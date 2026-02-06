@@ -1,0 +1,52 @@
+#' Data "d.pizza"
+#' 
+#' An artificial dataset inspired by a similar dataset pizza.sav in
+#' \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} by Toutenburg
+#' et.al.\cr The dataset contains data of a pizza delivery service in London,
+#' delivering pizzas to three areas. Every record defines one order/delivery
+#' and the according properties. A pizza is supposed to taste good, if its
+#' temperature is high enough, say 45 Celsius. So it might be interesting for
+#' the pizza delivery service to minimize the delivery time.\cr The dataset is
+#' designed to be as evil as possible. As far as the description is concerned,
+#' it should pose the same difficulties that we have to deal with in everyday
+#' life. It contains the most used datatypes as numerics, factors, ordered
+#' factors, integers, logicals and a date. NAs are scattered everywhere partly
+#' systematically, partly randomly (except in the index).
+#' 
+#' The dataset contains NAs randomly scattered. 
+#' 
+#' @name "d.pizza"
+#' @docType data
+#' @format A data frame with 1209 observations on the following 17 variables.
+#' \describe{ \item{list("index")}{a numeric vector, indexing the records (no
+#' missings here).} \item{list("date")}{Date, the delivery date}
+#' \item{list("week")}{integer, the weeknumber} \item{list("weekday")}{integer,
+#' the weekday} \item{list("area")}{factor, the three London districts:
+#' \code{Brent}, \code{Camden}, \code{Westminster} }
+#' \item{list("count")}{integer, the number of pizzas delivered}
+#' \item{list("rabate")}{logical, \code{TRUE} if a rabate has been given }
+#' \item{list("price")}{numeric, the total price of delivered pizza(s) }
+#' \item{list("operator")}{a factor with levels \code{Allanah} \code{Maria}
+#' \code{Rhonda}} \item{list("driver")}{a factor with levels \code{Carpenter}
+#' \code{Carter} \code{Taylor} \code{Butcher} \code{Hunter} \code{Miller}
+#' \code{Farmer}} \item{list("delivery_min")}{numeric, the delivery time in
+#' minutes (decimal)} \item{list("temperature")}{numeric, the temperature of
+#' the pizza in degrees Celsius when delivered to the customer }
+#' \item{list("wine_ordered")}{integer, 1 if wine was ordered, 0 if not}
+#' \item{list("wine_delivered")}{integer, 1 if wine was delivered, 0 if not}
+#' \item{list("wrongpizza")}{logical, \code{TRUE} if a wrong pizza was
+#' delivered } \item{list("quality")}{ordered factor with levels \code{low} <
+#' \code{medium} < \code{high}, defining the quality of the pizza when
+#' delivered} }
+#' @references Toutenburg H, Schomaker M, Wissmann M, Heumann C (2009):
+#' \emph{Arbeitsbuch zur deskriptiven und induktiven Statistik} Springer,
+#' Berlin Heidelberg
+#' @keywords datasets
+#' @examples
+#' 
+#' str(d.pizza)
+#' head(d.pizza)
+#' 
+#' # Desc(d.pizza)
+#' 
+"d.pizza"

@@ -1,3 +1,5 @@
-# DescToolsX (development version)
+# DescToolsX 0.0.0.9000
 
-* Initial CRAN submission.
+## New features
+
+- Initial development version.
