@@ -59,7 +59,7 @@
 #'             terms dbinom qbeta uniroot IQR approx ppois dchisq pchisq 
 #'             var.test frequency lm optimize relevel anova na.pass pnorm
 #'             p.adjust rnorm cor ppoints model.tables pt ptukey qtukey
-#'             aov pf qf 
+#'             aov pf qf filter relevel
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 

@@ -101,7 +101,7 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 10.1016/j.jkss.2012.10.002
 }
 \seealso{
-\code{\link{table}}, \code{\link{plotCorr}},
+\code{\link{table}}, \code{\link[DescToolsGraphics]{plotCorr}},
 \code{\link{pairApply}}, \code{\link{Association}}
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...

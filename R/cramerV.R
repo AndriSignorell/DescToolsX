@@ -24,7 +24,7 @@
 #' and the upper confidence interval
 #' @author Andri Signorell <andri@@signorell.net>, \cr Michael Smithson
 #' <michael.smithson@@anu.edu.au> (confidence intervals for Cramer V)
-#' @seealso \code{\link{table}}, \code{\link{plotCorr}},
+#' @seealso \code{\link{table}}, \code{\link[DescToolsGraphics]{plotCorr}},
 #' \code{\link{pairApply}}, \code{\link{Association}}
 #' %\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 #' outdated...
