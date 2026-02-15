@@ -71,12 +71,12 @@
 #' @importFrom grDevices dev.flush dev.hold
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size
-#'             str combn
+#'             str combn find getAnywhere lsf.str
 #'             
 #' @importFrom gld fit.fkml dgl pgl
 #' 
 #' @importFrom DescToolsViz plotFdist `%)(%` `%[]%` `%nin%` 
 #'             abind combPairs maxDigits recycle setNamesX 
-#'             strAlign strTrim strTrunc
+#'             strAlign strTrim strTrunc moveAvg
 #'             
 NULL

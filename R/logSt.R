@@ -21,15 +21,14 @@
 #' 
 #' This is obtained by
 #' 
-#' \deqn{g(x) = }{g(x)=log_10(x), if x>c, log_10(c) - (c-x)/(c log(10)),
-#' otherwise}\deqn{ \left\{\begin{array}{ll} }{g(x)=log_10(x), if x>c,
-#' log_10(c) - (c-x)/(c log(10)), otherwise}\deqn{ log_{10}(x) &\textup{for }x
-#' \ge c\\ }{g(x)=log_10(x), if x>c, log_10(c) - (c-x)/(c log(10)),
-#' otherwise}\deqn{ log_{10}(c) - \frac{c - x}{c \cdot log(10)} &\textup{for }
-#' x < c }{g(x)=log_10(x), if x>c, log_10(c) - (c-x)/(c log(10)),
-#' otherwise}\deqn{ \end{array}\right. }{g(x)=log_10(x), if x>c, log_10(c) -
-#' (c-x)/(c log(10)), otherwise}
-#' 
+#' \deqn{
+#'   g(x) =
+#'   \begin{cases}
+#'     \log_{10}(x) & \text{for } x \ge c \\
+#'     \log_{10}(c) - \frac{c - x}{c \log(10)} & \text{for } x < c
+#'   \end{cases}
+#' }
+#'  
 #' Small values are determined by the threshold \eqn{c}. If not given by the
 #' argument \code{threshold}, it is determined by the quartiles \eqn{q_1} and
 #' \eqn{q_3} of the non-zero data as those smaller than \eqn{c =

@@ -42,10 +42,10 @@
 #' If there are no values or if \code{na.rm = FALSE} and there are \code{NA}
 #' values the result is \code{NA} of the same type as \code{x} (or more
 #' generally the result of \code{x[FALSE][NA]}).
-#' @seealso \code{\link{quantile}} for general quantiles.
-#' \url{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}
-#' 
-#' \url{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}
+#' @seealso \code{\link{quantile}} for general quantiles, \cr
+#' \href{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}{Maechler on R-help mailing list, 2003-Nov}
+#' \cr
+#' \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median} 
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
 #' @keywords univar robust

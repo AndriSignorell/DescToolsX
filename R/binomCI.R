@@ -62,13 +62,15 @@
 ##' The \bold{Mid-p} approach is used to reduce the conservatism of the
 ##' Clopper-Pearson, which is known to be very pronounced. The method midp
 ##' accumulates the tail areas.  The lower bound \eqn{p_l} is found as the
-##' solution to the equation \deqn{\frac{1}{2} f(x;n,p_l) + (1-F(x;m,p_l)) =
-##' \frac{\alpha}{2}} where \eqn{f(x;n,p)} denotes the probability mass
+##' solution to the equation 
+##' \deqn{\frac{1}{2} f(x;n,p_l) + (1-F(x;n,p_l)) = \frac{\alpha}{2}} 
+##' where \eqn{f(x;n,p)} denotes the probability mass
 ##' function (pmf) and \eqn{F(x;n,p)} the (cumulative) distribution function of
 ##' the binomial distribution with size \eqn{n} and proportion \eqn{p}
 ##' evaluated at \eqn{x}.  The upper bound \eqn{p_u} is found as the solution
-##' to the equation \deqn{\frac{1}{2} f(x;n,p_u) + F(x-1;m,p_u) =
-##' \frac{\alpha}{2}} In case x=0 then the lower bound is zero and in case x=n
+##' to the equation 
+##' \deqn{\frac{1}{2} f(x;n,p_u) + F(x-1;n,p_u) = \frac{\alpha}{2}} 
+##' In case x=0 then the lower bound is zero and in case x=n
 ##' then the upper bound is 1.
 ##' 
 ##' The \bold{Likelihood-based} approach is said to be theoretically appealing.

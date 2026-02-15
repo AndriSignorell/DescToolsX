@@ -6,7 +6,7 @@
 #' 
 #' Let \eqn{X_{ij}} be the jth observation of X for the ith group. 
 #' Let \eqn{Z_{ij} = |X_{ij} - X_i|}, where \eqn{X_i} is the mean of X in the ith group. 
-#' Levene’s test statistic is 
+#' Levene's test statistic is 
 #' \deqn{ W_0 = \frac{ \sum_i n_i (\bar{Z}_i - \bar{Z})^2 / (g - 1) }{ \sum_i 
 #' \sum_j (Z_{ij} - \bar{Z}_i)^2 / \sum_i (n_i - 1) } } 
 #' where \eqn{n_i} is the number of observations in group i and g is the number of 
@@ -72,7 +72,7 @@
 #' Levene, H. (1960) Robust tests for equality of variances. 
 #' in Ingram, O., Hotelling, H. et al. (Hrsg.) (1960) Contributions 
 #' to Probability and Statistics, \emph{Essays in Honor of Harold Hotelling}. 
-#' Stanford University Press, 1960, ISBN 0-8047-0596-8, S. 278–292.
+#' Stanford University Press, 1960, ISBN 0-8047-0596-8, S. 278-292.
 
 #' @keywords htest
 

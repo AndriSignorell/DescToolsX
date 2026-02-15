@@ -53,8 +53,7 @@ hard place).
 All arguments are being recycled.
 
 We estimate the difference between proportions using the sample proportions:
-\deqn{\hat{\delta} =\hat{p}_1 - \hat{p}_2 = \frac{x_1}{n_1} -
-\frac{x_2}{n_2}}
+\deqn{\hat{\delta} =\hat{p}_1 - \hat{p}_2 = \frac{x_1}{n_1} - \frac{x_2}{n_2}}
 
 The traditional \bold{Wald } confidence interval for the difference of two
 proportions \eqn{\delta} is based on the asymptotic normal distribution of

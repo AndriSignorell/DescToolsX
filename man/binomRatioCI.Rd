@@ -65,8 +65,8 @@ Let \eqn{Y_1} and \eqn{Y_2} be multinomial random variables with parameters
 \eqn{n_1, \pi_{1i}}, and \eqn{n_2, \pi_{2i}}, respectively; where \eqn{i =
 \{1, 2, 3, \dots, r\}}.  This encompasses the binomial case in which \eqn{r
 = 1}. We define the true selection ratio for the \emph{i}th resource of
-\emph{r} total resources to be: \deqn{\theta_{i}=\frac{\pi _{1i}}{\pi
-_{2i}}}
+\emph{r} total resources to be:
+\deqn{\theta_{i}=\frac{\pi _{1i}}{\pi_{2i}}}
 
 where \eqn{\pi_{1i}} and \eqn{\pi_{2i}} represent the proportional use and
 availability of the \emph{i}th resource, respectively. Note that if \eqn{r =

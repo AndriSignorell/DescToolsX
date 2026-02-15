@@ -6,21 +6,15 @@
 #' 
 #' The Box-Cox transformation is given by
 #' 
-#' % \deqn{\theta(h) = % \left\{\begin{array}{ll} % u_\beta \left(\mu +
-#' \frac{\nu(h)}{\Gamma(1 - \xi)} % \right),&\xi \neq 0\\ %
-#' \exp\left(\frac{\nu(h)}{\sigma}\right),&\xi = 0 % \end{array}\right. %
-#' }{u_beta (mu + nu(h) / Gamma(1 - \xi)), if \xi < 1, % exp(nu(h)/sigma),
-#' otherwise}
+#' \deqn{
+#'   f_\lambda(x) =
+#'   \begin{cases}
+#'     \frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
+#'     \log(x) & \text{if } \lambda = 0
+#'   \end{cases}
+#' }
 #' 
-#' \deqn{f_\lambda(x) = }{f(x;\lambda)=(x^\lambda - 1)/\lambda, if \lambda not
-#' 0, log(x), otherwise}\deqn{ \left\{\begin{array}{ll}
-#' }{f(x;\lambda)=(x^\lambda - 1)/\lambda, if \lambda not 0, log(x),
-#' otherwise}\deqn{ \frac{x^\lambda - 1}{\lambda} &\textup{for }\lambda \neq
-#' 0\\ }{f(x;\lambda)=(x^\lambda - 1)/\lambda, if \lambda not 0, log(x),
-#' otherwise}\deqn{ log(x) &\textup{for }\lambda = 0 }{f(x;\lambda)=(x^\lambda
-#' - 1)/\lambda, if \lambda not 0, log(x), otherwise}\deqn{ \end{array}\right.
-#' }{f(x;\lambda)=(x^\lambda - 1)/\lambda, if \lambda not 0, log(x), otherwise}
-#' 
+#'  
 #' @name boxCox
 #' @aliases boxCox boxCoxInv
 #' @param x a numeric vector

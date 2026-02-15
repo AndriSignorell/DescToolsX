@@ -28,11 +28,11 @@
 #' @param method Character string specifying the type of confidence interval.
 #'   One of:
 #'   \itemize{
-#'     \item \code{"none"} – no interval (default if \code{conf.level = NA})
-#'     \item \code{"normal"} – analytic normal approximation
-#'     \item \code{"percentile"} – bootstrap percentile interval
-#'     \item \code{"student"} – studentized bootstrap interval
-#'     \item \code{"bca"} – bias-corrected and accelerated bootstrap interval
+#'     \item \code{"none"} - no interval (default if \code{conf.level = NA})
+#'     \item \code{"normal"} - analytic normal approximation
+#'     \item \code{"percentile"} - bootstrap percentile interval
+#'     \item \code{"student"} - studentized bootstrap interval
+#'     \item \code{"bca"} - bias-corrected and accelerated bootstrap interval
 #'   }
 #'
 #' @param R Number of bootstrap resamples used for bootstrap-based
@@ -67,15 +67,15 @@
 #'
 #' Otherwise, a named numeric vector with components:
 #' \itemize{
-#'   \item \code{brier} – the point estimate
-#'   \item \code{lwr.ci} – lower confidence limit
-#'   \item \code{upr.ci} – upper confidence limit
+#'   \item \code{brier} - the point estimate
+#'   \item \code{lwr.ci} - lower confidence limit
+#'   \item \code{upr.ci} - upper confidence limit
 #' }
 #'
 #' @references
 #' Brier, G. W. (1950).
 #' Verification of forecasts expressed in terms of probability.
-#' \emph{Monthly Weather Review}, 78(1), 1–3.
+#' \emph{Monthly Weather Review}, 78(1), 1-3.
 #'
 #' Efron, B., & Tibshirani, R. J. (1993).
 #' \emph{An Introduction to the Bootstrap}.

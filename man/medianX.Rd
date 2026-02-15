@@ -108,10 +108,10 @@ Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
-\code{\link{quantile}} for general quantiles.
-\url{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}
-
-\url{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}
+\code{\link{quantile}} for general quantiles, \cr
+\href{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}{Maechler on R-help mailing list, 2003-Nov}
+\cr
+\href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median}
 }
 \keyword{robust}
 \keyword{univar}
