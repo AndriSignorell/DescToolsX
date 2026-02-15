@@ -57,7 +57,7 @@
 #' # Approximation for classified data
 #' breaks <- seq(10,70, 10)
 #' medianX(
-#'   Freq(cut(d.pizza$temperature, breaks=breaks)),
+#'   freq(cut(d.pizza$temperature, breaks=breaks)),
 #'   breaks=breaks)
 #' 
 #' # compared to
@@ -70,14 +70,14 @@
 #' # 6000   8000      31
 #' # 8000  10000      12
 #' 
-#' # Freq(as.table(c(20,42,31,12)))
+#' # freq(as.table(c(20,42,31,12)))
 #' #    level  freq   perc  cumfreq  cumperc
 #' # 1      A    20  19.0%       20    19.0%
 #' # 2      B    42  40.0%       62    59.0%
 #' # 3      C    31  29.5%       93    88.6%
 #' # 4      D    12  11.4%      105   100.0%
 #' 
-#' medianX(Freq(as.table(c(20,42,31,12))), breaks=c(0,4000,6000,8000,10000))
+#' medianX(freq(as.table(c(20,42,31,12))), breaks=c(0,4000,6000,8000,10000))
 #' 
 #' # use weights
 #' x <- sample(20, 30, replace = TRUE)

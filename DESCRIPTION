@@ -126,13 +126,13 @@ Authors@R: c(
  )
 Description: This is the sequel to DescTools, completely redesigned, simplified and accelerated.
 Encoding: UTF-8
-Depends: R (>= 4.2.0), DescToolsGraphics
+Depends: R (>= 4.2.0), DescToolsViz
 License: GPL (>= 2)
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo 
 LazyData: yes
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: goftest, testthat (>= 3.0.0), R.rsp
 Config/testthat/edition: 3
-Imports: stats, boot, cli, Rcpp, MASS, methods, rstudioapi, gld, data.table, haven, mvtnorm, withr
+Imports: stats, boot, cli, Rcpp, MASS, methods, rstudioapi, gld, data.table, haven, mvtnorm, withr, tseries
 VignetteBuilder: R.rsp

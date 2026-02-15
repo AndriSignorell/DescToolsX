@@ -38,19 +38,10 @@
 #' 
 #' @name skew_kurt
 #' @aliases skewX kurtX
+#' 
+#' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector. An object which is not a vector is coerced (if
 #' possible) by \code{as.vector}.
-#' @param conf.level confidence level of the interval. If set to \code{NA}
-#' (which is the default) no confidence interval will be calculated.
-#' @param sides a character string specifying the side of the confidence
-#' interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-#' \code{"right"}. \code{"left"} would be analogue to a hypothesis of
-#' \code{"greater"} in a \code{t.test}. You can specify just the initial
-#' letter.
-#' @param method a character string, defining the type of intervals required.
-#' The value should be one out of \code{"classic"}, \code{"boot"} (default).
-#' Further arguments for the boot function (as \code{R}, \code{type}, ...) can
-#' be provided by the dots' argument if needed.
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
 #' @param weights a numerical vector of weights the same length as \code{x}
@@ -310,6 +301,17 @@ kurtX <- function (x,
 }
 
 
+# @param conf.level confidence level of the interval. If set to \code{NA}
+# (which is the default) no confidence interval will be calculated.
+# @param sides a character string specifying the side of the confidence
+# interval, must be one of \code{"two.sided"} (default), \code{"left"} or
+# \code{"right"}. \code{"left"} would be analogue to a hypothesis of
+# \code{"greater"} in a \code{t.test}. You can specify just the initial
+# letter.
+# @param method a character string, defining the type of intervals required.
+# The value should be one out of \code{"classic"}, \code{"boot"} (default).
+# Further arguments for the boot function (as \code{R}, \code{type}, ...) can
+# be provided by the dots' argument if needed.
 
 
 

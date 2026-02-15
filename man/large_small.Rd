@@ -54,7 +54,7 @@ approach becomes already impracticable for medium vector lengths
 solutions of this problem discussed out there. The present implementation is
 based on highly efficient C++ code and proved to be very fast.
 
-HighLow combines the two upper functions and reports the k extreme values on
+\code{highLow()} combines the two upper functions and reports the k extreme values on
 both sides together with their frequencies in parentheses. It is used for
 describing univariate variables and is interesting for checking the ends of
 the vector, where in real data often wrong values accumulate. This is in

@@ -113,33 +113,6 @@
 
 
 
-.printHeader <- function(main, class, label=NULL) {
-  
-  cat(.LineSep(), "\n")
-  
-  if (!identical(main, NA)) {
-    
-    header <- gettextf("%s (%s)", main, naVal(class, "-")) 
-    
-    if (.has_color()) 
-      header <- cli::style_bold(header)
-    
-    cat(header) 
-  }
-  
-  if (!is.null(label)) {
-    cat(" :", strwrap(label, indent = 2, exdent = 2), sep = "\n")
-    cat("\n")  
-  } else {
-    cat("\n")
-  }
-  
-  cat("\n")  
-  
-  
-}
-
-
 
 .CaptOut <- function(..., file = NULL, append = FALSE, width=150) {
   
@@ -569,7 +542,7 @@
   #--------------------------------------------------
   # 1) table input
   #--------------------------------------------------
-  if (inherits(x, "table") && length(dim(x)) == 2L) {
+  if (inherits(x, c("table", "matrix", "array")) && length(dim(x)) == 2L) {
     
     tab <- as.matrix(x)
     
@@ -667,4 +640,12 @@
   stop("Unsupported input type or missing second variable.")
 }
 
+
+
+
+.notThere <- function(object, ...){
+  warning(gettextf('Sorry, no method implemented for class "%s",', 
+                   paste(class(object), collapse=", ")))
+  NA_real_
+}
 

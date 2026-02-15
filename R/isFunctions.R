@@ -94,6 +94,32 @@ isZero <-function(x, tol = sqrt(.Machine$double.eps), na.rm=FALSE) {
     FALSE
   
 }
+
+
+#' @param nonNegative logical, defining it x should be non negative
+
+#' @rdname isFunctions
+#' @export
+isIntLike <- function(x,
+                      nonNegative = FALSE,
+                      tol = .Machine$double.eps^0.5) {
+  
+  if (!is.numeric(x) || anyNA(x))
+    return(FALSE)
+  
+  # integer-like check
+  if (any(abs(x - round(x)) > tol))
+    return(FALSE)
+  
+  # optional non-negative constraint
+  if (nonNegative && any(x < 0))
+    return(FALSE)
+  
+  TRUE
+}  
+
+
+
  
 #' @rdname isFunctions
 #' @export
@@ -132,7 +158,7 @@ isNumeric <- function (x, length.arg = Inf, integer.valued = FALSE, positive = F
 #   n <- length(x)
 #   X <- x[1L:n]
 #   L <- logical(n)
-#   p <- DescTools::Primes(ceiling(sqrt(max(x))))
+#   p <- DescToolsX::Primes(ceiling(sqrt(max(x))))
 #   for (i in 1L:n) {
 #     L[i] <- all(X[i] %% p[p < X[i]] != 0L)
 #   }

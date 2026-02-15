@@ -18,7 +18,7 @@
     DescToolsX.plotit    = TRUE,
     DescToolsX.stamp     = expression(gettextf("%s / %s", Sys.getenv("USERNAME"),
                                               DescToolsX::fm(DescToolsX::Today(), 
-                                                             fmt = "yyyy-mm-dd"))),
+                                                             fmt = "yyyy-MM-dd"))),
     DescToolsX.linesep   = cli::col_yellow("\u2500"),
     
     DescToolsX.lastWrd   = NULL,
@@ -59,15 +59,24 @@
 #'             terms dbinom qbeta uniroot IQR approx ppois dchisq pchisq 
 #'             var.test frequency lm optimize relevel anova na.pass pnorm
 #'             p.adjust rnorm cor ppoints model.tables pt ptukey qtukey
-#'             aov pf qf filter relevel
+#'             aov pf qf filter relevel fisher.test mcnemar.test
+#'             coefficients confint confint.default formula model.frame
+#'             model.matrix model.response nobs predict family as.formula
+#'             xtabs end start
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
 #'             segments strwidth text title axis
+#'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size
 #'             str combn
+#'             
 #' @importFrom gld fit.fkml dgl pgl
-#' @importFrom DescToolsGraphics plotFdist
+#' 
+#' @importFrom DescToolsViz plotFdist `%)(%` `%[]%` `%nin%` 
+#'             abind combPairs maxDigits recycle setNamesX 
+#'             strAlign strTrim strTrunc
+#'             
 NULL

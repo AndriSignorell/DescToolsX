@@ -53,7 +53,7 @@
 #' the relative frequencies.}
 #' @author Andri Signorell <andri@@signorell.net>
 #' @seealso \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
-#' \code{\link{table}}, \code{\link{prop.table}}, \code{\link{PercTable}},
+#' \code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
 #' \code{\link{freq2D}}
 #' @keywords univar
 #' @examples
@@ -61,7 +61,7 @@
 #' data(d.pizza)
 #' 
 #' # result is a data.frame
-#' d.freq <- Freq(d.pizza$price)
+#' d.freq <- freq(d.pizza$price)
 #' d.freq
 #' 
 #' # it is printed by default with 3 digits for the percent values,
@@ -69,20 +69,20 @@
 #' print(d.freq, digits=5)
 #' 
 #' # sorted by frequency
-#' Freq(d.pizza$driver, ord="desc")
+#' freq(d.pizza$driver, ord="desc")
 #' 
 #' # sorted by name using all the observations, say including NAs
-#' Freq(d.pizza$driver, ord="name", useNA="ifany")
+#' freq(d.pizza$driver, ord="name", useNA="ifany")
 #' 
 #' # percentages and cumulative frequencies for a vector of count data
-#' Freq(as.table(c(2,4,12,8)))
+#' freq(as.table(c(2,4,12,8)))
 #' 
 
 
 
 #' @export
 #' @rdname FreqTable
-Freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
+freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
                  ord = c("level", "desc", "asc", "name"),
                  useNA = c("no", "ifany", "always"), ...){
   

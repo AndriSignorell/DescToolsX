@@ -25,10 +25,6 @@ ADtestR <- function(x) {
     .Call(`_DescToolsX_ADtestR`, x)
 }
 
-between_num <- function(x, from, to, left_closed = TRUE, right_closed = TRUE) {
-    .Call(`_DescToolsX_between_num`, x, from, to, left_closed, right_closed)
-}
-
 acceptBin <- function(x, n, p) {
     .Call(`_DescToolsX_acceptBin`, x, n, p)
 }
@@ -41,8 +37,16 @@ binomdiffciMN <- function(x1, n1, x2, n2, z, lower) {
     .Call(`_DescToolsX_binomdiffciMN`, x1, n1, x2, n2, z, lower)
 }
 
-conv_DecToBin <- function(n) {
-    .Call(`_DescToolsX_conv_DecToBin`, n)
+brier_boot_cpp <- function(resp, pred, R, scaled) {
+    .Call(`_DescToolsX_brier_boot_cpp`, resp, pred, R, scaled)
+}
+
+conDisPairsTab <- function(x) {
+    .Call(`_DescToolsX_conDisPairsTab`, x)
+}
+
+conDisPairsXY <- function(x, y) {
+    .Call(`_DescToolsX_conDisPairsXY`, x, y)
 }
 
 isoWeek <- function(x) {
@@ -143,10 +147,6 @@ hl2qest <- function(x, y) {
 
 n_pow_sum <- function(x) {
     .Call(`_DescToolsX_n_pow_sum`, x)
-}
-
-roman2int_cpp <- function(x) {
-    .Call(`_DescToolsX_roman2int_cpp`, x)
 }
 
 rskew_cpp <- function(x, mean) {

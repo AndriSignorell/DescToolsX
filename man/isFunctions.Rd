@@ -5,11 +5,14 @@
 \alias{isWhole}
 \alias{isNumeric}
 \alias{isZero}
+\alias{isIntLike}
 \title{Check a Vector For Being Numeric, Zero Or a Whole Number}
 \usage{
 isWhole(x, all = FALSE, tol = sqrt(.Machine$double.eps), na.rm = FALSE)
 
 isZero(x, tol = sqrt(.Machine$double.eps), na.rm = FALSE)
+
+isIntLike(x, nonNegative = FALSE, tol = .Machine$double.eps^0.5)
 
 isNumeric(
   x,
@@ -30,6 +33,8 @@ to \code{TRUE} the function will return the result of
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
+
+\item{nonNegative}{logical, defining it x should be non negative}
 
 \item{length.arg}{integer, the length of the vector to be checked for.}
 

@@ -127,7 +127,7 @@ getOption("DescToolsX.plotit")
 
 }
 \seealso{
-\code{\link{fm}}, \code{\link[DescToolsGraphics]{pal}}
+\code{\link{fm}}, \code{\link[DescToolsViz]{pal}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

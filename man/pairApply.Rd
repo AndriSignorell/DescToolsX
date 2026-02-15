@@ -64,7 +64,7 @@ pairApply(lst, FUN = cramerV, symmetric=TRUE)
 
 }
 \seealso{
-\code{\link{outer}}, \code{\link{combPairs}},
+\code{\link{outer}}, \code{\link[DescToolsViz]{combPairs}},
 \code{\link{pairwise.table}}
 }
 \author{

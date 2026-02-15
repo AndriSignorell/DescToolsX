@@ -75,7 +75,7 @@ abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
   
   
   res <- data.frame(
-    nr = 1:ncol(x),
+    nr = 1:length(x),
     class = shortclass(x),
     varname = colnames(x),
     label = unlist(lapply(lapply(x, Label), Coalesce, "-")),
@@ -217,6 +217,4 @@ print.Abstract <- function(x, sep = NULL, width = NULL,
   print(x = res, print.gap = print.gap, right = FALSE, row.names = FALSE, ...)
   cat("\n")
 }
-
-
 

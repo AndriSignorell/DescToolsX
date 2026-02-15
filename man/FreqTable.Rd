@@ -2,11 +2,12 @@
 % Please edit documentation in R/freq.R
 \name{FreqTable}
 \alias{FreqTable}
+\alias{freq}
 \alias{Freq}
 \alias{print.Freq}
 \title{Frequency Table for a Single Variable}
 \usage{
-Freq(
+freq(
   x,
   breaks = hist(x, plot = FALSE)$breaks,
   include.lowest = TRUE,
@@ -82,7 +83,7 @@ value.) See \code{\link{cut}}.
 data(d.pizza)
 
 # result is a data.frame
-d.freq <- Freq(d.pizza$price)
+d.freq <- freq(d.pizza$price)
 d.freq
 
 # it is printed by default with 3 digits for the percent values,
@@ -90,18 +91,18 @@ d.freq
 print(d.freq, digits=5)
 
 # sorted by frequency
-Freq(d.pizza$driver, ord="desc")
+freq(d.pizza$driver, ord="desc")
 
 # sorted by name using all the observations, say including NAs
-Freq(d.pizza$driver, ord="name", useNA="ifany")
+freq(d.pizza$driver, ord="name", useNA="ifany")
 
 # percentages and cumulative frequencies for a vector of count data
-Freq(as.table(c(2,4,12,8)))
+freq(as.table(c(2,4,12,8)))
 
 }
 \seealso{
 \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
-\code{\link{table}}, \code{\link{prop.table}}, \code{\link{PercTable}},
+\code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
 \code{\link{freq2D}}
 }
 \author{

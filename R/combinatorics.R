@@ -6,15 +6,6 @@
 #' combinations with and without replacement and order, whereas \code{combSet}
 #' returns the value sets.
 #' 
-#' \code{combPairs} Returns all combinations of 2 out of the elements in x or x and y (if
-#' defined). Combinations of the same elements will be dropped (no replacing).
-#' The vector x need not contain unique values. The permutations will
-#' automatically be filtered for unique sets, if the same element is given
-#' twice or more.
-#' 
-#' If y = \code{NULL} then all combination of 2 out of x are returned. \cr If y
-#' is defined then all combinations of x and y are calculated. 
-#' 
 #' @name combinatoric
 #' @aliases permn combSet combN
 #' @param x a vector of numeric values or characters. Characters need not be
@@ -30,9 +21,6 @@
 #' @param as.list logical, defining if the results should be returned in a flat
 #' list, say every sample is a single element of the resulting list. Default is
 #' FALSE.
-#' @param y a vector of elements, need not be same dimension as x.  If y is not
-#' \code{NULL} then all combination x and y are returned. 
-#' 
 #' @return a matrix with all possible permutations or combinations of the
 #' values in x for \code{permn} and \code{combSet}\cr if m contains more than
 #' one element the result will be a list of matrices or a flat list if
@@ -40,7 +28,8 @@
 #' 
 #' @author Friederich Leisch <Friedrich.Leisch@@boku.ac.at>\cr Andri Signorell
 #' <andri@@signorell.net> (combSet, combN) 
-#' @seealso \code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}},
+#' @seealso \code{\link[DescToolsViz]{combPairs}}, 
+#' \code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}},
 #' \cr \code{vignette("Combinatorics")} 
 #' @keywords math
 #' @examples
@@ -189,21 +178,6 @@ combSet <- function(x, m, repl=FALSE, ord=FALSE, as.list=FALSE) {
   }
   return(res)
   
-}
-
-
-
-#' @rdname combinatoric
-#' @export
-combPairs <- function(x, y = NULL) {
-  # returns a data.frame with all pairwise combinations of two variables
-  if( missing(y)) {  # kein y vorhanden, use x only
-    data.frame( t(combn(x, 2L)), stringsAsFactors=FALSE )
-    
-  } else {
-    # if y is defined, all.x to all.y will be returned  
-    expand.grid(x, y, stringsAsFactors=FALSE )
-  }
 }
 
 

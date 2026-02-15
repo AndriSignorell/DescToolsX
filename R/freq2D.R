@@ -38,7 +38,7 @@
 #' @author Arni Magnusson <thisisarni@@gmail.com>>
 #' @seealso \code{\link{cut}}, \code{\link{table}}, and
 #' \code{\link{print.table}} are the basic underlying functions.\cr
-#' \code{\link{Freq}}, \code{\link{PercTable}}
+#' \code{\link{freq}}, \code{\link{percTable}}
 #' @keywords dplot manip distribution multivariate
 #' @examples
 #' 

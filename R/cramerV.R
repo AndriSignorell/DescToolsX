@@ -16,15 +16,15 @@
 #' \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
 #' \code{"fisheradj"} (using fisher z transformation and bias correction), \code{"boot"} 
 #' bootstrap intervals.
-#' @param correct logical. Should a bias correction (see Bergsma, 2013) be
-#' applied or not. Default is \code{FALSE}.
+#' @param correct logical (default \code{FALSE}). Should a bias 
+#' correction (see Bergsma, 2013) be applied or not. 
 #' 
 #' @return a single numeric value if no confidence intervals are requested,\cr
 #' and otherwise a numeric vector with 3 elements for the estimate, the lower
 #' and the upper confidence interval
 #' @author Andri Signorell <andri@@signorell.net>, \cr Michael Smithson
 #' <michael.smithson@@anu.edu.au> (confidence intervals for Cramer V)
-#' @seealso \code{\link{table}}, \code{\link[DescToolsGraphics]{plotCorr}},
+#' @seealso \code{\link{table}}, \code{\link[DescToolsViz]{plotCorr}},
 #' \code{\link{pairApply}}, \code{\link{Association}}
 #' %\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 #' outdated...

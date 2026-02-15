@@ -107,10 +107,6 @@ andersonDarlingTest <- function(x, null="punif", ..., estimated=FALSE, nullname)
   STATISTIC        <- z$statistic
   names(STATISTIC) <- z$statname
   
-  # dress up
-  METHOD <- c("Anderson-Darling test of goodness-of-fit",
-              ADJUST,
-              paste("Null hypothesis:", nullname))
   extras <- list(...)
   parnames <- intersect(names(extras), names(formals(F0)))
   if(length(parnames) > 0) {
@@ -120,14 +116,31 @@ andersonDarlingTest <- function(x, null="punif", ..., estimated=FALSE, nullname)
       pard[i] <- paste(parnames[i], "=", paste(pars[[i]], collapse=" "))
     pard <- paste("with",
                   ngettext(length(pard), "parameter", "parameters"),
-                  "  ", 
+                  "  ",
                   paste(pard, collapse=", "))
-    METHOD <- c(METHOD, pard)
+  }
+
+  coda <- if (estimated)
+    "parameters estimated from data"
+  else
+    "parameters fixed"
+  
+  # more R-like by Andri  
+  METHOD <- paste(
+    c(
+      "Anderson-Darling test of goodness-of-fit",
+      ADJUST,
+      paste("null hypothesis:", nullname)
+    ),
+    collapse = "\n"
+  )
+  
+  if (length(parnames) > 0) {
+    METHOD <- paste(METHOD, pard, sep = "\n")
   }
   
-  coda <- paste("Parameters assumed to",
-                if(estimated) "have been estimated from data" else "be fixed")
-  METHOD <- c(METHOD, coda)
+  METHOD <- paste(METHOD, coda, sep = "\n")
+  
   
   out <- list(statistic = STATISTIC,
               p.value = PVAL,
@@ -227,18 +240,25 @@ getCdf <- function(s="punif", fatal=TRUE) {
 #
 
 braun <- function(U, simpletest, m) {
+  
   n <- length(U)
   if(n < 2 * m) stop("Unsufficient data for Braun's method")
+  
   # split data into m groups
   group <- factor(sample(seq_len(n) %% m))
+  
   # apply the simple-null test to each subset
   zz <- by(data=U, INDICES=group, FUN=simpletest, simplify=FALSE)
   statistics <- sapply(zz, getElement, "statistic")
   pvalues    <- sapply(zz, getElement, "pvalue")
   statname   <- zz[[1]]$statname
+  
   # combine
   statistic <- max(statistics)
   pvalue <- 1 - (1 - min(pvalues))^m
   statname <- paste0(statname, "max")
-  return(list(statistic=statistic, pvalue=pvalue, statname=statname))
+  
+  return(list(statistic=statistic, 
+              pvalue=pvalue, 
+              statname=statname))
 }

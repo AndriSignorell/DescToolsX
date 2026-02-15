@@ -75,7 +75,7 @@ meanX <- function (x, ...)
 #' @rdname meanX
 #' @export
 meanX.Freq <- function(x, breaks, ...)  {
-  sum(head(MoveAvg(breaks, order=2, align="left"), -1) * x$perc)
+  sum(head(moveAvg(breaks, order=2, align="left"), -1) * x$perc)
 }
 
 

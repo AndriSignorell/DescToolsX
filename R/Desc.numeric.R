@@ -6,38 +6,30 @@
 #' The plot may include a histogram, density curve, boxplot 
 #' and empirical distribution.
 #'
+#' 
+#' 
+#' @name Desc.numeric
+#' @aliases Desc.numeric plot.Desc.numeric print.Desc.numeric
+#' 
 #' @param x An object of class \code{"Desc.numeric"}.
+#' 
 #' @param ... Further graphical parameters passed to the underlying
 #'   base R plotting functions.
+#'   
 #' @param maxrows numeric; defines the maximum number of rows in a frequency
 #' table to be reported. For factors with many levels it is often not
 #' interesting to see all of them. Default is set to 12 most frequent ones
 #' (resp. the first ones if \code{ord} is set to \code{"levels"} or
 #' \code{"names"}).
+#' 
 #' @param digits integer. With how many digits should the real numbers
 #' be formatted? Default is taken from \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA} no
-#' confidence interval will be calculated. Default is 0.95.
-#' @param plotit logical. Should a plot be created? The plot type will be
-#' chosen according to the classes of variables (roughly following a
-#' numeric-numeric, numeric-categorical, categorical-categorical logic).
-#' Default can be defined by option \code{plotit}, if it does not exist then
-#' it's set to \code{FALSE}.
-#' @param main (character|\code{NULL}|\code{NA}), the main title(s). 
-#' \itemize{
-#' \item If \code{NULL}, the title will be composed as: \itemize{ \item
-#' variable name (class(es)), \item resp. number - variable name (class(es)) if
-#' the \code{enum} option is set to \code{TRUE.} } \item Use \code{NA} if no
-#' caption should be printed at all. }
 #' @param include_x (logical) if \code{TRUE} (default) the original vector 
 #' will be returned
 #' in the result object. This is necessary for producing specific plot 
 #' (e.g. the density, ecdf, etc.). However if no plots are required the result
 #' object can be kept small and handy without the original data.
-#' 
-#' @name Desc.numeric
-#' @aliases Desc.numeric plot.Desc.numeric print.Desc.numeric
 #' 
 #' @details
 #' This function is an S3 method for \code{\link[graphics]{plot}}.
@@ -79,11 +71,13 @@
 
 
 
-#' @rdname Desc.numeric
+#' @rdname Desc
+#' @method Desc numeric
 #' @export
 Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
-                         include_x = TRUE, main = NULL, 
-                         plotit=.getOption("plotit"), digits=NULL, 
+                         include_x = TRUE, 
+                         main = NULL, verbose = NULL, plotit = NULL,
+                         digits=NULL, 
                          ...) {
   
   total_n <- length(x)    # total n
@@ -93,7 +87,7 @@ Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   if (is.null(main)) 
     main <- deparse(substitute(x))
 
-  nstat <- .NumStats(x[ok])
+  nstat <- .numStats(x[ok])
   
   # meanCI
   if (n > 1) {
@@ -125,7 +119,7 @@ Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   }
   
   if (maxrows > 0) {
-    freq <- Freq(factor(x[ok]))
+    freq <- freq(factor(x[ok]))
     colnames(freq)[1] <- "value"
     # use maxrows as percentage, when < 1
     if (maxrows < 1) {
@@ -137,10 +131,9 @@ Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   
   # put together the results
   res <- list(
-    xname = deparse(substitute(x)),
-    label = Label(x),
-    class = paste(class(x), collapse = ","),
-    classlabel = paste(class(x), collapse = ","),
+    
+    meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
+    
     length = total_n,
     n = n,
     NAs = total_n - n,
@@ -179,11 +172,11 @@ Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
 
 
 
-#' @rdname Desc.numeric
+#' @rdname Desc
 #' @export
 print.Desc.numeric <- function(x, digits = NULL, ...) {
 
-  .printHeader(main = x[["main"]], class=x[["class"]], label = x[["label"]])
+  .printHeader(x$meta)
   
   nlow <- 5
   nhigh <- 5
@@ -262,7 +255,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   
   # we need to do that even if highlow == FALSE, as Desc.integer
   # could need the result!!
-  if (x$class == "numeric") {
+  if (x$meta$class == "numeric") {
     vals <- fm(
       c(x$small$val, x$large$val),
       fmt = style("num.sty", digits = digits)
@@ -318,8 +311,8 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     ))
   }
   
-  if(x$plotit)
-    plot(x, main=x$main)
+  if(x$meta$plotit)
+    plot(x, main=x$meta$main)
   
   
 }
@@ -327,10 +320,10 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 
 
 
-#' @rdname Desc.numeric
+#' @rdname Desc
 #' @export
 plot.Desc.numeric <- function(x, ...){
-  DescToolsGraphics::plotFdist(x$x, na.rm=TRUE, ...)
+  DescToolsViz::plotFdist(x$x, na.rm=TRUE, ...)
 }
 
 
@@ -338,7 +331,7 @@ plot.Desc.numeric <- function(x, ...){
 # ===========================================================================
 # internal helper functions
 
-.NumStats <- function(x, ...){
+.numStats <- function(x, ...){
   
   # superfast function to get most relevant set of statistics
   # for numeric values within one step

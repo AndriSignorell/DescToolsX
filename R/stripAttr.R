@@ -15,7 +15,7 @@
 #' deleted. 
 #' @return the object \code{x} without the attributes contained in attr_names
 #' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{setNamesX}}, \code{\link{unname}}
+#' @seealso \code{\link[DescToolsViz]{setNamesX}}, \code{\link{unname}}
 #' @examples
 #' 
 #' x <- runif(10)

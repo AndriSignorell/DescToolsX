@@ -18,7 +18,20 @@
 #' DescToolsX follows a strict and consistent naming scheme to ensure
 #' predictability and to avoid name clashes with base R and other packages.
 #' 
+#' @docType package
 #' @name DescToolsX
+#' @aliases DescToolsX-package
+#' 
+#' @section Further principles:
+#' Following section explain further principles valid throughout \bold{DescToolsX}:
+#'  \tabular{ll}{
+#'    \verb{  }\link{Formulas}             \tab Handling formulas \cr
+#'    \verb{  }\link{Association}\verb{  } \tab Interrater agreement  \cr
+#'    \verb{  }\link{Association}\verb{  } \tab Tests  \cr
+#'    \verb{  }\link{Association}\verb{  } \tab Confidence intervals  \cr
+#'    \verb{  }\link{Association}\verb{  } \tab Measures  \cr
+#'    \verb{  }\link{Association}\verb{  } \tab Plots  \cr
+#'    }
 #'
 #' @section Function names:
 #' All functions use \strong{lower camelCase}.
@@ -110,7 +123,7 @@
 #' Performance improvements are a core design goal of DescToolsX and a key
 #' motivation for the package redesign.
 #' 
-#' “DescToolsGraphics is listed in Depends because this package extends its
+#' DescToolsViz is listed in Depends because this package extends its
 #' user-facing API and expects it to be attached. Functions used internally
 #' are explicitly imported via the NAMESPACE.”
 #' 

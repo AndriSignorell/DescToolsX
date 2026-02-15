@@ -32,19 +32,17 @@ kurtX(
 \item{x}{a numeric vector. An object which is not a vector is coerced (if
 possible) by \code{as.vector}.}
 
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
+\item{conf.level}{Confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
 
-\item{sides}{a character string specifying the side of the confidence
+\item{sides}{A character string specifying the side of the confidence
 interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. \code{"left"} would be analogue to a hypothesis of
-\code{"greater"} in a \code{t.test}. You can specify just the initial
-letter.}
+\code{"right"}. You can specify just the initial letter.}
 
-\item{method}{a character string, defining the type of intervals required.
-The value should be one out of \code{"classic"}, \code{"boot"} (default).
-Further arguments for the boot function (as \code{R}, \code{type}, ...) can
-be provided by the dots' argument if needed.}
+\item{method}{A character string defining the type of interval required.
+The value should be one of \code{"classic"} or \code{"boot"} (default).
+Further arguments for the bootstrap procedure (such as \code{R},
+\code{type}, etc.) can be supplied via the \code{...} argument if needed.}
 
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}

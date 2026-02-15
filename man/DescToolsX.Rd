@@ -2,8 +2,8 @@
 % Please edit documentation in R/DescToolsX-package.R
 \docType{package}
 \name{DescToolsX}
-\alias{DescToolsX-package}
 \alias{DescToolsX}
+\alias{DescToolsX-package}
 \title{DescToolsX: Descriptive Statistics and Exploratory Data Analysis}
 \description{
 DescToolsX is the sequel to DescTools which provides a modern, consistent,
@@ -33,6 +33,19 @@ DescTools.
 DescToolsX follows a set of strict design principles to ensure consistency,
 usability, and performance across the entire package.
 }
+\section{Further principles}{
+
+Following section explain further principles valid throughout \bold{DescToolsX}:
+\tabular{ll}{
+\verb{  }\link{Formulas}             \tab Handling formulas \cr
+\verb{  }\link{Association}\verb{  } \tab Interrater agreement  \cr
+\verb{  }\link{Association}\verb{  } \tab Tests  \cr
+\verb{  }\link{Association}\verb{  } \tab Confidence intervals  \cr
+\verb{  }\link{Association}\verb{  } \tab Measures  \cr
+\verb{  }\link{Association}\verb{  } \tab Plots  \cr
+}
+}
+
 \section{Function names}{
 
 All functions use \strong{lower camelCase}.
@@ -128,7 +141,7 @@ accuracy and user-facing behaviour.
 Performance improvements are a core design goal of DescToolsX and a key
 motivation for the package redesign.
 
-“DescToolsGraphics is listed in Depends because this package extends its
+DescToolsViz is listed in Depends because this package extends its
 user-facing API and expects it to be attached. Functions used internally
 are explicitly imported via the NAMESPACE.”
 }

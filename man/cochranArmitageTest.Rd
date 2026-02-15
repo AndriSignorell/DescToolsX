@@ -41,7 +41,6 @@ desc(dose)
 cochranArmitageTest(dose)
 cochranArmitageTest(dose, alternative="one.sided")
 
-
 # not exactly the same as in package coin:
 # independence_test(tumor ~ dose, data = lungtumor, teststat = "quad")
 lungtumor <- data.frame(dose = rep(c(0, 1, 2), c(40, 50, 48)),
@@ -53,6 +52,17 @@ cochranArmitageTest(tab)
 
 # but similar to
 prop.trend.test(tab[,1], apply(tab,1, sum))
+
+# another reference
+# https://support.sas.com/documentation/onlinedoc/stat/142/freq.pdf, pp 2868
+pain <- structure(c(26, 6, 26, 7, 23, 9, 18, 14, 9, 23), 
+                  dim = c(2L, 5L), 
+                  dimnames = list(adverse=c("No", "Yes"), 
+                                 dose=c("0", "1", "2", "3", "4")), 
+                 class = "table") 
+Desc(pain)
+cochranArmitageTest(pain)
+
 }
 \references{
 Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley

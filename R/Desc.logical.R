@@ -21,43 +21,28 @@
 #' function is, that dichotomous variable in general do not contain intense
 #' infmion. Therefore it makes sense to condense the description of sets of
 #' dichotomous variables.
-
+#' 
 #' @param x a dichotomous vector of variable class, can be a \code{"numeric"}
 #' \code{"integer"},  \code{"factor"},  \code{"character"} or  \code{"boolean"}, 
 #' the only condition is, that there are only two unique values.
+#' 
 #' @param ... Further graphical parameters passed to the underlying
 #'   base R plotting functions.
+#'   
 #' @param digits integer. With how many digits should the relative frequencies
 #' be fmted? Default can be set by
 #' \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA} no
-#' confidence interval will be calculated. Default is 0.95.
-#' @param plotit logical. Should a plot be created? The plot type will be
-#' chosen according to the classes of variables (roughly following a
-#' numeric-numeric, numeric-categorical, categorical-categorical logic).
-#' Default can be defined by option \code{plotit}, if it does not exist then
-#' it's set to \code{FALSE}.
-#' @param main (character|\code{NULL}|\code{NA}), the main title(s). 
-#' \itemize{
-#' \item If \code{NULL}, the title will be composed as: \itemize{ \item
-#' variable name (class(es)), \item resp. number - variable name (class(es)) if
-#' the \code{enum} option is set to \code{TRUE.} } \item Use \code{NA} if no
-#' caption should be printed at all. }
 #' @param ord  order of the levels
-#' @param xlab label for the x-axis
-#' @param col colors for the bars
-#' @param legend boolean, display a legend? (default \code{TRUE})
-#' @param xlim limits for the x-axis
-#' @param confint boolean, display confidence intervals? (default \code{TRUE})
+#' 
+#' @seealso \code{\link[DescToolsViz]{plot.Desc.logical}} for graphical display
 
 
-
-#' @rdname Desc.logical
+#' @rdname Desc
+#' @method Desc logical
 #' @export
 Desc.logical <- function(x, ord = "level", conf.level = 0.95, 
-                         main = NULL, 
-                         plotit=.getOption("plotit"), 
+                         main = NULL, verbose = NULL, plotit = NULL,
                          digits=NULL, ...) {
 
   # ----------------------------------------------------
@@ -96,19 +81,19 @@ Desc.logical <- function(x, ord = "level", conf.level = 0.95,
   
   res <- list(
     
-    xname = deparse(substitute(x)),
-    label = Label(x),
-    class = paste(class(x), collapse = ","),
-    classlabel = paste(class(x), collapse = ","),
+    meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
+    
     length = total_n,
     n = n,
     NAs = total_n - n,
-    main = main,
-    plotit = plotit,
+    
     digits = digits,
     
     unique = length(ff),
-    afrq = ff, rfrq = bf, conf.level = conf.level
+    afrq = ff, 
+    rfrq = bf, 
+    conf.level = conf.level
+    
   )
   
   class(res) <- c("Desc.logical", "Desc")
@@ -118,15 +103,13 @@ Desc.logical <- function(x, ord = "level", conf.level = 0.95,
 
 
 
-#' @rdname Desc.logical
+#' @rdname Desc
 #' @export
 print.Desc.logical <- function(x, digits = NULL, ...) {
-  digits <- Coalesce(digits, x$digits, NULL)
-
-  .printHeader(main = x[["main"]], 
-               class=x[["class"]], 
-               label = x[["label"]])
   
+  digits <- digits %||% x$digits
+
+  .printHeader(x$meta)
   
   if (!is.null(digits)) {
     opt <- options(digits = digits)
@@ -187,88 +170,15 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
     cat(gettextf("Nothing to plot in %s\n\n", x$xname))
   }
   
-  if(x$plotit)
-    plot(x, main=x$main)
+  if(x$meta$plotit)
+    plot(x, main=x$meta$main)
   
 }
 
 
 
 
-.plotBoolean <- function(x, main = NULL, xlab = "", col = NULL,
-                              legend = TRUE, xlim = c(0, 1), confint = TRUE, ...) {
-  
-  
-  DescToolsGraphics:::.withGraphicsState({
-    
-    main <- Coalesce(main, x$main, deparse(substitute(x)))
-    
-    if (is.null(col)) {
-      col <- c(DescToolsGraphics::Pal()[1:2], "grey80", "grey60", "grey40")
-    } else {
-      col <- rep(col, length.out = 5)
-    }
-    
-    tab <- x$afrq
-    ptab <- x$rfrq[, 1]
-    if (nrow(x$rfrq) > 2) stop("!plot.Desc.logical! can only display 2 levels")
-    oldpar <- par(no.readonly = TRUE)
-    on.exit(par(oldpar))
-    
-    par(mar = c(4.1, 2.1, 0, 2.1))
-    if (!is.na(main)) par(oma = c(0, 0, 3, 0))
-    
-    plot(
-      x = ptab[1], y = 1, cex = 0.8, xlim = xlim, yaxt = "n", ylab = "",
-      type = "n", bty = "n", xlab = xlab, main = NA
-    )
-    segments(x0 = 0, x1 = 1, y0 = 1, y1 = 1, col = "grey")
-    segments(x0 = c(0, 1), x1 = c(0, 1), y0 = 0.8, y1 = 1.2, col = "grey")
-    
-    # insert grid
-    segments(
-      x0 = seq(0, 1, 0.1), x1 = seq(0, 1, 0.1), y0 = 0.8, y1 = 1.2,
-      col = "grey", lty = "dotted"
-    )
-    rect(xleft = 0, ybottom = 0.95, xright = ptab[1], ytop = 1.05, col = col[1]) # greenyellow
-    rect(xleft = ptab[1], ybottom = 0.95, xright = 1, ytop = 1.05, col = col[2]) # green4
-    
-    if (confint) {
-      ci.99 <- binomCI(tab[1], sum(tab), conf.level = 0.99)[2:3]
-      ci.95 <- binomCI(tab[1], sum(tab), conf.level = 0.95)[2:3]
-      ci.90 <- binomCI(tab[1], sum(tab), conf.level = 0.90)[2:3]
-      rect(xleft = ci.99[1], ybottom = 0.9, xright = ci.99[2], ytop = 1.1, col = col[3]) # olivedrab1
-      rect(xleft = ci.95[1], ybottom = 0.9, xright = ci.95[2], ytop = 1.1, col = col[4]) # olivedrab3
-      rect(xleft = ci.90[1], ybottom = 0.9, xright = ci.90[2], ytop = 1.1, col = col[5]) # olivedrab4
-      segments(x0 = ptab[1], x1 = ptab[1], y0 = 0.7, y1 = 1.3)
-    }
-    
-    if (legend) {
-      legend(
-        x = 0, y = 0.75, legend = c("ci.99     ", "ci.95     ", "ci.90     "),
-        box.col = "white",
-        fill = col[3:5], bg = "white", cex = 1, ncol = 3,
-        text.width = c(0.2, 0.2, 0.2)
-      )
-    }
-    if (length(rownames(tab)) == 1) {
-      text(rownames(tab), x = ptab[1] / 2, y = 1.2)
-    } else {
-      text(rownames(tab), x = c(ptab[1], ptab[1] + 1) / 2, y = 1.2)
-    }
-    
-    if (!is.na(main)) title(main = main, outer = TRUE)
-    
-    if (!is.null(.getOption("stamp"))) 
-      DescToolsGraphics::stamp()
-    
-  })  
-  
-  invisible()
-  
-}
-
-#' @rdname Desc.logical
-#' @export
-plot.Desc.logical <- .plotBoolean
+# #' @rdname Desc.logical
+# #' @export
+# plot.Desc.logical <- DescToolsViz::plotBoolean
 

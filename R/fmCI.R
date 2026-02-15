@@ -39,9 +39,9 @@ fmCI <- function(x, template=NULL, ...){
   
   if (is.null(template)) {
     template <- switch(
-      n,
-      "%s [%s, %s]",   # n = 3
-      "[%s, %s]"       # n = 2
+      as.character(n),
+      "2"="[%s, %s]",       # n = 2
+      "3"="%s [%s, %s]"     # n = 3
     )
   }
   

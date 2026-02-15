@@ -113,7 +113,7 @@
 #' Otherwise, it changes the named settings and invisibly returns their
 #' previous values.
 #' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link{fm}}, \code{\link[DescToolsGraphics]{pal}}
+#' @seealso \code{\link{fm}}, \code{\link[DescToolsViz]{pal}}
 #' @examples
 #' 
 #' getOption("DescToolsX.plotit")
@@ -126,7 +126,7 @@ setDescToolsXOption <- function(...) {
   stopifnot(length(opts) > 0)
   names(opts) <- paste0("DescToolsX.", names(opts))
   options(opts)
-  invisible(NULL)
+  # invisible(NULL)
 }
 
 

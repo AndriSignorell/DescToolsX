@@ -2,52 +2,53 @@
 % Please edit documentation in R/percTable.R
 \name{percTable}
 \alias{percTable}
-\alias{PercTable}
-\alias{PercTable.default}
-\alias{PercTable.table}
-\alias{PercTable.formula}
-\alias{PercTable.matrix}
-\alias{Margins}
-\alias{print.PercTable}
 \alias{percTable.default}
-\alias{percTable.matrix}
-\alias{percTable.formula}
 \alias{percTable.table}
+\alias{percTable.formula}
+\alias{percTable.matrix}
+\alias{print.PercTable}
 \title{Percentage Table}
 \usage{
 percTable(...)
 
 \method{percTable}{default}(x, y = NULL, ...)
 
-\method{percTable}{matrix}(x, ...)
-
 \method{percTable}{formula}(formula, data, subset, na.action, ...)
 
 \method{percTable}{table}(
-  tab,
-  row.vars = NULL,
-  col.vars = NULL,
-  justify = "right",
+  x,
   freq = TRUE,
-  rfrq = "100",
+  prop = c("rows", "cols", "total"),
   expected = FALSE,
-  residuals = FALSE,
-  stdres = FALSE,
-  margins = NULL,
-  digits = NULL,
   ...
 )
 
-\method{print}{PercTable}(x, vsep = NULL, ...)
+\method{print}{PercTable}(
+  x,
+  margins = NULL,
+  col.vars = NULL,
+  row.vars = NULL,
+  justify = NULL,
+  blockSep = NULL,
+  ...
+)
+
+\method{percTable}{matrix}(
+  x,
+  freq = TRUE,
+  prop = c("rows", "cols", "total"),
+  expected = FALSE,
+  ...
+)
 }
 \arguments{
-\item{\dots}{the dots are passed from \code{PercTable.default()} to
-\code{PercTable.table()} and from \code{Margins} to the function
-\code{\link{Freq}}.}
+\item{\dots}{the dots are passed to \code{print.PercTable()}}
 
-\item{x, y}{objects which can be interpreted as factors (including character
-strings).  x and y will be tabulated via \code{table(x, y)}.\cr If x is a
-matrix, it will be coerced to a table via as.table(x).}
+\item{x}{Either a vector of observations, a two-column object
+(matrix, data.frame or list), or a contingency table.}
+
+\item{y}{Optional second vector. If \code{x} is a contingency table,
+\code{y} must be \code{NULL}.}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will
 be tabled versus rhs (\code{table(lhs, rhs)}).}
@@ -63,41 +64,30 @@ used.}
 \item{na.action}{a function which indicates what should happen when the data
 contain NAs. Defaults to \code{getOption("na.action")}.}
 
-\item{tab}{a r x c-contingency table \%\% ~~Describe \code{tab} here~~}
-
-\item{row.vars}{a vector of row variables (see Details).}
-
-\item{col.vars}{a vector of column variables (see Details). If this is left
-to \code{NULL} the table structure will be preserved.}
-
-\item{justify}{either \code{"left"} or \code{"right"} for defining the
-alignment of the table cells.}
-
 \item{freq}{boolean. Should absolute frequencies be included? Defaults to
 TRUE.}
 
-\item{rfrq}{a string with 3 characters, each of them being 1 or 0. The first
-position means total percentages, the second means row percentages and the
-third column percentages. "011" produces a table output with row and column
+\item{prop}{a string defining the conditional propotions to be displayed.
+Can be \code{"rows"} for rowwise percentages \code{"cols"} for columnwise
+or both of them.
+produces a table output with row and column
 percentages.}
 
 \item{expected}{the expected counts under the null hypothesis.}
-
-\item{residuals}{the Pearson residuals, (observed - expected) /
-sqrt(expected).}
-
-\item{stdres}{standardized residuals, (observed - expected) / sqrt(V), where
-V is the residual cell variance (for the case where x is a matrix, n * p *
-(1 - p) otherwise).}
 
 \item{margins}{a vector, consisting out of 1 and/or 2. Defines the margin
 sums to be included.  1 stands for row margins, 2 for column margins, c(1,2)
 for both. Default is \code{NULL} (none).}
 
-\item{digits}{integer. With how many digits shoud the relative frequencies
-be formatted? Default can be set by \code{DescToolsOptions(digits=x)}.}
+\item{col.vars}{a vector of column variables (see Details). If this is left
+to \code{NULL} the table structure will be preserved.}
 
-\item{vsep}{logical, defining if an empty row should be introduced between
+\item{row.vars}{a vector of row variables (see Details).}
+
+\item{justify}{either \code{"left"} or \code{"right"} for defining the
+alignment of the table cells.}
+
+\item{blockSep}{logical, defining if an empty row should be introduced between
 the table rows. Default is FALSE, if only a table with one single
 description (either frequencies or percents) should be returned and
 \code{TRUE} in any other case.}
@@ -131,38 +121,38 @@ percentages.
 }
 \examples{
 
-tab <- table(driver=d.pizza$driver, area=d.pizza$area)
+tab <- as.table(apply(HairEyeColor, c(1,2), sum))
 
-percTable(tab=tab, col.vars=2)
+percTable(tab, col.vars=2)
 
-percTable(tab=tab, col.vars=2, margins=c(1,2))
-percTable(tab=tab, col.vars=2, margins=2)
-percTable(tab=tab, col.vars=2, margins=1)
-percTable(tab=tab, col.vars=2, margins=NULL)
+percTable(tab, col.vars=2, margins=c(1,2))
+percTable(tab, col.vars=2, margins=2)
+percTable(tab, col.vars=2, margins=1)
+percTable(tab, col.vars=2, margins=NULL)
 
-percTable(tab=tab, col.vars=2, rfrq="000")
+percTable(tab, col.vars=2, prob=NULL)
 
 # just the percentages without absolute values
-percTable(tab=tab, col.vars=2, rfrq="110", freq=FALSE)
+percTable(tab, col.vars=2, prob=c("total","rows"), freq=FALSE)
 
-# just the row percentages in percent format (pfmt = TRUE)
-percTable(tab, freq= FALSE, rfrq="010", pfmt=TRUE, digits=1)
+# just the row percentages
+percTable(tab, freq= FALSE, prob="rows")
 
 # just the expected frequencies and the standard residuals
-percTable(tab=tab, rfrq="000", expected = TRUE, stdres = TRUE)
+percTable(tab, prob=NULL, expected = TRUE)
 
 
 # rearrange output such that freq are inserted as columns instead of rows
-percTable(tab=tab, col.vars=c(3,2), rfrq="111")
+percTable(tab, col.vars=c(3,2))
 
 # putting the areas in rows
-percTable(tab=tab, col.vars=c(3,1), rfrq="100", margins=c(1,2))
+percTable(tab, col.vars=c(3,1), prob="total", margins=c(1,2))
 
 # formula interface with subset
 percTable(driver ~ area, data=d.pizza, subset=wine_delivered==0)
 
 # sort the table by rows, order first column (Zurich), then third, then row.names (0)
-percTable(tab=sortX(tab, ord=c(1,3,0)))
+percTable(sortX(tab, ord=c(1,3,0)))
 
 # reverse the row variables, so that absolute frequencies and percents
 # are not nested together
@@ -170,13 +160,11 @@ percTable(tab, row.vars=c(3, 1))
 
 # the vector interface
 percTable(x=d.pizza$driver, y=d.pizza$area)
-percTable(x=d.pizza$driver, y=d.pizza$area, margins=c(1,2), rfrq="000", useNA="ifany")
+percTable(x=d.pizza$driver, y=d.pizza$area, prop="rows", 
+margins=c("rows","cols"))
 
-# one dimensional x falls back to the function Freq()
-percTable(x=d.pizza$driver)
-
-# the margin tables
-# Margins(Titanic)
+# one dimensional x falls back to the function freq()
+# percTable(x=d.pizza$driver)
 
 }
 \references{
@@ -184,8 +172,8 @@ Agresti, Alan (2007) \emph{Introduction to categorical data
 analysis}. NY: John Wiley and Sons, Section 2.4.5\cr
 }
 \seealso{
-\code{\link{Freq}}, \code{\link{table}}, \code{\link{ftable}},
-\code{\link{prop.table}}, \code{\link{addmargins}},
+\code{\link{freq}}, \code{\link{table}}, \code{\link{ftable}},
+\code{\link{proportions}}, \code{\link{addmargins}},
 \code{\link{setDescToolsXOption}}, \code{\link{style}}\cr There are similar
 functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
 package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of

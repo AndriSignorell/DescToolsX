@@ -444,34 +444,6 @@ MonthDays <- function (x) {
 
 
 
-
-#' @rdname date_functions
-#' @export
-Zodiac <- function(x, lang = c("en","de"), stringsAsFactors = TRUE) {
-  
-  switch(match.arg(lang, choices=c("en","de"))
-         , en = {z <- c("Capricorn","Aquarius","Pisces","Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn") }
-         , de =  {z <- c("Steinbock","Wassermann","Fische","Widder","Stier","Zwillinge","Krebs","Loewe","Jungfrau","Waage","Skorpion","Schuetze","Steinbock") }
-  )
-  
-  # i <- cut(DescTools::Month(x)*100 + DescTools::Day(x),
-  #          breaks=c(0,120,218,320,420,520,621,722,822,923,1023,1122,1221,1231))
-  i <- cut(Month(x) * 100 + DescToolsX::Day(x), 
-           breaks = c(0, 120, 218, 320, 420, 520, 621, 
-                      722, 823, 922, 1023, 1122, 1222, 1231), 
-           right=FALSE, include.lowest = TRUE)
-  
-  if(stringsAsFactors){
-    res <- i
-    levels(res) <- z
-  } else {
-    res <- z[i]
-  }
-  return(res)
-}
-
-
-
 #' @rdname date_functions
 #' @export
 isWeekend <- function(x) {

@@ -54,7 +54,7 @@ cutAge <- function(x, breaks=c(seq(from=0, to=90, by=10), Inf),
   if(!full)
     res <- factor(res, 
                   levels=levels(res)[do.call(seq, 
-                                             as.list(range(which(Freq(res)$freq != 0))))])			
+                                             as.list(range(which(freq(res)$freq != 0))))])			
   
   return(res)  
   

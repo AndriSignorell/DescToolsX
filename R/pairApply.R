@@ -19,7 +19,7 @@
 #' @return a matrix with the results of FUN. 
 #' 
 #' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{outer}}, \code{\link{combPairs}},
+#' @seealso \code{\link{outer}}, \code{\link[DescToolsViz]{combPairs}},
 #' \code{\link{pairwise.table}}
 #' @keywords manip
 #' @examples

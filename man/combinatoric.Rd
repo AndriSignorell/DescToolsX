@@ -5,7 +5,6 @@
 \alias{permn}
 \alias{combSet}
 \alias{combN}
-\alias{combPairs}
 \title{Number and Samples for Permutations or Combinations of a Set}
 \usage{
 permn(x, sort = FALSE)
@@ -13,8 +12,6 @@ permn(x, sort = FALSE)
 combN(n, m, repl = FALSE, ord = FALSE)
 
 combSet(x, m, repl = FALSE, ord = FALSE, as.list = FALSE)
-
-combPairs(x, y = NULL)
 }
 \arguments{
 \item{x}{a vector of numeric values or characters. Characters need not be
@@ -36,9 +33,6 @@ Defaults to FALSE}
 \item{as.list}{logical, defining if the results should be returned in a flat
 list, say every sample is a single element of the resulting list. Default is
 FALSE.}
-
-\item{y}{a vector of elements, need not be same dimension as x.  If y is not
-\code{NULL} then all combination x and y are returned.}
 }
 \value{
 a matrix with all possible permutations or combinations of the
@@ -51,16 +45,6 @@ Return the set of permutations for a given set of values. The values can be
 numeric values, characters or factors. \code{combN} computes the number of
 combinations with and without replacement and order, whereas \code{combSet}
 returns the value sets.
-}
-\details{
-\code{combPairs} Returns all combinations of 2 out of the elements in x or x and y (if
-defined). Combinations of the same elements will be dropped (no replacing).
-The vector x need not contain unique values. The permutations will
-automatically be filtered for unique sets, if the same element is given
-twice or more.
-
-If y = \code{NULL} then all combination of 2 out of x are returned. \cr If y
-is defined then all combinations of x and y are calculated.
 }
 \examples{
 
@@ -101,6 +85,7 @@ combPairs(which(sapply(d.pizza, isNumeric)), which(sapply(d.pizza, is.factor)))
 
 }
 \seealso{
+\code{\link[DescToolsViz]{combPairs}},
 \code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}},
 \cr \code{vignette("Combinatorics")}
 }

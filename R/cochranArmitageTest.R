@@ -42,7 +42,6 @@
 #' cochranArmitageTest(dose)
 #' cochranArmitageTest(dose, alternative="one.sided")
 #' 
-#' 
 #' # not exactly the same as in package coin:
 #' # independence_test(tumor ~ dose, data = lungtumor, teststat = "quad")
 #' lungtumor <- data.frame(dose = rep(c(0, 1, 2), c(40, 50, 48)),
@@ -54,6 +53,17 @@
 #' 
 #' # but similar to
 #' prop.trend.test(tab[,1], apply(tab,1, sum))
+#' 
+#' # another reference
+#' # https://support.sas.com/documentation/onlinedoc/stat/142/freq.pdf, pp 2868
+#' pain <- structure(c(26, 6, 26, 7, 23, 9, 18, 14, 9, 23), 
+#'                   dim = c(2L, 5L), 
+#'                   dimnames = list(adverse=c("No", "Yes"), 
+#'                                  dose=c("0", "1", "2", "3", "4")), 
+#'                  class = "table") 
+#' Desc(pain)
+#' cochranArmitageTest(pain)
+#' 
 
 
 #' @export
@@ -102,7 +112,11 @@ cochranArmitageTest <- function(x, alternative = c("two.sided","one.sided")) {
 
 # == internal helper functions =====================================
 
-.scores <- function(x, MARGIN=1, method="table") { 
+.scores <- function(x, MARGIN=1, 
+                    method=c("table", "ranks", "ridit", "modridit")) { 
+  
+  # used by cochranArmitageTest, pearsonCor, spearmanCor
+  
   
   # original by Eric Lecoutre
   # https://stat.ethz.ch/pipermail/r-help/2005-July/076371.html

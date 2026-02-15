@@ -1,0 +1,238 @@
+
+#' Relative Risk 
+#' 
+#' Computes the relative risk and its confidence intervals.  Confidence
+#' intervals are calculated using normal approximation (\code{"wald"}),
+#' (\code{"score"}) or by using odds ratio (\code{"use.or"})  
+#' 
+#' Best is to always put the outcome variable (disease yes/no) in the columns
+#' and the exposure variable in the rows. In other words, put the dependent
+#' variable – the one that describes the problem under study – in the columns.
+#' And put the independent variable – the factor assumed to cause the problem –
+#' in the rows. (Gerritsen, 2010)
+#' 
+#' According to this, the function expects the following table structure:
+#' \preformatted{ diseased=1 diseased=0 exposed=1 (ref) n00 n01 exposed=0 n10
+#' n11 }
+#' 
+#' The relative risk is then calculated as:
+#' 
+#' \preformatted{ (exposed & diseased) / exposed rr =
+#' ---------------------------------- (unexposed & diseased) / unexposed }
+#' 
+#' If the table to be used is not in the required shape, use the function
+#' \code{\link{revX}()} and/or \code{\link{t}()} to reverse rows, columns, or
+#' both, resp. to transpose the table.
+#' 
+#' @name relRisk
+#' @param x a numeric vector or a 2x2 numeric matrix, resp. table.
+#' @param y \code{NULL} (default) or a vector with compatible dimensions to
+#' \code{x}. If y is provided, \code{table(x, y, ...)} will be calculated.
+#' @param conf.level confidence level. Default is \code{NA}, meaning no
+#' confidence intervals will be reported. 
+#' @param method method for calculating the relative risk and the confidence
+#' intervals. Can be one out of \code{"score"}, \code{"wald"}, \code{"use.or"}.
+#' Default is \code{"score"}. 
+#' @param delta small constant to be added to the numerator for calculating the
+#' log risk ratio (Wald method). Usual choice is 0.5 although there does not
+#' seem to be any theory behind this. (Dewey, M. 2006) 
+#' @param \dots further arguments are passed to the function
+#' \code{\link{table}}, allowing i.e. to set \code{useNA}.
+#' @return If \code{conf.level} is not \code{NA} then the result will be a
+#' vector with 3 elements for estimate, lower confidence intervall and upper
+#' for the upper one.  Else the relative risk will be reported as a single
+#' value.
+#' 
+#' @author Andri Signorell <andri@@signorell.net>, based on code of Yongyi Min
+#' and Michael Dewey 
+#' @seealso \code{\link{oddsRatio}} 
+#' 
+#' @references Rothman, K. J. and Greenland, S. (1998) \emph{Modern
+#' Epidemiology}.  Lippincott-Raven Publishers
+#' 
+#' Rothman, K. J. (2002) \emph{Epidemiology: An Introduction}. Oxford
+#' University Press
+#' 
+#' Jewell, N. P. (2004) \emph{Statistics for Epidemiology}. 1st Edition, 2004,
+#' Chapman & Hall, pp. 73-81
+#' 
+#' Selvin, S. (1998) \emph{Modern Applied Biostatistical Methods Using S-Plus}.
+#' 1st Edition, Oxford University Press
+#' 
+#' Gerritsen, A (2010)
+#' \url{https://www.theanalysisfactor.com/cross-tabulation-in-cohort-and-case-control-studies/}
+#' @keywords multivariate
+#' @examples
+#' 
+#' m <- matrix(c(78,50,1422,950), 
+#'             nrow=2, 
+#'             dimnames = list(water=c("cont", "clean"), 
+#'                             diarrhea=c("yes", "no")))
+#' 
+#' relRisk(m, conf.level = 0.95)
+#' 
+#' 
+#' mm <- cbind(c(9,20),c(41,29))
+#' mm
+#'  
+#' relRisk(t(mm), conf.level=0.95)
+#' relRisk(t(mm), conf.level=0.95, method="wald")
+#' relRisk(t(mm), conf.level=0.95, method="use.or")
+#' 
+
+#' @export
+relRisk <- function(x, y = NULL, conf.level = NA, method = c("score", "wald", "use.or"), delta = 0.5, ...) {
+  
+  if(!is.null(y)) x <- table(x, y, ...)
+  
+  p <- (d <- dim(x))[1L]
+  if(!is.numeric(x) || length(d) != 2L || p != d[2L] || p !=2L)
+    stop("'x' is not a 2x2 numeric matrix")
+  
+  x1 <- x[1,1]
+  x2 <- x[2,1]
+  n1 <- x[1,1] + x[1,2]
+  n2 <- x[2,1] + x[2,2]
+  
+  rr <- (x[1,1]/sum(x[1,])) / (x[2,1]/sum(x[2,]))
+  
+  if( !is.na(conf.level)) {
+    switch( match.arg( arg = method, choices = c("score", "wald", "use.or") )
+            , "score" = {
+              # source:
+              # Agresti-Code:        http://www.stat.ufl.edu/~aa/cda/R/two-sample/R2/
+              
+              # R Code for large-sample score confidence interval for a relative risk
+              # in a 2x2 table (Koopman 1984, Miettinen and Nurminen 1985, Nurminen 1986).
+              
+              z =  abs(qnorm((1-conf.level)/2))
+              if ((x2==0) &&(x1==0)){
+                ul = Inf
+                ll = 0
+              }
+              else{
+                a1 =  n2*(n2*(n2+n1)*x1+n1*(n2+x1)*(z^2))
+                a2 = -n2*(n2*n1*(x2+x1)+2*(n2+n1)*x2*x1+n1*(n2+x2+2*x1)*(z^2))
+                a3 = 2*n2*n1*x2*(x2+x1)+(n2+n1)*(x2^2)*x1+n2*n1*(x2+x1)*(z^2)
+                a4 = -n1*(x2^2)*(x2+x1)
+                b1 = a2/a1
+                b2 = a3/a1
+                b3 = a4/a1
+                c1 = b2-(b1^2)/3
+                c2 = b3-b1*b2/3+2*(b1^3)/27
+                ceta = acos(sqrt(27)*c2/(2*c1*sqrt(-c1)))
+                t1 = -2*sqrt(-c1/3)*cos(pi/3-ceta/3)
+                t2 = -2*sqrt(-c1/3)*cos(pi/3+ceta/3)
+                t3 = 2*sqrt(-c1/3)*cos(ceta/3)
+                p01 = t1-b1/3
+                p02 = t2-b1/3
+                p03 = t3-b1/3
+                p0sum = p01+p02+p03
+                p0up = min(p01,p02,p03)
+                p0low = p0sum-p0up-max(p01,p02,p03)
+                
+                if( (x2==0) && (x1!=0) ){
+                  ll = (1-(n1-x1)*(1-p0low)/(x2+n1-(n2+n1)*p0low))/p0low
+                  ul = Inf
+                }
+                else if( (x2!=n2) && (x1==0)){
+                  ul = (1-(n1-x1)*(1-p0up)/(x2+n1-(n2+n1)*p0up))/p0up
+                  ll = 0
+                }
+                else if( (x2==n2) && (x1==n1)){
+                  ul = (n2+z^2)/n2
+                  ll =  n1/(n1+z^2)
+                }
+                else if( (x1==n1) || (x2==n2) ){
+                  if((x2==n2) && (x1==0)) { ll = 0 }
+                  if((x2==n2) && (x1!=0)) {
+                    phat1  = x2/n2
+                    phat2  =  x1/n1
+                    phihat = phat2/phat1
+                    phil = 0.95*phihat
+                    chi2 = 0
+                    while (chi2 <= z){
+                      a = (n2+n1)*phil
+                      b = -((x2+n1)*phil+x1+n2)
+                      c = x2+x1
+                      p1hat = (-b-sqrt(b^2-4*a*c))/(2*a)
+                      p2hat = p1hat*phil
+                      q2hat = 1-p2hat
+                      var = (n2*n1*p2hat)/(n1*(phil-p2hat)+n2*q2hat)
+                      chi2 = ((x1-n1*p2hat)/q2hat)/sqrt(var)
+                      ll = phil
+                      phil = ll/1.0001}}
+                  i = x2
+                  j = x1
+                  ni = n2
+                  nj = n1
+                  if( x1==n1 ){
+                    i = x1
+                    j = x2
+                    ni = n1
+                    nj = n2
+                  }
+                  phat1  = i/ni
+                  phat2  =  j/nj
+                  phihat = phat2/phat1
+                  phiu = 1.1*phihat
+                  if((x2==n2) && (x1==0)) {
+                    if(n2<100) {phiu = .01}
+                    else {phiu=0.001}
+                  }
+                  chi1 = 0
+                  while (chi1 >= -z){
+                    a = (ni+nj)*phiu
+                    b = -((i+nj)*phiu+j+ni)
+                    c = i+j
+                    p1hat = (-b-sqrt(b^2-4*a*c))/(2*a)
+                    p2hat = p1hat*phiu
+                    q2hat = 1-p2hat
+                    var = (ni*nj*p2hat)/(nj*(phiu-p2hat)+ni*q2hat)
+                    chi1  = ((j-nj*p2hat)/q2hat)/sqrt(var)
+                    phiu1 = phiu
+                    phiu = 1.0001*phiu1
+                  }
+                  
+                  if(x1==n1) {
+                    ul = (1-(n1-x1)*(1-p0up)/(x2+n1-(n2+n1)*p0up))/p0up
+                    ll = 1/phiu1
+                  }
+                  else{ ul = phiu1}
+                }
+                
+                else{
+                  ul = (1-(n1-x1)*(1-p0up)/(x2+n1-(n2+n1)*p0up))/p0up
+                  ll = (1-(n1-x1)*(1-p0low)/(x2+n1-(n2+n1)*p0low))/p0low
+                }
+              }
+            }
+            , "wald" = {
+              # based on code by Michael Dewey, 2006
+              
+              x1.d <- x1 + delta
+              x2.d <- x2 + delta
+              lrr <- log(rr)
+              se.lrr <- sqrt(1/x1.d - 1/n1 + 1/x2.d - 1/n2)
+              mult <- abs(qnorm((1-conf.level)/2))
+              ll <- exp(lrr - mult * se.lrr)
+              ul <- exp(lrr + mult * se.lrr)
+            }
+            , "use.or" = {
+              or <- oddsRatio(x, conf.level=conf.level)
+              p2 <- x2/n2
+              rr.ci <- or/((1-p2) + p2 * or)
+              ll <- unname(rr.ci[2])
+              ul <- unname(rr.ci[3])
+            }
+    )
+  }
+  
+  if (is.na(conf.level)) {
+    res <- rr
+  } else {
+    res <- c("rel. risk"=rr, lwr.ci=ll, upr.ci=ul)
+  }
+  return(res)
+  
+}

@@ -29,8 +29,8 @@ If \code{NA}, no confidence interval is computed.}
 \code{"fisheradj"} (using fisher z transformation and bias correction), \code{"boot"}
 bootstrap intervals.}
 
-\item{correct}{logical. Should a bias correction (see Bergsma, 2013) be
-applied or not. Default is \code{FALSE}.}
+\item{correct}{logical (default \code{FALSE}). Should a bias
+correction (see Bergsma, 2013) be applied or not.}
 
 \item{...}{Additional arguments passed to internal helper functions,
 such as bootstrap routines (\code{\link[boot]{boot}}) or
@@ -101,7 +101,7 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 10.1016/j.jkss.2012.10.002
 }
 \seealso{
-\code{\link{table}}, \code{\link[DescToolsGraphics]{plotCorr}},
+\code{\link{table}}, \code{\link[DescToolsViz]{plotCorr}},
 \code{\link{pairApply}}, \code{\link{Association}}
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...

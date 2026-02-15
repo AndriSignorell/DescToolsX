@@ -77,7 +77,7 @@
 #' backslashes, as if they are omitted, strings would be aligned to the
 #' \bold{character} l, r or c respectively. The default is \code{NULL} which
 #' would just leave the strings as they are.\cr This argument is send directly
-#' to the function \code{\link{strAlign}()} as argument \code{sep}.
+#' to the function \code{\link[DescToolsViz]{strAlign}()} as argument \code{sep}.
 #' @param lang optional value setting the language for the months and daynames.
 #' Can be either \code{"local"} for current locale or \code{"en"} for english.
 #' If left to \code{NULL}, the DescToolsOption \code{"lang"} will be searched

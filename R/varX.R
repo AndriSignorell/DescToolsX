@@ -65,7 +65,7 @@
 #' 
 #' 
 #' # Variance for frequency tables
-#' varX(Freq(as.table(c(6,16,24,25,17))),
+#' varX(freq(as.table(c(6,16,24,25,17))),
 #'           breaks=c(0, 10, 20, 30, 40, 50))
 #'      
 
@@ -132,8 +132,8 @@ varX.default <- function(x, estimator = c("unbiased", "ML"),
 #' @export
 varX.Freq <- function(x, breaks, ...)  {
   n <- sum(x$freq)
-  mu <- sum(head(MoveAvg(breaks, order=2, align="left"), -1) * x$perc)
-  s2 <- (sum(head(MoveAvg(breaks, order=2, align="left"), -1)^2 * x$freq) - n*mu^2) / (n-1)
+  mu <- sum(head(moveAvg(breaks, order=2, align="left"), -1) * x$perc)
+  s2 <- (sum(head(moveAvg(breaks, order=2, align="left"), -1)^2 * x$freq) - n*mu^2) / (n-1)
   
   return(s2)
 }

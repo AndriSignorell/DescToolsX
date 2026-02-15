@@ -5,7 +5,6 @@
 \alias{Desc.ordered}
 \alias{Desc.character}
 \alias{print.Desc.factor}
-\alias{plot.Desc.factor}
 \title{Desc.factor}
 \usage{
 \method{Desc}{factor}(
@@ -13,7 +12,8 @@
   maxrows = NULL,
   ord = NULL,
   main = NULL,
-  plotit = .getOption("plotit"),
+  verbose = NULL,
+  plotit = NULL,
   digits = NULL,
   ...
 )
@@ -23,24 +23,13 @@
   maxrows = NULL,
   ord = NULL,
   main = NULL,
-  plotit = .getOption("plotit"),
+  verbose = NULL,
+  plotit = NULL,
   digits = NULL,
   ...
 )
 
 \method{print}{Desc.factor}(x, digits = NULL, ...)
-
-\method{plot}{Desc.factor}(
-  x,
-  main = NULL,
-  maxlablen = 25,
-  type = c("bar", "dot"),
-  col = NULL,
-  border = NULL,
-  xlim = NULL,
-  ecdf = TRUE,
-  ...
-)
 }
 \arguments{
 \item{x}{the object to be described. This can be a data.frame, a list, a
@@ -75,36 +64,24 @@ factors, numerics with few unique values and logicals. Factors (and
 character vectors) are by default ordered by their descending frequencies,
 ordered factors by their natural order.}
 
-\item{main}{(character|\code{NULL}|\code{NA}), the main title(s). \itemize{
-\item If \code{NULL}, the title will be composed as: \itemize{ \item
-variable name (class(es)), \item resp. number - variable name (class(es)) if
-the \code{enum} option is set to \code{TRUE.} } \item Use \code{NA} if no
-caption should be printed at all. }}
+\item{main}{Character string (character|\code{NULL}|\code{NA})
+defining the main title. By default (\code{main = NULL}) the title will
+be composed as: \if{html}{\out{<variable name>}} (<class(es)>).
+If \code{NA}, no title is printed.}
 
-\item{plotit}{logical. Should a plot be created? The plot type will be
-chosen according to the classes of variables (roughly following a
-numeric-numeric, numeric-categorical, categorical-categorical logic).
-Default can be defined by option \code{plotit}, if it does not exist then
-it's set to \code{FALSE}.}
+\item{verbose}{Integer controlling verbosity of table output.
+One of \code{1} (minimal), \code{2} (default), \code{3} (extensive).
+Applies to tables only.}
+
+\item{plotit}{logical. Should a plot be created? The plot type depends
+on the classes of the variables. Default can be defined by
+the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
 \item{digits}{integer. With how many digits should the relative frequencies
 be formatted? Default can be set by
 \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.}
 
-\item{\dots}{further arguments to be passed to or from other methods}
-
-\item{maxlablen}{maximal character length for the labels}
-
-\item{type}{type of plot bar/dot}
-
-\item{col}{the color of the bars}
-
-\item{border}{the border color of the bars}
-
-\item{xlim}{limitation for the x-axis}
-
-\item{ecdf}{boolean, should the cumulative distribution function be
-included? (default \code{TRUE})}
+\item{...}{Additional arguments passed to \code{percTable()}.}
 }
 \description{
 Displays a set of statistical measures describing a factor.
@@ -122,4 +99,7 @@ factors Desc.char converts x to a factor an processes x as factor.\cr
 Desc.ordered does nothing more than changing the standard order for the
 frequencies to it's intrinsic order, which means order \code{"level"}
 instead of \code{"desc"} in the factor case.
+}
+\seealso{
+\code{\link[DescToolsViz]{plot.Desc.factor}} for graphical display
 }

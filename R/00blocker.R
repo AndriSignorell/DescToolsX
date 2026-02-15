@@ -1,5 +1,5 @@
 
 
 .blocker <- function(){
-  DescToolsGraphics::colToRgb("peachpuff")
+  DescToolsViz::colToRgb("peachpuff")
 }

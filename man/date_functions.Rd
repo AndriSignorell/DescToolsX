@@ -29,7 +29,6 @@
 \alias{Year.ym}
 \alias{Year.default}
 \alias{Month.default}
-\alias{Zodiac}
 \title{Count Work Days Between Two Dates}
 \usage{
 CountWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
@@ -101,8 +100,6 @@ LastDayOfMonth(x)
 YearDays(x)
 
 MonthDays(x)
-
-Zodiac(x, lang = c("en", "de"), stringsAsFactors = TRUE)
 
 isWeekend(x)
 

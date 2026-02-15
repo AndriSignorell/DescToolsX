@@ -79,7 +79,7 @@ all.equal(varX(x), varX(z, weights=w))
 
 
 # Variance for frequency tables
-varX(Freq(as.table(c(6,16,24,25,17))),
+varX(freq(as.table(c(6,16,24,25,17))),
           breaks=c(0, 10, 20, 30, 40, 50))
      
 }

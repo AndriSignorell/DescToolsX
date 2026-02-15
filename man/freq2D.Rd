@@ -73,7 +73,7 @@ freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 \seealso{
 \code{\link{cut}}, \code{\link{table}}, and
 \code{\link{print.table}} are the basic underlying functions.\cr
-\code{\link{Freq}}, \code{\link{PercTable}}
+\code{\link{freq}}, \code{\link{percTable}}
 }
 \author{
 Arni Magnusson \href{mailto:thisisarni@gmail.com}{thisisarni@gmail.com}>
