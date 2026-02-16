@@ -61,9 +61,17 @@ meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 }
 \seealso{
 \code{\link{mad}}
+
+Other dispersion: 
+\code{\link{iqrX}()},
+\code{\link{madX}()},
+\code{\link{rangeX}()},
+\code{\link{skew_kurt}},
+\code{\link{varX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} following an idea of Danielle
 Navarro (\code{aad} in the \pkg{lsr} package)
 }
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{dispersion}

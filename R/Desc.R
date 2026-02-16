@@ -157,11 +157,11 @@ desc <- Desc
 
 .printHeader <- function(meta) {
   
-  cat(.LineSep(), "\n")
+  cat(lineSep(), "\n")
   
   if (!identical(meta$main, NA)) {
     
-    header <- gettextf("%s (%s)", meta$main, naVal(meta$class, "-")) 
+    header <- gettextf("%s (%s)", meta$main, naReplace(meta$class, "-")) 
     
     if (.has_color()) 
       header <- cli::style_bold(header)

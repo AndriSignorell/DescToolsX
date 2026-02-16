@@ -10,8 +10,8 @@
 #' 
 #' @param n vector of integers to factorize.
 #' 
-#' @name number_theory
-#' @aliases factorize primes isPrime
+#' @name factorize
+#' @aliases factorize 
 #' @return A named \code{\link{list}} of the same length as \code{n}, each
 #' element a 2-column matrix with column \code{"p"} the prime factors and
 #' column~\code{"m"} their respective exponents (or multiplities), i.e., for a
@@ -30,23 +30,9 @@
 #' factorize(seq(101, 120, by=2))
 
 
-#' @rdname number_theory
+#' @rdname factorize
 #' @export
 factorize <- function (n) {
   setNamesX(lapply(n, factor_u64), n)
 }
  
-
-#' @rdname number_theory
-#' @export
-primes <- function (n) { 
-  setNamesX(lapply(n, primes_upto), n)
-}
-
-
-#' @rdname number_theory
-#' @export
-isPrime <- function(n) {
-  sapply(n, is_prime_u64)
-}
-

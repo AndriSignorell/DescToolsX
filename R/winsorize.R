@@ -45,11 +45,11 @@
 #' 
 #' (d.frm <- (data.frame(
 #'   x, 
-#'   default   = Winsorize(x), 
-#'   quantile  = Winsorize(x, quantile(x, probs=c(0.1, 0.8), na.rm = FALSE)), 
-#'   fixed_val = Winsorize(x, val=c(15, 85)) ######,
-#' #########  fixed_n   = Winsorize(x, val=c(Small(x, k=3)[3], Large(x, k=3)[1])),
-#' #######  closest   = Winsorize(x, val=unlist(Closest(x, c(30, 70)))) 
+#'   default   = winsorize(x), 
+#'   quantile  = winsorize(x, quantile(x, probs=c(0.1, 0.8), na.rm = FALSE)), 
+#'   fixed_val = winsorize(x, val=c(15, 85)) ######,
+#' #########  fixed_n   = winsorize(x, val=c(Small(x, k=3)[3], Large(x, k=3)[1])),
+#' #######  closest   = winsorize(x, val=unlist(Closest(x, c(30, 70)))) 
 #' )))[c(1:10, 90:100), ]
 #' 
 #' # use Large and Small, if a fix number of values should be winsorized (here k=3)
@@ -59,18 +59,18 @@
 
 #' z <- 0:10
 #' # twosided (default):
-#' Winsorize(z, val=c(2,8))
+#' winsorize(z, val=c(2,8))
 #' 
 #' # onesided:
 #' # ... replace all values > 8 with 8
-#' Winsorize(z, val=c(min(z), 8))
+#' winsorize(z, val=c(min(z), 8))
 #' # ... replace all values < 4 with 4
-#' Winsorize(z, val=c(4, max(z)))
+#' winsorize(z, val=c(4, max(z)))
 #' 
 
 
 #' @export
-Winsorize <- function(x, val = quantile(x, probs=c(0.05, 0.95), 
+winsorize <- function(x, val = quantile(x, probs=c(0.05, 0.95), 
                                                na.rm = FALSE)) {
   
   x[x < val[1L]] <- val[1L]

@@ -34,7 +34,7 @@ larger weights contribute more strongly to the empirical distribution.}
 \item{\dots}{further arguments passed to or from other methods.}
 
 \item{breaks}{breaks for calculating the variance for classified data as
-composed by \code{\link{Freq}}.}
+composed by \code{\link{freq}}.}
 }
 \value{
 single numeric value
@@ -95,7 +95,13 @@ base R's implementations \code{\link{var}}, \code{\link{sd}},
 \code{\link{cov}}
 
 also consider \code{\link{madX}}, the most robust alternative
+
+Other dispersion: 
+\code{\link{iqrX}()},
+\code{\link{madX}()},
+\code{\link{meanAD}()},
+\code{\link{rangeX}()},
+\code{\link{skew_kurt}}
 }
-\keyword{array}
-\keyword{multivariate}
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{dispersion}

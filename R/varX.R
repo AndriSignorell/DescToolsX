@@ -32,7 +32,7 @@
 #' larger weights contribute more strongly to the empirical distribution.
 #' @param na.rm logical. Should missing values be removed?
 #' @param breaks breaks for calculating the variance for classified data as
-#' composed by \code{\link{Freq}}.
+#' composed by \code{\link{freq}}.
 #' @param \dots further arguments passed to or from other methods.
 #' @return single numeric value
 #' @seealso \code{\link{varCI}} for confidence intervals and
@@ -44,7 +44,10 @@
 #' also consider \code{\link{madX}}, the most robust alternative
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
-#' @keywords univar multivariate array
+#' 
+#' @family dispersion
+#' @concept descriptive-statistics 
+#' 
 #' @examples
 #' 
 #' varX(1:10)                 # 9.166667

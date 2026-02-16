@@ -29,13 +29,12 @@
 #' round(zs, 2)
 #' n <- 30
 #' r <- seq(0, .9, .1)
-#' rc <- t(sapply(r, corCI, n=n))
 #' t <- r * sqrt(n-2) / sqrt(1-r^2)
 #' p <- (1 - pt(t, n-2)) / 2
 #' 
-#' r.rc <- data.frame(r=r, z=fisherZ(r), lower=rc[,2], upper=rc[,3], t=t, p=p)
+#' # r.rc <- data.frame(r=r, z=fisherZ(r), lower=rc[,2], upper=rc[,3], t=t, p=p)
 #' 
-#' round(r.rc,2)
+#' # round(r.rc,2)
 #' 
 
 # old - replaced by 0.99.60

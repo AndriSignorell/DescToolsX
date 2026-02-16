@@ -31,7 +31,7 @@
 #' @param weights a numerical vector of weights the same length as \code{x}
 #' giving the weights to use for elements of \code{x}.
 #' @param breaks breaks for calculating the mean for classified data as
-#' composed by \code{\link{Freq}}.
+#' composed by \code{\link{freq}}.
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #' stripped before the computation proceeds.
 #' @param \dots further arguments passed to or from other methods.
@@ -48,7 +48,11 @@
 #' \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median} 
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
-#' @keywords univar robust
+#' 
+#' @family central-tendency
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#' 
 #' @examples
 #' 
 #' medianX(1:4)                # = 2.5 [even number]

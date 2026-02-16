@@ -83,6 +83,7 @@ Authors@R: c(
   person("Hong"          , "Ooi",                 role = c("ctb")),
   person("Nick"          , "Parsons",             role = c("ctb")),
   person("Sandrine"      , "Pavoine",             role = c("ctb")),
+  person("Bernhard"      , "Pfaff",               role = c("ctb")),
   person("Tony"          , "Plate",               role = c("ctb")),
   person("Luke"          , "Prendergast",         role = c("ctb")),
   person("Roland"        , "Rapold",              role = c("ctb")),
@@ -124,7 +125,7 @@ Authors@R: c(
   person("Thomas"        , "Yee",                 role = c("ctb")),
   person("Achim"         , "Zeileis",             role = c("ctb"))
  )
-Description: This is the sequel to DescTools, completely redesigned, simplified and accelerated.
+Description: This is the successor to DescTools, completely redesigned, decluttered, simplified, unified and accelerated.
 Encoding: UTF-8
 Depends: R (>= 4.2.0), DescToolsViz
 License: GPL (>= 2)
@@ -134,5 +135,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: goftest, testthat (>= 3.0.0), R.rsp
 Config/testthat/edition: 3
-Imports: stats, boot, cli, Rcpp, MASS, methods, rstudioapi, gld, data.table, haven, mvtnorm, withr, tseries
+Imports: stats, boot, rstudioapi, cli, gld, data.table, haven, mvtnorm, withr
 VignetteBuilder: R.rsp

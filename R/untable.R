@@ -107,7 +107,7 @@ untable.default <- function(x, dimnames=NULL, type = NULL, rownames = NULL, coln
     warning("Provided object to untable contains NAs.")
   
   # coerce to table, such as also be able to handle vectors
-  x <- as.table(zeroIfNA(x))
+  x <- as.table(naReplace(x, 0))
   
   if(!is.null(dimnames)) dimnames(x) <- dimnames
   if(is.null(dimnames) && identical(type, "as.numeric")) dimnames(x) <- list(seq_along(x))

@@ -19,7 +19,7 @@
 #' @keywords utilities
 #' @examples
 #' 
-#' lsFunctions("DescTools")
+#' lsFunctions("DescToolsX")
 #' 
 
 #' @param package the name of the package 
@@ -35,7 +35,7 @@ lsFunctions <- function(package, exported=TRUE) {
 #' @param sort logical (default \code{FALSE}) should the arguments be alphabetically sorted?
 #' @rdname FunctionUtils
 #' @export
-funArgs <- function(name, sort=FALSE, values=TRUE) {
+funArgs <- function(name, sort=FALSE) {
   
   
   # got that somewhere, but don't know from where...
@@ -85,9 +85,9 @@ funArgs <- function(name, sort=FALSE, values=TRUE) {
 #' @export
 funCalls <- function (name, package=NULL, sort=FALSE) {
   
-  tmp <- utils::getParseData(parse(text = getAnywhere(fun), keep.source = TRUE))
+  tmp <- utils::getParseData(parse(text = getAnywhere(name), keep.source = TRUE))
   nms <- tmp$text[which(tmp$token == "SYMBOL_FUNCTION_CALL")]
-  funs <- unique(if (alphabetic) {
+  funs <- unique(if (sort) {
     sort(nms)
   } else {
     nms

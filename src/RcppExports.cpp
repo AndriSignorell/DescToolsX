@@ -351,37 +351,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// formatDateTime
-CharacterVector formatDateTime(SEXP x, std::string fmt, bool strict, std::string locale);
-RcppExport SEXP _DescToolsX_formatDateTime(SEXP xSEXP, SEXP fmtSEXP, SEXP strictSEXP, SEXP localeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< std::string >::type fmt(fmtSEXP);
-    Rcpp::traits::input_parameter< bool >::type strict(strictSEXP);
-    Rcpp::traits::input_parameter< std::string >::type locale(localeSEXP);
-    rcpp_result_gen = Rcpp::wrap(formatDateTime(x, fmt, strict, locale));
-    return rcpp_result_gen;
-END_RCPP
-}
-// formatNum
-CharacterVector formatNum(NumericVector x, Nullable<IntegerVector> digits, Nullable<IntegerVector> ldigits, Nullable<CharacterVector> big_mark, Nullable<CharacterVector> decimal_mark, int sci_big, int sci_small);
-RcppExport SEXP _DescToolsX_formatNum(SEXP xSEXP, SEXP digitsSEXP, SEXP ldigitsSEXP, SEXP big_markSEXP, SEXP decimal_markSEXP, SEXP sci_bigSEXP, SEXP sci_smallSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Nullable<IntegerVector> >::type digits(digitsSEXP);
-    Rcpp::traits::input_parameter< Nullable<IntegerVector> >::type ldigits(ldigitsSEXP);
-    Rcpp::traits::input_parameter< Nullable<CharacterVector> >::type big_mark(big_markSEXP);
-    Rcpp::traits::input_parameter< Nullable<CharacterVector> >::type decimal_mark(decimal_markSEXP);
-    Rcpp::traits::input_parameter< int >::type sci_big(sci_bigSEXP);
-    Rcpp::traits::input_parameter< int >::type sci_small(sci_smallSEXP);
-    rcpp_result_gen = Rcpp::wrap(formatNum(x, digits, ldigits, big_mark, decimal_mark, sci_big, sci_small));
-    return rcpp_result_gen;
-END_RCPP
-}
 // compute_LCM
 long long compute_LCM(long long int a, long long int b);
 RcppExport SEXP _DescToolsX_compute_LCM(SEXP aSEXP, SEXP bSEXP) {
@@ -568,8 +537,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_is_prime_u64", (DL_FUNC) &_DescToolsX_is_prime_u64, 1},
     {"_DescToolsX_primes_upto", (DL_FUNC) &_DescToolsX_primes_upto, 1},
     {"_DescToolsX_factor_u64", (DL_FUNC) &_DescToolsX_factor_u64, 1},
-    {"_DescToolsX_formatDateTime", (DL_FUNC) &_DescToolsX_formatDateTime, 4},
-    {"_DescToolsX_formatNum", (DL_FUNC) &_DescToolsX_formatNum, 7},
     {"_DescToolsX_compute_LCM", (DL_FUNC) &_DescToolsX_compute_LCM, 2},
     {"_DescToolsX_compute_GCD", (DL_FUNC) &_DescToolsX_compute_GCD, 2},
     {"_DescToolsX_divs", (DL_FUNC) &_DescToolsX_divs, 1},

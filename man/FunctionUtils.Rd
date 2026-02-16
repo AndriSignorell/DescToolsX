@@ -9,7 +9,7 @@
 \usage{
 lsFunctions(package, exported = TRUE)
 
-funArgs(name, sort = FALSE, values = TRUE)
+funArgs(name, sort = FALSE)
 
 funCalls(name, package = NULL, sort = FALSE)
 }
@@ -33,7 +33,7 @@ functions in a package.
 }
 \examples{
 
-lsFunctions("DescTools")
+lsFunctions("DescToolsX")
 
 }
 \references{

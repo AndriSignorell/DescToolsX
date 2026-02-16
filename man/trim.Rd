@@ -56,7 +56,7 @@ setequal(c(s[attr(s.tr, "trim")], s.tr), s)
 
 }
 \seealso{
-\code{\link{Winsorize}}
+\code{\link{winsorize}}
 }
 \author{
 R-Core (function mean), Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

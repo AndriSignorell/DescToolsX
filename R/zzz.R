@@ -17,7 +17,7 @@
     DescToolsX.lang      = "en",
     DescToolsX.plotit    = TRUE,
     DescToolsX.stamp     = expression(gettextf("%s / %s", Sys.getenv("USERNAME"),
-                                              DescToolsX::fm(DescToolsX::Today(), 
+                                              DescToolsViz::fm(DescToolsX::Today(), 
                                                              fmt = "yyyy-MM-dd"))),
     DescToolsX.linesep   = cli::col_yellow("\u2500"),
     
@@ -50,9 +50,6 @@
 
 #' @useDynLib DescToolsX, .registration = TRUE
 #' 
-#' @importFrom Rcpp sourceCpp
-#' @importFrom data.table frankv
-#' @importFrom haven read_spss
 #' @importFrom stats na.omit filter is.ts mad median pbinom qbinom 
 #'             qchisq qnorm qt quantile sd t.test var runif 
 #'             binom.test complete.cases addmargins chisq.test ftable 
@@ -62,7 +59,7 @@
 #'             aov pf qf filter relevel fisher.test mcnemar.test
 #'             coefficients confint confint.default formula model.frame
 #'             model.matrix model.response nobs predict family as.formula
-#'             xtabs end start
+#'             xtabs end start AIC embed residuals kruskal.test
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
@@ -71,12 +68,13 @@
 #' @importFrom grDevices dev.flush dev.hold
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size
-#'             str combn find getAnywhere lsf.str
+#'             str combn find getAnywhere lsf.str write.table
 #'             
-#' @importFrom gld fit.fkml dgl pgl
-#' 
 #' @importFrom DescToolsViz plotFdist `%)(%` `%[]%` `%nin%` 
 #'             abind combPairs maxDigits recycle setNamesX 
-#'             strAlign strTrim strTrunc moveAvg
+#'             strAlign strTrim strTrunc moveAvg Label abstract 
+#'             fm style lineSep setDescToolsXOption naIf naReplace
+#'             isZero isWholeLike isDichotomous
+#'             
 #'             
 NULL

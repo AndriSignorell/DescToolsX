@@ -56,7 +56,12 @@
 #' Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
 #' classifications III: Approximate sampling theory. \emph{Journal of the
 #' American Statistical Association}, 58, 310--364.
-#' @keywords multivar nonparametric
+#' 
+#' @family association-measures
+#' @concept association
+#' @concept contingency-tables
+#' @concept categorical-data
+
 #' @examples
 #' 
 #' # example in:

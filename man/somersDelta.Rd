@@ -90,9 +90,17 @@ There's an implementation of Somers's D in Frank Harrell's
 sample sizes. However it is restricted to computing Somers' Dxy rank
 correlation between a variable x and a binary (0-1) variable y.\cr
 Other association measures: \code{\link{Association}}
+
+Other association-measures: 
+\code{\link{Yule_Q_Y}},
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{kendallTauB}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{multivar}
-\keyword{nonparametric}
+\concept{association}
+\concept{association-measures}
+\concept{categorical-data}
+\concept{contingency-tables}

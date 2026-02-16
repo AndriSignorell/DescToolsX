@@ -64,9 +64,17 @@ rangeX(x)
 }
 \seealso{
 \code{\link{range}}, \code{\link{min}}, \code{\link{max}}
+
+Other dispersion: 
+\code{\link{iqrX}()},
+\code{\link{madX}()},
+\code{\link{meanAD}()},
+\code{\link{skew_kurt}},
+\code{\link{varX}()}
 }
 \author{
 Werner Stahel, ETH Zurich (robust range)\cr Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{dispersion}

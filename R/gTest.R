@@ -26,26 +26,6 @@
 #' distribution of the cell counts in a 2-dimensional contingency table is the
 #' product of the row and column marginals.
 #' 
-#' % If \code{simulate.p.value} is \code{FALSE}, the p-value is computed % from
-#' the asymptotic chi-squared distribution of the test statistic; % continuity
-#' correction is only used in the 2-by-2 case (if \code{correct} % is
-#' \code{TRUE}, the default).  Otherwise the p-value is computed for a % Monte
-#' Carlo test (Hope, 1968) with \code{B} replicates.
-#' 
-#' % In the contingency table case simulation is done by random sampling % from
-#' the set of all contingency tables with given marginals, and works % only if
-#' the marginals are strictly positive.  (A C translation of the % algorithm of
-#' Patefield (1981) is used.)  Continuity correction is % never used, and the
-#' statistic is quoted without it.  Note that this is % not the usual sampling
-#' situation assumed for the chi-squared test but % rather that for Fisher's
-#' exact test.
-#' 
-#' % In the goodness-of-fit case simulation is done by random sampling from %
-#' the discrete distribution specified by \code{p}, each sample being % of size
-#' \code{n = sum(x)}.  This simulation is done in \R and may be % slow.  Test
-#' of independence Yates' correction taken from Mike Camann's 2x2 G-test
-#' function.  Goodness of Fit Yates' correction as described in Zar (2000).
-#' 
 #' @param x a numeric vector or matrix. \code{x} and \code{y} can also both be
 #' factors.
 #' @param y a numeric vector; ignored if \code{x} is a matrix.  If \code{x} is
@@ -57,6 +37,7 @@
 #' @param rescale.p a logical scalar; if \code{TRUE} then p is rescaled (if
 #' necessary) to sum to 1. If rescale.p is \code{FALSE}, and p does not sum to
 #' 1, an error is given.
+
 #' @return A list with class \code{"htest"} containing the following
 #' components: \item{statistic}{the value the chi-squared test statistic.}
 #' \item{parameter}{the degrees of freedom of the approximate chi-squared
@@ -67,8 +48,10 @@
 #' \item{data.name}{a character string giving the name(s) of the data.}
 #' \item{observed}{the observed counts.} \item{expected}{the expected counts
 #' under the null hypothesis.}
+
 #' @author Pete Hurd <phurd@@ualberta.ca>, Andri Signorell
 #' <andri@@signorell.net> (tiny tweaks)
+
 #' @seealso \code{\link{chisq.test}}.
 #' @references Hope, A. C. A. (1968) A simplified Monte Carlo significance test
 #' procedure.  \emph{J. Roy, Statist. Soc. B} \bold{30}, 582--598.
@@ -84,7 +67,6 @@
 #' of statistics in biological research}. 4th edition. W. H. Freeman and Co.:
 #' New York. 937 pp.
 #' 
-#' @keywords htest distribution
 #' @examples
 #' 
 #' 

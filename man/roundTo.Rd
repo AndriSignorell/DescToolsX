@@ -2,28 +2,25 @@
 % Please edit documentation in R/roundTo.R
 \name{roundTo}
 \alias{roundTo}
-\title{Round to Multiple \%\% ~~function to do ... ~~}
+\title{Round to Multiple}
 \usage{
 roundTo(x, multiple = 1, FUN = round)
 }
 \arguments{
-\item{x}{numeric. The value to round. \%\% ~~Describe \code{x} here~~}
+\item{x}{numeric. The value to round.}
 
 \item{multiple}{numeric. The multiple to which the number is to be rounded.
-Default is 1. \%\% ~~Describe \code{multiple} here~~}
+Default is 1.}
 
 \item{FUN}{the rounding function as character or as expression. Can be one
 out of \code{\link{trunc}}, \code{ceiling}, \code{round} (default) or
 \code{floor}.}
 }
 \value{
-the rounded value \%\% ~Describe the value returned \%\% If it is a
-LIST, use \%\% \item{comp1 }{Description of 'comp1'} \%\% \item{comp2
-}{Description of 'comp2'} \%\% ...
+the rounded value
 }
 \description{
-Returns a number rounded to the nearest specified multiple. \%\% ~~ A concise
-(1-5 lines) description of what the function does. ~~
+Returns a number rounded to the nearest specified multiple.
 }
 \details{
 There are several functions to convert to integers. \code{\link{round}}
@@ -39,8 +36,7 @@ result. So if \code{x} is equally close to two multiples, the multiple with
 the smaller absolute value will be returned when \code{round(x/multiple)} is
 even (and the greater when it's odd).\cr If \code{FUN} is set to
 \code{ceiling} it will always round up, and if set to \code{floor} it will
-always round down. See examples for comparison). \%\% ~~ If necessary, more
-details than the description above ~~
+always round down. See examples for comparison).
 }
 \examples{
 
@@ -84,9 +80,9 @@ cbind(x =       x,
 }
 \seealso{
 \code{\link{round}}, \code{\link{trunc}}, \code{\link{ceiling}},
-\code{\link{floor}} \%\% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{floor}}
 }
 \author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} \%\% ~~who you are~~
+Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \keyword{manip}

@@ -64,7 +64,13 @@
 #' 
 #' Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 #' kurtosis. \emph{The Statistician}, 47, 183-189.
-#' @keywords math
+#' 
+#' @family dispersion
+#' @concept shape
+#' @concept moments
+#' @concept descriptive-statistics
+#' 
+#' 
 #' @examples
 #' 
 #' skewX(d.pizza$price, na.rm=TRUE)

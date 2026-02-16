@@ -12,11 +12,11 @@
 #' (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is
 #' the first dimension of the table, 2 the second and 3 the percentages). \cr
 #' Use \code{sortX()} if you want to have your table sorted by rows.\cr\cr The
-#' style in which numbers are formatted is selected by \code{\link{style}()} from
-#' the DescTools options. Absolute frequencies will use \code{style("abs.sty")} and
+#' style in which numbers are formatted is selected by \code{\link[DescToolsViz]{style}()} from
+#' the DescToolsX options. Absolute frequencies will use \code{style("abs.sty")} and
 #' \code{style("per.sty")} will do it for the percentages. The options can be changed
 #' with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
-#' containing any format information used in \code{\link{fm}}.
+#' containing any format information used in \code{\link[DescToolsViz]{fm}}.
 #' 
 #' \code{Margins()} returns a list containing all the one dimensional margin
 #' tables of a n-dimensional table along the given dimensions. It uses
@@ -64,7 +64,7 @@
 #' @author Andri Signorell <andri@@signorell.net> 
 #' @seealso \code{\link{freq}}, \code{\link{table}}, \code{\link{ftable}},
 #' \code{\link{proportions}}, \code{\link{addmargins}},
-#' \code{\link{setDescToolsXOption}}, \code{\link{style}}\cr There are similar
+#' \code{\link[DescToolsViz]{setDescToolsXOption}}, \code{\link[DescToolsViz]{style}}\cr There are similar
 #' functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
 #' package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of
 #' the flexibility we needed here. \cr
@@ -186,7 +186,7 @@ percTable.table <- function(x, freq=TRUE,
   if (!is.array(x) ||
       length(dim(x)) != 2 ||
       any(dim(x) == 0) ||
-      !isIntLike(x, nonNegative = TRUE)) {
+      !isWholeLike(x, nonNegative = TRUE)) {
     
     stop("'x' must be a 2-dimensional array of non-negative integer-like counts.")
   }

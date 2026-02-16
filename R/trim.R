@@ -23,7 +23,7 @@
 #' \code{\link{mean}}, which allows the vector \code{x} to be trimmed before
 #' calculating the mean. But what if a trimmed standard deviation is needed?
 #' @author R-Core (function mean), Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{Winsorize}} 
+#' @seealso \code{\link{winsorize}} 
 #' @keywords univar robust
 #' @examples
 #' 

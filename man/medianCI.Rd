@@ -44,7 +44,7 @@ Calculate the confidence interval for the median.
 }
 \details{
 The \code{"exact"} method is the way SAS is said to calculate the confidence
-interval. This is also implemented in \code{\link[DescTools]{SignTest}}. The boot
+interval. This is also implemented in \code{\link{signTest}}. The boot
 confidence interval type is calculated by means of \code{\link[boot]{boot.ci}}
 with default type \code{"perc"}.\cr Use \code{\link{sapply}},
 resp.\code{\link{apply}}, to get the confidence intervals from a data.frame

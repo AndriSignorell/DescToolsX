@@ -6,14 +6,14 @@
 #' integer is often handy and a useful and efficient data structure. Adding a
 #' number of months to such a date is not quite catchy, however, since the date
 #' structure is to be retained. For example, 201201 - 2 \verb{[months]} is expected to
-#' result in 201111 instead of 201199. \code{AddMonthsYM()} does this job.
+#' result in 201111 instead of 201199. \code{addMonthsYM()} does this job.
 #' 
 #' All parameters will be recyled if necessary. The therefore used function
 #' \code{\link{mapply}} will display a warning, if the longer argument is not a
 #' multiple of the length of the shorter one.
 #' 
 #' @name as_ym
-#' @aliases as.ym as.Date.ym AddMonths.ym
+#' @aliases as.ym as.Date.ym addMonths.ym
 #' @param x a vector of integers, representing the dates in the format YYYYMM,
 #' to which a number of months has to be added. YYYY must lie in the range of
 #' 1000-3000, MM in 1-12.
@@ -26,7 +26,7 @@
 #' containing the transformed dates.
 #' @author Andri Signorell <andri@@signorell.net>, originally based on code by
 #' Roland Rapold
-#' @seealso \code{\link{AddMonths}}; Date functions, like \code{\link{Year}},
+#' @seealso \code{\link{addMonths}}; Date functions, like \code{\link{Year}},
 #' \code{\link{Month}}, etc. 
 #' @keywords chron
 #' @examples
@@ -41,10 +41,10 @@
 #' Month(as.Date("2024-12-05"), fmt = "mm")
 #' Month(as.ym(202412), fmt="mm")
 #' 
-#' AddMonths(201511, 5)
+#' addMonths(201511, 5)
 #' 
-#' AddMonths(c(201511, 201302), c(5, 15))
-#' AddMonths(c(201511, 201302), c(5, -4))
+#' addMonths(c(201511, 201302), c(5, 15))
+#' addMonths(c(201511, 201302), c(5, -4))
 #' 
 
 
@@ -80,9 +80,9 @@ print.ym <- function(x, ...) {
 
 
 #' @rdname as_ym
-#' @method AddMonths ym
+#' @method addMonths ym
 #' @export
-AddMonths.ym <- function (x, n, ...) {
+addMonths.ym <- function (x, n, ...) {
   
   .addMonths <- function (x, n) {
     
@@ -98,7 +98,7 @@ AddMonths.ym <- function (x, n, ...) {
     } else if (x %[]% c(10000101L, 99991231L)) {
       
       # YYYYMMDD
-      res <- AddMonths(x = as.Date(as.character(x), "%Y%m%d"), n = n)
+      res <- addMonths(x = as.Date(as.character(x), "%Y%m%d"), n = n)
       res <- Year(res)*10000L + DescToolsX::Month(res)*100L + Day(res)
     }
     

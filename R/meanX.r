@@ -27,7 +27,7 @@
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #' stripped before the computation proceeds.
 #' @param breaks breaks for calculating the mean for classified data as
-#' composed by \code{\link[DescTools]{Freq}}.
+#' composed by \code{\link{freq}}.
 #' @param \dots further arguments passed to or from other methods.
 
 #' @details
@@ -58,14 +58,17 @@
 #' \code{\link{colMeans}} for row and column means.
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
-#' @keywords univar
+#' 
+#' @family central-tendency
+#' @concept descriptive-statistics
+#'  
 #' @examples
 #' 
 #' x <- c(0:10, 50)
 #' xm <- meanX(x)
 #' c(xm, meanX(x, trim = 0.10))
 #'
-
+#'  
 
 #' @export
 meanX <- function (x, ...)

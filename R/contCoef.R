@@ -33,7 +33,11 @@
 #' Tables, \emph{Proceedings of the Social Statistics Section of the American
 #' Statistical Association} (Part III), 777-780.
 #' 
-#' @keywords multivariate
+#' @family association-measures
+#' @concept association
+#' @concept contingency-tables
+#' @concept categorical-data
+#' 
 #' @examples
 #' 
 #' tab <- apply(HairEyeColor, c(1,2), sum)

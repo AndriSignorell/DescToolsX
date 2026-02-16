@@ -37,7 +37,11 @@
 #' @seealso \code{\link[MASS]{hubers}} (and \code{huber}) in package
 #' \pkg{MASS}; \code{\link{mad}}.
 #' @references Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
-#' @keywords univar robust
+#' 
+#' @family central-tendency
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#' 
 #' @examples
 #' 
 #' huberM(c(1:9, 1000))

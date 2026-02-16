@@ -33,7 +33,9 @@
 #' 
 #' @seealso \code{\link{mad}}
 #' 
-#' @keywords univar
+#' @family dispersion
+#' @concept descriptive-statistics
+#' 
 #' @examples
 #' 
 #' x <- runif(100)

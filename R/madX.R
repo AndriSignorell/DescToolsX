@@ -38,7 +38,10 @@
 #' \code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
 #' \code{\link{median}}, \code{\link{var}} the base R equivalents
 #' \cr\code{\link{madCI}} (confidence intervals).
-#' @keywords univar robust
+#' 
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept robust-statistics
 #' @examples
 #' 
 #' madX(c(1:9))

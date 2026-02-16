@@ -105,9 +105,18 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 \code{\link{pairApply}}, \code{\link{Association}}
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...
+
+Other association-measures: 
+\code{\link{Yule_Q_Y}},
+\code{\link{contCoef}()},
+\code{\link{kendallTauB}()},
+\code{\link{somersDelta}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Michael Smithson
 \href{mailto:michael.smithson@anu.edu.au}{michael.smithson@anu.edu.au} (confidence intervals for Cramer V)
 }
-\keyword{multivariate}
+\concept{association}
+\concept{association-measures}
+\concept{categorical-data}
+\concept{contingency-tables}

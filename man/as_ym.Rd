@@ -4,7 +4,7 @@
 \alias{as_ym}
 \alias{as.ym}
 \alias{as.Date.ym}
-\alias{AddMonths.ym}
+\alias{addMonths.ym}
 \alias{print.ym}
 \title{A Class for Dealing with the Yearmonth Format}
 \usage{
@@ -14,7 +14,7 @@ as.ym(x)
 
 \method{print}{ym}(x, ...)
 
-\method{AddMonths}{ym}(x, n, ...)
+\method{addMonths}{ym}(x, n, ...)
 }
 \arguments{
 \item{x}{a vector of integers, representing the dates in the format YYYYMM,
@@ -38,7 +38,7 @@ The representation of year and month information in YYYYYMM format as an
 integer is often handy and a useful and efficient data structure. Adding a
 number of months to such a date is not quite catchy, however, since the date
 structure is to be retained. For example, 201201 - 2 \verb{[months]} is expected to
-result in 201111 instead of 201199. \code{AddMonthsYM()} does this job.
+result in 201111 instead of 201199. \code{addMonthsYM()} does this job.
 }
 \details{
 All parameters will be recyled if necessary. The therefore used function
@@ -57,14 +57,14 @@ Year(as.ym(202412))
 Month(as.Date("2024-12-05"), fmt = "mm")
 Month(as.ym(202412), fmt="mm")
 
-AddMonths(201511, 5)
+addMonths(201511, 5)
 
-AddMonths(c(201511, 201302), c(5, 15))
-AddMonths(c(201511, 201302), c(5, -4))
+addMonths(c(201511, 201302), c(5, 15))
+addMonths(c(201511, 201302), c(5, -4))
 
 }
 \seealso{
-\code{\link{AddMonths}}; Date functions, like \code{\link{Year}},
+\code{\link{addMonths}}; Date functions, like \code{\link{Year}},
 \code{\link{Month}}, etc.
 }
 \author{

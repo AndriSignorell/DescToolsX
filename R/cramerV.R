@@ -38,7 +38,12 @@
 #' Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 #' \emph{Journal of the Korean Statistical Society} 42(3) DOI:
 #' 10.1016/j.jkss.2012.10.002
-#' @keywords multivariate
+#' 
+#' @family association-measures
+#' @concept association
+#' @concept contingency-tables
+#' @concept categorical-data
+# 
 #' @examples
 #' 
 #' tab <- table(d.pizza$driver, d.pizza$wine_delivered)

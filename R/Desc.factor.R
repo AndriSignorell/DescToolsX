@@ -49,7 +49,7 @@
 #' 
 #' @param digits integer. With how many digits should the relative frequencies
 #' be formatted? Default can be set by
-#' \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.
+#' \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.
 #' 
 #' @param ord character out of \code{"name"} (alphabetical order),
 #' \code{"level"}, \code{"asc"} (by frequencies ascending), \code{"desc"} (by

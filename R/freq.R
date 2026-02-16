@@ -20,8 +20,9 @@
 #' constant vector, equal-length intervals are created that cover the single
 #' value.) See \code{\link{cut}}.
 #' 
-#' @name FreqTable
-#' @aliases Freq print.Freq
+#' @name freq
+#' @aliases freq print.Freq
+#' 
 #' @param x the variable to be described, can be any atomic type.
 #' @param breaks either a numeric vector of two or more cut points or a single
 #' number (greater than or equal to 2) giving the number of intervals into
@@ -37,8 +38,6 @@
 #' @param useNA one out of \code{"no"}, \code{"ifany"}, \code{"always"}.
 #' Defines whether to include extra \code{NA} levels in the table.  Defaults to
 #' \code{"no"} which is the \code{\link{table}()} default too.
-#' @param digits integer, determining the number of digits used to format the
-#' relative frequencies.
 #' @param \dots further arguments are passed to the function
 #' \code{\link{cut}()}. Use \code{dig.lab} to control the format of numeric
 #' group names. Use the argument \code{right} to define if the intervals should
@@ -80,9 +79,10 @@
 
 
 
+#' @rdname freq
 #' @export
-#' @rdname FreqTable
-freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE,
+freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, 
+                 include.lowest = TRUE,
                  ord = c("level", "desc", "asc", "name"),
                  useNA = c("no", "ifany", "always"), ...){
   
@@ -129,8 +129,9 @@ freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, include.lowest = TRUE
 
 
 
-#' @rdname FreqTable
+#' @rdname freq
 #' @method print Freq
+#' @param digits digits for displaying relative frequencies to be changed if required
 #' @export
 print.Freq <- function(x, digits=NULL, ...) {
   

@@ -253,6 +253,9 @@ for discrete distributions, \emph{Canadian Journal of Statistics} 28 (4),
 \code{\link{binomRatioCI}}
 
 \code{\link{binomCI}()}
+
+Other categorical-data: 
+\code{\link{multinomCI}()}
 }
 \author{
 Matthias Kohl \href{mailto:Matthias.Kohl@stamats.de}{Matthias.Kohl@stamats.de}, Rand R. Wilcox (Pratt's
@@ -262,4 +265,5 @@ method), Michael Hoehle \href{mailto:hoehle@math.su.se}{hoehle@math.su.se} (Mid-
 
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{univar}
+\concept{categorical-data}
+\concept{confidence-intervals}

@@ -20,7 +20,7 @@ Complex vectors are allowed for \code{trim = 0} only.}
 \item{\dots}{further arguments passed to or from other methods.}
 
 \item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link[DescTools]{Freq}}.}
+composed by \code{\link{freq}}.}
 
 \item{weights}{non-negative numeric vector of weights of the same length as \code{x}
 interpreted as frequency (replication) weights.
@@ -69,6 +69,7 @@ x <- c(0:10, 50)
 xm <- meanX(x)
 c(xm, meanX(x, trim = 0.10))
 
+ 
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
@@ -77,5 +78,12 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \seealso{
 \code{\link{weighted.mean}}, \code{\link{mean.POSIXct}},
 \code{\link{colMeans}} for row and column means.
+
+Other central-tendency: 
+\code{\link{hodgesLehmann}()},
+\code{\link{huberM}()},
+\code{\link{medianX}()},
+\code{\link{tukeyBiweight}()}
 }
-\keyword{univar}
+\concept{central-tendency}
+\concept{descriptive-statistics}

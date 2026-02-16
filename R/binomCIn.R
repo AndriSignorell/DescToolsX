@@ -31,6 +31,10 @@
 #' @return a numeric value 
 #' @author Andri Signorell <andri@@signorell.net>
 #' @seealso \code{\link{binomCI}()} 
+#' 
+#' @family categorical-data
+#' @concept confidence-intervals
+#'  
 #' @examples
 #' 
 #' binomCIn(p=0.1, width=0.05, method="pratt")

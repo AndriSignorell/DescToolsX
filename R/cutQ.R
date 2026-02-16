@@ -68,7 +68,7 @@ cutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE),
   
   if(na.rm) x <- na.omit(x)
   
-  if(length(breaks)==1 && isWhole(breaks))
+  if(length(breaks)==1 && DescToolsViz::isWholeLike(breaks))
     breaks <- quantile(x, seq(0, 1, by = 1/breaks), na.rm = TRUE)
   
   if(is.null(labels)) labels <- gettextf("Q%s", 1:(length(breaks)-1))

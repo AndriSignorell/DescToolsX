@@ -28,7 +28,7 @@ giving the weights to use for elements of \code{x}.}
 stripped before the computation proceeds.}
 
 \item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link{Freq}}.}
+composed by \code{\link{freq}}.}
 }
 \value{
 The default method returns a length-one object of the same type as
@@ -112,6 +112,13 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \href{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}{Maechler on R-help mailing list, 2003-Nov}
 \cr
 \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median}
+
+Other central-tendency: 
+\code{\link{hodgesLehmann}()},
+\code{\link{huberM}()},
+\code{\link{meanX}()},
+\code{\link{tukeyBiweight}()}
 }
-\keyword{robust}
-\keyword{univar}
+\concept{central-tendency}
+\concept{descriptive-statistics}
+\concept{robust-statistics}

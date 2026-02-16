@@ -3,7 +3,7 @@
 #' Add a Month to a Date
 #' 
 #' Clueless adding numbers of months to a date will in some cases lead to
-#' invalid dates, think of e.g. 2012-01-30 + 1 month. \cr AddMonths ensures
+#' invalid dates, think of e.g. 2012-01-30 + 1 month. \cr addMonths ensures
 #' that the result is always a valid date, e.g. \code{as.Date("2013-01-31") + 1
 #' month} will be \code{"2013-02-28"}. If number \code{n} is negative, the
 #' months will be subtracted.
@@ -29,36 +29,36 @@
 #' @examples
 #' 
 #' # characters will be coerced to Date
-#' AddMonths("2013-01-31", 1)
+#' addMonths("2013-01-31", 1)
 #' 
 #' # negative n
-#' AddMonths(as.Date("2013-03-31"), -1)
+#' addMonths(as.Date("2013-03-31"), -1)
 #' 
 #' # Arguments will be recycled
 #' # (with warning if the longer is not a multiple of length of shorter)
-#' AddMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1,-1))
+#' addMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1,-1))
 #' 
 #' 
 #' x <- as.POSIXct(c("2015-01-31", "2015-08-31"))
 #' n <- c(1, 3)
-#' AddMonths(x, n)
+#' addMonths(x, n)
 #' 
 #' # mind the origin if x supplied as numeric ...
 #' x <- as.numeric(as.Date(x))
-#' AddMonths(x, n, origin=as.Date("1970-01-01"))
+#' addMonths(x, n, origin=as.Date("1970-01-01"))
 #' 
 
 
 
 #' @export
-AddMonths <- function (x, n, ...) {
-  UseMethod("AddMonths")
+addMonths <- function (x, n, ...) {
+  UseMethod("addMonths")
 }
 
 
-#' @method AddMonths default
+#' @method addMonths default
 #' @export
-AddMonths.default <- function (x, n, ...) {
+addMonths.default <- function (x, n, ...) {
   
   .addMonths <- function (x, n) {
     

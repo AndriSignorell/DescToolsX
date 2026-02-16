@@ -104,10 +104,10 @@ meanCI <- function (x,
     # new 17.2.2015:
     minval <- sort(x, partial = trn)[trn]
     maxval <- sort(x, partial = max((n - trn + 1), 1))[max((n - trn + 1), 1)]
-    winvar <- var(Winsorize(x, val = c(minval, maxval)))
+    winvar <- var(winsorize(x, val = c(minval, maxval)))
     
     # This was an overkill, we need only the n-thest value here:
-    # winvar <- var(Winsorize(x, minval=max(Small(x, trn)), maxval=min(Large(x, trn))))
+    # winvar <- var(winsorize(x, minval=max(Small(x, trn)), maxval=min(Large(x, trn))))
     #
     # degrees of freedom
     DF <- n - 2*(trn-1) - 1

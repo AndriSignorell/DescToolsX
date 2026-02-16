@@ -80,6 +80,14 @@ stopifnot(identical(m1, m2))
 \code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
 \code{\link{median}}, \code{\link{var}} the base R equivalents
 \cr\code{\link{madCI}} (confidence intervals).
+
+Other dispersion: 
+\code{\link{iqrX}()},
+\code{\link{meanAD}()},
+\code{\link{rangeX}()},
+\code{\link{skew_kurt}},
+\code{\link{varX}()}
 }
-\keyword{robust}
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{dispersion}
+\concept{robust-statistics}

@@ -53,7 +53,9 @@ mhChisqTest <- function(x, srow=1:nrow(x), scol=1:ncol(x)){
   
   DNAME <- deparse(substitute(x))
   
-  STATISTIC <- (sum(x) - 1) * corX(d=combPairs(srow, scol), as.vector(x))^2
+# check if ok  ****************
+  #  STATISTIC <- (sum(x) - 1) * corX(d=combPairs(srow, scol), as.vector(x))^2
+  STATISTIC <- (sum(x) - 1) * pearsonCor(x)^2
   PARAMETER <- 1
   names(STATISTIC) <- "X-squared"
   names(PARAMETER) <- "df"

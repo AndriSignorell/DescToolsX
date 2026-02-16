@@ -67,26 +67,6 @@ objects are coerced to factors, and the contingency table is computed from
 these.  Then G-test is performed on the null hypothesis that the joint
 distribution of the cell counts in a 2-dimensional contingency table is the
 product of the row and column marginals.
-
-\% If \code{simulate.p.value} is \code{FALSE}, the p-value is computed \% from
-the asymptotic chi-squared distribution of the test statistic; \% continuity
-correction is only used in the 2-by-2 case (if \code{correct} \% is
-\code{TRUE}, the default).  Otherwise the p-value is computed for a \% Monte
-Carlo test (Hope, 1968) with \code{B} replicates.
-
-\% In the contingency table case simulation is done by random sampling \% from
-the set of all contingency tables with given marginals, and works \% only if
-the marginals are strictly positive.  (A C translation of the \% algorithm of
-Patefield (1981) is used.)  Continuity correction is \% never used, and the
-statistic is quoted without it.  Note that this is \% not the usual sampling
-situation assumed for the chi-squared test but \% rather that for Fisher's
-exact test.
-
-\% In the goodness-of-fit case simulation is done by random sampling from \%
-the discrete distribution specified by \code{p}, each sample being \% of size
-\code{n = sum(x)}.  This simulation is done in \R and may be \% slow.  Test
-of independence Yates' correction taken from Mike Camann's 2x2 G-test
-function.  Goodness of Fit Yates' correction as described in Zar (2000).
 }
 \examples{
 
@@ -145,5 +125,3 @@ New York. 937 pp.
 Pete Hurd \href{mailto:phurd@ualberta.ca}{phurd@ualberta.ca}, Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net} (tiny tweaks)
 }
-\keyword{distribution}
-\keyword{htest}

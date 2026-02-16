@@ -191,13 +191,13 @@ Week <- function(x, method = c("iso", "us")){
   # 
   # identical(Week(dd, "us"), as.integer(lubridate::week(dd)))
   # microbenchmark::microbenchmark(
-  #   DescTools = Week(dd, "us"),
+  #   DescToolsX = Week(dd, "us"),
   #   lubridate = lubridate::week(dd)
   # )
   # 
   # identical(Week(dd, "iso"), as.integer(lubridate::isoweek(dd)))
   # microbenchmark::microbenchmark(
-  #   DescTools = Week(dd, "iso"),
+  #   DescToolsX = Week(dd, "iso"),
   #   lubridate = lubridate::isoweek(dd)
   # )
   # --> We are superfast!!
@@ -413,7 +413,7 @@ DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
 #' @rdname date_functions
 #' @export
 LastDayOfMonth <- function(x){
-  z <- AddMonths(x, 1L)
+  z <- addMonths(x, 1L)
   Day(z) <- 1L
   return(z - 1L)
 }
@@ -456,7 +456,7 @@ isWeekend <- function(x) {
 #' @export
 isLeapYear <- function(x){
   
-  if(!isWhole(x))
+  if(!isWholeLike(x))
     .Call("_DescToolsX_isLeapYearDate", x, PACKAGE="DescToolsX")
   else 
     .Call("_DescToolsX_isLeapYearInt", x, PACKAGE="DescToolsX")

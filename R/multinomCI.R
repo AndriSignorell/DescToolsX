@@ -76,7 +76,10 @@
 #' 
 #' Wilson, E. B. Probable inference, the law of succession and statistical
 #' inference, \emph{J.Am. Stat. Assoc.} 22 (1927) 209-212.
-#' @keywords univar
+#' 
+#' @family categorical-data
+#' @concept confidence-intervals
+#' 
 #' @examples
 #' 
 #' # Multinomial distribution with 3 classes, from which a sample of 79 elements

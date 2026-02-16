@@ -121,9 +121,19 @@ kurtosis. \emph{The Statistician}, 47, 183-189.
 \seealso{
 \code{\link{mean}}, \code{\link{sd}}, similar code in
 \code{library(e1071)}
+
+Other dispersion: 
+\code{\link{iqrX}()},
+\code{\link{madX}()},
+\code{\link{meanAD}()},
+\code{\link{rangeX}()},
+\code{\link{varX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, David Meyer
 \href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org} (method = 3)
 }
-\keyword{math}
+\concept{descriptive-statistics}
+\concept{dispersion}
+\concept{moments}
+\concept{shape}

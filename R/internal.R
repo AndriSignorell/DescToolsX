@@ -8,6 +8,12 @@
 
 
 
+# internal getOption wrapper for DescToolsX options
+.getOption <- function(name, default = NULL) {
+  getOption(paste0("DescToolsX.", name), default)
+}
+
+
 # check if the user system supports colors
 
 .has_color <- function() {
@@ -95,22 +101,22 @@
 
 
 # produces a line separator
-
-.LineSep <- function(sep=.getOption("linesep")){
-  
-  # sep <- Coalesce(sep, x$sep, .getOption("linesep", default = "\u2500"))
-  sep <- sep %||% "\u2500"
-  
-  # Remove the ANSI color codes using gsub
-  # ansi_pattern <- "\033\\[\\d+(;\\d+)?m"
-  
-  if(nchar(gsub("\033\\[\\d+(;\\d+)?m", "", sep, perl = TRUE)) == 1)
-    sep <- strrep(sep, getOption("width") - 2)
-  
-  return(sep)  
-  
-}
-
+# 
+# .LineSep <- function(sep=.getOption("linesep")){
+#   
+#   # sep <- Coalesce(sep, x$sep, .getOption("linesep", default = "\u2500"))
+#   sep <- sep %||% "\u2500"
+#   
+#   # Remove the ANSI color codes using gsub
+#   # ansi_pattern <- "\033\\[\\d+(;\\d+)?m"
+#   
+#   if(nchar(gsub("\033\\[\\d+(;\\d+)?m", "", sep, perl = TRUE)) == 1)
+#     sep <- strrep(sep, getOption("width") - 2)
+#   
+#   return(sep)  
+#   
+# }
+# 
 
 
 

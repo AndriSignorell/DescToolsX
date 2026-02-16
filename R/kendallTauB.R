@@ -29,7 +29,11 @@
 #' Brown, M.B.andBenedetti, J.K.(1977) Sampling Behavior of Tests for
 #' Correlation in Two-Way Contingency Tables, \emph{Journal of the American
 #' Statistical Association}, 72, 309-315.
-#' @keywords multivar nonparametric
+#' 
+#' @family association-measures
+#' @concept association
+#' @concept contingency-tables
+#' @concept categorical-data
 #' @examples
 #' 
 #' # example in:

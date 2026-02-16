@@ -79,7 +79,7 @@ the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
 \item{digits}{integer. With how many digits should the relative frequencies
 be formatted? Default can be set by
-\link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.}
+\code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.}
 
 \item{...}{Additional arguments passed to \code{percTable()}.}
 }

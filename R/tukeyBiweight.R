@@ -49,7 +49,11 @@
 #' Shewchuk, J. R. (1997) Adaptive Precision Floating-Point Arithmetic and Fast
 #' Robust Geometric Predicates.  \emph{Discrete and Computational Geometry},
 #' 18(3):305-363. Springer.
-#' @keywords robust univar
+#' 
+#' @family central-tendency
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#' 
 #' @examples
 #' 
 #' tukeyBiweight(rnorm(100))

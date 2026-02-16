@@ -117,14 +117,6 @@ factor_u64 <- function(x) {
     .Call(`_DescToolsX_factor_u64`, x)
 }
 
-formatDateTime <- function(x, fmt, strict = TRUE, locale = "current") {
-    .Call(`_DescToolsX_formatDateTime`, x, fmt, strict, locale)
-}
-
-formatNum <- function(x, digits = NULL, ldigits = NULL, big_mark = NULL, decimal_mark = NULL, sci_big = 9999L, sci_small = -9999L) {
-    .Call(`_DescToolsX_formatNum`, x, digits, ldigits, big_mark, decimal_mark, sci_big, sci_small)
-}
-
 compute_LCM <- function(a, b) {
     .Call(`_DescToolsX_compute_LCM`, a, b)
 }

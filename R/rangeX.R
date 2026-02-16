@@ -42,7 +42,9 @@
 #' 
 #' @seealso \code{\link{range}}, \code{\link{min}}, \code{\link{max}} 
 #' 
-#' @keywords univar
+#' @family dispersion
+#' @concept descriptive-statistics
+#' 
 #' @examples
 #' 
 #' x <- c(0:10, 50)

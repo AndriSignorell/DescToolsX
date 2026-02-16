@@ -23,6 +23,7 @@
 #' completeColumns(d.pizza, which=FALSE)
 #' 
 
+#' @export 
 completeColumns <- function(x, which=TRUE){
   if(which)
     names(Filter(isZero, sapply(x, function(z) sum(is.na(z)))))

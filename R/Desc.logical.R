@@ -31,7 +31,7 @@
 #'   
 #' @param digits integer. With how many digits should the relative frequencies
 #' be fmted? Default can be set by
-#' \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.
+#' \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.
 #' 
 #' @param ord  order of the levels
 #' 

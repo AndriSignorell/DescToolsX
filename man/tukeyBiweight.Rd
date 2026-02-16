@@ -76,10 +76,17 @@ Robust Geometric Predicates.  \emph{Discrete and Computational Geometry},
 }
 \seealso{
 \code{\link{huberM}}, \code{\link{rangeX}}, \code{\link{scaleX}}
+
+Other central-tendency: 
+\code{\link{hodgesLehmann}()},
+\code{\link{huberM}()},
+\code{\link{meanX}()},
+\code{\link{medianX}()}
 }
 \author{
 originally written by Mikko Korpela \href{mailto:mikko.korpela@aalto.fi}{mikko.korpela@aalto.fi}\cr
 Rcpp port by Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{robust}
-\keyword{univar}
+\concept{central-tendency}
+\concept{descriptive-statistics}
+\concept{robust-statistics}

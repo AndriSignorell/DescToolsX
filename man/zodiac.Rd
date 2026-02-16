@@ -27,11 +27,11 @@ discovered such a function... ;-)
 
 The following rule to determine zodiac symbols is implemented:
 
-\preformatted{Dec. 22 - Jan. 19 : Capricorn Jan. 20 - Feb. 17 : Aquarius
-Feb. 18 - Mar. 19 : Pisces March 20 - April 19 : Aries April 20 - May 19 :
-Taurus May 20 - June 20 : Gemini June 21 - July 21 : Cancer July 22 - Aug.
-22 : Leo Aug 23 - Sept. 21 : Virgo Sept. 22 - Oct. 22 : Libran Oct. 23 -
-Nov. 21 : Scorpio Nov. 22 - Dec. 21 : Sagittarius }
+\preformatted{Dec. 22 - Jan. 19 : Capricorn | Jan. 20 - Feb. 17 : Aquarius | 
+Feb. 18 - Mar. 19 : Pisces | March 20 - April 19 : Aries | April 20 - May 19 :
+Taurus | May 20 - June 20 : Gemini | June 21 - July 21 : Cancer | July 22 - Aug.
+22 : Leo | Aug 23 - Sept. 21 : Virgo | Sept. 22 - Oct. 22 : Libran | Oct. 23 -
+Nov. 21 : Scorpio | Nov. 22 - Dec. 21 : Sagittarius }
 }
 \examples{
 

@@ -5,21 +5,16 @@
 \alias{constants}
 \alias{day.abb}
 \alias{day.name}
-\alias{d.prefix}
 \title{DescToolsX Constants}
 \format{
 A character vector of length 7.
 
 An object of class \code{character} of length 7.
-
-An object of class \code{data.frame} with 20 rows and 3 columns.
 }
 \usage{
 day.abb
 
 day.name
-
-d.prefix
 }
 \description{
 English abbreviated and full weekday names, starting with Monday.

@@ -82,11 +82,17 @@ Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 \seealso{
 \code{\link{wilcox.test}}, \code{\link{median}},
 \code{\link{medianCI}}
+
+Other central-tendency: 
+\code{\link{huberM}()},
+\code{\link{meanX}()},
+\code{\link{medianX}()},
+\code{\link{tukeyBiweight}()}
 }
 \author{
 Cyril Flurin Moser (Cyril did the lion's share and coded Monahan's
 algorithm in C++), Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{nonparametric}
-\keyword{robust}
-\keyword{univar}
+\concept{central-tendency}
+\concept{descriptive-statistics}
+\concept{robust-statistics}

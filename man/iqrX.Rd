@@ -34,11 +34,17 @@ iqrX(x=x, weights=w)
 \seealso{
 \code{\link{medianX}()}, \code{\link{quantileX}()},
 \code{\link{IQR}()}, \code{\link{quantile}()}
+
+Other dispersion: 
+\code{\link{madX}()},
+\code{\link{meanAD}()},
+\code{\link{rangeX}()},
+\code{\link{skew_kurt}},
+\code{\link{varX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{IO}
-\keyword{distribution}
-\keyword{robust}
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{dispersion}
+\concept{robust-statistics}

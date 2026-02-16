@@ -43,7 +43,11 @@
 #' Monahan, J. (1984), Algorithm 616: Fast Computation of the Hodges-Lehmann
 #' Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 #' 10, No. 3, pp. 265-270
-#' @keywords nonparametric robust univar
+#' 
+#' @family central-tendency
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#' 
 #' @examples
 #' 
 #' set.seed(1)

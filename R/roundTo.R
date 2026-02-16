@@ -1,8 +1,7 @@
 
-#' Round to Multiple %% ~~function to do ... ~~
+#' Round to Multiple 
 #' 
-#' Returns a number rounded to the nearest specified multiple. %% ~~ A concise
-#' (1-5 lines) description of what the function does. ~~
+#' Returns a number rounded to the nearest specified multiple. 
 #' 
 #' There are several functions to convert to integers. \code{\link{round}}
 #' rounds to the nearest integer or to any number of digits. Using a negative
@@ -17,21 +16,21 @@
 #' the smaller absolute value will be returned when \code{round(x/multiple)} is
 #' even (and the greater when it's odd).\cr If \code{FUN} is set to
 #' \code{ceiling} it will always round up, and if set to \code{floor} it will
-#' always round down. See examples for comparison). %% ~~ If necessary, more
-#' details than the description above ~~
+#' always round down. See examples for comparison). 
 #' 
-#' @param x numeric. The value to round. %% ~~Describe \code{x} here~~
+#' @param x numeric. The value to round. 
 #' @param multiple numeric. The multiple to which the number is to be rounded.
-#' Default is 1. %% ~~Describe \code{multiple} here~~
+#' Default is 1.
 #' @param FUN the rounding function as character or as expression. Can be one
 #' out of \code{\link{trunc}}, \code{ceiling}, \code{round} (default) or
 #' \code{floor}.
-#' @return the rounded value %% ~Describe the value returned %% If it is a
-#' LIST, use %% \item{comp1 }{Description of 'comp1'} %% \item{comp2
-#' }{Description of 'comp2'} %% ...
-#' @author Andri Signorell <andri@@signorell.net> %% ~~who you are~~
+#' 
+#' @return the rounded value 
+#' 
+#' @author Andri Signorell <andri@@signorell.net> 
 #' @seealso \code{\link{round}}, \code{\link{trunc}}, \code{\link{ceiling}},
-#' \code{\link{floor}} %% ~~objects to See Also as \code{\link{help}}, ~~~
+#' \code{\link{floor}} 
+#' 
 #' @keywords manip
 #' @examples
 #' 
@@ -76,19 +75,11 @@
 #' @export
 roundTo <- function(x, multiple = 1, FUN = round) {
   
-  # check for functions: round, ceiling, floor, but how????
-  # FUN <- match.arg(FUN, c(round, ceiling, floor))
+  if (!is.function(FUN))
+    stop("`FUN` must be a function.")
   
-  if(is.function(FUN)) {
-    # if FUN is a function, then save it under new name and
-    # overwrite function name in FUN, which has to be character
-    fct <- FUN
-    FUN <- "fct"
-    FUN <- gettextf("%s", FUN)
-  }
+  FUN(x / multiple) * multiple
   
-  # round will set digits to 0 by default, which is exactly what we need here
-  return(eval(parse(text = gettextf("%s(x/multiple) * multiple", FUN))))
 }
 
 

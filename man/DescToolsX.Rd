@@ -228,6 +228,7 @@ Other contributors:
   \item Hong Ooi [contributor]
   \item Nick Parsons [contributor]
   \item Sandrine Pavoine [contributor]
+  \item Bernhard Pfaff [contributor]
   \item Tony Plate [contributor]
   \item Luke Prendergast [contributor]
   \item Roland Rapold [contributor]

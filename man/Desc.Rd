@@ -100,7 +100,7 @@ on the classes of the variables. Default can be defined by
 the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
 \item{digits}{integer. With how many digits should the real numbers
-be formatted? Default is taken from \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.}
+be formatted? Default is taken from \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.}
 
 \item{maxrows}{numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
@@ -277,7 +277,7 @@ Forecasting: Principles and Practice.
 \code{\link[base:summary]{base::summary()}},
 \code{\link[base:plot]{base::plot()}}
 
-Other Statistical summary functions: \code{\link{abstract}()}
+Other Statistical summary functions: \code{\link[DescToolsViz]{abstract}()}
 
 \code{\link{chisq.test}},
 \code{\link{fisher.test}},

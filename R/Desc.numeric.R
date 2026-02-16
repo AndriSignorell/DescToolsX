@@ -23,7 +23,7 @@
 #' \code{"names"}).
 #' 
 #' @param digits integer. With how many digits should the real numbers
-#' be formatted? Default is taken from \link[=setDescToolsXOption]{setDescToolsXOption(digits=x)}.
+#' be formatted? Default is taken from \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.
 #' 
 #' @param include_x (logical) if \code{TRUE} (default) the original vector 
 #' will be returned
@@ -62,7 +62,7 @@
 #' @seealso \code{\link[base:summary]{base::summary()}},
 #' \code{\link[base:plot]{base::plot()}}
 #' 
-#' Other Statistical summary functions: \code{\link{abstract}()}
+#' Other Statistical summary functions: \code{\link[DescToolsViz]{abstract}()}
 #' @keywords multivariate print univar
 #' @examples
 #' 
@@ -100,7 +100,7 @@ Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   # check for remarkably frequent values in a numeric variable
   # say the most frequent value has significantly more than 5% from the total sample
   modefreq_crit <-
-    binom.test(zeroIfNA(nstat$modefreq), n = n, p = 0.05, alternative = "greater")
+    binom.test(naReplace(nstat$modefreq, 0), n = n, p = 0.05, alternative = "greater")
   
   if (modefreq_crit$p.value < 0.05 & nstat$nu > 12) {
     modefreq_crit <- gettextf(

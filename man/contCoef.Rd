@@ -61,8 +61,17 @@ with(untable(tab), contCoef(Hair, Eye))
 Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
 Tables, \emph{Proceedings of the Social Statistics Section of the American
 Statistical Association} (Part III), 777-780.
+
+Other association-measures: 
+\code{\link{Yule_Q_Y}},
+\code{\link{cramerV}()},
+\code{\link{kendallTauB}()},
+\code{\link{somersDelta}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net},
 }
-\keyword{multivariate}
+\concept{association}
+\concept{association-measures}
+\concept{categorical-data}
+\concept{contingency-tables}
