@@ -79,11 +79,11 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \code{\link{weighted.mean}}, \code{\link{mean.POSIXct}},
 \code{\link{colMeans}} for row and column means.
 
-Other central-tendency: 
+Other topic.central-tendency: 
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{medianX}()},
 \code{\link{tukeyBiweight}()}
 }
-\concept{central-tendency}
 \concept{descriptive-statistics}
+\concept{topic.central-tendency}

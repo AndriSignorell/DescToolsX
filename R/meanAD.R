@@ -33,7 +33,7 @@
 #' 
 #' @seealso \code{\link{mad}}
 #' 
-#' @family dispersion
+#' @family topic.dispersion
 #' @concept descriptive-statistics
 #' 
 #' @examples

@@ -78,6 +78,6 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on
 Doran
 }
 \concept{Internal Consistency}
-\concept{InternalConsistency}
 \concept{Reliability}
 \concept{Scale Reliability}
+\concept{topic.InternalConsistency}

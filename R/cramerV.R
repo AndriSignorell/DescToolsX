@@ -39,7 +39,7 @@
 #' \emph{Journal of the Korean Statistical Society} 42(3) DOI:
 #' 10.1016/j.jkss.2012.10.002
 #' 
-#' @family association-measures
+#' @family topic.association-measures
 #' @concept association
 #' @concept contingency-tables
 #' @concept nominal-data

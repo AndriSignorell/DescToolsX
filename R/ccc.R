@@ -72,7 +72,7 @@
 #' Snedecor G, Cochran W (1989). \emph{Statistical Methods}. Ames: Iowa State
 #' University Press.
 #' 
-#' @family Agreement
+#' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Metric Agreement
 #' 

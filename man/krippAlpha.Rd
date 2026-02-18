@@ -96,15 +96,15 @@ Sage Publications.
 \seealso{
 \code{\link{bootCI}}
 
-Other Agreement: 
+Other topic.Agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()}
 }
-\concept{Agreement}
 \concept{Interrater Agreement}
 \concept{Metric Agreement}
 \concept{Nominal Agreement}
 \concept{Ordinal Agreement}
+\concept{topic.Agreement}

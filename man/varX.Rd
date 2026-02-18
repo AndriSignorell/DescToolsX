@@ -96,12 +96,13 @@ base R's implementations \code{\link{var}}, \code{\link{sd}},
 
 also consider \code{\link{madX}}, the most robust alternative
 
-Other dispersion: 
+Other topic.dispersion: 
 \code{\link{iqrX}()},
+\code{\link{kurtX}()},
 \code{\link{madX}()},
 \code{\link{meanAD}()},
 \code{\link{rangeX}()},
-\code{\link{skew_kurt}}
+\code{\link{skewX}()}
 }
 \concept{descriptive-statistics}
-\concept{dispersion}
+\concept{topic.dispersion}

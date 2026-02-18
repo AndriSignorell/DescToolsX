@@ -84,7 +84,7 @@ American Statistical Association}, 58, 310-364.
 \seealso{
 \code{\link{Association}}
 
-Other correlation: 
+Other topic.correlation: 
 \code{\link{kendallTauA}()},
 \code{\link{kendallTauB}()},
 \code{\link{pearsonCor}()},
@@ -94,7 +94,7 @@ Other correlation:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
-\concept{correlation}
 \concept{nonparametric}
 \concept{ordinal-data}
 \concept{rank-methods}
+\concept{topic.correlation}

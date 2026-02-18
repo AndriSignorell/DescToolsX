@@ -75,20 +75,20 @@ Amsterdam: North-Holland Publishing Company.
 \seealso{
 \code{\link{Association}}
 
-Other association-measures: 
-\code{\link{Yule_Q_Y}},
+Other topic.association-measures: 
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
-\code{\link{somersDelta}()}
+\code{\link{somersDelta}()},
+\code{\link{yuleQY}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} strongly based on code from
 Antti Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}
 }
 \concept{association}
-\concept{association-measures}
 \concept{information-theory}
+\concept{topic.association-measures}

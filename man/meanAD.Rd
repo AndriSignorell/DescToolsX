@@ -62,11 +62,12 @@ meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 \seealso{
 \code{\link{mad}}
 
-Other dispersion: 
+Other topic.dispersion: 
 \code{\link{iqrX}()},
+\code{\link{kurtX}()},
 \code{\link{madX}()},
 \code{\link{rangeX}()},
-\code{\link{skew_kurt}},
+\code{\link{skewX}()},
 \code{\link{varX}()}
 }
 \author{
@@ -74,4 +75,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} following
 Navarro (\code{aad} in the \pkg{lsr} package)
 }
 \concept{descriptive-statistics}
-\concept{dispersion}
+\concept{topic.dispersion}

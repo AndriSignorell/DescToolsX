@@ -1,3 +1,4 @@
+
 #' Yule's Coefficients of Association (Q and Y)
 #'
 #' Computes Yule's Q or Y for a 2x2 contingency table, optionally with
@@ -30,7 +31,7 @@
 #' \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
 #' and then transformed to the selected coefficient.
 #' 
-#' @name Yule_Q_Y
+#' @name yuleQY
 #'
 #' @return a single numeric value if no confidence intervals are requested,\cr
 #' and otherwise a numeric vector with 3 elements for the estimate, the lower
@@ -46,13 +47,13 @@
 #'
 #' @export
 #'  
-#' @family association-measures
+#' @family topic.association-measures
 #' @concept association
 #' @concept contingency-tables
 #' @concept categorical-data
 #' 
 
-#' @rdname Yule
+#' @rdname yuleQY
 #' @export
 yuleQ <- function(x, y=NULL,
                   conf.level = 0.95,
@@ -110,7 +111,7 @@ yuleQ <- function(x, y=NULL,
 
 
 
-#' @rdname Yule
+#' @rdname yuleQY
 #' @export
 yuleY <- function(x, y=NULL, 
                      conf.level = 0.95,

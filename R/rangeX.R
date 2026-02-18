@@ -42,7 +42,7 @@
 #' 
 #' @seealso \code{\link{range}}, \code{\link{min}}, \code{\link{max}} 
 #' 
-#' @family dispersion
+#' @family topic.dispersion
 #' @concept descriptive-statistics
 #' 
 #' @examples

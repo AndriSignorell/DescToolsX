@@ -62,20 +62,20 @@ Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
 Tables, \emph{Proceedings of the Social Statistics Section of the American
 Statistical Association} (Part III), 777-780.
 
-Other association-measures: 
-\code{\link{Yule_Q_Y}},
+Other topic.association-measures: 
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
-\code{\link{uncertCoef}()}
+\code{\link{uncertCoef}()},
+\code{\link{yuleQY}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net},
 }
 \concept{association}
-\concept{association-measures}
 \concept{contingency-tables}
 \concept{nominal-data}
+\concept{topic.association-measures}

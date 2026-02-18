@@ -62,7 +62,7 @@ pairApply(swiss,
 \seealso{
 \code{\link{fisherZ}}, \code{\link{fisherZInv}}
 
-Other correlation: 
+Other topic.correlation: 
 \code{\link{kendallTauA}()},
 \code{\link{kendallTauB}()},
 \code{\link{spearmanCor}()},
@@ -78,3 +78,4 @@ code
 \concept{continuous-data}
 \concept{correlation}
 \concept{parametric}
+\concept{topic.correlation}

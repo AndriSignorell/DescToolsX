@@ -50,7 +50,7 @@
 #' Robust Geometric Predicates.  \emph{Discrete and Computational Geometry},
 #' 18(3):305-363. Springer.
 #' 
-#' @family central-tendency
+#' @family topic.central-tendency
 #' @concept descriptive-statistics
 #' @concept robust-statistics
 #' 

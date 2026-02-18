@@ -159,7 +159,7 @@ Technology}, 11, 101-109.
 \code{\link{cronbachAlpha}}, \code{\link{kappaM}},
 \code{\link{krippAlpha}}
 
-Other Agreement: 
+Other topic.Agreement: 
 \code{\link{ccc}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
@@ -170,6 +170,6 @@ Other Agreement:
 David Meyer \href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org}, some changes and tweaks
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{Agreement}
 \concept{Interrater Agreement}
 \concept{Nominal Agreement}
+\concept{topic.Agreement}

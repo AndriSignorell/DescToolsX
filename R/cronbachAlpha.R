@@ -31,7 +31,7 @@
 #' @references Cohen, J. (1960), A coefficient of agreement for nominal scales.
 #' \emph{Educational and Psychological Measurement}, 20, 37-46.
 #' 
-#' @family InternalConsistency
+#' @family topic.InternalConsistency
 #' @concept Reliability
 #' @concept Internal Consistency
 #' @concept Scale Reliability

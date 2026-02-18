@@ -44,7 +44,7 @@
 #' classifications III: Approximate sampling theory. \emph{Journal of the
 #' American Statistical Association}, 58, 310-364.
 #' 
-#' @family correlation
+#' @family topic.correlation
 #' @concept association
 #' @concept ordinal-data
 #' @concept rank-methods

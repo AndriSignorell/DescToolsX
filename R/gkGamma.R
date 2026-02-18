@@ -46,7 +46,7 @@
 #' American Statistical Association}, 58, 310-364.
 #' 
 #' 
-#' @family association-measures
+#' @family topic.association-measures
 #' @concept association
 #' @concept ordinal-data
 #' 

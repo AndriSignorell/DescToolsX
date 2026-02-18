@@ -16,7 +16,7 @@
 #' @seealso \code{\link{medianX}()}, \code{\link{quantileX}()},
 #' \code{\link{IQR}()}, \code{\link{quantile}()} 
 #' 
-#' @family dispersion
+#' @family topic.dispersion
 #' @concept descriptive-statistics
 #' @concept robust-statistics
 #' 

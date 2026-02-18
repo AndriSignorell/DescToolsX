@@ -91,7 +91,7 @@ scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 \seealso{
 \code{\link{cohenKappa}}
 
-Other Agreement: 
+Other topic.Agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
 \code{\link{icc}()},
@@ -102,7 +102,7 @@ Other Agreement:
 Matthias Gamer, with some modifications by Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{Agreement}
 \concept{Interrater Agreement}
 \concept{Multi-Rater Agreement}
 \concept{Nominal Agreement}
+\concept{topic.Agreement}

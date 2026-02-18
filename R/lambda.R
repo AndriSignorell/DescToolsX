@@ -47,7 +47,7 @@
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 17--24 
 #' 
-#' @family association-measures
+#' @family topic.association-measures
 #' @concept association
 #' @concept nominal-data
 #' @concept proportional-reduction-in-error

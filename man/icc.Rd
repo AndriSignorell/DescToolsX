@@ -126,7 +126,7 @@ applications in R} Springer. (working draft available at
 \url{http://personality-project.org/r/book/}
 }
 \seealso{
-Other Agreement: 
+Other topic.Agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
 \code{\link{kappaM}()},
@@ -137,6 +137,6 @@ Other Agreement:
 William Revelle \href{mailto:revelle@northwestern.edu}{revelle@northwestern.edu}, some editorial
 amendments Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{Agreement}
 \concept{Interrater Agreement}
 \concept{Metric Agreement}
+\concept{topic.Agreement}

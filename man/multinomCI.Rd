@@ -151,7 +151,7 @@ Wilson, E. B. Probable inference, the law of succession and statistical
 inference, \emph{J.Am. Stat. Assoc.} 22 (1927) 209-212.
 }
 \seealso{
-Other categorical-data: 
+Other topic.categorical-data: 
 \code{\link{binomCI}()}
 }
 \author{
@@ -162,5 +162,5 @@ Computer Science and Artificial Intelligence, University of Granada (Spain)
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} (Goodman, Wald, Wilson,
 Fitzpatrick-Scott, Quesenberry-Hurst)
 }
-\concept{categorical-data}
 \concept{confidence-intervals}
+\concept{topic.categorical-data}

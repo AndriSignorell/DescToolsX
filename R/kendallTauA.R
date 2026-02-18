@@ -39,7 +39,7 @@
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 49-56
 #' 
-#' @family correlation
+#' @family topic.correlation
 #' @concept association
 #' @concept ordinal-data
 #' @concept rank-methods

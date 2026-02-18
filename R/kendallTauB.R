@@ -33,7 +33,7 @@
 #' Correlation in Two-Way Contingency Tables, \emph{Journal of the American
 #' Statistical Association}, 72, 309-315.
 #' 
-#' @family correlation
+#' @family topic.correlation
 #' @concept association
 #' @concept ordinal-data
 #' @concept rank-methods

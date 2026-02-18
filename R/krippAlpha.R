@@ -60,7 +60,7 @@
 #'
 #' @seealso \code{\link{bootCI}}
 #'
-#' @family Agreement
+#' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Nominal Agreement
 #' @concept Ordinal Agreement

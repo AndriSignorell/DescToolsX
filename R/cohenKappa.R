@@ -63,7 +63,7 @@
 #' Reliability of Scoring EEG Sleep Recordings \emph{American Journal of EEG
 #' Technology}, 11, 101-109.
 #' 
-#' @family Agreement
+#' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Nominal Agreement
 #' 

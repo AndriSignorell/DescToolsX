@@ -39,7 +39,7 @@
 #' \code{\link{median}}, \code{\link{var}} the base R equivalents
 #' \cr\code{\link{madCI}} (confidence intervals).
 #' 
-#' @family dispersion
+#' @family topic.dispersion
 #' @concept descriptive-statistics
 #' @concept robust-statistics
 #' @examples

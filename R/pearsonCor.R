@@ -25,7 +25,7 @@
 #' code
 #' @seealso \code{\link{fisherZ}}, \code{\link{fisherZInv}}
 #' 
-#' @family correlation
+#' @family topic.correlation
 #' @concept correlation
 #' @concept continuous-data
 #' @concept parametric

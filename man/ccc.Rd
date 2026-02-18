@@ -139,7 +139,7 @@ University Press.
 \seealso{
 \code{\link{icc}}, \code{\link{kendallW}}
 
-Other Agreement: 
+Other topic.Agreement: 
 \code{\link{cohenKappa}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
@@ -149,6 +149,6 @@ Other Agreement:
 \author{
 Mark Stevenson \href{mailto:mark.stevenson1@unimelb.edu.au}{mark.stevenson1@unimelb.edu.au}
 }
-\concept{Agreement}
 \concept{Interrater Agreement}
 \concept{Metric Agreement}
+\concept{topic.Agreement}

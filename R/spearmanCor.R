@@ -22,7 +22,7 @@
 #' @references Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 #' (3rd edition)}. Wiley 
 #' 
-#' @family correlation
+#' @family topic.correlation
 #' @concept correlation
 #' @concept rank-methods
 #' @concept nonparametric

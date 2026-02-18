@@ -67,7 +67,7 @@
 #' 
 #' Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409–416.
 #' 
-#' @family Agreement
+#' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Rank Agreement
 #' @concept Ordinal Agreement

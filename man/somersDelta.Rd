@@ -101,20 +101,20 @@ sample sizes. However it is restricted to computing Somers' Dxy rank
 correlation between a variable x and a binary (0-1) variable y.\cr
 Other association measures: \code{\link{Association}}
 
-Other association-measures: 
-\code{\link{Yule_Q_Y}},
+Other topic.association-measures: 
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
-\code{\link{uncertCoef}()}
+\code{\link{uncertCoef}()},
+\code{\link{yuleQY}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
-\concept{association-measures}
 \concept{asymmetric-measures}
 \concept{ordinal-data}
+\concept{topic.association-measures}

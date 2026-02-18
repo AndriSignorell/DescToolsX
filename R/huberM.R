@@ -38,7 +38,7 @@
 #' \pkg{MASS}; \code{\link{mad}}.
 #' @references Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
 #' 
-#' @family central-tendency
+#' @family topic.central-tendency
 #' @concept descriptive-statistics
 #' @concept robust-statistics
 #' 

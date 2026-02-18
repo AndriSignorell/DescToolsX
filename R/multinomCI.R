@@ -77,7 +77,7 @@
 #' Wilson, E. B. Probable inference, the law of succession and statistical
 #' inference, \emph{J.Am. Stat. Assoc.} 22 (1927) 209-212.
 #' 
-#' @family categorical-data
+#' @family topic.categorical-data
 #' @concept confidence-intervals
 #' 
 #' @examples

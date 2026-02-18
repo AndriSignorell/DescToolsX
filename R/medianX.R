@@ -49,7 +49,7 @@
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
 #' 
-#' @family central-tendency
+#' @family topic.central-tendency
 #' @concept descriptive-statistics
 #' @concept robust-statistics
 #' 

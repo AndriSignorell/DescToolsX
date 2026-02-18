@@ -32,7 +32,7 @@
 #'   \item{\code{conceptAudit}}{Data frame with concept frequencies.}
 #' }
 #'
-#' @family SystemTools
+#' @family topic.SystemTools
 #' @concept Infrastructure
 #' @concept Documentation Tools
 #' @concept Programming Utilities

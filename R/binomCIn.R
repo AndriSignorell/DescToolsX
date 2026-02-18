@@ -32,7 +32,7 @@
 #' @author Andri Signorell <andri@@signorell.net>
 #' @seealso \code{\link{binomCI}()} 
 #' 
-#' @family categorical-data
+#' @family topic.categorical-data
 #' @concept confidence-intervals
 #'  
 #' @examples

@@ -52,7 +52,7 @@
 #' Scott, W.A. (1955). Reliability of content analysis: the case of nominal
 #' scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 #' 
-#' @family Agreement
+#' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Multi-Rater Agreement
 #' @concept Nominal Agreement

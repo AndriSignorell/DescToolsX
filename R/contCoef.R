@@ -33,7 +33,7 @@
 #' Tables, \emph{Proceedings of the Social Statistics Section of the American
 #' Statistical Association} (Part III), 777-780.
 #' 
-#' @family association-measures
+#' @family topic.association-measures
 #' @concept association
 #' @concept contingency-tables
 #' @concept nominal-data

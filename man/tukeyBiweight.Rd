@@ -77,7 +77,7 @@ Robust Geometric Predicates.  \emph{Discrete and Computational Geometry},
 \seealso{
 \code{\link{huberM}}, \code{\link{rangeX}}, \code{\link{scaleX}}
 
-Other central-tendency: 
+Other topic.central-tendency: 
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{meanX}()},
@@ -87,6 +87,6 @@ Other central-tendency:
 originally written by Mikko Korpela \href{mailto:mikko.korpela@aalto.fi}{mikko.korpela@aalto.fi}\cr
 Rcpp port by Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{central-tendency}
 \concept{descriptive-statistics}
 \concept{robust-statistics}
+\concept{topic.central-tendency}

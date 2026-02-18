@@ -83,7 +83,7 @@
 #' applications in R} Springer. (working draft available at
 #' \url{http://personality-project.org/r/book/}
 #' 
-#' @family Agreement
+#' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Metric Agreement
 #' 

@@ -254,7 +254,7 @@ for discrete distributions, \emph{Canadian Journal of Statistics} 28 (4),
 
 \code{\link{binomCI}()}
 
-Other categorical-data: 
+Other topic.categorical-data: 
 \code{\link{multinomCI}()}
 }
 \author{
@@ -267,3 +267,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{categorical-data}
 \concept{confidence-intervals}
+\concept{topic.categorical-data}

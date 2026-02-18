@@ -53,19 +53,19 @@ World Scientific. p. 2. ISBN 978-981-02-0985-8.
 package \pkg{entropy} which implements various estimators of
 entropy
 
-Other association-measures: 
-\code{\link{Yule_Q_Y}},
+Other topic.association-measures: 
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{gkGamma}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
-\code{\link{uncertCoef}()}
+\code{\link{uncertCoef}()},
+\code{\link{yuleQY}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
-\concept{association-measures}
 \concept{information-theory}
+\concept{topic.association-measures}

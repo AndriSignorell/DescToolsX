@@ -106,22 +106,22 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...
 
-Other association-measures: 
-\code{\link{Yule_Q_Y}},
+Other topic.association-measures: 
 \code{\link{contCoef}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
-\code{\link{uncertCoef}()}
+\code{\link{uncertCoef}()},
+\code{\link{yuleQY}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Michael Smithson
 \href{mailto:michael.smithson@anu.edu.au}{michael.smithson@anu.edu.au} (confidence intervals for Cramer V)
 }
 \concept{association}
-\concept{association-measures}
 \concept{contingency-tables}
 \concept{effect-size}
 \concept{nominal-data}
+\concept{topic.association-measures}
