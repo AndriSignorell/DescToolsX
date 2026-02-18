@@ -125,3 +125,5 @@ New York. 937 pp.
 Pete Hurd \href{mailto:phurd@ualberta.ca}{phurd@ualberta.ca}, Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net} (tiny tweaks)
 }
+\concept{association}
+\concept{contingency-tests}

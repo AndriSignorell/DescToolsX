@@ -24,7 +24,12 @@
 #' \href{mailto:andri@@signorell.net}{andri@@signorell.net} based on R-Core
 #' code
 #' @seealso \code{\link{fisherZ}}, \code{\link{fisherZInv}}
-#' @keywords models multivariate
+#' 
+#' @family correlation
+#' @concept correlation
+#' @concept continuous-data
+#' @concept parametric
+#' 
 #' @examples
 #' 
 #' with(swiss, pearsonCor(Fertility, Agriculture))

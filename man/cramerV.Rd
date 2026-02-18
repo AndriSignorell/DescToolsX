@@ -109,8 +109,12 @@ outdated...
 Other association-measures: 
 \code{\link{Yule_Q_Y}},
 \code{\link{contCoef}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()}
+\code{\link{entropy}()},
+\code{\link{gkGamma}()},
+\code{\link{lambda}()},
+\code{\link{mutInf}()},
+\code{\link{somersDelta}()},
+\code{\link{uncertCoef}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Michael Smithson
@@ -118,5 +122,6 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Mich
 }
 \concept{association}
 \concept{association-measures}
-\concept{categorical-data}
 \concept{contingency-tables}
+\concept{effect-size}
+\concept{nominal-data}

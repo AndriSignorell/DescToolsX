@@ -36,7 +36,7 @@
 #' @family association-measures
 #' @concept association
 #' @concept contingency-tables
-#' @concept categorical-data
+#' @concept nominal-data
 #' 
 #' @examples
 #' 

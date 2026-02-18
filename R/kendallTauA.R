@@ -38,7 +38,14 @@
 #' Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 49-56
-#' @keywords multivar nonparametric
+#' 
+#' @family correlation
+#' @concept association
+#' @concept ordinal-data
+#' @concept rank-methods
+#' @concept nonparametric
+#' 
+#' 
 #' @examples
 #' 
 #' 

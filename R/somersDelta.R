@@ -59,8 +59,8 @@
 #' 
 #' @family association-measures
 #' @concept association
-#' @concept contingency-tables
-#' @concept categorical-data
+#' @concept ordinal-data
+#' @concept asymmetric-measures
 
 #' @examples
 #' 
@@ -79,7 +79,11 @@
 #' 
 
 #' @export
-somersDelta <- function(x,  y = NULL, direction=c("row","column"), conf.level = NA, ...) {
+somersDelta <- function(x,  y = NULL, 
+                        conf.level = NA, 
+                        sides = c("two.sided", "left", "right"),
+                        direction=c("row","column"), 
+                        ...) {
   
   if(!is.null(y)) tab <- table(x, y, ...)
   else tab <- as.table(x)

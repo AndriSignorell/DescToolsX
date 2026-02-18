@@ -12,6 +12,7 @@
 #' z-Transformation.\cr
 #' 
 #' @inheritParams Association
+#' 
 #' @param na.rm logical, should NAs be removed?
 #' @return Either a single numeric value, if no confidence interval is
 #' required, \cr or a vector with 3 elements for estimate, lower and upper
@@ -20,7 +21,12 @@
 #' @seealso \code{\link{Association}} 
 #' @references Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 #' (3rd edition)}. Wiley 
-#' @keywords multivar
+#' 
+#' @family correlation
+#' @concept correlation
+#' @concept rank-methods
+#' @concept nonparametric
+#' 
 #' @examples
 #' 
 #' pain <- as.table(matrix(c(26,  6, 26, 7, 23, 

@@ -65,13 +65,17 @@ Statistical Association} (Part III), 777-780.
 Other association-measures: 
 \code{\link{Yule_Q_Y}},
 \code{\link{cramerV}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()}
+\code{\link{entropy}()},
+\code{\link{gkGamma}()},
+\code{\link{lambda}()},
+\code{\link{mutInf}()},
+\code{\link{somersDelta}()},
+\code{\link{uncertCoef}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net},
 }
 \concept{association}
 \concept{association-measures}
-\concept{categorical-data}
 \concept{contingency-tables}
+\concept{nominal-data}

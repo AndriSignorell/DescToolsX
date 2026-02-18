@@ -105,10 +105,10 @@ skewX <- function (x,
   
   # C++ part for the expensive (x - mean(x))^2 etc. is roughly 14 times faster
   #   > x <- rchisq(100000000, df=2)
-  #   > system.time(Skew(x))
+  #   > system.time(skew(x))
   #   user  system elapsed
   #   6.32    0.30    6.62
-  #   > system.time(Skew2(x))
+  #   > system.time(skew2(x))
   #   user  system elapsed
   #   0.47    0.00    0.47
   

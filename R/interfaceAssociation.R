@@ -31,7 +31,7 @@
 #' can be controlled using the sides argument. The definition is following the
 #' handling in statistical tests. Alternative hypothesis: \code{"two.sided"}, 
 #' \code{"left"}, or \code{"right"}. Frequently there is a classic and 
-#' a bootsrap approach (\code{"classic"}, \code{"boot"}). 
+#' a bootstrap approach (\code{"classic"}, \code{"boot"}). 
 #' However most measures have their own specific confidence intervals methods.
 #' 
 #' Some association measures define additional parameters such as \code{direction},

@@ -14,6 +14,9 @@
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
 #' vector interface.
+#' 
+#' @inheritParams ConfidenceIntervals
+#' 
 #' @return a single numeric value if no confidence intervals are requested,\cr
 #' and otherwise a numeric vector with 3 elements for the estimate, the lower
 #' and the upper confidence interval 
@@ -30,10 +33,12 @@
 #' Correlation in Two-Way Contingency Tables, \emph{Journal of the American
 #' Statistical Association}, 72, 309-315.
 #' 
-#' @family association-measures
+#' @family correlation
 #' @concept association
-#' @concept contingency-tables
-#' @concept categorical-data
+#' @concept ordinal-data
+#' @concept rank-methods
+#' @concept nonparametric
+#' 
 #' @examples
 #' 
 #' # example in:
@@ -46,12 +51,15 @@
 #' 
 
 #' @export
-kendallTauB <- function(x, y = NULL, conf.level = NA, ...){
+kendallTauB <- function(x, y = NULL, 
+                        conf.level = NA, 
+                        sides = c("two.sided", "left", "right"),
+                        ...){
   
   # Ref: http://www.fs.fed.us/psw/publications/lewis/LewisHMP.pdf
   # pp 2-9
   #
-
+  
   if(!is.null(y)) {
     x <- conDisPairsXY(tab)
     

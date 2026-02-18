@@ -87,9 +87,18 @@ Newbury Park, CA: Sage, pp. 49-56
 }
 \seealso{
 \code{\link{Association}}
+
+Other correlation: 
+\code{\link{kendallTauB}()},
+\code{\link{pearsonCor}()},
+\code{\link{spearmanCor}()},
+\code{\link{stuartTauC}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{multivar}
-\keyword{nonparametric}
+\concept{association}
+\concept{correlation}
+\concept{nonparametric}
+\concept{ordinal-data}
+\concept{rank-methods}

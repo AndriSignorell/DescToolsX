@@ -61,6 +61,12 @@ pairApply(swiss,
 }
 \seealso{
 \code{\link{fisherZ}}, \code{\link{fisherZInv}}
+
+Other correlation: 
+\code{\link{kendallTauA}()},
+\code{\link{kendallTauB}()},
+\code{\link{spearmanCor}()},
+\code{\link{stuartTauC}()}
 }
 \author{
 William Revelle
@@ -69,5 +75,6 @@ slight modifications Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net} based on R-Core
 code
 }
-\keyword{models}
-\keyword{multivariate}
+\concept{continuous-data}
+\concept{correlation}
+\concept{parametric}

@@ -79,8 +79,12 @@ Yule, G. U. (1912). On the methods of measuring association between two attribut
 Other association-measures: 
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()}
+\code{\link{entropy}()},
+\code{\link{gkGamma}()},
+\code{\link{lambda}()},
+\code{\link{mutInf}()},
+\code{\link{somersDelta}()},
+\code{\link{uncertCoef}()}
 }
 \concept{association}
 \concept{association-measures}

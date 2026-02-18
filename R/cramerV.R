@@ -42,7 +42,8 @@
 #' @family association-measures
 #' @concept association
 #' @concept contingency-tables
-#' @concept categorical-data
+#' @concept nominal-data
+#' @concept effect-size
 # 
 #' @examples
 #' 
@@ -85,7 +86,8 @@
 
 #' @export
 cramerV <- function(x, y = NULL, conf.level = NA,
-                    method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"), 
+                    method = c("ncchisq", "ncchisqadj", 
+                               "fisher", "fisheradj"), 
                     correct=FALSE, ...){
 
   tab <- .normalizeToConfusion(x, y, mode = "association")

@@ -30,7 +30,11 @@
 #' @seealso \code{\link{Association}}
 #' @references Theil, H. (1972), \emph{Statistical Decomposition Analysis},
 #' Amsterdam: North-Holland Publishing Company. 
-#' @keywords multivariate
+#' 
+#' @family association-measures
+#' @concept association
+#' @concept information-theory
+#' 
 #' @examples
 #' 
 #' # example from Goodman Kruskal (1954)

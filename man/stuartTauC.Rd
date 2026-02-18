@@ -4,7 +4,13 @@
 \alias{stuartTauC}
 \title{Stuart \eqn{\tau_{c}}{Tau-c}}
 \usage{
-stuartTauC(x, y = NULL, conf.level = NA, ...)
+stuartTauC(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  ...
+)
 }
 \arguments{
 \item{x}{Either a vector of observations, a two-column object
@@ -15,6 +21,9 @@ stuartTauC(x, y = NULL, conf.level = NA, ...)
 
 \item{conf.level}{Confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
+
+\item{sides}{Alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
 
 \item{\dots}{further arguments are passed to the function
 \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
@@ -74,9 +83,18 @@ American Statistical Association}, 58, 310-364.
 }
 \seealso{
 \code{\link{Association}}
+
+Other correlation: 
+\code{\link{kendallTauA}()},
+\code{\link{kendallTauB}()},
+\code{\link{pearsonCor}()},
+\code{\link{spearmanCor}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{multivar}
-\keyword{nonparametric}
+\concept{association}
+\concept{correlation}
+\concept{nonparametric}
+\concept{ordinal-data}
+\concept{rank-methods}

@@ -78,9 +78,20 @@ American Statistical Association}, 58, 310-364.
 \seealso{
 There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
+
+Other association-measures: 
+\code{\link{Yule_Q_Y}},
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{entropy}()},
+\code{\link{lambda}()},
+\code{\link{mutInf}()},
+\code{\link{somersDelta}()},
+\code{\link{uncertCoef}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{multivar}
-\keyword{nonparametric}
+\concept{association}
+\concept{association-measures}
+\concept{ordinal-data}

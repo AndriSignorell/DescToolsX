@@ -45,7 +45,11 @@
 #' classifications III: Approximate sampling theory. \emph{Journal of the
 #' American Statistical Association}, 58, 310-364.
 #' 
-#' @keywords multivar nonparametric
+#' 
+#' @family association-measures
+#' @concept association
+#' @concept ordinal-data
+#' 
 #' @examples
 #' 
 #' 

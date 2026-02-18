@@ -59,7 +59,8 @@
 #'             aov pf qf filter relevel fisher.test mcnemar.test
 #'             coefficients confint confint.default formula model.frame
 #'             model.matrix model.response nobs predict family as.formula
-#'             xtabs end start AIC embed residuals kruskal.test
+#'             xtabs end start AIC embed residuals kruskal.test reshape
+#'             contr.helmert contr.poly contr.sum contr.treatment
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
@@ -69,6 +70,7 @@
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size
 #'             str combn find getAnywhere lsf.str write.table
+#'             getFromNamespace stack
 #'             
 #' @importFrom DescToolsViz plotFdist `%)(%` `%[]%` `%nin%` 
 #'             abind combPairs maxDigits recycle setNamesX 

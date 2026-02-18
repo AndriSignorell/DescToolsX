@@ -4,7 +4,13 @@
 \alias{kendallTauB}
 \title{Kendall's \eqn{\tau_{b}}{Tau-b}}
 \usage{
-kendallTauB(x, y = NULL, conf.level = NA, ...)
+kendallTauB(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  ...
+)
 }
 \arguments{
 \item{x}{a numeric vector, matrix or data.frame.}
@@ -14,6 +20,10 @@ If y is provided, \code{table(x, y, \dots)} is calculated.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
+
+\item{sides}{A character string specifying the side of the confidence
+interval, must be one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. You can specify just the initial letter.}
 
 \item{\dots}{further arguments are passed to the function
 \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
@@ -54,16 +64,17 @@ Statistical Association}, 72, 309-315.
 \seealso{
 \code{\link{Association}}
 
-Other association-measures: 
-\code{\link{Yule_Q_Y}},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{somersDelta}()}
+Other correlation: 
+\code{\link{kendallTauA}()},
+\code{\link{pearsonCor}()},
+\code{\link{spearmanCor}()},
+\code{\link{stuartTauC}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
-\concept{association-measures}
-\concept{categorical-data}
-\concept{contingency-tables}
+\concept{correlation}
+\concept{nonparametric}
+\concept{ordinal-data}
+\concept{rank-methods}

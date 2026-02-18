@@ -92,10 +92,23 @@ Newbury Park, CA: Sage, pp. 17--24
 }
 \seealso{
 \code{\link{Association}}
+
+Other association-measures: 
+\code{\link{Yule_Q_Y}},
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{entropy}()},
+\code{\link{gkGamma}()},
+\code{\link{mutInf}()},
+\code{\link{somersDelta}()},
+\code{\link{uncertCoef}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} based on code from Antti
 Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}, \cr Nanina Anderegg (confidence interval
 symmetric lambda)
 }
-\keyword{univar}
+\concept{association}
+\concept{association-measures}
+\concept{nominal-data}
+\concept{proportional-reduction-in-error}

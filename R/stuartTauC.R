@@ -43,7 +43,13 @@
 #' Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
 #' classifications III: Approximate sampling theory. \emph{Journal of the
 #' American Statistical Association}, 58, 310-364.
-#' @keywords multivar nonparametric
+#' 
+#' @family correlation
+#' @concept association
+#' @concept ordinal-data
+#' @concept rank-methods
+#' @concept nonparametric
+#' 
 #' @examples
 #' 
 #' # example in:
@@ -56,7 +62,10 @@
 #' 
 
 #' @export
-stuartTauC <- function(x, y = NULL, conf.level = NA, ...) {
+stuartTauC <- function(x, y = NULL, 
+                       conf.level = NA, 
+                       sides = c("two.sided", "left", "right"),
+                       ...) {
   
   if(!is.null(y)) tab <- table(x, y, ...)
   else tab <- as.table(x)

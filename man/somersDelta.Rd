@@ -4,7 +4,14 @@
 \alias{somersDelta}
 \title{Somers' Delta}
 \usage{
-somersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
+somersDelta(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  direction = c("row", "column"),
+  ...
+)
 }
 \arguments{
 \item{x}{Either a vector of observations, a two-column object
@@ -13,12 +20,15 @@ somersDelta(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 \item{y}{Optional second vector. If \code{x} is a contingency table,
 \code{y} must be \code{NULL}.}
 
+\item{conf.level}{Confidence level for confidence intervals.
+If \code{NA}, no confidence interval is computed.}
+
+\item{sides}{Alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+
 \item{direction}{direction of the calculation. Can be \code{"row"} (default)
 or \code{"column"}, where \code{"row"} calculates Somers' D (R | C) ("column
 dependent").}
-
-\item{conf.level}{Confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
 
 \item{\dots}{further arguments are passed to the function
 \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
@@ -95,12 +105,16 @@ Other association-measures:
 \code{\link{Yule_Q_Y}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
-\code{\link{kendallTauB}()}
+\code{\link{entropy}()},
+\code{\link{gkGamma}()},
+\code{\link{lambda}()},
+\code{\link{mutInf}()},
+\code{\link{uncertCoef}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
 \concept{association-measures}
-\concept{categorical-data}
-\concept{contingency-tables}
+\concept{asymmetric-measures}
+\concept{ordinal-data}

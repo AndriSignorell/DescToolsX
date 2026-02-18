@@ -66,8 +66,16 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 }
 \seealso{
 \code{\link{Association}}
+
+Other correlation: 
+\code{\link{kendallTauA}()},
+\code{\link{kendallTauB}()},
+\code{\link{pearsonCor}()},
+\code{\link{stuartTauC}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{multivar}
+\concept{correlation}
+\concept{nonparametric}
+\concept{rank-methods}

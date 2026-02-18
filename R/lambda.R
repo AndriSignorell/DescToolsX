@@ -46,7 +46,12 @@
 #' Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 17--24 
-#' @keywords univar
+#' 
+#' @family association-measures
+#' @concept association
+#' @concept nominal-data
+#' @concept proportional-reduction-in-error
+#' 
 #' @examples
 #' 
 #' # example from Goodman Kruskal (1954)

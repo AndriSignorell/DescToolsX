@@ -67,6 +67,9 @@
 #' of statistics in biological research}. 4th edition. W. H. Freeman and Co.:
 #' New York. 937 pp.
 #' 
+#' @family contingency-tests
+#' @concept association
+#' 
 #' @examples
 #' 
 #' 
