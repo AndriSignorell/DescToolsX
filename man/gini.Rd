@@ -131,7 +131,7 @@ concentration measures, \code{\link{lc}} for the Lorenz curve\cr
 \code{\link[ineq]{ineq}()} in the package \pkg{ineq} contains additional
 inequality measures
 
-Other topic.Inequality: 
+Other topic.inequality: 
 \code{\link{Lc}},
 \code{\link{atkinson}()},
 \code{\link{herfindahl}()},
@@ -143,4 +143,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{Inequality}
 \concept{Lorenz Curve}
-\concept{topic.Inequality}
+\concept{topic.inequality}

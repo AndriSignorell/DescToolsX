@@ -28,7 +28,7 @@ New S Language}. Wadsworth & Brooks/Cole.
 \seealso{
 \code{\link{ls}}, \code{\link{ls.str}}, \code{\link{lsf.str}}
 
-Other topic.SystemTools: 
+Other topic.systemTools: 
 \code{\link{concepts}},
 \code{\link{funArgs}()},
 \code{\link{lsFunctions}()}
@@ -38,4 +38,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{Infrastructure}
 \concept{Programming Utilities}
-\concept{topic.SystemTools}
+\concept{topic.systemTools}

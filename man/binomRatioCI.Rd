@@ -174,9 +174,11 @@ Walter, S. D. (1975) The distribution of Levins measure of attributable
 risk. \emph{Biometrika} 62(2): 371-374.
 }
 \seealso{
-Other topic.categorical_data: 
+Other topic.categoricalData: 
 \code{\link{binomCI}()},
-\code{\link{binomDiffCI}()}
+\code{\link{binomDiffCI}()},
+\code{\link{multinomCI}()},
+\code{\link{poissonCI}()}
 }
 \author{
 Ken Aho \href{mailto:kenaho1@gmail.com}{kenaho1@gmail.com}, some tweaks Andri Signorell
@@ -184,4 +186,4 @@ Ken Aho \href{mailto:kenaho1@gmail.com}{kenaho1@gmail.com}, some tweaks Andri Si
 }
 \concept{categorical data}
 \concept{confidence intervals}
-\concept{topic.categorical_data}
+\concept{topic.categoricalData}

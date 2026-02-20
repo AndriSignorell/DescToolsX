@@ -78,7 +78,7 @@ Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
 John Wiley and Sons
 }
 \seealso{
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
@@ -89,5 +89,5 @@ Other topic.association-measures:
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}
 \keyword{internal}

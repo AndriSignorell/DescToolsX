@@ -76,7 +76,7 @@ yuleY(m, conf.level = 0.95)
 Yule, G. U. (1912). On the methods of measuring association between two attributes.
 }
 \seealso{
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
@@ -90,4 +90,4 @@ Other topic.association-measures:
 \concept{association}
 \concept{categorical-data}
 \concept{contingency-tables}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

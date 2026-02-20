@@ -19,7 +19,7 @@
 #' For factorization of moderately or really large numbers, see the \pkg{gmp}
 #' package, and its \code{\link[gmp]{factorize}()} (which is ~20x faster!).
 #' 
-#' @family topic. number_theory
+#' @family topic.numberTheory
 #' @concept number theory
 #' 
 #' @examples

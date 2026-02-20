@@ -61,6 +61,7 @@
 #'             model.matrix model.response nobs predict family as.formula
 #'             xtabs end start AIC embed residuals kruskal.test reshape
 #'             contr.helmert contr.poly contr.sum contr.treatment
+#'             poisson.test
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
@@ -76,7 +77,7 @@
 #'             abind combPairs maxDigits recycle setNamesX 
 #'             strAlign strTrim strTrunc moveAvg Label abstract 
 #'             fm style lineSep setDescToolsXOption naIf naReplace
-#'             isZero isWholeLike isDichotomous
+#'             isZero isWholeLike isDichotomous `%][%`
 #'             
 #'             
 NULL

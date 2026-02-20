@@ -83,7 +83,7 @@ Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 \code{\link{wilcox.test}}, \code{\link{median}},
 \code{\link{medianCI}}
 
-Other topic.central-tendency: 
+Other topic.centralTendency: 
 \code{\link{huberM}()},
 \code{\link{meanX}()},
 \code{\link{medianX}()},
@@ -96,4 +96,4 @@ algorithm in C++), Andri Signorell \href{mailto:andri@signorell.net}{andri@signo
 }
 \concept{descriptive-statistics}
 \concept{robust-statistics}
-\concept{topic.central-tendency}
+\concept{topic.centralTendency}

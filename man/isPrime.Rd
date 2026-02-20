@@ -34,7 +34,7 @@ isPrime(c(17, 18, 19))
 
 }
 \seealso{
-Other topic. number_theory: 
+Other topic.numberTheory: 
 \code{\link{divisors}()},
 \code{\link{factorize}()},
 \code{\link{fibonacci}()},
@@ -44,4 +44,4 @@ Other topic. number_theory:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{number theory}
-\concept{topic. number_theory}
+\concept{topic.numberTheory}

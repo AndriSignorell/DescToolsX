@@ -157,7 +157,7 @@
 #' 
 #' @seealso \code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}
 #'  
-#' @family topic.categorical_data
+#' @family topic.categoricalData
 #' @concept categorical data
 #' @concept confidence intervals
 #'  
@@ -304,9 +304,7 @@ binomCI <- function(x, n,
 
 
 
-# ---------------------------------
-# internal functions
-# ---------------------------------
+# ==  internal helper functions  ===========================================
 
 #' @keywords internal
 .binomCI.wilson <- function(x, n, alpha) {

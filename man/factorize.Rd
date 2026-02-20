@@ -26,7 +26,7 @@ factorize(47)
 factorize(seq(101, 120, by=2))
 }
 \seealso{
-Other topic. number_theory: 
+Other topic.numberTheory: 
 \code{\link{divisors}()},
 \code{\link{fibonacci}()},
 \code{\link{gcd_lcm}},
@@ -39,4 +39,4 @@ For factorization of moderately or really large numbers, see the \pkg{gmp}
 package, and its \code{\link[gmp]{factorize}()} (which is ~20x faster!).
 }
 \concept{number theory}
-\concept{topic. number_theory}
+\concept{topic.numberTheory}

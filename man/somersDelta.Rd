@@ -102,7 +102,7 @@ sample sizes. However it is restricted to computing Somers' Dxy rank
 correlation between a variable x and a binary (0-1) variable y.\cr
 Other association measures: \code{\link{Association}}
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
@@ -119,4 +119,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 \concept{association}
 \concept{asymmetric-measures}
 \concept{ordinal-data}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

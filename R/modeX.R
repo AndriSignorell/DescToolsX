@@ -56,7 +56,7 @@
 #' @references
 #' \href{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/}{rcpp-fast-statistical-mode}
 #' 
-#' @family topic.central-tendency
+#' @family topic.centralTendency
 #' @concept descriptive-statistics
 #' 
 #' @examples

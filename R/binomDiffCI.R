@@ -122,7 +122,7 @@
 #' intervals for two independent binomial proportions, \emph{Statistical
 #' Methods in Medical Research} 0(0) 1-31
 #' 
-#' @family topic.categorical_data
+#' @family topic.categoricalData
 #' @concept categorical data
 #' @concept confidence intervals
 #'  

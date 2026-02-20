@@ -69,8 +69,10 @@ winsorize(z, val=c(4, max(z)))
 \code{\link{scale}}, \code{\link[robustHD]{winsorize}} contains
 an option to winsorize multivariate data
 
-Other data_processing: 
+Other topic.dataProcessing: 
+\code{\link{dummy}()},
 \code{\link{impute}()},
+\code{\link{locf}()},
 \code{\link{scaleX}()},
 \code{\link{trim}()}
 }
@@ -78,5 +80,5 @@ Other data_processing:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{data processing}
-\concept{data_processing}
 \concept{robust-statistics}
+\concept{topic.dataProcessing}

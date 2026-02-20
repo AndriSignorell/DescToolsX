@@ -257,12 +257,17 @@ for discrete distributions, \emph{Canadian Journal of Statistics} 28 (4),
 
 \code{\link{binomCI}()}
 
-Other topic.categorical_data: 
+Other topic.categoricalData: 
 \code{\link{binomDiffCI}()},
-\code{\link{binomRatioCI}()}
+\code{\link{binomRatioCI}()},
+\code{\link{multinomCI}()},
+\code{\link{poissonCI}()}
 
-Other topic.categorical-data: 
-\code{\link{multinomCI}()}
+Other topic.categoricalData: 
+\code{\link{binomDiffCI}()},
+\code{\link{binomRatioCI}()},
+\code{\link{multinomCI}()},
+\code{\link{poissonCI}()}
 }
 \author{
 Matthias Kohl \href{mailto:Matthias.Kohl@stamats.de}{Matthias.Kohl@stamats.de}, Rand R. Wilcox (Pratt's
@@ -275,5 +280,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 \concept{categorical data}
 \concept{confidence intervals}
 \concept{confidence-intervals}
-\concept{topic.categorical-data}
-\concept{topic.categorical_data}
+\concept{topic.categoricalData}

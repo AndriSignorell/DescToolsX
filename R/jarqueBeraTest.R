@@ -26,17 +26,12 @@
 #' degrees of freedom.} \item{p.value}{the p-value of the test.}
 #' \item{method}{type of test was performed.} \item{data.name}{a character
 #' string giving the name of the data.}
+#' 
 #' @note This function is melted from the \code{jarque.bera.test} (in
 #' \code{tseries} package) and the \code{rjb.test} from the package
 #' \code{lawstat}.
-#' @author W. Wallace Hui, Yulia R. Gel, Joseph L. Gastwirth, Weiwen Miao
-#' @seealso Alternative tests for normality as \code{\link{shapiro.test}},
-#' \code{\link{andersonDarlingTest}}, \code{\link{cramerVonMisesTest}},
-#' \code{\link{lillieTest}}, \code{\link{pearsonTest}},
-#' \code{\link{shapiroFranciaTest}}
 #' 
-#' \code{\link{qqnorm}}, \code{\link{qqline}} for producing a normal
-#' quantile-quantile plot
+#' @author W. Wallace Hui, Yulia R. Gel, Joseph L. Gastwirth, Weiwen Miao
 #' 
 #' @references Gastwirth, J. L.(1982) \emph{Statistical Properties of A Measure
 #' of Tax Assessment Uniformity}, Journal of Statistical Planning and Inference
@@ -48,7 +43,15 @@
 #' Jarque, C. and Bera, A. (1980) \emph{Efficient tests for normality,
 #' homoscedasticity and serial independence of regression residuals}, Economics
 #' Letters 6, 255-259.
-#' @keywords htest
+#' 
+#' @seealso [stats::shapiro.test] for performing the Shapiro-Wilk test for
+#' normality.  [DescToolsViz::plotQQ] for producing extended normal
+#' quantile-quantile plots.
+#' 
+#' @family topic.hypothesisTests
+#' @concept hypothesis tests
+#' @concept normality tests
+#' 
 #' @examples
 #' 
 #' x <- rnorm(100)    # null hypothesis

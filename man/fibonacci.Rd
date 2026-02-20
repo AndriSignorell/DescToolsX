@@ -48,7 +48,7 @@ fibo(30:33)                             # 1346269 2178309 3524578 5702887
 \url{https://mathworld.wolfram.com/GoldenRatio.html}
 }
 \seealso{
-Other topic. number_theory: 
+Other topic.numberTheory: 
 \code{\link{divisors}()},
 \code{\link{factorize}()},
 \code{\link{gcd_lcm}},
@@ -58,4 +58,4 @@ Other topic. number_theory:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{number theory}
-\concept{topic. number_theory}
+\concept{topic.numberTheory}

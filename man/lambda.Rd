@@ -94,7 +94,7 @@ Newbury Park, CA: Sage, pp. 17--24
 \seealso{
 \code{\link{Association}}
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
@@ -113,4 +113,4 @@ symmetric lambda)
 \concept{association}
 \concept{nominal-data}
 \concept{proportional-reduction-in-error}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

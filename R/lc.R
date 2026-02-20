@@ -46,7 +46,7 @@
 #' Cowell, F. A. (1995) Measuring Inequality \emph{Harvester Wheatshef:
 #' Prentice Hall}.
 #' 
-#' @family topic.Inequality
+#' @family topic.inequality
 #' @concept Inequality
 #' @concept Lorenz Curve
 #' 

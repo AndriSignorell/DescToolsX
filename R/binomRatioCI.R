@@ -143,7 +143,7 @@
 #' binomRatioCI(x1 = 36, n1 = 40, x2 = 16, n2 = 80, method = "koop")
 #' 
 #' 
-#' @family topic.categorical_data
+#' @family topic.categoricalData
 #' @concept categorical data
 #' @concept confidence intervals
 #'  

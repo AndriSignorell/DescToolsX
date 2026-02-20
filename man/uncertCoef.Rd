@@ -75,7 +75,7 @@ Amsterdam: North-Holland Publishing Company.
 \seealso{
 \code{\link{Association}}
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
@@ -92,4 +92,4 @@ Antti Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}
 }
 \concept{association}
 \concept{information-theory}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

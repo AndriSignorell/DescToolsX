@@ -44,7 +44,7 @@
 #' Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 #' 10, No. 3, pp. 265-270
 #' 
-#' @family topic.central-tendency
+#' @family topic.centralTendency
 #' @concept descriptive-statistics
 #' @concept robust-statistics
 #' 

@@ -23,7 +23,7 @@
 #' 
 #' @seealso [base::scale], [base::sweep]
 #' 
-#' @family data_processing
+#' @family topic.dataProcessing
 #' @concept data processing
 #' @concept robust-statistics
 #' 

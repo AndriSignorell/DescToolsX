@@ -100,15 +100,27 @@ to Probability and Statistics, \emph{Essays in Honor of Harold Hotelling}.
 Stanford University Press, 1960, ISBN 0-8047-0596-8, S. 278-292.
 }
 \seealso{
-\code{\link{fligner.test}} for a rank-based (nonparametric)
-\eqn{k}-sample test for homogeneity of variances; \code{\link{mood.test}}
+\link[stats:shapiro.test]{stats::shapiro.test} for performing the Shapiro-Wilk test for
+normality.  \link[DescToolsViz:plotQQ]{DescToolsViz::plotQQ} for producing extended normal
+quantile-quantile plots.
+
+\link[stats:fligner.test]{stats::fligner.test} for a rank-based (nonparametric)
+\eqn{k}-sample test for homogeneity of variances; \link[stats:mood.test]{stats::mood.test}
 for another rank-based two-sample test for a difference in scale parameters;
-\code{\link{var.test}} and \code{\link{bartlett.test}} for parametric tests
+\link{varTest} and \link[stats:bartlett.test]{stats::bartlett.test}] for parametric tests
 for the homogeneity in variance.
 
 \code{\link[coin:ScaleTests]{ansari_test}} in package \pkg{coin} for exact
 and approximate \emph{conditional} p-values for the Ansari-Bradley test, as
 well as different methods for handling ties.
+
+Other topic.hypothesisTests: 
+\code{\link{andersonDarlingTest}()},
+\code{\link{cramerVonMisesTest}()},
+\code{\link{jarqueBeraTest}()},
+\code{\link{lillieTest}()},
+\code{\link{pearsonTest}()},
+\code{\link{shapiroFranciaTest}()}
 }
 \author{
 andri.signorell \email{andri@signorell.net}; original version
@@ -116,4 +128,6 @@ written by John Fox \email{jfox@mcmaster.ca} based on a generic version
 contributed by Derek Ogle\cr adapted from a response posted by Brian Ripley
 to the r-help email list.
 }
-\keyword{htest}
+\concept{hypothesis tests}
+\concept{topic.hypothesisTests}
+\concept{variance tests}

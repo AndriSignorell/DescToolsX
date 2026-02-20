@@ -20,7 +20,7 @@
 #' @return A vector of the same type and length as \code{x},
 #'   with missing values replaced.
 #'   
-#' @family data_processing
+#' @family topic.dataProcessing
 #' @concept data processing
 #' @concept imputation
 #'

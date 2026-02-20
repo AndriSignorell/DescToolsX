@@ -70,5 +70,5 @@
 #' John Wiley and Sons
 #' 
 #' @keywords internal
-#' @family topic.association-measures
+#' @family topic.associationMeasures
 NULL

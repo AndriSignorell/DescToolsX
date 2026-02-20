@@ -107,7 +107,7 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{entropy}()},
@@ -126,4 +126,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Mich
 \concept{contingency-tables}
 \concept{effect-size}
 \concept{nominal-data}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

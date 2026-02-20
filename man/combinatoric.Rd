@@ -51,11 +51,11 @@ combSet(x=x, m=c(1, 3, 5), as.list=TRUE)
 \code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}},
 \cr \code{vignette("Combinatorics")}
 
-Other topic. combinatorics: 
+Other topic.combinatorics: 
 \code{\link{combN}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} (combSet, combN)
 }
 \concept{combinatorics}
-\concept{topic. combinatorics}
+\concept{topic.combinatorics}

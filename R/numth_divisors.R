@@ -17,7 +17,7 @@
 #' 
 #' @author Andri Signorell <andri@@signorell.net>
 #' 
-#' @family topic. number_theory
+#' @family topic.numberTheory
 #' @concept number theory
 #' 
 #' @examples

@@ -24,20 +24,21 @@
 #' character string giving the name(s) of the data.}
 #' @author Juergen Gross
 #' 
-#' @seealso \code{\link{shapiro.test}} for performing the Shapiro-Wilk test for
-#' normality.  \code{\link{andersonDarlingTest}}, 
-#' \code{\link{lillieTest}}, \code{\link{shapiroFranciaTest}}, 
-#' \code{\link{pearsonTest}} for performing further
-#' tests for normality. \code{\link{qqnorm}} for producing a normal
-#' quantile-quantile plot.
 #' @references Stephens, M.A. (1986): Tests based on EDF statistics. In:
 #' D'Agostino, R.B. and Stephens, M.A., eds.: Goodness-of-Fit Techniques.
 #' Marcel Dekker, New York.
 #' 
 #' Thode Jr., H.C. (2002): Testing for Normality. Marcel Dekker, New York.
-#' @keywords htest
-#' @examples
 #' 
+#' @seealso [stats::shapiro.test] for performing the Shapiro-Wilk test for
+#' normality.  [DescToolsViz::plotQQ] for producing extended normal
+#' quantile-quantile plots.
+#' 
+#' @family topic.hypothesisTests
+#' @concept hypothesis tests
+#' @concept normality tests
+#' 
+#' @examples
 #' cramerVonMisesTest(rnorm(100, mean = 5, sd = 3))
 #' cramerVonMisesTest(runif(100, min = 2, max = 4))
 #' 

@@ -1,5 +1,4 @@
 
-
 #' Levene's Test for Homogeneity of Variance
 #' 
 #' Computes Levene's test for homogeneity of variance across groups.
@@ -53,16 +52,6 @@
 #' contributed by Derek Ogle\cr adapted from a response posted by Brian Ripley
 #' to the r-help email list.
 
-#' @seealso \code{\link{fligner.test}} for a rank-based (nonparametric)
-#' \eqn{k}-sample test for homogeneity of variances; \code{\link{mood.test}}
-#' for another rank-based two-sample test for a difference in scale parameters;
-#' \code{\link{var.test}} and \code{\link{bartlett.test}} for parametric tests
-#' for the homogeneity in variance.
-#' 
-#' \code{\link[coin:ScaleTests]{ansari_test}} in package \pkg{coin} for exact
-#' and approximate \emph{conditional} p-values for the Ansari-Bradley test, as
-#' well as different methods for handling ties.
-#' 
 #' @references Fox, J. (2008) \emph{Applied Regression Analysis and Generalized
 #' Linear Models}, Second Edition. Sage.
 #' 
@@ -73,9 +62,25 @@
 #' in Ingram, O., Hotelling, H. et al. (Hrsg.) (1960) Contributions 
 #' to Probability and Statistics, \emph{Essays in Honor of Harold Hotelling}. 
 #' Stanford University Press, 1960, ISBN 0-8047-0596-8, S. 278-292.
-
-#' @keywords htest
-
+#' 
+#' @seealso [stats::shapiro.test] for performing the Shapiro-Wilk test for
+#' normality.  [DescToolsViz::plotQQ] for producing extended normal
+#' quantile-quantile plots.
+#' 
+#' @seealso [stats::fligner.test] for a rank-based (nonparametric)
+#' \eqn{k}-sample test for homogeneity of variances; [stats::mood.test]
+#' for another rank-based two-sample test for a difference in scale parameters;
+#' [varTest] and [stats::bartlett.test]] for parametric tests
+#' for the homogeneity in variance.
+#' 
+#' \code{\link[coin:ScaleTests]{ansari_test}} in package \pkg{coin} for exact
+#' and approximate \emph{conditional} p-values for the Ansari-Bradley test, as
+#' well as different methods for handling ties.
+#' 
+#' @family topic.hypothesisTests
+#' @concept hypothesis tests
+#' @concept variance tests
+#' 
 #' @examples
 #' 
 #' ## example from ansari.test:

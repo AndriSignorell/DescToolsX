@@ -34,7 +34,6 @@ from the modified statistic \eqn{Z=W (1.0 + 0.5/n)} according to Table 4.9
 in Stephens (1986).
 }
 \examples{
-
 cramerVonMisesTest(rnorm(100, mean = 5, sd = 3))
 cramerVonMisesTest(runif(100, min = 2, max = 4))
 
@@ -48,14 +47,21 @@ Marcel Dekker, New York.
 Thode Jr., H.C. (2002): Testing for Normality. Marcel Dekker, New York.
 }
 \seealso{
-\code{\link{shapiro.test}} for performing the Shapiro-Wilk test for
-normality.  \code{\link{andersonDarlingTest}},
-\code{\link{lillieTest}}, \code{\link{shapiroFranciaTest}},
-\code{\link{pearsonTest}} for performing further
-tests for normality. \code{\link{qqnorm}} for producing a normal
-quantile-quantile plot.
+\link[stats:shapiro.test]{stats::shapiro.test} for performing the Shapiro-Wilk test for
+normality.  \link[DescToolsViz:plotQQ]{DescToolsViz::plotQQ} for producing extended normal
+quantile-quantile plots.
+
+Other topic.hypothesisTests: 
+\code{\link{andersonDarlingTest}()},
+\code{\link{jarqueBeraTest}()},
+\code{\link{leveneTest}()},
+\code{\link{lillieTest}()},
+\code{\link{pearsonTest}()},
+\code{\link{shapiroFranciaTest}()}
 }
 \author{
 Juergen Gross
 }
-\keyword{htest}
+\concept{hypothesis tests}
+\concept{normality tests}
+\concept{topic.hypothesisTests}

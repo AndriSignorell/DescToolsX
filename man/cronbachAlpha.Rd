@@ -80,4 +80,4 @@ Doran
 \concept{Internal Consistency}
 \concept{Reliability}
 \concept{Scale Reliability}
-\concept{topic.InternalConsistency}
+\concept{topic.internalConsistency}

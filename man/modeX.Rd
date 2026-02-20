@@ -92,7 +92,7 @@ sapply(d.pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 \seealso{
 \code{\link{meanX}}, \code{\link{medianX}}
 
-Other topic.central-tendency: 
+Other topic.centralTendency: 
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{meanX}()},
@@ -104,4 +104,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr grea
 Wood and Ralf Stubner
 }
 \concept{descriptive-statistics}
-\concept{topic.central-tendency}
+\concept{topic.centralTendency}

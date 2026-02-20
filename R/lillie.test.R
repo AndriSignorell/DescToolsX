@@ -44,14 +44,9 @@
 #' p-value greater than 0.1. (Actually, the alternative p-value approximation
 #' is provided for the complete range of test statistic values, but is only
 #' used when the Dallal-Wilkinson approximation fails.)
+#' 
 #' @author Juergen Gross
-#' @seealso \code{\link{shapiro.test}} for performing the Shapiro-Wilk test for
-#' normality. 
-#' \code{\link{andersonDarlingTest}}, \code{\link{cramerVonMisesTest}},
-#' \code{\link{shapiroFranciaTest}}
-#' \code{\link{pearsonTest}} for performing further
-#' tests for normality. \code{\link{qqnorm}} for producing a normal
-#' quantile-quantile plot.
+#' 
 #' @references Dallal, G.E. and Wilkinson, L. (1986): An analytic approximation
 #' to the distribution of Lilliefors' test for normality. The American
 #' Statistician, 40, 294--296.
@@ -60,7 +55,15 @@
 #' comparisons. Journal of the American Statistical Association, 69, 730--737.
 #' 
 #' Thode Jr., H.C. (2002): Testing for Normality. Marcel Dekker, New York.
-#' @keywords htest
+#' 
+#' @seealso [stats::shapiro.test] for performing the Shapiro-Wilk test for
+#' normality.  [DescToolsViz::plotQQ] for producing extended normal
+#' quantile-quantile plots.
+#' 
+#' @family topic.hypothesisTests
+#' @concept hypothesis tests
+#' @concept normality tests
+#' 
 #' @examples
 #' 
 #' lillieTest(rnorm(100, mean = 5, sd = 3))

@@ -40,7 +40,6 @@
 #' hypothesis test.
 #' @author Original C code by George Marsaglia and John Marsaglia.  \R
 #' interface by Adrian Baddeley.
-#' @seealso \code{\link{pAD}} for the null distribution of the test statistic.
 #' @references Anderson, T.W. and Darling, D.A. (1952) Asymptotic theory of
 #' certain 'goodness-of-fit' criteria based on stochastic processes.
 #' \emph{Annals of Mathematical Statistics} \bold{23}, 193--212.
@@ -55,7 +54,13 @@
 #' Marsaglia, G. and Marsaglia, J. (2004) Evaluating the Anderson-Darling
 #' Distribution.  \emph{Journal of Statistical Software} \bold{9} (2), 1--5.
 #' February 2004.  \url{http://www.jstatsoft.org/v09/i02}
-#' @keywords htest
+#' 
+#' @seealso \code{\link{pAD}} for the null distribution of the test statistic.
+#' 
+#' @family topic.hypothesisTests
+#' @concept hypothesis tests
+#' @concept normality tests
+#' 
 #' @examples
 #' 
 #' x <- rnorm(10, mean=2, sd=1)

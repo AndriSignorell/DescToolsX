@@ -114,7 +114,7 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \cr
 \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median}
 
-Other topic.central-tendency: 
+Other topic.centralTendency: 
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{meanX}()},
@@ -123,4 +123,4 @@ Other topic.central-tendency:
 }
 \concept{descriptive-statistics}
 \concept{robust-statistics}
-\concept{topic.central-tendency}
+\concept{topic.centralTendency}

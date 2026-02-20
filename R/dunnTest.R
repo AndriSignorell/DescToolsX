@@ -103,24 +103,6 @@ dunnTest <- function (x, ...)
 #' @export
 dunnTest.formula <- function (formula, data, subset, na.action, ...) {
   
-  # if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-  #                                                                 "term.labels")) != 1L))
-  #   stop("'formula' missing or incorrect")
-  # m <- match.call(expand.dots = FALSE)
-  # if (is.matrix(eval(m$data, parent.frame())))
-  #   m$data <- as.data.frame(data)
-  # m[[1L]] <- quote(stats::model.frame)
-  # m$... <- NULL
-  # mf <- eval(m, parent.frame())
-  # if (length(mf) > 2L)
-  #   stop("'formula' should be of the form response ~ group")
-  # DNAME <- paste(names(mf), collapse = " by ")
-  # names(mf) <- NULL
-  # response <- attr(attr(mf, "terms"), "response")
-  # y <- DoCall("dunnTest", c(as.list(mf), list(...)))
-  # y$data.name <- DNAME
-  # y
-  
   if (missing(formula) || length(formula) != 3L)
     stop("'formula' missing or incorrect")
   
@@ -152,16 +134,15 @@ dunnTest.formula <- function (formula, data, subset, na.action, ...) {
   ## --- align with stats:::*.formula behaviour ---
   y$data.name <- pf$data.name
   y
-  
-  
-  
+
 }
 
 
 
 #' @rdname dunnTest
 #' @export
-dunnTest.default <- function (x, g, method = c("holm","hochberg","hommel","bonferroni","BH","BY","fdr","none"),
+dunnTest.default <- function (x, g, method = c("holm","hochberg","hommel",
+                                               "bonferroni","BH","BY","fdr","none"),
                               alternative = c("two.sided", "less", "greater"),
                               out.list = TRUE, ...) {
   
@@ -182,8 +163,8 @@ dunnTest.default <- function (x, g, method = c("holm","hochberg","hommel","bonfe
       stop("all groups must contain data")
     g <- factor(rep.int(seq_len(k), l))
     x <- unlist(x)
-  }
-  else {
+    
+  } else {
     if (length(x) != length(g)) 
       stop("'x' and 'g' must have the same length")
     DNAME <- paste(deparse1(substitute(x)), "and", deparse1(substitute(g)))

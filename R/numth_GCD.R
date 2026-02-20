@@ -18,7 +18,7 @@
 #' \code{n * m = gcd(n, m) * lcm(n, m)}
 #' @author Andri Signorell <andri@@signorell.net> 
 #' 
-#' @family topic. number_theory
+#' @family topic.numberTheory
 #' @concept number theory
 #' 
 #' @examples

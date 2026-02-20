@@ -74,15 +74,21 @@ homoscedasticity and serial independence of regression residuals}, Economics
 Letters 6, 255-259.
 }
 \seealso{
-Alternative tests for normality as \code{\link{shapiro.test}},
-\code{\link{andersonDarlingTest}}, \code{\link{cramerVonMisesTest}},
-\code{\link{lillieTest}}, \code{\link{pearsonTest}},
-\code{\link{shapiroFranciaTest}}
+\link[stats:shapiro.test]{stats::shapiro.test} for performing the Shapiro-Wilk test for
+normality.  \link[DescToolsViz:plotQQ]{DescToolsViz::plotQQ} for producing extended normal
+quantile-quantile plots.
 
-\code{\link{qqnorm}}, \code{\link{qqline}} for producing a normal
-quantile-quantile plot
+Other topic.hypothesisTests: 
+\code{\link{andersonDarlingTest}()},
+\code{\link{cramerVonMisesTest}()},
+\code{\link{leveneTest}()},
+\code{\link{lillieTest}()},
+\code{\link{pearsonTest}()},
+\code{\link{shapiroFranciaTest}()}
 }
 \author{
 W. Wallace Hui, Yulia R. Gel, Joseph L. Gastwirth, Weiwen Miao
 }
-\keyword{htest}
+\concept{hypothesis tests}
+\concept{normality tests}
+\concept{topic.hypothesisTests}

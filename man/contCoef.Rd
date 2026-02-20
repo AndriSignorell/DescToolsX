@@ -65,7 +65,7 @@ Statistical Association} (Part III), 777-780.
 \seealso{
 \code{\link{pairApply}}
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
@@ -82,4 +82,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net},
 \concept{association}
 \concept{contingency-tables}
 \concept{nominal-data}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

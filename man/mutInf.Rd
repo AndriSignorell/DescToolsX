@@ -52,7 +52,7 @@ World Scientific. p. 2. ISBN 978-981-02-0985-8.
 package \pkg{entropy} which implements various estimators of
 entropy
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
@@ -68,4 +68,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
 \concept{information-theory}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

@@ -25,7 +25,7 @@
 #' @author R-Core (function mean), Andri Signorell <andri@@signorell.net> 
 #' 
 #' 
-#' @family data_processing
+#' @family topic.dataProcessing
 #' @concept data processing
 #' @concept robust-statistics
 #' 

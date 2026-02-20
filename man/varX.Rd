@@ -88,13 +88,9 @@ Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
-\code{\link{varCI}} for confidence intervals and
-\code{\link{varTest}} for tests.
-
-base R's implementations \code{\link{var}}, \code{\link{sd}},
-\code{\link{cov}}
-
-also consider \code{\link{madX}}, the most robust alternative
+\code{\link{varCI}} for confidence intervals,
+\code{\link{varTest}} for tests and base R's implementations
+\code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
 
 Other topic.dispersion: 
 \code{\link{iqrX}()},

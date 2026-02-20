@@ -25,7 +25,10 @@
 #' 
 #' @seealso \code{\link{merge}} 
 #' 
-#' @keywords data manip array methods1
+#' @family topic.data_processing
+#' @concept data processing
+#' @concept data integration
+#' 
 #' @examples
 #' 
 #' x1 <- setNamesX(data.frame(v=letters[1:6], w=1:6), 

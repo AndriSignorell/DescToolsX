@@ -35,7 +35,7 @@
 #' an option to winsorize multivariate data 
 #' 
 #' 
-#' @family data_processing
+#' @family topic.dataProcessing
 #' @concept data processing
 #' @concept robust-statistics
 #' 

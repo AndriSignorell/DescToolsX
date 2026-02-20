@@ -151,8 +151,11 @@ Wilson, E. B. Probable inference, the law of succession and statistical
 inference, \emph{J.Am. Stat. Assoc.} 22 (1927) 209-212.
 }
 \seealso{
-Other topic.categorical-data: 
-\code{\link{binomCI}()}
+Other topic.categoricalData: 
+\code{\link{binomCI}()},
+\code{\link{binomDiffCI}()},
+\code{\link{binomRatioCI}()},
+\code{\link{poissonCI}()}
 }
 \author{
 Pablo J. Villacorta Iglesias \href{mailto:pjvi@decsai.ugr.es}{pjvi@decsai.ugr.es}\cr Department of
@@ -163,4 +166,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} (Goodman,
 Fitzpatrick-Scott, Quesenberry-Hurst)
 }
 \concept{confidence-intervals}
-\concept{topic.categorical-data}
+\concept{topic.categoricalData}

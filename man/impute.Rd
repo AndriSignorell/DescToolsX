@@ -43,11 +43,13 @@ impute(x, "mean(x, na.rm = TRUE)")
 
 }
 \seealso{
-Other data_processing: 
+Other topic.dataProcessing: 
+\code{\link{dummy}()},
+\code{\link{locf}()},
 \code{\link{scaleX}()},
 \code{\link{trim}()},
 \code{\link{winsorize}()}
 }
 \concept{data processing}
-\concept{data_processing}
 \concept{imputation}
+\concept{topic.dataProcessing}

@@ -26,7 +26,7 @@
 #' isPrime(c(17, 18, 19))
 #'
 #' 
-#' @family topic. number_theory
+#' @family topic.numberTheory
 #' @concept number theory
 #' 
 #'

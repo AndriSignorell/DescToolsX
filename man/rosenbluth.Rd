@@ -35,7 +35,7 @@ are present, \code{NA} is returned.
 Rosenbluth, G. (1955). Measures of concentration.
 }
 \seealso{
-Other topic.Inequality: 
+Other topic.inequality: 
 \code{\link{Lc}},
 \code{\link{atkinson}()},
 \code{\link{gini}()},
@@ -44,4 +44,4 @@ Other topic.Inequality:
 }
 \concept{Concentration Measure}
 \concept{Inequality}
-\concept{topic.Inequality}
+\concept{topic.inequality}

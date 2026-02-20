@@ -47,7 +47,7 @@
 #'
 #' @export
 #'  
-#' @family topic.association-measures
+#' @family topic.associationMeasures
 #' @concept association
 #' @concept contingency-tables
 #' @concept categorical-data

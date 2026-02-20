@@ -65,7 +65,7 @@ Hirschman, A. O. (1964). The paternity of an index.
 \seealso{
 See \code{\link{gini}}, \code{\link{atkinson}} and
 
-Other topic.Inequality: 
+Other topic.inequality: 
 \code{\link{Lc}},
 \code{\link{atkinson}()},
 \code{\link{gini}()},
@@ -78,4 +78,4 @@ rewritten by Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.n
 }
 \concept{Concentration Measure}
 \concept{Inequality}
-\concept{topic.Inequality}
+\concept{topic.inequality}

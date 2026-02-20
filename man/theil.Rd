@@ -45,7 +45,7 @@ are present, \code{NA} is returned.
 Theil, H. (1967). Economics and Information Theory.
 }
 \seealso{
-Other topic.Inequality: 
+Other topic.inequality: 
 \code{\link{Lc}},
 \code{\link{atkinson}()},
 \code{\link{gini}()},
@@ -55,4 +55,4 @@ Other topic.Inequality:
 \concept{Entropy Measure}
 \concept{Inequality}
 \concept{Theil Index}
-\concept{topic.Inequality}
+\concept{topic.inequality}

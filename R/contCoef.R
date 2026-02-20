@@ -36,7 +36,7 @@
 #' 
 #' @seealso \code{\link{pairApply}}
 #' 
-#' @family topic.association-measures
+#' @family topic.associationMeasures
 #' @concept association
 #' @concept contingency-tables
 #' @concept nominal-data

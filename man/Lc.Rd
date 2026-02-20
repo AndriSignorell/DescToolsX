@@ -177,7 +177,7 @@ Prentice Hall}.
 The original location \code{\link[ineq]{Lc}()}, \cr inequality
 measures \code{\link{gini}()}, \code{\link{atkinson}()}
 
-Other topic.Inequality: 
+Other topic.inequality: 
 \code{\link{atkinson}()},
 \code{\link{gini}()},
 \code{\link{herfindahl}()},
@@ -190,4 +190,4 @@ Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{Inequality}
 \concept{Lorenz Curve}
-\concept{topic.Inequality}
+\concept{topic.inequality}

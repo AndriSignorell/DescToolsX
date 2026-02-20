@@ -77,9 +77,19 @@ February 2004.  \url{http://www.jstatsoft.org/v09/i02}
 }
 \seealso{
 \code{\link{pAD}} for the null distribution of the test statistic.
+
+Other topic.hypothesisTests: 
+\code{\link{cramerVonMisesTest}()},
+\code{\link{jarqueBeraTest}()},
+\code{\link{leveneTest}()},
+\code{\link{lillieTest}()},
+\code{\link{pearsonTest}()},
+\code{\link{shapiroFranciaTest}()}
 }
 \author{
 Original C code by George Marsaglia and John Marsaglia.  \R
 interface by Adrian Baddeley.
 }
-\keyword{htest}
+\concept{hypothesis tests}
+\concept{normality tests}
+\concept{topic.hypothesisTests}

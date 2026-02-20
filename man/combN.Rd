@@ -36,11 +36,11 @@ combN(n, m, repl=FALSE, ord=FALSE)
 \code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}},
 \cr \code{vignette("Combinatorics")}
 
-Other topic. combinatorics: 
+Other topic.combinatorics: 
 \code{\link{combSet}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{combinatorics}
-\concept{topic. combinatorics}
+\concept{topic.combinatorics}

@@ -29,7 +29,7 @@ number of its divisors can be determined with the function
 divisors(c(145, 786))
 }
 \seealso{
-Other topic. number_theory: 
+Other topic.numberTheory: 
 \code{\link{factorize}()},
 \code{\link{fibonacci}()},
 \code{\link{gcd_lcm}},
@@ -39,4 +39,4 @@ Other topic. number_theory:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{number theory}
-\concept{topic. number_theory}
+\concept{topic.numberTheory}

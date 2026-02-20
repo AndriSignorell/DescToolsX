@@ -31,7 +31,7 @@
 #' @references Theil, H. (1972), \emph{Statistical Decomposition Analysis},
 #' Amsterdam: North-Holland Publishing Company. 
 #' 
-#' @family topic.association-measures
+#' @family topic.associationMeasures
 #' @concept association
 #' @concept information-theory
 #' 

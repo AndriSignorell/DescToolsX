@@ -57,7 +57,7 @@
 #' classifications III: Approximate sampling theory. \emph{Journal of the
 #' American Statistical Association}, 58, 310--364.
 #' 
-#' @family topic.association-measures
+#' @family topic.associationMeasures
 #' @concept association
 #' @concept ordinal-data
 #' @concept asymmetric-measures

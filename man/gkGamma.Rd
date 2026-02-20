@@ -80,7 +80,7 @@ American Statistical Association}, 58, 310-364.
 There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 
-Other topic.association-measures: 
+Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
@@ -96,4 +96,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{association}
 \concept{ordinal-data}
-\concept{topic.association-measures}
+\concept{topic.associationMeasures}

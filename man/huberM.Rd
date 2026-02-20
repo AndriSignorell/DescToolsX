@@ -90,7 +90,7 @@ Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
 \code{\link[MASS]{hubers}} (and \code{huber}) in package
 \pkg{MASS}; \code{\link{mad}}.
 
-Other topic.central-tendency: 
+Other topic.centralTendency: 
 \code{\link{hodgesLehmann}()},
 \code{\link{meanX}()},
 \code{\link{medianX}()},
@@ -103,4 +103,4 @@ Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} (confidence int
 }
 \concept{descriptive-statistics}
 \concept{robust-statistics}
-\concept{topic.central-tendency}
+\concept{topic.centralTendency}

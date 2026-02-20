@@ -18,7 +18,7 @@
 #' \code{\link{combn}}, \code{\link{choose}}, \code{\link{factorial}},
 #' \cr \code{vignette("Combinatorics")} 
 #' 
-#' @family topic. combinatorics
+#' @family topic.combinatorics
 #' @concept combinatorics
 #'  
 #' @examples

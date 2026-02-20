@@ -50,7 +50,7 @@ Atkinson, A. B. (1970). On the measurement of inequality.
 Journal of Economic Theory.
 }
 \seealso{
-Other topic.Inequality: 
+Other topic.inequality: 
 \code{\link{Lc}},
 \code{\link{gini}()},
 \code{\link{herfindahl}()},
@@ -60,4 +60,4 @@ Other topic.Inequality:
 \concept{Atkinson Index}
 \concept{Inequality}
 \concept{Welfare-Based Measure}
-\concept{topic.Inequality}
+\concept{topic.inequality}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dummy.R
 \name{dummy}
 \alias{dummy}
-\title{Generate dummy Codes for a Factor \%\% ~~function to do ... ~~}
+\title{Generate dummy Codes for a Factor}
 \usage{
 dummy(
   x,
@@ -12,16 +12,14 @@ dummy(
 )
 }
 \arguments{
-\item{x}{factor or vector of classes for cases. \%\% ~~Describe \code{x}
-here~~}
+\item{x}{factor or vector of classes for cases.}
 
 \item{method}{defines the method of the contrasts being formed. Can be one
 out of \code{"treatment"}, \code{"sum"}, \code{"helmert"}, \code{"poly"},
 \code{"full"}, whereas \code{"treatment"} is the default one. Abbreviations
 are accepted.\cr The option \code{"full"} returns a full set of class
 indicators, say a dummy factor for \bold{each} level of x.  Note that this
-would be redundant for \code{\link{lm}()} and friends! \%\% ~~Describe
-\code{method} here~~}
+would be redundant for \code{\link{lm}()} and friends!}
 
 \item{base}{an integer specifying which group is considered the baseline
 group.}
@@ -40,8 +38,7 @@ When \code{method = "full"} is chosen the number of columns will correspond
 to the number of levels.
 }
 \description{
-Generate a matrix of dummy codes (class indicators) for a given factor.  \%\%
-~~ A concise (1-5 lines) description of what the function does. ~~
+Generate a matrix of dummy codes (class indicators) for a given factor.
 }
 \details{
 For reverting dummy codes see the approach in the examples below.
@@ -83,8 +80,17 @@ Statistics with S}. Fourth edition. Springer.
 \seealso{
 \code{\link{model.frame}}, \code{\link{contrasts}},
 \code{\link[nnet]{class.ind}} in the package \pkg{nnet}
+
+Other topic.dataProcessing: 
+\code{\link{impute}()},
+\code{\link{locf}()},
+\code{\link{scaleX}()},
+\code{\link{trim}()},
+\code{\link{winsorize}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{math}
+\concept{data processing}
+\concept{topic.dataProcessing}
+\concept{transformation}

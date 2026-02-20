@@ -35,15 +35,12 @@
 #' composed by \code{\link{freq}}.
 #' @param \dots further arguments passed to or from other methods.
 #' @return single numeric value
-#' @seealso \code{\link{varCI}} for confidence intervals and
-#' \code{\link{varTest}} for tests.
-#' 
-#' base R's implementations \code{\link{var}}, \code{\link{sd}},
-#' \code{\link{cov}}
-#' 
-#' also consider \code{\link{madX}}, the most robust alternative
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
+#' 
+#' @seealso \code{\link{varCI}} for confidence intervals,
+#' \code{\link{varTest}} for tests and base R's implementations 
+#' \code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
 #' 
 #' @family topic.dispersion
 #' @concept descriptive-statistics 

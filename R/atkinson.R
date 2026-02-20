@@ -33,7 +33,7 @@
 #' If negative values or missing values (when \code{na.rm = FALSE})
 #' are present, \code{NA} is returned.
 #'
-#' @family topic.Inequality
+#' @family topic.inequality
 #' @concept Inequality
 #' @concept Atkinson Index
 #' @concept Welfare-Based Measure

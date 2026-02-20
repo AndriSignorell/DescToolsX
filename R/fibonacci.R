@@ -17,7 +17,7 @@
 #' @references \url{https://en.wikipedia.org/wiki/Fibonacci_number}\cr
 #' \url{https://mathworld.wolfram.com/GoldenRatio.html}
 #' 
-#' @family topic. number_theory
+#' @family topic.numberTheory
 #' @concept number theory
 #' 
 #' 

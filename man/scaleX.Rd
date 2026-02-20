@@ -37,8 +37,10 @@ points(x=seq_along(x), y=scale(x), col="red" )
 \seealso{
 \link[base:scale]{base::scale}, \link[base:sweep]{base::sweep}
 
-Other data_processing: 
+Other topic.dataProcessing: 
+\code{\link{dummy}()},
 \code{\link{impute}()},
+\code{\link{locf}()},
 \code{\link{trim}()},
 \code{\link{winsorize}()}
 }
@@ -46,5 +48,5 @@ Other data_processing:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{data processing}
-\concept{data_processing}
 \concept{robust-statistics}
+\concept{topic.dataProcessing}

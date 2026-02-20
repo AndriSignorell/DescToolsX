@@ -77,7 +77,7 @@
 #' bootstrap method. \emph{Journal of the American Statistical Association}
 #' 92:548-560.
 #' 
-#' @family topic.Inequality
+#' @family topic.inequality
 #' @concept Inequality
 #' @concept Lorenz Curve
 #' 

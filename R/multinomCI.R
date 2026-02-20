@@ -41,6 +41,7 @@
 #' 
 #' Andri Signorell <andri@@signorell.net> (Goodman, Wald, Wilson,
 #' Fitzpatrick-Scott, Quesenberry-Hurst)
+#' 
 #' @references Fitzpatrick, S. and Scott, A. (1987). Quick simultaneous
 #' confidence interval for multinomial proportions. \emph{Journal of American
 #' Statistical Association} 82(399): 875-878.
@@ -77,7 +78,7 @@
 #' Wilson, E. B. Probable inference, the law of succession and statistical
 #' inference, \emph{J.Am. Stat. Assoc.} 22 (1927) 209-212.
 #' 
-#' @family topic.categorical-data
+#' @family topic.categoricalData
 #' @concept confidence-intervals
 #' 
 #' @examples

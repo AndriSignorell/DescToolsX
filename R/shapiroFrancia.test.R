@@ -12,6 +12,7 @@
 #' 
 #' @param x a numeric vector of data values, the number of which must be
 #' between 5 and 5000. Missing values are allowed.
+#' 
 #' @return A list with class \dQuote{htest} containing the following
 #' components: \item{statistic}{the value of the Shapiro-Francia statistic.}
 #' \item{p.value }{the p-value for the test.} \item{method}{the character
@@ -23,20 +24,23 @@
 #' being slightly different from the approximation \code{qnorm(ppoints(x, a =
 #' 1/2))} used for the normal quantile-quantile plot by \code{\link{qqnorm}}
 #' for sample sizes greater than 10.
+#' 
 #' @author Juergen Gross
-#' @seealso \code{\link{shapiro.test}} for performing the Shapiro-Wilk test for
-#' normality.  
-#' \code{\link{andersonDarlingTest}}, \code{\link{cramerVonMisesTest}},
-#' \code{\link{lillieTest}}, 
-#' \code{\link{pearsonTest}} for performing further
-#' tests for normality. \code{\link{qqnorm}} for producing a normal
-#' quantile-quantile plot.
+#' 
 #' @references Royston, P. (1993): A pocket-calculator algorithm for the
 #' Shapiro-Francia test for non-normality: an application to medicine.
 #' Statistics in Medicine, 12, 181--184.
 #' 
 #' Thode Jr., H.C. (2002): Testing for Normality. Marcel Dekker, New York.
-#' @keywords htest
+#' 
+#' @seealso [stats::shapiro.test] for performing the Shapiro-Wilk test for
+#' normality.  [DescToolsViz::plotQQ] for producing extended normal
+#' quantile-quantile plots.
+#' 
+#' @family topic.hypothesisTests
+#' @concept hypothesis tests
+#' @concept normality tests
+#' 
 #' @examples
 #' 
 #' shapiroFranciaTest(rnorm(100, mean = 5, sd = 3))
