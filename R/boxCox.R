@@ -13,19 +13,23 @@
 #'     \log(x) & \text{if } \lambda = 0
 #'   \end{cases}
 #' }
-#' 
 #'  
 #' @name boxCox
 #' @aliases boxCox boxCoxInv
 #' @param x a numeric vector
 #' @param lambda transformation parameter
+#' 
 #' @return a numeric vector of the same length as x.
 #' @note These two functions are borrowed from \code{library(forecast)}.
+#' 
 #' @author Rob J Hyndman <rob.hyndman@@monash.edu>
+#' 
 #' @seealso Use \code{\link{boxCoxLambda}} or \code{\link[MASS]{boxcox}} in
 #' \code{library(MASS)} to find optimal lambda values.
+#' 
 #' @references Box, G. E. P. and Cox, D. R. (1964) An analysis of
 #' transformations. \emph{JRSS B} \bold{26} 211--246.
+#' 
 #' @keywords univar
 #' @examples
 #' 

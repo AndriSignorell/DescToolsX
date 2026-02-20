@@ -37,9 +37,7 @@ You may also want to consider standardizing (possibly robustly) the data
 before you perform a winsorization.
 }
 \examples{
-
-
-## generate data
+# generate data
 set.seed(9128)
 x <- round(runif(100) * 100, 1)
 
@@ -68,13 +66,17 @@ winsorize(z, val=c(4, max(z)))
 
 }
 \seealso{
-\code{\link[robustHD]{winsorize}} from the package \code{robustHD} contains
+\code{\link{scale}}, \code{\link[robustHD]{winsorize}} contains
 an option to winsorize multivariate data
 
-\code{\link{scale}}, \code{\link{scaleX}}
+Other data_processing: 
+\code{\link{impute}()},
+\code{\link{scaleX}()},
+\code{\link{trim}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{robust}
-\keyword{univar}
+\concept{data processing}
+\concept{data_processing}
+\concept{robust-statistics}

@@ -16,11 +16,14 @@
 #' @param lower lower limit for possible lambda values, default is -1.
 #' @param upper upper limit for possible lambda values, default is 2.
 #' @return a number indicating the Box-Cox transformation parameter.
+#' 
 #' @note This function was previously published as \code{BoxCox.lambda()} in
 #' the \pkg{forecast} package and has been integrated here without logical
 #' changes.
 #' @author Leanne Chhay and Rob J Hyndman
+#' 
 #' @seealso \code{\link{boxCox}}
+#' 
 #' @references Box, G. E. P. and Cox, D. R. (1964) An analysis of
 #' transformations. \emph{JRSS B} \bold{26} 211--246.
 #' 
@@ -34,14 +37,11 @@
 #' 
 
 
-
 #' # This R script contains code for extracting the Box-Cox
 # parameter, lambda, using Guerrero's method (1993).
 # Written by Leanne Chhay
 
 
-
-#' @rdname boxCox
 #' @export
 boxCoxLambda <- function(x, method=c("guerrero","loglik"), lower=-1, upper=2) {
   

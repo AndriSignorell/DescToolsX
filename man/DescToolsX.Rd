@@ -38,9 +38,10 @@ usability, and performance across the entire package.
 Following section explain further principles valid throughout \bold{DescToolsX}:
 \tabular{ll}{
 \verb{  }\link{Formulas}             \tab Handling formulas \cr
-\verb{  }\link{Association}\verb{  } \tab Interrater agreement  \cr
-\verb{  }\link{Association}\verb{  } \tab Tests  \cr
-\verb{  }\link{Association}\verb{  } \tab Confidence intervals  \cr
+\verb{  }\link{Association}\verb{  } \tab Association  \cr
+\verb{  }\link{Agreement}\verb{  } \tab Interrater agreement  \cr
+\verb{  }\link{Tests}\verb{  } \tab Hypothesis-Tests  \cr
+\verb{  }\link{ConfidenceIntervals}\verb{  } \tab Confidence intervals  \cr
 \verb{  }\link{Association}\verb{  } \tab Measures  \cr
 \verb{  }\link{Association}\verb{  } \tab Plots  \cr
 }
@@ -143,7 +144,7 @@ motivation for the package redesign.
 
 DescToolsViz is listed in Depends because this package extends its
 user-facing API and expects it to be attached. Functions used internally
-are explicitly imported via the NAMESPACE.”
+are explicitly imported via the NAMESPACE.
 }
 
 \author{

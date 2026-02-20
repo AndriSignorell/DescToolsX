@@ -18,15 +18,28 @@
 #' 
 #' @return the centered, scaled matrix.  The numeric centering and scalings
 #' used (if any) are returned as attributes "scaled:center" and "scaled:scale"
+#' 
 #' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{scale}, \code{sweep}
-#' @keywords univar robust
+#' 
+#' @seealso [base::scale], [base::sweep]
+#' 
+#' @family data_processing
+#' @concept data processing
+#' @concept robust-statistics
+#' 
 #' @examples
 #' 
 #' x <- d.pizza$temperature
 #' plot(x=seq_along(x), y=scaleX(x), xlim=c(0,100))
 #' points(x=seq_along(x), y=scale(x), col="red" )
 #' 
+
+
+
+## ************************************
+#  ToDo: wrap scale with an option robust = TRUE
+## ************************************
+
 
 
 #' @export

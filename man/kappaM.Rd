@@ -22,22 +22,22 @@ and otherwise a numeric vector with 3 elements for the estimate, the lower
 and the upper confidence interval
 }
 \description{
-Computes Fleiss’ kappa, which quantifies agreement among m≥2 raters on
+Computes Fleiss' kappa, which quantifies agreement among \eqn{m \geq 2} raters on
 categorical items by contrasting the mean observed agreement with the chance
-agreement implied by the overall category proportions. It equals Scott’s pi
-when m=2 (but not Cohen’s kappa).
+agreement implied by the overall category proportions. It equals Scott's pi
+when m=2 (but not Cohen's kappa).
 }
 \details{
-Missing data are omitted in a listwise way.\cr Fleiss’ kappa (Fleiss, 1971)
-is a multi-rater agreement coefficient that generalises Scott’s pi (Scott,
+Missing data are omitted in a listwise way.\cr Fleiss' kappa (Fleiss, 1971)
+is a multi-rater agreement coefficient that generalises Scott's pi (Scott,
 1955) to m raters by basing chance agreement on the average category
-proportions across raters. For m = 2 it equals Scott’s pi (not Cohen’s
-kappa). Cohen’s kappa, by contrast, is defined for two raters and computes
-chance agreement from each rater’s own marginal distribution; it can also be
-extended with weights for ordinal scales (weighted Cohen’s kappa). Light’s
+proportions across raters. For m = 2 it equals Scott's pi (not Cohen's
+kappa). Cohen's kappa, by contrast, is defined for two raters and computes
+chance agreement from each rater's own marginal distribution; it can also be
+extended with weights for ordinal scales (weighted Cohen's kappa). Light's
 kappa (Light, 1971) is simply the unweighted mean of all pairwise Cohen
-kappas among multiple raters, whereas Conger’s kappa (Conger, 1980) is a
-principled multi-rater generalisation that reduces exactly to Cohen’s kappa
+kappas among multiple raters, whereas Conger's kappa (Conger, 1980) is a
+principled multi-rater generalisation that reduces exactly to Cohen's kappa
 when m = 2.\cr Standard errors and Wald-type confidence intervals are
 available for all of these coefficients (Cohen, Scott, Fleiss, Conger);
 bootstrap intervals are a practical alternative when assumptions are

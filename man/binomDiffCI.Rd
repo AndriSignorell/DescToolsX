@@ -172,8 +172,14 @@ Methods in Medical Research} 0(0) 1-31
 \code{\link{binomCI}}, \code{\link{multinomCI}},
 \code{\link{binom.test}}, \code{\link{prop.test}},
 \code{\link{binomRatioCI}}
+
+Other topic.categorical_data: 
+\code{\link{binomCI}()},
+\code{\link{binomRatioCI}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{category}
+\concept{categorical data}
+\concept{confidence intervals}
+\concept{topic.categorical_data}

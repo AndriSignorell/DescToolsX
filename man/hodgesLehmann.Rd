@@ -87,6 +87,7 @@ Other topic.central-tendency:
 \code{\link{huberM}()},
 \code{\link{meanX}()},
 \code{\link{medianX}()},
+\code{\link{modeX}()},
 \code{\link{tukeyBiweight}()}
 }
 \author{

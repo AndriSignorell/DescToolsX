@@ -125,7 +125,7 @@ isConfusionTable <- function(
   # small tolerance allowed (for numeric rounding errors)
   if (min(x) < -tol) return(FALSE)
   
-  # 3) Integer: true integer storage or numerically ‘integer-like’
+  # 3) Integer: true integer storage or numerically 'integer-like'
   if (!is.integer(x)) {
     # only check if not integer
     if(!isTRUE(all.equal(x, round(x), tol))) return(FALSE)

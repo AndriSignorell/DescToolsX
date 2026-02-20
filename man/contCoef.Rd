@@ -8,10 +8,11 @@
 contCoef(x, y = NULL, conf.level = NA, method = "boot", correct = FALSE, ...)
 }
 \arguments{
-\item{x}{Either a vector of observations, a two-column object
-(matrix, data.frame or list), or a contingency table.}
+\item{x}{Either a contingency table, a two-column object
+(matrix, data.frame or list), or a vector of observations
+(together with \code{y}).}
 
-\item{y}{Optional second vector. If \code{x} is a contingency table,
+\item{y}{Optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
 \item{conf.level}{Confidence level for confidence intervals.
@@ -33,18 +34,19 @@ and otherwise a numeric vector with 3 elements for the estimate, the lower
 and the upper confidence interval.
 }
 \description{
-Calculate Pearson's contingency coefficient of \code{x}, if \code{x} is a table. If both,
+Calculate Pearson's contingency coefficient for a table \code{x}. If
 \code{x} and \code{y} are given, then the according table will be built
-first (see \link{Association}).
-The contingency coefficient goes from 0 to \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. For
-the corrected contingency coefficient the range is 0 to 1.
+first (more details in \link{Association}).
+The contingency coefficient goes from 0 to
+\eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. Sakoda (1977) proposed the
+corrected contingency coefficient with a range between 0 and 1.
 }
 \details{
-For Pearson’s contingency coefficient
+For Pearson's contingency coefficient
 no generally accepted analytical confidence intervals exist. If interval
 estimation is required, resampling methods such as the bootstrap may be
 applied. In applied research, effect size measures with better inferential
-properties (e.g. Cramér’s V) are usually preferred.
+properties (e.g. Cramer's V) are usually preferred.
 }
 \examples{
 
@@ -55,14 +57,16 @@ contCoef(tab)
 with(untable(tab), contCoef(Hair, Eye))
 
 }
-\seealso{
-\code{\link{Association}}, \code{\link{cramerV}}
-\code{\link{pairApply}}
+\references{
 Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
 Tables, \emph{Proceedings of the Social Statistics Section of the American
 Statistical Association} (Part III), 777-780.
+}
+\seealso{
+\code{\link{pairApply}}
 
 Other topic.association-measures: 
+\code{\link{Association}},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},

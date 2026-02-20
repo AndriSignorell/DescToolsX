@@ -2,7 +2,7 @@
 % Please edit documentation in R/interfaceConfidenceIntervals.R
 \name{ConfidenceIntervals}
 \alias{ConfidenceIntervals}
-\title{Confidence Interval Interface – Common Arguments}
+\title{Confidence Interval Interface - Common Arguments}
 \arguments{
 \item{conf.level}{Confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}

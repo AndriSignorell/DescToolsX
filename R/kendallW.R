@@ -63,9 +63,9 @@
 #' 
 #' Brueckl, M. (2011). Statistische Verfahren zur Ermittlung der 
 #' Urteileruebereinstimmung. in: Altersbedingte Veraenderungen der 
-#' Stimme und Sprechweise von Frauen, Berlin: Logos, 88–103.
+#' Stimme und Sprechweise von Frauen, Berlin: Logos, 88-103.
 #' 
-#' Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409–416.
+#' Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409-416.
 #' 
 #' @family topic.Agreement
 #' @concept Interrater Agreement
@@ -121,7 +121,7 @@ kendallW <- function(x, correct=FALSE, test=FALSE, na.rm=NULL) {
   nr <- ncol(ratings)  # number of raters
   
   # check for NAs and escalate to
-  # Brueckl, M. (2011). Statistische Verfahren zur Ermittlung der Urteileruebereinstimmung. in: Altersbedingte Veraenderungen der Stimme und Sprechweise von Frauen, Berlin: Logos, 88–103.
+  # Brueckl, M. (2011). Statistische Verfahren zur Ermittlung der Urteileruebereinstimmung. in: Altersbedingte Veraenderungen der Stimme und Sprechweise von Frauen, Berlin: Logos, 88-103.
   if(sum(is.na(ratings)) > 0){
     
     # no correction required

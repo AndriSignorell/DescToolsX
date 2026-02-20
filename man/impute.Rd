@@ -40,4 +40,14 @@ impute(x, function(x) mean(x, na.rm = TRUE))
 
 # Using a character expression
 impute(x, "mean(x, na.rm = TRUE)")
+
 }
+\seealso{
+Other data_processing: 
+\code{\link{scaleX}()},
+\code{\link{trim}()},
+\code{\link{winsorize}()}
+}
+\concept{data processing}
+\concept{data_processing}
+\concept{imputation}

@@ -1,5 +1,5 @@
 
-#' Confidence Interval Interface – Common Arguments
+#' Confidence Interval Interface - Common Arguments
 #'
 #' Common confidence interval interface shared by multiple functions.
 #'

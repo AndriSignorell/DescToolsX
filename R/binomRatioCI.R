@@ -105,7 +105,6 @@
 #' upper confidence intervall.
 #' @author Ken Aho <kenaho1@@gmail.com>, some tweaks Andri Signorell
 #' <andri@@signorell.net>
-#' @seealso \code{\link{binomCI}, \link{binomDiffCI}}
 #' @references Agresti, A., Min, Y. (2001) On small-sample confidence intervals
 #' for parameters in discrete distributions.  \emph{Biometrics} 57: 963-97.
 #' 
@@ -143,7 +142,11 @@
 #' binomRatioCI(x1 = 36, n1 = 40, x2 = 16, n2 = 80, method = "katz")
 #' binomRatioCI(x1 = 36, n1 = 40, x2 = 16, n2 = 80, method = "koop")
 #' 
-
+#' 
+#' @family topic.categorical_data
+#' @concept categorical data
+#' @concept confidence intervals
+#'  
 
 #' @export
 binomRatioCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),

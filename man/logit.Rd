@@ -6,6 +6,8 @@
 \title{Generalized logit and Inverse logit Function}
 \usage{
 logit(x, min = 0, max = 1)
+
+logitInv(x, min = 0, max = 1)
 }
 \arguments{
 \item{x}{value(s) to be transformed}
@@ -26,9 +28,6 @@ them to span \eqn{[-\infty, \infty ]}{[-Inf, Inf]}. \cr It is defined as:
 
 \deqn{y = log\left (\frac{p}{1-p} \right ) \;\;\; \; \textup{where} \; \;\;
 p=\frac{x-min}{max-min}}{y = log(p/(1-p)) where p=(x-min)/(max-min)}
-
-\%s \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))} \%s \%s where \%s \%s
-\deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}
 
 The generalized inverse logit function provides the inverse transformation:
 

@@ -13,10 +13,11 @@ stuartTauC(
 )
 }
 \arguments{
-\item{x}{Either a vector of observations, a two-column object
-(matrix, data.frame or list), or a contingency table.}
+\item{x}{Either a contingency table, a two-column object
+(matrix, data.frame or list), or a vector of observations
+(together with \code{y}).}
 
-\item{y}{Optional second vector. If \code{x} is a contingency table,
+\item{y}{Optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
 \item{conf.level}{Confidence level for confidence intervals.
@@ -47,7 +48,7 @@ when both variables lie on an ordinal scale. \cr It is estimated by \cr
 / (n^2 (m-1))} where P equals the number of concordances and Q the number of
 discordances, n is the total amount of observations and m = min(R, C). The
 range of \eqn{\tau_{c}}{tau-c} is \verb{[-1, 1]}. \cr See
-\url{http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf},
+\href{http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf}{SAS-The FREQ Procedure},
 pp. 1739 for the estimation of the asymptotic variance.
 
 The use of Stuart's Tau-c versus Kendall's Tau-b is recommended when the two

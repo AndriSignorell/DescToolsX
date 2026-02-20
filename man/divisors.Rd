@@ -29,11 +29,14 @@ number of its divisors can be determined with the function
 divisors(c(145, 786))
 }
 \seealso{
-\code{\link{primes}}, \code{\link{isPrime}}, \code{\link{GCD}},
-\code{\link{lcm}}
+Other topic. number_theory: 
+\code{\link{factorize}()},
+\code{\link{fibonacci}()},
+\code{\link{gcd_lcm}},
+\code{\link{isPrime}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{arith}
-\keyword{math}
+\concept{number theory}
+\concept{topic. number_theory}

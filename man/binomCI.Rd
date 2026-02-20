@@ -66,8 +66,8 @@ For more than one argument each, a 3-column matrix is returned.
 a numeric value
 }
 \description{
-Compute confidence intervals for binomial proportions according to a number
-of the most common proposed methods.
+\code{binomCI} computes confidence intervals for binomial proportions
+according to a large number of the most common proposed methods.
 
 Returns the necessary sample size to achieve a given width of a binomial
 confidence interval, as calculated by \code{\link{binomCI}()}. The function
@@ -209,15 +209,20 @@ binomCI(x=c(42, 35, 23, 22), n=c(50, 60, 70, 80), method="jeffreys")
 # example Table I in Newcombe (1998)
 meths <- c("wald", "waldcc", "wilson", "wilsoncc",
            "clopper-pearson","midp", "lik")
-round(cbind(
-  binomCI(81, 263, m=meths)[, -1],
-  binomCI(15, 148, m=meths)[, -1],
-  binomCI(0, 20, m=meths)[, -1],
-  binomCI(1, 29, m=meths)[, -1]), 4)
-
+setNamesX(cbind(round(cbind(
+    binomCI(81, 263, m=meths)[, c("lci","uci")],
+    binomCI(15, 148, m=meths)[,  c("lci","uci")],
+    binomCI(0, 20, m=meths)[, c("lci","uci")],
+    binomCI(1, 29, m=meths)[, c("lci","uci")]), 4)), 
+  rownames=meths)
 
 # returning p.tilde for agresti-coull ci
 binomCI(x=81, n=263, meth="agresti-coull", std_est = c(TRUE, FALSE))
+
+# return all implemented methods
+binomCI(4, 19, conf.level =0.95, 
+        method = c(".all"))[, c("est","lci","uci","method")]
+
 
 binomCIn(p=0.1, width=0.05, method="pratt")
 
@@ -248,11 +253,13 @@ for discrete distributions, \emph{Canadian Journal of Statistics} 28 (4),
 783-798
 }
 \seealso{
-\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}},
-\code{\link{multinomCI}}, \code{\link{binomDiffCI}},
-\code{\link{binomRatioCI}}
+\code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}
 
 \code{\link{binomCI}()}
+
+Other topic.categorical_data: 
+\code{\link{binomDiffCI}()},
+\code{\link{binomRatioCI}()}
 
 Other topic.categorical-data: 
 \code{\link{multinomCI}()}
@@ -265,6 +272,8 @@ method), Michael Hoehle \href{mailto:hoehle@math.su.se}{hoehle@math.su.se} (Mid-
 
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{categorical-data}
+\concept{categorical data}
+\concept{confidence intervals}
 \concept{confidence-intervals}
 \concept{topic.categorical-data}
+\concept{topic.categorical_data}

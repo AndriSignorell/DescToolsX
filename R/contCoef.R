@@ -1,11 +1,12 @@
 
 #' Pearson's Contingency Coefficient
 #' 
-#' Calculate Pearson's contingency coefficient of \code{x}, if \code{x} is a table. If both,
+#' Calculate Pearson's contingency coefficient for a table \code{x}. If 
 #' \code{x} and \code{y} are given, then the according table will be built
-#' first (see \link{Association}).
-#' The contingency coefficient goes from 0 to \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. For
-#' the corrected contingency coefficient the range is 0 to 1. 
+#' first (more details in \link{Association}).
+#' The contingency coefficient goes from 0 to 
+#' \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. Sakoda (1977) proposed the 
+#' corrected contingency coefficient with a range between 0 and 1. 
 #' 
 #' @aliases ContCoef
 #' @inheritParams Association
@@ -20,18 +21,20 @@
 #' and the upper confidence interval. 
 #' 
 #' @details
-#' For Pearson’s contingency coefficient 
+#' For Pearson's contingency coefficient 
 #' no generally accepted analytical confidence intervals exist. If interval 
 #' estimation is required, resampling methods such as the bootstrap may be 
 #' applied. In applied research, effect size measures with better inferential 
-#' properties (e.g. Cramér’s V) are usually preferred.
+#' properties (e.g. Cramer's V) are usually preferred.
 #' 
 #' @author Andri Signorell <andri@@signorell.net>,
-#' @seealso \code{\link{Association}}, \code{\link{cramerV}}
-#' \code{\link{pairApply}}
+#' 
+#' @references 
 #' Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
 #' Tables, \emph{Proceedings of the Social Statistics Section of the American
 #' Statistical Association} (Part III), 777-780.
+#' 
+#' @seealso \code{\link{pairApply}}
 #' 
 #' @family topic.association-measures
 #' @concept association

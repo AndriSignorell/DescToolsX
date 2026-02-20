@@ -83,6 +83,7 @@ Other topic.central-tendency:
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{medianX}()},
+\code{\link{modeX}()},
 \code{\link{tukeyBiweight}()}
 }
 \concept{descriptive-statistics}

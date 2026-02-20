@@ -31,15 +31,16 @@
 #' 
 #' @author Andri Signorell <andri@@signorell.net>
 #' 
-#' @seealso \code{\link[robustHD]{winsorize}} from the package \code{robustHD} contains
-#' an option to winsorize multivariate data
+#' @seealso \code{\link{scale}}, \code{\link[robustHD]{winsorize}} contains
+#' an option to winsorize multivariate data 
 #' 
-#' \code{\link{scale}}, \code{\link{scaleX}}
-#' @keywords univar robust
+#' 
+#' @family data_processing
+#' @concept data processing
+#' @concept robust-statistics
+#' 
 #' @examples
-#' 
-#' 
-#' ## generate data
+#' # generate data
 #' set.seed(9128)
 #' x <- round(runif(100) * 100, 1)
 #' 

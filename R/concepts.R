@@ -10,9 +10,9 @@
 #'
 #' \strong{Functions}
 #' \itemize{
-#'   \item \code{getConcepts()} – Returns all unique concepts used in a package.
-#'   \item \code{conceptMap()} – Returns a mapping of concepts to functions.
-#'   \item \code{conceptAudit()} – Returns a summary table of concept usage.
+#'   \item \code{getConcepts()} - Returns all unique concepts used in a package.
+#'   \item \code{conceptMap()} - Returns a mapping of concepts to functions.
+#'   \item \code{conceptAudit()} - Returns a summary table of concept usage.
 #' }
 #'
 #' @param pkg Character string. Name of the installed package.

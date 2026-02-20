@@ -1,4 +1,4 @@
-#' Agreement Measures – Common Interface
+#' Agreement Measures - Common Interface
 #'
 #' All agreement measures in this package share a common interface. 
 #'
@@ -63,7 +63,7 @@
 #'   \verb{  }\link{ccc}           \tab Lin's Concordance Correlation \cr
 #' }
 #'
-#' @param x A matrix or data.frame of ratings (subjects × raters),
+#' @param x A matrix or data.frame of ratings (subjects x raters),
 #'   or a single vector if \code{y} is provided.
 #' @param y Optional second vector (only for two raters).
 #' @param conf.level Confidence level for confidence intervals.

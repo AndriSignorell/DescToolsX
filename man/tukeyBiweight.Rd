@@ -81,7 +81,8 @@ Other topic.central-tendency:
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{meanX}()},
-\code{\link{medianX}()}
+\code{\link{medianX}()},
+\code{\link{modeX}()}
 }
 \author{
 originally written by Mikko Korpela \href{mailto:mikko.korpela@aalto.fi}{mikko.korpela@aalto.fi}\cr

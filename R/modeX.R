@@ -33,14 +33,16 @@
 #' is orders of magnitude faster than other implementations, especially for
 #' large numeric vectors with large numbers of distinct values.
 #' 
-#' You might furthermore consider using
-#' \code{density(x)$x[which.max(density(x)$y)]} for quantitative data or
-#' alternatively use \code{hist()}.\cr Another interesting idea for a more
-#' robust estimation of the mode:\cr \preformatted{ peak <-
-#' optimize(function(x, model) predict(model, data.frame(x = x)), c(min(x),
-#' max(x)), maximum = TRUE, model = y.loess)
-#' 
-#' points(peak$maximum, peak$objective, pch=FILLED.CIRCLE <- 19) }
+#' @note
+#' There are other approaches for determining the mode, e.g. one might use
+#' \code{density(x)$x[which.max(density(x)$y)]} for quantitative data, resp. 
+#' \code{hist()}.\cr Another interesting idea for a more
+#' robust estimation of the mode:\cr 
+#' \preformatted{ peak <- optimize(function(x, model) 
+#'   predict(model, data.frame(x = x)), 
+#'     c(min(x), max(x)), maximum = TRUE, model = y.loess)
+#'   points(peak$maximum, peak$objective) 
+#' }
 #' 
 #' @param x a (non-empty) numeric vector of data values.
 #' @param na.rm logical. Should missing values be removed? Defaults to
@@ -48,13 +50,15 @@
 #' @return The most frequent value as number or character, depending of
 #' \code{class(x)}. If there is more than one, all are returned in a vector.\cr
 #' The modal frequency is attached as attribute named \code{"freq"}.
-#' @author Andri Signorell <andri@@signorell.net>, great Rcpp part by Joseph
+#' @author Andri Signorell <andri@@signorell.net>, \cr great Rcpp part by Joseph
 #' Wood and Ralf Stubner
 #' @seealso \code{\link{meanX}}, \code{\link{medianX}}
 #' @references
-#' https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/
-#' https://stackoverflow.com/a/55213471/8416610
-#' @keywords univar
+#' \href{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/}{rcpp-fast-statistical-mode}
+#' 
+#' @family topic.central-tendency
+#' @concept descriptive-statistics
+#' 
 #' @examples
 #' 
 #' # normal mode

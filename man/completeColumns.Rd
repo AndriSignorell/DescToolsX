@@ -15,7 +15,7 @@ should be returned.}
 }
 \value{
 A logical vector specifying which columns have no missing values
-across the entire sequence. \%\% ~Describe the value returned
+across the entire sequence.
 }
 \description{
 Return either the columnnames or a logical vector indicating which columns

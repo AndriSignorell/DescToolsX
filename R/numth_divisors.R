@@ -16,9 +16,10 @@
 #' @return an integer vector containg the divisors 
 #' 
 #' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link{primes}}, \code{\link{isPrime}}, \code{\link{GCD}},
-#' \code{\link{lcm}} 
-#' @keywords arith math
+#' 
+#' @family topic. number_theory
+#' @concept number theory
+#' 
 #' @examples
 #' 
 #' divisors(c(145, 786))

@@ -99,9 +99,9 @@ Kendall, M.G. (1962). Rank correlation methods (3rd ed.). London: Griffin.
 
 Brueckl, M. (2011). Statistische Verfahren zur Ermittlung der
 Urteileruebereinstimmung. in: Altersbedingte Veraenderungen der
-Stimme und Sprechweise von Frauen, Berlin: Logos, 88–103.
+Stimme und Sprechweise von Frauen, Berlin: Logos, 88-103.
 
-Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409–416.
+Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409-416.
 }
 \seealso{
 \code{\link[stats]{cor}}, \code{\link{kappaM}},

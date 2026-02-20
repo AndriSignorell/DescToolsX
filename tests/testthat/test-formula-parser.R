@@ -1,7 +1,7 @@
 # 
 # test_that("one-sample wilcox is detected", {
 #   df <- data.frame(x = rnorm(10))
-#   res <- .parse_formula(x ~ 1, df)
+#   res <- .parseFormula(x ~ 1, df)
 #   
 #   expect_equal(res$type, "one.sample")
 #   expect_equal(res$method, "wilcox")
@@ -15,7 +15,7 @@
 #     g = rep(c("A", "B"), each = 10)
 #   )
 #   
-#   res <- .parse_formula(y ~ g, df)
+#   res <- .parseFormula(y ~ g, df)
 #   
 #   expect_equal(res$type, "two.sample")
 #   expect_length(res$x, 10)
@@ -29,7 +29,7 @@
 #     g = factor(rep(1:3, each = 10))
 #   )
 #   
-#   res <- .parse_formula(y ~ g, df)
+#   res <- .parseFormula(y ~ g, df)
 #   
 #   expect_equal(res$type, "n.sample")
 #   expect_equal(res$method, "kruskal")
@@ -43,7 +43,7 @@
 #     block = factor(rep(1:4, each = 3))
 #   )
 #   
-#   res <- .parse_formula(y ~ trt | block, df)
+#   res <- .parseFormula(y ~ trt | block, df)
 #   
 #   expect_equal(res$type, "paired")
 #   expect_equal(res$method, "friedman")
@@ -56,7 +56,7 @@
 #     g = rep(c("A", "B"), each = 10)
 #   )
 #   
-#   res <- .parse_formula(y ~ g, df, subset = y > 0)
+#   res <- .parseFormula(y ~ g, df, subset = y > 0)
 #   
 #   expect_true(all(res$x > 0))
 #   expect_true(all(res$y > 0))

@@ -21,7 +21,8 @@
 #' going on whether this should be defined or not. We'll wait for definitive
 #' results and enjoy the function's comfort so far...
 #' 
-#' Note that there are alternative approaches for calculating weighted median
+#' @note 
+#' There are alternative approaches for calculating weighted median
 #' (e.g. \code{matrixstats::weightedMedian}).
 #' 
 #' @name medianX

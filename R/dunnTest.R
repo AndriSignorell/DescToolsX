@@ -130,7 +130,7 @@ dunnTest.formula <- function (formula, data, subset, na.action, ...) {
   na_expr     <- if (!missing(na.action)) substitute(na.action) else NULL
   
   ## --- parse formula (n.sample only) ---
-  pf <- .parse_formula(
+  pf <- .parseFormula(
     formula   = formula,
     data      = data,
     subset    = subset_expr,

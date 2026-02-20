@@ -56,10 +56,14 @@ setequal(c(s[attr(s.tr, "trim")], s.tr), s)
 
 }
 \seealso{
-\code{\link{winsorize}}
+Other data_processing: 
+\code{\link{impute}()},
+\code{\link{scaleX}()},
+\code{\link{winsorize}()}
 }
 \author{
 R-Core (function mean), Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{robust}
-\keyword{univar}
+\concept{data processing}
+\concept{data_processing}
+\concept{robust-statistics}

@@ -34,9 +34,9 @@ inside a package.
 
 \strong{Functions}
 \itemize{
-\item \code{getConcepts()} – Returns all unique concepts used in a package.
-\item \code{conceptMap()} – Returns a mapping of concepts to functions.
-\item \code{conceptAudit()} – Returns a summary table of concept usage.
+\item \code{getConcepts()} - Returns all unique concepts used in a package.
+\item \code{conceptMap()} - Returns a mapping of concepts to functions.
+\item \code{conceptAudit()} - Returns a summary table of concept usage.
 }
 
 The functions use \code{\link[tools]{Rd_db}} to parse Rd files and

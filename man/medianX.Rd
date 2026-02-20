@@ -60,8 +60,9 @@ high median and prints a warning if the low median would be different (which
 is supposed to be a rare event). There's a vivid discussion between experts
 going on whether this should be defined or not. We'll wait for definitive
 results and enjoy the function's comfort so far...
-
-Note that there are alternative approaches for calculating weighted median
+}
+\note{
+There are alternative approaches for calculating weighted median
 (e.g. \code{matrixstats::weightedMedian}).
 }
 \examples{
@@ -117,6 +118,7 @@ Other topic.central-tendency:
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
 \code{\link{meanX}()},
+\code{\link{modeX}()},
 \code{\link{tukeyBiweight}()}
 }
 \concept{descriptive-statistics}

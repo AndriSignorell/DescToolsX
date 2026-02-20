@@ -121,7 +121,11 @@
 #' Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence
 #' intervals for two independent binomial proportions, \emph{Statistical
 #' Methods in Medical Research} 0(0) 1-31
-#' @keywords category
+#' 
+#' @family topic.categorical_data
+#' @concept categorical data
+#' @concept confidence intervals
+#'  
 #' @examples
 #' 
 #' x1 <- 56; n1 <- 70; x2 <- 48; n2 <- 80
@@ -309,8 +313,8 @@ binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
   
   z <- qnorm(1 - alpha/2)
   
-  ci1 <- binomCI(x=x1, n=n1, conf.level=1-alpha, method="wilson")[1,]
-  ci2 <- binomCI(x=x2, n=n2, conf.level=1-alpha, method="wilson")[1,]
+  ci1 <- binomCI(x=x1, n=n1, conf.level=1-alpha, method="wilson")
+  ci2 <- binomCI(x=x2, n=n2, conf.level=1-alpha, method="wilson")
   
   lci <- est - z * sqrt( ci1["lci"] * (1-ci1["lci"])/n1 + ci2["uci"] * (1-ci2["uci"])/n2)
   uci <- est + z * sqrt( ci1["uci"] * (1-ci1["uci"])/n1 + ci2["lci"] * (1-ci2["lci"])/n2)
@@ -327,8 +331,8 @@ binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
   p2.hat <- x2/n2
   est <- p1.hat - p2.hat
   
-  ci1 <- binomCI(x=x1, n=n1, conf.level=1-alpha, method="wilsoncc")[1,]
-  ci2 <- binomCI(x=x2, n=n2, conf.level=1-alpha, method="wilsoncc")[1,]
+  ci1 <- binomCI(x=x1, n=n1, conf.level=1-alpha, method="wilsoncc")
+  ci2 <- binomCI(x=x2, n=n2, conf.level=1-alpha, method="wilsoncc")
   
   lci <- est - sqrt((p1.hat - ci1["lci"])^2 + (ci2["uci"] - p2.hat)^2) 
   uci <- est + sqrt((ci1["uci"] - p1.hat)^2 + (p2.hat - ci2["lci"])^2) 

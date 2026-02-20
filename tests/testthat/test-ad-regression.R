@@ -3,7 +3,7 @@ test_that("Regression vs goftest", {
   
   skip_if_not_installed("goftest")
   
-  # Anderson–Darling test statistic + p-value
+  # Anderson-Darling test statistic p val
   set.seed(1)
   x <- runif(100)
   

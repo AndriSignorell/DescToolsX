@@ -139,6 +139,7 @@ The bootstrap method currently employs percentile confidence intervals.
 binomRatioCI(x1 = 36, n1 = 40, x2 = 16, n2 = 80, method = "katz")
 binomRatioCI(x1 = 36, n1 = 40, x2 = 16, n2 = 80, method = "koop")
 
+
 }
 \references{
 Agresti, A., Min, Y. (2001) On small-sample confidence intervals
@@ -173,9 +174,14 @@ Walter, S. D. (1975) The distribution of Levins measure of attributable
 risk. \emph{Biometrika} 62(2): 371-374.
 }
 \seealso{
-\code{\link{binomCI}, \link{binomDiffCI}}
+Other topic.categorical_data: 
+\code{\link{binomCI}()},
+\code{\link{binomDiffCI}()}
 }
 \author{
 Ken Aho \href{mailto:kenaho1@gmail.com}{kenaho1@gmail.com}, some tweaks Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{categorical data}
+\concept{confidence intervals}
+\concept{topic.categorical_data}

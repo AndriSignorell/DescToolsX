@@ -1,12 +1,9 @@
 
 #' Prime Factorization of Integers
 #' 
-#' Compute the prime factorization(s) of integer(s) \code{n}.
-#' 
-#' % ## Purpose: Prime factorization of integer(s) 'n'  
-#' 
-#' works via \code{\link{primes}}, currently in a cheap way, sub-optimal for
-#' large composite \eqn{n}. 
+#' Compute the prime factorization(s) of integer(s) \code{n}. 
+#' Prime factorization of integer(s) works via \code{\link{primes}}, 
+#' currently in a cheap way, sub-optimal for large composite \code{n}. 
 #' 
 #' @param n vector of integers to factorize.
 #' 
@@ -18,12 +15,13 @@
 #' prime number \code{n}, the resulting matrix is \code{cbind(p = n, m = 1)}.
 #' 
 #' @author Andri Signorell <andri@signorell.net>
-#' @seealso \code{\link{GCD}}, \code{\link{LCM}}, \code{\link{primes}},
-#' \code{\link{isPrime}}, \code{\link{divisors}}
 #' 
 #' For factorization of moderately or really large numbers, see the \pkg{gmp}
 #' package, and its \code{\link[gmp]{factorize}()} (which is ~20x faster!).
-#' @keywords math arith
+#' 
+#' @family topic. number_theory
+#' @concept number theory
+#' 
 #' @examples
 #' 
 #' factorize(47)

@@ -1,21 +1,21 @@
 
 #' Kappa for m Raters
 #' 
-#' Computes Fleiss’ kappa, which quantifies agreement among m≥2 raters on
+#' Computes Fleiss' kappa, which quantifies agreement among \eqn{m \geq 2} raters on
 #' categorical items by contrasting the mean observed agreement with the chance
-#' agreement implied by the overall category proportions. It equals Scott’s pi
-#' when m=2 (but not Cohen’s kappa).
+#' agreement implied by the overall category proportions. It equals Scott's pi
+#' when m=2 (but not Cohen's kappa).
 #' 
-#' Missing data are omitted in a listwise way.\cr Fleiss’ kappa (Fleiss, 1971)
-#' is a multi-rater agreement coefficient that generalises Scott’s pi (Scott,
+#' Missing data are omitted in a listwise way.\cr Fleiss' kappa (Fleiss, 1971)
+#' is a multi-rater agreement coefficient that generalises Scott's pi (Scott,
 #' 1955) to m raters by basing chance agreement on the average category
-#' proportions across raters. For m = 2 it equals Scott’s pi (not Cohen’s
-#' kappa). Cohen’s kappa, by contrast, is defined for two raters and computes
-#' chance agreement from each rater’s own marginal distribution; it can also be
-#' extended with weights for ordinal scales (weighted Cohen’s kappa). Light’s
+#' proportions across raters. For m = 2 it equals Scott's pi (not Cohen's
+#' kappa). Cohen's kappa, by contrast, is defined for two raters and computes
+#' chance agreement from each rater's own marginal distribution; it can also be
+#' extended with weights for ordinal scales (weighted Cohen's kappa). Light's
 #' kappa (Light, 1971) is simply the unweighted mean of all pairwise Cohen
-#' kappas among multiple raters, whereas Conger’s kappa (Conger, 1980) is a
-#' principled multi-rater generalisation that reduces exactly to Cohen’s kappa
+#' kappas among multiple raters, whereas Conger's kappa (Conger, 1980) is a
+#' principled multi-rater generalisation that reduces exactly to Cohen's kappa
 #' when m = 2.\cr Standard errors and Wald-type confidence intervals are
 #' available for all of these coefficients (Cohen, Scott, Fleiss, Conger);
 #' bootstrap intervals are a practical alternative when assumptions are
@@ -117,8 +117,8 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
     # idx: N x R Matrix mit Kategorie-Indices
     
     # p_lookup[i,r,r2] = pjr[idx[i,r2], r]
-    # bedeutet: nehme Randwahrscheinlichkeit von Rater r für die Kategorie,
-    # die Rater r2 bei Subjekt i gewählt hat
+    # bedeutet: nehme Randwahrscheinlichkeit von Rater r for die Kategorie,
+    # die Rater r2 bei Subjekt i gewaehlt hat
     Pe2_i <- sapply(1:N, function(i) {
       mat <- outer(1:R, 1:R, Vectorize(function(r, r2) {
         if (r == r2) return(0)
@@ -185,7 +185,7 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
             
             
             
-            # 1. Beobachtete Übereinstimmung pro Subjekt (Po_i)
+            # 1. Beobachtete Uebereinstimmung pro Subjekt (Po_i)
             
             Po_i <- apply(xx, 1, function(row) {
               counts <- table(row)
@@ -200,7 +200,7 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
             pjr <- do.call(cbind, pjr)   # K x R Matrix
             rownames(pjr) <- as.character(levi)
             
-            ## 4. Erwartete Übereinstimmung pro Subjekt (Pe2_i)
+            ## 4. Erwartete Uebereinstimmung pro Subjekt (Pe2_i)
             # chanceP_i <- numeric(ns)
             # for (i in 1:ns) {
             #   row <- xx[i, ]

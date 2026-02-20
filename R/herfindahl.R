@@ -1,12 +1,12 @@
 
 #' Herfindahl Index
 #'
-#' Computes the Herfindahl (or Herfindahl–Hirschman) index as a measure
+#' Computes the Herfindahl (or Herfindahl-Hirschman) index as a measure
 #' of concentration or inequality.
 #'
 #' The index is defined as the power mean of order \eqn{m+1} of the
 #' relative shares. For \code{parameter = 1}, the classical
-#' Herfindahl–Hirschman Index (HHI) is obtained.
+#' Herfindahl-Hirschman Index (HHI) is obtained.
 #'
 #' @param x Numeric vector of non-negative values (e.g. market shares,
 #'   incomes, or frequencies).

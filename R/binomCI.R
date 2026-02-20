@@ -2,8 +2,8 @@
 
 #' Confidence Intervals for Binomial Proportions
 #' 
-#' Compute confidence intervals for binomial proportions according to a number
-#' of the most common proposed methods.
+#' \code{binomCI} computes confidence intervals for binomial proportions 
+#' according to a large number of the most common proposed methods.
 #' 
 #' All arguments are being recycled.
 #' 
@@ -131,9 +131,6 @@
 #' method), Michael Hoehle <hoehle@@math.su.se> (Mid-p), Ralph Scherer
 #' <shearer.ra76@@gmail.com> (Blaker), Andri Signorell <andri@@signorell.net>
 #' (interface issues and all the rest)
-#' @seealso \code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}},
-#' \code{\link{multinomCI}}, \code{\link{binomDiffCI}},
-#' \code{\link{binomRatioCI}}
 #' @references Agresti A. and Coull B.A. (1998) Approximate is better than
 #' "exact" for interval estimation of binomial proportions.  \emph{American
 #' Statistician}, \bold{52}, pp. 119-126.
@@ -157,9 +154,13 @@
 #' Blaker, H. (2000) Confidence curves and improved exact confidence intervals
 #' for discrete distributions, \emph{Canadian Journal of Statistics} 28 (4),
 #' 783-798
-#' @concept confidence-intervals
-#' @concept categorical-data
 #' 
+#' @seealso \code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}
+#'  
+#' @family topic.categorical_data
+#' @concept categorical data
+#' @concept confidence intervals
+#'  
 #' @examples
 #' 
 #' binomCI(x=37, n=43, 
@@ -182,149 +183,124 @@
 #' # example Table I in Newcombe (1998)
 #' meths <- c("wald", "waldcc", "wilson", "wilsoncc",
 #'            "clopper-pearson","midp", "lik")
-#' round(cbind(
-#'   binomCI(81, 263, m=meths)[, -1],
-#'   binomCI(15, 148, m=meths)[, -1],
-#'   binomCI(0, 20, m=meths)[, -1],
-#'   binomCI(1, 29, m=meths)[, -1]), 4)
-#' 
+#' setNamesX(cbind(round(cbind(
+#'     binomCI(81, 263, m=meths)[, c("lci","uci")],
+#'     binomCI(15, 148, m=meths)[,  c("lci","uci")],
+#'     binomCI(0, 20, m=meths)[, c("lci","uci")],
+#'     binomCI(1, 29, m=meths)[, c("lci","uci")]), 4)), 
+#'   rownames=meths)
 #' 
 #' # returning p.tilde for agresti-coull ci
 #' binomCI(x=81, n=263, meth="agresti-coull", std_est = c(TRUE, FALSE))
+#' 
+#' # return all implemented methods
+#' binomCI(4, 19, conf.level =0.95, 
+#'         method = c(".all"))[, c("est","lci","uci","method")]
+#' 
 
 
 
 #' @rdname binomCI
 #' @export
 binomCI <- function(x, n, 
-                    conf.level = 0.95, sides = c("two.sided","left","right"),
+                    conf.level = 0.95, 
+                    sides = c("two.sided","left","right"),
                     method = c("wilson", "wilsoncc", "modified wilson",
-                      "agresti-coull", 
-                      "jeffreys", "modified jeffreys",
-                      "lik", "blaker",
-                      "clopper-pearson", "midp",
-                      "waldcc", "wald",
-                      "logit", "arcsine",
-                      "witting", "pratt" ), 
+                               "agresti-coull", 
+                               "jeffreys", "modified jeffreys",
+                               "lik", "blaker",
+                               "clopper-pearson", "midp",
+                               "waldcc", "wald",
+                               "logit", "arcsine",
+                               "witting", "pratt" ), 
                     std_est=TRUE) {
-
-
-  ibinomCI <- function(x, n, conf.level, sides = c("two.sided","left","right"),
-                       method = c("wilson", "wilsoncc", "modified wilson",
-                                         "agresti-coull", 
-                                         "jeffreys", "modified jeffreys",
-                                         "lik", "blaker",
-                                         "clopper-pearson", "midp",
-                                         "waldcc", "wald",
-                                         "logit", "arcsine",
-                                         "witting", "pratt" ), std_est) {
+  
+  
+  sides <- match.arg(sides)
+  
+  if (missing(method)) {
+    # if not provided take the first method instead of all (!)
+    method <- eval(formals(sys.function())$method)[1]
     
-    if(length(x) != 1) stop("'x' has to be of length 1 (number of successes)")
-    if(length(n) != 1) stop("'n' has to be of length 1 (number of trials)")
-    if(length(conf.level) != 1)  stop("'conf.level' has to be of length 1 (confidence level)")
-    if(conf.level < 0.5 | conf.level > 1)  stop("'conf.level' has to be in [0.5, 1]")
-    
-    
-    method <- match.arg(arg=method, 
-                        choices=c("wilson", "wilsoncc", "modified wilson",
-                                   "agresti-coull", "jeffreys", "modified jeffreys",
-                                   "lik", "blaker", "clopper-pearson", "midp",
-                                   "waldcc", "wald", "logit", "arcsine",
-                                   "witting", "pratt" ))
-    
-    sides <- match.arg(sides, choices = c("two.sided","left","right"), 
-                       several.ok = FALSE)
-    
-    alpha <- 1 - conf.level
-    
-    if(sides!="two.sided")
-      conf.level <- 1 - 2*alpha
-
-    CI <- switch( method
-            , "wald" =              { .binomCI.wald(x, n, alpha) }
-            , "waldcc" =            { .binomCI.wald(x, n, alpha, corr=TRUE) }
-            , "jeffreys" =          { .binomCI.jeffreys(x, n, alpha) }
-            , "modified jeffreys" = { .binomCI.jeffreys_mod(x, n, alpha) }
-            , "clopper-pearson" =   { .binomCI.clopper_pearson(x, n, alpha) }
-            , "arcsine" =           { .binomCI.arcsine(x, n, alpha) }
-            , "logit" =             { .binomCI.logit(x, n, alpha) }
-            , "witting" =           { .binomCI.witting(x, n, alpha) }
-            , "agresti-coull" =     { .binomCI.agresti_coull(x, n, alpha) }
-            , "pratt" =             { .binomCI.pratt(x, n, alpha) }
-            , "wilson" =            { .binomCI.wilson(x, n, alpha) }
-            , "wilsoncc" =          { .binomCI.wilson_cc(x, n, alpha) }
-            , "modified wilson" =   { .binomCI.wilson_mod(x, n, alpha) }
-            , "midp" =              { .binomCI.midp(x, n, alpha) }
-            , "blaker" =            { .binomCI.blaker(x, n, alpha) }
-            , "lik" =               { .binomCI.lik(x, n, alpha) }
-    )
-
-    
-    # this is the default estimator used by the most (but not all) methods
-    est <- x/n
-    
-    if(!std_est){
-      
-      if(method %in% 
-              c("agresti-coull", "wilson", "wilsoncc", "modified wilson"))
-        est <- .binomCI.nonStdEst(x, n, alpha)
-      
-      else if(method %in% c("arcsine", "witting"))
-        est <- attr(CI, "p.tilde")
-    }
-    
-        
-    # dot not return ci bounds outside [0,1]
-    ci <- c( est    = est, 
-             lci = max(0, CI["lci"]), 
-             uci = min(1, CI["uci"]) )
-    
-    if(sides=="left")
-      ci[3] <- 1
-    else if(sides=="right")
-      ci[2] <- 0
-    
-    return(ci)
-    
+  } else {
+    # resolve methods cleanly, allowing an ".all" hidden option for method
+    method <- .resolveMethod(method, several.ok = TRUE)
   }
   
-  # set defaults when user does not provide argument
-  # (we can't match.arg, when several options should be possible)
-  if(missing(sides)) sides <- "two.sided"
-  if(missing(method)) method <- "wilson"
+  res <- .recycleApply(.binomCI_engine,
+                       x = x,
+                       n = n,
+                       conf.level = conf.level,
+                       sides = sides,
+                       method = method,
+                       std_est = std_est
+                       )
   
-  # handle vectors
-  # which parameter has the highest dimension
-  lst <- list(x=x, n=n, conf.level=conf.level, sides=sides, 
-              method=method, std_est=std_est)
-  
-  maxdim <- max(unlist(lapply(lst, length)))
-  
-  # recycle all params to maxdim
-  lgp <- lapply( lst, rep, length.out=maxdim )
-  # # increase conf.level for one sided intervals
-  # lgp$conf.level[lgp.sides!="two.sided"] <- 1 - 2*(1-lgp$conf.level[lgp.sides!="two.sided"])
-  
-  # get rownames
-  lgn <- recycle(x=if(is.null(names(x))) paste("x", seq_along(x), sep=".") else names(x),
-                            n=if(is.null(names(n))) paste("n", seq_along(n), sep=".") else names(n),
-                            conf.level=conf.level, sides=sides, method=method, std_est=std_est)
-  
-  
-  xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
-  
-  res <- t(sapply(1:maxdim, function(i) ibinomCI(x=lgp$x[i], n=lgp$n[i],
-                                                 conf.level=lgp$conf.level[i],
-                                                 sides=lgp$sides[i],
-                                                 method=lgp$method[i], 
-                                                 std_est=lgp$std_est[i])))
-  colnames(res)[1] <- c("est")
-  rownames(res) <- xn
-  
-  return(res)
+  if(length(res) == 1)
+    out <- res[[1]]
+  else{
+    out <- as.data.frame(attr(res, "recycle"))
+    out <- data.frame(do.call(rbind, res), out)
+  }
+
+  return(out)
   
 }
 
+
+
+.binomCI_engine <- function(x, n, conf.level, sides, method, std_est){
+  
+  alpha <- 1 - conf.level
+  if (sides != "two.sided")
+    alpha <- alpha / 2
+
+  CI <- switch( method
+                , "wald" =              { .binomCI.wald(x, n, alpha) }
+                , "waldcc" =            { .binomCI.wald(x, n, alpha, corr=TRUE) }
+                , "jeffreys" =          { .binomCI.jeffreys(x, n, alpha) }
+                , "modified jeffreys" = { .binomCI.jeffreys_mod(x, n, alpha) }
+                , "clopper-pearson" =   { .binomCI.clopper_pearson(x, n, alpha) }
+                , "arcsine" =           { .binomCI.arcsine(x, n, alpha) }
+                , "logit" =             { .binomCI.logit(x, n, alpha) }
+                , "witting" =           { .binomCI.witting(x, n, alpha) }
+                , "agresti-coull" =     { .binomCI.agresti_coull(x, n, alpha) }
+                , "pratt" =             { .binomCI.pratt(x, n, alpha) }
+                , "wilson" =            { .binomCI.wilson(x, n, alpha) }
+                , "wilsoncc" =          { .binomCI.wilson_cc(x, n, alpha) }
+                , "modified wilson" =   { .binomCI.wilson_mod(x, n, alpha) }
+                , "midp" =              { .binomCI.midp(x, n, alpha) }
+                , "blaker" =            { .binomCI.blaker(x, n, alpha) }
+                , "lik" =               { .binomCI.lik(x, n, alpha) }
+                , stop("Unknown method.")
+  )
+  
+  # this is the default estimator used by the most (but not all) methods
+  est <- x/n
+  
+  if(!std_est){
+    
+    if(method %in% 
+       c("agresti-coull", "wilson", "wilsoncc", "modified wilson"))
+      est <- .binomCI.nonStdEst(x, n, alpha)
+    
+    else if(method %in% c("arcsine", "witting"))
+      est <- attr(CI, "p.tilde")
+  }
+  
+  # dot not return ci bounds outside [0,1]
+  ci <- c( est = est, 
+           lci = max(0, CI["lci"]), 
+           uci = min(1, CI["uci"]) )
+  
+  if(sides=="left")
+    ci[3] <- 1
+  else if(sides=="right")
+    ci[2] <- 0
+  
+  return(ci)
+
+}
 
 
 

@@ -17,12 +17,8 @@ prime number \code{n}, the resulting matrix is \code{cbind(p = n, m = 1)}.
 }
 \description{
 Compute the prime factorization(s) of integer(s) \code{n}.
-}
-\details{
-\% ## Purpose: Prime factorization of integer(s) 'n'
-
-works via \code{\link{primes}}, currently in a cheap way, sub-optimal for
-large composite \eqn{n}.
+Prime factorization of integer(s) works via \code{\link{primes}},
+currently in a cheap way, sub-optimal for large composite \code{n}.
 }
 \examples{
 
@@ -30,14 +26,17 @@ factorize(47)
 factorize(seq(101, 120, by=2))
 }
 \seealso{
-\code{\link{GCD}}, \code{\link{LCM}}, \code{\link{primes}},
-\code{\link{isPrime}}, \code{\link{divisors}}
+Other topic. number_theory: 
+\code{\link{divisors}()},
+\code{\link{fibonacci}()},
+\code{\link{gcd_lcm}},
+\code{\link{isPrime}()}
+}
+\author{
+Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 
 For factorization of moderately or really large numbers, see the \pkg{gmp}
 package, and its \code{\link[gmp]{factorize}()} (which is ~20x faster!).
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\keyword{arith}
-\keyword{math}
+\concept{number theory}
+\concept{topic. number_theory}

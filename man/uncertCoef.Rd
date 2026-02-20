@@ -76,6 +76,7 @@ Amsterdam: North-Holland Publishing Company.
 \code{\link{Association}}
 
 Other topic.association-measures: 
+\code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},

@@ -7,10 +7,11 @@
 gkGamma(x, y = NULL, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{Either a vector of observations, a two-column object
-(matrix, data.frame or list), or a contingency table.}
+\item{x}{Either a contingency table, a two-column object
+(matrix, data.frame or list), or a vector of observations
+(together with \code{y}).}
 
-\item{y}{Optional second vector. If \code{x} is a contingency table,
+\item{y}{Optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
 \item{conf.level}{Confidence level for confidence intervals.
@@ -80,6 +81,7 @@ There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 
 Other topic.association-measures: 
+\code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},

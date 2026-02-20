@@ -12,7 +12,7 @@
 #' / (n^2 (m-1))} where P equals the number of concordances and Q the number of
 #' discordances, n is the total amount of observations and m = min(R, C). The
 #' range of \eqn{\tau_{c}}{tau-c} is \verb{[-1, 1]}. \cr See
-#' \url{http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf},
+#' \href{http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf}{SAS-The FREQ Procedure},
 #' pp. 1739 for the estimation of the asymptotic variance.
 #' 
 #' The use of Stuart's Tau-c versus Kendall's Tau-b is recommended when the two
@@ -27,7 +27,6 @@
 #' and otherwise a numeric vector with 3 elements for the estimate, the lower
 #' and the upper confidence interval 
 #' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{Association}}
 #' 
 #' @references Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
 #' & Sons, pp. 57--59.
@@ -43,6 +42,8 @@
 #' Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
 #' classifications III: Approximate sampling theory. \emph{Journal of the
 #' American Statistical Association}, 58, 310-364.
+#' 
+#' @seealso \code{\link{Association}}
 #' 
 #' @family topic.correlation
 #' @concept association

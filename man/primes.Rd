@@ -29,9 +29,8 @@ primes(10)
 primes(c(5, 10))
 
 }
-\seealso{
-\code{\link{isPrime}}
-}
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{number theory}
+\concept{number_theory}

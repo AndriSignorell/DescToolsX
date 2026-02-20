@@ -19,6 +19,10 @@
 #'
 #' @return A vector of the same type and length as \code{x},
 #'   with missing values replaced.
+#'   
+#' @family data_processing
+#' @concept data processing
+#' @concept imputation
 #'
 #' @examples
 #' x <- c(1, 2, NA, 4)
@@ -31,6 +35,7 @@
 #'
 #' # Using a character expression
 #' impute(x, "mean(x, na.rm = TRUE)")
+#' 
 
 
 

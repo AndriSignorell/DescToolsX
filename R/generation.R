@@ -6,7 +6,7 @@
 #' The generations are defined as:\cr
 #' 
 #' \tabular{ll}{ \code{1946-1964} \verb{ } \tab Babyboomer\cr \code{1965-1979}
-#' \tab Generation X \cr \code{1980-1995} \tab Generation Y – also known as
+#' \tab Generation X \cr \code{1980-1995} \tab Generation Y - also known as
 #' Millennials\cr \code{1996-2010} \tab Generation Z \cr \code{2011-2025} \tab
 #' Generation Alpha\cr }
 #' 
@@ -28,7 +28,7 @@ generation <- function(year){
   
   # Babyboomer   (1946-1964)
   # Generation X (1965-1979)
-  # Generation Y (1980-1995) – also called Millennials
+  # Generation Y (1980-1995) - also called Millennials
   # Generation Z (1996-2010)
   # Generation Alpha (ab 2011-2025)
   

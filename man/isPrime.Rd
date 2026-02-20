@@ -31,10 +31,17 @@ isPrime(2)
 isPrime(1:10)
 isPrime(c(17, 18, 19))
 
+
 }
 \seealso{
-\code{\link{primes}}
+Other topic. number_theory: 
+\code{\link{divisors}()},
+\code{\link{factorize}()},
+\code{\link{fibonacci}()},
+\code{\link{gcd_lcm}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{number theory}
+\concept{topic. number_theory}

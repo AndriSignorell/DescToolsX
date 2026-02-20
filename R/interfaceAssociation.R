@@ -1,4 +1,4 @@
-#' Association Measures – Common Interface
+#' Association Measures - Common Interface
 #'
 #' All association measures in this package share a common interface. 
 #'
@@ -47,9 +47,10 @@
 #'    \verb{  }\link{lambda}\verb{  } \tab Goodman's Lambda \cr
 #'    }
 #'
-#' @param x Either a vector of observations, a two-column object
-#'   (matrix, data.frame or list), or a contingency table.
-#' @param y Optional second vector. If \code{x} is a contingency table,
+#' @param x Either a contingency table, a two-column object
+#'   (matrix, data.frame or list), or a vector of observations 
+#'   (together with \code{y}).
+#' @param y Optional second vector. If \code{x} is not a vector,
 #'   \code{y} must be \code{NULL}.
 #' @param conf.level Confidence level for confidence intervals.
 #'   If \code{NA}, no confidence interval is computed.
@@ -69,4 +70,5 @@
 #' John Wiley and Sons
 #' 
 #' @keywords internal
+#' @family topic.association-measures
 NULL

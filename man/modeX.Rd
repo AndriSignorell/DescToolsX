@@ -50,15 +50,17 @@ most frequent one. This function uses a sophisticated data structure in C++
 and is limited to determining the most frequent element only. Therefore it
 is orders of magnitude faster than other implementations, especially for
 large numeric vectors with large numbers of distinct values.
-
-You might furthermore consider using
-\code{density(x)$x[which.max(density(x)$y)]} for quantitative data or
-alternatively use \code{hist()}.\cr Another interesting idea for a more
-robust estimation of the mode:\cr \preformatted{ peak <-
-optimize(function(x, model) predict(model, data.frame(x = x)), c(min(x),
-max(x)), maximum = TRUE, model = y.loess)
-
-points(peak$maximum, peak$objective, pch=FILLED.CIRCLE <- 19) }
+}
+\note{
+There are other approaches for determining the mode, e.g. one might use
+\code{density(x)$x[which.max(density(x)$y)]} for quantitative data, resp.
+\code{hist()}.\cr Another interesting idea for a more
+robust estimation of the mode:\cr
+\preformatted{ peak <- optimize(function(x, model) 
+  predict(model, data.frame(x = x)), 
+    c(min(x), max(x)), maximum = TRUE, model = y.loess)
+  points(peak$maximum, peak$objective) 
+}
 }
 \examples{
 
@@ -85,14 +87,21 @@ sapply(d.pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 
 }
 \references{
-https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/
-https://stackoverflow.com/a/55213471/8416610
+\href{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/}{rcpp-fast-statistical-mode}
 }
 \seealso{
 \code{\link{meanX}}, \code{\link{medianX}}
+
+Other topic.central-tendency: 
+\code{\link{hodgesLehmann}()},
+\code{\link{huberM}()},
+\code{\link{meanX}()},
+\code{\link{medianX}()},
+\code{\link{tukeyBiweight}()}
 }
 \author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, great Rcpp part by Joseph
+Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr great Rcpp part by Joseph
 Wood and Ralf Stubner
 }
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{topic.central-tendency}

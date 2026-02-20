@@ -21,8 +21,10 @@
 #' @examples
 #' primes(10)
 #' primes(c(5, 10))
-#'
-#' @seealso \code{\link{isPrime}}
+#' 
+#' @family number_theory
+#' @concept number theory
+#' 
 #'
 #' @export
 primes <- function (n) { 

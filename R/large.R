@@ -19,7 +19,7 @@
 #' the vector, where in real data often wrong values accumulate. This is in
 #' essence a printing routine for the highest and the lowest values of x.
 #' 
-#' @name large_small
+#' @name extremes
 #' @aliases large small highLow
 #' @param x a \code{numeric} vector 
 #' @param k an integer >0 defining how many extreme values should be returned.
@@ -66,7 +66,7 @@
 #' 
 
 
-#' @rdname large_small
+#' @rdname extremes
 #' @export
 large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
   
@@ -123,7 +123,7 @@ large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
 
 
 
-#' @rdname large_small
+#' @rdname extremes
 #' @export
 small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
   
@@ -182,7 +182,7 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
 
 
 
-#' @rdname large_small
+#' @rdname extremes
 #' @export
 highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
   
@@ -192,7 +192,9 @@ highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
   # http://r.789695.n4.nabble.com/Fast-way-of-finding-top-n-values-of-a-long-vector-td892565.html
   
   # updated 1.5.2016 / Andri
-  # ... seemed the way to go so far, but now outperformed by nathan russell's C++ solution
+  # ... approach above seemed the way to go so far, but now significantly 
+  # outperformed by nathan russell's C++ solution
+  
   
   if ((nlow + nhigh) != 0L) {
     frqs <- small(x, k=nlow, unique=TRUE, na.last=na.last)

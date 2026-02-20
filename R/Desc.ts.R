@@ -73,17 +73,17 @@ Desc.ts <- function(x,
                     ...) {
   
   
-  # # 1️⃣ Lag-1 ACF
+  # # Lag-1 ACF
   # acf1 <- acf(x, plot = FALSE)$acf[2]
   # cat("Lag-1 Autocorrelation:", round(acf1, 3), "\n\n")
   # 
-  # # 2️⃣ Ljung-Box
+  # # Ljung-Box
   # lb <- Box.test(x, lag = lag.lb, type = "Ljung")
   # cat("Ljung-Box Test (lag =", lag.lb, ")\n")
   # cat("  Statistic:", round(lb$statistic, 3), "\n")
   # cat("  p-value :", round(lb$p.value, 4), "\n\n")
   # 
-  # # 3️⃣ Stationarity Tests
+  # # Stationarity Tests
   # if(requireNamespace("tseries", quietly = TRUE)) {
   #   adf  <- tseries::adf.test(x)
   #   kpss <- tseries::kpss.test(x)
@@ -97,7 +97,7 @@ Desc.ts <- function(x,
   #   cat("Install package 'tseries' for stationarity tests.\n\n")
   # }
   # 
-  # # 4️⃣ Linear Trend
+  # # Linear Trend
   # t <- time(x)
   # fit <- lm(x ~ t)
   # slope <- coef(fit)[2]
@@ -107,13 +107,13 @@ Desc.ts <- function(x,
   # cat("  Slope  :", round(slope, 4), "\n")
   # cat("  p-value:", round(pval, 4), "\n\n")
   # 
-  # # 5️⃣ BoxCox Lambda
+  # # BoxCox Lambda
   # if(requireNamespace("forecast", quietly = TRUE)) {
   #   lambda <- forecast::BoxCox.lambda(x)
   #   cat("Suggested BoxCox Lambda:", round(lambda, 3), "\n")
   #   
   #   if(abs(lambda) < 0.15)
-  #     cat("  → Log transformation recommended\n")
+  #     cat(" Log transformation recommended\n")
   # } else {
   #   cat("Install package 'forecast' for BoxCox suggestion.\n")
   # }

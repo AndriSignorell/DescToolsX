@@ -6,7 +6,7 @@
 #' with the subjects in rows and the raters in columns as base structure for
 #' interrater agreement (IRA) functions.
 #' 
-#' Assessments made by raters are typically—and appropriately—stored and
+#' Assessments made by raters are typically - and appropriately - stored and
 #' organized in databases. Data originating from databases are usually in long
 #' format. Converting this long format into a wide format suitable for analysis
 #' is a complex task, as it is not just a matter of simply displaying

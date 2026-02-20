@@ -2,9 +2,9 @@
 % Please edit documentation in R/interfaceAgreement.R
 \name{Agreement}
 \alias{Agreement}
-\title{Agreement Measures – Common Interface}
+\title{Agreement Measures - Common Interface}
 \arguments{
-\item{x}{A matrix or data.frame of ratings (subjects × raters),
+\item{x}{A matrix or data.frame of ratings (subjects x raters),
 or a single vector if \code{y} is provided.}
 
 \item{y}{Optional second vector (only for two raters).}

@@ -9,37 +9,36 @@
 #' vector \code{x} will be computed (the multiple GCD).
 #' 
 #' @name gcd_lcm
-#' @aliases GCD LCM
+#' @aliases gcd lcm
 #' @param ... integer or logical vectors.
 #' @param na.rm logical. Should missing values (including NaN) be removed?
 #' @return A numeric (integer) value.
 #' @note The following relation is always true:
 #' 
-#' \code{n * m = GCD(n, m) * LCM(n, m)}
+#' \code{n * m = gcd(n, m) * lcm(n, m)}
 #' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{factorize}}, \code{\link{primes}},
-#' \code{\link{isPrime}}
-#' @references Eddelbuettel, D. (2013). Seamless R and C++ Integration with
-#' Rcpp. New York, NY: Springer.
+#' 
+#' @family topic. number_theory
+#' @concept number theory
+#' 
 #' @examples
+#' gcd(12, 10)
+#' gcd(144, 233)    # Fibonacci numbers are relatively prime to each other
 #' 
-#' GCD(12, 10)
-#' GCD(144, 233)    # Fibonacci numbers are relatively prime to each other
-#' 
-#' LCM(12, 10)
-#' LCM(144, 233)    # = 144 * 233
+#' lcm(12, 10)
+#' lcm(144, 233)    # = 144 * 233
 #' 
 #' # all elements will be flattened by unlist
-#' GCD(2, 3, c(5, 7) * 11)
-#' GCD(c(2*3, 3*5, 5*7))
-#' LCM(c(2, 3, 5, 7) * 11)
-#' LCM(2*3, 3*5, 5*7)
+#' gcd(2, 3, c(5, 7) * 11)
+#' gcd(c(2*3, 3*5, 5*7))
+#' lcm(c(2, 3, 5, 7) * 11)
+#' lcm(2*3, 3*5, 5*7)
 #' 
 
 
 #' @rdname gcd_lcm
 #' @export
-GCD <- function(..., na.rm = FALSE) {
+gcd <- function(..., na.rm = FALSE) {
   
   x <- unlist(list(...), recursive=TRUE)
   
@@ -72,7 +71,7 @@ GCD <- function(..., na.rm = FALSE) {
 
 #' @rdname gcd_lcm
 #' @export
-LCM <- function(..., na.rm = FALSE) {
+lcm <- function(..., na.rm = FALSE) {
   
   x <- unlist(list(...), recursive=TRUE)
   

@@ -133,7 +133,7 @@ yuleY <- function(x, y=NULL,
   OR <- (a*d)/(b*c)
   logOR <- log(OR)
   
-  # Schätzer für Y (stabiler via tanh)
+  # Schaetzer fuer Y (stabiler via tanh)
   Y <- tanh(logOR / 2)
   
   se <- sqrt(1/a + 1/b + 1/c + 1/d)

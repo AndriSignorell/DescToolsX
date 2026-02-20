@@ -35,10 +35,16 @@ points(x=seq_along(x), y=scale(x), col="red" )
 
 }
 \seealso{
-\code{scale}, \code{sweep}
+\link[base:scale]{base::scale}, \link[base:sweep]{base::sweep}
+
+Other data_processing: 
+\code{\link{impute}()},
+\code{\link{trim}()},
+\code{\link{winsorize}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\keyword{robust}
-\keyword{univar}
+\concept{data processing}
+\concept{data_processing}
+\concept{robust-statistics}

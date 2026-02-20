@@ -47,8 +47,8 @@ intervals are calculated using normal approximation (\code{"wald"}),
 \details{
 Best is to always put the outcome variable (disease yes/no) in the columns
 and the exposure variable in the rows. In other words, put the dependent
-variable – the one that describes the problem under study – in the columns.
-And put the independent variable – the factor assumed to cause the problem –
+variable - the one that describes the problem under study - in the columns.
+And put the independent variable - the factor assumed to cause the problem -
 in the rows. (Gerritsen, 2010)
 
 According to this, the function expects the following table structure:

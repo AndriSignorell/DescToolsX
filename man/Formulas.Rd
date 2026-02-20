@@ -2,7 +2,7 @@
 % Please edit documentation in R/interfaceFormula.R
 \name{Formulas}
 \alias{Formulas}
-\title{Formula Interface – Common Arguments}
+\title{Formula Interface - Common Arguments}
 \arguments{
 \item{formula}{A formula of the form \code{lhs ~ rhs}, where \code{lhs}
 gives the response values and \code{rhs} the corresponding groups

@@ -18,7 +18,8 @@ If \code{NULL}, levels are inferred from the union of observed categories.}
 (e.g., \code{"no"}, \code{"ifany"}, \code{"always"}).}
 }
 \value{
-A square numeric \code{matrix} with dimnames (rows = rater A levels, cols = rater B levels).
+A square numeric \code{matrix} with dimnames (rows = rater A
+levels, cols = rater B levels).
 }
 \description{
 Accepts diverse inputs and returns a square contingency table (matrix)
@@ -30,7 +31,8 @@ Supported inputs:
 \item \strong{table} (2D): already a confusion table.
 \item \strong{matrix} that looks like a confusion table
 (square, non-negative, etc.).
-\item \strong{matrix/data.frame} with 2 columns and >2 rows: interpreted as raw ratings
+\item \strong{matrix/data.frame} with 2 columns and >2 rows:
+interpreted as raw ratings
 (subjects in rows, raters in columns).
 \item \strong{list} of 2 vectors: each element is one rater's ratings.
 \item \strong{two vectors} \code{x}, \code{y}: ratings of two raters.
@@ -71,7 +73,7 @@ y <- anxiety[, 2]
 
 # Two vectors:
 normalizeToConfusion(x, y)
-# matrix/data.frame with 2 columns (subjects × raters):
+# matrix/data.frame with 2 columns (subjects x raters):
 normalizeToConfusion(cbind(x, y))
 normalizeToConfusion(data.frame(x, y))
 # list with 2 elements (same as vector interface):
@@ -94,7 +96,7 @@ d.anxiety <- data.frame(
              1, 2, 3, 4, 5, 6, 7)
 )
 
-# matrix/data.frame with 2 columns (subjects × raters):
+# matrix/data.frame with 2 columns (subjects x raters):
 normalizeToConfusion(
   raterFrame(rating ~ subj | rater, data=d.anxiety, 
              subset=rater \%in\% c("rater1","rater2"), drop.subj=TRUE)

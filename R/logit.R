@@ -10,15 +10,13 @@
 #' \deqn{y = log\left (\frac{p}{1-p} \right ) \;\;\; \; \textup{where} \; \;\;
 #' p=\frac{x-min}{max-min}}{y = log(p/(1-p)) where p=(x-min)/(max-min)}
 #' 
-#' %s \deqn{y = log(\frac{p}{(1-p)})}{y = log(p/(1-p))} %s %s where %s %s
-#' \deqn{p=\frac{(x-min)}{(max-min)}}{p=(x-min)/(max-min)}
-#' 
 #' The generalized inverse logit function provides the inverse transformation:
 #' 
 #' \deqn{x = p' \cdot (max-min) + min \;\;\; \; \textup{where} \; \;\;
 #' p'=\frac{exp(y)}{1+exp(y)}}{x = p' * (max-min) + min where p' =
 #' exp(y)/(1+exp(y))}
 #' 
+#' @name logit
 #' @aliases logit logitInv
 #' 
 #' @param x value(s) to be transformed
@@ -42,6 +40,7 @@
 
 
 
+#' @rdname logit
 #' @export
 logit <- function(x, min=0, max=1) {
   
@@ -52,6 +51,7 @@ logit <- function(x, min=0, max=1) {
 
 
 
+#' @rdname logit
 #' @export
 logitInv <- function(x, min=0, max=1) {
   

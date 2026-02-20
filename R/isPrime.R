@@ -25,7 +25,10 @@
 #' isPrime(1:10)
 #' isPrime(c(17, 18, 19))
 #'
-#' @seealso \code{\link{primes}}
+#' 
+#' @family topic. number_theory
+#' @concept number theory
+#' 
 #'
 #' @export
 isPrime <- function(n) {

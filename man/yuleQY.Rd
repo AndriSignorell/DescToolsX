@@ -77,6 +77,7 @@ Yule, G. U. (1912). On the methods of measuring association between two attribut
 }
 \seealso{
 Other topic.association-measures: 
+\code{\link{Association}},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},

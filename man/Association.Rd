@@ -2,12 +2,13 @@
 % Please edit documentation in R/interfaceAssociation.R
 \name{Association}
 \alias{Association}
-\title{Association Measures – Common Interface}
+\title{Association Measures - Common Interface}
 \arguments{
-\item{x}{Either a vector of observations, a two-column object
-(matrix, data.frame or list), or a contingency table.}
+\item{x}{Either a contingency table, a two-column object
+(matrix, data.frame or list), or a vector of observations
+(together with \code{y}).}
 
-\item{y}{Optional second vector. If \code{x} is a contingency table,
+\item{y}{Optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
 \item{conf.level}{Confidence level for confidence intervals.
@@ -76,4 +77,17 @@ University Press
 Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
 John Wiley and Sons
 }
+\seealso{
+Other topic.association-measures: 
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{entropy}()},
+\code{\link{gkGamma}()},
+\code{\link{lambda}()},
+\code{\link{mutInf}()},
+\code{\link{somersDelta}()},
+\code{\link{uncertCoef}()},
+\code{\link{yuleQY}}
+}
+\concept{topic.association-measures}
 \keyword{internal}

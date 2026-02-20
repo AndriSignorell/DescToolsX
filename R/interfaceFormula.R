@@ -1,5 +1,5 @@
 
-#' Formula Interface – Common Arguments
+#' Formula Interface - Common Arguments
 #'
 #' Common formula-based interface shared by multiple functions.
 #'
