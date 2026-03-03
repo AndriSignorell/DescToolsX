@@ -10,9 +10,9 @@ binomCI(
   n,
   conf.level = 0.95,
   sides = c("two.sided", "left", "right"),
-  method = c("wilson", "wilsoncc", "modified wilson", "agresti-coull", "jeffreys",
-    "modified jeffreys", "lik", "blaker", "clopper-pearson", "midp", "waldcc", "wald",
-    "logit", "arcsine", "witting", "pratt"),
+  method = c("wilson", "wilson-cc", "wilson-mod", "wald", "wald-cc", "jeffreys",
+    "jeffreys-mod", "clopper-pearson", "agresti-coull", "pratt", "arcsine", "logit",
+    "witting", "mid-p", "blaker", "likelihood"),
   std_est = TRUE
 )
 
@@ -30,27 +30,29 @@ binomCIn(
 
 \item{n}{number of trials.}
 
-\item{conf.level}{confidence level, defaults to \code{0.95}.}
+\item{conf.level}{confidence level, defaults to 0.95.}
 
 \item{sides}{a character string specifying the side of the confidence
 interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter. \code{"left"} would
-be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\code{"right"}. You can specify just the initial letter. \code{"left"}
+would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
 
-\item{method}{character string specifing which method to use; this can be
-one out of: \code{"wald"}, \code{"wilson"}, \code{"wilsoncc"},
-\code{"agresti-coull"}, \code{"jeffreys"}, \code{"modified wilson"},
-\code{"modified jeffreys"}, \code{"clopper-pearson"}, \code{"arcsine"},
-\code{"logit"}, \code{"witting"} or \code{"pratt"}. Defaults to
-\code{"wilson"}.  Abbreviation of method are accepted. See details in
-\code{\link{binomCI}()}.}
+\item{method}{character string specifying which method to use; this can be
+one out of: \code{"wald"}, \code{"wald-cc"},\code{"wilson"} (default),
+\code{"wilson-cc"},
+\code{"agresti-coull"}, \code{"jeffreys"}, \code{"wilson-mod"},
+\code{"jeffreys-mod"}, \code{"clopper-pearson"}, \code{"arcsine"},
+\code{"logit"}, \code{"witting"}, \code{"pratt"}, \code{"mid-p"},
+\code{"likelihood"} and \code{"blaker"}.  All the methods can be
+asked by \code{".all"}. Abbreviation of method is
+accepted. See details.}
 
 \item{std_est}{logical, specifying if the standard point estimator for the
 proportion value \code{x/n} should be returned (\code{TRUE}, default) or
 the method-specific internally used alternative point estimate
 (\code{FALSE}).}
 
-\item{p}{probability for success, defaults to \code{0.5}.}
+\item{p}{probability for success, defaults to \code{0.5} as worst case.}
 
 \item{width}{the width of the confidence interval}
 
@@ -63,130 +65,139 @@ for estimate, lower and upper confidence interval.
 
 For more than one argument each, a 3-column matrix is returned.
 
-a numeric value
+\code{binomCI()} returns a single numeric value
 }
 \description{
-\code{binomCI} computes confidence intervals for binomial proportions
-according to a large number of the most common proposed methods.
+\code{binomCI()} computes confidence intervals for binomial proportions
+using a wide range of commonly proposed methods.
 
-Returns the necessary sample size to achieve a given width of a binomial
-confidence interval, as calculated by \code{\link{binomCI}()}. The function
-uses \code{\link{uniroot}()} to find a numeric solution.
+\code{binomCIn()} computes the required sample size to obtain a binomial
+confidence interval of a specified width, as calculated by \code{binomCI()}.
+The function uses \code{\link{uniroot}()} to numerically solve for the
+corresponding sample size.
 }
 \details{
-All arguments are being recycled.
+All arguments are vectorized and recycled according to standard R rules.
 
-The \bold{Wald } interval is obtained by inverting the acceptance region of
-the Wald large-sample normal test.
+\strong{Wald}:
+Obtained by inverting the acceptance region of the large-sample normal
+(Wald) test.
 
-The \bold{Wald with continuity correction } interval is obtained by adding
-the term 1/(2*n) to the Wald interval.
+\strong{Wald with continuity correction}:
+A continuity-corrected version of the Wald interval, obtained by adding
+1/(2n) to the standard Wald limits.
 
-The \bold{Wilson} interval, which here is the default method, was
-introduced by Wilson (1927) and is the inversion of the CLT approximation
-to the family of equal tail tests of p = p0.  The Wilson interval is
-recommended by Agresti and Coull (1998) as well as by Brown et al (2001).
-It is also returned as \code{conf.int} from the function
-\code{\link{prop.test}} with the \code{correct} option set to \code{FALSE}.
+\strong{Wilson} (default):
+Introduced by Wilson (1927), this interval is obtained by inverting the
+central limit theorem approximation to the family of equal-tail tests of
+\eqn{p = p_0}. It is recommended by Agresti and Coull (1998) and
+Brown et al. (2001). The same interval is returned as \code{conf.int}
+by \code{\link{prop.test}} with \code{correct = FALSE}.
 
-The \bold{Wilson cc} interval is a modification of the Wilson interval
-adding a continuity correction term. This is returned as \code{conf.int}
-from the function \code{\link{prop.test}} with the \code{correct} option
-set to \code{TRUE}.
+\strong{Wilson with continuity correction}:
+A continuity-corrected modification of the Wilson interval. This
+corresponds to \code{\link{prop.test}} with \code{correct = TRUE}.
 
-The \bold{modified Wilson} interval is a modification of the Wilson
-interval for x close to 0 or n as proposed by Brown et al (2001).
+\strong{Modified Wilson}:
+An adjustment of the Wilson interval for extreme counts
+(i.e., \eqn{x} close to 0 or \eqn{n}), as proposed by Brown et al. (2001).
 
-The \bold{Agresti-Coull} interval was proposed by Agresti and Coull (1998)
-and is a slight modification of the Wilson interval. The Agresti-Coull
-intervals are never shorter than the Wilson intervals; cf. Brown et al
-(2001). The internally used point estimator p-tilde is returned as
-attribute.
+\strong{Agresti-Coull}:
+A simplified modification of the Wilson interval (Agresti and Coull, 1998).
+These intervals are never shorter than the Wilson intervals
+(Brown et al., 2001). The internally used adjusted estimator
+\eqn{\tilde{p}} is returned as an attribute.
 
-The \bold{Jeffreys} interval is an implementation of the equal-tailed
-Jeffreys prior interval as given in Brown et al (2001).
+\strong{Jeffreys}:
+The equal-tailed Bayesian interval based on the Jeffreys prior,
+as described in Brown et al. (2001).
 
-The \bold{modified Jeffreys} interval is a modification of the Jeffreys
-interval for \code{x == 0 | x == 1} and \code{x == n-1 | x == n} as
-proposed by Brown et al (2001).
+\strong{Modified Jeffreys}:
+A modification of the Jeffreys interval for boundary cases
+(e.g., \eqn{x = 0}, \eqn{x = n}, or near-boundary values),
+following Brown et al. (2001).
 
-The \bold{Clopper-Pearson} interval is based on quantiles of corresponding
-beta distributions. This is sometimes also called exact interval.
+\strong{Clopper-Pearson}:
+The so-called exact interval, based on quantiles of the
+corresponding beta distribution.
 
-The \bold{arcsine} interval is based on the variance stabilizing
-distribution for the binomial distribution.
+\strong{Arcsine}:
+Based on the variance-stabilizing arcsine transformation for
+the binomial distribution.
 
-The \bold{logit} interval is obtained by inverting the Wald type interval
-for the log odds.
+\strong{Logit}:
+Obtained by constructing a Wald-type interval on the log-odds scale
+and transforming back to the probability scale.
 
-The \bold{Witting} interval (cf. Beispiel 2.106 in Witting (1985)) uses
-randomization to obtain uniformly optimal lower and upper confidence bounds
-(cf. Satz 2.105 in Witting (1985)) for binomial proportions.
-Repeated calls will yield slightly different interval bounds unless the
-random number generator is fixed.
+\strong{Witting}:
+A randomized procedure (Witting, 1985) providing uniformly optimal
+lower and upper confidence bounds for binomial proportions.
+Repeated calls may yield slightly different results unless the
+random number generator seed is fixed.
 
-The \bold{Pratt} interval is obtained by extremely accurate normal
-approximation. (Pratt 1968)
+\strong{Pratt}:
+Based on a highly accurate normal approximation (Pratt, 1968).
 
-The \bold{Mid-p} approach is used to reduce the conservatism of the
-Clopper-Pearson, which is known to be very pronounced. The method midp
-accumulates the tail areas.  The lower bound \eqn{p_l} is found as the
-solution to the equation
-\deqn{\frac{1}{2} f(x;n,p_l) + (1-F(x;n,p_l)) = \frac{\alpha}{2}}
-where \eqn{f(x;n,p)} denotes the probability mass
-function (pmf) and \eqn{F(x;n,p)} the (cumulative) distribution function of
-the binomial distribution with size \eqn{n} and proportion \eqn{p}
-evaluated at \eqn{x}.  The upper bound \eqn{p_u} is found as the solution
-to the equation
-\deqn{\frac{1}{2} f(x;n,p_u) + F(x-1;n,p_u) = \frac{\alpha}{2}}
-In case x=0 then the lower bound is zero and in case x=n
-then the upper bound is 1.
+\strong{Mid-p}:
+Designed to reduce the conservatism of the Clopper-Pearson interval.
+The lower bound \eqn{p_l} solves
+\deqn{\frac{1}{2} f(x; n, p_l) + (1 - F(x; n, p_l)) = \frac{\alpha}{2}}
+and the upper bound \eqn{p_u} solves
+\deqn{\frac{1}{2} f(x; n, p_u) + F(x - 1; n, p_u) = \frac{\alpha}{2}}
+where \eqn{f} and \eqn{F} denote the binomial probability mass and
+cumulative distribution functions. For \eqn{x = 0} the lower bound
+is set to 0; for \eqn{x = n} the upper bound is set to 1.
 
-The \bold{Likelihood-based} approach is said to be theoretically appealing.
-Confidence intervals are based on profiling the binomial deviance in the
-neighbourhood of the MLE.
+\strong{Likelihood-based}:
+Confidence intervals obtained by profiling the binomial deviance
+in the neighbourhood of the maximum likelihood estimator.
 
-For the \bold{Blaker} method refer to Blaker (2000).
+\strong{Blaker}:
+An exact interval based on the method proposed by Blaker (2000).
 
-For more details we refer to Brown et al (2001) as well as Witting (1985).
+Some methods may produce limits outside the admissible range
+\eqn{[0, 1]}. In such cases, the bounds are truncated to remain
+within the valid parameter space.
 
-Some approaches for the confidence intervals are capable of violating the
-\code{[0, 1]} boundaries and potentially yield negative results or values beyond
-\enumerate{
-\item These would be truncated such as not to exceed the valid range of \code{[0,
-1]}.
+\strong{Which interval should be used?}
+The Wald interval is known to have poor coverage properties,
+particularly for small sample sizes or proportions near 0 or 1.
+In contrast, the Clopper-Pearson interval is conservative and
+often unnecessarily wide. Brown et al. (2001) recommend the
+Wilson or Jeffreys intervals for small sample sizes, and
+the Agresti-Coull, Wilson, or Jeffreys intervals for larger samples,
+as providing more reliable coverage than most alternatives.
+
+For the methods \code{"wilson"}, \code{"wilson-cc"},
+\code{"wilson-mod"}, \code{"agresti-coull"},
+\code{"witting"}, and \code{"arcsine"},
+the internally used adjusted point estimator can be returned
+by setting \code{std_est = FALSE}. These estimators are typically
+slightly shrunk toward 0.5 compared to the usual estimator \eqn{x/n}.
+See the cited literature for further details.
+
+\strong{Required Samplesize: }
+The required sample size for a given confidence interval width depends
+on the assumed population proportion. Since this proportion is often
+unknown at the planning stage of a study, a conservative approach is to
+use the worst-case scenario of \eqn{p = 0.5}, which maximizes the variance
+and therefore yields the largest required sample size. If a more
+accurate estimate of the population proportion is available,
+it can be used to obtain a smaller required sample size for the same
+level of precision.
+}
+\section{Contributors}{
+
+The function is based on earlier work by Matthias Kohl in package \pkg{SLmisc},
+whose original implementation provided the methodological foundation
+The implementations of the Pratt, Mid-p, and Blaker methods are
+based on contributions by Rand R. Wilcox, Michael Hoehle,
+and Ralph Scherer, respectively.
+
+The current implementation was written and is maintained by
+Andri Signorell.
 }
 
-So now, which interval should we use? The Wald interval often has
-inadequate coverage, particularly for small n and values of p close to 0 or
-\enumerate{
-\item Conversely, the Clopper-Pearson Exact method is very conservative and
-tends to produce wider intervals than necessary. Brown et al.  recommends
-the Wilson or Jeffreys methods for small n and Agresti-Coull, Wilson, or
-Jeffreys, for larger n as providing more reliable coverage . than the
-alternatives.
-}
-
-For the methods \code{"wilson"}, \code{"wilsoncc"}, \code{"modified
-wilson"}, \code{"agresti-coull"}, \code{"witting"} and \code{"arcsine"}
-the internally used point estimator for the proportion
-value can be returned (by
-setting \code{std_est = FALSE}). The point estimate typically is slightly
-shifted towards 0.5 compared to the standard estimator.  See the literature
-for the more details.
-
-The required sample sizes for a specific width of confidence interval
-depends on the proportion in the population. This value might be unknown
-right from the start when a study is planned. In such cases the sample size
-needed for a given level of accuracy can be estimated using the worst case
-percentage which is p=50\\%. When a better estimate is available you can you
-can use it to get a smaller interval.
-}
-\note{
-The base of this function once was \code{binomCI()} from the
-\pkg{SLmisc} package. In the meantime, the code has been updated on several
-occasions and it has undergone numerous extensions and bug fixes.
-}
 \examples{
 
 binomCI(x=37, n=43, 
@@ -207,8 +218,8 @@ binomCI(x=c(42, 35, 23, 22), n=43, method="wilson")
 binomCI(x=c(42, 35, 23, 22), n=c(50, 60, 70, 80), method="jeffreys")
 
 # example Table I in Newcombe (1998)
-meths <- c("wald", "waldcc", "wilson", "wilsoncc",
-           "clopper-pearson","midp", "lik")
+meths <- c("wald", "wald-cc", "wilson", "wilson-cc",
+           "clopper-pearson","mid-p", "lik")
 setNamesX(cbind(round(cbind(
     binomCI(81, 263, m=meths)[, c("lci","uci")],
     binomCI(15, 148, m=meths)[,  c("lci","uci")],
@@ -255,29 +266,12 @@ for discrete distributions, \emph{Canadian Journal of Statistics} 28 (4),
 \seealso{
 \code{\link[stats]{binom.test}}, \code{\link[Hmisc]{binconf}}
 
-\code{\link{binomCI}()}
-
 Other topic.categoricalData: 
 \code{\link{binomDiffCI}()},
 \code{\link{binomRatioCI}()},
 \code{\link{multinomCI}()},
 \code{\link{poissonCI}()}
-
-Other topic.categoricalData: 
-\code{\link{binomDiffCI}()},
-\code{\link{binomRatioCI}()},
-\code{\link{multinomCI}()},
-\code{\link{poissonCI}()}
-}
-\author{
-Matthias Kohl \href{mailto:Matthias.Kohl@stamats.de}{Matthias.Kohl@stamats.de}, Rand R. Wilcox (Pratt's
-method), Michael Hoehle \href{mailto:hoehle@math.su.se}{hoehle@math.su.se} (Mid-p), Ralph Scherer
-\href{mailto:shearer.ra76@gmail.com}{shearer.ra76@gmail.com} (Blaker), Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-(interface issues and all the rest)
-
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{categorical data}
 \concept{confidence intervals}
-\concept{confidence-intervals}
 \concept{topic.categoricalData}

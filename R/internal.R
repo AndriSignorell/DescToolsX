@@ -370,3 +370,19 @@
 
 
 
+
+.ci_tails <- function(conf.level, sides) {
+  
+  if (is.na(conf.level))
+    return(NULL)
+  
+  sides <- match.arg(sides, c("two-sided","left","right"))
+  
+  alpha <- 1 - conf.level
+  
+  switch(sides,
+         "two-sided" = list(alpha_l = alpha/2, alpha_u = alpha/2),
+         "left"      = list(alpha_l = alpha,   alpha_u = 0),
+         "right"     = list(alpha_l = 0,       alpha_u = alpha)
+  )
+}

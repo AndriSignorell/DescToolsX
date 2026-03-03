@@ -1,40 +1,28 @@
 
-#' Sample Size for a Given Width of a Binomial Confidence Interval 
-#' 
-#' Returns the necessary sample size to achieve a given width of a binomial
-#' confidence interval, as calculated by \code{\link{binomCI}()}. The function
-#' uses \code{\link{uniroot}()} to find a numeric solution.  
-#' 
-#' The required sample sizes for a specific width of confidence interval
-#' depends on the proportion in the population. This value might be unknown
-#' right from the start when a study is planned. In such cases the sample size
-#' needed for a given level of accuracy can be estimated using the worst case
-#' percentage which is p=50\%. When a better estimate is available you can you
-#' can use it to get a smaller interval. 
-#' 
-#' @param p probability for success, defaults to \code{0.5}. 
+#' Sample Size for a Desired Width of a Binomial Confidence Interval
+#'
+#' \code{binomCIn()} computes the required sample size to obtain a binomial
+#' confidence interval of a specified width, as calculated by \code{binomCI()}.
+#' The function uses \code{\link{uniroot}()} to numerically solve for the
+#' corresponding sample size.
+#'
+#' \strong{Required Samplesize: } 
+#' The required sample size for a given confidence interval width depends
+#' on the assumed population proportion. Since this proportion is often
+#' unknown at the planning stage of a study, a conservative approach is to
+#' use the worst-case scenario of \eqn{p = 0.5}, which maximizes the variance
+#' and therefore yields the largest required sample size. If a more 
+#' accurate estimate of the population proportion is available,
+#' it can be used to obtain a smaller required sample size for the same
+#' level of precision.
+#'  
+#' @param p probability for success, defaults to \code{0.5} as worst case. 
 #' @param width the width of the confidence interval 
 #' @param interval a vector containing the end-points of the interval to be
 #' searched for the root. The defaults are set to \code{c(1, 100000)}. 
-#' @param conf.level confidence level, defaults to \code{0.95}.
-#' @param sides a character string specifying the side of the confidence
-#' interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-#' \code{"right"}. You can specify just the initial letter. \code{"left"} would
-#' be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.
-#' @param method character string specifing which method to use; this can be
-#' one out of: \code{"wald"}, \code{"wilson"}, \code{"wilsoncc"},
-#' \code{"agresti-coull"}, \code{"jeffreys"}, \code{"modified wilson"},
-#' \code{"modified jeffreys"}, \code{"clopper-pearson"}, \code{"arcsine"},
-#' \code{"logit"}, \code{"witting"} or \code{"pratt"}. Defaults to
-#' \code{"wilson"}.  Abbreviation of method are accepted. See details in
-#' \code{\link{binomCI}()}.
-#' @return a numeric value 
-#' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link{binomCI}()} 
 #' 
-#' @family topic.categoricalData
-#' @concept confidence-intervals
-#'  
+#' @return \code{binomCI()} returns a single numeric value 
+#' 
 #' @examples
 #' 
 #' binomCIn(p=0.1, width=0.05, method="pratt")
@@ -44,9 +32,11 @@
 #' @export
 binomCIn <- function(p=0.5, width, interval=c(1, 1e5), 
                      conf.level=0.95, sides="two.sided", method="wilson") {
+  
   uniroot(f = function(n) diff(binomCI(x=p*n, n=n, conf.level=conf.level, 
                                        sides=sides, method=method)[-1]) - width, 
           interval = interval)$root
+  
 }
 
 

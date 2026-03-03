@@ -57,8 +57,8 @@ locf <- function(x) {
   # corrected by 0.99.19, as this didn't handle c(NA, 3.0, NA, 5,5) correctly
   # rep(x[!is.na(x)], diff(c(which(!is.na(x)), length(x)+1)))
   
-  l <- !is.na(x)
-  rep(c(NA, x[l]), diff(c(1L, which(l), length(x) + 1L)))
+  ok <- !is.na(x)
+  rep(c(NA, x[ok]), diff(c(1L, which(ok), length(x) + 1L)))
   
 }
 

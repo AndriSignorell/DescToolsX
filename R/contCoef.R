@@ -27,8 +27,6 @@
 #' applied. In applied research, effect size measures with better inferential 
 #' properties (e.g. Cramer's V) are usually preferred.
 #' 
-#' @author Andri Signorell <andri@@signorell.net>,
-#' 
 #' @references 
 #' Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
 #' Tables, \emph{Proceedings of the Social Statistics Section of the American
@@ -48,30 +46,103 @@
 #' 
 #' # just x and y
 #' with(untable(tab), contCoef(Hair, Eye))
+#'   
+#' 
 #' 
 
 
-# Pearson's Contingency Coefficient
 #' @export
-contCoef <- function(x, y = NULL, conf.level = NA,
-                     method = "boot",
-                     correct = FALSE, ...) {
+contCoef <- function(x, y = NULL, 
+                     correct = FALSE,
+                     conf.level = NA,
+                     sides = c("two.sided","left","right"),
+                     method = c("boot"),
+                     ...) {
   
+  sides  <- match.arg(sides)
+  method <- match.arg(method)
+  
+  # ------------------------------------------
+  # Extract bootstrap arguments from ...
+  # ------------------------------------------
+  dots <- list(...)
+  
+  R    <- dots$R    %||% 5000
+  type <- dots$type %||% "perc"
+  
+  type <- match.arg(type, c("perc","bca"))
+  
+  if (!is.numeric(R) || length(R) != 1L || R <= 0)
+    stop("'R' must be a positive integer.")
+  
+  R <- as.integer(R)
+  
+  # ------------------------------------------
+  # Normalize input
+  # ------------------------------------------
   tab <- .normalizeToConfusion(x, y, mode = "association")
   
-  chisq <- suppressWarnings(chisq.test(tab, correct = FALSE)$statistic)
-  cc <- as.numeric( sqrt( chisq / ( chisq + sum(tab)) ))
+  # ------------------------------------------
+  # Point estimate (C++)
+  # ------------------------------------------
+  cc <- contcoef_table_cpp(tab, correct)
   
-  if(correct) {  # Sakoda's adjusted Pearson's C
-    k <- min(nrow(tab), ncol(tab))
-    cc <- cc / sqrt((k-1) / k)
+  if (is.na(conf.level))
+    return(cc)
+  
+  if (method != "boot")
+    stop("Currently only method = 'boot' is supported.")
+  
+  # ------------------------------------------
+  # Deterministic base seed from R RNG
+  # ------------------------------------------
+  base_seed <- as.integer(sample.int(.Machine$integer.max, 1))
+  
+  alpha <- 1 - conf.level
+  
+  # ------------------------------------------
+  # Percentile bootstrap
+  # ------------------------------------------
+  if (type == "perc") {
+    
+    boot_vals <- bootstrap_contcoef_table_cpp(
+      tab     = tab,
+      R       = R,
+      seed    = base_seed,
+      correct = correct
+    )
+    
+    probs <- switch(
+      sides,
+      two.sided = c(alpha/2, 1 - alpha/2),
+      left      = c(0, conf.level),
+      right     = c(1 - conf.level, 1)
+    )
+    
+    ci <- quantile(boot_vals, probs = probs, names = FALSE)
+    
   }
   
-  if(!is.na(conf.level))
-    # **** ToDo ****: boot ci
-    a <- method 
+  # ------------------------------------------
+  # BCa bootstrap
+  # ------------------------------------------
+  if (type == "bca") {
+    
+    res <- bootstrap_contcoef_table_bca_cpp(
+      tab,
+      R,
+      base_seed,
+      correct,
+      conf.level
+    )
+
+    cc <- res$estimate
+    ci <- c(res$conf.low, res$conf.high)
+    
+  }
   
-  return(cc)
+  
+  return( setNamesX(c(cc,ci), names=c("est","lci","uci")) )
+  
   
 }
-

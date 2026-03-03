@@ -2,128 +2,135 @@
 % Please edit documentation in R/icc.R
 \name{icc}
 \alias{icc}
-\alias{ICC}
-\alias{print.ICC}
-\title{Intraclass Correlations (ICC1, ICC2, ICC3 From Shrout and Fleiss)}
+\title{Intraclass Correlation Coefficient (ICC)}
 \usage{
 icc(
   x,
-  type = c("all", "ICC1", "ICC2", "ICC3", "ICC1k", "ICC2k", "ICC3k"),
+  model = c("twoway", "oneway"),
+  type = c("agreement", "consistency"),
+  unit = c("single", "average"),
   conf.level = NA,
-  na.rm = FALSE
+  sides = c("two.sided", "left", "right"),
+  method = c("anova", "reml", "boot"),
+  na.rm = FALSE,
+  ...
 )
-
-\method{print}{ICC}(x, digits = 3, ...)
 }
 \arguments{
-\item{x}{\eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m
-raters (in columns).}
+\item{x}{A numeric matrix or data frame with subjects in rows and
+raters in columns.}
 
-\item{type}{one out of "all", "ICC1", "ICC2", "ICC3", "ICC1k", "ICC2k",
-"ICC3k". See details.}
+\item{model}{Character string, either \code{"oneway"} or \code{"twoway"}.}
 
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence intervals will be calculated.}
+\item{type}{Character string, either \code{"agreement"} or \code{"consistency"}.}
 
-\item{na.rm}{logical, indicating whether \code{NA} values should be stripped
-before the computation proceeds. If set to \code{TRUE} only the complete
-cases of the ratings will be used. Defaults to \code{FALSE}.}
+\item{unit}{Character string, either \code{"single"} or \code{"average"}.}
 
-\item{digits}{number of digits to use in printing}
+\item{conf.level}{Confidence level of the interval. If \code{NA}
+(default), no confidence interval is computed.}
 
-\item{\dots}{further arguments to be passed to or from methods.}
+\item{sides}{Currently only two-sided intervals are implemented.}
+
+\item{method}{Character string specifying the estimation and CI method.
+Defaults to \code{"anova"}.}
+
+\item{na.rm}{Logical. If \code{TRUE}, complete cases are used.}
+
+\item{\dots}{Additional arguments. For \code{method = "boot"},
+the number of bootstrap resamples can be specified via \code{R}.}
 }
 \value{
-if method is set to "all", then the result will be
+If \code{conf.level = NA}, a numeric scalar with the ICC estimate.
 
-\item{results}{A matrix of 6 rows and 8 columns, including the ICCs, F test,
-p values, and confidence limits} \item{summary}{The anova summary table}
-\item{stats}{The anova statistics} \item{MSW}{Mean Square Within based upon
-the anova}
-
-if a specific type has been defined, the function will first check, whether
-no confidence intervals are requested: if so, the result will be the
-estimate as numeric value\cr\cr else a named numeric vector with 3 elements
-\item{ICCx}{estimate (name is the selected type of coefficient)}
-\item{lwr.ci}{lower confidence interval} \item{upr.ci}{upper confidence
-interval}
+If confidence intervals are requested, a named numeric vector with:
+\itemize{
+\item \code{est} — the ICC estimate
+\item \code{lci} — lower confidence limit
+\item \code{uci} — upper confidence limit
+}
 }
 \description{
-The Intraclass correlation is used as a measure of association when studying
-the reliability of raters.  Shrout and Fleiss (1979) outline 6 different
-estimates, that depend upon the particular experimental design. All are
-implemented and given confidence limits.
+Computes intraclass correlation coefficients (ICC) according to
+Shrout and Fleiss (1979) and McGraw and Wong (1996).
 }
 \details{
-Shrout and Fleiss (1979) consider six cases of reliability of ratings done
-by k raters on n targets.
+The ICC is a measure of reliability for ratings of \eqn{n} subjects
+by \eqn{k} raters. The specific coefficient depends on three design
+decisions:
 
-\tabular{ll}{ ICC1 \tab Each target is rated by a different judge and the
-judges are selected at random.\cr \tab (This is a one-way ANOVA fixed
-effects model and is found by (MSB- MSW)/(MSB+ (nr-1)*MSW)) \cr
-
-ICC2 \tab A random sample of k judges rate each target.  The measure is one
-of absolute agreement \cr \tab in the ratings. Found as (MSB- MSE)/(MSB +
-(nr-1)\emph{MSE + nr}(MSJ-MSE)/nc) \cr ICC3 \tab A fixed set of k judges rate
-each target. There is no generalization to a larger population \cr \tab of
-judges. (MSB - MSE)/(MSB+ (nr-1)*MSE) \cr }
-
-Then, for each of these cases, is reliability to be estimated for a single
-rating or for the average of k ratings?  (The 1 rating case is equivalent to
-the average intercorrelation, the k rating case to the Spearman Brown
-adjusted reliability.)
-
-ICC1 is sensitive to differences in means between raters and is a measure of
-absolute agreement.
-
-ICC2 and ICC3 remove mean differences between judges, but are sensitive to
-interactions of raters by judges.  \cr The difference between ICC2 and ICC3
-is whether raters are seen as fixed or random effects.
-
-ICC1k, ICC2k, ICC3K reflect the means of k raters.
-
-The intraclass correlation is used if raters are all of the same ``class".
-That is, there is no logical way of distinguishing them.  Examples include
-correlations between pairs of twins, correlations between raters.  If the
-variables are logically distinguishable (e.g., different items on a test),
-then the more typical coefficient is based upon the inter-class correlation
-(e.g., a Pearson r) and a statistic such as alpha or omega might be used.
+\itemize{
+\item \strong{model}: one-way or two-way ANOVA design
+\item \strong{type}: agreement or consistency
+\item \strong{unit}: single rating or average of k ratings
 }
-\note{
-The results for the lower and upper Bounds for ICC(2,k) do not match
-those of SPSS 9 or 10, but do match the definitions of Shrout and Fleiss.
-SPSS seems to have been using the formula in McGraw and Wong, but not the
-errata on p 390.  They seem to have fixed it in more recent releases (15).
+
+The six classical Shrout–Fleiss cases are:
+
+\tabular{lll}{
+model \tab type \tab unit \cr
+oneway  \tab agreement   \tab single   (ICC1)  \cr
+oneway  \tab agreement   \tab average  (ICC1k) \cr
+twoway  \tab agreement   \tab single   (ICC2)  \cr
+twoway  \tab agreement   \tab average  (ICC2k) \cr
+twoway  \tab consistency \tab single   (ICC3)  \cr
+twoway  \tab consistency \tab average  (ICC3k) \cr
+}
+
+For \code{model = "oneway"} only \code{type = "agreement"} is meaningful.
+
+Confidence intervals can be computed using different inference methods:
+
+\itemize{
+\item \code{"anova"}: exact F-based intervals following Shrout and Fleiss (1979)
+\item \code{"reml"}: variance components estimated via REML (Wald approximation)
+\item \code{"boot"}: nonparametric percentile bootstrap
+}
+
+ICC(1) is based on a one-way random effects ANOVA and measures
+absolute agreement. ICC(2) assumes raters are randomly sampled
+and generalizable, while ICC(3) assumes a fixed set of raters.
+
+The average forms (k) reflect the reliability of the mean of k raters
+and correspond to the Spearman–Brown adjusted reliability.
+
+The ANOVA-based confidence intervals follow the exact formulas
+of Shrout and Fleiss (1979), including the variance approximation
+for ICC(2).
 }
 \examples{
-
-sf <- matrix(c(
-      9, 2, 5, 8,
-      6, 1, 3, 2,
-      8, 4, 6, 8,
-      7, 1, 2, 6,
-      10,5, 6, 9,
-      6, 2, 4, 7),
+#example from Shrout and Fleiss (1979)
+sf <- matrix(c( 9, 2, 5, 8,    6, 1, 3, 2,    8, 4, 6, 8,     
+                7, 1, 2, 6,   10, 5, 6, 9,    6, 2, 4, 7),
       ncol=4, byrow=TRUE,
-      dimnames=list(paste("S", 1:6, sep=""), paste("J", 1:4, sep=""))
-)
+      dimnames=list(c("S1","S2","S3","S4","S5","S6"), 
+                    c("J1","J2","J3","J4"))  )
 
-sf  #example from Shrout and Fleiss (1979)
 icc(sf)
+
+# get all versions
+args <- formals(icc)[c("model","type","unit")]
+grid <- expand.grid(lapply(args, eval), 
+                    stringsAsFactors = FALSE)[-c(4,8),]
+                    
+out <- apply(grid, 1, function(row)
+  icc(sf,
+      model = row["model"],
+      type  = row["type"],
+      unit  = row["unit"],
+      method = "anova",
+      conf.level = 0.95) )
+      
+t(simplify2array(out))
 
 }
 \references{
-Shrout, P. E., Fleiss, J. L. (1979) Intraclass correlations:
-uses in assessing rater reliability. \emph{ Psychological Bulletin}, 86,
-420-3428.
+Shrout, P. E., Fleiss, J. L. (1979).
+Intraclass correlations: uses in assessing rater reliability.
+\emph{Psychological Bulletin}, 86, 420–428.
 
-McGraw, K. O., Wong, S. P. (1996) Forming inferences about some intraclass
-correlation coefficients.  \emph{ Psychological Methods}, 1, 30-46. + errata
-on page 390.
-
-Revelle, W. (in prep) \emph{ An introduction to psychometric theory with
-applications in R} Springer. (working draft available at
-\url{http://personality-project.org/r/book/}
+McGraw, K. O., Wong, S. P. (1996).
+Forming inferences about some intraclass correlation coefficients.
+\emph{Psychological Methods}, 1, 30–46.
 }
 \seealso{
 Other topic.Agreement: 
@@ -132,10 +139,6 @@ Other topic.Agreement:
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
 \code{\link{krippAlpha}()}
-}
-\author{
-William Revelle \href{mailto:revelle@northwestern.edu}{revelle@northwestern.edu}, some editorial
-amendments Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{Interrater Agreement}
 \concept{Metric Agreement}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/binomDiffCI.R
 \name{binomDiffCI}
 \alias{binomDiffCI}
-\title{Confidence Interval for a Difference of Binomials}
+\title{Confidence Intervals for the Difference of Two Binomial Proportions}
 \usage{
 binomDiffCI(
   x1,
@@ -11,176 +11,195 @@ binomDiffCI(
   n2,
   conf.level = 0.95,
   sides = c("two.sided", "left", "right"),
-  method = c("ac", "wald", "waldcc", "score", "scorecc", "mn", "mee", "blj", "ha", "hal",
-    "jp")
+  method = c("wald", "wald-cc", "agresti-caffo", "exact", "newcombe-score",
+    "newcombe-score-cc", "miettinen-nurminen", "mee-farrington-manning",
+    "brown-li-jeffreys", "hauck-anderson", "beal", "haldane", "jeffreys-perks")
 )
 }
 \arguments{
-\item{x1}{number of successes for the first group.}
+\item{x1}{Number of successes in the first group.}
 
-\item{n1}{number of trials for the first group.}
+\item{n1}{Number of trials in the first group.}
 
-\item{x2}{number of successes for the second group.}
+\item{x2}{Number of successes in the second group.}
 
-\item{n2}{number of trials for the second group.}
+\item{n2}{Number of trials in the second group.}
 
-\item{conf.level}{confidence level, defaults to 0.95.}
+\item{conf.level}{Confidence level, default is 0.95.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter. \code{"left"} would
-be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\item{sides}{A character string specifying the type of confidence interval:
+\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
+Partial matching is allowed.}
 
-\item{method}{one of \code{"wald"}, \code{"waldcc"}, \code{"ac"},
-\code{"score"}, \code{"scorecc"}, \code{"mn"}, \code{"mee"}, \code{"blj"},
-\code{"ha"}, \code{"hal"}, \code{"jp"}.}
+\item{method}{One of:
+\code{"wald"},
+\code{"wald-cc"},
+\code{"agresti-caffo"},
+\code{"exact"},
+\code{"newcombe-score"},
+\code{"newcombe-score-cc"},
+\code{"miettinen-nurminen"},
+\code{"mee-farrington-manning"},
+\code{"brown-li-jeffreys"},
+\code{"hauck-anderson"},
+\code{"beal"},
+\code{"haldane"},
+\code{"jeffreys-perks"}.}
 }
 \value{
-A matrix with 3 columns containing the estimate, the lower and the
-upper confidence intervall.
+A matrix with three columns containing the estimate of the
+difference and the lower and upper confidence limits.
 }
 \description{
-Several confidence intervals for the difference between proportions are
-available, but they can produce markedly different results. Traditional
-approaches, such as the Wald interval do not perform well unless the sample
-size is large. Better intervals are available. These include the
-Agresti/Caffo method (2000), Newcombe Score method (1998) and more computing
-intensive ones as by Miettinen and Nurminen (1985) or Mee (1984). The latter
-ones are favoured by Newcombe (when forced to choose between a rock and a
-hard place).
+Computes confidence intervals for the difference between two independent
+binomial proportions. A variety of classical and modern methods are
+available, which may yield substantially different results, particularly
+for small sample sizes or extreme proportions.
 }
 \details{
-All arguments are being recycled.
+All arguments are vectorized and recycled according to standard R rules.
 
-We estimate the difference between proportions using the sample proportions:
-\deqn{\hat{\delta} =\hat{p}_1 - \hat{p}_2 = \frac{x_1}{n_1} - \frac{x_2}{n_2}}
+The difference in proportions is estimated by
+\deqn{
+\hat{\delta} = \hat{p}_1 - \hat{p}_2 =
+\frac{x_1}{n_1} - \frac{x_2}{n_2}.
+}
 
-The traditional \bold{Wald } confidence interval for the difference of two
-proportions \eqn{\delta} is based on the asymptotic normal distribution of
-\eqn{\hat{\delta}}.
+\strong{Wald}:
+The traditional large-sample normal approximation interval based on the
+asymptotic distribution of \eqn{\hat{\delta}}.
 
-The \bold{Corrected Wald} interval uses a continuity correction included in
-the test statistic. The continuity correction is subtracted from the
-numerator of the test statistic if the numerator is greater than zero;
-otherwise, the continuity correction is added to the numerator. The value of
-the continuity correction is (1/n1 + 1/n2)/2.
+\strong{Wald with continuity correction}:
+A continuity-corrected version of the Wald interval. The correction
+term \eqn{(1/n_1 + 1/n_2)/2} is added or subtracted from the test statistic
+depending on its sign.
 
-The \bold{Agresti-Caffo} (code \code{"ac"}) is equal to the Wald interval
-with the adjustment according to Agresti, Caffo (2000) for difference in
-proportions and independent samples. It adds 1 to x1 and x2 and adds 2 to n1
-and n2 and performs surpringly well.
+\strong{Agresti-Caffo}:
+A simple adjustment of the Wald interval (Agresti and Caffo, 2000) obtained
+by adding one success and one failure to each group. This approach performs
+well in many practical situations.
 
-\bold{Newcombe} (code \code{"scorecc"}) proposed a confidence interval for
-the difference based on the Wilson score confidence interval for a single
-proportion. A variant uses a continuity correction for the Wilson interval
-(code \code{"scorecc"}).
+\strong{Newcombe score}:
+Based on inverting the Wilson score interval for each proportion and
+combining them to obtain an interval for the difference (Newcombe, 1998).
 
-\bold{Miettinen and Nurminen} showed that the restricted maximum likelihood
-estimates for p1 and p2 can be obtained by solving a cubic equation and gave
-unique closed-form expressions for them. The Miettinen-Nurminen confidence
-interval is returned with code \code{"mn"}.
+\strong{Newcombe score with continuity correction}:
+A continuity-corrected variant of the Newcombe score method.
 
-The \bold{Mee} (code \code{"mee"}) interval proposed by Mee (1984) and
-Farrington-Manning (1990) is using the same maximum likelihood estimators as
-Miettinen-Nurminen but with another correcting factor.
+\strong{Miettinen-Nurminen}:
+Based on restricted maximum likelihood estimation obtained by solving a
+cubic equation (Miettinen and Nurminen, 1985). Often recommended for small
+to moderate sample sizes.
 
-The \bold{Brown-Li-Jeffreys} (code \code{"blj"}) interval was proposed by
-Brown and Li (2005).
+\strong{Mee-Farrington-Manning}:
+Uses the same maximum likelihood estimators as the
+Miettinen-Nurminen method but applies a different correction factor
+(Mee, 1984; Farrington and Manning, 1990).
 
-The \bold{Hauck-Anderson} (code \code{"ha"}) interval was proposed by
-Hauck-Anderson (1986).
+\strong{Brown-Li-Jeffreys}:
+A method proposed by Brown and Li (2005).
 
-The \bold{Haldane} (code \code{"hal"}) interval is described in Newcombe
-(1998) and so is the \bold{Jeffreys-Perks} (code \code{"jp"}).
+\strong{Hauck-Anderson}:
+A large-sample method described by Hauck and Anderson (1986).
 
-Some approaches for the confidence intervals can potentially yield negative
-results or values beyond \verb{[-1, 1]}. These would be reset such as not to exceed
-the range of \verb{[-1, 1]}.
+\strong{Beal}:
+An asymptotic method intended for use with small samples (Beal, 1987).
 
-Which of the methods to use is currently still the subject of lively
-discussion and has not yet been conclusively clarified. See e.g. Fagerland
-(2011).
+\strong{Haldane}:
+Described in Newcombe (1998), based on adding 0.5 to all cells.
 
-The general consensus is that the most widely taught method
-\code{method="wald"} is inappropriate in many situations and should not be
-used. Recommendations seem to converge around the Miettinen-Nurminen based
-methods (\code{method="mn"}).
+\strong{Jeffreys-Perks}:
+Also described in Newcombe (1998), based on Bayesian-type adjustments.
+
+Some methods may produce limits outside the admissible parameter space
+\eqn{[-1, 1]}. In such cases, interval bounds are truncated to remain within
+the valid range.
+
+The choice of method remains an active topic of discussion. The Wald
+interval is known to perform poorly in many practical situations.
+Reviews such as Fagerland et al. (2011) provide comparative evaluations and
+recommendations.
+
+Miettinen-Nurminen might be a sensible default. Newcombe-Score is almost equivalent.
 }
 \examples{
 
 x1 <- 56; n1 <- 70; x2 <- 48; n2 <- 80
-xci <- binomDiffCI(x1, n1, x2, n2, method=c("wald", "waldcc", "ac", "score",
-            "scorecc", "mn", "mee", "blj", "ha"))
+meths <- c("wald", "wald-cc", "agresti-caffo", 
+                    "newcombe-score", "newcombe-score-cc", 
+                    "miettinen-nurminen", "mee-farrington-manning", 
+                    "brown-li-jeffreys", "hauck-anderson")
+                    
+xci <- binomDiffCI(x1, n1, x2, n2, method=meths)
 fm(xci[,-1], digits=4)
 
 x1 <- 9; n1 <- 10; x2 <- 3; n2 <- 10
-yci <- binomDiffCI(x1, n1, x2, n2, method=c("wald", "waldcc", "ac", "score",
-            "scorecc", "mn", "mee", "blj", "ha"))
+yci <- binomDiffCI(x1, n1, x2, n2, method=meths)
 fm(yci[, -1], digits=4)
 
 # https://www.lexjansen.com/wuss/2016/127_Final_Paper_PDF.pdf, page 9
 setNamesX(round(
   binomDiffCI(56, 70, 48, 80, 
-              method=c("wald", "waldcc", "hal", 
-                       "jp", "mee",
-                       "mn", "score", "scorecc", 
-                       "ha", "ac", "blj"))[,-1], 4),
+              method=c("wald", "wald-cc", "haldane", 
+                       "jeffreys-perks", "mee-farrington-manning",
+                       "miettinen-nurminen", "newcombe-score", 
+                       "newcombe-score-cc", 
+                       "hauck-anderson", "agresti-caffo" ,
+                       "brown-li-jeffreys")
+  )[,c(2,3)], 4),
   rownames=c("1. Wald, no CC", "2. Wald, CC", "3. Haldane", "4. Jeffreys-Perks",
              "5. Mee", "6. Miettinen-Nurminen", "10. Score, no CC", "11. Score, CC",
              "12. Hauck-Andersen", "13. Agresti-Caffo", "16. Brown-Li"))
 
- 
 }
 \references{
-Agresti, A, Caffo, B (2000) Simple and effective confidence
-intervals for proportions and difference of proportions result from adding
-two successes and two failures. \emph{The American Statistician} 54 (4),
-280-288.
+Agresti A, Caffo B (2000).
+Simple and effective confidence intervals for proportions and difference of
+proportions result from adding two successes and two failures.
+\emph{The American Statistician}, 54(4), 280-288.
 
-Beal, S L (1987) Asymptotic Confidence Intervals for the Difference Between
-Two Binomial Parameters for Use with Small Samples; \emph{Biometrics}, 43,
-941-950.
+Beal SL (1987).
+Asymptotic confidence intervals for the difference between two binomial
+parameters for use with small samples.
+\emph{Biometrics}, 43, 941-950.
 
-Brown L, Li X (2005) Confidence intervals for two sample binomial
-distribution, \emph{Journal of Statistical Planning and Inference}, 130(1),
-359-375.
+Brown L, Li X (2005).
+Confidence intervals for two sample binomial distribution.
+\emph{Journal of Statistical Planning and Inference}, 130(1), 359-375.
 
-Hauck WW, Anderson S. (1986) A comparison of large-sample confidence
-interval methods for the difference of two binomial probabilities \emph{The
-American Statistician} 40(4): 318-322.
+Fagerland MW, Lydersen S, Laake P (2011).
+Recommended confidence intervals for two independent binomial proportions.
+\emph{Statistical Methods in Medical Research}.
 
-Farrington, C. P. and Manning, G. (1990) Test Statistics and Sample Size
-Formulae for Comparative Binomial Trials with Null Hypothesis of Non-zero
-Risk Difference or Non-unity Relative Risk \emph{Statistics in Medicine}, 9,
-1447-1454.
+Farrington CP, Manning G (1990).
+Test statistics and sample size formulae for comparative binomial trials.
+\emph{Statistics in Medicine}, 9, 1447-1454.
 
-Mee RW (1984) Confidence bounds for the difference between two
-probabilities, \emph{Biometrics} 40:1175-1176 .
+Hauck WW, Anderson S (1986).
+A comparison of large-sample confidence interval methods for the difference
+of two binomial probabilities.
+\emph{The American Statistician}, 40(4), 318-322.
 
-Miettinen OS, Nurminen M. (1985) Comparative analysis of two rates.
-\emph{Statistics in Medicine} 4, 213-226.
+Mee RW (1984).
+Confidence bounds for the difference between two probabilities.
+\emph{Biometrics}, 40, 1175-1176.
 
-Newcombe, R G (1998). Interval Estimation for the Difference Between
-Independent Proportions: Comparison of Eleven Methods. \emph{Statistics in
-Medicine}, 17, 873--890.
+Miettinen OS, Nurminen M (1985).
+Comparative analysis of two rates.
+\emph{Statistics in Medicine}, 4, 213-226.
 
-Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence
-intervals for two independent binomial proportions, \emph{Statistical
-Methods in Medical Research} 0(0) 1-31
+Newcombe RG (1998).
+Interval estimation for the difference between independent proportions.
+\emph{Statistics in Medicine}, 17, 873-890.
 }
 \seealso{
-\code{\link{binomCI}}, \code{\link{multinomCI}},
-\code{\link{binom.test}}, \code{\link{prop.test}},
-\code{\link{binomRatioCI}}
+\code{\link{binom.test}}, \code{\link{prop.test}}
 
 Other topic.categoricalData: 
 \code{\link{binomCI}()},
 \code{\link{binomRatioCI}()},
 \code{\link{multinomCI}()},
 \code{\link{poissonCI}()}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{categorical data}
 \concept{confidence intervals}

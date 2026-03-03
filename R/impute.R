@@ -1,52 +1,77 @@
 
 #' Impute Missing Values in a Vector
 #'
-#' Replaces missing values in a vector using a specified summary function.
+#' Replaces missing values (`NA`) in a vector by either
+#' a summary statistic computed from the data (e.g. mean, median)
+#' or a user-supplied scalar value.
 #'
-#' @param x A vector in which missing values (\code{NA}) should be imputed.
-#' @param FUN A function or character string specifying the summary
-#'   function used to compute the replacement value. The function must
-#'   accept \code{x} as its first argument. By default, the median
-#'   (with \code{na.rm = TRUE}) is used.
+#' If `FUN` is a function, it is applied to `x` to compute
+#' a single imputation value. If the function accepts an argument
+#' named `na.rm`, it will be passed automatically.
+#'
+#' Alternatively, `FUN` can be a single scalar value, which will
+#' directly replace all missing values.
+#'
+#' @param x An atomic vector.
+#' @param FUN A function used to compute the imputation value,
+#'   or a single scalar value. Default is \code{median}.
+#' @param na.rm Logical. Should missing values be removed before
+#'   computing the summary statistic? Default is \code{TRUE}.
+#' @param ... Additional arguments passed to \code{FUN}.
+#'
+#' @return A vector of the same length and type as \code{x},
+#'   with missing values replaced.
 #'
 #' @details
-#' If \code{FUN} is a function, it is applied to \code{x} to compute
-#' a single replacement value. All missing values in \code{x} are then
-#' replaced with this value.
+#' If \code{FUN} is a function, it must return a single value.
+#' An error is thrown if the returned value is not scalar.
 #'
-#' If \code{FUN} is a character string, it must represent a valid
-#' R expression involving \code{x}, e.g. \code{"mean(x, na.rm = TRUE)"}.
+#' If \code{FUN} does not accept an argument named \code{na.rm},
+#' the function is called again without it.
 #'
-#' @return A vector of the same type and length as \code{x},
-#'   with missing values replaced.
-#'   
-#' @family topic.dataProcessing
+#' @family  topic.dataProcessing
 #' @concept data processing
 #' @concept imputation
 #'
+#' @seealso For direct value replacement see [DescToolsViz::naReplace()].
+#' 
 #' @examples
-#' x <- c(1, 2, NA, 4)
+#' x <- c(2, 3, NA, 5, 9)
 #'
-#' # Default (median)
+#' # Default: median(x, na.rm=TRUE)
 #' impute(x)
 #'
-#' # Using mean
-#' impute(x, function(x) mean(x, na.rm = TRUE))
+#' # Using mean(x, na.rm=TRUE)
+#' impute(x, mean)
 #'
-#' # Using a character expression
-#' impute(x, "mean(x, na.rm = TRUE)")
+#' # Using trimmed mean
+#' impute(x, function(x) meanX(x, trim=0.3, na.rm = TRUE))
+#'
+#' # Constant replacement
+#' impute(x, 99)
 #' 
 
 
-
 #' @export
-impute <- function(x, FUN = function(x) median(x, na.rm=TRUE)) {
+impute <- function(x, FUN = median, na.rm = TRUE, ...) {
   
-  if(is.function(FUN)) {
-    fct <- FUN
-    FUN <- "fct"
-    FUN <- gettextf("%s(x)", FUN)
+  if (is.function(FUN)) {
+    
+    value <- tryCatch(
+      FUN(x, na.rm = na.rm, ...),
+      error = function(e) FUN(x, ...)
+    )
+    
+  } else if (length(FUN) == 1) {
+    
+    value <- FUN
+    
+  } else {
+    stop("FUN must be a function or a scalar value.")
   }
   
-  return(eval(parse(text = gettextf("replace(x, is.na(x), %s)", FUN))))
+  if (length(value) != 1)
+    stop("Imputation value must be scalar.")
+  
+  replace(x, is.na(x), value)
 }

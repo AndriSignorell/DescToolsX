@@ -161,7 +161,8 @@ desc <- Desc
   
   if (!identical(meta$main, NA)) {
     
-    header <- gettextf("%s (%s)", meta$main, naReplace(meta$class, "-")) 
+    header <- gettextf("%s (%s)", meta$main, 
+                       paste(naReplace(meta$class, "-"), collapse=", ")) 
     
     if (.has_color()) 
       header <- cli::style_bold(header)

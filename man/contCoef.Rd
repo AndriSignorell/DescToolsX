@@ -5,7 +5,15 @@
 \alias{ContCoef}
 \title{Pearson's Contingency Coefficient}
 \usage{
-contCoef(x, y = NULL, conf.level = NA, method = "boot", correct = FALSE, ...)
+contCoef(
+  x,
+  y = NULL,
+  correct = FALSE,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  method = c("boot"),
+  ...
+)
 }
 \arguments{
 \item{x}{Either a contingency table, a two-column object
@@ -15,14 +23,17 @@ contCoef(x, y = NULL, conf.level = NA, method = "boot", correct = FALSE, ...)
 \item{y}{Optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
+\item{correct}{logical (default \code{FALSE}), indicates, whether
+Sakoda's adjusted Pearson's C should be returned.}
+
 \item{conf.level}{Confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
+\item{sides}{Alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+
 \item{method}{string defining the method to calculate confidence intervals
 for the contingency coefficient. Only \code{"boot"} implemented.}
-
-\item{correct}{logical (default \code{FALSE}), indicates, whether
-Sakoda's adjusted Pearson's C should be returned.}
 
 \item{...}{Additional arguments passed to internal helper functions,
 such as bootstrap routines (\code{\link[boot]{boot}}) or
@@ -55,6 +66,8 @@ contCoef(tab)
 
 # just x and y
 with(untable(tab), contCoef(Hair, Eye))
+  
+
 
 }
 \references{
@@ -75,9 +88,6 @@ Other topic.associationMeasures:
 \code{\link{somersDelta}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net},
 }
 \concept{association}
 \concept{contingency-tables}

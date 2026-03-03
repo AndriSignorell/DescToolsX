@@ -129,11 +129,11 @@ Description: This is the successor to DescTools, completely redesigned, declutte
 Encoding: UTF-8
 Depends: R (>= 4.2.0), DescToolsViz
 License: GPL (>= 2)
-LinkingTo: Rcpp, RcppArmadillo 
+LinkingTo: Rcpp, RcppArmadillo, RcppParallel  
 LazyData: yes
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: goftest, testthat (>= 3.0.0), R.rsp
 Config/testthat/edition: 3
-Imports: stats, boot, rstudioapi, cli, gld, data.table, haven, mvtnorm, withr
+Imports: stats, boot, rstudioapi, cli, gld, data.table, haven, mvtnorm, lme4, withr
 VignetteBuilder: R.rsp

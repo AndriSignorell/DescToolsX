@@ -69,17 +69,14 @@ assocs <- function(x, conf.level = 0.95, out = c("def", "ext")){
   out <- match.arg(out)
   # if(is.null(verbose)) verbose <- "3"
   # if(verbose != "3") conf.level <- NA
-  
-  
-  res <- rbind(
-    # "Phi Coeff." = c(Phi(x), NA, NA)
-    "Contingency Coeff." = c(contCoef(x), NA, NA)
-  )
-  
+
   if(is.na(conf.level)){
+    res <- rbind("Contingency Coeff." = c(contCoef(x), NA, NA))
     res <- rbind(res, "Cramer V" = c(cramerV(x), NA, NA))
     res <- rbind(res, "Kendall Tau-b" = c(kendallTauB(x), NA, NA))
+    
   } else {
+    res <- rbind("Contingency Coeff." = contCoef(x, conf.level=conf.level))
     res <- rbind(res, "Cramer V" = cramerV(x, conf.level=conf.level))
     res <- rbind(res, "Kendall Tau-b" = c(kendallTauB(x, conf.level=conf.level)))
   }

@@ -1,127 +1,144 @@
 
-#' Confidence Interval for a Difference of Binomials
+#' Confidence Intervals for the Difference of Two Binomial Proportions
+#'
+#' Computes confidence intervals for the difference between two independent
+#' binomial proportions. A variety of classical and modern methods are
+#' available, which may yield substantially different results, particularly
+#' for small sample sizes or extreme proportions.
+#'
+#' All arguments are vectorized and recycled according to standard R rules.
+#'
+#' The difference in proportions is estimated by
+#' \deqn{
+#' \hat{\delta} = \hat{p}_1 - \hat{p}_2 =
+#' \frac{x_1}{n_1} - \frac{x_2}{n_2}.
+#' }
+#'
+#' \strong{Wald}:
+#' The traditional large-sample normal approximation interval based on the
+#' asymptotic distribution of \eqn{\hat{\delta}}.
+#'
+#' \strong{Wald with continuity correction}:
+#' A continuity-corrected version of the Wald interval. The correction
+#' term \eqn{(1/n_1 + 1/n_2)/2} is added or subtracted from the test statistic
+#' depending on its sign.
+#'
+#' \strong{Agresti-Caffo}:
+#' A simple adjustment of the Wald interval (Agresti and Caffo, 2000) obtained
+#' by adding one success and one failure to each group. This approach performs
+#' well in many practical situations.
+#'
+#' \strong{Newcombe score}:
+#' Based on inverting the Wilson score interval for each proportion and
+#' combining them to obtain an interval for the difference (Newcombe, 1998).
+#'
+#' \strong{Newcombe score with continuity correction}:
+#' A continuity-corrected variant of the Newcombe score method.
+#'
+#' \strong{Miettinen-Nurminen}:
+#' Based on restricted maximum likelihood estimation obtained by solving a
+#' cubic equation (Miettinen and Nurminen, 1985). Often recommended for small
+#' to moderate sample sizes.
+#'
+#' \strong{Mee-Farrington-Manning}:
+#' Uses the same maximum likelihood estimators as the
+#' Miettinen-Nurminen method but applies a different correction factor
+#' (Mee, 1984; Farrington and Manning, 1990).
+#'
+#' \strong{Brown-Li-Jeffreys}:
+#' A method proposed by Brown and Li (2005).
+#'
+#' \strong{Hauck-Anderson}:
+#' A large-sample method described by Hauck and Anderson (1986).
+#'
+#' \strong{Beal}:
+#' An asymptotic method intended for use with small samples (Beal, 1987).
+#'
+#' \strong{Haldane}:
+#' Described in Newcombe (1998), based on adding 0.5 to all cells.
+#'
+#' \strong{Jeffreys-Perks}:
+#' Also described in Newcombe (1998), based on Bayesian-type adjustments.
+#'
+#' Some methods may produce limits outside the admissible parameter space
+#' \eqn{[-1, 1]}. In such cases, interval bounds are truncated to remain within
+#' the valid range.
+#'
+#' The choice of method remains an active topic of discussion. The Wald
+#' interval is known to perform poorly in many practical situations.
+#' Reviews such as Fagerland et al. (2011) provide comparative evaluations and
+#' recommendations.
 #' 
-#' Several confidence intervals for the difference between proportions are
-#' available, but they can produce markedly different results. Traditional
-#' approaches, such as the Wald interval do not perform well unless the sample
-#' size is large. Better intervals are available. These include the
-#' Agresti/Caffo method (2000), Newcombe Score method (1998) and more computing
-#' intensive ones as by Miettinen and Nurminen (1985) or Mee (1984). The latter
-#' ones are favoured by Newcombe (when forced to choose between a rock and a
-#' hard place). 
-#' 
-#' All arguments are being recycled.
-#' 
-#' We estimate the difference between proportions using the sample proportions:
-#' \deqn{\hat{\delta} =\hat{p}_1 - \hat{p}_2 = \frac{x_1}{n_1} - \frac{x_2}{n_2}}
-#' 
-#' The traditional \bold{Wald } confidence interval for the difference of two
-#' proportions \eqn{\delta} is based on the asymptotic normal distribution of
-#' \eqn{\hat{\delta}}.
-#' 
-#' The \bold{Corrected Wald} interval uses a continuity correction included in
-#' the test statistic. The continuity correction is subtracted from the
-#' numerator of the test statistic if the numerator is greater than zero;
-#' otherwise, the continuity correction is added to the numerator. The value of
-#' the continuity correction is (1/n1 + 1/n2)/2.
-#' 
-#' The \bold{Agresti-Caffo} (code \code{"ac"}) is equal to the Wald interval
-#' with the adjustment according to Agresti, Caffo (2000) for difference in
-#' proportions and independent samples. It adds 1 to x1 and x2 and adds 2 to n1
-#' and n2 and performs surpringly well.
-#' 
-#' \bold{Newcombe} (code \code{"scorecc"}) proposed a confidence interval for
-#' the difference based on the Wilson score confidence interval for a single
-#' proportion. A variant uses a continuity correction for the Wilson interval
-#' (code \code{"scorecc"}).
-#' 
-#' \bold{Miettinen and Nurminen} showed that the restricted maximum likelihood
-#' estimates for p1 and p2 can be obtained by solving a cubic equation and gave
-#' unique closed-form expressions for them. The Miettinen-Nurminen confidence
-#' interval is returned with code \code{"mn"}.
-#' 
-#' The \bold{Mee} (code \code{"mee"}) interval proposed by Mee (1984) and
-#' Farrington-Manning (1990) is using the same maximum likelihood estimators as
-#' Miettinen-Nurminen but with another correcting factor.
-#' 
-#' The \bold{Brown-Li-Jeffreys} (code \code{"blj"}) interval was proposed by
-#' Brown and Li (2005).
-#' 
-#' The \bold{Hauck-Anderson} (code \code{"ha"}) interval was proposed by
-#' Hauck-Anderson (1986).
-#' 
-#' The \bold{Haldane} (code \code{"hal"}) interval is described in Newcombe
-#' (1998) and so is the \bold{Jeffreys-Perks} (code \code{"jp"}).
-#' 
-#' Some approaches for the confidence intervals can potentially yield negative
-#' results or values beyond \verb{[-1, 1]}. These would be reset such as not to exceed
-#' the range of \verb{[-1, 1]}.
-#' 
-#' Which of the methods to use is currently still the subject of lively
-#' discussion and has not yet been conclusively clarified. See e.g. Fagerland
-#' (2011).
-#' 
-#' The general consensus is that the most widely taught method
-#' \code{method="wald"} is inappropriate in many situations and should not be
-#' used. Recommendations seem to converge around the Miettinen-Nurminen based
-#' methods (\code{method="mn"}).
-#' 
-#' @param x1 number of successes for the first group.
-#' @param n1 number of trials for the first group.
-#' @param x2 number of successes for the second group.
-#' @param n2 number of trials for the second group.
-#' @param conf.level confidence level, defaults to 0.95.
-#' @param sides a character string specifying the side of the confidence
-#' interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-#' \code{"right"}. You can specify just the initial letter. \code{"left"} would
-#' be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.
-#' @param method one of \code{"wald"}, \code{"waldcc"}, \code{"ac"},
-#' \code{"score"}, \code{"scorecc"}, \code{"mn"}, \code{"mee"}, \code{"blj"},
-#' \code{"ha"}, \code{"hal"}, \code{"jp"}. 
-#'  
-#' @return A matrix with 3 columns containing the estimate, the lower and the
-#' upper confidence intervall.
-#' 
-#' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{binomCI}}, \code{\link{multinomCI}},
-#' \code{\link{binom.test}}, \code{\link{prop.test}},
-#' \code{\link{binomRatioCI}} 
-#' @references Agresti, A, Caffo, B (2000) Simple and effective confidence
-#' intervals for proportions and difference of proportions result from adding
-#' two successes and two failures. \emph{The American Statistician} 54 (4),
-#' 280-288.
-#' 
-#' Beal, S L (1987) Asymptotic Confidence Intervals for the Difference Between
-#' Two Binomial Parameters for Use with Small Samples; \emph{Biometrics}, 43,
-#' 941-950.
-#' 
-#' Brown L, Li X (2005) Confidence intervals for two sample binomial
-#' distribution, \emph{Journal of Statistical Planning and Inference}, 130(1),
-#' 359-375.
-#' 
-#' Hauck WW, Anderson S. (1986) A comparison of large-sample confidence
-#' interval methods for the difference of two binomial probabilities \emph{The
-#' American Statistician} 40(4): 318-322.
-#' 
-#' Farrington, C. P. and Manning, G. (1990) Test Statistics and Sample Size
-#' Formulae for Comparative Binomial Trials with Null Hypothesis of Non-zero
-#' Risk Difference or Non-unity Relative Risk \emph{Statistics in Medicine}, 9,
-#' 1447-1454.
-#' 
-#' Mee RW (1984) Confidence bounds for the difference between two
-#' probabilities, \emph{Biometrics} 40:1175-1176 .
-#' 
-#' Miettinen OS, Nurminen M. (1985) Comparative analysis of two rates.
-#' \emph{Statistics in Medicine} 4, 213-226.
-#' 
-#' Newcombe, R G (1998). Interval Estimation for the Difference Between
-#' Independent Proportions: Comparison of Eleven Methods. \emph{Statistics in
-#' Medicine}, 17, 873--890.
-#' 
-#' Fagerland M W, Lydersen S and Laake P (2011) Recommended confidence
-#' intervals for two independent binomial proportions, \emph{Statistical
-#' Methods in Medical Research} 0(0) 1-31
-#' 
+#' Miettinen-Nurminen might be a sensible default. Newcombe-Score is almost equivalent.
+#'
+#' @param x1 Number of successes in the first group.
+#' @param n1 Number of trials in the first group.
+#' @param x2 Number of successes in the second group.
+#' @param n2 Number of trials in the second group.
+#' @param conf.level Confidence level, default is 0.95.
+#' @param sides A character string specifying the type of confidence interval:
+#'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
+#'   Partial matching is allowed.
+#' @param method One of:
+#'   \code{"wald"},
+#'   \code{"wald-cc"},
+#'   \code{"agresti-caffo"},
+#'   \code{"exact"},
+#'   \code{"newcombe-score"},
+#'   \code{"newcombe-score-cc"},
+#'   \code{"miettinen-nurminen"},
+#'   \code{"mee-farrington-manning"},
+#'   \code{"brown-li-jeffreys"},
+#'   \code{"hauck-anderson"},
+#'   \code{"beal"},
+#'   \code{"haldane"},
+#'   \code{"jeffreys-perks"}.
+#'
+#' @return A matrix with three columns containing the estimate of the
+#' difference and the lower and upper confidence limits.
+#'
+#' @references
+#' Agresti A, Caffo B (2000).
+#' Simple and effective confidence intervals for proportions and difference of
+#' proportions result from adding two successes and two failures.
+#' \emph{The American Statistician}, 54(4), 280-288.
+#'
+#' Beal SL (1987).
+#' Asymptotic confidence intervals for the difference between two binomial
+#' parameters for use with small samples.
+#' \emph{Biometrics}, 43, 941-950.
+#'
+#' Brown L, Li X (2005).
+#' Confidence intervals for two sample binomial distribution.
+#' \emph{Journal of Statistical Planning and Inference}, 130(1), 359-375.
+#'
+#' Fagerland MW, Lydersen S, Laake P (2011).
+#' Recommended confidence intervals for two independent binomial proportions.
+#' \emph{Statistical Methods in Medical Research}.
+#'
+#' Farrington CP, Manning G (1990).
+#' Test statistics and sample size formulae for comparative binomial trials.
+#' \emph{Statistics in Medicine}, 9, 1447-1454.
+#'
+#' Hauck WW, Anderson S (1986).
+#' A comparison of large-sample confidence interval methods for the difference
+#' of two binomial probabilities.
+#' \emph{The American Statistician}, 40(4), 318-322.
+#'
+#' Mee RW (1984).
+#' Confidence bounds for the difference between two probabilities.
+#' \emph{Biometrics}, 40, 1175-1176.
+#'
+#' Miettinen OS, Nurminen M (1985).
+#' Comparative analysis of two rates.
+#' \emph{Statistics in Medicine}, 4, 213-226.
+#'
+#' Newcombe RG (1998).
+#' Interval estimation for the difference between independent proportions.
+#' \emph{Statistics in Medicine}, 17, 873-890.
+#'
+#' @seealso \code{\link{binom.test}}, \code{\link{prop.test}}
+#'
 #' @family topic.categoricalData
 #' @concept categorical data
 #' @concept confidence intervals
@@ -129,27 +146,34 @@
 #' @examples
 #' 
 #' x1 <- 56; n1 <- 70; x2 <- 48; n2 <- 80
-#' xci <- binomDiffCI(x1, n1, x2, n2, method=c("wald", "waldcc", "ac", "score",
-#'             "scorecc", "mn", "mee", "blj", "ha"))
+#' meths <- c("wald", "wald-cc", "agresti-caffo", 
+#'                     "newcombe-score", "newcombe-score-cc", 
+#'                     "miettinen-nurminen", "mee-farrington-manning", 
+#'                     "brown-li-jeffreys", "hauck-anderson")
+#'                     
+#' xci <- binomDiffCI(x1, n1, x2, n2, method=meths)
 #' fm(xci[,-1], digits=4)
 #' 
 #' x1 <- 9; n1 <- 10; x2 <- 3; n2 <- 10
-#' yci <- binomDiffCI(x1, n1, x2, n2, method=c("wald", "waldcc", "ac", "score",
-#'             "scorecc", "mn", "mee", "blj", "ha"))
+#' yci <- binomDiffCI(x1, n1, x2, n2, method=meths)
 #' fm(yci[, -1], digits=4)
 #' 
 #' # https://www.lexjansen.com/wuss/2016/127_Final_Paper_PDF.pdf, page 9
 #' setNamesX(round(
 #'   binomDiffCI(56, 70, 48, 80, 
-#'               method=c("wald", "waldcc", "hal", 
-#'                        "jp", "mee",
-#'                        "mn", "score", "scorecc", 
-#'                        "ha", "ac", "blj"))[,-1], 4),
+#'               method=c("wald", "wald-cc", "haldane", 
+#'                        "jeffreys-perks", "mee-farrington-manning",
+#'                        "miettinen-nurminen", "newcombe-score", 
+#'                        "newcombe-score-cc", 
+#'                        "hauck-anderson", "agresti-caffo" ,
+#'                        "brown-li-jeffreys")
+#'   )[,c(2,3)], 4),
 #'   rownames=c("1. Wald, no CC", "2. Wald, CC", "3. Haldane", "4. Jeffreys-Perks",
 #'              "5. Mee", "6. Miettinen-Nurminen", "10. Score, no CC", "11. Score, CC",
 #'              "12. Hauck-Andersen", "13. Agresti-Caffo", "16. Brown-Li"))
-#' 
-#'  
+#'
+
+  
 # x1 <- 56; n1 <- 70; x2 <- 48; n2 <- 80
 # xci <- binomDiffCI(x1, n1, x2, n2, method=eval(formals(binomDiffCI)$method))
 # 
@@ -160,96 +184,134 @@
 
 
 #' @export
-binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided","left","right"),
-                        method=c("ac", "wald", "waldcc", "score", "scorecc", "mn",
-                                 "mee", "blj", "ha", "hal", "jp")) {
+binomDiffCI <- function(x1, n1, x2, n2, 
+                        conf.level = 0.95, 
+                        sides = c("two.sided","left","right"),
+                        method = c(
+                          "wald",
+                          "wald-cc",
+                          "agresti-caffo",
+                          "exact",
+                          "newcombe-score",
+                          "newcombe-score-cc",
+                          "miettinen-nurminen",
+                          "mee-farrington-manning",
+                          "brown-li-jeffreys",
+                          "hauck-anderson",
+                          "beal",
+                          "haldane",
+                          "jeffreys-perks"
+                        )) {
+  
+  # old DescTools codes:
+  # method <- switch(method,
+  #                  "wald"     = "wald",
+  #                  "waldcc"   = "wald-cc",
+  #                  "ac"       = "agresti-caffo",
+  #                  "exact"    = "exact"
+  #                  "score"    = "newcombe-score",
+  #                  "scorecc"  = "newcombe-score-cc",
+  #                  "mn"       = "miettinen-nurminen",
+  #                  "mee"      = "mee-farrington-manning",
+  #                  "blj"      = "brown-li-jeffreys",
+  #                  "ha"       = "hauck-anderson",
+  #                  "beal"     = "beal"
+  #                  "hal"      = "haldane",
+  #                  "jp"       = "jeffreys-perks",
+  #                  method
+  # )
   
   
-  if(missing(sides))    sides <- match.arg(sides)
-  if(missing(method))   method <- match.arg(method)
+  sides <- match.arg(sides)
   
-  
-  ibinomDiffCI <- function(x1, n1, x2, n2, conf.level, sides, method) {
+  if (missing(method)) {
+    # if not provided take the first method instead of all (!)
+    method <- eval(formals(sys.function())$method)[1]
     
-    #   .Wald #1
-    #   .Wald (Corrected) #2
-    #   .Exact
-    #   .Exact (FM Score)
-    #   .Newcombe Score #10
-    #   .Newcombe Score (Corrected) #11
-    #   .Farrington-Manning
-    #   .Hauck-Anderson
-    # http://www.jiangtanghu.com/blog/2012/09/23/statistical-notes-5-confidence-intervals-for-difference-between-independent-binomial-proportions-using-sas/
-    #  Interval estimation for the difference between independent proportions: comparison of eleven methods.
-    
-    # https://www.lexjansen.com/wuss/2016/127_Final_Paper_PDF.pdf
-    # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.633.9380&rep=rep1&type=pdf
-    
-    # Newcombe (1998) (free):
-    # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.408.7354&rep=rep1&type=pdf
-
-    
-    if(sides!="two.sided")
-      conf.level <- 1 - 2*(1-conf.level)
-    
-    alpha <- 1 - conf.level
-
-    p1.hat <- x1/n1
-    p2.hat <- x2/n2
-    est <- p1.hat - p2.hat
-    
-    CI <- switch(method,
-       "wald" =    { .bdci.wald(x1, n1, x2, n2, alpha, correct=FALSE) },
-       "waldcc" =  { .bdci.wald(x1, n1, x2, n2, alpha, correct=TRUE) },
-       "ac" =      { .bdci.ac(x1, n1, x2, n2, alpha)  } ,     # Agresti-Caffo
-       "exact" =   { .bdci.exact(x1, n1, x2, n2, alpha) },    # exact
-       "score" =   { .bdci.score(x1, n1, x2, n2, alpha) },    # Newcombe
-       "scorecc" = { .bdci.scorecc(x1, n1, x2, n2, alpha) },  # Newcombe
-       "mee" =     { .bdci.mee(x1, n1, x2, n2, alpha)  },     # Mee, also called Farrington-Mannig
-       "blj" =     { .bdci.blj(x1, n1, x2, n2, alpha) },      # brown-li-jeffreys
-       "ha" =      { .bdci.ha(x1, n1, x2, n2, alpha) },       # Hauck-Anderson
-       "mn" =      { .bdci.mn(x1, n1, x2, n2, alpha)   },     # Miettinen-Nurminen
-       "beal" =    { .bdci.beal(x1, n1, x2, n2, alpha) },     # Beal
-       "hal" =     { .bdci.hal(x1, n1, x2, n2, alpha) },      # haldane 
-       "jp" =      { .bdci.jp(x1, n1, x2, n2, alpha) }        # jeffreys-perks
-    )
-
-    ci <- c(est = est, 
-            lci = max(-1, min(CI)), uci = min(1, max(CI)))
-    
-    if(sides=="left")
-      ci[3] <- 1
-    else if(sides=="right")
-      ci[2] <- -1
-    
-    return(ci)
-    
+  } else {
+    # resolve methods cleanly, allowing an ".all" hidden option for method
+    method <- .resolveMethod(method, several.ok = TRUE)
   }
   
+  res <- .recycleApply(.binomDiffCI_engine,
+                       x1=x1, n1=n1, 
+                       x2=x2, n2=n2, 
+                       conf.level = conf.level,
+                       sides = sides,
+                       method = method
+  )
   
-  method <- match.arg(arg=method, several.ok = TRUE)
-  sides <- match.arg(arg=sides, several.ok = TRUE)
+  if(length(res) == 1)
+    out <- res[[1]]
+  else{
+    out <- as.data.frame(attr(res, "recycle"))
+    out <- data.frame(do.call(rbind, res), out)
+  }
   
-  # Recycle arguments
-  lst <- recycle(x1=x1, n1=n1, x2=x2, n2=n2, 
-                 conf.level=conf.level, sides=sides, method=method)
+  return(out)
   
-  res <- t(sapply(1:attr(lst, "maxdim"),
-                  function(i) ibinomDiffCI(x1=lst$x1[i], n1=lst$n1[i], x2=lst$x2[i], n2=lst$n2[i],
-                                           conf.level=lst$conf.level[i],
-                                           sides=lst$sides[i],
-                                           method=lst$method[i])))
+} 
+
+
+
+.binomDiffCI_engine <- function(x1, n1, x2, n2, conf.level, sides, method){
+
+  #   .Wald #1
+  #   .Wald (Corrected) #2
+  #   .Exact
+  #   .Exact (FM Score)
+  #   .Newcombe Score #10
+  #   .Newcombe Score (Corrected) #11
+  #   .Farrington-Manning
+  #   .Hauck-Anderson
+  # http://www.jiangtanghu.com/blog/2012/09/23/statistical-notes-5-confidence-intervals-for-difference-between-independent-binomial-proportions-using-sas/
+  #  Interval estimation for the difference between independent proportions: comparison of eleven methods.
   
-  # get rownames
-  lgn <- recycle(x1=if(is.null(names(x1))) paste("x1", seq_along(x1), sep=".") else names(x1),
-                 n1=if(is.null(names(n1))) paste("n1", seq_along(n1), sep=".") else names(n1),
-                 x2=if(is.null(names(x2))) paste("x2", seq_along(x2), sep=".") else names(x2),
-                 n2=if(is.null(names(n2))) paste("n2", seq_along(n2), sep=".") else names(n2),
-                 conf.level=conf.level, sides=sides, method=method)
-  xn <- apply(as.data.frame(lgn[sapply(lgn, function(x) length(unique(x)) != 1)]), 1, paste, collapse=":")
+  # https://www.lexjansen.com/wuss/2016/127_Final_Paper_PDF.pdf
+  # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.633.9380&rep=rep1&type=pdf
   
-  rownames(res) <- xn
-  return(res)
+  # Newcombe (1998) (free):
+  # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.408.7354&rep=rep1&type=pdf
+  
+  
+    
+  alpha <- 1 - conf.level
+  if (sides != "two.sided")
+    alpha <- alpha / 2
+  
+  CI <- switch(method,
+               "wald" =                    { .bdci.wald(x1, n1, x2, n2, alpha, correct=FALSE) },
+               "wald-cc" =                 { .bdci.wald(x1, n1, x2, n2, alpha, correct=TRUE) },
+               "agresti-caffo" =           { .bdci.ac(x1, n1, x2, n2, alpha)  } ,     # Agresti-Caffo
+               "exact" =                   { .bdci.exact(x1, n1, x2, n2, alpha) },    # exact
+               "newcombe-score" =          { .bdci.score(x1, n1, x2, n2, alpha) },    # Newcombe
+               "newcombe-score-cc" =       { .bdci.scorecc(x1, n1, x2, n2, alpha) },  # Newcombe
+               "mee-farrington-manning" =  { .bdci.mee(x1, n1, x2, n2, alpha)  },     # Mee, also called Farrington-Mannig
+               "brown-li-jeffreys" =       { .bdci.blj(x1, n1, x2, n2, alpha) },      # brown-li-jeffreys
+               "hauck-anderson" =          { .bdci.ha(x1, n1, x2, n2, alpha) },       # Hauck-Anderson
+               "miettinen-nurminen" =      { .bdci.mn(x1, n1, x2, n2, alpha)   },     # Miettinen-Nurminen
+               "beal" =                    { .bdci.beal(x1, n1, x2, n2, alpha) },     # Beal
+               "haldane" =                 { .bdci.hal(x1, n1, x2, n2, alpha) },      # haldane 
+               "jeffreys-perks" =          { .bdci.jp(x1, n1, x2, n2, alpha) },       # jeffreys-perks
+               stop(gettextf("Unknown method '%s'.", method))
+  )
+  
+  # this is the default estimator used by the most (but not all) methods
+  p1.hat <- x1/n1
+  p2.hat <- x2/n2
+  est <- p1.hat - p2.hat
+
+  # dot not return ci bounds outside [0,1]
+  ci <- c( est = est, 
+           lci = max(-1, CI["lci"]), 
+           uci = min(1, CI["uci"]) )
+  
+  if(sides=="left")
+    ci[3] <- 1
+  else if(sides=="right")
+    ci[2] <- -1
+  
+  return(ci)
   
 }
 
@@ -296,12 +358,67 @@ binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
 
 
 
-.bdci.exact <- function(p1.hat, n1, p2.hat, n2, alpha) {
-  # exact
-  warning("exact is not yet implemented!")
-  return( c( lci = NA, uci = NA) )
+.bdci.exact <- function(x1, n1, x2, n2, alpha) {
+    
+    # # observed difference
+    # delta_hat <- x1/n1 - x2/n2
+    # 
+    # # grid for nuisance parameter optimisation
+    # p2_grid <- seq(0, 1, length.out = 200)
+    # 
+    # # two-sided p-value under H0: p1 = p2 + delta
+    # pval_fun <- function(delta) {
+    #   
+    #   max_p <- 0
+    #   
+    #   for (p2 in p2_grid) {
+    #     
+    #     p1 <- p2 + delta
+    #     
+    #     if (p1 < 0 || p1 > 1) next
+    #     
+    #     prob_obs <- dbinom(x1, n1, p1) * dbinom(x2, n2, p2)
+    #     
+    #     # enumerate all tables
+    #     p_sum <- 0
+    #     
+    #     for (i in 0:n1) {
+    #       for (j in 0:n2) {
+    #         
+    #         if ( (i/n1 - j/n2 - delta)^2 >=
+    #              (x1/n1 - x2/n2 - delta)^2 ) {
+    #           
+    #           p_sum <- p_sum +
+    #             dbinom(i, n1, p1) * dbinom(j, n2, p2)
+    #         }
+    #       }
+    #     }
+    #     
+    #     max_p <- max(max_p, p_sum)
+    #   }
+    #   
+    #   max_p
+    # }
+    # 
+    # # lower bound
+    # lower <- uniroot(function(d) pval_fun(d) - alpha,
+    #                  lower = -1,
+    #                  upper = delta_hat)$root
+    # 
+    # # upper bound
+    # upper <- uniroot(function(d) pval_fun(d) - alpha,
+    #                  lower = delta_hat,
+    #                  upper = 1)$root
+    # 
+    # c(estimate = delta_hat,
+    #   lci  = max(-1, lower),
+    #   uci  = min(1, upper))
   
+  # experimental code only...
+  # bdci_exact_rcpp(x1, n1, x2, n2, alpha)
+  return(lci=NA, uci=NA)
 }
+
 
 
 .bdci.score <- function(x1, n1, x2, n2, alpha) {
@@ -319,7 +436,7 @@ binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
   lci <- est - z * sqrt( ci1["lci"] * (1-ci1["lci"])/n1 + ci2["uci"] * (1-ci2["uci"])/n2)
   uci <- est + z * sqrt( ci1["uci"] * (1-ci1["uci"])/n1 + ci2["lci"] * (1-ci2["lci"])/n2)
   
-  return( c( lci = lci, uci = uci) )
+  return( c( lci, uci) )
   
 }
 
@@ -331,13 +448,13 @@ binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
   p2.hat <- x2/n2
   est <- p1.hat - p2.hat
   
-  ci1 <- binomCI(x=x1, n=n1, conf.level=1-alpha, method="wilsoncc")
-  ci2 <- binomCI(x=x2, n=n2, conf.level=1-alpha, method="wilsoncc")
+  ci1 <- binomCI(x=x1, n=n1, conf.level=1-alpha, method="wilson-cc")
+  ci2 <- binomCI(x=x2, n=n2, conf.level=1-alpha, method="wilson-cc")
   
   lci <- est - sqrt((p1.hat - ci1["lci"])^2 + (ci2["uci"] - p2.hat)^2) 
   uci <- est + sqrt((ci1["uci"] - p1.hat)^2 + (p2.hat - ci2["lci"])^2) 
   
-  return( c( lci = lci, uci = uci) )
+  return( c( lci, uci) )
   
 }
 
@@ -434,25 +551,57 @@ binomDiffCI <- function(x1, n1, x2, n2, conf.level = 0.95, sides = c("two.sided"
 
 
 
-.bdci.beal <- function(p1.hat, n1, p2.hat, n2, alpha, correct=FALSE) {
+# .bdci.beal <- function(p1.hat, n1, p2.hat, n2, alpha, correct=FALSE) {
   # "beal" = {
   
   # experimental code only...
   # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.633.9380&rep=rep1&type=pdf
   
-  a <- p1.hat + p2.hat
-  b <- p1.hat - p2.hat
-  u <- ((1/n1) + (1/n2)) / 4
-  v <- ((1/n1) - (1/n2)) / 4
-  V <- u*((2-a)*a - b^2) + 2*v*(1-a)*b
-  z <- qchisq(p=1-alpha/2, df = 1)
-  A <- sqrt(z*(V + z*u^2*(2-a)*a + z*v^2*(1-a)^2))
-  B <- (b + z*v*(1-a)) / (1+z*u)
+  # a <- p1.hat + p2.hat
+  # b <- p1.hat - p2.hat
+  # u <- ((1/n1) + (1/n2)) / 4
+  # v <- ((1/n1) - (1/n2)) / 4
+  # V <- u*((2-a)*a - b^2) + 2*v*(1-a)*b
+  # z <- qchisq(p=1-alpha/2, df = 1)
+  # A <- sqrt(z*(V + z*u^2*(2-a)*a + z*v^2*(1-a)^2))
+  # B <- (b + z*v*(1-a)) / (1+z*u)
+  # 
+  # CI.lower <- max(-1, B - A / (1 + z*u))
+  # CI.upper <- min(1, B + A / (1 + z*u))
   
-  CI.lower <- max(-1, B - A / (1 + z*u))
-  CI.upper <- min(1, B + A / (1 + z*u))
+.bdci.beal <- function(x1, n1, x2, n2, alpha) {
+    
+    warning("Not yet thoroughly tested.")  
   
+    z <- qnorm(1 - alpha/2)
+    
+    p1_hat <- x1 / n1
+    p2_hat <- x2 / n2
+    
+    delta_hat <- p1_hat - p2_hat
+    
+    # Beal adjustment
+    p1_tilde <- (x1 + 0.5) / (n1 + 1)
+    p2_tilde <- (x2 + 0.5) / (n2 + 1)
+    
+    var_hat <-
+      p1_tilde * (1 - p1_tilde) / n1 +
+      p2_tilde * (1 - p2_tilde) / n2
+    
+    half_width <- z * sqrt(var_hat)
+    
+    lower <- delta_hat - half_width
+    upper <- delta_hat + half_width
+    
+    c(
+      est = delta_hat,
+      lci = max(-1, lower),
+      uci = min( 1, upper)
+    )
+    
 }
+  
+
 
 
 

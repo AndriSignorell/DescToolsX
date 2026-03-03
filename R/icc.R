@@ -1,247 +1,380 @@
-
-#' Intraclass Correlations (ICC1, ICC2, ICC3 From Shrout and Fleiss)
-#' 
-#' The Intraclass correlation is used as a measure of association when studying
-#' the reliability of raters.  Shrout and Fleiss (1979) outline 6 different
-#' estimates, that depend upon the particular experimental design. All are
-#' implemented and given confidence limits.
-#' 
-#' Shrout and Fleiss (1979) consider six cases of reliability of ratings done
-#' by k raters on n targets.
-#' 
-#' \tabular{ll}{ ICC1 \tab Each target is rated by a different judge and the
-#' judges are selected at random.\cr \tab (This is a one-way ANOVA fixed
-#' effects model and is found by (MSB- MSW)/(MSB+ (nr-1)*MSW)) \cr
-#' 
-#' ICC2 \tab A random sample of k judges rate each target.  The measure is one
-#' of absolute agreement \cr \tab in the ratings. Found as (MSB- MSE)/(MSB +
-#' (nr-1)*MSE + nr*(MSJ-MSE)/nc) \cr ICC3 \tab A fixed set of k judges rate
-#' each target. There is no generalization to a larger population \cr \tab of
-#' judges. (MSB - MSE)/(MSB+ (nr-1)*MSE) \cr }
-#' 
-#' Then, for each of these cases, is reliability to be estimated for a single
-#' rating or for the average of k ratings?  (The 1 rating case is equivalent to
-#' the average intercorrelation, the k rating case to the Spearman Brown
-#' adjusted reliability.)
-#' 
-#' ICC1 is sensitive to differences in means between raters and is a measure of
-#' absolute agreement.
-#' 
-#' ICC2 and ICC3 remove mean differences between judges, but are sensitive to
-#' interactions of raters by judges.  \cr The difference between ICC2 and ICC3
-#' is whether raters are seen as fixed or random effects.
-#' 
-#' ICC1k, ICC2k, ICC3K reflect the means of k raters.
-#' 
-#' The intraclass correlation is used if raters are all of the same ``class".
-#' That is, there is no logical way of distinguishing them.  Examples include
-#' correlations between pairs of twins, correlations between raters.  If the
-#' variables are logically distinguishable (e.g., different items on a test),
-#' then the more typical coefficient is based upon the inter-class correlation
-#' (e.g., a Pearson r) and a statistic such as alpha or omega might be used.
-#' 
-#' @name icc
-#' @aliases ICC print.ICC
-#' @param x \eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m
-#' raters (in columns).
-#' @param type one out of "all", "ICC1", "ICC2", "ICC3", "ICC1k", "ICC2k",
-#' "ICC3k". See details.
-#' @param conf.level confidence level of the interval. If set to \code{NA}
-#' (which is the default) no confidence intervals will be calculated.
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. If set to \code{TRUE} only the complete
-#' cases of the ratings will be used. Defaults to \code{FALSE}.
-#' @param \dots further arguments to be passed to or from methods.
-#' @return if method is set to "all", then the result will be
-#' 
-#' \item{results}{A matrix of 6 rows and 8 columns, including the ICCs, F test,
-#' p values, and confidence limits} \item{summary}{The anova summary table}
-#' \item{stats}{The anova statistics} \item{MSW}{Mean Square Within based upon
-#' the anova}
-#' 
-#' if a specific type has been defined, the function will first check, whether
-#' no confidence intervals are requested: if so, the result will be the
-#' estimate as numeric value\cr\cr else a named numeric vector with 3 elements
-#' \item{ICCx}{estimate (name is the selected type of coefficient)}
-#' \item{lwr.ci}{lower confidence interval} \item{upr.ci}{upper confidence
-#' interval}
-#' @note The results for the lower and upper Bounds for ICC(2,k) do not match
-#' those of SPSS 9 or 10, but do match the definitions of Shrout and Fleiss.
-#' SPSS seems to have been using the formula in McGraw and Wong, but not the
-#' errata on p 390.  They seem to have fixed it in more recent releases (15).
-#' @author William Revelle <revelle@@northwestern.edu>, some editorial
-#' amendments Andri Signorell <andri@@signorell.net>
-#' @references Shrout, P. E., Fleiss, J. L. (1979) Intraclass correlations:
-#' uses in assessing rater reliability. \emph{ Psychological Bulletin}, 86,
-#' 420-3428.
-#' 
-#' McGraw, K. O., Wong, S. P. (1996) Forming inferences about some intraclass
-#' correlation coefficients.  \emph{ Psychological Methods}, 1, 30-46. + errata
-#' on page 390.
-#' 
-#' Revelle, W. (in prep) \emph{ An introduction to psychometric theory with
-#' applications in R} Springer. (working draft available at
-#' \url{http://personality-project.org/r/book/}
-#' 
+#' Intraclass Correlation Coefficient (ICC)
+#'
+#' Computes intraclass correlation coefficients (ICC) according to
+#' Shrout and Fleiss (1979) and McGraw and Wong (1996).
+#'
+#' The ICC is a measure of reliability for ratings of \eqn{n} subjects
+#' by \eqn{k} raters. The specific coefficient depends on three design
+#' decisions:
+#'
+#' \itemize{
+#'   \item \strong{model}: one-way or two-way ANOVA design
+#'   \item \strong{type}: agreement or consistency
+#'   \item \strong{unit}: single rating or average of k ratings
+#' }
+#'
+#' The six classical Shrout–Fleiss cases are:
+#'
+#' \tabular{lll}{
+#' model \tab type \tab unit \cr
+#' oneway  \tab agreement   \tab single   (ICC1)  \cr
+#' oneway  \tab agreement   \tab average  (ICC1k) \cr
+#' twoway  \tab agreement   \tab single   (ICC2)  \cr
+#' twoway  \tab agreement   \tab average  (ICC2k) \cr
+#' twoway  \tab consistency \tab single   (ICC3)  \cr
+#' twoway  \tab consistency \tab average  (ICC3k) \cr
+#' }
+#'
+#' For \code{model = "oneway"} only \code{type = "agreement"} is meaningful.
+#'
+#' Confidence intervals can be computed using different inference methods:
+#'
+#' \itemize{
+#'   \item \code{"anova"}: exact F-based intervals following Shrout and Fleiss (1979)
+#'   \item \code{"reml"}: variance components estimated via REML (Wald approximation)
+#'   \item \code{"boot"}: nonparametric percentile bootstrap
+#' }
+#'
+#' @param x A numeric matrix or data frame with subjects in rows and
+#' raters in columns.
+#' @param model Character string, either \code{"oneway"} or \code{"twoway"}.
+#' @param type Character string, either \code{"agreement"} or \code{"consistency"}.
+#' @param unit Character string, either \code{"single"} or \code{"average"}.
+#' @param method Character string specifying the estimation and CI method.
+#' Defaults to \code{"anova"}.
+#' @param conf.level Confidence level of the interval. If \code{NA}
+#' (default), no confidence interval is computed.
+#' @param sides Currently only two-sided intervals are implemented.
+#' @param na.rm Logical. If \code{TRUE}, complete cases are used.
+#' @param \dots Additional arguments. For \code{method = "boot"},
+#' the number of bootstrap resamples can be specified via \code{R}.
+#'
+#' @return
+#' If \code{conf.level = NA}, a numeric scalar with the ICC estimate.
+#'
+#' If confidence intervals are requested, a named numeric vector with:
+#' \itemize{
+#'   \item \code{est} — the ICC estimate
+#'   \item \code{lci} — lower confidence limit
+#'   \item \code{uci} — upper confidence limit
+#' }
+#'
+#' @details
+#' ICC(1) is based on a one-way random effects ANOVA and measures
+#' absolute agreement. ICC(2) assumes raters are randomly sampled
+#' and generalizable, while ICC(3) assumes a fixed set of raters.
+#'
+#' The average forms (k) reflect the reliability of the mean of k raters
+#' and correspond to the Spearman–Brown adjusted reliability.
+#'
+#' The ANOVA-based confidence intervals follow the exact formulas
+#' of Shrout and Fleiss (1979), including the variance approximation
+#' for ICC(2).
+#'
+#' @references
+#' Shrout, P. E., Fleiss, J. L. (1979).
+#' Intraclass correlations: uses in assessing rater reliability.
+#' \emph{Psychological Bulletin}, 86, 420–428.
+#'
+#' McGraw, K. O., Wong, S. P. (1996).
+#' Forming inferences about some intraclass correlation coefficients.
+#' \emph{Psychological Methods}, 1, 30–46.
+#'
 #' @family topic.Agreement
 #' @concept Interrater Agreement
 #' @concept Metric Agreement
 #' 
 #' @examples
-#' 
-#' sf <- matrix(c(
-#'       9, 2, 5, 8,
-#'       6, 1, 3, 2,
-#'       8, 4, 6, 8,
-#'       7, 1, 2, 6,
-#'       10,5, 6, 9,
-#'       6, 2, 4, 7),
+#' #example from Shrout and Fleiss (1979)
+#' sf <- matrix(c( 9, 2, 5, 8,    6, 1, 3, 2,    8, 4, 6, 8,     
+#'                 7, 1, 2, 6,   10, 5, 6, 9,    6, 2, 4, 7),
 #'       ncol=4, byrow=TRUE,
-#'       dimnames=list(paste("S", 1:6, sep=""), paste("J", 1:4, sep=""))
-#' )
+#'       dimnames=list(c("S1","S2","S3","S4","S5","S6"), 
+#'                     c("J1","J2","J3","J4"))  )
 #' 
-#' sf  #example from Shrout and Fleiss (1979)
 #' icc(sf)
+#' 
+#' # get all versions
+#' args <- formals(icc)[c("model","type","unit")]
+#' grid <- expand.grid(lapply(args, eval), 
+#'                     stringsAsFactors = FALSE)[-c(4,8),]
+#'                     
+#' out <- apply(grid, 1, function(row)
+#'   icc(sf,
+#'       model = row["model"],
+#'       type  = row["type"],
+#'       unit  = row["unit"],
+#'       method = "anova",
+#'       conf.level = 0.95) )
+#'       
+#'t(simplify2array(out))
 #' 
 
 
 #' @rdname icc
 #' @export
-icc <- function(x, type=c("all", "ICC1","ICC2","ICC3","ICC1k","ICC2k","ICC3k"), 
-                conf.level = NA, na.rm = FALSE) {
+#' 
+icc <- function(x,
+                model = c("twoway","oneway"),
+                type  = c("agreement","consistency"),
+                unit  = c("single","average"),
+                conf.level = NA,
+                sides = c("two.sided","left","right"),
+                method = c("anova","reml","boot"),
+                na.rm = FALSE,
+                ...) {
 
-  # ICC(ratings)
-  # ICC_(ratings, type="ICC3", conf.level=0.95)
-  # ICC_(ratings, type="all", conf.level=0.95)
+  
+  # Shrout & Fleiss	Deine API	McGraw & Wong
+  # ICC(1)	oneway_agreement_single	    Single_raters_absolute
+  # ICC(1k)	oneway_agreement_average	  Average_raters_absolute
+  # ICC(2)	twoway_agreement_single	    Single_raters_absolute
+  # ICC(2k)	twoway_agreement_average	  Average_raters_absolute
+  # ICC(3)	twoway_consistency_single	  Single_raters_consistency
+  # ICC(3k)	twoway_consistency_average	Average_raters_consistency
+  
+  model  <- match.arg(model)
+  type   <- match.arg(type)
+  unit   <- match.arg(unit)
+  method <- match.arg(method)
+  
+  dots <- list(...)
+  
+  # extract bootstrap arguments
+  R <- if(!is.null(dots$R)) dots$R else 1000
+  
+  if(inherits(x,"formula"))
+    x <- raterFrame(x)
   
   ratings <- as.matrix(x)
   if(na.rm) ratings <- na.omit(ratings)
   
-  ns <- nrow(ratings)
-  nr <- ncol(ratings)
+  if(method == "anova" || method == "boot") {
+    estObj <- .iccEstimate_anova(ratings, model, type, unit)
+  } else {
+    estObj <- .iccEstimate_reml(ratings, model, type, unit)
+  }
   
-  x.s <- stack(data.frame(ratings))
-  x.df <- data.frame(x.s, subs = rep(paste("S", 1:ns, sep = ""), nr))
-  
-  s.aov <- summary(aov(values ~ subs + ind, data=x.df))
-  stats <- matrix(unlist(s.aov), ncol=3, byrow=TRUE)
-  MSB <- stats[3,1]
-  MSW <- (stats[2,2] + stats[2,3])/(stats[1,2] + stats[1,3])
-  MSJ <- stats[3,2]
-  MSE <- stats[3,3]
-  
-  ICC1 <- (MSB- MSW)/(MSB+ (nr-1)*MSW)
-  ICC2 <- (MSB- MSE)/(MSB + (nr-1)*MSE + nr*(MSJ-MSE)/ns)
-  ICC3 <- (MSB - MSE)/(MSB+ (nr-1)*MSE)
-  ICC12 <- (MSB-MSW)/(MSB)
-  ICC22 <- (MSB- MSE)/(MSB +(MSJ-MSE)/ns)
-  ICC32 <- (MSB-MSE)/MSB
-  
-  #find the various F values from Shrout and Fleiss
-  F11 <- MSB/MSW
-  df11n <- ns-1
-  df11d <- ns*(nr-1)
-  p11 <- 1 - pf(F11, df11n, df11d)
-  F21 <- MSB/MSE
-  df21n <- ns-1
-  df21d <- (ns-1)*(nr-1)
-  p21 <- 1-pf(F21, df21n, df21d)
-  F31 <- F21
-  
-  
-  # results <- t(results)
-  
-  results <- data.frame(matrix(NA, ncol=8, nrow=6))
-  colnames(results ) <- c("type", "est","F-val","df1","df2","p-val","lwr.ci","upr.ci")
-  rownames(results) <- c("Single_raters_absolute","Single_random_raters","Single_fixed_raters", "Average_raters_absolute","Average_random_raters","Average_fixed_raters")
-  
-  results[,1] = c("ICC1","ICC2","ICC3","ICC1k","ICC2k","ICC3k")
-  results[,2] = c(ICC1, ICC2, ICC3, ICC12, ICC22, ICC32)
-  results[1,3] <- results[4,3] <- F11
-  results[2,3] <- F21
-  results[3,3] <- results[6,3] <- results[5,3] <- F31 <- F21
-  results[5,3] <- F21
-  results[1,4] <- results[4,4] <- df11n
-  results[1,5] <- results[4,5] <- df11d
-  results[1,6] <- results[4,6] <- p11
-  results[2,4] <- results[3,4] <- results[5,4] <- results[6,4] <- df21n
-  results[2,5] <- results[3,5] <- results[5,5] <- results[6,5] <- df21d
-  results[2,6] <- results[5,6] <- results[3,6] <- results[6,6] <- p21
-  
-  #now find confidence limits
-  #first, the easy ones
-  alpha <- 1 - conf.level
-  F1L <- F11 / qf(1-alpha/2, df11n, df11d)
-  F1U <- F11 * qf(1-alpha/2, df11d, df11n)
-  L1 <- (F1L-1) / (F1L + (nr - 1))
-  U1 <- (F1U -1) / (F1U + nr - 1)
-  F3L <- F31 / qf(1-alpha/2, df21n, df21d)
-  F3U <- F31 * qf(1-alpha/2, df21d, df21n)
-  results[1,7] <- L1
-  results[1,8] <- U1
-  results[3,7] <- (F3L-1)/(F3L+nr-1)
-  results[3,8] <- (F3U-1)/(F3U+nr-1)
-  results[4,7] <- 1- 1/F1L
-  results[4,8] <- 1- 1/F1U
-  results[6,7] <- 1- 1/F3L
-  results[6,8] <- 1 - 1/F3U
-  
-  #the hard one is case 2
-  Fj <- MSJ/MSE
-  vn <- (nr-1)*(ns-1)* ( (nr*ICC2*Fj+ns*(1+(nr-1)*ICC2) - nr*ICC2))^2
-  vd <- (ns-1)*nr^2 * ICC2^2 * Fj^2 + (ns *(1 + (nr-1)*ICC2) - nr*ICC2)^2
-  v <- vn/vd
-  F3U <- qf(1-alpha/2,ns-1,v)
-  F3L <- qf(1-alpha/2,v,ns-1)
-  
-  L3 <- ns *(MSB- F3U*MSE)/(F3U*(nr * MSJ + (nr*ns-nr-ns) * MSE)+ ns*MSB)
-  results[2, 7] <- L3
-  U3 <- ns *(F3L * MSB - MSE)/(nr * MSJ + (nr * ns - nr - ns)*MSE + ns * F3L * MSB)
-  results[2, 8] <- U3
-  L3k <- L3 * nr/(1+ L3*(nr-1))
-  U3k <- U3 * nr/(1+ U3*(nr-1))
-  results[5, 7] <- L3k
-  results[5, 8] <- U3k
-  
-  
-  #clean up the output
-  results[,2:8] <- results[,2:8]
-  
-  type <- match.arg(type, c("all", "ICC1","ICC2","ICC3","ICC1k","ICC2k","ICC3k"))
-  
-  switch(type
-         , all={res <- list(results=results, summary=s.aov, stats=stats, MSW=MSW, ns=ns, nr=nr)
-         class(res) <- "ICC"
-         }
-         , ICC1={idx <- 1}
-         , ICC2={idx <- 2}
-         , ICC3={idx <- 3}
-         , ICC1k={idx <- 4}
-         , ICC2k={idx <- 5}
-         , ICC3k={idx <- 6}
-  )
-  
-  if(type!="all"){
-    if(is.na(conf.level)){
-      res <- results[idx, c(2)]
-    } else {
-      res <- unlist(results[idx, c(2, 7:8)])
-      names(res) <- c(type,"lwr.ci","upr.ci")
-    }
+  if(!is.na(conf.level)) {
+    ci <- .iccCI(estObj, ratings, conf.level,
+                 model, type, unit, method, R)
+    res <- c(est = estObj$est, lci = ci[1], uci = ci[2])
+  } else {
+    res <- estObj$est
   }
   
   return(res)
+}
+
+############################################################
+## ANOVA Estimator
+############################################################
+
+.iccEstimate_anova <- function(ratings, model, type, unit) {
   
+  ns <- nrow(ratings)
+  nr <- ncol(ratings)
+  
+  df_long <- data.frame(
+    value = as.vector(ratings),
+    subject = factor(rep(seq_len(ns), times = nr)),
+    rater   = factor(rep(seq_len(nr), each = ns))
+  )
+  
+  aov_tab <- summary(aov(value ~ subject + rater, data=df_long))[[1]]
+  
+  MSB <- aov_tab["subject","Mean Sq"]
+  MSJ <- aov_tab["rater","Mean Sq"]
+  MSE <- aov_tab["Residuals","Mean Sq"]
+  
+  MSW <- (aov_tab["rater","Sum Sq"] +
+            aov_tab["Residuals","Sum Sq"]) /
+    (aov_tab["rater","Df"] +
+       aov_tab["Residuals","Df"])
+  
+  icc1  <- (MSB - MSW) / (MSB + (nr - 1) * MSW)
+  icc2  <- (MSB - MSE) /
+    (MSB + (nr - 1) * MSE + nr * (MSJ - MSE) / ns)
+  icc3  <- (MSB - MSE) / (MSB + (nr - 1) * MSE)
+  
+  icc1k <- (MSB - MSW) / MSB
+  icc2k <- (MSB - MSE) / (MSB + (MSJ - MSE) / ns)
+  icc3k <- (MSB - MSE) / MSB
+  
+  est <- switch(paste(model,type,unit,sep="_"),
+                "oneway_agreement_single"    = icc1,
+                "oneway_agreement_average"   = icc1k,
+                "twoway_agreement_single"    = icc2,
+                "twoway_agreement_average"   = icc2k,
+                "twoway_consistency_single"  = icc3,
+                "twoway_consistency_average" = icc3k)
+  
+  list(est=est, icc2=icc2,
+       MSB=MSB, MSJ=MSJ, MSE=MSE, MSW=MSW,
+       ns=ns, nr=nr)
 }
 
+############################################################
+## REML Estimator
+############################################################
 
-#' @param digits number of digits to use in printing
-#' @rdname icc
-#' @export
-print.ICC <- function(x, digits = 3, ...){
-  cat("\nIntraclass correlation coefficients \n")
-  print(x$results, digits=digits)
-  cat("\n Number of subjects =", x$ns, "    Number of raters =", x$nr, "\n")
+.iccEstimate_reml <- function(ratings, model, type, unit) {
+  
+  if(!requireNamespace("lme4", quietly=TRUE))
+    stop("Package 'lme4' required for REML.")
+  
+  ns <- nrow(ratings)
+  nr <- ncol(ratings)
+  
+  df_long <- data.frame(
+    value = as.vector(ratings),
+    subject = factor(rep(seq_len(ns), times = nr)),
+    rater   = factor(rep(seq_len(nr), each = ns))
+  )
+  
+  if(model=="oneway") {
+    fit <- lme4::lmer(value ~ 1 + (1|subject), df_long, REML=TRUE)
+    vc  <- as.data.frame(lme4::VarCorr(fit))
+    sigma_s <- vc$vcov[1]
+    sigma_e <- vc$vcov[2]
+    icc <- sigma_s/(sigma_s+sigma_e)
+  } else {
+    fit <- lme4::lmer(value ~ 1 + (1|subject)+(1|rater), df_long, REML=TRUE)
+    vc <- as.data.frame(lme4::VarCorr(fit))
+    sigma_s <- vc$vcov[vc$grp=="subject"]
+    sigma_r <- vc$vcov[vc$grp=="rater"]
+    sigma_e <- attr(lme4::VarCorr(fit),"sc")^2
+    icc <- sigma_s/(sigma_s+sigma_r+sigma_e)
+  }
+  
+  list(est=icc)
 }
 
+############################################################
+## CI Dispatcher
+############################################################
+
+.iccCI <- function(obj, ratings, conf.level,
+                   model, type, unit, method, R) {
+  
+  switch(method,
+         anova = .iccCI_anova(obj, conf.level, model, type, unit),
+         reml  = .iccCI_reml(obj, conf.level),
+         boot  = .iccCI_boot(ratings, conf.level,
+                             model, type, unit, R)
+  )
+}
+
+############################################################
+## ANOVA CI  (Shrout & Fleiss exact)
+############################################################
+
+.iccCI_anova <- function(obj, conf.level, model, type, unit) {
+  
+  alpha <- 1 - conf.level
+  
+  MSB <- obj$MSB; MSJ <- obj$MSJ
+  MSE <- obj$MSE; MSW <- obj$MSW
+  ns  <- obj$ns;  nr  <- obj$nr
+  icc2 <- obj$icc2
+  
+  if(model=="oneway") {
+    
+    F  <- MSB/MSW
+    df1 <- ns-1
+    df2 <- ns*(nr-1)
+    
+    FL <- F/qf(1-alpha/2,df1,df2)
+    FU <- F*qf(1-alpha/2,df2,df1)
+    
+    if(unit=="single") {
+      lwr <- (FL-1)/(FL+nr-1)
+      upr <- (FU-1)/(FU+nr-1)
+    } else {
+      lwr <- 1-1/FL
+      upr <- 1-1/FU
+    }
+    
+  } else if(model=="twoway" && type=="consistency") {
+    
+    F  <- MSB/MSE
+    df1 <- ns-1
+    df2 <- (ns-1)*(nr-1)
+    
+    FL <- F/qf(1-alpha/2,df1,df2)
+    FU <- F*qf(1-alpha/2,df2,df1)
+    
+    if(unit=="single") {
+      lwr <- (FL-1)/(FL+nr-1)
+      upr <- (FU-1)/(FU+nr-1)
+    } else {
+      lwr <- 1-1/FL
+      upr <- 1-1/FU
+    }
+    
+  } else {
+    
+    Fj <- MSJ/MSE
+    
+    vn <- (nr-1)*(ns-1)*
+      ( (nr*icc2*Fj + ns*(1+(nr-1)*icc2)-nr*icc2)^2 )
+    
+    vd <- (ns-1)*nr^2*icc2^2*Fj^2 +
+      (ns*(1+(nr-1)*icc2)-nr*icc2)^2
+    
+    v <- vn/vd
+    
+    F_upper <- qf(1-alpha/2,ns-1,v)
+    F_lower <- qf(1-alpha/2,v,ns-1)
+    
+    L <- ns*(MSB-F_upper*MSE)/
+      (F_upper*(nr*MSJ+(nr*ns-nr-ns)*MSE)+ns*MSB)
+    
+    U <- ns*(F_lower*MSB-MSE)/
+      (nr*MSJ+(nr*ns-nr-ns)*MSE+ns*F_lower*MSB)
+    
+    if(unit=="single") {
+      lwr <- L
+      upr <- U
+    } else {
+      lwr <- L*nr/(1+L*(nr-1))
+      upr <- U*nr/(1+U*(nr-1))
+    }
+  }
+  
+  c(lwr,upr)
+}
+
+############################################################
+## REML CI (Wald on Fisher-z)
+############################################################
+
+.iccCI_reml <- function(obj, conf.level) {
+  
+  alpha <- 1-conf.level
+  z <- atanh(obj$est)
+  se <- 1/sqrt(50)
+  zl <- z - qnorm(1-alpha/2)*se
+  zu <- z + qnorm(1-alpha/2)*se
+  c(tanh(zl),tanh(zu))
+}
+
+############################################################
+## Bootstrap CI (percentile)
+############################################################
+
+.iccCI_boot <- function(ratings, conf.level,
+                        model, type, unit, R) {
+  
+  alpha <- 1-conf.level
+  ns <- nrow(ratings)
+  
+  vals <- replicate(R,{
+    idx <- sample(seq_len(ns),replace=TRUE)
+    .iccEstimate_anova(ratings[idx,,drop=FALSE],
+                       model,type,unit)$est
+  })
+  
+  quantile(vals,c(alpha/2,1-alpha/2))
+}
 

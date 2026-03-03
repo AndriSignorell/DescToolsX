@@ -91,6 +91,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// bdci_exact_sas_rcpp
+NumericVector bdci_exact_sas_rcpp(int x1, int n1, int x2, int n2, double alpha);
+RcppExport SEXP _DescToolsX_bdci_exact_sas_rcpp(SEXP x1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP n2SEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< int >::type x2(x2SEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(bdci_exact_sas_rcpp(x1, n1, x2, n2, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 // binomdiffciMee
 double binomdiffciMee(int x1, int n1, int x2, int n2, double alpha, bool lower);
 RcppExport SEXP _DescToolsX_binomdiffciMee(SEXP x1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP n2SEXP, SEXP alphaSEXP, SEXP lowerSEXP) {
@@ -157,6 +172,47 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
     rcpp_result_gen = Rcpp::wrap(conDisPairsXY(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bootstrap_contcoef_table_bca_cpp
+List bootstrap_contcoef_table_bca_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct, double conf_level);
+RcppExport SEXP _DescToolsX_bootstrap_contcoef_table_bca_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP, SEXP conf_levelSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tab(tabSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
+    Rcpp::traits::input_parameter< double >::type conf_level(conf_levelSEXP);
+    rcpp_result_gen = Rcpp::wrap(bootstrap_contcoef_table_bca_cpp(tab, R, seed, correct, conf_level));
+    return rcpp_result_gen;
+END_RCPP
+}
+// contcoef_table_cpp
+double contcoef_table_cpp(IntegerMatrix tab, bool correct);
+RcppExport SEXP _DescToolsX_contcoef_table_cpp(SEXP tabSEXP, SEXP correctSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tab(tabSEXP);
+    Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
+    rcpp_result_gen = Rcpp::wrap(contcoef_table_cpp(tab, correct));
+    return rcpp_result_gen;
+END_RCPP
+}
+// bootstrap_contcoef_table_cpp
+NumericVector bootstrap_contcoef_table_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct);
+RcppExport SEXP _DescToolsX_bootstrap_contcoef_table_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tab(tabSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
+    rcpp_result_gen = Rcpp::wrap(bootstrap_contcoef_table_cpp(tab, R, seed, correct));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -515,11 +571,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_ADprobN", (DL_FUNC) &_DescToolsX_ADprobN, 2},
     {"_DescToolsX_ADtestR", (DL_FUNC) &_DescToolsX_ADtestR, 1},
     {"_DescToolsX_acceptBin", (DL_FUNC) &_DescToolsX_acceptBin, 3},
+    {"_DescToolsX_bdci_exact_sas_rcpp", (DL_FUNC) &_DescToolsX_bdci_exact_sas_rcpp, 5},
     {"_DescToolsX_binomdiffciMee", (DL_FUNC) &_DescToolsX_binomdiffciMee, 6},
     {"_DescToolsX_binomdiffciMN", (DL_FUNC) &_DescToolsX_binomdiffciMN, 6},
     {"_DescToolsX_brier_boot_cpp", (DL_FUNC) &_DescToolsX_brier_boot_cpp, 4},
     {"_DescToolsX_conDisPairsTab", (DL_FUNC) &_DescToolsX_conDisPairsTab, 1},
     {"_DescToolsX_conDisPairsXY", (DL_FUNC) &_DescToolsX_conDisPairsXY, 2},
+    {"_DescToolsX_bootstrap_contcoef_table_bca_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_bca_cpp, 5},
+    {"_DescToolsX_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_cpp, 2},
+    {"_DescToolsX_bootstrap_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_cpp, 4},
     {"_DescToolsX_isoWeek", (DL_FUNC) &_DescToolsX_isoWeek, 1},
     {"_DescToolsX_usWeek", (DL_FUNC) &_DescToolsX_usWeek, 1},
     {"_DescToolsX_isoYear", (DL_FUNC) &_DescToolsX_isoYear, 1},

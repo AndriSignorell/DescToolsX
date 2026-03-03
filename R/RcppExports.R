@@ -29,6 +29,10 @@ acceptBin <- function(x, n, p) {
     .Call(`_DescToolsX_acceptBin`, x, n, p)
 }
 
+bdci_exact_sas_rcpp <- function(x1, n1, x2, n2, alpha = 0.05) {
+    .Call(`_DescToolsX_bdci_exact_sas_rcpp`, x1, n1, x2, n2, alpha)
+}
+
 binomdiffciMee <- function(x1, n1, x2, n2, alpha, lower) {
     .Call(`_DescToolsX_binomdiffciMee`, x1, n1, x2, n2, alpha, lower)
 }
@@ -47,6 +51,18 @@ conDisPairsTab <- function(x) {
 
 conDisPairsXY <- function(x, y) {
     .Call(`_DescToolsX_conDisPairsXY`, x, y)
+}
+
+bootstrap_contcoef_table_bca_cpp <- function(tab, R, seed, correct, conf_level) {
+    .Call(`_DescToolsX_bootstrap_contcoef_table_bca_cpp`, tab, R, seed, correct, conf_level)
+}
+
+contcoef_table_cpp <- function(tab, correct = FALSE) {
+    .Call(`_DescToolsX_contcoef_table_cpp`, tab, correct)
+}
+
+bootstrap_contcoef_table_cpp <- function(tab, R = 5000L, seed = 0L, correct = FALSE) {
+    .Call(`_DescToolsX_bootstrap_contcoef_table_cpp`, tab, R, seed, correct)
 }
 
 isoWeek <- function(x) {

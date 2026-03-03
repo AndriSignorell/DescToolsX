@@ -4,45 +4,61 @@
 \alias{impute}
 \title{Impute Missing Values in a Vector}
 \usage{
-impute(x, FUN = function(x) median(x, na.rm = TRUE))
+impute(x, FUN = median, na.rm = TRUE, ...)
 }
 \arguments{
-\item{x}{A vector in which missing values (\code{NA}) should be imputed.}
+\item{x}{An atomic vector.}
 
-\item{FUN}{A function or character string specifying the summary
-function used to compute the replacement value. The function must
-accept \code{x} as its first argument. By default, the median
-(with \code{na.rm = TRUE}) is used.}
+\item{FUN}{A function used to compute the imputation value,
+or a single scalar value. Default is \code{median}.}
+
+\item{na.rm}{Logical. Should missing values be removed before
+computing the summary statistic? Default is \code{TRUE}.}
+
+\item{...}{Additional arguments passed to \code{FUN}.}
 }
 \value{
-A vector of the same type and length as \code{x},
+A vector of the same length and type as \code{x},
 with missing values replaced.
 }
 \description{
-Replaces missing values in a vector using a specified summary function.
+Replaces missing values (\code{NA}) in a vector by either
+a summary statistic computed from the data (e.g. mean, median)
+or a user-supplied scalar value.
 }
 \details{
 If \code{FUN} is a function, it is applied to \code{x} to compute
-a single replacement value. All missing values in \code{x} are then
-replaced with this value.
+a single imputation value. If the function accepts an argument
+named \code{na.rm}, it will be passed automatically.
 
-If \code{FUN} is a character string, it must represent a valid
-R expression involving \code{x}, e.g. \code{"mean(x, na.rm = TRUE)"}.
+Alternatively, \code{FUN} can be a single scalar value, which will
+directly replace all missing values.
+
+If \code{FUN} is a function, it must return a single value.
+An error is thrown if the returned value is not scalar.
+
+If \code{FUN} does not accept an argument named \code{na.rm},
+the function is called again without it.
 }
 \examples{
-x <- c(1, 2, NA, 4)
+x <- c(2, 3, NA, 5, 9)
 
-# Default (median)
+# Default: median(x, na.rm=TRUE)
 impute(x)
 
-# Using mean
-impute(x, function(x) mean(x, na.rm = TRUE))
+# Using mean(x, na.rm=TRUE)
+impute(x, mean)
 
-# Using a character expression
-impute(x, "mean(x, na.rm = TRUE)")
+# Using trimmed mean
+impute(x, function(x) meanX(x, trim=0.3, na.rm = TRUE))
+
+# Constant replacement
+impute(x, 99)
 
 }
 \seealso{
+For direct value replacement see \code{\link[DescToolsViz:naReplace]{DescToolsViz::naReplace()}}.
+
 Other topic.dataProcessing: 
 \code{\link{dummy}()},
 \code{\link{locf}()},

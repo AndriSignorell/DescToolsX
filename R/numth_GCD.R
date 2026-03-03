@@ -9,36 +9,36 @@
 #' vector \code{x} will be computed (the multiple GCD).
 #' 
 #' @name gcd_lcm
-#' @aliases gcd lcm
+#' @aliases GCD LCM
 #' @param ... integer or logical vectors.
 #' @param na.rm logical. Should missing values (including NaN) be removed?
 #' @return A numeric (integer) value.
 #' @note The following relation is always true:
 #' 
-#' \code{n * m = gcd(n, m) * lcm(n, m)}
+#' \code{n * m = GCD(n, m) * LCM(n, m)}
 #' @author Andri Signorell <andri@@signorell.net> 
 #' 
 #' @family topic.numberTheory
 #' @concept number theory
 #' 
 #' @examples
-#' gcd(12, 10)
-#' gcd(144, 233)    # Fibonacci numbers are relatively prime to each other
+#' GCD(12, 10)
+#' GCD(144, 233)    # Fibonacci numbers are relatively prime to each other
 #' 
-#' lcm(12, 10)
-#' lcm(144, 233)    # = 144 * 233
+#' LCM(12, 10)
+#' LCM(144, 233)    # = 144 * 233
 #' 
 #' # all elements will be flattened by unlist
-#' gcd(2, 3, c(5, 7) * 11)
-#' gcd(c(2*3, 3*5, 5*7))
-#' lcm(c(2, 3, 5, 7) * 11)
-#' lcm(2*3, 3*5, 5*7)
+#' GCD(2, 3, c(5, 7) * 11)
+#' GCD(c(2*3, 3*5, 5*7))
+#' LCM(c(2, 3, 5, 7) * 11)
+#' LCM(2*3, 3*5, 5*7)
 #' 
 
 
 #' @rdname gcd_lcm
 #' @export
-gcd <- function(..., na.rm = FALSE) {
+GCD <- function(..., na.rm = FALSE) {
   
   x <- unlist(list(...), recursive=TRUE)
   
@@ -71,7 +71,10 @@ gcd <- function(..., na.rm = FALSE) {
 
 #' @rdname gcd_lcm
 #' @export
-lcm <- function(..., na.rm = FALSE) {
+LCM <- function(..., na.rm = FALSE) {
+  
+  # do not lower case this as it then would interact
+  # with graphics::lcm!!!
   
   x <- unlist(list(...), recursive=TRUE)
   

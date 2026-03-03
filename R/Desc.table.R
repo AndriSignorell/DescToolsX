@@ -137,10 +137,12 @@ Desc.table <- function(x, conf.level = 0.95,
     },
     propdiff = if (ttype == "t2x2") {
       binomDiffCI(x[1,1], sum(x[1,]), x[2,1], sum(x[2,]), 
-                  conf.level = conf.level, method = "mn")[1,]
+                  conf.level = conf.level, 
+                  method = "miettinen-nurminen")
     },
     relRisk1r = if (ttype == "t2x2") {
-      relRisk(t(x), conf.level = conf.level, method = "wald", delta = 0)
+      relRisk(t(x), conf.level = conf.level, method = "wald", 
+              delta = 0)
     },
     relRisk2r = if (ttype == "t2x2") {
       relRisk(t(revX(x, margin = 1)), conf.level = conf.level, method = "wald", delta = 0)
@@ -313,7 +315,7 @@ print.Desc.table <- function(x, ...) {
             sep = ""
         )
         
-        if (x$meta$verbose == "3") {
+        if (x$meta$verbose == "3" &  x$ttype == "t2x2") {
           cat("Pearson's Chi-squared test (cont. adj):\n  ",
               .CaptOut(x$chisq.test.cont)[5], "\n",
               sep = ""
