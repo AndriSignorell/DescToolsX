@@ -81,7 +81,7 @@ Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 }
 \seealso{
 \code{\link{wilcox.test}}, \code{\link{median}},
-\code{\link{medianCI}}
+\code{\link[lumen]{medianCI}}
 
 Other topic.centralTendency: 
 \code{\link{huberM}()},

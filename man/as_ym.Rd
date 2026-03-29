@@ -48,14 +48,14 @@ multiple of the length of the shorter one.
 \examples{
 
 
-Month(as.ym(202408))
-Year(as.ym(202408))
+month(as.ym(202408))
+year(as.ym(202408))
 
-Year(as.Date("2024-12-05"))
-Year(as.ym(202412))
+year(as.Date("2024-12-05"))
+year(as.ym(202412))
 
-Month(as.Date("2024-12-05"), fmt = "mm")
-Month(as.ym(202412), fmt="mm")
+month(as.Date("2024-12-05"), fmt = "mm")
+month(as.ym(202412), fmt="mm")
 
 addMonths(201511, 5)
 
@@ -64,8 +64,8 @@ addMonths(c(201511, 201302), c(5, -4))
 
 }
 \seealso{
-\code{\link{addMonths}}; Date functions, like \code{\link{Year}},
-\code{\link{Month}}, etc.
+\code{\link{addMonths}}; Date functions, like \code{\link{year}},
+\code{\link{month}}, etc.
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, originally based on code by

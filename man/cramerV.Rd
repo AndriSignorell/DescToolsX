@@ -61,15 +61,15 @@ cramerV(tab)
 cramerV(d.pizza$driver, d.pizza$wine_delivered)
 
 # data.frame
-pairApply(d.pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
+bedrock::pairApply(d.pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
 
 
 # useNA is passed to table
-pairApply(d.pizza[,c("driver","operator","area")], cramerV,
+bedrock::pairApply(d.pizza[,c("driver","operator","area")], cramerV,
           useNA="ifany", symmetric = TRUE)
 
 d.frm <- d.pizza[,c("driver","operator","area")]
-pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
+bedrock::pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
 
 
 # Bootstrap confidence intervals for Cramer's V
@@ -78,7 +78,7 @@ pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
 tab <- as.table(rbind(
   c(26,26,23,18, 9),
   c( 6, 7, 9,14,23)))
-d.frm <- untable(tab)
+d.frm <- bedrock::untable(tab)
 
 n <- 1000
 idx <- matrix(sample(nrow(d.frm), size=nrow(d.frm) * n, replace=TRUE), ncol=n, byrow=FALSE)
@@ -102,8 +102,8 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 10.1016/j.jkss.2012.10.002
 }
 \seealso{
-\code{\link{table}}, \code{\link[DescToolsViz]{plotCorr}},
-\code{\link{pairApply}}, \code{\link{Association}}
+\code{\link{table}}, \code{\link[aurora]{plotCor}},
+\code{\link[bedrock]{pairApply}}, \code{\link{Association}}
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...
 
@@ -112,9 +112,11 @@ Other topic.associationMeasures:
 \code{\link{contCoef}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

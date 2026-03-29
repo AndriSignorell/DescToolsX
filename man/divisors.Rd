@@ -30,10 +30,7 @@ divisors(c(145, 786))
 }
 \seealso{
 Other topic.numberTheory: 
-\code{\link{factorize}()},
-\code{\link{fibonacci}()},
-\code{\link{gcd_lcm}},
-\code{\link{isPrime}()}
+\code{\link{gcd_lcm}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

@@ -23,7 +23,7 @@
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set \code{useNA}.
 #' 
-#' @return a numeric value. %% ~Describe the value returned 
+#' @return a numeric value. 
 #' 
 #' @author Andri Signorell <andri@@signorell.net> 
 #' @seealso package \pkg{entropy} which implements various estimators of

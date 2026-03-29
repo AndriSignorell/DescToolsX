@@ -11,133 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// ADstat
-double ADstat(NumericVector x);
-RcppExport SEXP _DescToolsX_ADstat(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ADstat(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ADtest
-double ADtest(NumericVector x);
-RcppExport SEXP _DescToolsX_ADtest(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ADtest(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ADprobExactInf
-NumericVector ADprobExactInf(NumericVector a);
-RcppExport SEXP _DescToolsX_ADprobExactInf(SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(ADprobExactInf(a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ADprobApproxInf
-NumericVector ADprobApproxInf(NumericVector a);
-RcppExport SEXP _DescToolsX_ADprobApproxInf(SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(ADprobApproxInf(a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ADprobN
-NumericVector ADprobN(NumericVector a, int n);
-RcppExport SEXP _DescToolsX_ADprobN(SEXP aSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(ADprobN(a, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ADtestR
-Rcpp::List ADtestR(const Rcpp::NumericVector& x);
-RcppExport SEXP _DescToolsX_ADtestR(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ADtestR(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// acceptBin
-double acceptBin(int x, int n, double p);
-RcppExport SEXP _DescToolsX_acceptBin(SEXP xSEXP, SEXP nSEXP, SEXP pSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(acceptBin(x, n, p));
-    return rcpp_result_gen;
-END_RCPP
-}
-// bdci_exact_sas_rcpp
-NumericVector bdci_exact_sas_rcpp(int x1, int n1, int x2, int n2, double alpha);
-RcppExport SEXP _DescToolsX_bdci_exact_sas_rcpp(SEXP x1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP n2SEXP, SEXP alphaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x1(x1SEXP);
-    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
-    Rcpp::traits::input_parameter< int >::type x2(x2SEXP);
-    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(bdci_exact_sas_rcpp(x1, n1, x2, n2, alpha));
-    return rcpp_result_gen;
-END_RCPP
-}
-// binomdiffciMee
-double binomdiffciMee(int x1, int n1, int x2, int n2, double alpha, bool lower);
-RcppExport SEXP _DescToolsX_binomdiffciMee(SEXP x1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP n2SEXP, SEXP alphaSEXP, SEXP lowerSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x1(x1SEXP);
-    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
-    Rcpp::traits::input_parameter< int >::type x2(x2SEXP);
-    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< bool >::type lower(lowerSEXP);
-    rcpp_result_gen = Rcpp::wrap(binomdiffciMee(x1, n1, x2, n2, alpha, lower));
-    return rcpp_result_gen;
-END_RCPP
-}
-// binomdiffciMN
-double binomdiffciMN(int x1, int n1, int x2, int n2, double z, bool lower);
-RcppExport SEXP _DescToolsX_binomdiffciMN(SEXP x1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP n2SEXP, SEXP zSEXP, SEXP lowerSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x1(x1SEXP);
-    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
-    Rcpp::traits::input_parameter< int >::type x2(x2SEXP);
-    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
-    Rcpp::traits::input_parameter< double >::type z(zSEXP);
-    Rcpp::traits::input_parameter< bool >::type lower(lowerSEXP);
-    rcpp_result_gen = Rcpp::wrap(binomdiffciMN(x1, n1, x2, n2, z, lower));
-    return rcpp_result_gen;
-END_RCPP
-}
 // brier_boot_cpp
 arma::vec brier_boot_cpp(const arma::vec& resp, const arma::vec& pred, int R, bool scaled);
 RcppExport SEXP _DescToolsX_brier_boot_cpp(SEXP respSEXP, SEXP predSEXP, SEXP RSEXP, SEXP scaledSEXP) {
@@ -163,15 +36,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// conDisPairsXY
-List conDisPairsXY(NumericVector x, NumericVector y);
-RcppExport SEXP _DescToolsX_conDisPairsXY(SEXP xSEXP, SEXP ySEXP) {
+// cstat_bootstrap_parallel_cpp
+NumericVector cstat_bootstrap_parallel_cpp(NumericVector yR, NumericVector xR, int B, double alpha, int seed);
+RcppExport SEXP _DescToolsX_cstat_bootstrap_parallel_cpp(SEXP yRSEXP, SEXP xRSEXP, SEXP BSEXP, SEXP alphaSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(conDisPairsXY(x, y));
+    Rcpp::traits::input_parameter< NumericVector >::type yR(yRSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xR(xRSEXP);
+    Rcpp::traits::input_parameter< int >::type B(BSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(cstat_bootstrap_parallel_cpp(yR, xR, B, alpha, seed));
+    return rcpp_result_gen;
+END_RCPP
+}
+// conDisPairsXY_ind_cpp
+NumericVector conDisPairsXY_ind_cpp(NumericVector xR, NumericVector yR);
+RcppExport SEXP _DescToolsX_conDisPairsXY_ind_cpp(SEXP xRSEXP, SEXP yRSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type xR(xRSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type yR(yRSEXP);
+    rcpp_result_gen = Rcpp::wrap(conDisPairsXY_ind_cpp(xR, yR));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -374,39 +262,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// is_prime_u64
-bool is_prime_u64(double x);
-RcppExport SEXP _DescToolsX_is_prime_u64(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(is_prime_u64(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// primes_upto
-IntegerVector primes_upto(int n);
-RcppExport SEXP _DescToolsX_primes_upto(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(primes_upto(n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// factor_u64
-NumericMatrix factor_u64(double x);
-RcppExport SEXP _DescToolsX_factor_u64(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(factor_u64(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // compute_LCM
 long long compute_LCM(long long int a, long long int b);
 RcppExport SEXP _DescToolsX_compute_LCM(SEXP aSEXP, SEXP bSEXP) {
@@ -564,19 +419,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_DescToolsX_ADstat", (DL_FUNC) &_DescToolsX_ADstat, 1},
-    {"_DescToolsX_ADtest", (DL_FUNC) &_DescToolsX_ADtest, 1},
-    {"_DescToolsX_ADprobExactInf", (DL_FUNC) &_DescToolsX_ADprobExactInf, 1},
-    {"_DescToolsX_ADprobApproxInf", (DL_FUNC) &_DescToolsX_ADprobApproxInf, 1},
-    {"_DescToolsX_ADprobN", (DL_FUNC) &_DescToolsX_ADprobN, 2},
-    {"_DescToolsX_ADtestR", (DL_FUNC) &_DescToolsX_ADtestR, 1},
-    {"_DescToolsX_acceptBin", (DL_FUNC) &_DescToolsX_acceptBin, 3},
-    {"_DescToolsX_bdci_exact_sas_rcpp", (DL_FUNC) &_DescToolsX_bdci_exact_sas_rcpp, 5},
-    {"_DescToolsX_binomdiffciMee", (DL_FUNC) &_DescToolsX_binomdiffciMee, 6},
-    {"_DescToolsX_binomdiffciMN", (DL_FUNC) &_DescToolsX_binomdiffciMN, 6},
     {"_DescToolsX_brier_boot_cpp", (DL_FUNC) &_DescToolsX_brier_boot_cpp, 4},
     {"_DescToolsX_conDisPairsTab", (DL_FUNC) &_DescToolsX_conDisPairsTab, 1},
-    {"_DescToolsX_conDisPairsXY", (DL_FUNC) &_DescToolsX_conDisPairsXY, 2},
+    {"_DescToolsX_cstat_bootstrap_parallel_cpp", (DL_FUNC) &_DescToolsX_cstat_bootstrap_parallel_cpp, 5},
+    {"_DescToolsX_conDisPairsXY_ind_cpp", (DL_FUNC) &_DescToolsX_conDisPairsXY_ind_cpp, 2},
     {"_DescToolsX_bootstrap_contcoef_table_bca_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_bca_cpp, 5},
     {"_DescToolsX_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_cpp, 2},
     {"_DescToolsX_bootstrap_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_cpp, 4},
@@ -594,9 +440,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_bottom_i", (DL_FUNC) &_DescToolsX_bottom_i, 2},
     {"_DescToolsX_fastMode", (DL_FUNC) &_DescToolsX_fastMode, 2},
     {"_DescToolsX_fastModeX", (DL_FUNC) &_DescToolsX_fastModeX, 2},
-    {"_DescToolsX_is_prime_u64", (DL_FUNC) &_DescToolsX_is_prime_u64, 1},
-    {"_DescToolsX_primes_upto", (DL_FUNC) &_DescToolsX_primes_upto, 1},
-    {"_DescToolsX_factor_u64", (DL_FUNC) &_DescToolsX_factor_u64, 1},
     {"_DescToolsX_compute_LCM", (DL_FUNC) &_DescToolsX_compute_LCM, 2},
     {"_DescToolsX_compute_GCD", (DL_FUNC) &_DescToolsX_compute_GCD, 2},
     {"_DescToolsX_divs", (DL_FUNC) &_DescToolsX_divs, 1},

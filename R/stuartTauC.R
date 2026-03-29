@@ -89,7 +89,7 @@ stuartTauC <- function(x, y = NULL,
   } else {
     pr2 <- 1 - (1 - conf.level)/2
     CI <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + tauc
-    result <- c(tauc = tauc,  lwr.ci=max(CI[1], -1), upr.ci=min(CI[2], 1))
+    result <- c(tauc = tauc,  lci=max(CI[1], -1), uci=min(CI[2], 1))
   }
   
   return(result)

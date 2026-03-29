@@ -100,7 +100,7 @@ on the classes of the variables. Default can be defined by
 the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
 \item{digits}{integer. With how many digits should the real numbers
-be formatted? Default is taken from \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.}
+be formatted? Default is taken from \code{\link{setDescToolsXOption}(digits=x)}.}
 
 \item{maxrows}{numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
@@ -185,7 +185,7 @@ The most frequent object types are supported, find more specific help in:
 Description of a \strong{dichotomous variable}. This can either be a logical
 vector, a factor with two levels or a numeric variable with only two unique
 values. The confidence levels for the relative frequencies are calculated by
-\code{\link[=binomCI]{binomCI()}}, method \code{"Wilson"} on a confidence
+\code{\link[lumen]{binomCI}()}, method \code{"Wilson"} on a confidence
 level defined by \code{conf.level}.
 
 Dichotomous variables can easily be
@@ -272,12 +272,12 @@ Forecasting: Principles and Practice.
 \seealso{
 \code{\link{summary}}, \code{\link{plot}}
 
-\code{\link[DescToolsViz]{plot.Desc.logical}} for graphical display
+\code{\link[aurora]{plot.Desc.logical}} for graphical display
 
 \code{\link[base:summary]{base::summary()}},
 \code{\link[base:plot]{base::plot()}}
 
-Other Statistical summary functions: \code{\link[DescToolsViz]{abstract}()}
+Other Statistical summary functions: \code{\link{abstract}()}
 
 \code{\link{chisq.test}},
 \code{\link{fisher.test}},

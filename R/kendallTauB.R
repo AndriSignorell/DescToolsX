@@ -61,11 +61,11 @@ kendallTauB <- function(x, y = NULL,
   #
   
   if(!is.null(y)) {
-    x <- conDisPairsXY(tab)
+    z <- conDisPairsXY_ind_cpp(x, y)
     
   } else {
     tab <- as.table(x)
-    x <- conDisPairsTab(tab)
+    z <- conDisPairsTab(tab)
   }
   
   n <- sum(tab)
@@ -75,12 +75,12 @@ kendallTauB <- function(x, y = NULL,
   n1 <- sum(ti * (ti-1) / 2)
   n2 <- sum(uj * (uj-1) / 2)
   
-  taub <- (x$C - x$D) / sqrt((n0-n1)*(n0-n2))
+  taub <- (z$C - z$D) / sqrt((n0-n1)*(n0-n2))
   
   pi <- tab / sum(tab)
   
-  pdiff <- (x$pi.c - x$pi.d) / sum(tab)
-  Pdiff <- 2 * (x$C - x$D) / sum(tab)^2
+  pdiff <- (z$pi.c - z$pi.d) / sum(tab)
+  Pdiff <- 2 * (z$C - z$D) / sum(tab)^2
   
   rowsum <- rowSums(pi) 
   colsum <- colSums(pi)  
@@ -105,7 +105,7 @@ kendallTauB <- function(x, y = NULL,
   else {
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taub
-    result <- c(tau_b = taub, lwr.ci = max(ci[1], -1), upr.ci = min(ci[2], 1))
+    result <- c(tau_b = taub, lci = max(ci[1], -1), uci = min(ci[2], 1))
   }
   
   return(result)

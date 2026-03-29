@@ -56,7 +56,7 @@ gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
 }
 \seealso{
 \code{\link{medianX}}, \code{\link[stats]{quantile}},
-\code{\link{quantileCI}}
+\code{\link[lumen]{quantileCI}}
 }
 \author{
 Andreas Alfons, Matthias Templ, some tweaks Andri Signorell

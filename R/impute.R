@@ -33,7 +33,7 @@
 #' @concept data processing
 #' @concept imputation
 #'
-#' @seealso For direct value replacement see [DescToolsViz::naReplace()].
+#' @seealso For direct value replacement see [bedrock::naReplace()].
 #' 
 #' @examples
 #' x <- c(2, 3, NA, 5, 9)

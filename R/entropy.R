@@ -13,7 +13,7 @@
 #' stream of characters of the given "script".\cr The entropy is ranging from 0
 #' to Inf. 
 #' 
-#' @aliases Entropy MutInf
+#' @aliases entropy
 #' @param x a vector or a matrix of numerical or categorical type. If only x is
 #' supplied it will be interpreted as contingency table. 
 #' @param y a vector with the same type and dimension as x. If y is not
@@ -21,7 +21,7 @@
 #' @param base base of the logarithm to be used, defaults to 2. 
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set \code{useNA}.
-#' @return a numeric value. %% ~Describe the value returned 
+#' @return a numeric value. 
 #' @author Andri Signorell <andri@@signorell.net> 
 #' @seealso package \pkg{entropy} which implements various estimators of
 #' entropy 
@@ -39,8 +39,10 @@
 #' examp <- c(1,3)
 #' # todo: some more ********
 #' 
+#' 
 
 
+#' @export
 entropy <- function(x, y = NULL, base = 2, ...) {
   
   # x is either a table or a vector if y is defined

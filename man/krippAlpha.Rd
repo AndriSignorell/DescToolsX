@@ -94,7 +94,7 @@ Krippendorff, K. (2018). \emph{Content Analysis: An Introduction to Its Methodol
 Sage Publications.
 }
 \seealso{
-\code{\link{bootCI}}
+\code{\link[lumen]{bootCI}}
 
 Other topic.Agreement: 
 \code{\link{ccc}()},

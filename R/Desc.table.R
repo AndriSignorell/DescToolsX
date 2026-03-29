@@ -387,8 +387,8 @@ print.Desc.table <- function(x, ...) {
 }
 
 
-# no export here, all code in DescToolsViz 
-# plot.Desc.table <- DescToolsViz::plot.Desc.table
+# no export here, all code in aurora 
+# plot.Desc.table <- aurora::plot.Desc.table
 
 
 

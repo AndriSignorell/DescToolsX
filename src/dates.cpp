@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 
-// ************************ Week ***************
+// ************************ week ***************
 
 // [[Rcpp::export]]
 IntegerVector isoWeek(DateVector x) {
@@ -79,7 +79,7 @@ IntegerVector usWeek(DateVector x) {
 
 
 
-// ************************ Year ***************
+// ************************ year ***************
 
 
 // [[Rcpp::export]]

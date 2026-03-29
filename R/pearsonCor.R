@@ -35,11 +35,11 @@
 #' with(swiss, pearsonCor(Fertility, Agriculture))
 #' with(swiss, pearsonCor(Fertility, Agriculture, conf.level=0.95))
 #' 
-#' pairApply(swiss, pearsonCor)
+#' bedrock::pairApply(swiss, pearsonCor)
 #' 
-#' pairApply(swiss, 
-#'           function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
-#'                               digits=3, ldigits=0))
+#' bedrock::pairApply(swiss, 
+#'            function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
+#'                                digits=3, ldigits=0))
 #' 
 
 
@@ -62,8 +62,8 @@ pearsonCor <- function(x, y = NULL,
   if (is.null(y)) {
     
     # Table interface
-    sR <- .scores(x, 1, scores.type)
-    sC <- .scores(x, 2, scores.type)
+    sR <- scores(x, 1, scores.type)
+    sC <- scores(x, 2, scores.type)
     
     n  <- sum(x)
     
@@ -127,7 +127,7 @@ pearsonCor <- function(x, y = NULL,
     return(NULL)
   
   if (n < 4)
-    return(c(lwr.ci = NA_real_, upr.ci = NA_real_))
+    return(c(lci = NA_real_, uci = NA_real_))
   
   if ( isZero(abs(r) - 1) )
     return( c(est=1, lci=1, uci=1) )

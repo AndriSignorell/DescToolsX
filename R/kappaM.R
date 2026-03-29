@@ -259,7 +259,7 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
   if (is.na(conf.level)) {
     res <- value
   } else {
-    res <- c("kappa"=value, lwr.ci=ci[1], upr.ci=ci[2])
+    res <- c("kappa"=value, lci=ci[1], uci=ci[2])
   }
   return(res)
   

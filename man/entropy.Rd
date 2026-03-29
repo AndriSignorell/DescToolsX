@@ -2,8 +2,6 @@
 % Please edit documentation in R/entropy.R
 \name{entropy}
 \alias{entropy}
-\alias{Entropy}
-\alias{MutInf}
 \title{Shannon Entropy}
 \usage{
 entropy(x, y = NULL, base = 2, ...)
@@ -21,7 +19,7 @@ supplied it will be interpreted as contingency table.}
 \code{\link{table}}, allowing i.e. to set \code{useNA}.}
 }
 \value{
-a numeric value. \%\% ~Describe the value returned
+a numeric value.
 }
 \description{
 Computes Shannon entropy of two variables. The
@@ -41,6 +39,7 @@ to Inf.
 examp <- c(1,3)
 # todo: some more ********
 
+
 }
 \references{
 Shannon, Claude E. (July/October 1948). A Mathematical Theory of
@@ -58,9 +57,11 @@ Other topic.associationMeasures:
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

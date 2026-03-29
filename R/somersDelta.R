@@ -118,7 +118,7 @@ somersDelta <- function(x,  y = NULL,
   if(is.na(conf.level)){
     result <- somers
   } else {
-    result <- c(somers = somers,  lwr.ci=max(ci[1], -1), upr.ci=min(ci[2], 1))
+    result <- c(somers = somers,  lci=max(ci[1], -1), uci=min(ci[2], 1))
   }
   
   return(result)

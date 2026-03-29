@@ -80,7 +80,7 @@
 #' cohenKappa(m, weight="Unweighted")
 #' 
 #' # vector interface
-#' x <- untable(m)
+#' x <- bedrock::untable(m)
 #' cohenKappa(x$rater1, x$rater2, weight="Unweighted")
 #' 
 #' # pairwise Kappa

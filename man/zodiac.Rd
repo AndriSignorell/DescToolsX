@@ -44,7 +44,7 @@ Desc(z)
 
 }
 \seealso{
-\code{\link{Year}} and other date functions
+\code{\link{year}} and other date functions
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code from Markus

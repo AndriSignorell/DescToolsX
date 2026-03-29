@@ -61,7 +61,7 @@ The relative risk is then calculated as:
 ---------------------------------- (unexposed & diseased) / unexposed }
 
 If the table to be used is not in the required shape, use the function
-\code{\link{revX}()} and/or \code{\link{t}()} to reverse rows, columns, or
+\code{\link[bedrock]{revX}()} and/or \code{\link{t}()} to reverse rows, columns, or
 both, resp. to transpose the table.
 }
 \examples{

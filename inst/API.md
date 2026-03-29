@@ -7,7 +7,7 @@
 
 ## Function groups
 ### Location
-- MeanCI
+- meanCI
 - MedianCI
 
 ### Dispersion

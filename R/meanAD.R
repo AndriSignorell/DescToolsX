@@ -78,7 +78,7 @@ meanAD <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
   }
   
   if(!is.null(weights)) {
-    z <- .NormWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
+    z <- .normWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
     res <- sum(abs(z$x - center) * z$weights) / z$wsum
     
   } else {

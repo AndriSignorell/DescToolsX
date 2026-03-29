@@ -1,5 +1,5 @@
 
 
 .blocker <- function(){
-  DescToolsViz::colToRgb("peachpuff")
+  aurora::colToRgb("peachpuff")
 }

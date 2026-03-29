@@ -52,11 +52,11 @@ calculation of normal distributed confidence intervals.
 with(swiss, pearsonCor(Fertility, Agriculture))
 with(swiss, pearsonCor(Fertility, Agriculture, conf.level=0.95))
 
-pairApply(swiss, pearsonCor)
+bedrock::pairApply(swiss, pearsonCor)
 
-pairApply(swiss, 
-          function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
-                              digits=3, ldigits=0))
+bedrock::pairApply(swiss, 
+           function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
+                               digits=3, ldigits=0))
 
 }
 \seealso{

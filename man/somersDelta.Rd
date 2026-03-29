@@ -108,8 +108,10 @@ Other topic.associationMeasures:
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

@@ -26,20 +26,20 @@
 #' containing the transformed dates.
 #' @author Andri Signorell <andri@@signorell.net>, originally based on code by
 #' Roland Rapold
-#' @seealso \code{\link{addMonths}}; Date functions, like \code{\link{Year}},
-#' \code{\link{Month}}, etc. 
+#' @seealso \code{\link{addMonths}}; Date functions, like \code{\link{year}},
+#' \code{\link{month}}, etc. 
 #' @keywords chron
 #' @examples
 #' 
 #' 
-#' Month(as.ym(202408))
-#' Year(as.ym(202408))
+#' month(as.ym(202408))
+#' year(as.ym(202408))
 #' 
-#' Year(as.Date("2024-12-05"))
-#' Year(as.ym(202412))
+#' year(as.Date("2024-12-05"))
+#' year(as.ym(202412))
 #' 
-#' Month(as.Date("2024-12-05"), fmt = "mm")
-#' Month(as.ym(202412), fmt="mm")
+#' month(as.Date("2024-12-05"), fmt = "mm")
+#' month(as.ym(202412), fmt="mm")
 #' 
 #' addMonths(201511, 5)
 #' 
@@ -99,7 +99,7 @@ addMonths.ym <- function (x, n, ...) {
       
       # YYYYMMDD
       res <- addMonths(x = as.Date(as.character(x), "%Y%m%d"), n = n)
-      res <- Year(res)*10000L + DescToolsX::Month(res)*100L + Day(res)
+      res <- year(res)*10000L + DescToolsX::month(res)*100L + Day(res)
     }
     
     return(res)

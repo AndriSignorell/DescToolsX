@@ -78,7 +78,7 @@ cronbachAlpha <- function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
     if (!is.na(conf.level)) {
       N <- length(x)
       ci <- 1 - (1-res) * qf( c(1-(1-conf.level)/2, (1-conf.level)/2), N-1, (nc-1)*(N-1))
-      res <- c("Cronbach Alpha"=res, lwr.ci=ci[1], upr.ci=ci[2])
+      res <- c("Cronbach Alpha"=res, lci=ci[1], uci=ci[2])
     }
     return(res)
   }

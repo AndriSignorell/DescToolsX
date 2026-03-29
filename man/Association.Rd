@@ -41,7 +41,7 @@ table with \code{\link{table}(x, y, ...)}. \code{NAs} are by default handled the
 way as the function does, so \code{NAs} omitted.
 
 If the measure should be calculated pairwise for a set of variables
-\code{\link{pairApply}} can be used. This easily allows to create matrices
+\code{\link[bedrock]{pairApply}} can be used. This easily allows to create matrices
 of association measures (the same way as the \code{cor} does). \code{NAs}
 again are by default omitted pairwise, which corresponds to the
 \code{pairwise.complete} option of \code{\link{cor}}.
@@ -83,9 +83,11 @@ Other topic.associationMeasures:
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

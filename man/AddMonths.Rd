@@ -2,7 +2,7 @@
 % Please edit documentation in R/addMonths.R
 \name{addMonths}
 \alias{addMonths}
-\title{Add a Month to a Date}
+\title{Add a month to a Date}
 \usage{
 addMonths(x, n, ...)
 }
@@ -58,8 +58,8 @@ Thanks to Antonio:
 \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 }
 \seealso{
-\code{\link{as.ym}}; Date functions: \code{\link{Year}},
-\code{\link{Month}}, etc.
+\code{\link{as.ym}}; Date functions: \code{\link{year}},
+\code{\link{month}}, etc.
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code by Roland

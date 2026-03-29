@@ -23,7 +23,7 @@
 #' @author Andreas Alfons, Matthias Templ, some tweaks Andri Signorell
 #' <andri@@signorell.net>
 #' @seealso \code{\link{medianX}}, \code{\link[stats]{quantile}},
-#' \code{\link{quantileCI}}
+#' \code{\link[lumen]{quantileCI}}
 #' @references Working group on Statistics on Income and Living Conditions
 #' (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
 #' gap.  \emph{EU-SILC 131-rev/04}, Eurostat.

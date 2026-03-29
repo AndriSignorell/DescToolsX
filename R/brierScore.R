@@ -68,8 +68,8 @@
 #' Otherwise, a named numeric vector with components:
 #' \itemize{
 #'   \item \code{brier} - the point estimate
-#'   \item \code{lwr.ci} - lower confidence limit
-#'   \item \code{upr.ci} - upper confidence limit
+#'   \item \code{lci} - lower confidence limit
+#'   \item \code{uci} - upper confidence limit
 #' }
 #'
 #' @references

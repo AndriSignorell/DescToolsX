@@ -22,8 +22,7 @@
 #' @param labels labels for the levels of the resulting category. By default,
 #' labels are defined as \code{Q1}, \code{Q2} to the length of breaks - 1. The
 #' parameter ist passed to \code{\link{cut}}, so if \code{labels} are set to
-#' \code{FALSE}, simple integer codes are returned instead of a factor. %%
-#' ~~Describe \code{labels} here~~
+#' \code{FALSE}, simple integer codes are returned instead of a factor. 
 #' @param na.rm Boolean indicating whether missing values should be removed
 #' when computing quantiles.  Defaults to TRUE.
 #' @param \dots Optional arguments passed to \code{\link{cut}}.
@@ -68,7 +67,7 @@ cutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE),
   
   if(na.rm) x <- na.omit(x)
   
-  if(length(breaks)==1 && DescToolsViz::isWholeLike(breaks))
+  if(length(breaks)==1 && isWholeLike(breaks))
     breaks <- quantile(x, seq(0, 1, by = 1/breaks), na.rm = TRUE)
   
   if(is.null(labels)) labels <- gettextf("Q%s", 1:(length(breaks)-1))

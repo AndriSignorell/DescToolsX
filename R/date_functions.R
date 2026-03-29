@@ -6,11 +6,11 @@
 #' 
 #' These functions are mainly convenience wrappers for the painful
 #' \code{format()} and its strange codes...\cr Based on the requested time
-#' component, the output is as follows:\cr \tabular{ll}{ \code{Year}\tab
+#' component, the output is as follows:\cr \tabular{ll}{ \code{year}\tab
 #' returns the year of a date or a yearmonth (\code{yyyymm}) in (\code{yyyy})
 #' format .\cr \code{Quarter}\tab returns the quarter of the year (1 to 4) for
-#' the input date. \cr \code{Month}\tab returns the month of the year (1 to 12)
-#' for the input date or for a yearmonth. \cr \code{Week}\tab returns the week
+#' the input date. \cr \code{month}\tab returns the month of the year (1 to 12)
+#' for the input date or for a yearmonth. \cr \code{week}\tab returns the week
 #' of the year for the input date (0 to 53), as defined in ISO8601. \cr
 #' \code{Weekday}\tab returns the week day of the input date. (1 - Monday, 2 -
 #' Tuesday, ... 7 - Sunday). (Names and abbreviations are either english or in
@@ -23,7 +23,7 @@
 #' \code{Hour}, \code{Minute}, \code{Second} \tab returns the hour, minute or
 #' second from a POSIXlt object. \cr \code{Timezone} \tab returns the timezone
 #' from a POSIXlt object. \cr \code{HmsToMinute} \tab converts the time parts
-#' of a POSIXlt object to minutes.\cr \code{Today}, \code{Now}\tab returns the
+#' of a POSIXlt object to minutes.\cr \code{today}, \code{now}\tab returns the
 #' current date, resp. the current date and time.\cr
 #' 
 #' \code{isWeekend} \tab returns \code{TRUE}, if the date x falls on a weekend.
@@ -31,19 +31,19 @@
 #' a leap year. \cr } The day can not only be extracted, but as well be
 #' defined. See examples. \tabular{ll}{ \code{DiffDays360} \tab calculates the
 #' difference between 2 dates using the 360-days convention.\cr
-#' \code{LastDayOfMonth} \tab returns the last day of the month of the given
+#' \code{lastDayOfMonth} \tab returns the last day of the month of the given
 #' date(s). \cr \code{YearDays} \tab returns the total number of days of the
 #' given date(s). \cr \code{MonthDays} \tab returns the numer of days of the
 #' month of the given date(s). \cr } The language in \code{Weekday()} and
-#' \code{Month()} can be set with an option as well.  These functions will
+#' \code{month()} can be set with an option as well.  These functions will
 #' check for an existing option named \code{"lang"} and take this value if it
 #' exists. So simply set \code{option(lang="engl")} if the results should
 #' always be reported in English.
 #' 
 #' @name date_functions
-#' @aliases Year Quarter Month Week Day Day<- Weekday YearDay YearWeek
-#' YearMonth isWeekend isLeapYear Hour Minute Second Now Today DiffDays360
-#' LastDayOfMonth Timezone YearDays MonthDays Month.ym Year.ym
+#' @aliases year Quarter month week Day Day<- Weekday YearDay YearWeek
+#' YearMonth isWeekend isLeapYear Hour Minute Second now today DiffDays360
+#' lastDayOfMonth Timezone YearDays MonthDays month.ym year.ym
 #' @param x the date to be evaluated. 
 #' @param fmt format string, defines how the month or the weekday are to be
 #' formatted. Defaults to \code{"m"}, resp. \code{"d"}. Is ignored for other
@@ -67,18 +67,18 @@
 #' @keywords chron
 #' @examples
 #' 
-#' x <- Today()    # the same as Sys.Date() but maybe easier to remember..
+#' x <- today()    # the same as Sys.Date() but maybe easier to remember..
 #' 
-#' Year(x)
+#' year(x)
 #' Quarter(x)
 #' 
-#' Month(x)
-#' Month(x, fmt = "mm", lang="en")
-#' Month(x, fmt = "mm", lang="local")
-#' Month(x, fmt = "mmm", lang="en")
-#' Month(x, fmt = "mmm", lang="local")
+#' month(x)
+#' month(x, fmt = "mm", lang="en")
+#' month(x, fmt = "mm", lang="local")
+#' month(x, fmt = "mmm", lang="en")
+#' month(x, fmt = "mmm", lang="local")
 #' 
-#' Week(x)
+#' week(x)
 #' 
 #' Day(x)
 #' Day(x) <- 20
@@ -97,9 +97,9 @@
 #' isLeapYear(x)
 #' 
 #' # let's generate a time sequence by weeks
-#' Month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), fmt="mm")
+#' month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), fmt="mm")
 #' 
-#' LastDayOfMonth(as.Date(c("2014-10-12","2013-01-31","2011-12-05")))
+#' lastDayOfMonth(as.Date(c("2014-10-12","2013-01-31","2011-12-05")))
 #' 
 #' 
 
@@ -107,19 +107,19 @@
 
 #' @rdname date_functions
 #' @export
-Year <-  function(x){
-  UseMethod("Year")
+year <-  function(x){
+  UseMethod("year")
 }
 
 #' @rdname date_functions
-#' @method Year ym
+#' @method year ym
 #' @export
-Year.ym  <- function(x){  unclass(round((x/100)))   }
+year.ym  <- function(x){  unclass(round((x/100)))   }
 
 #' @rdname date_functions
-#' @method Year default
+#' @method year default
 #' @export
-Year.default <- function(x){ as.POSIXlt(x)$year + 1900L }
+year.default <- function(x){ as.POSIXlt(x)$year + 1900L }
 
 
 
@@ -127,26 +127,26 @@ Year.default <- function(x){ as.POSIXlt(x)$year + 1900L }
 
 #' @rdname date_functions
 #' @export
-Month <- function(x, fmt = c("m", "mm", "mmm"), 
+month <- function(x, fmt = c("m", "mm", "mmm"), 
                   lang = .getOption("lang"), stringsAsFactors = TRUE) {
-  UseMethod("Month")
+  UseMethod("month")
 }
 
 
 #' @rdname date_functions
-#' @method Month ym
+#' @method month ym
 #' @export
-Month.ym <- function(x, fmt = c("m", "mm", "mmm"), 
+month.ym <- function(x, fmt = c("m", "mm", "mmm"), 
                      lang = .getOption("lang"), stringsAsFactors = TRUE) {
-  # unclass(x - Year(x) * 100)   
+  # unclass(x - year(x) * 100)   
   x <- as.Date(x)
   NextMethod()
 }
 
 #' @rdname date_functions
-#' @method Month default
+#' @method month default
 #' @export
-Month.default <- function(x, fmt = c("m", "mm", "mmm"), 
+month.default <- function(x, fmt = c("m", "mm", "mmm"), 
                           lang = .getOption("lang"), stringsAsFactors = TRUE) {
   
   res <- as.POSIXlt(x)$mon + 1L
@@ -185,19 +185,19 @@ Month.default <- function(x, fmt = c("m", "mm", "mmm"),
 
 #' @rdname date_functions
 #' @export
-Week <- function(x, method = c("iso", "us")){
+week <- function(x, method = c("iso", "us")){
   
   # dd <- seq(as.Date("1970-01-01"), as.Date("2030-01-01"), by="days")
   # 
-  # identical(Week(dd, "us"), as.integer(lubridate::week(dd)))
+  # identical(week(dd, "us"), as.integer(lubridate::week(dd)))
   # microbenchmark::microbenchmark(
-  #   DescToolsX = Week(dd, "us"),
+  #   DescToolsX = week(dd, "us"),
   #   lubridate = lubridate::week(dd)
   # )
   # 
-  # identical(Week(dd, "iso"), as.integer(lubridate::isoweek(dd)))
+  # identical(week(dd, "iso"), as.integer(lubridate::isoweek(dd)))
   # microbenchmark::microbenchmark(
-  #   DescToolsX = Week(dd, "iso"),
+  #   DescToolsX = week(dd, "iso"),
   #   lubridate = lubridate::isoweek(dd)
   # )
   # --> We are superfast!!
@@ -287,11 +287,11 @@ Quarter <- function (x) {
 
 #' @rdname date_functions
 #' @export
-Today <- function() Sys.Date()
+today <- function() Sys.Date()
 
 #' @rdname date_functions
 #' @export
-Now <- function() Sys.time()
+now <- function() Sys.time()
 
 #' @rdname date_functions
 #' @export
@@ -381,11 +381,11 @@ DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
   end_d <- as.Date(end_d)
   
   d1 <- Day(start_d)
-  m1 <- Month(start_d)
-  y1 <- Year(start_d)
+  m1 <- month(start_d)
+  y1 <- year(start_d)
   d2 <- Day(end_d)
-  m2 <- Month(end_d)
-  y2 <- Year(end_d)
+  m2 <- month(end_d)
+  y2 <- year(end_d)
   
   method = match.arg(method)
   switch(method,
@@ -394,10 +394,10 @@ DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
            if(Day(end_d)==31L) end_d <- end_d-1L
          }
          , "us" ={
-           if( (Day(start_d+1L)==1L & Month(start_d+1L)==3L) &
-               (Day(end_d+1L)==1L & Month(end_d+1L)==3L)) d2 <- 30L
+           if( (Day(start_d+1L)==1L & month(start_d+1L)==3L) &
+               (Day(end_d+1L)==1L & month(end_d+1L)==3L)) d2 <- 30L
            if( d1==31L ||
-               (Day(start_d+1L)==1L & Month(start_d+1L)==3L)) {
+               (Day(start_d+1L)==1L & month(start_d+1L)==3L)) {
              d1 <- 30L
              if(d2==31L) d2 <- 30L
            }
@@ -412,7 +412,7 @@ DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
 
 #' @rdname date_functions
 #' @export
-LastDayOfMonth <- function(x){
+lastDayOfMonth <- function(x){
   z <- addMonths(x, 1L)
   Day(z) <- 1L
   return(z - 1L)

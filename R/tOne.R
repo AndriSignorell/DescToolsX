@@ -56,7 +56,7 @@
 #' are used. Deviations from this can be freely passed as arguments to the
 #' function. fms can be defined for integers, floating point numbers,
 #' percentages and for the p-values of statistical tests. All options of the
-#' function \code{\link[DescToolsViz]{fm}()} are available and can be provided as a list.
+#' function \code{\link[aurora]{fm}()} are available and can be provided as a list.
 #' See examples which show several different implementations. 
 #' \preformatted{
 #'   fmt = list(abs  = "abs.sty", 
@@ -65,7 +65,8 @@
 #'              pval = style(fmt = "*", na.form = " ")
 #'              ) }
 #' 
-#' Several tables can be appended using \code{\link{appendX}()}. This can be useful, 
+#' Several tables can be appended using \code{\link[bedrock]{appendX}()}. 
+#' This can be useful, 
 #' if e.g. the \code{mean/sd} AND \code{median/IQR} should be displayed together.
 #' Another use case is to introduce a delimiter row.
 #' 
@@ -121,12 +122,9 @@
 #' 
 #' @return a character matrix 
 #' 
-#' @author Andri Signorell <andri@@signorell.net> 
-#' 
-#' @seealso \code{\link{appendX}()}
+#' @seealso \code{\link[bedrock]{appendX}()}
 #' 
 #' 
-#' @keywords IO
 #' @examples
 #' 
 #' options(scipen = 8)

@@ -26,8 +26,7 @@
 #' single number between 0 and 1.
 #' @param na.rm logical, indicating whether \code{NA} values should be stripped
 #' before the computation proceeds. If set to \code{TRUE} only the complete
-#' cases of the ratings will be used. Defaults to \code{FALSE}.  %% ~~Describe
-#' \code{na.rm} here~~
+#' cases of the ratings will be used. Defaults to \code{FALSE}.  
 #' @return A list containing the following: \item{rho.c}{the concordance
 #' correlation coefficient.} \item{s.shift}{the scale shift.}
 #' \item{l.shift}{the location shift.} \item{C.b}{a bias correction factor that
@@ -35,8 +34,8 @@
 #' deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page
 #' 258).} \item{blalt}{a data frame with two columns: \code{mean} the mean of
 #' each pair of measurements, \code{delta} vector \code{y} minus vector
-#' \code{x}.} %% \item{nmissing}{a count of the number of measurement pairs
-#' ignored due to missingness.}
+#' \code{x}.} 
+#' 
 #' @author Mark Stevenson <mark.stevenson1@@unimelb.edu.au>
 #' 
 #' @seealso \code{\link{icc}}, \code{\link{kendallW}}
@@ -131,7 +130,8 @@
 
      
 #' @export
-ccc <- function(x, y, ci = "z-transform", conf.level = 0.95, na.rm = FALSE){
+ccc <- function(x, y, ci = "z-transform", 
+                conf.level = 0.95, na.rm = FALSE){
   
   dat <- data.frame(x, y)
   
@@ -143,8 +143,8 @@ ccc <- function(x, y, ci = "z-transform", conf.level = 0.95, na.rm = FALSE){
   
   N. <- 1 - ((1 - conf.level) / 2)
   zv <- qnorm(N., mean = 0, sd = 1)
-  lower <- "lwr.ci"
-  upper <- "upr.ci"
+  lower <- "lci"
+  upper <- "uci"
   
   k <- length(dat$y)
   yb <- mean(dat$y)

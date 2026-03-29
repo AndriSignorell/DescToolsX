@@ -103,7 +103,7 @@ uncertCoef <- function(x, y = NULL, conf.level = NA,
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res
     
-    res <- c(uc = res,  lwr.ci=max(ci[1], -1), upr.ci=min(ci[2], 1))
+    res <- c(uc = res,  lci=max(ci[1], -1), uci=min(ci[2], 1))
   }
   return(res)
 }

@@ -43,7 +43,7 @@
 #' @return If \code{conf.level} is set to \code{NA} then the result will be
 #' \item{a}{ single numeric value} and if a \code{conf.level} is provided, a
 #' named numeric vector with 3 elements: \item{gini}{gini coefficient}
-#' \item{lwr.ci}{lower bound of the confidence interval} \item{upr.ci}{upper
+#' \item{lci}{lower bound of the confidence interval} \item{uci}{upper
 #' bound of the confidence interval}
 #' 
 #' @author Andri Signorell <andri@@signorell.net>
@@ -170,7 +170,7 @@ gini <- function(x,
     #                     i.gini(x = z[i], w = u[i], unbiased = unbiased), 
     #                   R=R, u=weights, unbiased=unbiased)
     # ci <- boot.ci(boot.gini, conf = conf.level, type = type)
-    # res <- c(gini = boot.gini$t0, lwr.ci = ci[[4]][4], upr.ci = ci[[4]][5])
+    # res <- c(gini = boot.gini$t0, lci = ci[[4]][4], uci = ci[[4]][5])
     
     
     # boot arguments in dots ...
@@ -262,7 +262,7 @@ gini <- function(x,
 #     # adjusted bootstrap percentile (BCa) interval
 #     boot.gini <- boot(x, function(x, d) i.gini(x[d], unbiased = unbiased), R=R)
 #     ci <- boot.ci(boot.gini, conf=conf.level, type=type)
-#     res <- c(gini=boot.gini$t0, lwr.ci=ci[[4]][4], upr.ci=ci[[4]][5])
+#     res <- c(gini=boot.gini$t0, lci=ci[[4]][4], uci=ci[[4]][5])
 #   }
 # 
 #   return(res)

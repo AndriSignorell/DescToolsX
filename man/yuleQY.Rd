@@ -71,6 +71,7 @@ m <- matrix(c(12, 5, 3, 20), nrow = 2)
 yuleQ(m)
 yuleY(m, conf.level = 0.95)
 
+
 }
 \references{
 Yule, G. U. (1912). On the methods of measuring association between two attributes.
@@ -82,9 +83,11 @@ Other topic.associationMeasures:
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()}
 }
 \concept{association}

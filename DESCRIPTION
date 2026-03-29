@@ -12,16 +12,13 @@ Authors@R: c(
   person("Tomas"         , "Aragon",              role = c("ctb")),
   person("Chandima"      , "Arachchige",          role = c("ctb")),
   person("Antti"         , "Arppe",               role = c("ctb")),
-  person("Adrian"        , "Baddeley",            role = c("ctb")),
   person("Kamil"         , "Barton",              role = c("ctb")),
   person("Ben"           , "Bolker",              role = c("ctb")),
   person("Hans W."       , "Borchers",            role = c("ctb")),
-  person("Frederico"     , "Caeiro",              role = c("ctb")),
   person("Stephane"      , "Champely",            role = c("ctb")),
   person("Daniel"        , "Chessel",             role = c("ctb")),
   person("Leanne"        , "Chhay",               role = c("ctb")),
   person("Nicholas"      , "Cooper",              role = c("ctb")),
-  person("Clint"         , "Cummins",             role = c("ctb")),
   person("Michael"       , "Dewey",               role = c("ctb")),
   person("Harold C."     , "Doran",               role = c("ctb")),
   person("Stephane"      , "Dray",                role = c("ctb")),
@@ -30,55 +27,33 @@ Authors@R: c(
   person("Claus"         , "Ekstrom",             role = c("ctb")),
   person("Martin"        , "Elff",                role = c("ctb")),
   person("Jeff"          , "Enos",                role = c("ctb")),
-  person("Richard W."    , "Farebrother",         role = c("ctb")),
-  person("John"          , "Fox",                 role = c("ctb")),
   person("Romain"        , "Francois",            role = c("ctb")),
-  person("Michael"       , "Friendly",            role = c("ctb")),
-  person("Tal"           , "Galili",              role = c("ctb")),
   person("Matthias"      , "Gamer",               role = c("ctb")),
-  person("Joseph L."     , "Gastwirth",           role = c("ctb")),
   person("Vilmantas"     , "Gegzna",              role = c("ctb")),
-  person("Yulia R."      , "Gel",                 role = c("ctb")),
   person("Sereina"       , "Graber",              role = c("ctb")),
-  person("Juergen"       , "Gross",               role = c("ctb")),
   person("Gabor"         , "Grothendieck",        role = c("ctb")),
   person("Frank E."      , "Harrell Jr",          role = c("ctb")),
   person("Richard"       , "Heiberger",           role = c("ctb")),
-  person("Michael"       , "Hoehle",              role = c("ctb")),
   person("Christian W."  , "Hoffmann",            role = c("ctb")),
   person("Soeren"        , "Hojsgaard",           role = c("ctb")),
-  person("Torsten"       , "Hothorn",             role = c("ctb")),
   person("Markus"        , "Huerzeler",           role = c("ctb")),
-  person("Wallace W."    , "Hui",                 role = c("ctb")),
-  person("Pete"          , "Hurd",                role = c("ctb")),
   person("Rob J."        , "Hyndman",             role = c("ctb")),
   person("Christopher"   , "Jackson",             role = c("ctb")),
   person("Ken"           , "Kelly",               role = c("ctb")),
-  person("Matthias"      , "Kohl",                role = c("ctb")),
   person("Mikko"         , "Korpela",             role = c("ctb")),
   person("Max"           , "Kuhn",                role = c("ctb")),
-  person("Detlew"        , "Labes",               role = c("ctb")),
   person("Friederich"    , "Leisch",              role = c("ctb")),
-  person("Jim"           , "Lemon",               role = c("ctb")),
   person("Dong"          , "Li",                  role = c("ctb")),
   person("Martin"        , "Maechler",            role = c("ctb")),
   person("Arni"          , "Magnusson",           role = c("ctb")),
   person("Ben"           , "Mainwaring",          role = c("ctb")),
-  person("Daniel"        , "Malter",              role = c("ctb")),
-  person("George"        , "Marsaglia",           role = c("ctb")),
-  person("John"          , "Marsaglia",           role = c("ctb")),
   person("Alina"         , "Matei",               role = c("ctb")),
-  person("David"         , "Meyer",               role = c("ctb")),
-  person("Weiwen"        , "Miao",                role = c("ctb")),
-  person("Giovanni"      , "Millo",               role = c("ctb")),
   person("Yongyi"        , "Min",                 role = c("ctb")),
-  person("David"         , "Mitchell",            role = c("ctb")),
   person("Cyril Flurin"  , "Moser",               role = c("ctb")),
   person("Franziska"     , "Mueller",             role = c("ctb")),
   person("Markus"        , "Naepflin",            role = c("ctb")),
   person("Danielle"      , "Navarro",             role = c("ctb")),
   person("Henric"        , "Nilsson",             role = c("ctb")),
-  person("Klaus"         , "Nordhausen",          role = c("ctb")),
   person("Derek"         , "Ogle",                role = c("ctb")),
   person("Hong"          , "Ooi",                 role = c("ctb")),
   person("Nick"          , "Parsons",             role = c("ctb")),
@@ -94,9 +69,7 @@ Authors@R: c(
   person("Nathan"        , "Russell",             role = c("ctb")),
   person("Nick"          , "Sabbe",               role = c("ctb")),
   person("Ralph"         , "Scherer",             role = c("ctb")),
-  person("Venkatraman E.", "Seshan",              role = c("ctb")),
   person("Michael"       , "Smithson",            role = c("ctb")),
-  person("Greg"          , "Snow",                role = c("ctb")),
   person("Karline"       , "Soetaert",            role = c("ctb")),
   person("Werner A."     , "Stahel",              role = c("ctb")),
   person("Alec"          , "Stephenson",          role = c("ctb")),
@@ -115,7 +88,6 @@ Authors@R: c(
   person("John"          , "Verzani",             role = c("ctb")),
   person("Pablo J."      , "Villacorta Iglesias", role = c("ctb")),
   person("Gregory R."    , "Warnes",              role = c("ctb")),
-  person("Stefan"        , "Wellek",              role = c("ctb")),
   person("Hadley"        , "Wickham",             role = c("ctb")),
   person("Rand R."       , "Wilcox",              role = c("ctb")),
   person("Peter"         , "Wolf",                role = c("ctb")),
@@ -125,15 +97,17 @@ Authors@R: c(
   person("Thomas"        , "Yee",                 role = c("ctb")),
   person("Achim"         , "Zeileis",             role = c("ctb"))
  )
-Description: This is the successor to DescTools, completely redesigned, decluttered, simplified, unified and accelerated.
+Description: This is the successor to DescTools, completely redesigned, decluttered, simplified, bugfixed, unified and accelerated.
 Encoding: UTF-8
-Depends: R (>= 4.2.0), DescToolsViz
+Depends: R (>= 4.2.0), aurora, lumen, bedrock, hermes
 License: GPL (>= 2)
 LinkingTo: Rcpp, RcppArmadillo, RcppParallel  
-LazyData: yes
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Suggests: goftest, testthat (>= 3.0.0), R.rsp
+Suggests: goftest, testthat (>= 3.0.0), R.rsp, readr
 Config/testthat/edition: 3
-Imports: stats, boot, rstudioapi, cli, gld, data.table, haven, mvtnorm, lme4, withr
+Imports: stats, boot, rstudioapi, cli, gld, data.table, haven, lme4, methods, stringi
 VignetteBuilder: R.rsp
+URL: https://andrisignorell.github.io/DescToolsX/,
+            https://github.com/AndriSignorell/DescToolsX/
+BugReports: https://github.com/AndriSignorell/DescToolsX/issues

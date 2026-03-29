@@ -19,7 +19,36 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/AndriSignorell/DescToolsX/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AndriSignorell/DescToolsX/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of DescToolsX is to ...
+# Tools for Descriptive Statistics and Exploratory Data Analysis
+
+[DescTools](https://cran.r-project.org/web/packages/DescTools/) has been available on CRAN for more than 12 years and has undergone a large number of changes and additions during that time. In this timespan the package gained impressive popularity and was downloaded a million times in 2025.
+However its historical development has led to inconsistencies that could no longer be resolved through an evolutionary process. It was time to redesign the package to establish a clean new foundation.
+
+![](C:\temp\DescToolsX_doku\timeToMove.png)
+
+**DescToolsX** is the successor to DescTools, completely redesigned, decluttered, simplified, bugfixed, unified and substantially  accelerated.
+
+
+The DescTools collection of functions has been reviewed, reorganised and grouped into logical units, with particular attention paid to consistency in operation and user interface design. 
+The new approach moves away from the monolithic design of DescTools, which had recently made maintenance so difficult. The functions are now distributed across several packages, which are, however, loaded directly alongside the main package, so the user does not need to do anything further.
+
+
+## 📦 The DescToolsX ecosystem consists of:
+
+**DescToolsX** is the front-end package that automatically loads:
+
+- 🪨 **bedrock**  
+  → Core utility functions used across all packages  
+
+- 🌌 **aurora**  
+  → Plotting, colour handling, and formatting tools  
+
+- 💡 **lumen**  
+  → Inferential statistics (tests, confidence intervals, distributions)  
+
+- 📨 **hermes**  
+  → MS Office interface and reporting tools  
+  
 
 ## Installation
 

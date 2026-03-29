@@ -11,7 +11,7 @@
 #' Description of a \strong{dichotomous variable}. This can either be a logical
 #' vector, a factor with two levels or a numeric variable with only two unique
 #' values. The confidence levels for the relative frequencies are calculated by
-#' \code{\link[=binomCI]{binomCI()}}, method \code{"Wilson"} on a confidence
+#' \code{\link[lumen]{binomCI}()}, method \code{"Wilson"} on a confidence
 #' level defined by \code{conf.level}. 
 #' 
 #' Dichotomous variables can easily be
@@ -31,11 +31,11 @@
 #'   
 #' @param digits integer. With how many digits should the relative frequencies
 #' be fmted? Default can be set by
-#' \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.
+#' \code{\link{setDescToolsXOption}(digits=x)}.
 #' 
 #' @param ord  order of the levels
 #' 
-#' @seealso \code{\link[DescToolsViz]{plot.Desc.logical}} for graphical display
+#' @seealso \code{\link[aurora]{plot.Desc.logical}} for graphical display
 
 
 #' @rdname Desc
@@ -76,7 +76,7 @@ Desc.logical <- function(x, ord = "level", conf.level = 0.95,
          }
   )
   
-  bf <- binomCI(ff, n, conf.level = conf.level)
+  bf <- as.matrix(binomCI(ff, n, conf.level = conf.level)[, 1:3])
   rownames(bf) <- names(ff)
   
   res <- list(
@@ -176,9 +176,7 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
 }
 
 
+# Note:
+# plot.Desc.logical is part of aurora
 
-
-# #' @rdname Desc.logical
-# #' @export
-# plot.Desc.logical <- DescToolsViz::plotBoolean
 

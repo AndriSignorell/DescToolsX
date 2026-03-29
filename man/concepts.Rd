@@ -52,12 +52,6 @@ conceptAudit("DescToolsX")
 
 
 }
-\seealso{
-Other topic.systemTools: 
-\code{\link{funArgs}()},
-\code{\link{funCalls}()},
-\code{\link{lsFunctions}()}
-}
 \concept{Documentation Tools}
 \concept{Infrastructure}
 \concept{Programming Utilities}

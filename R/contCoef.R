@@ -32,7 +32,7 @@
 #' Tables, \emph{Proceedings of the Social Statistics Section of the American
 #' Statistical Association} (Part III), 777-780.
 #' 
-#' @seealso \code{\link{pairApply}}
+#' @seealso \code{\link[bedrock]{pairApply}}
 #' 
 #' @family topic.associationMeasures
 #' @concept association
@@ -45,7 +45,7 @@
 #' contCoef(tab)
 #' 
 #' # just x and y
-#' with(untable(tab), contCoef(Hair, Eye))
+#' with(bedrock::untable(tab), contCoef(Hair, Eye))
 #'   
 #' 
 #' 

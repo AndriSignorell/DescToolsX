@@ -18,7 +18,7 @@
 #' rearranged into other levels.
 #' @author Michael Friendly <friendly@@yorku.ca>, Andri Signorell
 #' <andri@@signorell.net>
-#' @seealso \code{\link{untable}}
+#' @seealso \code{\link[bedrock]{untable}}
 #' 
 #' \code{\link[base]{margin.table}} "collapses" a table in a different way, by
 #' summing over table dimensions.

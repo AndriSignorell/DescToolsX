@@ -88,8 +88,8 @@ Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
-\code{\link{varCI}} for confidence intervals,
-\code{\link{varTest}} for tests and base R's implementations
+\code{\link[lumen]{varCI}} for confidence intervals,
+\code{\link[lumen]{varTest}} for tests and base R's implementations
 \code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
 
 Other topic.dispersion: 

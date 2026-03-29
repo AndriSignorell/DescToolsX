@@ -48,10 +48,7 @@ LCM(2*3, 3*5, 5*7)
 }
 \seealso{
 Other topic.numberTheory: 
-\code{\link{divisors}()},
-\code{\link{factorize}()},
-\code{\link{fibonacci}()},
-\code{\link{isPrime}()}
+\code{\link{divisors}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

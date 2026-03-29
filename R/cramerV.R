@@ -24,8 +24,8 @@
 #' and the upper confidence interval
 #' @author Andri Signorell <andri@@signorell.net>, \cr Michael Smithson
 #' <michael.smithson@@anu.edu.au> (confidence intervals for Cramer V)
-#' @seealso \code{\link{table}}, \code{\link[DescToolsViz]{plotCorr}},
-#' \code{\link{pairApply}}, \code{\link{Association}}
+#' @seealso \code{\link{table}}, \code{\link[aurora]{plotCor}},
+#' \code{\link[bedrock]{pairApply}}, \code{\link{Association}}
 #' %\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 #' outdated...
 #' @references 
@@ -54,15 +54,15 @@
 #' cramerV(d.pizza$driver, d.pizza$wine_delivered)
 #' 
 #' # data.frame
-#' pairApply(d.pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
+#' bedrock::pairApply(d.pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
 #' 
 #' 
 #' # useNA is passed to table
-#' pairApply(d.pizza[,c("driver","operator","area")], cramerV,
+#' bedrock::pairApply(d.pizza[,c("driver","operator","area")], cramerV,
 #'           useNA="ifany", symmetric = TRUE)
 #' 
 #' d.frm <- d.pizza[,c("driver","operator","area")]
-#' pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
+#' bedrock::pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
 #' 
 #' 
 #' # Bootstrap confidence intervals for Cramer's V
@@ -71,7 +71,7 @@
 #' tab <- as.table(rbind(
 #'   c(26,26,23,18, 9),
 #'   c( 6, 7, 9,14,23)))
-#' d.frm <- untable(tab)
+#' d.frm <- bedrock::untable(tab)
 #' 
 #' n <- 1000
 #' idx <- matrix(sample(nrow(d.frm), size=nrow(d.frm) * n, replace=TRUE), ncol=n, byrow=FALSE)

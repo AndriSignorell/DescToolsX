@@ -15,7 +15,7 @@
 #' \code{FALSE}. 
 #' @return the standard error as numeric value.
 #' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link{meanCI}} 
+#' @seealso \code{\link[lumen]{meanCI}} 
 #' @keywords univar
 #' @examples
 #' 

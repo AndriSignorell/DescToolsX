@@ -84,9 +84,7 @@ Statistics with S}. Fourth edition. Springer.
 Other topic.dataProcessing: 
 \code{\link{impute}()},
 \code{\link{locf}()},
-\code{\link{scaleX}()},
-\code{\link{trim}()},
-\code{\link{winsorize}()}
+\code{\link{scaleX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

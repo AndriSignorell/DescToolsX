@@ -21,7 +21,7 @@
 #' ---------------------------------- (unexposed & diseased) / unexposed }
 #' 
 #' If the table to be used is not in the required shape, use the function
-#' \code{\link{revX}()} and/or \code{\link{t}()} to reverse rows, columns, or
+#' \code{\link[bedrock]{revX}()} and/or \code{\link{t}()} to reverse rows, columns, or
 #' both, resp. to transpose the table.
 #' 
 #' @name relRisk
@@ -231,7 +231,7 @@ relRisk <- function(x, y = NULL, conf.level = NA, method = c("score", "wald", "u
   if (is.na(conf.level)) {
     res <- rr
   } else {
-    res <- c("rel. risk"=rr, lwr.ci=ll, upr.ci=ul)
+    res <- c("rel. risk"=rr, lci=ll, uci=ul)
   }
   return(res)
   

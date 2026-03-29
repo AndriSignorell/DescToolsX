@@ -17,7 +17,7 @@
 #' way as the function does, so \code{NAs} omitted. 
 #' 
 #' If the measure should be calculated pairwise for a set of variables 
-#' \code{\link{pairApply}} can be used. This easily allows to create matrices 
+#' \code{\link[bedrock]{pairApply}} can be used. This easily allows to create matrices 
 #' of association measures (the same way as the \code{cor} does). \code{NAs} 
 #' again are by default omitted pairwise, which corresponds to the 
 #' \code{pairwise.complete} option of \code{\link{cor}}. 

@@ -58,7 +58,7 @@
 #' Krippendorff, K. (2018). \emph{Content Analysis: An Introduction to Its Methodology}.
 #' Sage Publications.  
 #'
-#' @seealso \code{\link{bootCI}}
+#' @seealso \code{\link[lumen]{bootCI}}
 #'
 #' @family topic.Agreement
 #' @concept Interrater Agreement

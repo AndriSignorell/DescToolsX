@@ -23,7 +23,7 @@
 #' \code{"names"}).
 #' 
 #' @param digits integer. With how many digits should the real numbers
-#' be formatted? Default is taken from \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.
+#' be formatted? Default is taken from \code{\link{setDescToolsXOption}(digits=x)}.
 #' 
 #' @param include_x (logical) if \code{TRUE} (default) the original vector 
 #' will be returned
@@ -62,7 +62,7 @@
 #' @seealso \code{\link[base:summary]{base::summary()}},
 #' \code{\link[base:plot]{base::plot()}}
 #' 
-#' Other Statistical summary functions: \code{\link[DescToolsViz]{abstract}()}
+#' Other Statistical summary functions: \code{\link{abstract}()}
 #' @keywords multivariate print univar
 #' @examples
 #' 
@@ -323,7 +323,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 #' @rdname Desc
 #' @export
 plot.Desc.numeric <- function(x, ...){
-  DescToolsViz::plotFdist(x$x, na.rm=TRUE, ...)
+  aurora::plotFdist(x$x, na.rm=TRUE, ...)
 }
 
 

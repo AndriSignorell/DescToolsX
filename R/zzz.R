@@ -17,7 +17,7 @@
     DescToolsX.lang      = "en",
     DescToolsX.plotit    = TRUE,
     DescToolsX.stamp     = expression(gettextf("%s / %s", Sys.getenv("USERNAME"),
-                                              DescToolsViz::fm(DescToolsX::Today(), 
+                                              aurora::fm(DescToolsX::today(), 
                                                              fmt = "yyyy-MM-dd"))),
     DescToolsX.linesep   = cli::col_yellow("\u2500"),
     
@@ -45,7 +45,8 @@
 }
 
 
-.DescToolsEnv <- new.env(parent = emptyenv())
+# if starting environment is somwhere needed
+# .DescToolsEnv <- new.env(parent = emptyenv())
 
 
 #' @useDynLib DescToolsX, .registration = TRUE
@@ -61,7 +62,8 @@
 #'             model.matrix model.response nobs predict family as.formula
 #'             xtabs end start AIC embed residuals kruskal.test reshape
 #'             contr.helmert contr.poly contr.sum contr.treatment
-#'             poisson.test
+#'             poisson.test contrasts drop1 integrate splinefun
+#'             cov2cor vcov
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
@@ -71,13 +73,24 @@
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size
 #'             str combn find getAnywhere lsf.str write.table
-#'             getFromNamespace stack
+#'             getFromNamespace stack browseURL help.search
 #'             
-#' @importFrom DescToolsViz plotFdist `%)(%` `%[]%` `%nin%` 
+#' @importFrom bedrock `%)(%` `%[]%` `%nin%` 
 #'             abind combPairs maxDigits recycle setNamesX 
-#'             strAlign strTrim strTrunc moveAvg Label abstract 
-#'             fm style lineSep setDescToolsXOption naIf naReplace
-#'             isZero isWholeLike isDichotomous `%][%`
+#'             Label naIf naReplace isZero isWholeLike 
+#'             isDichotomous `%][%` pairApply appendX sortX 
+#'             inDots revX sampleX untable Coalesce columnWrap 
+#'             splitAt moveAvg stripAttr
 #'             
+#' @importFrom aurora plotFdist strAlign strTrim strTrunc 
+#'             fm style lineSep strTrim
 #'             
+#' @importFrom lumen scores adfTest gTest kpssTest mhChisqTest
+#'             varTest meanCI binomCI binomDiffCI bootCI 
+#'             
+#' @importFrom hermes newWrd
+#' @importFrom methods is
+#' 
+#' @importFrom stringi stri_replace_all_fixed
+#'              
 NULL

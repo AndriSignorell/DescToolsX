@@ -11,7 +11,7 @@
 #' or "\code{timeVaries}". 
 #' @return logical vector of the same dimension as x.
 #' @author Frank E Harrell 
-#' @seealso \code{\link{Year}}, \code{\link{Month}}, etc. 
+#' @seealso \code{\link{year}}, \code{\link{month}}, etc. 
 #' @keywords chron logic
 #' @examples
 #' 

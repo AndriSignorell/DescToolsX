@@ -95,7 +95,7 @@ Desc(t4)
 
 }
 \seealso{
-\code{\link{untable}}
+\code{\link[bedrock]{untable}}
 
 \code{\link[base]{margin.table}} "collapses" a table in a different way, by
 summing over table dimensions.

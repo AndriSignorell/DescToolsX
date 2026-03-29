@@ -30,7 +30,7 @@ isDate(31002)
 
 }
 \seealso{
-\code{\link{Year}}, \code{\link{Month}}, etc.
+\code{\link{year}}, \code{\link{month}}, etc.
 }
 \author{
 Frank E Harrell

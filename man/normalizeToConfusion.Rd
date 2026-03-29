@@ -106,6 +106,6 @@ normalizeToConfusion(
 
 }
 \seealso{
-\code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[=pairApply]{pairApply()}}
+\code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[bedrock:pairApply]{bedrock::pairApply()}}
 }
 \keyword{internal}

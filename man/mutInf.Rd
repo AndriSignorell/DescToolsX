@@ -19,7 +19,7 @@ supplied it will be interpreted as contingency table.}
 \code{\link{table}}, allowing i.e. to set \code{useNA}.}
 }
 \value{
-a numeric value. \%\% ~Describe the value returned
+a numeric value.
 }
 \description{
 Computes Shannon mutual information of two variables. The
@@ -58,8 +58,10 @@ Other topic.associationMeasures:
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

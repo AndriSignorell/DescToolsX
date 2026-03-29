@@ -96,7 +96,7 @@ Examples:
 Plotting functions start with the prefix \code{plot} and use lower camelCase.
 
 Examples:
-\code{plotQQ()}, \code{plotECDF()}, \code{plotCorr()}, \code{plotViolin()}
+\code{plotQQ()}, \code{plotECDF()}, \code{plotCor()}, \code{plotViolin()}
 
 
 Plotting functions follow the same data-first argument convention. The data
@@ -105,7 +105,7 @@ graphical options. This ensures intuitive usage and consistent behaviour
 across different plot types.
 
 Examples:
-\code{plotQQ(x)}, \code{plotECDF(x)}, \code{plotCorr(x, method = "spearman")}
+\code{plotQQ(x)}, \code{plotECDF(x)}, \code{plotCor(x, method = "spearman")}
 }
 
 \section{Classes and S3 methods}{
@@ -142,11 +142,20 @@ accuracy and user-facing behaviour.
 Performance improvements are a core design goal of DescToolsX and a key
 motivation for the package redesign.
 
-DescToolsViz is listed in Depends because this package extends its
+aurora is listed in Depends because this package extends its
 user-facing API and expects it to be attached. Functions used internally
 are explicitly imported via the NAMESPACE.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://andrisignorell.github.io/DescToolsX/}
+  \item \url{https://github.com/AndriSignorell/DescToolsX/}
+  \item Report bugs at \url{https://github.com/AndriSignorell/DescToolsX/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Andri Signorell \email{andri@signorell.net} (\href{https://orcid.org/0000-0003-4311-1969}{ORCID})
 
@@ -158,16 +167,13 @@ Other contributors:
   \item Tomas Aragon [contributor]
   \item Chandima Arachchige [contributor]
   \item Antti Arppe [contributor]
-  \item Adrian Baddeley [contributor]
   \item Kamil Barton [contributor]
   \item Ben Bolker [contributor]
   \item Hans W. Borchers [contributor]
-  \item Frederico Caeiro [contributor]
   \item Stephane Champely [contributor]
   \item Daniel Chessel [contributor]
   \item Leanne Chhay [contributor]
   \item Nicholas Cooper [contributor]
-  \item Clint Cummins [contributor]
   \item Michael Dewey [contributor]
   \item Harold C. Doran [contributor]
   \item Stephane Dray [contributor]
@@ -176,55 +182,33 @@ Other contributors:
   \item Claus Ekstrom [contributor]
   \item Martin Elff [contributor]
   \item Jeff Enos [contributor]
-  \item Richard W. Farebrother [contributor]
-  \item John Fox [contributor]
   \item Romain Francois [contributor]
-  \item Michael Friendly [contributor]
-  \item Tal Galili [contributor]
   \item Matthias Gamer [contributor]
-  \item Joseph L. Gastwirth [contributor]
   \item Vilmantas Gegzna [contributor]
-  \item Yulia R. Gel [contributor]
   \item Sereina Graber [contributor]
-  \item Juergen Gross [contributor]
   \item Gabor Grothendieck [contributor]
   \item Frank E. Harrell Jr [contributor]
   \item Richard Heiberger [contributor]
-  \item Michael Hoehle [contributor]
   \item Christian W. Hoffmann [contributor]
   \item Soeren Hojsgaard [contributor]
-  \item Torsten Hothorn [contributor]
   \item Markus Huerzeler [contributor]
-  \item Wallace W. Hui [contributor]
-  \item Pete Hurd [contributor]
   \item Rob J. Hyndman [contributor]
   \item Christopher Jackson [contributor]
   \item Ken Kelly [contributor]
-  \item Matthias Kohl [contributor]
   \item Mikko Korpela [contributor]
   \item Max Kuhn [contributor]
-  \item Detlew Labes [contributor]
   \item Friederich Leisch [contributor]
-  \item Jim Lemon [contributor]
   \item Dong Li [contributor]
   \item Martin Maechler [contributor]
   \item Arni Magnusson [contributor]
   \item Ben Mainwaring [contributor]
-  \item Daniel Malter [contributor]
-  \item George Marsaglia [contributor]
-  \item John Marsaglia [contributor]
   \item Alina Matei [contributor]
-  \item David Meyer [contributor]
-  \item Weiwen Miao [contributor]
-  \item Giovanni Millo [contributor]
   \item Yongyi Min [contributor]
-  \item David Mitchell [contributor]
   \item Cyril Flurin Moser [contributor]
   \item Franziska Mueller [contributor]
   \item Markus Naepflin [contributor]
   \item Danielle Navarro [contributor]
   \item Henric Nilsson [contributor]
-  \item Klaus Nordhausen [contributor]
   \item Derek Ogle [contributor]
   \item Hong Ooi [contributor]
   \item Nick Parsons [contributor]
@@ -240,9 +224,7 @@ Other contributors:
   \item Nathan Russell [contributor]
   \item Nick Sabbe [contributor]
   \item Ralph Scherer [contributor]
-  \item Venkatraman E. Seshan [contributor]
   \item Michael Smithson [contributor]
-  \item Greg Snow [contributor]
   \item Karline Soetaert [contributor]
   \item Werner A. Stahel [contributor]
   \item Alec Stephenson [contributor]
@@ -261,7 +243,6 @@ Other contributors:
   \item John Verzani [contributor]
   \item Pablo J. Villacorta Iglesias [contributor]
   \item Gregory R. Warnes [contributor]
-  \item Stefan Wellek [contributor]
   \item Hadley Wickham [contributor]
   \item Rand R. Wilcox [contributor]
   \item Peter Wolf [contributor]

@@ -97,7 +97,7 @@ madX <- function(x,
   if (is.null(weights))
     weights <- rep(1, length(d))
   
-  z <- .NormWeights(d, weights, na.rm = FALSE, zero.rm = TRUE)
+  z <- .normWeights(d, weights, na.rm = FALSE, zero.rm = TRUE)
   
   ## Median-Index
   n <- length(z$x)

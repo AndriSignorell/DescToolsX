@@ -3,10 +3,10 @@
 \name{CountWorkDays}
 \alias{CountWorkDays}
 \alias{date_functions}
-\alias{Year}
+\alias{year}
 \alias{Quarter}
-\alias{Month}
-\alias{Week}
+\alias{month}
+\alias{week}
 \alias{Day}
 \alias{Day<-}
 \alias{Weekday}
@@ -18,49 +18,49 @@
 \alias{Hour}
 \alias{Minute}
 \alias{Second}
-\alias{Now}
-\alias{Today}
+\alias{now}
+\alias{today}
 \alias{DiffDays360}
-\alias{LastDayOfMonth}
+\alias{lastDayOfMonth}
 \alias{Timezone}
 \alias{YearDays}
 \alias{MonthDays}
-\alias{Month.ym}
-\alias{Year.ym}
-\alias{Year.default}
-\alias{Month.default}
+\alias{month.ym}
+\alias{year.ym}
+\alias{year.default}
+\alias{month.default}
 \title{Count Work Days Between Two Dates}
 \usage{
 CountWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
 
-Year(x)
+year(x)
 
-\method{Year}{ym}(x)
+\method{year}{ym}(x)
 
-\method{Year}{default}(x)
+\method{year}{default}(x)
 
-Month(
+month(
   x,
   fmt = c("m", "mm", "mmm"),
   lang = .getOption("lang"),
   stringsAsFactors = TRUE
 )
 
-\method{Month}{ym}(
+\method{month}{ym}(
   x,
   fmt = c("m", "mm", "mmm"),
   lang = .getOption("lang"),
   stringsAsFactors = TRUE
 )
 
-\method{Month}{default}(
+\method{month}{default}(
   x,
   fmt = c("m", "mm", "mmm"),
   lang = .getOption("lang"),
   stringsAsFactors = TRUE
 )
 
-Week(x, method = c("iso", "us"))
+week(x, method = c("iso", "us"))
 
 Day(x)
 
@@ -75,9 +75,9 @@ Weekday(
 
 Quarter(x)
 
-Today()
+today()
 
-Now()
+now()
 
 Hour(x)
 
@@ -95,7 +95,7 @@ YearDay(x)
 
 DiffDays360(start_d, end_d, method = c("eu", "us"))
 
-LastDayOfMonth(x)
+lastDayOfMonth(x)
 
 YearDays(x)
 
@@ -157,11 +157,11 @@ supplied. The dates are recycled, if their number are different.
 
 These functions are mainly convenience wrappers for the painful
 \code{format()} and its strange codes...\cr Based on the requested time
-component, the output is as follows:\cr \tabular{ll}{ \code{Year}\tab
+component, the output is as follows:\cr \tabular{ll}{ \code{year}\tab
 returns the year of a date or a yearmonth (\code{yyyymm}) in (\code{yyyy})
 format .\cr \code{Quarter}\tab returns the quarter of the year (1 to 4) for
-the input date. \cr \code{Month}\tab returns the month of the year (1 to 12)
-for the input date or for a yearmonth. \cr \code{Week}\tab returns the week
+the input date. \cr \code{month}\tab returns the month of the year (1 to 12)
+for the input date or for a yearmonth. \cr \code{week}\tab returns the week
 of the year for the input date (0 to 53), as defined in ISO8601. \cr
 \code{Weekday}\tab returns the week day of the input date. (1 - Monday, 2 -
 Tuesday, ... 7 - Sunday). (Names and abbreviations are either english or in
@@ -174,7 +174,7 @@ returns the yearmonth representation (yyyymm) of a date as long integer. \cr
 \code{Hour}, \code{Minute}, \code{Second} \tab returns the hour, minute or
 second from a POSIXlt object. \cr \code{Timezone} \tab returns the timezone
 from a POSIXlt object. \cr \code{HmsToMinute} \tab converts the time parts
-of a POSIXlt object to minutes.\cr \code{Today}, \code{Now}\tab returns the
+of a POSIXlt object to minutes.\cr \code{today}, \code{now}\tab returns the
 current date, resp. the current date and time.\cr
 
 \code{isWeekend} \tab returns \code{TRUE}, if the date x falls on a weekend.
@@ -182,11 +182,11 @@ current date, resp. the current date and time.\cr
 a leap year. \cr } The day can not only be extracted, but as well be
 defined. See examples. \tabular{ll}{ \code{DiffDays360} \tab calculates the
 difference between 2 dates using the 360-days convention.\cr
-\code{LastDayOfMonth} \tab returns the last day of the month of the given
+\code{lastDayOfMonth} \tab returns the last day of the month of the given
 date(s). \cr \code{YearDays} \tab returns the total number of days of the
 given date(s). \cr \code{MonthDays} \tab returns the numer of days of the
 month of the given date(s). \cr } The language in \code{Weekday()} and
-\code{Month()} can be set with an option as well.  These functions will
+\code{month()} can be set with an option as well.  These functions will
 check for an existing option named \code{"lang"} and take this value if it
 exists. So simply set \code{option(lang="engl")} if the results should
 always be reported in English.
@@ -207,18 +207,18 @@ data.frame(
 CountWorkDays(from = min(x), to = max(x), holiday = c("2019-01-06", "2019-01-07"))
 
 
-x <- Today()    # the same as Sys.Date() but maybe easier to remember..
+x <- today()    # the same as Sys.Date() but maybe easier to remember..
 
-Year(x)
+year(x)
 Quarter(x)
 
-Month(x)
-Month(x, fmt = "mm", lang="en")
-Month(x, fmt = "mm", lang="local")
-Month(x, fmt = "mmm", lang="en")
-Month(x, fmt = "mmm", lang="local")
+month(x)
+month(x, fmt = "mm", lang="en")
+month(x, fmt = "mm", lang="local")
+month(x, fmt = "mmm", lang="en")
+month(x, fmt = "mmm", lang="local")
 
-Week(x)
+week(x)
 
 Day(x)
 Day(x) <- 20
@@ -237,9 +237,9 @@ isWeekend(x)
 isLeapYear(x)
 
 # let's generate a time sequence by weeks
-Month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), fmt="mm")
+month(seq(from=as.Date(Sys.Date()), to=Sys.Date()+150, by="weeks"), fmt="mm")
 
-LastDayOfMonth(as.Date(c("2014-10-12","2013-01-31","2011-12-05")))
+lastDayOfMonth(as.Date(c("2014-10-12","2013-01-31","2011-12-05")))
 
 
 }

@@ -88,7 +88,7 @@ kurtX <- function (x,
     # estimator 1: older textbooks
     if(!is.null(weights)){
       # use a standard treatment for weights
-      z <- .NormWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
+      z <- .normWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
       r.kurt <- rkurtw_cpp(as.numeric(z$x), 
                            as.numeric(meanX(z$x, weights = z$weights)), 
                            as.numeric(z$weights))

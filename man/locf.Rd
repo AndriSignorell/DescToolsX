@@ -46,9 +46,7 @@ functions.
 Other topic.dataProcessing: 
 \code{\link{dummy}()},
 \code{\link{impute}()},
-\code{\link{scaleX}()},
-\code{\link{trim}()},
-\code{\link{winsorize}()}
+\code{\link{scaleX}()}
 }
 \author{
 Daniel Wollschlaeger \href{mailto:dwoll@psychologie.uni-kiel.de}{dwoll@psychologie.uni-kiel.de}

@@ -48,7 +48,7 @@ when confidence intervals are calculated.}
 If \code{conf.level} is set to \code{NA} then the result will be
 \item{a}{ single numeric value} and if a \code{conf.level} is provided, a
 named numeric vector with 3 elements: \item{gini}{gini coefficient}
-\item{lwr.ci}{lower bound of the confidence interval} \item{upr.ci}{upper
+\item{lci}{lower bound of the confidence interval} \item{uci}{upper
 bound of the confidence interval}
 }
 \description{

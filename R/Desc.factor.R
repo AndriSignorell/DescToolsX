@@ -49,7 +49,7 @@
 #' 
 #' @param digits integer. With how many digits should the relative frequencies
 #' be formatted? Default can be set by
-#' \code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.
+#' \code{\link{setDescToolsXOption}(digits=x)}.
 #' 
 #' @param ord character out of \code{"name"} (alphabetical order),
 #' \code{"level"}, \code{"asc"} (by frequencies ascending), \code{"desc"} (by
@@ -58,7 +58,7 @@
 #' character vectors) are by default ordered by their descending frequencies,
 #' ordered factors by their natural order.
 #' 
-#' @seealso \code{\link[DescToolsViz]{plot.Desc.factor}} for graphical display
+#' @seealso \code{\link[aurora]{plot.Desc.factor}} for graphical display
 #' 
 
 
@@ -174,8 +174,8 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 
 
 
-# no export here, all code in DescToolsViz 
+# no export here, all code in aurora 
 # #' @rdname Desc.factor
 # #' @export
-# plot.Desc.factor <- DescToolsViz::plot.Desc.factor
+# plot.Desc.factor <- aurora::plot.Desc.factor
 

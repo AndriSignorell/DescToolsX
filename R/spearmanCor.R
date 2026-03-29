@@ -39,7 +39,10 @@
 #' spearmanCor(pain, conf.level=0.95)
 #'   
 #' # must be the same as
-#' with(lapply(untable(pain, colnames = c("adverse","dose")), ordered), 
+#' with(lapply(
+#'        bedrock::untable(pain, 
+#'                         colnames = c("adverse","dose")), 
+#'        ordered), 
 #'      spearmanCor(adverse, dose, conf.level=0.95))
 #' 
 
@@ -124,11 +127,11 @@ spearmanCor <- function(x, y = NULL,
   } else {
     
     if(identical(rho, 1)){     # will blast the fisher z transformation
-      result <- c(rho=1, lwr.ci=1, upr.ci=1)
+      result <- c(rho=1, lci=1, uci=1)
       
     } else {
       pr2 <- 1 - (1 - conf.level) / 2
-      result <- c(rho = rho, lwr.ci = max(ci[1], -1), upr.ci = min(ci[2], 1))
+      result <- c(rho = rho, lci = max(ci[1], -1), uci = min(ci[2], 1))
     }
   }
   

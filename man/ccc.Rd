@@ -19,8 +19,7 @@ single number between 0 and 1.}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. If set to \code{TRUE} only the complete
-cases of the ratings will be used. Defaults to \code{FALSE}.  \%\% ~~Describe
-\code{na.rm} here~~}
+cases of the ratings will be used. Defaults to \code{FALSE}.}
 }
 \value{
 A list containing the following: \item{rho.c}{the concordance
@@ -30,8 +29,7 @@ measures how far the best-fit line deviates from a line at 45 degrees. No
 deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page
 258).} \item{blalt}{a data frame with two columns: \code{mean} the mean of
 each pair of measurements, \code{delta} vector \code{y} minus vector
-\code{x}.} \%\% \item{nmissing}{a count of the number of measurement pairs
-ignored due to missingness.}
+\code{x}.}
 }
 \description{
 Calculates Lin's concordance correlation coefficient for agreement on a

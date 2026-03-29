@@ -60,7 +60,7 @@ oddsRatio.default <- function(x, y = NULL,
               # Agresti Categorical Data Analysis, 3.1.1
               sigma2lor <- sum(1/x)
               ci <- or * exp(c(1,-1) * qnorm((1-conf.level)/2) * sqrt(sigma2lor))
-              res <- c("odds ratio"=or, lwr.ci=ci[1], upr.ci=ci[2])
+              res <- c("odds ratio"=or, lci=ci[1], uci=ci[2])
             }
           }
           , "exact" = {
@@ -68,7 +68,7 @@ oddsRatio.default <- function(x, y = NULL,
               res <- unname(fisher.test(x, conf.int=FALSE)$estimate)
             } else {
               res <- fisher.test(x, conf.level=conf.level)
-              res <- c(res$estimate, lwr.ci=res$conf.int[1], upr.ci=res$conf.int[2])
+              res <- c(res$estimate, lci=res$conf.int[1], uci=res$conf.int[2])
             }
           }
           , "midp" = {
@@ -107,7 +107,7 @@ oddsRatio.default <- function(x, y = NULL,
                 midp(a1, a0, b1, b0, or=1/or)-alpha/2
               },  interval = interval)$root
               
-              res <- c("odds ratio" = EST, lwr.ci=LCL, upr.ci= UCL)
+              res <- c("odds ratio" = EST, lci=LCL, uci= UCL)
             }
           }
   )
@@ -276,7 +276,7 @@ plot.OddsRatio <- function(x, intercept=FALSE, ...){
     args.plotdot1[names(args)] <- args
   }
   
-  do.call(DescToolsViz::plotDot, args=args.plotdot1)
+  do.call(aurora::plotDot, args=args.plotdot1)
   
 }
 

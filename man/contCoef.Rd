@@ -65,7 +65,7 @@ tab <- apply(HairEyeColor, c(1,2), sum)
 contCoef(tab)
 
 # just x and y
-with(untable(tab), contCoef(Hair, Eye))
+with(bedrock::untable(tab), contCoef(Hair, Eye))
   
 
 
@@ -76,16 +76,18 @@ Tables, \emph{Proceedings of the Social Statistics Section of the American
 Statistical Association} (Part III), 777-780.
 }
 \seealso{
-\code{\link{pairApply}}
+\code{\link[bedrock]{pairApply}}
 
 Other topic.associationMeasures: 
 \code{\link{Association}},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
 \code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

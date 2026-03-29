@@ -1,7 +1,7 @@
 
 #' Association Measures 
 #' 
-#' Collects a number of association measures for nominal and ordinal data. %%
+#' Collects a number of association measures for nominal and ordinal data. 
 #' 
 #' This function wraps the association measures phi, contingency coefficient,
 #' Cramer's V, Goodman Kruskal's Gamma, Kendall's Tau-b, Stuart's Tau-c,

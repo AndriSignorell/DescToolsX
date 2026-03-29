@@ -64,7 +64,7 @@
 #' Plotting functions start with the prefix \code{plot} and use lower camelCase.
 #'
 #' Examples:
-#' \code{plotQQ()}, \code{plotECDF()}, \code{plotCorr()}, \code{plotViolin()}
+#' \code{plotQQ()}, \code{plotECDF()}, \code{plotCor()}, \code{plotViolin()}
 #'
 #' @section Classes and S3 methods:
 #' Classes use \strong{UpperCamelCase}. S3 methods follow standard R conventions.
@@ -113,7 +113,7 @@
 #' across different plot types.
 #'
 #' Examples:
-#' \code{plotQQ(x)}, \code{plotECDF(x)}, \code{plotCorr(x, method = "spearman")}
+#' \code{plotQQ(x)}, \code{plotECDF(x)}, \code{plotCor(x, method = "spearman")}
 #'
 #' @section Performance and implementation:
 #' Computationally intensive functionality is systematically reimplemented
@@ -124,7 +124,7 @@
 #' Performance improvements are a core design goal of DescToolsX and a key
 #' motivation for the package redesign.
 #' 
-#' DescToolsViz is listed in Depends because this package extends its
+#' aurora is listed in Depends because this package extends its
 #' user-facing API and expects it to be attached. Functions used internally
 #' are explicitly imported via the NAMESPACE.
 #' 

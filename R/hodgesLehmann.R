@@ -35,7 +35,7 @@
 #' @author Cyril Flurin Moser (Cyril did the lion's share and coded Monahan's
 #' algorithm in C++), Andri Signorell <andri@@signorell.net>
 #' @seealso \code{\link{wilcox.test}}, \code{\link{median}},
-#' \code{\link{medianCI}}
+#' \code{\link[lumen]{medianCI}}
 #' @references Hodges, J.L., and Lehmann, E.L. (1963), Estimates of location
 #' based on rank tests. \emph{The Annals of Mathematical Statistics},
 #' \bold{34}, 598--611.
@@ -106,7 +106,7 @@ hodgesLehmann <- function(x, y = NULL, conf.level = NA, sides = c("two.sided","l
     if(is.na(conf.level))
       return(NA)
   else
-    return(c(est=NA,  lwr.ci=NA, upr.ci=NA))
+    return(c(est=NA,  lci=NA, uci=NA))
   
   
   #  res <- wilcox.test(x,  y, conf.int = TRUE, conf.level = Coalesce(conf.level, 0.8))
@@ -167,7 +167,7 @@ hodgesLehmann <- function(x, y = NULL, conf.level = NA, sides = c("two.sided","l
     if(sides=="left")        res[3] <- Inf
     else if(sides=="right")  res[2] <- -Inf
     
-    result <- c(est=res,  lwr.ci=lci, upr.ci=uci)
+    result <- c(est=res,  lci=lci, uci=uci)
   }
   
   return(result)

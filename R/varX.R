@@ -38,8 +38,8 @@
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
 #' 
-#' @seealso \code{\link{varCI}} for confidence intervals,
-#' \code{\link{varTest}} for tests and base R's implementations 
+#' @seealso \code{\link[lumen]{varCI}} for confidence intervals,
+#' \code{\link[lumen]{varTest}} for tests and base R's implementations 
 #' \code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
 #' 
 #' @family topic.dispersion
@@ -109,7 +109,7 @@ varX.default <- function(x, estimator = c("unbiased", "ML"),
     
   } else {
     
-    z <- .NormWeights(x, weights, na.rm = FALSE, zero.rm = TRUE)
+    z <- .normWeights(x, weights, na.rm = FALSE, zero.rm = TRUE)
     
     if (estimator == "ML"){
       res <- as.numeric(stats::cov.wt(cbind(z$x), z$weights, method = "ML")$cov)

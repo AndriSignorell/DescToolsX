@@ -36,7 +36,7 @@ sapply(d.pizza[,1:4], meanSE, na.rm=TRUE)
 
 }
 \seealso{
-\code{\link{meanCI}}
+\code{\link[lumen]{meanCI}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

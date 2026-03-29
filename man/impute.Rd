@@ -57,14 +57,12 @@ impute(x, 99)
 
 }
 \seealso{
-For direct value replacement see \code{\link[DescToolsViz:naReplace]{DescToolsViz::naReplace()}}.
+For direct value replacement see \code{\link[bedrock:naReplace]{bedrock::naReplace()}}.
 
 Other topic.dataProcessing: 
 \code{\link{dummy}()},
 \code{\link{locf}()},
-\code{\link{scaleX}()},
-\code{\link{trim}()},
-\code{\link{winsorize}()}
+\code{\link{scaleX}()}
 }
 \concept{data processing}
 \concept{imputation}

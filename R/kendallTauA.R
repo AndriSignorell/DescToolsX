@@ -102,7 +102,7 @@ kendallTauA <- function(x, y = NULL, direction = c("row", "column"), conf.level 
     
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taua
-    result <- c(tau_a = taua, lwr.ci = max(ci[1], -1), upr.ci = min(ci[2], 1))
+    result <- c(tau_a = taua, lci = max(ci[1], -1), uci = min(ci[2], 1))
   }
   
   return(result)

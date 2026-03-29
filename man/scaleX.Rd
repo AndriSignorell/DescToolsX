@@ -40,9 +40,7 @@ points(x=seq_along(x), y=scale(x), col="red" )
 Other topic.dataProcessing: 
 \code{\link{dummy}()},
 \code{\link{impute}()},
-\code{\link{locf}()},
-\code{\link{trim}()},
-\code{\link{winsorize}()}
+\code{\link{locf}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

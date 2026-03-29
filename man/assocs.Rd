@@ -26,7 +26,7 @@ the estimate, the second the lower confidence interval, the third the upper
 one.
 }
 \description{
-Collects a number of association measures for nominal and ordinal data. \%\%
+Collects a number of association measures for nominal and ordinal data.
 }
 \details{
 This function wraps the association measures phi, contingency coefficient,

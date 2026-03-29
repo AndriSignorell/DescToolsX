@@ -24,8 +24,7 @@ will return x cut in deciles.}
 \item{labels}{labels for the levels of the resulting category. By default,
 labels are defined as \code{Q1}, \code{Q2} to the length of breaks - 1. The
 parameter ist passed to \code{\link{cut}}, so if \code{labels} are set to
-\code{FALSE}, simple integer codes are returned instead of a factor. \%\%
-~~Describe \code{labels} here~~}
+\code{FALSE}, simple integer codes are returned instead of a factor.}
 
 \item{na.rm}{Boolean indicating whether missing values should be removed
 when computing quantiles.  Defaults to TRUE.}

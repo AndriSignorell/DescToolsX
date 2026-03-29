@@ -126,7 +126,7 @@ Desc.Date <- function(x,
   wd_stdres <- wd_chi$stdres
   
   # ------------------------------
-  # Month distribution
+  # month distribution
   
   mo_num <- as.integer(format(x_ok, "%m"))
   mo_obs <- tabulate(mo_num, nbins = 12)
@@ -331,7 +331,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
     return(invisible(x))
   
   # -------------------------
-  # Month block
+  # month block
   
   cat("\nMonth distribution:\n\n")
   

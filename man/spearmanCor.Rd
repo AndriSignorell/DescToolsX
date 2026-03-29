@@ -57,7 +57,10 @@ spearmanCor(pain)
 spearmanCor(pain, conf.level=0.95)
   
 # must be the same as
-with(lapply(untable(pain, colnames = c("adverse","dose")), ordered), 
+with(lapply(
+       bedrock::untable(pain, 
+                        colnames = c("adverse","dose")), 
+       ordered), 
      spearmanCor(adverse, dose, conf.level=0.95))
 
 }

@@ -1,6 +1,6 @@
 
 
-#' Add a Month to a Date
+#' Add a month to a Date
 #' 
 #' Clueless adding numbers of months to a date will in some cases lead to
 #' invalid dates, think of e.g. 2012-01-30 + 1 month. \cr addMonths ensures
@@ -21,8 +21,8 @@
 #' containing the transformed dates.
 #' @author Andri Signorell <andri@@signorell.net>, based on code by Roland
 #' Rapold and Antonio
-#' @seealso \code{\link{as.ym}}; Date functions: \code{\link{Year}},
-#' \code{\link{Month}}, etc. 
+#' @seealso \code{\link{as.ym}}; Date functions: \code{\link{year}},
+#' \code{\link{month}}, etc. 
 #' @references Thanks to Antonio:
 #' \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 #' @keywords chron

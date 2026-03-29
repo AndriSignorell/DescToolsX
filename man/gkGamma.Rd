@@ -85,9 +85,11 @@ Other topic.associationMeasures:
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{entropy}()},
+\code{\link{gkTau}()},
 \code{\link{lambda}()},
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
+\code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yuleQY}}
 }

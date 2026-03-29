@@ -79,7 +79,7 @@ the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
 \item{digits}{integer. With how many digits should the relative frequencies
 be formatted? Default can be set by
-\code{\link[DescToolsViz]{setDescToolsXOption}(digits=x)}.}
+\code{\link{setDescToolsXOption}(digits=x)}.}
 
 \item{...}{Additional arguments passed to \code{percTable()}.}
 }
@@ -101,5 +101,5 @@ frequencies to it's intrinsic order, which means order \code{"level"}
 instead of \code{"desc"} in the factor case.
 }
 \seealso{
-\code{\link[DescToolsViz]{plot.Desc.factor}} for graphical display
+\code{\link[aurora]{plot.Desc.factor}} for graphical display
 }
