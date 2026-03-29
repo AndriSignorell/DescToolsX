@@ -36,16 +36,16 @@ package, so the user does not need to do anything further.
 
 **DescToolsX** is the front-end package that automatically loads:
 
-- 🪨 **bedrock**  
+- 🪨 **[bedrock](https://github.com/AndriSignorell/bedrock/)**  
   → Core utility functions used across all packages
 
-- 🌌 **aurora**  
+- 🌌 **[aurora](https://github.com/AndriSignorell/aurora/)**  
   → Plotting, colour handling, and formatting tools
 
-- 💡 **lumen**  
+- 💡 **[lumen](https://github.com/AndriSignorell/lumen/)**  
   → Inferential statistics (tests, confidence intervals, distributions)
 
-- 📨 **hermes**  
+- 📨 **[hermes](https://github.com/AndriSignorell/hermes/)**  
   → MS Office interface and reporting tools
 
 ## Installation
