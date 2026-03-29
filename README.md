@@ -18,7 +18,7 @@ in 2025. However its historical development has led to inconsistencies
 that could no longer be resolved through an evolutionary process. It was
 time to redesign the package to establish a clean new foundation.
 
-![](C:\temp\DescToolsX_doku\timeToMove.png)
+![](man/figures/timeToMove.png)
 
 **DescToolsX** is the successor to DescTools, completely redesigned,
 decluttered, simplified, bugfixed, unified and substantially
