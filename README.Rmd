@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 [DescTools](https://cran.r-project.org/web/packages/DescTools/) has been available on CRAN for more than 12 years and has undergone a large number of changes and additions during that time. In this timespan the package gained impressive popularity and was downloaded a million times in 2025.
 However its historical development has led to inconsistencies that could no longer be resolved through an evolutionary process. It was time to redesign the package to establish a clean new foundation.
 
-![](man\figures\timeToMove.png)
+![](man/figures/timeToMove.png)
 
 **DescToolsX** is the successor to DescTools, completely redesigned, decluttered, simplified, bugfixed, unified and substantially  accelerated.
 
