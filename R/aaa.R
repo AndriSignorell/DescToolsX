@@ -112,7 +112,7 @@
 
 
 
-.CaptOut <- function(..., file = NULL, append = FALSE, width=150) {
+.captOut <- function(..., file = NULL, append = FALSE, width=150) {
   
   opt <- options(width=width)
   

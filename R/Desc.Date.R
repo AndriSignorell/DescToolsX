@@ -37,7 +37,7 @@
 #'   \item Interquartile range (IQR) in days
 #' }
 #'
-#' Weekday and month distributions are compared to their expected
+#' weekday and month distributions are compared to their expected
 #' probabilities using chi-square goodness-of-fit tests.
 #'
 #' Standardized residuals are defined as
@@ -109,7 +109,7 @@ Desc.Date <- function(x,
   iqr_days <- as.numeric(q_vals["q75"] - q_vals["q25"])
   
   # ------------------------------
-  # Weekday distribution
+  # weekday distribution
   
   wd_num <- as.integer(strftime(x_ok, "%u"))  # 1 = Montag ... 7 = Sonntag
   wd_obs <- tabulate(wd_num, nbins = 7)
@@ -255,7 +255,7 @@ Desc.Date <- function(x,
 #' @param ... Further arguments passed to underlying print methods.
 #'
 #' @details
-#' Weekday and month distributions are compared to their expected
+#' weekday and month distributions are compared to their expected
 #' probabilities as defined in \code{\link{Desc}}.
 #'
 #' Standardized residuals are computed as
@@ -305,9 +305,9 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
     return(invisible(x))
   
   # -------------------------
-  # Weekday block
+  # weekday block
   
-  cat("\nWeekday distribution:\n\n")
+  cat("\nweekday distribution:\n\n")
   
   wd <- x$weekday
 

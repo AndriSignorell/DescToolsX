@@ -99,7 +99,7 @@ addMonths.ym <- function (x, n, ...) {
       
       # YYYYMMDD
       res <- addMonths(x = as.Date(as.character(x), "%Y%m%d"), n = n)
-      res <- year(res)*10000L + DescToolsX::month(res)*100L + Day(res)
+      res <- year(res)*10000L + DescToolsX::month(res)*100L + day(res)
     }
     
     return(res)

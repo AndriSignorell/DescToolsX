@@ -89,7 +89,7 @@ Other topic.associationMeasures:
 \code{\link{somersDelta}()},
 \code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
-\code{\link{yuleQY}}
+\code{\link{yule}}
 }
 \concept{topic.associationMeasures}
 \keyword{internal}

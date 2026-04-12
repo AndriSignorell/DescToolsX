@@ -70,7 +70,4 @@ assocs(pain)
 \seealso{
 \code{\link{Association}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
 \keyword{multivariate}

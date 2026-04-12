@@ -157,7 +157,7 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
   cat(paste(" ", apply(m, 1, paste, collapse = " ")), sep = "\n")
 
   x$freq <- x$freq[1:min(nrow(x$freq), x$maxrows), ]
-  txt.freq <- .CaptOut(print(x$freq, digits = digits))
+  txt.freq <- .captOut(print(x$freq, digits = digits))
   cat("\n")
   cat(txt.freq, sep = "\n")
   

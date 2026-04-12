@@ -26,7 +26,7 @@
 #' @note
 #' Based on code by William Revelle.
 #' 
-#' @seealso \code{\link[DescTools]{GlassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
+#' @seealso \code{\link{glassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
 #' 
 #' @references Cohen, J. (1988) \emph{Statistical power analysis for the
 #' behavioral sciences (2nd ed.)} Academic Press, New York.

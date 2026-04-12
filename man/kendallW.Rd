@@ -113,7 +113,8 @@ Other topic.Agreement:
 \code{\link{cohenKappa}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
-\code{\link{krippAlpha}()}
+\code{\link{krippAlpha}()},
+\code{\link{randolphKappa}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}\cr

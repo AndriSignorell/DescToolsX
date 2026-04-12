@@ -31,7 +31,7 @@
 #' \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
 #' and then transformed to the selected coefficient.
 #' 
-#' @name yuleQY
+#' @name yule
 #'
 #' @return a single numeric value if no confidence intervals are requested,\cr
 #' and otherwise a numeric vector with 3 elements for the estimate, the lower
@@ -51,7 +51,7 @@
 #' yuleY(m, conf.level = 0.95)
 #'
 #' 
-#' @rdname yuleQY
+#' @rdname yule
 #' @export
 yuleQ <- function(x, y=NULL,
                   conf.level = 0.95,
@@ -109,7 +109,7 @@ yuleQ <- function(x, y=NULL,
 
 
 
-#' @rdname yuleQY
+#' @rdname yule
 #' @export
 yuleY <- function(x, y=NULL, 
                      conf.level = 0.95,

@@ -44,6 +44,8 @@
 #' # todo: some more ********
 #' 
 
+
+#' @export
 mutInf <- function(x, y = NULL, base = 2, ...){
   # ### Ref.:  http://en.wikipedia.org/wiki/Cluster_labeling
   

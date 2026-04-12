@@ -62,5 +62,5 @@ Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications
 in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
 }
 \seealso{
-\code{\link[DescTools]{GlassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
+\code{\link{glassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
 }

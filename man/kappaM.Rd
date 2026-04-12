@@ -96,7 +96,8 @@ Other topic.Agreement:
 \code{\link{cohenKappa}()},
 \code{\link{icc}()},
 \code{\link{kendallW}()},
-\code{\link{krippAlpha}()}
+\code{\link{krippAlpha}()},
+\code{\link{randolphKappa}()}
 }
 \author{
 Matthias Gamer, with some modifications by Andri Signorell

@@ -5,6 +5,10 @@ brier_boot_cpp <- function(resp, pred, R, scaled) {
     .Call(`_DescToolsX_brier_boot_cpp`, resp, pred, R, scaled)
 }
 
+coef_bootstrap_parallel_cpp <- function(X, y, B = 2000L, alpha = 0.05, seed = -1L) {
+    .Call(`_DescToolsX_coef_bootstrap_parallel_cpp`, X, y, B, alpha, seed)
+}
+
 conDisPairsTab <- function(x) {
     .Call(`_DescToolsX_conDisPairsTab`, x)
 }
@@ -105,8 +109,16 @@ hl2qest <- function(x, y) {
     .Call(`_DescToolsX_hl2qest`, x, y)
 }
 
+hoeffdingD_cpp <- function(perm) {
+    .Call(`_DescToolsX_hoeffdingD_cpp`, perm)
+}
+
 n_pow_sum <- function(x) {
     .Call(`_DescToolsX_n_pow_sum`, x)
+}
+
+rsq_bootstrap_parallel_cpp <- function(X, y, B = 1000L, alpha = 0.05, adjusted = TRUE, seed = -1L) {
+    .Call(`_DescToolsX_rsq_bootstrap_parallel_cpp`, X, y, B, alpha, adjusted, seed)
 }
 
 rskew_cpp <- function(x, mean) {

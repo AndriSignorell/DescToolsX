@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 # Tools for Descriptive Statistics and Exploratory Data Analysis
 
-[DescTools](https://cran.r-project.org/web/packages/DescTools/) has been available on CRAN for more than 12 years and has undergone a large number of changes and additions during that time. In this timespan the package gained impressive popularity and was downloaded a million times in 2025.
+[DescTools](https://cran.r-project.org/web/packages/DescTools/) has been available on CRAN for more than 12 years and has undergone a large number of changes and additions during that time. In this timespan the package gained impressive popularity and reached the one-million-download mark in 2025. 
 However its historical development has led to inconsistencies that could no longer be resolved through an evolutionary process. It was time to redesign the package to establish a clean new foundation.
 
 ![](man/figures/timeToMove.png)
@@ -30,7 +30,9 @@ However its historical development has led to inconsistencies that could no long
 
 
 The DescTools collection of functions has been reviewed, reorganised and grouped into logical units, with particular attention paid to consistency in operation and user interface design. 
-The new approach moves away from the monolithic design of DescTools, which had recently made maintenance so difficult. The functions are now distributed across several packages, which are, however, loaded directly alongside the main package, so the user does not need to do anything further.
+The new approach moves away from the monolithic design of DescTools, which had recently made maintenance so difficult. The functions are now distributed across several packages, which are, however, loaded directly alongside the main package, so the user does not need to do anything further. Documentation has been completely "roxygenised" allowing a better overview of code and documentation. Functions are now also organised in own R-files, which makes it simpler to follow the development on github.
+There is no longer any Fortran or C code; all the older code has been ported to C++, 
+which can be maintained very nicely and directly using Rcpp. Further performance-critical components were written in C++ and now run up to 100 times faster.
 
 
 ## 📦 The DescToolsX ecosystem consists of:

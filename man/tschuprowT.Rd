@@ -77,7 +77,7 @@ Other topic.associationMeasures:
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
 \code{\link{uncertCoef}()},
-\code{\link{yuleQY}}
+\code{\link{yule}}
 }
 \concept{association}
 \concept{categorical-data}

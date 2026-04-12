@@ -8,42 +8,42 @@
 #' \code{format()} and its strange codes...\cr Based on the requested time
 #' component, the output is as follows:\cr \tabular{ll}{ \code{year}\tab
 #' returns the year of a date or a yearmonth (\code{yyyymm}) in (\code{yyyy})
-#' format .\cr \code{Quarter}\tab returns the quarter of the year (1 to 4) for
+#' format .\cr \code{quarter}\tab returns the quarter of the year (1 to 4) for
 #' the input date. \cr \code{month}\tab returns the month of the year (1 to 12)
 #' for the input date or for a yearmonth. \cr \code{week}\tab returns the week
 #' of the year for the input date (0 to 53), as defined in ISO8601. \cr
-#' \code{Weekday}\tab returns the week day of the input date. (1 - Monday, 2 -
+#' \code{weekday}\tab returns the week day of the input date. (1 - Monday, 2 -
 #' Tuesday, ... 7 - Sunday). (Names and abbreviations are either english or in
-#' the current locale!)\cr \code{YearDay}\tab returns the day of the year
+#' the current locale!)\cr \code{yearDay}\tab returns the day of the year
 #' numbering (1 to 366). \cr \code{Day}\tab returns the day of the month (1 to
-#' 31). \cr \code{YearDay}\tab returns the yearday representation (yyyyddd) of
-#' a date as long integer. \cr \code{YearWeek}\tab returns the yearweek
-#' representation (yyyyww) of a date as long integer. \cr \code{YearMonth}\tab
+#' 31). \cr \code{yearDay}\tab returns the yearday representation (yyyyddd) of
+#' a date as long integer. \cr \code{yearWeek}\tab returns the yearweek
+#' representation (yyyyww) of a date as long integer. \cr \code{yearMonth}\tab
 #' returns the yearmonth representation (yyyymm) of a date as long integer. \cr
-#' \code{Hour}, \code{Minute}, \code{Second} \tab returns the hour, minute or
-#' second from a POSIXlt object. \cr \code{Timezone} \tab returns the timezone
-#' from a POSIXlt object. \cr \code{HmsToMinute} \tab converts the time parts
+#' \code{hour}, \code{minute}, \code{second} \tab returns the hour, minute or
+#' second from a POSIXlt object. \cr \code{timezone} \tab returns the timezone
+#' from a POSIXlt object. \cr \code{hmsToMinute} \tab converts the time parts
 #' of a POSIXlt object to minutes.\cr \code{today}, \code{now}\tab returns the
 #' current date, resp. the current date and time.\cr
 #' 
 #' \code{isWeekend} \tab returns \code{TRUE}, if the date x falls on a weekend.
 #' \cr \code{isLeapYear} \tab returns \code{TRUE}, if the year of the date x is
 #' a leap year. \cr } The day can not only be extracted, but as well be
-#' defined. See examples. \tabular{ll}{ \code{DiffDays360} \tab calculates the
+#' defined. See examples. \tabular{ll}{ \code{diffDays360} \tab calculates the
 #' difference between 2 dates using the 360-days convention.\cr
 #' \code{lastDayOfMonth} \tab returns the last day of the month of the given
-#' date(s). \cr \code{YearDays} \tab returns the total number of days of the
-#' given date(s). \cr \code{MonthDays} \tab returns the numer of days of the
-#' month of the given date(s). \cr } The language in \code{Weekday()} and
+#' date(s). \cr \code{yearDays} \tab returns the total number of days of the
+#' given date(s). \cr \code{monthDays} \tab returns the numer of days of the
+#' month of the given date(s). \cr } The language in \code{weekday()} and
 #' \code{month()} can be set with an option as well.  These functions will
 #' check for an existing option named \code{"lang"} and take this value if it
 #' exists. So simply set \code{option(lang="engl")} if the results should
 #' always be reported in English.
 #' 
 #' @name date_functions
-#' @aliases year Quarter month week Day Day<- Weekday YearDay YearWeek
-#' YearMonth isWeekend isLeapYear Hour Minute Second now today DiffDays360
-#' lastDayOfMonth Timezone YearDays MonthDays month.ym year.ym
+#' @aliases year quarter month week Day Day<- weekday yearDay yearWeek
+#' yearMonth isWeekend isLeapYear hour minute second now today diffDays360
+#' lastDayOfMonth timezone yearDays monthDays month.ym year.ym
 #' @param x the date to be evaluated. 
 #' @param fmt format string, defines how the month or the weekday are to be
 #' formatted. Defaults to \code{"m"}, resp. \code{"d"}. Is ignored for other
@@ -56,7 +56,7 @@
 #' @param stringsAsFactors logical. Defines if the result should be coerced to
 #' a factor, using the local definitions as levels.  The result would be an
 #' ordered factor. Default is TRUE.
-#' @param start_d,end_d the start, resp. end date for \code{DiffDays360}. 
+#' @param start_d,end_d the start, resp. end date for \code{diffDays360}. 
 #' @param method one out of \code{"eu", "us"}, setting either European or
 #' US-Method calculation mode. Default is \code{"eu"}. 
 #' @return a vector of the same dimension as x, consisting of either numeric
@@ -70,7 +70,7 @@
 #' x <- today()    # the same as Sys.Date() but maybe easier to remember..
 #' 
 #' year(x)
-#' Quarter(x)
+#' quarter(x)
 #' 
 #' month(x)
 #' month(x, fmt = "mm", lang="en")
@@ -80,17 +80,17 @@
 #' 
 #' week(x)
 #' 
-#' Day(x)
-#' Day(x) <- 20
+#' day(x)
+#' day(x) <- 20
 #' x
 #' 
-#' Weekday(x)
-#' Weekday(x, fmt = "dd", lang="en")
-#' Weekday(x, fmt = "dd", lang="local")
-#' Weekday(x, fmt = "ddd", lang="en")
-#' Weekday(x, fmt = "ddd", lang="local")
+#' weekday(x)
+#' weekday(x, fmt = "dd", lang="en")
+#' weekday(x, fmt = "dd", lang="local")
+#' weekday(x, fmt = "ddd", lang="en")
+#' weekday(x, fmt = "ddd", lang="local")
 #' 
-#' YearDay(x)
+#' yearDay(x)
 #' 
 #' isWeekend(x)
 #' 
@@ -219,21 +219,21 @@ week <- function(x, method = c("iso", "us")){
 }
 
 
-# Day <- function(x){ as.integer(format(as.Date(x), "%d") ) }
+# day <- function(x){ as.integer(format(as.Date(x), "%d") ) }
 #' @rdname date_functions
 #' @export
-Day <- function(x){ as.POSIXlt(x)$mday }
+day <- function(x){ as.POSIXlt(x)$mday }
 
 
-# Accessor for Day, as defined by library(lubridate)
+# Accessor for day, as defined by library(lubridate)
 #' @rdname date_functions
 #' @export
-"Day<-" <- function(x, value) { x <- x + (value - Day(x)) }
+"day<-" <- function(x, value) { x <- x + (value - day(x)) }
 
 
 #' @rdname date_functions
 #' @export
-Weekday <- function (x, fmt = c("d", "dd", "ddd"), 
+weekday <- function (x, fmt = c("d", "dd", "ddd"), 
                      lang = .getOption("lang"), stringsAsFactors = TRUE) {
   
   # x <- as.Date(x)
@@ -275,7 +275,7 @@ Weekday <- function (x, fmt = c("d", "dd", "ddd"),
 
 #' @rdname date_functions
 #' @export
-Quarter <- function (x) {
+quarter <- function (x) {
   # Berechnet das Quartal eines Datums
   # y <- as.numeric( format( x, "%Y") )
   # paste(y, "Q", (as.POSIXlt(x)$mon)%/%3 + 1, sep = "")
@@ -295,21 +295,21 @@ now <- function() Sys.time()
 
 #' @rdname date_functions
 #' @export
-Hour <- function(x) {
+hour <- function(x) {
   # strptime(x, "%H")
   as.POSIXlt(x)$hour
 }
 
 #' @rdname date_functions
 #' @export
-Minute <- function(x) {
+minute <- function(x) {
   #  strptime(x, "%M")
   as.POSIXlt(x)$min
 }
 
 #' @rdname date_functions
 #' @export
-Second <- function(x) {
+second <- function(x) {
   #  strptime(x, "%S")
   as.POSIXlt(x)$sec
 }
@@ -317,14 +317,14 @@ Second <- function(x) {
 
 #' @rdname date_functions
 #' @export
-Timezone <- function(x) {
+timezone <- function(x) {
   as.POSIXlt(x)$zone
 }
 
 
 #' @rdname date_functions
 #' @export
-YearMonth <- function(x){
+yearMonth <- function(x){
   # returns the yearmonth representation of a date x
   # x <- as.POSIXlt(x)
   # return(as.ym((x$year + 1900L)*100L + x$mon + 1L))
@@ -336,7 +336,7 @@ YearMonth <- function(x){
 
 #' @rdname date_functions
 #' @export
-YearWeek <- function(x, method = c("iso", "us")){
+yearWeek <- function(x, method = c("iso", "us")){
   
   # cast x to date, such as being able to handle POSIX-Dates automatically
   x <- as.Date(x)
@@ -360,7 +360,7 @@ YearWeek <- function(x, method = c("iso", "us")){
 
 #' @rdname date_functions
 #' @export
-YearDay <- function(x) {
+yearDay <- function(x) {
   # return(as.integer(format(as.Date(x), "%j")))
   
   # As ?POSIXlt reveals, a $yday suffix to a POSIXlt date (or even a vector of such) 
@@ -374,30 +374,30 @@ YearDay <- function(x) {
 
 #' @rdname date_functions
 #' @export
-DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
+diffDays360 <- function(start_d, end_d, method=c("eu","us")){
   
   # source: http://en.wikipedia.org/wiki/360-day_calendar
   start_d <- as.Date(start_d)
   end_d <- as.Date(end_d)
   
-  d1 <- Day(start_d)
+  d1 <- day(start_d)
   m1 <- month(start_d)
   y1 <- year(start_d)
-  d2 <- Day(end_d)
+  d2 <- day(end_d)
   m2 <- month(end_d)
   y2 <- year(end_d)
   
   method = match.arg(method)
   switch(method,
          "eu" = {
-           if(Day(start_d)==31L) start_d <- start_d-1L
-           if(Day(end_d)==31L) end_d <- end_d-1L
+           if(day(start_d)==31L) start_d <- start_d-1L
+           if(day(end_d)==31L) end_d <- end_d-1L
          }
          , "us" ={
-           if( (Day(start_d+1L)==1L & month(start_d+1L)==3L) &
-               (Day(end_d+1L)==1L & month(end_d+1L)==3L)) d2 <- 30L
+           if( (day(start_d+1L)==1L & month(start_d+1L)==3L) &
+               (day(end_d+1L)==1L & month(end_d+1L)==3L)) d2 <- 30L
            if( d1==31L ||
-               (Day(start_d+1L)==1L & month(start_d+1L)==3L)) {
+               (day(start_d+1L)==1L & month(start_d+1L)==3L)) {
              d1 <- 30L
              if(d2==31L) d2 <- 30L
            }
@@ -414,7 +414,7 @@ DiffDays360 <- function(start_d, end_d, method=c("eu","us")){
 #' @export
 lastDayOfMonth <- function(x){
   z <- addMonths(x, 1L)
-  Day(z) <- 1L
+  day(z) <- 1L
   return(z - 1L)
 }
 
@@ -422,7 +422,7 @@ lastDayOfMonth <- function(x){
 
 #' @rdname date_functions
 #' @export
-YearDays <- function (x) {
+yearDays <- function (x) {
   # return the number of days in the specific year of x
   x <- as.POSIXlt(x)
   x$mon[] <- x$mday[] <- x$sec[] <- x$min <- x$hour <- 0
@@ -433,7 +433,7 @@ YearDays <- function (x) {
 
 #' @rdname date_functions
 #' @export
-MonthDays <- function (x) {
+monthDays <- function (x) {
   # return the number of days in the specific month of x
   x <- as.POSIXlt(x)
   x$mday[] <- x$sec[] <- x$min <- x$hour <- 0

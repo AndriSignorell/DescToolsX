@@ -1,36 +1,36 @@
 
-#' Convert h:m:s To/From Seconds
+#' Convert h:m:s To/From seconds
 #' 
 #' \code{HmsToSec} - Converts a vector of h:m:s to seconds.
 #' 
-#' \code{SecToHms} - Converts a vector of seconds to h:m:s.
+#' \code{secToHms} - Converts a vector of seconds to h:m:s.
 #' 
 #' 
 #' @name time_conversions
-#' @aliases HmsToSec SecToHms
+#' @aliases HmsToSec secToHms
 #' @param x A vector of times in h:m:s (for \code{HmsToSec}) or seconds (for
-#' \code{SecToHms}).
+#' \code{secToHms}).
 #' @param digits the number of digits to use for potential fractions of
 #' seconds.
 #' @return \code{HmsToSec} - Returns a vector of times in seconds.
 #' 
-#' \code{SecToHms} - Returns a vector of times in h:m:s format.
+#' \code{secToHms} - Returns a vector of times in h:m:s format.
 #' @author Tyler Rinker <tyler.rinker@@gmail.com>
 #' @seealso \code{\link[chron]{times}}
 #' @keywords chron
 #' @examples
 #' 
 #' HmsToSec(c("02:00:03", "04:03:01"))
-#' HmsToSec(SecToHms(c(222, 1234, 55)))
-#' SecToHms(c(256, 3456, 56565))
+#' HmsToSec(secToHms(c(222, 1234, 55)))
+#' secToHms(c(256, 3456, 56565))
 #' 
 
 
 
 #' @rdname time_conversions
 #' @export
-HmsToMinute <- function(x){
-  Hour(x)*60 + Minute(x) + Second(x)/60
+hmsToMinute <- function(x){
+  hour(x)*60 + minute(x) + second(x)/60
 }
 
 
@@ -47,7 +47,7 @@ HmsToSec <- function(x) {
 
 #' @rdname time_conversions
 #' @export
-SecToHms <- function(x, digits=NULL) {
+secToHms <- function(x, digits=NULL) {
   
   x <- as.numeric(x)
   

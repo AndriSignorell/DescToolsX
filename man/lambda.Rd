@@ -105,7 +105,7 @@ Other topic.associationMeasures:
 \code{\link{somersDelta}()},
 \code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
-\code{\link{yuleQY}}
+\code{\link{yule}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} based on code from Antti

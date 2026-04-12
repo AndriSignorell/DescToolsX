@@ -86,7 +86,7 @@ Other topic.associationMeasures:
 \code{\link{mutInf}()},
 \code{\link{somersDelta}()},
 \code{\link{tschuprowT}()},
-\code{\link{yuleQY}}
+\code{\link{yule}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} strongly based on code from

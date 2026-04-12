@@ -69,7 +69,7 @@ IntegerVector usWeek(DateVector x) {
     // Calculate US week number (weeks start on Sunday)
     // this does not work:
     //   weeks[i] = curr_d.getYearday() % 7 + 1;
-    // so we get a helper function YearDay 
+    // so we get a helper function yearDay 
     weeks[i] = (Yearday(curr_d.getYear(), curr_d.getMonth(), curr_d.getDay()) - 1) / 7 + 1;
 
   }
@@ -123,7 +123,7 @@ IntegerVector isoYear(DateVector x) {
 }
 
 
-// ************************ YearWeek ***************
+// ************************ yearWeek ***************
 
 
 // [[Rcpp::export]]

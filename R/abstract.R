@@ -7,7 +7,7 @@
 #' the other side already calculates some basic statistics. 
 #' 
 #' The levels of a factor and describing variable labels (as created by
-#' [Label()]) will be wrapped within the columns.
+#' \code{\link[bedrock]{label}()}) will be wrapped within the columns.
 #' 
 #' The first 4 columns are printed with the needed fix width, the last 2
 #' (Levels and Labels) are wrapped within the column. The width is calculated
@@ -52,13 +52,13 @@
 #' d.mydata <- CO2
 #' 
 #' # let's use describing labels
-#' Label(d.mydata) <- "CO2 contains data from an experiment on the cold 
+#' label(d.mydata) <- "CO2 contains data from an experiment on the cold 
 #' tolerance of the grass species Echinochloa crus-galli."
 #' 
-#' Label(d.mydata$Plant) <- "an ordered factor with levels Qn1 < Qn2 < Qn3 < ... < Mc1 
+#' label(d.mydata$Plant) <- "an ordered factor with levels Qn1 < Qn2 < Qn3 < ... < Mc1 
 #' giving a unique identifier for each plant."
 #' 
-#' Label(d.mydata$Plant) <- "a factor with levels Quebec Mississippi giving the 
+#' label(d.mydata$Plant) <- "a factor with levels Quebec Mississippi giving the 
 #' origin of the plant"
 #' 
 #' abstract(d.mydata)
@@ -83,7 +83,7 @@ abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
     nr = 1:length(x),
     class = shortclass(x),
     varname = colnames(x),
-    label = unlist(lapply(lapply(x, Label), Coalesce, "-")),
+    label = unlist(lapply(lapply(x, label), Coalesce, "-")),
     levels = unlist(lapply(
       x,
       function(z) {

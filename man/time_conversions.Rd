@@ -2,20 +2,20 @@
 % Please edit documentation in R/hmsToSec.R
 \name{time_conversions}
 \alias{time_conversions}
-\alias{HmsToMinute}
+\alias{hmsToMinute}
 \alias{HmsToSec}
-\alias{SecToHms}
-\title{Convert h:m:s To/From Seconds}
+\alias{secToHms}
+\title{Convert h:m:s To/From seconds}
 \usage{
-HmsToMinute(x)
+hmsToMinute(x)
 
 HmsToSec(x)
 
-SecToHms(x, digits = NULL)
+secToHms(x, digits = NULL)
 }
 \arguments{
 \item{x}{A vector of times in h:m:s (for \code{HmsToSec}) or seconds (for
-\code{SecToHms}).}
+\code{secToHms}).}
 
 \item{digits}{the number of digits to use for potential fractions of
 seconds.}
@@ -23,19 +23,19 @@ seconds.}
 \value{
 \code{HmsToSec} - Returns a vector of times in seconds.
 
-\code{SecToHms} - Returns a vector of times in h:m:s format.
+\code{secToHms} - Returns a vector of times in h:m:s format.
 }
 \description{
 \code{HmsToSec} - Converts a vector of h:m:s to seconds.
 }
 \details{
-\code{SecToHms} - Converts a vector of seconds to h:m:s.
+\code{secToHms} - Converts a vector of seconds to h:m:s.
 }
 \examples{
 
 HmsToSec(c("02:00:03", "04:03:01"))
-HmsToSec(SecToHms(c(222, 1234, 55)))
-SecToHms(c(256, 3456, 56565))
+HmsToSec(secToHms(c(222, 1234, 55)))
+secToHms(c(256, 3456, 56565))
 
 }
 \seealso{

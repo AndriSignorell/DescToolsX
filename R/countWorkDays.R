@@ -23,7 +23,7 @@
 #' from <- as.Date("2019-01-01") + rep(0, 10)
 #' to <- as.Date("2020-01-15") + seq(0, 9)
 #' 
-#' CountWorkDays(from, to)
+#' countWorkDays(from, to)
 #' 
 #' x <- seq(from[1], from[1]+11, "days")
 #' x <- to
@@ -31,13 +31,13 @@
 #'   date = x, 
 #'   day  = fm(x, fmt="ddd"))
 #' 
-#' CountWorkDays(from = min(x), to = max(x), holiday = c("2019-01-06", "2019-01-07"))
+#' countWorkDays(from = min(x), to = max(x), holiday = c("2019-01-06", "2019-01-07"))
 #' 
 
 
 #' @rdname date_functions
 #' @export
-CountWorkDays <- function(from, to, 
+countWorkDays <- function(from, to, 
                           holiday=NULL, nonworkdays=c("Sat","Sun")) {
   
   
@@ -47,12 +47,12 @@ CountWorkDays <- function(from, to,
     w <- (d %/% 7)
     
     res <- w * (7-length(nonworkdays)) + 
-      sum(Weekday(seq(from + w*7,  to, 1), fmt="dd", lang="en") %nin% nonworkdays)
+      sum(weekday(seq(from + w*7,  to, 1), fmt="dd", lang="en") %nin% nonworkdays)
     
     if(!is.null(holiday)){
       # count holidays in period
       h <- holiday[holiday %[]% c(from, to)]
-      res <- res - sum(Weekday(h, fmt="dd", lang="en") %nin% nonworkdays)
+      res <- res - sum(weekday(h, fmt="dd", lang="en") %nin% nonworkdays)
     }
     
     return(res)

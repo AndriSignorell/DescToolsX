@@ -43,9 +43,9 @@ zodiac <- function(x, lang = c("en","de"), stringsAsFactors = TRUE) {
          , de =  {z <- c("Steinbock","Wassermann","Fische","Widder","Stier","Zwillinge","Krebs","Loewe","Jungfrau","Waage","Skorpion","Schuetze","Steinbock") }
   )
   
-  # i <- cut(DescToolsX::month(x)*100 + DescToolsX::Day(x),
+  # i <- cut(DescToolsX::month(x)*100 + DescToolsX::day(x),
   #          breaks=c(0,120,218,320,420,520,621,722,822,923,1023,1122,1221,1231))
-  i <- cut(month(x) * 100 + Day(x), 
+  i <- cut(month(x) * 100 + day(x), 
            breaks = c(0, 120, 218, 320, 420, 520, 621, 
                       722, 823, 922, 1023, 1122, 1222, 1231), 
            right=FALSE, include.lowest = TRUE)

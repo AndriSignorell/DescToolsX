@@ -164,7 +164,8 @@ Other topic.Agreement:
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
-\code{\link{krippAlpha}()}
+\code{\link{krippAlpha}()},
+\code{\link{randolphKappa}()}
 }
 \author{
 David Meyer \href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org}, some changes and tweaks

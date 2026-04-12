@@ -63,11 +63,12 @@
 #'             xtabs end start AIC embed residuals kruskal.test reshape
 #'             contr.helmert contr.poly contr.sum contr.treatment
 #'             poisson.test contrasts drop1 integrate splinefun
-#'             cov2cor vcov
+#'             cov2cor vcov model.extract na.pass na.omit na.exclude na.fail
+#'             optim optimise nlm
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
-#'             segments strwidth text title axis
+#'             segments strwidth text title axis mosaicplot
 #'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
@@ -77,13 +78,13 @@
 #'             
 #' @importFrom bedrock `%)(%` `%[]%` `%nin%` 
 #'             abind combPairs maxDigits recycle setNamesX 
-#'             Label naIf naReplace isZero isWholeLike 
+#'             label naIf naReplace isZero isWholeLike 
 #'             isDichotomous `%][%` pairApply appendX sortX 
 #'             inDots revX sampleX untable Coalesce columnWrap 
-#'             splitAt moveAvg stripAttr
+#'             splitAt moveAvg stripAttr combLevels
 #'             
 #' @importFrom aurora plotFdist strAlign strTrim strTrunc 
-#'             fm style lineSep strTrim
+#'             fm style lineSep strTrim strPad
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mhChisqTest
 #'             varTest meanCI binomCI binomDiffCI bootCI 
@@ -92,5 +93,6 @@
 #' @importFrom methods is
 #' 
 #' @importFrom stringi stri_replace_all_fixed
+#' @importFrom mvtnorm pmvnorm
 #'              
 NULL

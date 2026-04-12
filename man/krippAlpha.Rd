@@ -101,7 +101,8 @@ Other topic.Agreement:
 \code{\link{cohenKappa}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
-\code{\link{kendallW}()}
+\code{\link{kendallW}()},
+\code{\link{randolphKappa}()}
 }
 \concept{Interrater Agreement}
 \concept{Metric Agreement}

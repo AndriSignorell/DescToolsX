@@ -141,7 +141,7 @@ desc <- Desc
   
   list(
     xname      = xname,
-    label      = Label(x),
+    label      = label(x),
     main       = main %||% xname,
     class      = class(x),
     classlabel = paste(class(x), collapse = ","),

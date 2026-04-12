@@ -233,7 +233,7 @@ print.Desc.table <- function(x, ...) {
           sep = ""
       )
       cat("Pearson's Chi-squared test (1-dim uniform):\n  ",
-          .CaptOut(x$chisq.test)[5], "\n\n",
+          .captOut(x$chisq.test)[5], "\n\n",
           sep = ""
       )
       
@@ -262,21 +262,21 @@ print.Desc.table <- function(x, ...) {
       if (x$ttype == "t2x2") {
         if (x$meta$verbose == "3") {
           cat("Pearson's Chi-squared test:\n  ",
-              .CaptOut(x$chisq.test)[5], "\n",
+              .captOut(x$chisq.test)[5], "\n",
               sep = ""
           )
         }
         cat("Pearson's Chi-squared test (cont. adj):\n  ",
-            .CaptOut(x$chisq.test.cont)[5], "\n",
+            .captOut(x$chisq.test.cont)[5], "\n",
             sep = ""
         )
         cat("Fisher's exact test ",
-            .CaptOut(x$fisher.test)[5], "\n",
+            .captOut(x$fisher.test)[5], "\n",
             sep = ""
         )
         
         if (x$meta$verbose %in% c("2", "3")) { # print only with verbosity > 1
-          cat("", .CaptOut(x$mcnemar.test)[5], "\n", sep = "")
+          cat("", .captOut(x$mcnemar.test)[5], "\n", sep = "")
         }
         
         if (!x$approx.ok) {
@@ -311,13 +311,13 @@ print.Desc.table <- function(x, ...) {
       } else {
         # we report chisquare without cont-corr for rxc and with cont-corr for 2x2 by default
         cat("Pearson's Chi-squared test:\n  ",
-            .CaptOut(x$chisq.test)[5], "\n",
+            .captOut(x$chisq.test)[5], "\n",
             sep = ""
         )
         
         if (x$meta$verbose == "3" &  x$ttype == "t2x2") {
           cat("Pearson's Chi-squared test (cont. adj):\n  ",
-              .CaptOut(x$chisq.test.cont)[5], "\n",
+              .captOut(x$chisq.test.cont)[5], "\n",
               sep = ""
           )
         }
@@ -326,12 +326,12 @@ print.Desc.table <- function(x, ...) {
           
           # Log-likelihood chi-squared (G2) test of independence (homogeneity)
           cat("Log likelihood ratio (G-test) test of independence:\n  ",
-              .CaptOut(x$loglik.chisq.test)[5], "\n",
+              .captOut(x$loglik.chisq.test)[5], "\n",
               sep = ""
           )
           # Mantel-Haenszel ChiSquared (linear hypothesis)
           cat("Mantel-Haenszel Chi-squared:\n  ",
-              .CaptOut(x$mh.test)[5], "\n",
+              .captOut(x$mh.test)[5], "\n",
               sep = ""
           )
         }

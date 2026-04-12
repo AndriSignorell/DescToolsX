@@ -142,7 +142,8 @@ Other topic.Agreement:
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
-\code{\link{krippAlpha}()}
+\code{\link{krippAlpha}()},
+\code{\link{randolphKappa}()}
 }
 \author{
 Mark Stevenson \href{mailto:mark.stevenson1@unimelb.edu.au}{mark.stevenson1@unimelb.edu.au}

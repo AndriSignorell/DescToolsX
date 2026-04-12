@@ -22,7 +22,6 @@
 #' @return numeric matrix, dimension \verb{[1:17, 1:3]}\cr the first column contains
 #' the estimate, the second the lower confidence interval, the third the upper
 #' one.
-#' @author Andri Signorell <andri@@signorell.net> 
 #' @seealso \code{\link{Association}}
 #' @keywords multivariate
 #' @examples

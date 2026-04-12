@@ -70,7 +70,7 @@ addMonths.default <- function (x, n, ...) {
     # sapply kills the Date class, so recreate down the road
     
     # ceiling
-    Day(x) <- 1L
+    day(x) <- 1L
     res_c <- sapply(x, seq, by = paste(n + 1L, "months"), length = 2L)[2L,] - 1L
     
     # use ceiling in case of overlapping

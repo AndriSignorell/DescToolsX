@@ -138,7 +138,8 @@ Other topic.Agreement:
 \code{\link{cohenKappa}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
-\code{\link{krippAlpha}()}
+\code{\link{krippAlpha}()},
+\code{\link{randolphKappa}()}
 }
 \concept{Interrater Agreement}
 \concept{Metric Agreement}
