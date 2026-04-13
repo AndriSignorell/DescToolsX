@@ -64,7 +64,7 @@
 #'             contr.helmert contr.poly contr.sum contr.treatment
 #'             poisson.test contrasts drop1 integrate splinefun
 #'             cov2cor vcov model.extract na.pass na.omit na.exclude na.fail
-#'             optim optimise nlm
+#'             optim optimise nlm aggregate
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
