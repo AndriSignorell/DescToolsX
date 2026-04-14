@@ -124,12 +124,14 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
   # only displays the effect size, but if requested it will also print out the full
   # ANOVA table.
   
-  if (!is(anova, "logical") | length(anova) != 1) {
+  if (!is.logical(anova) || length(anova) != 1) {
     stop("\"anova\" must be a single logical value")
   }
-  if (!is(type, "numeric") | length(type) != 1) {
+  
+  if (!is.numeric(type) || length(type) != 1) {
     stop("type must be equal to 1, 2 or 3")
   }
+  
   if (type == 1) {
     ss <- anova(x)[, "Sum Sq", drop = FALSE]
     ss.res <- ss[dim(ss)[1], ]
@@ -241,13 +243,14 @@ etaSq.aovlist <-  function (x, type = 2, anova = FALSE) {
   # etaSq.aovlist() calculates partial eta-squared and generalized eta-squared
   # for aovlists
   
-  if (!is(anova, "logical") | length(anova) != 1) {
+  if (!is.logical(anova) || length(anova) != 1) {
     stop("\"anova\" must be a single logical value")
   }
-  if (!is(type, "numeric") | length(type) != 1) {
+  
+  if (!is.numeric(type) || length(type) != 1) {
     stop("type must be equal to 1, 2 or 3")
   }
-  
+
   ## alternative: check design has balanced cell sizes
   if (type != 1) {
     stop("type must be equal to 1")

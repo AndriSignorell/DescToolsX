@@ -136,6 +136,8 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
       fm(x$rfrq, fmt = style("per.sty", digits = digits))
     )
     
+    out <- apply(out, 2, strTrim)
+    
     rownames(out) <- rownames(x$afrq)
     colnames(out) <- c(
       "freq", "perc",
@@ -145,7 +147,7 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
       )
     )
     
-    txt <- capture.output(print(strTrim(out),
+    txt <- capture.output(print(out,
                                 quote = FALSE, right = TRUE,
                                 print.gap = 2
     ))

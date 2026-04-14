@@ -8,14 +8,14 @@ simpson(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE)
 }
 \arguments{
 \item{x}{A vector of observations (factor, character, numeric), or a
-vector of counts.}
+named vector of non-negative integer counts.}
 
 \item{method}{Character string specifying the index to compute:
 \code{"gini"}, \code{"hunter"}, or \code{"deltas"}.}
 
 \item{na.rm}{Logical. If \code{TRUE}, missing values are removed before
 computation. If \code{FALSE} and \code{x} contains \code{NA}, the result
-will be \code{NA}.}
+will be \code{NA_real_}.}
 }
 \value{
 A numeric value between 0 and 1. Returns \code{NA_real_} if input
@@ -35,13 +35,19 @@ The Hunter-Gaston index is defined as
 \eqn{N} is the total sample size.
 
 The Deltas correction is defined as
-\eqn{(1 - \sum p_i^2) * k / (k - 1)}, where \eqn{k} is the number of categories.
+\eqn{(1 - \sum p_i^2) * k / (k - 1)}, where \eqn{k} is the number of
+observed (non-empty) categories.
 
 All indices represent the probability that two randomly selected
 observations belong to different categories.
 
 The Hunter-Gaston index corrects for finite sample size, while the
-Deltas correction adjusts for a small number of categories.
+Deltas correction adjusts for a small number of observed categories.
+
+When \code{x} is numeric, it is treated as a vector of counts. Non-integer
+values produce a warning; the Hunter-Gaston index requires integer counts.
+
+The Deltas correction uses the number of observed (non-empty) categories.
 }
 \examples{
 x <- c("A", "A", "B", "C", "C", "C")
@@ -64,12 +70,12 @@ Sachs, L. (1997). \emph{Angewandte Statistik}. Springer.
 
 Hunter, P. R., & Gaston, M. A. (1988).
 Numerical index of the discriminatory ability of typing systems.
-\emph{Journal of Clinical Microbiology}, 26(11), 2465–2466.
+\emph{Journal of Clinical Microbiology}, 26(11), 2465-2466.
 https://doi.org/10.1128/jcm.26.11.2465-2466.1988
 
 Deltas, G. (2003).
 The small-sample bias of the Gini coefficient:
 Results and implications for empirical research.
-\emph{Review of Economics and Statistics}, 85(1), 226–234.
+\emph{Review of Economics and Statistics}, 85(1), 226-234.
 https://doi.org/10.1162/rest.2003.85.1.226
 }

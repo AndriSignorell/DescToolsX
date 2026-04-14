@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.904
+Version: 0.0.0.905
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -97,16 +97,39 @@ Authors@R: c(
   person("Thomas"        , "Yee",                 role = c("ctb")),
   person("Achim"         , "Zeileis",             role = c("ctb"))
  )
-Description: This is the successor to DescTools, completely redesigned, decluttered, simplified, bugfixed, unified and accelerated.
+Description: Provides a collection of functions for descriptive statistics, 
+    data analysis, and statistical testing. The package is a redesigned and 
+    streamlined successor to DescTools, with a focus on improved consistency, 
+    performance, and maintainability.
 Encoding: UTF-8
-Depends: R (>= 4.2.0), aurora, lumen, bedrock, hermes
+Depends: R (>= 4.2.0),
+    aurora,
+    lumen,
+    bedrock,
+    hermes
 License: GPL (>= 2)
 LinkingTo: Rcpp, RcppParallel, RcppArmadillo  
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Suggests: goftest, testthat (>= 3.0.0), R.rsp, readr, vegan
 Config/testthat/edition: 3
-Imports: stats, boot, rstudioapi, cli, gld, lme4, methods, stringi, mvtnorm
+Imports:
+    stats, 
+    boot, 
+    cli,
+    stringi,
+    mvtnorm
+Suggests:
+    goftest,
+    testthat (>= 3.0.0),
+    R.rsp,
+    readr,
+    vegan,
+    VGAM,
+    nnet,
+    MASS,
+    rstudioapi,
+    gld, 
+    lme4
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/

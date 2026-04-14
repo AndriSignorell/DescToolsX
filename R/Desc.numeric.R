@@ -216,7 +216,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   
   x[["quant"]][] <- fm(x[["quant"]], fmt = style("num.sty", digits = digits))
   
-  x[c("mean", "meanCI", "meanUCI", "range", "sd", "vcoef", "mad", "IQR", "skew", "kurt")] <-
+  x[c("mean", "meanCI", "meanUCI", "range", "sd", "vcoef", "mad", "iqr", "skew", "kurt")] <-
     lapply(x[c("mean", "meanCI", "meanUCI", "range", "sd", "vcoef", "mad", "IQR", "skew", "kurt")],
            fm,
            fmt = style("num.sty", digits = digits)
@@ -226,7 +226,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     l1 = unlist(x[c("length", "n", "NAs", "unique", "0s", "mean", "meanCI")]),
     l2 = c("", x[["nperc"]], x[["naperc"]], "", x[["zeroperc"]], "", x[["meanUCI"]]),
     l3 = x[["quant"]][-c(1, 9)],
-    l4 = unlist(x[c("range", "sd", "vcoef", "mad", "IQR", "skew", "kurt")])
+    l4 = unlist(x[c("range", "sd", "vcoef", "mad", "iqr", "skew", "kurt")])
   )
   
   width <- max(c(

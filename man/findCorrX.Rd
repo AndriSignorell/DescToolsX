@@ -59,6 +59,7 @@ This is a greedy heuristic and does not guarantee a globally optimal solution.
 \examples{
 set.seed(123)
 m <- matrix(rnorm(100), ncol = 5)
+colnames(m) <- paste0("V", 1:5)
 cmat <- cor(m)
 
 findCorrX(cmat, cutoff = 0.8)

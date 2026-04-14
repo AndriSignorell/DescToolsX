@@ -64,7 +64,8 @@
 #'             contr.helmert contr.poly contr.sum contr.treatment
 #'             poisson.test contrasts drop1 integrate splinefun
 #'             cov2cor vcov model.extract na.pass na.omit na.exclude na.fail
-#'             optim optimise nlm aggregate
+#'             optim optimise nlm aggregate logLik AIC BIC model.frame predict
+#'             glm
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
@@ -90,7 +91,6 @@
 #'             varTest meanCI binomCI binomDiffCI bootCI 
 #'             
 #' @importFrom hermes newWrd
-#' @importFrom methods is
 #' 
 #' @importFrom stringi stri_replace_all_fixed
 #' @importFrom mvtnorm pmvnorm

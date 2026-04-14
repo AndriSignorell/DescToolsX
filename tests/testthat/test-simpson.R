@@ -43,42 +43,11 @@ test_that("gini matches vegan::diversity", {
 })
 
 
-
-test_that("hunter matches vegan unbiased simpson", {
-  skip_if_not_installed("vegan")
-  
-  data(BCI, package = "vegan")
-  x <- BCI[1, ]
-  
-  # vegan's unbiased estimator
-  expected <- vegan::simpson.unb(x)
-  
-  expect_equal(
-    suppressWarnings(simpson(x, method = "hunter")),
-    expected,
-    tolerance = 1e-12
-  )
-  
-})
-
 test_that("handles NA correctly", {
   x <- c("A","A",NA,"B")
   
   expect_true(is.na(simpson(x, na.rm = FALSE)))
   expect_false(is.na(simpson(x, na.rm = TRUE)))
-})
-
-
-
-test_that("edge cases handled", {
-
-  expect_warning(simpson(character(0)), "Input is empty")
-  expect_warning(simpson("A", method = "hunter"), "Sample size must be at least 2")
-  expect_warning(simpson(c("A","A"), method = "deltas"), "At least two categories")
-  
-  expect_true(is.na(simpson(character(0))))
-  expect_true(is.na(simpson("A", method = "hunter")))
-  expect_true(is.na(simpson(c("A","A"), method = "deltas")))
 })
 
 
@@ -96,4 +65,33 @@ test_that("method argument works", {
   x <- c("A","B","C")
   
   expect_error(simpson(x, method = "invalid"))
+})
+
+
+
+test_that("edge cases handled", {
+  expect_warning(simpson(character(0)),                  "Empty input")
+  expect_warning(simpson("A", method = "hunter"),        "N >= 2")
+  expect_warning(simpson(c("A","A"), method = "deltas"), "k >= 2")
+  expect_true(is.na(suppressWarnings(simpson(character(0)))))
+  expect_true(is.na(suppressWarnings(simpson("A", method = "hunter"))))
+  expect_true(is.na(suppressWarnings(simpson(c("A","A"), method = "deltas"))))
+})
+
+
+test_that("hunter matches vegan unbiased simpson", {
+  skip_if_not_installed("vegan")
+
+  data(BCI, package = "vegan")
+  x <- BCI[1, ]
+
+  # vegan's unbiased estimator
+  expected <- vegan::simpson.unb(x)
+
+  expect_equal(
+    suppressWarnings(simpson(x, method = "hunter")),
+    unname(expected),
+    tolerance = 1e-12
+  )
+  
 })

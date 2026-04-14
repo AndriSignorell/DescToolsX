@@ -32,14 +32,17 @@
 #'
 #' @examples
 #' set.seed(123)
-#' dat <- data.frame(
-#'   x = c(1, 2, NA, 4),
-#'   y = c(NA, 2, 3, 4),
-#'   z = factor(c("a", "b", "a", NA))
-#' )
-#'
+#'dat <- data.frame(
+#'  x = c(1, 2, 3, 4, 5, 6),
+#'  y = c(1, 2, 3, 4, 5, 6),
+#'  z = factor(c("a", "b", "a", "b", "a", "b"))
+#')
+#' 
+#' dat[c(1,3), "x"] <- NA
+#' dat[c(2,5), "y"] <- NA
+#' 
 #' imputeKnn(dat, k = 2)
-#'
+#' 
 
 #' @export
 imputeKnn <- function(data,
