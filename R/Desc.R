@@ -135,22 +135,34 @@ desc <- Desc
 
 
 
+#' @rdname Desc
+#' @exportS3Method
+print.Desc <- function(x, ...) {
+  
+  for (i in seq_along(x)) {
+    print(x[[i]], ...)
+  }
+  
+  invisible(x)
+}
+
+
 # == internal helper functions ===============================================
 
 .descMeta <- function(x, xname, main, plotit, verbose) {
-  
-  list(
-    xname      = xname,
-    label      = label(x),
-    main       = main %||% xname,
-    class      = class(x),
-    classlabel = paste(class(x), collapse = ","),
-    plotit     = plotit %||% .getOption("plotit", FALSE),
-    call       = match.call(),
-    timestamp  = Sys.time(),
-    verbose    = verbose %||% getOption("Desc.verbose", 2)
-  )
-  
+
+    list(
+      xname      = xname,
+      label      = label(x),
+      main       = main %||% xname,
+      class      = class(x),
+      classlabel = paste(class(x), collapse = ","),
+      plotit     = plotit %||% .getOption("plotit", FALSE),
+      call       = match.call(),
+      timestamp  = Sys.time(),
+      verbose    = verbose %||% getOption("Desc.verbose", 2)
+    )
+
 }
 
 
@@ -170,7 +182,7 @@ desc <- Desc
     cat(header) 
   }
   
-  if (!is.null(meta$label)) {
+  if (!(is.null(meta$label) | is.na(meta$label))) {
     cat(" :", strwrap(meta$label, indent = 2, exdent = 2), sep = "\n")
     cat("\n")  
   } else {
@@ -178,10 +190,14 @@ desc <- Desc
   }
   
   cat("\n")  
-  
-  
+
 }
 
+
+
+.ChisqWarning <- function(){
+  cat(cli::col_red("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n\n"))
+}
 
 
 

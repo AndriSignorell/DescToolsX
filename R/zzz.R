@@ -65,11 +65,12 @@
 #'             poisson.test contrasts drop1 integrate splinefun
 #'             cov2cor vcov model.extract na.pass na.omit na.exclude na.fail
 #'             optim optimise nlm aggregate logLik AIC BIC model.frame predict
-#'             glm
+#'             glm loess
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
 #'             segments strwidth text title axis mosaicplot
+#'             spineplot
 #'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
@@ -88,7 +89,7 @@
 #'             fm style lineSep strTrim strPad
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mhChisqTest
-#'             varTest meanCI binomCI binomDiffCI bootCI 
+#'             varTest meanCI binomCI binomDiffCI bootCI leveneTest 
 #'             
 #' @importFrom hermes newWrd
 #' 

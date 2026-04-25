@@ -4,7 +4,7 @@
 \alias{divCoef}
 \title{Compute a diversity coefficient}
 \usage{
-divCoef(df, dis = NULL, normalize = FALSE, tol = 1e-08)
+divCoef(df, dis = NULL, normalize = FALSE, tol = 0.00000001)
 }
 \arguments{
 \item{df}{A data frame or matrix of non-negative values (e.g. abundances).

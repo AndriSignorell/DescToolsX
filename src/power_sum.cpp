@@ -17,19 +17,8 @@ List n_pow_sum(NumericVector x) {
     counts[x[i]]++;
   }
   
-  // double mean = 0;
-  // typedef std::map<double, int>::iterator it_type;
-  // for(it_type iterator = counts.begin(); iterator != counts.end(); iterator++) {
-    // 
-      //   mean += iterator->second * iterator->first;
-      // 
-        //   // iterator->first = key
-        //   // iterator->second = value
-        // }
-  // mean = mean / n;
-  
   double mean =  std::reduce(x.begin(), x.end(), 0.0, std::plus<double>()) / x.size();
-  
+
   // int un = counts.size();
   int zn = 0;
   int un = 0;

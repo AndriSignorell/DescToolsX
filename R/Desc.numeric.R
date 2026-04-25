@@ -191,7 +191,8 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   x["zeroperc"] <- fm(x[["0s"]] / x[["length"]], fmt = "%", digits = 1)
   
   if (x[["n"]] > 1) {
-    a <- qt(p = (1 - x[["conf.level"]]) / 2, df = x[["n"]] - 1) * x[["meanSE"]]
+    a <- qt(p = (1 - x[["conf.level"]]) / 2, df = x[["n"]] - 1, 
+             lower.tail = FALSE) * x[["meanSE"]]
   } else {
     a <- NA
   }
@@ -210,8 +211,8 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     out <- capture.output(x$quant)
     digits <- max(2, maxDigits(strsplit(strTrim(out[[2]]), split = " ")[[1]][1]))
     # for counts the quants would tipically return 0 digits, mean and
-    # ds deserve some though
-    # if(digits==0) digits <- 1
+    # sd deserve some though
+    
   }
   
   x[["quant"]][] <- fm(x[["quant"]], fmt = style("num.sty", digits = digits))
@@ -336,7 +337,7 @@ plot.Desc.numeric <- function(x, ...){
   # superfast function to get most relevant set of statistics
   # for numeric values within one step
   
-  # ATTENTION: x must not contain NAs!!
+  # ATTENTION: x MUST NOT contain NAs!!
   #            (we don't want to lose time here to check for NAs)
   
   
