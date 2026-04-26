@@ -57,8 +57,6 @@
 #' @return
 #' Invisibly returns \code{NULL}.
 #'
-#' @author Andri Signorell
-#' \href{mailto:andri@@signorell.net}{andri@@signorell.net}
 #' @seealso \code{\link[base:summary]{base::summary()}},
 #' \code{\link[base:plot]{base::plot()}}
 #' 

@@ -113,7 +113,7 @@ collapseTable <- function (x, ...) {
   if (is.null(nm))
     names(args) <- names(dimnames(x))[seq(nargs)]
   else if (any(ng0 <- !nzchar(nm)))
-    names(args)[ng0] <- names(dimnames(x))[names(dimnames(x)) %nin% nm[nzchar(nm)]][seq(sum(ng0))]
+    names(args)[ng0] <- names(dimnames(x))[names(dimnames(x)) %notin% nm[nzchar(nm)]][seq(sum(ng0))]
   
   if (inherits(x, "ftable"))
     x <- as.table(x)

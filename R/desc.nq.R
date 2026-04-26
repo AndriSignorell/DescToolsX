@@ -20,30 +20,15 @@
 }  
 
 
-# Eta² aus Kruskal-Wallis (Tomczak & Tomczak 2014)
-# H = Kruskal-Wallis Statistik, k = Anzahl Gruppen, n = Gesamtn
-.eta2_kruskal <- function(H, k, n) {
-  eta2 <- (H - k + 1) / (n - k)
-  eta2 <- max(0, eta2)   # kann bei kleinen n leicht negativ werden
-  
-  label <- cut(eta2,
-               breaks = c(-Inf, 0.01, 0.06, 0.14, Inf),
-               labels = c("negligible", "small", "moderate", "large"),
-               right  = FALSE)
-  
-  structure(eta2, label = as.character(label))
-}
 
 
-
-#' @rdname Desc
 #' @exportS3Method
 print.Desc.nq <- function(x, digits = NULL, ...) {
 
   .printHeader(x$meta)
   
   cat(x$pair$strOut)
-  printCharMatrix(x$res$tab, sep = 3)
+  printCharMatrix(x$res$tab, sep = 3, ...)
   
   out <- strTrim(capture.output(x$res$test)[c(2,5)])
   cat(gettextf("\n%s:\n  %s\n", out[1], out[2]))
@@ -62,6 +47,32 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 
 
 
+#' @exportS3Method
+plot.Desc.nq <- function(x, which = NULL, ...){
+  
+  switch(as.character(which %||% "1"),
+         "1" = {
+           boxplot(x$data$y ~ x$data$x, ...)
+           
+           abline(h=mean(x$data$y, na.rm=TRUE), col="grey", lty="dotted")
+           
+           points(x=seq(length(unique(x$data$x))), 
+                  y=tapply(x$data$y, x$data$x, mean, na.rm=TRUE),
+                  pch=4)
+           
+         },
+         "2" ={
+           plotDens(x$data$y ~ x$data$x, ...)
+           
+         }
+  )
+  
+}
+
+
+
+
+# == internal helper functions ===============================================
 
 
 .extract_nq_summary <- function(x) {
@@ -105,4 +116,18 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 }
 
 
+
+# Eta² aus Kruskal-Wallis (Tomczak & Tomczak 2014)
+# H = Kruskal-Wallis Statistik, k = Anzahl Gruppen, n = Gesamtn
+.eta2_kruskal <- function(H, k, n) {
+  eta2 <- (H - k + 1) / (n - k)
+  eta2 <- max(0, eta2)   # kann bei kleinen n leicht negativ werden
+  
+  label <- cut(eta2,
+               breaks = c(-Inf, 0.01, 0.06, 0.14, Inf),
+               labels = c("negligible", "small", "moderate", "large"),
+               right  = FALSE)
+  
+  structure(eta2, label = as.character(label))
+}
 

@@ -1,60 +1,145 @@
 
-#' Descriptive analysis of contingency tables
+#' Describe a Contingency Table
 #'
-#' @description
-#' Performs a comprehensive descriptive and inferential analysis of a
-#' contingency table. Depending on the table dimension, appropriate
-#' chi-squared tests, exact tests, measures of association, risk estimates,
-#' and percentage tables are computed.
+#' Computes and displays a comprehensive set of descriptive statistics and
+#' association measures for a contingency table (r x c or 2 x 2). The function
+#' is also dispatched for \code{matrix} and cross-classified factor pairs via
+#' \code{Desc.qq} and \code{Desc.matrix}.
 #'
-#' For two-by-two tables, additional measures such as odds ratios,
-#' relative risks, Fisher's exact test, McNemar's test, and differences
-#' in proportions are provided.
+#' @param x a \code{table} or \code{matrix} object. For the formula interface
+#'   use \code{Desc(y ~ x, data)} which dispatches to this function
+#'   automatically.
+#' @param prop character string controlling which proportions are shown in the
+#'   cross-tabulation. One of \code{"rows"} (default), \code{"cols"},
+#'   \code{"total"}, or \code{"no"} (frequencies only). At \code{verbose = 3}
+#'   all three proportions are shown regardless of this argument.
+#' @param verbose integer controlling the amount of output (1, 2, or 3).
+#'   \code{NULL} (default) falls back to
+#'   \code{getOption("DescTools.verbose", 2)}. If set explicitly in the
+#'   function call, that value takes priority over the global option.
+#'   See Details for what each level produces.
+#' @param conf.level numeric, confidence level for all confidence intervals.
+#'   Default is \code{0.95}.
+#' @param \dots further arguments passed to or from other methods.
 #'
-#' @name Desc.table
-#' 
-#' @aliases Desc.table Desc.matrix Desc.array
 #' @details
-#' The function automatically determines the table type (one-dimensional,
-#' two-by-two, r-by-c, or multi-dimensional) and adapts the set of
-#' statistical procedures accordingly.
+#' The \code{verbose} argument controls which statistics are computed and
+#' displayed. The following table gives an overview; items marked with
+#' \emph{2x2} are only shown for 2 x 2 tables.
 #'
-#' Percentage tables are computed using \code{percTable()} for applicable
-#' table types. Graphical and fmting parameters for percentage tables
-#' can be passed via \code{...}.
+#' \strong{verbose = 1 — essential output:}
+#' \itemize{
+#'   \item Summary: n, rows, columns, missings
+#'   \item Cross-tabulation: frequencies
+#'   \item Pearson chi-squared test
+#'   \item Chi-squared with Yates continuity correction \emph{(2x2)}
+#'   \item Fisher's exact test \emph{(2x2)}
+#'   \item McNemar's test \emph{(2x2)}
+#'   \item Cramér's V with confidence interval and effect size label
+#'   \item Odds ratio with confidence interval \emph{(2x2)}
+#' }
 #'
-#' @param x
-#' A contingency table (matrix or array of non-negative counts).
-#' @param ...
-#' Additional arguments passed to \code{percTable()}.
+#' \strong{verbose = 2 — standard output (default):}
 #'
-#' @return
-#' A list containing descriptive statistics, test results, measures of
-#' association, frequency and percentage tables, and diagnostic infmion
-#' about the validity of chi-squared approximations.
+#' All of the above, plus:
+#' \itemize{
+#'   \item Cross-tabulation: row proportions (or as set by \code{prop})
+#'   \item G-test (log likelihood ratio test of independence)
+#'   \item Mantel-Haenszel chi-squared test
+#'   \item Contingency coefficient
+#'   \item Kendall's tau-b with confidence interval
+#'   \item Relative risk col1/col2 and row1/row2 with confidence intervals
+#'     \emph{(2x2)}
+#'   \item Proportions difference with confidence interval \emph{(2x2)}
+#' }
+#'
+#' \strong{verbose = 3 — full output:}
+#'
+#' All of the above, plus:
+#' \itemize{
+#'   \item Cross-tabulation: row, column, and total proportions
+#'   \item Lambda C|R, R|C, symmetric
+#'   \item Uncertainty coefficient C|R, R|C, symmetric
+#'   \item Mutual information
+#'   \item Goodman-Kruskal gamma with confidence interval
+#'   \item Stuart's tau-c with confidence interval
+#'   \item Somers' D C|R and R|C with confidence intervals
+#'   \item Pearson and Spearman correlation with confidence intervals
+#' }
+#'
+#' \strong{Table types:}
+#'
+#' For \strong{r x c tables} (arbitrary number of rows and columns) all
+#' nominal and ordinal association measures listed above are available.
+#' For \strong{2 x 2 tables} the output additionally includes tests and
+#' measures specific to the 2 x 2 case (Fisher's exact, McNemar, odds ratio,
+#' relative risk, proportions difference).
+#'
+#' \strong{Dispatching:}
+#'
+#' \code{Desc.matrix} and \code{Desc.qq} both redirect to \code{Desc.table}.
+#' When called via the formula interface \code{Desc(y ~ x, data)}, the type
+#' of \code{y} and \code{x} is known and ordinal-specific measures
+#' (tau-b and above) are activated automatically when both variables are
+#' \code{ordered} factors.
+#'
+#' @return An object of class \code{c("Desc.table", "Desc")}, invisibly.
+#'   The object is a list containing all computed statistics and is intended
+#'   to be used via its \code{print} and \code{plot} methods.
 #'
 #' @seealso
-#' \code{\link{chisq.test}},
-#' \code{\link{fisher.test}},
-#' \code{\link{oddsRatio}},
-#' \code{\link{relRisk}},
-#' \code{\link{assocs}},
-#' \code{\link{percTable}}
+#'   \code{\link{Desc}} for the generic function and formula interface,
+#'   \code{\link{Desc.numeric}} for univariate numeric descriptions,
+#'   \code{\link{Desc.factor}} for univariate factor descriptions,
+#'   \code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
+#'   \code{\link{CramerV}}, \code{\link{OddsRatio}}
+#'
+#' @family plotdesc
+#' @concept contingency table cross-tabulation association measures
+#' @concept chi-squared cramér fisher odds-ratio relative-risk
+#' @concept nominal ordinal tau kendall gamma somers lambda
 #'
 #' @examples
-#' tab <- matrix(c(12, 5, 7, 9), nrow = 2)
+#' # from an existing table
+#' tab <- table(d.pizza$driver, d.pizza$area)
 #' Desc(tab)
-#' Desc(tab, verbose=3)
-#' 
-#' Desc(marginSums(HairEyeColor, c(3,2)))
-#' Desc(marginSums(HairEyeColor, c(3,2)), verbose=3)
+#' Desc(tab, prop = "rows", verbose = 3)
 #'
+#' # 2x2 table — additional measures are shown automatically
+#' tab2 <- tab[1:2, 1:2]
+#' Desc(tab2)
+#'
+#' # formula interface — dispatches to Desc.table internally
+#' Desc(driver ~ class, data = d.pizza)
+#'
+#' # from a matrix
+#' m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),
+#'             nrow = 3, byrow = TRUE,
+#'             dimnames = list(c("Brent","Camden","Westminster"),
+#'                             c("Allanah","Maria","Rhonda")))
+#' Desc(m, verbose = 2)
+#'
+
+
+#' 
+#' #' @export
+#' Desc.table <- function(x, prop = "rows", verbose = NULL,
+#'                        abs.sty = NULL, per.sty = NULL,
+#'                        conf.level = 0.95, ...) {
+#'   
+#'   # resolve format styles: function arg > global option > package default
+#'   if (is.null(abs.sty))
+#'     abs.sty <- getOption("DescTools.abs.sty", default = .default_abs.sty)
+#'   if (is.null(per.sty))
+#'     per.sty <- getOption("DescTools.per.sty", default = .default_per.sty)
+#'   
+#' }
 
 
 #' @rdname Desc
 #' @method Desc table
 #' @export
-Desc.table <- function(x, conf.level = 0.95, 
+Desc.table <- function(x, conf.level = 0.95, prop = "rows",
                        main = NULL, verbose = NULL, plotit = NULL,
                        ...) {
 
@@ -95,6 +180,9 @@ Desc.table <- function(x, conf.level = 0.95,
     )
   }
 
+  # resolve verbose: function arg > global option > hardcoded default
+  verbose <- verbose %||% getOption("DescTools.verbose", default = 2L)
+  
   
   ttype <- if (identical(dim(x), c(2L, 2L))) {
     "t2x2"
@@ -161,7 +249,7 @@ Desc.table <- function(x, conf.level = 0.95,
     } else if (ttype == "tndim") {
       NULL
     } else {
-      percTable(x, margins=c(1,2), ...)
+      percTable(x, margins=c(1,2), prop=prop, ...)
     },
     approx.ok = if (ttype == "tndim") {
       r.chisq$approx.ok
@@ -191,9 +279,10 @@ Desc.array <- Desc.table
 
 #' @rdname Desc
 #' @export
-print.Desc.table <- function(x, ...) {
+print.Desc.table <- function(x, print_header=TRUE, ...) {
   
-  .printHeader(x$meta)
+  if(print_header)
+    .printHeader(x$meta)
   
   # x[c(6, 8)] <- NULL
   
@@ -201,13 +290,17 @@ print.Desc.table <- function(x, ...) {
   
   if (x$ttype == "tndim") { # multdim table
     
-    cat("Summary: \n",
-        "n: ", fm(x$n, fmt = "abs.sty"), ", ",
-        length(x$dim), "-dim table: ", paste(x$dim, collapse = " x "),
-        "\n\n",
-        sep = ""
-    )
+    if(print_header)
+      cat("Summary: \n",
+          "n: ", fm(x$n, fmt = "abs.sty"), ", ",
+          length(x$dim), "-dim table: ", paste(x$dim, collapse = " x "),
+          "\n\n",
+          sep = ""
+        )
     
+    print(ftable(addmargins(x$tab, c(1, length(x$dim)))))
+    cat("\n")
+
     cat(gettextf(
       "%s\n  X-squared = %s, df = %s, p-value = %s",
       x[["chisq.test"]][["method"]],
@@ -219,8 +312,6 @@ print.Desc.table <- function(x, ...) {
       cat(cli::col_red("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n"))
     }
     
-    cat("\n")
-    print(ftable(addmargins(x$tab, c(1, length(x$dim)))))
     cat("\n")
   } else { # <= 2-dimensional table
     
@@ -236,12 +327,16 @@ print.Desc.table <- function(x, ...) {
           .captOut(x$chisq.test)[5], "\n\n",
           sep = ""
       )
-      
       if (!x$approx.ok) {
-        .ChisqWarning()
+        cat(cli::col_cyan("  Note: expected counts < 5 in some cells\n"))
       }
       
+      # if (!x$approx.ok) {
+      #   .ChisqWarning()
+      # }
+      
       print(x$perctab)
+      
     } else { # 2-dim tabl *****
       
       if (!is.null(attr(x, "missings"))) {
@@ -250,21 +345,31 @@ print.Desc.table <- function(x, ...) {
         missn <- ""
       }
       
-      cat("Summary: \n",
-          "n: ", fm(x$n, fmt = "abs.sty"),
-          ", rows: ", fm(x$dim[1], fmt = "abs.sty"),
-          ", columns: ", fm(x$dim[2], fmt = "abs.sty"),
-          missn,
-          "\n\n",
-          sep = ""
-      )
+      # 1. summary --------------------------------------------
+      if(print_header)
+        cat("Summary: \n",
+            "n: ", fm(x$n, fmt = "abs.sty"),
+            ", rows: ", fm(x$dim[1], fmt = "abs.sty"),
+            ", columns: ", fm(x$dim[2], fmt = "abs.sty"),
+            missn,
+            "\n\n",
+            sep = ""
+        )
       
+      # 2. data --------------------------------------------
+      print(x$perctab)
+      cat("\n\n")
+      
+      # 3. inference --------------------------------------------
       if (x$ttype == "t2x2") {
         if (x$meta$verbose == "3") {
           cat("Pearson's Chi-squared test:\n  ",
               .captOut(x$chisq.test)[5], "\n",
               sep = ""
           )
+        }
+        if (!x$approx.ok) {
+          cat(cli::col_cyan("  Note: expected counts < 5 in some cells\n"))
         }
         cat("Pearson's Chi-squared test (cont. adj):\n  ",
             .captOut(x$chisq.test.cont)[5], "\n",
@@ -279,9 +384,9 @@ print.Desc.table <- function(x, ...) {
           cat("", .captOut(x$mcnemar.test)[5], "\n", sep = "")
         }
         
-        if (!x$approx.ok) {
-          .ChisqWarning()
-        }
+        # if (!x$approx.ok) {
+        #   .ChisqWarning()
+        # }
         
         if (x$meta$verbose %in% c("2", "3")) { # print only with verbosity > 1
           cat("\n")
@@ -314,6 +419,9 @@ print.Desc.table <- function(x, ...) {
             .captOut(x$chisq.test)[5], "\n",
             sep = ""
         )
+        if (!x$approx.ok) {
+          cat(cli::col_cyan("  Note: expected counts < 5 in some cells\n"))
+        }
         
         if (x$meta$verbose == "3" &  x$ttype == "t2x2") {
           cat("Pearson's Chi-squared test (cont. adj):\n  ",
@@ -336,11 +444,7 @@ print.Desc.table <- function(x, ...) {
           )
         }
         
-        if (!x$approx.ok) {
-          .ChisqWarning()
-        }
-      }
-      
+
       switch(x$meta$verbose,
              "1" = {
                cat("\n")
@@ -363,8 +467,6 @@ print.Desc.table <- function(x, ...) {
              }
       )
       
-      print(x$perctab)
-      
       if ((x$meta$verbose == "3") || (x$ttype == "t2x2")) {
         
         out <- gettextf( "\n%s\n%s %s%s conf. level\n", 
@@ -379,6 +481,7 @@ print.Desc.table <- function(x, ...) {
     }
     
     cat("\n")
+  }
   }
   
   if(x$meta$plotit)

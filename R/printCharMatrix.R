@@ -99,10 +99,12 @@ printCharMatrix <- function(
   # --- CLI Styling ---
   style_header <- function(x) {
     if (cli_style) cli::style_bold(x) else x
+    # if (cli_style) cli::col_blue(x) else x
   }
   
   style_rowname <- function(x) {
-    if (cli_style) cli::style_bold(x) else x
+  if (cli_style) cli::style_bold(x) else x
+    #  if (cli_style) cli::col_blue(x) else x
   }
   
   # --- Wie viele Spalten passen? ---

@@ -47,12 +47,12 @@ countWorkDays <- function(from, to,
     w <- (d %/% 7)
     
     res <- w * (7-length(nonworkdays)) + 
-      sum(weekday(seq(from + w*7,  to, 1), fmt="dd", lang="en") %nin% nonworkdays)
+      sum(weekday(seq(from + w*7,  to, 1), fmt="dd", lang="en") %notin% nonworkdays)
     
     if(!is.null(holiday)){
       # count holidays in period
       h <- holiday[holiday %[]% c(from, to)]
-      res <- res - sum(weekday(h, fmt="dd", lang="en") %nin% nonworkdays)
+      res <- res - sum(weekday(h, fmt="dd", lang="en") %notin% nonworkdays)
     }
     
     return(res)

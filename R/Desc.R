@@ -16,6 +16,7 @@
 #' @name Desc
 #' @aliases Desc Desc.data.frame
 #' 
+#' @inheritParams Formulas
 #' @param x object to be described. 
 #' 
 #' @param main Character string (character|\code{NULL}|\code{NA}) 
@@ -141,6 +142,9 @@ print.Desc <- function(x, ...) {
   
   for (i in seq_along(x)) {
     print(x[[i]], ...)
+    
+    if(x[[i]]$meta$plotit)  plot(x[[i]])
+    
   }
   
   invisible(x)
@@ -182,7 +186,7 @@ print.Desc <- function(x, ...) {
     cat(header) 
   }
   
-  if (!(is.null(meta$label) | is.na(meta$label))) {
+  if (!(is.null(meta$label) || is.na(meta$label))) {
     cat(" :", strwrap(meta$label, indent = 2, exdent = 2), sep = "\n")
     cat("\n")  
   } else {

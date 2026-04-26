@@ -1,53 +1,57 @@
 
-#' Fisher z-Transformation
-#' 
-#' Convert a correlation to a z score or z to r using the Fisher transformation.
-#' 
-#' The sampling distribution of Pearson's r is not normally distributed. Fisher
-#' developed a transformation now called "Fisher's z-transformation" that
-#' converts Pearson's r to the normally distributed variable z. The formula for
-#' the transformation is:
-#' 
-#' \deqn{z_r = tanh^{-1}(r) = \frac{1}{2}log\left ( \frac{1+r}{1-r}\right )}
-#' 
-#' @aliases fisherZ fisherZInv
-
-#' @param rho the Pearson's correlation coefficient
-#' @param z a Fisher z transformed value
-#' @return z value corresponding to r (in fisherZ) \cr r corresponding to z (in
-#' fisherZInv) \cr
-#' @author William Revelle <revelle@@northwestern.edu>, \cr slight
-#' modifications Andri Signorell <andri@@signorell.net> based on R-Core code
-#' @seealso \code{\link{cor.test}}
-#' @keywords multivariate models
+#' Fisher's z-Transformation
+#'
+#' Convert a Pearson correlation coefficient to Fisher's \eqn{z} scale
+#' and back. The transformation stabilizes the variance of the correlation
+#' coefficient and yields approximately normally distributed values.
+#'
+#' The forward transformation is defined as
+#' \deqn{
+#' z = \tanh^{-1}(r) = \frac{1}{2}\log\left(\frac{1 + r}{1 - r}\right),
+#' }
+#' and the inverse transformation as
+#' \deqn{
+#' r = \tanh(z).
+#' }
+#'
+#' @param rho Numeric vector. Pearson correlation coefficient(s), typically
+#'   in the interval \eqn{[-1, 1]}. Values of \eqn{\pm 1} are mapped to
+#'   \eqn{\pm \infty}.
+#' @param z Numeric vector. Fisher \eqn{z}-transformed values.
+#'
+#' @return
+#' \describe{
+#'   \item{fisherZ}{Numeric vector of Fisher \eqn{z}-transformed values.}
+#'   \item{fisherZInv}{Numeric vector of correlation coefficients.}
+#' }
+#'
+#' @details
+#' Fisher's \eqn{z}-transformation is commonly used to construct confidence
+#' intervals and perform hypothesis tests for correlation coefficients.
+#'
+#' @seealso \code{\link{corCI}}, \code{\link{cor.test}}
+#'
 #' @examples
-#' 
-#' cors <- seq(-.9, .9, .1)
-#' 
-#' zs <- fisherZ(cors)
-#' rs <- fisherZInv(zs)
-#' round(zs, 2)
-#' n <- 30
-#' r <- seq(0, .9, .1)
-#' t <- r * sqrt(n-2) / sqrt(1-r^2)
-#' p <- (1 - pt(t, n-2)) / 2
-#' 
-#' # r.rc <- data.frame(r=r, z=fisherZ(r), lower=rc[,2], upper=rc[,3], t=t, p=p)
-#' 
-#' # round(r.rc,2)
-#' 
-
-# old - replaced by 0.99.60
-#  fisherZ <- function(rho)  { 0.5*log((1+rho)/(1-rho)) }   #converts r to z
-#  fisherZInv <- function(z) {(exp(2*z)-1)/(1+exp(2*z)) }   #converts back again
+#' # Forward and inverse transformation
+#' r <- seq(-0.9, 0.9, by = 0.1)
+#' z <- fisherZ(r)
+#' fisherZInv(z)
+#'
+#' # Round-trip accuracy
+#' all.equal(r, fisherZInv(fisherZ(r)))
+#'
 
 
 #' @rdname fisherZ
 #' @export
-fisherZ <- function(rho)  { atanh(rho) }   # converts r to z
+fisherZ <- function(rho) {
+  atanh(rho)
+}
+
 
 #' @rdname fisherZ
 #' @export
-fisherZInv <- function(z) { tanh(z)    }   # converts back again
-
+fisherZInv <- function(z) {
+  tanh(z)
+}
 

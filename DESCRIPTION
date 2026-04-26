@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.906
+Version: 0.0.0.907
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -102,7 +102,7 @@ Description: Provides a collection of functions for descriptive statistics,
     streamlined successor to DescTools, with a focus on improved consistency, 
     performance, and maintainability.
 Encoding: UTF-8
-Depends: R (>= 4.2.0),
+Depends: R (>= 4.6.0),
     aurora,
     lumen,
     bedrock,

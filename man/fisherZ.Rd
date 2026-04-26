@@ -3,55 +3,53 @@
 \name{fisherZ}
 \alias{fisherZ}
 \alias{fisherZInv}
-\title{Fisher z-Transformation}
+\title{Fisher's z-Transformation}
 \usage{
 fisherZ(rho)
 
 fisherZInv(z)
 }
 \arguments{
-\item{rho}{the Pearson's correlation coefficient}
+\item{rho}{Numeric vector. Pearson correlation coefficient(s), typically
+in the interval \eqn{[-1, 1]}. Values of \eqn{\pm 1} are mapped to
+\eqn{\pm \infty}.}
 
-\item{z}{a Fisher z transformed value}
+\item{z}{Numeric vector. Fisher \eqn{z}-transformed values.}
 }
 \value{
-z value corresponding to r (in fisherZ) \cr r corresponding to z (in
-fisherZInv) \cr
+\describe{
+\item{fisherZ}{Numeric vector of Fisher \eqn{z}-transformed values.}
+\item{fisherZInv}{Numeric vector of correlation coefficients.}
+}
 }
 \description{
-Convert a correlation to a z score or z to r using the Fisher transformation.
+Convert a Pearson correlation coefficient to Fisher's \eqn{z} scale
+and back. The transformation stabilizes the variance of the correlation
+coefficient and yields approximately normally distributed values.
 }
 \details{
-The sampling distribution of Pearson's r is not normally distributed. Fisher
-developed a transformation now called "Fisher's z-transformation" that
-converts Pearson's r to the normally distributed variable z. The formula for
-the transformation is:
+The forward transformation is defined as
+\deqn{
+z = \tanh^{-1}(r) = \frac{1}{2}\log\left(\frac{1 + r}{1 - r}\right),
+}
+and the inverse transformation as
+\deqn{
+r = \tanh(z).
+}
 
-\deqn{z_r = tanh^{-1}(r) = \frac{1}{2}log\left ( \frac{1+r}{1-r}\right )}
+Fisher's \eqn{z}-transformation is commonly used to construct confidence
+intervals and perform hypothesis tests for correlation coefficients.
 }
 \examples{
+# Forward and inverse transformation
+r <- seq(-0.9, 0.9, by = 0.1)
+z <- fisherZ(r)
+fisherZInv(z)
 
-cors <- seq(-.9, .9, .1)
-
-zs <- fisherZ(cors)
-rs <- fisherZInv(zs)
-round(zs, 2)
-n <- 30
-r <- seq(0, .9, .1)
-t <- r * sqrt(n-2) / sqrt(1-r^2)
-p <- (1 - pt(t, n-2)) / 2
-
-# r.rc <- data.frame(r=r, z=fisherZ(r), lower=rc[,2], upper=rc[,3], t=t, p=p)
-
-# round(r.rc,2)
+# Round-trip accuracy
+all.equal(r, fisherZInv(fisherZ(r)))
 
 }
 \seealso{
-\code{\link{cor.test}}
+\code{\link{corCI}}, \code{\link{cor.test}}
 }
-\author{
-William Revelle \href{mailto:revelle@northwestern.edu}{revelle@northwestern.edu}, \cr slight
-modifications Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} based on R-Core code
-}
-\keyword{models}
-\keyword{multivariate}

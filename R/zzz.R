@@ -78,7 +78,7 @@
 #'             str combn find getAnywhere lsf.str write.table
 #'             getFromNamespace stack browseURL help.search
 #'             
-#' @importFrom bedrock `%)(%` `%[]%` `%nin%` 
+#' @importFrom bedrock `%)(%` `%[]%`  
 #'             abind combPairs maxDigits recycle setNamesX 
 #'             label naIf naReplace isZero isWholeLike 
 #'             isDichotomous `%][%` pairApply appendX sortX 

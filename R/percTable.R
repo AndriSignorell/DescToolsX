@@ -138,7 +138,7 @@ percTable.default <- function (x, y = NULL, ...) {
   # the dot arguments which match PercTable.table
   pt.args <- dot.args[names(dot.args) %in% percTableArgs ]
   # the dot arguments which DO NOT match PercTable.table
-  tab.args <- dot.args[names(dot.args) %nin% percTableArgs ]
+  tab.args <- dot.args[names(dot.args) %notin% percTableArgs ]
 
   if(is.null(y)){
     tab <- do.call("table", append(list(x), tab.args) )
@@ -322,6 +322,8 @@ print.PercTable <- function(x,
   invisible(txt)
   
 }
+
+
 
 
 #' @rdname percTable

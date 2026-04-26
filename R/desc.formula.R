@@ -75,7 +75,8 @@ Desc.formula <- function(formula, data, subset, na.action=na.pass,
       meta = .descMetaXY(nm, y_name, main, plotit, verbose, 
                          gettextf("Desc.%s", type), call=call ),
       pair = .calcPairSummary(xi, y),
-      res  = FUN(y, xi, ... )
+      res  = FUN(y, xi, ... ),
+      data = list(x=xi, y=y)
       
     ), class=c(gettextf("Desc.%s", type), "Desc"))
     
@@ -144,13 +145,13 @@ Desc.formula <- function(formula, data, subset, na.action=na.pass,
   }
   
   
-  out <- gettextf("Summary:\npairs: %s, valid: %s (%s), missings: %s (%s), groups: %s\n\n",
+  out <- gettextf("Summary:\npairs: %s, valid: %s (%s), missings: %s (%s)%s\n\n",
     fm(n_total,   fmt = "abs.sty"),
     fm(n_valid,   fmt = "abs.sty"),
     fm(pct_valid / 100,   fmt = "per.sty"),
     fm(n_missing, fmt = "abs.sty"),
     fm(pct_missing / 100, fmt = "per.sty"),
-    fm(n_groups, fmt = "abs.sty")
+    if(xor(is_cat(x), is_cat(y))) gettextf(", groups: %s", fm(n_groups, fmt = "abs.sty")) else ""
   )
 
   # Output

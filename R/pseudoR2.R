@@ -292,7 +292,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 #' @noRd
 .compute_glm_metrics <- function(x, preds, core, info) {
   
-  if(info$type %nin% c("glm", "vglm"))
+  if(info$type %notin% c("glm", "vglm"))
     return(NULL)
   
   y <- preds$y
