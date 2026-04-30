@@ -1,9 +1,9 @@
 
 
-#' @rdname Desc
-#' @method Desc formula
+#' @rdname desc
+#' @method desc formula
 #' @export
-Desc.formula <- function(formula, data, subset, na.action=na.pass, 
+desc.formula <- function(formula, data, subset, na.action=na.pass, 
                          main = NULL, verbose = NULL, plotit = NULL, ...) {
   
   # Call rekonstruieren

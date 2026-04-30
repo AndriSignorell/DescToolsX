@@ -25,6 +25,7 @@
 #'   \code{getOption("DescTools.per.sty")}.
 #' @param \dots further arguments passed to the underlying plot functions.
 #'
+#' @name desc.nn
 #' @details
 #' \strong{Print output by verbose level:}
 #'
@@ -85,7 +86,7 @@
 #'   \code{\link{print.Desc.nq}} for numeric ~ categorical,
 #'   \code{\link{print.Desc.qn}} for categorical ~ numeric,
 #'   \code{\link{print.Desc.qq}} for categorical ~ categorical,
-#'   \code{\link{corCI}}, \code{\link{bpTest}},
+#'   \code{\link{corCI}}, \code{\link[lumen]{bpTest}},
 #'   \code{\link[stats]{lm}}, \code{\link[stats]{cor.test}}
 #'
 #' @family desc
@@ -107,7 +108,6 @@
 #' # pipe
 #' desc(mpg ~ wt, mtcars) |> plot(which = 3)
 #'
-#' @name Desc.nn
 NULL
 
 
@@ -235,7 +235,7 @@ NULL
 
 
 #' @exportS3Method
-#' @rdname Desc.nn
+#' @rdname desc.nn
 print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
                           per.sty = NULL, ...) {
 
@@ -243,14 +243,14 @@ print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
   
   cat(x$pair$strOut)
 
-  printNN(x$res)
+  .printNN(x$res)
 
 }
 
 
 
-#' @export
-printNN <- function(x, verbose = NULL, abs.sty = NULL,
+
+.printNN <- function(x, verbose = NULL, abs.sty = NULL,
                           per.sty = NULL, ...) {
 
   verbose <- verbose %||% getOption("DescTools.verbose", default = 2L)
@@ -318,24 +318,40 @@ printNN <- function(x, verbose = NULL, abs.sty = NULL,
 
 
 #' @exportS3Method
-#' @rdname Desc.nn
-plot.Desc.nn <- function(x, which = NULL, verbose = NULL, ...) {
+#' @rdname desc.nn
+plot.Desc.nn <- function(x, which = 1, verbose = NULL, ...) {
   
-  switch(as.character(which %||% "1"),
-         "1" = {
-           plot(x$data$y ~ x$data$x, ...,type="n")
-           
-           points(x=x$data$x, y=x$data$y, ...)
-           
-           lines(loess(y ~ x, x$data))
-           abline(lm(y ~ x, x$data), lwd = 1.5, col = "darkgray")
-           
-         },
-         "2" ={
-           plotDens(x$data$y ~ x$data$x, ...)
-           
-         }
-  )
-  
+  for(j in which){
+    
+    switch(as.character(j %||% "1"),
+           "1" = {
+             plot(x$data$y ~ x$data$x, ...,type="n")
+             
+             points(x=x$data$x, y=x$data$y, ...)
+             
+             lines(loess(y ~ x, x$data))
+             abline(lm(y ~ x, x$data), lwd = 1.5, col = "darkgray")
+             
+           },
+           "2" ={
+             
+             zz <- as.data.frame(x$data)
+             zz <- zz[complete.cases(zz), ]
+             
+             plotDens2D(x=zz$x, y=zz$y, ...)
+             
+           },
+           "3" ={
+             plotBag(x=cbind(x$data$x, y=x$data$y), ...)
+             
+           },
+           "4" ={
+             plotHexbin(x=x$data$x, y=x$data$y, ...)
+             
+           },
+    )
+  }
   
 }
+
+

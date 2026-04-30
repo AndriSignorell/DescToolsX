@@ -85,11 +85,8 @@ abstract(d.mydata)
 }
 \seealso{
 \code{\link[utils:str]{utils::str()}}, \code{\link[base:summary]{base::summary()}}, \code{\link[bedrock:columnWrap]{bedrock::columnWrap()}},
-\code{\link[=Desc]{Desc()}}
+\code{\link[=desc]{desc()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{Desc}
 \concept{Statistical summary functions}
+\concept{desc}
 \keyword{print}

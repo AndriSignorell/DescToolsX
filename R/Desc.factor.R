@@ -17,10 +17,10 @@
 #' frequencies to it's intrinsic order, which means order \code{"level"}
 #' instead of \code{"desc"} in the factor case.
 #' 
-#' @name Desc.factor
-#' @aliases Desc.factor Desc.ordered Desc.character
+#' @name desc.factor
+#' @aliases desc.factor Desc.ordered Desc.character
 #' 
-#' @inheritParams Desc 
+#' @inheritParams desc 
 #' 
 #' @param x the object to be described. This can be a data.frame, a list, a
 #' table or a vector of the classes: numeric, integer, factor, ordered factor,
@@ -63,10 +63,10 @@
 
 
 
-#' @rdname Desc.factor
-#' @method Desc factor
+#' @rdname desc.factor
+#' @method desc factor
 #' @export
-Desc.factor <- function(x, maxrows = NULL, ord=NULL, 
+desc.factor <- function(x, maxrows = NULL, ord=NULL, 
                         main = NULL, verbose = NULL, plotit = NULL,
                         digits=NULL, ...) {
   
@@ -124,13 +124,13 @@ Desc.factor <- function(x, maxrows = NULL, ord=NULL,
 
 
 # use the exactly same logic for characters...
-#' @rdname Desc.factor
+#' @rdname desc.factor
 #' @export
-Desc.character <- Desc.factor  
+desc.character <- desc.factor  
 
 
 
-#' @rdname Desc.factor
+#' @rdname desc.factor
 #' @export
 print.Desc.factor <- function(x, digits = NULL, ...) {
   
@@ -175,7 +175,7 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 
 
 # no export here, all code in aurora 
-# #' @rdname Desc.factor
+# #' @rdname desc.factor
 # #' @export
 # plot.Desc.factor <- aurora::plot.Desc.factor
 

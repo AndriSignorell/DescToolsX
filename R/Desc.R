@@ -4,19 +4,18 @@
 #' and plots are chosen automatically depending on the class of \code{x}.
 #' The intention is to provide a fast but rich summary with minimal typing.
 #'
-#' \code{Desc()} is an S3 generic that computes basic descriptive statistics
+#' \code{desc()} is an S3 generic that computes basic descriptive statistics
 #' depending on the class of its input. The result is an object of class
-#' \code{"Desc"} with a more specific subclass such as
-#' \code{"Desc.numeric"}, \code{"Desc.factor"} or \code{"Desc.data.frame"}.
+#' \code{"desc"} with a more specific subclass such as
+#' \code{"desc.numeric"}, \code{"desc.factor"} or \code{"desc.data.frame"}.
 #'
 #' For numeric vectors, summary statistics such as mean and standard deviation
 #' are computed. For factors, frequency tables are returned. For data frames,
-#' \code{Desc()} is applied column-wise.
+#' \code{desc()} is applied column-wise.
 #'
-#' @name Desc
-#' @aliases Desc Desc.data.frame
+#' @name desc
+#' @aliases desc desc.data.frame desc.list
 #' 
-#' @inheritParams Formulas
 #' @param x object to be described. 
 #' 
 #' @param main Character string (character|\code{NULL}|\code{NA}) 
@@ -38,21 +37,21 @@
 #' will be calculated.
 #'
 #' @details
-#' \code{Desc} is a \strong{generic function}. It dispatches to the
+#' \code{desc} is a \strong{generic function}. It dispatches to the
 #' method of the class of its first argument. Typing
-#' \code{?Desc} + TAB at the prompt should present a choice of links: the help
-#' pages for each of these \code{Desc} methods. You don't need to 
+#' \code{?desc} + TAB at the prompt should present a choice of links: the help
+#' pages for each of these \code{desc} methods. You don't need to 
 #' use the full name of the method although you may if you wish; 
-#' i.e., \code{Desc(x)} is idiomatic R but you can bypass method 
-#' dispatch by going direct if you wish: \code{Desc.numeric(x)}.
+#' i.e., \code{desc(x)} is idiomatic R but you can bypass method 
+#' dispatch by going direct if you wish: \code{desc.numeric(x)}.
 
 #' The most frequent object types are supported, find more specific help in:
-#' \verb{  }Numeric variables: \code{\link{Desc.numeric}}\cr
-#' \verb{  }Factors and character vectors: \code{\link{Desc.factor}}\cr
-#' \verb{  }Boolean or dichotomous variables: \code{\link{Desc.logical}}\cr
-#' \verb{  }Contingency tables and frequencies: \code{\link{Desc.table}}\cr
-#' \verb{  }Calender date variables: \code{\link{Desc.Date}}\cr
-#' \verb{  }Time series: \code{\link{Desc.ts}}\cr
+#' \verb{  }Numeric variables: \code{\link{desc.numeric}}\cr
+#' \verb{  }Factors and character vectors: \code{\link{desc.factor}}\cr
+#' \verb{  }Boolean or dichotomous variables: \code{\link{desc.logical}}\cr
+#' \verb{  }Contingency tables and frequencies: \code{\link{desc.table}}\cr
+#' \verb{  }Calender date variables: \code{\link{desc.Date}}\cr
+#' \verb{  }Time series: \code{\link{desc.ts}}\cr
 #' 
 #' 
 #' @return An object of class \code{"Desc"} with a subclass depending on
@@ -62,20 +61,21 @@
 #' @keywords descriptive statistics
 
 
-#' @rdname Desc
+
+#' @rdname desc
 #' @export
-Desc <- function(x, ...) {
-  UseMethod("Desc")
+desc <- function(x, ...) {
+  UseMethod("desc")
 }
 
 
-#' @rdname Desc
-#' @method Desc list
+#' @rdname desc
+#' @method desc list
 #' @export
-Desc.list <- function(x, ...) {
+desc.list <- function(x, ...) {
   
   res <- lapply(names(x), function(nm) {
-    Desc(x[[nm]], main=nm, ...)
+    desc(x[[nm]], main=nm, ...)
   })
   
   names(res) <- names(x)
@@ -90,7 +90,7 @@ Desc.list <- function(x, ...) {
 }
 
 
-#' @rdname Desc
+#' @rdname desc
 #' @method print Desc.list
 #' @export
 print.Desc.list <- function(x, ...) {
@@ -106,12 +106,12 @@ print.Desc.list <- function(x, ...) {
 }
 
 
-#' @rdname Desc
-#' @method Desc data.frame
+#' @rdname desc
+#' @method desc data.frame
 #' @export
-Desc.data.frame <- function(x, ...) {
+desc.data.frame <- function(x, ...) {
   
-  res <- Desc.list(as.list(x), ...)
+  res <- desc.list(as.list(x), ...)
   
   abst <- abstract(x)
       attr(abst, which="main") <- 
@@ -125,18 +125,8 @@ Desc.data.frame <- function(x, ...) {
 }
 
 
-#' @rdname Desc
-#' @export
-descX <- Desc
 
-#' @rdname Desc
-#' @export
-desc <- Desc
-
-
-
-
-#' @rdname Desc
+#' @rdname desc
 #' @exportS3Method
 print.Desc <- function(x, ...) {
   
@@ -149,6 +139,20 @@ print.Desc <- function(x, ...) {
   
   invisible(x)
 }
+
+
+
+#' @rdname desc
+#' @exportS3Method
+plot.Desc <- function(x, ...) {
+  
+  for (i in seq_along(x)) {
+    plot(x[[i]], ...)
+  }
+  
+  invisible(x)
+}
+
 
 
 # == internal helper functions ===============================================

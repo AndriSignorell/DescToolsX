@@ -38,12 +38,8 @@
 #' 5. the levels if the variable is a factor (`Levels`), 
 #' 6. (if there are any) descriptive labels for the column (`Labels`).
 #' 
-#' @author Andri Signorell <andri@@signorell.net>
-#' 
-#' @concept Desc
-#' @family Statistical summary functions
 #' @seealso [utils::str()], [base::summary()], [columnWrap()], 
-#' [DescToolsX::Desc()]
+#' [DescToolsX::desc()]
 #' 
 #' 
 #' @keywords print
@@ -66,6 +62,11 @@
 
 
 
+#' @family data.description
+#' @concept data-description
+#' @concept data-inspection
+#'
+#'
 #' @export
 abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
                      trunc = TRUE, list.len = 999) {

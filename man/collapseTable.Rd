@@ -39,7 +39,7 @@ counts <- rpois(36, 100)
 data <- cbind(data, counts)
 t1 <- xtabs(counts ~ sex + age + education, data=data)
 
-Desc(t1)
+desc(t1)
 
 ##                  age   a   b   c   d   e   f
 ## sex    education
@@ -53,7 +53,7 @@ Desc(t1)
 
 # collapse age to 3 levels
 t2 <- collapseTable(t1, age=c("A", "A", "B", "B", "C", "C"))
-Desc(t2)
+desc(t2)
 
 ##                  age   A   B   C
 ## sex    education
@@ -68,7 +68,7 @@ Desc(t2)
 # collapse age to 3 levels and pool education: "low" and "med" to "low"
 t3 <- collapseTable(t1, age=c("A", "A", "B", "B", "C", "C"),
     education=c("low", "low", "high"))
-Desc(t3)
+desc(t3)
 
 ##                  age   A   B   C
 ## sex    education
@@ -81,7 +81,7 @@ Desc(t3)
 
 # change labels for levels of education to 1:3
 t4 <- collapseTable(t1,  education=1:3)
-Desc(t4)
+desc(t4)
 
 ##                  age   a   b   c   d   e   f
 ## sex    education

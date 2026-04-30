@@ -31,7 +31,7 @@
 #' 
 #' d <- sample(seq(as.Date("2015-01-01"), as.Date("2015-12-31"), 1), 120)
 #' z <- zodiac(d)
-#' Desc(z)
+#' desc(z)
 #' 
 
 

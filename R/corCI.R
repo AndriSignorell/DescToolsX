@@ -90,6 +90,7 @@ corCI <- function(rho, n, conf.level = 0.95,
   
   ci <- fisherZInv(ci)
   
-  setNames(c(rho, ci), c("cor", "lwr.ci", "upr.ci"))
+  setNamesX(c(rho, ci), c("cor", "lci", "uci"))
+  
 }
 

@@ -25,7 +25,7 @@ chi-square p-value.}
 }
 \description{
 Prints a structured summary of a \code{"Desc.Date"} object as created
-by \code{\link{Desc}}. The output includes core time-axis statistics
+by \code{\link{desc}}. The output includes core time-axis statistics
 such as range, span, coverage and fundamental quantiles.
 }
 \details{
@@ -39,7 +39,7 @@ the magnitude and direction of deviation from expectation but do not
 represent separate hypothesis tests.
 
 weekday and month distributions are compared to their expected
-probabilities as defined in \code{\link{Desc}}.
+probabilities as defined in \code{\link{desc}}.
 
 Standardized residuals are computed as
 \deqn{(Observed - Expected) / sqrt(Expected)}.

@@ -2,23 +2,30 @@
 % Please edit documentation in R/conf.R
 \name{sens}
 \alias{sens}
-\title{Extract Sensitivity}
+\title{Extract Sensitivity from a Confusion Matrix}
 \usage{
 sens(x, ...)
 }
 \arguments{
-\item{x}{Object containing predictions. Can be:
+\item{x}{object containing predictions. Can be:
 \itemize{
-\item A factor/vector of predicted classes
-\item A confusion matrix (table or matrix)
-\item A fitted model object (e.g., \code{glm}, \code{rpart})
+\item a factor or character vector of predicted classes
+\item a confusion matrix (\code{table} or \code{matrix})
+\item a fitted model object (e.g., \code{glm}, \code{rpart})
 }}
 
-\item{...}{Further arguments passed to specific methods.}
+\item{...}{further arguments passed to specific methods.}
 }
 \value{
-Numeric vector of sensitivities.
+named numeric vector of sensitivities.
 }
 \description{
-Convenience function to extract sensitivity from a confusion matrix.
+Extract Sensitivity from a Confusion Matrix
 }
+\seealso{
+\code{\link{conf}}, \code{\link{spec}}
+
+Other classification: 
+\code{\link{spec}()}
+}
+\concept{classification}

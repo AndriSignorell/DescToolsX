@@ -81,7 +81,7 @@ tschuprowT <- function(x, y = NULL, correct = FALSE, ...){
     # Bergsma, W, A bias-correction for Cramer's V and Tschuprow's T
     # September 2013 Journal of the Korean Statistical Society 42(3)
     # DOI: 10.1016/j.jkss.2012.10.002
-    # see also CramerV
+    # see also cramerV()
     
     phi.hat <- chisq.hat / n
     as.numeric(sqrt(max(0, phi.hat - df/(n-1)) / 

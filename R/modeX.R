@@ -8,7 +8,7 @@
 #' integer vector. For numerical vectors, it is not so much the central
 #' tendency property of the mode that is interesting as the information about
 #' conspicuous accumulation points, which sometimes can indicate data errors.
-#' In \code{Desc()} it is integrated in the numeric description to draw the
+#' In \code{desc()} it is integrated in the numeric description to draw the
 #' analyst's attention to strikingly high frequencies of a single value as soon
 #' as they exceed a certain treshold. (In a numeric vector we would in general
 #' rather expect low numbers of tied values, or we should be aware of the

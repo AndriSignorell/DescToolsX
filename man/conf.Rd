@@ -12,9 +12,8 @@
 \alias{conf.svm}
 \alias{conf.lda}
 \alias{conf.qda}
-\alias{conf.regr}
-\alias{plot.Conf}
 \alias{print.Conf}
+\alias{plot.Conf}
 \title{Confusion Matrix and Classification Metrics}
 \usage{
 conf(x, ...)
@@ -39,48 +38,50 @@ conf(x, ...)
 
 \method{conf}{qda}(x, ...)
 
-\method{conf}{regr}(x, ...)
+\method{print}{Conf}(x, digits = max(3L, getOption("digits") - 3L), ...)
 
 \method{plot}{Conf}(x, main = "Confusion Matrix", ...)
-
-\method{print}{Conf}(x, digits = max(3, getOption("digits") - 3), ...)
 }
 \arguments{
-\item{x}{Object containing predictions. Can be:
+\item{x}{object containing predictions. Can be:
 \itemize{
-\item A factor/vector of predicted classes
-\item A confusion matrix (table or matrix)
-\item A fitted model object (e.g., \code{glm}, \code{rpart})
+\item a factor or character vector of predicted classes
+\item a confusion matrix (\code{table} or \code{matrix})
+\item a fitted model object (e.g., \code{glm}, \code{rpart})
 }}
 
-\item{...}{Further arguments passed to specific methods.}
+\item{\dots}{further arguments passed to specific methods.}
 
-\item{pos}{Optional character specifying the positive class (for binary classification).
-If \code{NULL}, the first level is used.}
+\item{pos}{optional character specifying the positive class (binary
+classification only). If \code{NULL}, the second level is used and
+a message is issued.}
 
-\item{ref}{Optional reference (true labels). Required for default method.}
+\item{ref}{optional reference (true labels). Required for the default
+method.}
 
-\item{na.rm}{Logical; remove missing values before computation.}
+\item{na.rm}{logical; remove missing values before computation.
+Default \code{TRUE}.}
 
-\item{cutoff}{Numeric cutoff for probabilistic models (e.g., \code{glm}).}
+\item{cutoff}{numeric cutoff for probabilistic models (e.g., \code{glm}).
+Default \code{0.5}.}
 
-\item{main}{Plot title.}
+\item{digits}{integer, number of decimal places for printing.}
 
-\item{digits}{Number of digits for printing.}
+\item{main}{character, plot title.}
 }
 \value{
-An object of class \code{"Conf"} containing:
-\itemize{
-\item \code{table} Confusion matrix
-\item \code{pos} Positive class (if applicable)
-\item \code{diag} Number of correct predictions
-\item \code{n} Total number of observations
-\item \code{acc}, \code{acc.lci}, \code{acc.uci} Accuracy and CI
-\item \code{nri} No Information Rate
-\item \code{acc.pval} p-value for Accuracy > NIR
-\item \code{kappa} Cohen's Kappa
-\item \code{mcnemar.pval} McNemar test p-value
-\item \code{byclass} Matrix of class-wise metrics
+an object of class \code{"Conf"} containing:
+\describe{
+\item{\code{table}}{confusion matrix}
+\item{\code{pos}}{positive class (binary only, else \code{NULL})}
+\item{\code{diag}}{number of correct predictions}
+\item{\code{n}}{total number of observations}
+\item{\code{acc}, \code{acc.lci}, \code{acc.uci}}{accuracy and CI}
+\item{\code{nir}}{No Information Rate}
+\item{\code{acc.pval}}{p-value for Accuracy > NIR}
+\item{\code{kappa}}{Cohen's Kappa}
+\item{\code{mcnemar.pval}}{McNemar test p-value}
+\item{\code{byclass}}{matrix of class-wise metrics}
 }
 }
 \description{
@@ -89,17 +90,18 @@ for classification models or predicted vs. observed labels.
 }
 \details{
 This is a generic function with methods for tables, vectors, and several
-model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest}, \code{svm}).
+model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
+\code{svm}).
 
-The function computes:
+\strong{Overall statistics:}
 \itemize{
-\item Accuracy (with confidence interval)
-\item No Information Rate (NIR) and p-value
+\item Accuracy with 95\\% confidence interval
+\item No Information Rate (NIR) and p-value (Accuracy > NIR)
 \item Cohen's Kappa
 \item McNemar test p-value
 }
 
-Additionally, class-wise statistics include:
+\strong{Class-wise statistics} (computed one-vs-all for multiclass):
 \itemize{
 \item Sensitivity (Recall)
 \item Specificity
@@ -108,20 +110,21 @@ Additionally, class-wise statistics include:
 \item Prevalence
 \item Detection Rate and Detection Prevalence
 \item Balanced Accuracy
-\item F-value (harmonic mean of precision and recall)
+\item F-value (harmonic mean of Precision and Recall)
 \item Matthews Correlation Coefficient (MCC)
 }
-
-For multiclass problems, statistics are computed one-vs-all.
 }
 \examples{
-# Example with vectors
-pred <- factor(c("A","B","A","A","B"))
-ref  <- factor(c("A","A","A","B","B"))
+# vectors
+pred <- factor(c("A", "B", "A", "A", "B"))
+ref  <- factor(c("A", "A", "A", "B", "B"))
 conf(pred, ref)
 
-# Example with table
-tab <- table(pred, ref)
-conf(tab)
+# table
+conf(table(pred, ref))
+
+# glm
+m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
+conf(m)
 
 }

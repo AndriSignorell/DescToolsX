@@ -53,7 +53,7 @@ suitable defaults.
 }
 \examples{
 
-Desc(cutAge(sample(100, 100)))
+desc(cutAge(sample(100, 100)))
 }
 \seealso{
 \code{\link{cut}}, \code{\link{seq}}

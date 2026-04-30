@@ -5,31 +5,38 @@
 #' for classification models or predicted vs. observed labels.
 #'
 #' This is a generic function with methods for tables, vectors, and several
-#' model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest}, \code{svm}).
+#' model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
+#' \code{svm}).
 #'
-#' @param x Object containing predictions. Can be:
-#' \itemize{
-#'   \item A factor/vector of predicted classes
-#'   \item A confusion matrix (table or matrix)
-#'   \item A fitted model object (e.g., \code{glm}, \code{rpart})
-#' }
-#' @param ref Optional reference (true labels). Required for default method.
-#' @param pos Optional character specifying the positive class (for binary classification).
-#' If \code{NULL}, the first level is used.
-#' @param cutoff Numeric cutoff for probabilistic models (e.g., \code{glm}).
-#' @param na.rm Logical; remove missing values before computation.
-#' @param ... Further arguments passed to specific methods.
+#' @param x object containing predictions. Can be:
+#'   \itemize{
+#'     \item a factor or character vector of predicted classes
+#'     \item a confusion matrix (\code{table} or \code{matrix})
+#'     \item a fitted model object (e.g., \code{glm}, \code{rpart})
+#'   }
+#' @param ref optional reference (true labels). Required for the default
+#'   method.
+#' @param pos optional character specifying the positive class (binary
+#'   classification only). If \code{NULL}, the second level is used and
+#'   a message is issued.
+#' @param cutoff numeric cutoff for probabilistic models (e.g., \code{glm}).
+#'   Default \code{0.5}.
+#' @param na.rm logical; remove missing values before computation.
+#'   Default \code{TRUE}.
+#' @param digits integer, number of decimal places for printing.
+#' @param main character, plot title.
+#' @param \dots further arguments passed to specific methods.
 #'
 #' @details
-#' The function computes:
+#' \strong{Overall statistics:}
 #' \itemize{
-#'   \item Accuracy (with confidence interval)
-#'   \item No Information Rate (NIR) and p-value
+#'   \item Accuracy with 95\% confidence interval
+#'   \item No Information Rate (NIR) and p-value (Accuracy > NIR)
 #'   \item Cohen's Kappa
 #'   \item McNemar test p-value
 #' }
 #'
-#' Additionally, class-wise statistics include:
+#' \strong{Class-wise statistics} (computed one-vs-all for multiclass):
 #' \itemize{
 #'   \item Sensitivity (Recall)
 #'   \item Specificity
@@ -38,335 +45,343 @@
 #'   \item Prevalence
 #'   \item Detection Rate and Detection Prevalence
 #'   \item Balanced Accuracy
-#'   \item F-value (harmonic mean of precision and recall)
+#'   \item F-value (harmonic mean of Precision and Recall)
 #'   \item Matthews Correlation Coefficient (MCC)
 #' }
 #'
-#' For multiclass problems, statistics are computed one-vs-all.
-#'
-#' @return
-#' An object of class \code{"Conf"} containing:
-#' \itemize{
-#'   \item \code{table} Confusion matrix
-#'   \item \code{pos} Positive class (if applicable)
-#'   \item \code{diag} Number of correct predictions
-#'   \item \code{n} Total number of observations
-#'   \item \code{acc}, \code{acc.lci}, \code{acc.uci} Accuracy and CI
-#'   \item \code{nri} No Information Rate
-#'   \item \code{acc.pval} p-value for Accuracy > NIR
-#'   \item \code{kappa} Cohen's Kappa
-#'   \item \code{mcnemar.pval} McNemar test p-value
-#'   \item \code{byclass} Matrix of class-wise metrics
+#' @return an object of class \code{"Conf"} containing:
+#' \describe{
+#'   \item{\code{table}}{confusion matrix}
+#'   \item{\code{pos}}{positive class (binary only, else \code{NULL})}
+#'   \item{\code{diag}}{number of correct predictions}
+#'   \item{\code{n}}{total number of observations}
+#'   \item{\code{acc}, \code{acc.lci}, \code{acc.uci}}{accuracy and CI}
+#'   \item{\code{nir}}{No Information Rate}
+#'   \item{\code{acc.pval}}{p-value for Accuracy > NIR}
+#'   \item{\code{kappa}}{Cohen's Kappa}
+#'   \item{\code{mcnemar.pval}}{McNemar test p-value}
+#'   \item{\code{byclass}}{matrix of class-wise metrics}
 #' }
 #'
 #' @examples
-#' # Example with vectors
-#' pred <- factor(c("A","B","A","A","B"))
-#' ref  <- factor(c("A","A","A","B","B"))
+#' # vectors
+#' pred <- factor(c("A", "B", "A", "A", "B"))
+#' ref  <- factor(c("A", "A", "A", "B", "B"))
 #' conf(pred, ref)
 #'
-#' # Example with table
-#' tab <- table(pred, ref)
-#' conf(tab)
+#' # table
+#' conf(table(pred, ref))
 #'
-
+#' # glm
+#' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
+#' conf(m)
+#'
 #' @export
 conf <- function(x, ...) UseMethod("conf")
 
 
 
+# ── conf.table ────────────────────────────────────────────────────────────────
+
 #' @rdname conf
 #' @export
 conf.table <- function(x, pos = NULL, ...) {
   
-  
   p <- (d <- dim(x))[1L]
-  if(!is.numeric(x) || length(d) != 2L || p != d[2L]) {    # allow nxn!  || p != 2L)
-    stop("'x' is not a nxn numeric matrix.")
-    # print(x)
-    # invisible()
-  }
+  if (!is.numeric(x) || length(d) != 2L || p != d[2L])
+    stop("'x' must be a square numeric matrix")
   
-  # observed in columns, predictions in rows
-  if(!identical(rownames(x), colnames(x)))
+  if (!identical(rownames(x), colnames(x)))
     stop("rownames(x) and colnames(x) must be identical")
   
-  if(is.null(pos)) pos <- rownames(x)[1]
-  if(nrow(x)!=2) {
-    # ignore pos for nxn tables, pos makes only sense for sensitivity
-    # and that is not defined for n-dim tables
-    pos <- NULL
-    
+  # ── positive class ──────────────────────────────────────────────────────────
+  if (nrow(x) != 2L) {
+    pos <- NULL   # pos only meaningful for binary
   } else {
-    # order 2x2-confusion table so
-    # that the positive class is the first and the others keep their position
-    # fixed=TRUE as we might run into problems with columnnames like (8-9] ...
-    ord <- c(pos, rownames(x)[-grep(pos, rownames(x), fixed=TRUE)])
-    # the columnnames must be the same as the rownames
-    x <- as.table(x[ord, ord])
+    if (is.null(pos)) {
+      pos <- colnames(x)[2L]
+      message(gettextf("'pos' not specified, using '%s' as positive class", pos))
+    }
+    ord <- c(pos, rownames(x)[-grep(pos, rownames(x), fixed = TRUE)])
+    x   <- as.table(x[ord, ord])
   }
   
-  # overall statistics first
-  res <- list(
-    table   = x,
-    pos     = pos,
-    diag    = sum(diag(x)),
-    n       = sum(x)
-  )
-  res <- c(res,
-           acc     = lumen::binomCI(x=res$diag, n=res$n),
-           sapply(binom.test(x=res$diag, n=res$n,
-                             p=max(apply(x, 2, sum) / res$n),
-                             alternative = "greater")[c("null.value", "p.value")], unname),
-           kappa   = DescToolsX::cohenKappa(x),
-           mcnemar = mcnemar.test(x)$p.value
-  )
-  names(res) <- c("table","pos","diag","n","acc","acc.lci","acc.uci",
-                  "nri","acc.pval","kappa","mcnemar.pval")
+  # ── overall statistics ──────────────────────────────────────────────────────
+  diag_n <- sum(diag(x))
+  n      <- sum(x)
   
-  # byclass
-  lst <- list()
-  for(i in 1L:nrow(x)){
-    
-    z <- .collapseConfTab(x=x, pos=rownames(x)[i])
+  ci     <- binomCI(x = diag_n, n = n)
+  bt     <- binom.test(x    = diag_n,
+                       n    = n,
+                       p    = max(colSums(x) / n),
+                       alternative = "greater")
+  
+  res <- list(
+    table       = x,
+    pos         = pos,
+    diag        = diag_n,
+    n           = n,
+    acc         = unname(ci[1L]),
+    acc.lci     = unname(ci[2L]),
+    acc.uci     = unname(ci[3L]),
+    nir         = unname(bt$null.value),
+    acc.pval    = unname(bt$p.value),
+    kappa       = cohenKappa(x),
+    mcnemar.pval = tryCatch(mcnemar.test(x)$p.value, error = function(e) NA_real_)
+  )
+  
+  # ── class-wise statistics ───────────────────────────────────────────────────
+  lst <- vector("list", nrow(x))
+  
+  for (i in seq_len(nrow(x))) {
+    z <- .collapseConfTab(x = x, pos = rownames(x)[i])
     z[] <- as.double(z)
-    A <- z[1, 1]; B <- z[1, 2]; C <- z[2, 1]; D <- z[2, 2]
+    A <- z[1L, 1L]; B <- z[1L, 2L]
+    C <- z[2L, 1L]; D <- z[2L, 2L]
     
-    lst[[i]] <- rbind(
-      sens    = A / (A + C),                 # sensitivity
-      spec    = D / (B + D),                 # specificity
-      ppv     = A / (A + B),                 # positive predicted value
-      npv     = D / (C + D),                 # negative predicted value
-      prev    = (A + C) / (A + B + C + D),   # prevalence
-      detprev = (A + B) / (A + B + C + D),   # detection prevalence
-      detrate = A / (A + B + C + D),         # detection rate
-      bacc    = mean(c(A / (A + C), D / (B + D)) ),  # balanced accuracy
-      fval    = hmean(c(A / (A + B), A / (A + C)), conf.level = NA), # guetemass wollschlaeger s. 150
-      #   this would overflow for already small frequencies if we don't cast z to double ..
-      mcc     = (A*D-B*C) / sqrt((A+B)*(A+C)*(D+B)*(D+C))  # Matthews correlation coefficient (=Phi(x) with sign!)
+    den_mcc <- sqrt((A + B) * (A + C) * (D + B) * (D + C))
+    
+    lst[[i]] <- c(
+      sens    = .safeDiv(A, A + C),
+      spec    = .safeDiv(D, B + D),
+      ppv     = .safeDiv(A, A + B),
+      npv     = .safeDiv(D, C + D),
+      prev    = .safeDiv(A + C, n),
+      detrate = .safeDiv(A, n),
+      detprev = .safeDiv(A + B, n),
+      bacc    = .safeDiv(A, A + C) / 2 + .safeDiv(D, B + D) / 2,
+      fval    = DescToolsX::hmean(c(.safeDiv(A, A + B), 
+                                    .safeDiv(A, A + C)),
+                      conf.level = NA),
+      mcc     = if (den_mcc == 0) NA_real_ else (A * D - B * C) / den_mcc
     )
   }
   
-  res <- c(res, byclass=list(do.call(cbind, lst)))
-  colnames(res[["byclass"]]) <- rownames(x)
+  byclass           <- do.call(cbind, lst)
+  colnames(byclass) <- rownames(x)
   
-  if(nrow(x)==2) res[["byclass"]] <- res[["byclass"]][, res[["pos"]], drop=FALSE]
+  # for binary: only show the positive class column
+  if (nrow(x) == 2L)
+    byclass <- byclass[, pos, drop = FALSE]
   
-  class(res) <- "Conf"
-  
-  return(res)
-  
+  res$byclass <- byclass
+  class(res)  <- "Conf"
+  res
 }
 
+
+# ── conf.default ──────────────────────────────────────────────────────────────
 
 #' @rdname conf
 #' @export
-conf.default <-  function(x, ref, pos = NULL, na.rm = TRUE, ...) {
-  if(na.rm) {
+conf.default <- function(x, ref, pos = NULL, na.rm = TRUE, ...) {
+  if (na.rm) {
     idx <- complete.cases(data.frame(x, ref))
-    x <- x[idx]
+    x   <- x[idx]
     ref <- ref[idx]
   }
   clvl <- combLevels(x, ref)
-  
-  conf.table(table(Prediction=factor(x, levels=clvl),
-                   Reference=factor(ref, levels=clvl)), pos = pos, ...)
-  
+  conf.table(table(Prediction = factor(x,   levels = clvl),
+                   Reference  = factor(ref, levels = clvl)),
+             pos = pos, ...)
 }
+
+
+# ── conf.matrix ───────────────────────────────────────────────────────────────
 
 #' @rdname conf
 #' @export
 conf.matrix <- function(x, pos = NULL, ...) {
-  conf.table(as.table(x), pos=pos, ...)
+  conf.table(as.table(x), pos = pos, ...)
 }
 
 
-#' @rdname conf
-#' @export
-conf.rpart <- function(x, ...){
-  # y <- attr(x, "ylevels")
-  conf(x=attr(x,"ylevels")[x$frame$yval[x$where]],
-       ref=attr(x,"ylevels")[x$y], ...)
-}
+# ── conf.rpart ────────────────────────────────────────────────────────────────
 
 #' @rdname conf
 #' @export
-conf.multinom <- function(x, ...){
-  if(is.null(x$model)) stop("x does not contain model. Run multinom with argument model=TRUE!")
+conf.rpart <- function(x, ...) {
+  lvl <- attr(x, "ylevels")
+  conf(x   = lvl[x$frame$yval[x$where]],
+       ref = lvl[x$y], ...)
+}
+
+
+# ── conf.multinom ─────────────────────────────────────────────────────────────
+
+#' @rdname conf
+#' @export
+conf.multinom <- function(x, ...) {
+  if (is.null(x$model))
+    stop("'x' does not contain model frame — refit with model = TRUE")
   resp <- model.extract(x$model, "response")
-  
-  # attention: this will not handle correctly responses defined as dummy codes
-  # adapt for that!!  ************************************************************
-  # resp <- x$response[,1]
-  
-  pred <- predict(x, type="class")
-  conf(x=pred, resp, ... )
+  pred <- predict(x, type = "class")
+  conf(x = pred, ref = resp, ...)
 }
 
 
+# ── conf.glm ──────────────────────────────────────────────────────────────────
+
 #' @rdname conf
 #' @export
-conf.glm <- function(x, cutoff = 0.5, pos=NULL, ...){
+conf.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
+  
   resp <- model.extract(x$model, "response")
-  if(is.factor(resp)){
-    pred <- levels(resp)[(predict(x, type="response") > cutoff)+1]
-    if(is.null(pos)) pos <- levels(resp)[2]
-  } else {
-    lvl <- levels(factor(resp))
-    pred <- lvl[(predict(x, type="response") > cutoff)+1]
-    if(is.null(pos)) pos <- lvl[2]
-  }
-  conf(x=pred, ref=resp, pos=pos, ... )
-}
-
-
-#' @rdname conf
-#' @export
-conf.randomForest <- function(x, ...){
-  conf(x=x$predicted, ref=x$y, ... )
-}
-
-
-#' @rdname conf
-#' @export
-conf.svm <- function(x, ...){
+  lvl  <- if (is.factor(resp)) levels(resp) else levels(factor(resp))
   
-  # old:  Conf(x=predict(x), ref=model.extract(model.frame(x), "response"), ... )
-  conf(x=predict(x, type="class"), ref=model.response(model.frame(x)), ... )
-}
-
-
-#' @rdname conf
-#' @export
-conf.lda <- function(x, ...){
+  if (length(lvl) != 2L)
+    stop("conf.glm requires a binary response — use conf.multinom() for multiclass")
   
-  # extract response from the model
+  prob <- predict(x, type = "response")
+  pred <- lvl[(prob > cutoff) + 1L]
   
-  conf(x=predict(x)$class,
-       ref=model.extract(model.frame(x), "response") , ... )
-}
-
-#' @rdname conf
-#' @export
-conf.qda <- function(x, ...){
-  conf(x=predict(x)$class,
-       ref=model.extract(model.frame(x), "response") , ... )
+  if (is.null(pos)) pos <- lvl[2L]
+  
+  conf(x = pred, ref = resp, pos = pos, ...)
 }
 
 
+# ── conf.randomForest ─────────────────────────────────────────────────────────
 
 #' @rdname conf
 #' @export
-conf.regr <- function(x, ...){
-  NextMethod()
-  # Conf(x=Predict(x, type="class"), reference=x$response[,], ... )
+conf.randomForest <- function(x, ...) {
+  conf(x = x$predicted, ref = x$y, ...)
 }
 
 
+# ── conf.svm ──────────────────────────────────────────────────────────────────
+
 #' @rdname conf
-#' @param main Plot title.
 #' @export
-plot.Conf <- function(x, main="Confusion Matrix", ...){
-  mosaicplot(t(x$table), shade=TRUE, main=main, col=c("red", "green"), ...)
+conf.svm <- function(x, ...) {
+  conf(x   = predict(x, type = "class"),
+       ref = model.response(model.frame(x)), ...)
 }
 
 
+# ── conf.lda ──────────────────────────────────────────────────────────────────
+
 #' @rdname conf
-#' @param digits Number of digits for printing.
 #' @export
-print.Conf <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+conf.lda <- function(x, ...) {
+  conf(x   = predict(x)$class,
+       ref = model.extract(model.frame(x), "response"), ...)
+}
+
+
+# ── conf.qda ──────────────────────────────────────────────────────────────────
+
+#' @rdname conf
+#' @export
+conf.qda <- function(x, ...) {
+  conf(x   = predict(x)$class,
+       ref = model.extract(model.frame(x), "response"), ...)
+}
+
+
+# ── print.Conf ────────────────────────────────────────────────────────────────
+
+#' @rdname conf
+#' @export
+print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+  
   cat("\nConfusion Matrix and Statistics\n\n")
   
-  if(all(names(attr(x$table, "dimnames")) == ""))
-    names(attr(x$table, "dimnames")) <- c("Prediction","Reference")
+  if (all(names(attr(x$table, "dimnames")) == ""))
+    names(attr(x$table, "dimnames")) <- c("Prediction", "Reference")
   print(x$table, ...)
   
-  if(nrow(x$table)!=2) cat("\nOverall Statistics\n")
+  if (nrow(x$table) != 2L) cat("\nOverall Statistics\n")
   
-  txt <- gettextf("
+  cat(gettextf("
                 Total n : %s
                Accuracy : %s
                  95%s CI : (%s, %s)
     No Information Rate : %s
     P-Value [Acc > NIR] : %s
-
                   Kappa : %s
- Mcnemar's Test P-Value : %s\n\n",
-                  fm(x$n, digits=0, big.mark="'"),
-                  fm(x$acc, digits=digits), "%",
-                  fm(x$acc.lci, digits=digits), fm(x$acc.uci, digits=digits),
-                  fm(x$nri, digits=digits), fm(x$acc.pval, fmt="p", na.form="NA"),
-                  fm(x$kappa, digits=digits), fm(x$mcnemar.pval, fmt="p", na.form="NA")
-  )
-  cat(txt)
+ McNemar's Test P-Value : %s\n\n",
+               fm(x$n,           digits = 0L, big.mark = "'"),
+               fm(x$acc,         digits = digits), "%",
+               fm(x$acc.lci,     digits = digits),
+               fm(x$acc.uci,     digits = digits),
+               fm(x$nir,         digits = digits),
+               fm(x$acc.pval,    fmt = "p", na.form = "NA"),
+               fm(x$kappa,       digits = digits),
+               fm(x$mcnemar.pval, fmt = "p", na.form = "NA")
+  ))
   
-  rownames(x$byclass) <- c("Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value", "Prevalence",
-                           "Detection Rate", "Detection Prevalence", "Balanced Accuracy","F-val Accuracy", "Matthews Cor.-Coef")
+  rownames(x$byclass) <- c("Sensitivity", "Specificity",
+                           "Pos Pred Value", "Neg Pred Value",
+                           "Prevalence", "Detection Rate",
+                           "Detection Prevalence", "Balanced Accuracy",
+                           "F-Value", "Matthews Cor.-Coef.")
   
-  if(nrow(x$table)==2){
-    cat(
-      paste(strPad(paste(rownames(x$byclass), ":"), width=25, adj = "right"),
-            fm(x$byclass, digits=digits))
-      , sep="\n")
-    
-    txt <- gettextf("\n       'Positive' Class : %s\n\n", x$pos)
-    cat(txt)
+  if (nrow(x$table) == 2L) {
+    cat(paste(strPad(paste0(rownames(x$byclass), " :"),
+                     width = 25L, adj = "right"),
+              fm(x$byclass, digits = digits)),
+        sep = "\n")
+    cat(gettextf("\n       'Positive' Class : %s\n\n", x$pos))
     
   } else {
-    
     cat("\nStatistics by Class:\n\n")
-    print(fm(x$byclass, digits = digits, na.form="NA"), quote = FALSE)
+    print(fm(x$byclass, digits = digits, na.form = "NA"), quote = FALSE)
     cat("\n")
-    
   }
   
+  invisible(x)
 }
 
 
+# ── plot.Conf ─────────────────────────────────────────────────────────────────
 
-#' Extract Sensitivity
-#'
-#' Convenience function to extract sensitivity from a confusion matrix.
+#' @rdname conf
+#' @export
+plot.Conf <- function(x, main = "Confusion Matrix", ...) {
+  mosaicplot(t(x$table), shade = TRUE, main = main, ...)
+}
+
+
+# ── Convenience extractors ────────────────────────────────────────────────────
+
+#' Extract Sensitivity from a Confusion Matrix
 #'
 #' @inheritParams conf
-#' @return Numeric vector of sensitivities.
+#' @return named numeric vector of sensitivities.
+#' @seealso \code{\link{conf}}, \code{\link{spec}}
+#' @family classification
 #' @export
-sens <- function(x, ...) {
-  conf(x, ...)[["byclass"]]["sens",]
-}
+sens <- function(x, ...) conf(x, ...)[["byclass"]]["sens", ]
 
-#' Extract Specificity
-#'
-#' Convenience function to extract specificity from a confusion matrix.
+#' Extract Specificity from a Confusion Matrix
 #'
 #' @inheritParams conf
-#' @return Numeric vector of specificities.
+#' @return named numeric vector of specificities.
+#' @seealso \code{\link{conf}}, \code{\link{sens}}
+#' @family classification
 #' @export
-spec <- function(x, ...) {
-  conf(x, ...)[["byclass"]]["spec",]
-}
+spec <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
 
 
+# == internal helper functions==================================================
 
 
+# Safe division — returns NA instead of NaN/Inf when denominator is 0
+.safeDiv <- function(a, b) ifelse(b == 0, NA_real_, a / b)
 
-# == internal helper functions ===============================================
+
 
 #' @keywords internal
 .collapseConfTab <- function(x, pos = NULL, ...) {
-  
-  if(nrow(x) > 2) {
+  if (nrow(x) > 2L) {
     names(attr(x, "dimnames")) <- c("pred", "obs")
-    x <- collapseTable(x, obs=c("neg", pos)[(rownames(x)==pos)+1],
-                       pred=c("neg", pos)[(rownames(x)==pos)+1])
+    x <- collapseTable(x,
+                       obs  = c("neg", pos)[(rownames(x) == pos) + 1L],
+                       pred = c("neg", pos)[(rownames(x) == pos) + 1L])
   }
-  
-  # order confusion table so
-  # that the positive class is the first and the others keep their position
-  ord <- c(pos, rownames(x)[-grep(pos, rownames(x), fixed=TRUE)])
-  # the columnnames must be the same as the rownames
-  x <- as.table(x[ord, ord])
-  return(x)
+  ord <- c(pos, rownames(x)[-grep(pos, rownames(x), fixed = TRUE)])
+  as.table(x[ord, ord])
 }
-
 

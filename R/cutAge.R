@@ -32,7 +32,7 @@
 #' @seealso \code{\link{cut}}, \code{\link{seq}}
 #' @examples
 #' 
-#' Desc(cutAge(sample(100, 100)))
+#' desc(cutAge(sample(100, 100)))
 
 
  

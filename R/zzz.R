@@ -65,12 +65,12 @@
 #'             poisson.test contrasts drop1 integrate splinefun
 #'             cov2cor vcov model.extract na.pass na.omit na.exclude na.fail
 #'             optim optimise nlm aggregate logLik AIC BIC model.frame predict
-#'             glm loess
+#'             glm loess cooks.distance cor.test density shapiro.test
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
 #'             segments strwidth text title axis mosaicplot
-#'             spineplot
+#'             spineplot arrows boxplot cdplot legend lines
 #'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
@@ -86,10 +86,13 @@
 #'             splitAt moveAvg stripAttr combLevels
 #'             
 #' @importFrom aurora plotFdist strAlign strTrim strTrunc 
-#'             fm style lineSep strTrim strPad
+#'             fm style lineSep strTrim strPad plotDens2D plotBag
+#'             plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries
+#'             plotCatDist plotPropCI
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mhChisqTest
-#'             varTest meanCI binomCI binomDiffCI bootCI leveneTest 
+#'             varTest meanCI binomCI binomDiffCI bootCI leveneTest
+#'             cochranArmitageTest bpTest             
 #'             
 #' @importFrom hermes newWrd
 #' 

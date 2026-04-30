@@ -107,7 +107,7 @@
 }
   # ── Print ─────────────────────────────────────────────────────────────────────
   
-#' @rdname Desc
+#' @rdname desc
 #' @exportS3Method
 #' @export
 print.Desc.qn <- function(x, verbose = NULL, ...) {
@@ -245,11 +245,12 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
   
   # ── default which by verbose ──────────────────────────────────────────────
   if (is.null(which)) {
-    which <- switch(as.character(verbose),
-                    "1" = 1L,
-                    "2" = 1:2,
-                    if (isBinary) c(1L, 2L, 5L) else 1:2   # verbose = 3
-    )
+    # which <- switch(as.character(verbose),
+    #                 "1" = 1L,
+    #                 "2" = 1:2,
+    #                 if (isBinary) c(1L, 2L, 5L) else 1:2   # verbose = 3
+    # )
+    which <-  1
   }
   
   # ── layout ───────────────────────────────────────────────────────────────
@@ -273,20 +274,20 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
            
            # ── 1: Spineplot ───────────────────────────────────────────────────────
            "1" = {
-             spineplot(yOk ~ xOk,
-                       xlab = xLab,
-                       ylab = yLab,
-                       main = "Spineplot",
-                       ...)
-           },
-           
-           # ── 2: Conditional density plot ───────────────────────────────────────
-           "2" = {
              cdplot(yOk ~ xOk,
                     xlab = xLab,
                     ylab = sprintf("P(%s)", yLab),
                     main = "Conditional density",
                     ...)
+           },
+           
+           # ── 2: Conditional density plot ───────────────────────────────────────
+           "2" = {
+             spineplot(yOk ~ xOk,
+                       xlab = xLab,
+                       ylab = yLab,
+                       main = "Spineplot",
+                       ...)
            },
            
            # ── 3: Overlapping density per group ──────────────────────────────────

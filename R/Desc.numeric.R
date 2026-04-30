@@ -8,8 +8,8 @@
 #'
 #' 
 #' 
-#' @name Desc.numeric
-#' @aliases Desc.numeric plot.Desc.numeric print.Desc.numeric
+#' @name desc.numeric
+#' @aliases desc.numeric plot.Desc.numeric print.Desc.numeric
 #' 
 #' @param x An object of class \code{"Desc.numeric"}.
 #' 
@@ -64,15 +64,15 @@
 #' @keywords multivariate print univar
 #' @examples
 #' 
-#' Desc(d.pizza$delivery_min)             # numeric
+#' desc(d.pizza$delivery_min)             # numeric
 
 
 
 
-#' @rdname Desc
-#' @method Desc numeric
+#' @rdname desc
+#' @method desc numeric
 #' @export
-Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
+desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
                          include_x = TRUE, 
                          main = NULL, verbose = NULL, plotit = NULL,
                          digits=NULL, 
@@ -170,7 +170,7 @@ Desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
 
 
 
-#' @rdname Desc
+#' @rdname desc
 #' @export
 print.Desc.numeric <- function(x, digits = NULL, ...) {
 
@@ -319,7 +319,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 
 
 
-#' @rdname Desc
+#' @rdname desc
 #' @export
 plot.Desc.numeric <- function(x, ...){
   aurora::plotFdist(x$x, na.rm=TRUE, ...)

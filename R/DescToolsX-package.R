@@ -70,7 +70,7 @@
 #' Classes use \strong{UpperCamelCase}. S3 methods follow standard R conventions.
 #'
 #' Examples:
-#' \code{Desc.numeric}, \code{PercTable}, \code{print.PercTable},
+#' \code{desc.numeric}, \code{percTable}, \code{print.PercTable},
 #' \code{plot.Desc.numeric}
 #'
 #' @details

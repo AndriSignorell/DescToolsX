@@ -6,7 +6,7 @@
 #' The plot consists of a pair of horizontally organized barplots
 #' displaying the absolute and relative frequencies.
 #' 
-#' @aliases Desc.logical
+#' @aliases desc.logical
 #' @details
 #' Description of a \strong{dichotomous variable}. This can either be a logical
 #' vector, a factor with two levels or a numeric variable with only two unique
@@ -38,10 +38,10 @@
 #' @seealso \code{\link[aurora]{plot.Desc.logical}} for graphical display
 
 
-#' @rdname Desc
-#' @method Desc logical
+#' @rdname desc
+#' @method desc logical
 #' @export
-Desc.logical <- function(x, ord = "level", conf.level = 0.95, 
+desc.logical <- function(x, ord = "level", conf.level = 0.95, 
                          main = NULL, verbose = NULL, plotit = NULL,
                          digits=NULL, ...) {
 
@@ -103,7 +103,7 @@ Desc.logical <- function(x, ord = "level", conf.level = 0.95,
 
 
 
-#' @rdname Desc
+#' @rdname desc
 #' @export
 print.Desc.logical <- function(x, digits = NULL, ...) {
   

@@ -192,7 +192,7 @@ lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   names(lc) <- c("p", "L", "L.general", "Gini", "x", "n")
   class(lc) <- "lc"
   
-  # no plot anymore, we have plot(lc) and Desc(lc, plotit=TRUE)
+  # no plot anymore, we have plot(lc) and desc(lc, plotit=TRUE)
   # if(plot) plot(lc)
   lc
 }

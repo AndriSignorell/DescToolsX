@@ -63,12 +63,16 @@ plot.Desc.nq <- function(x, which = NULL, ...){
          },
          "2" ={
            plotDens(x$data$y ~ x$data$x, ...)
+         },
+         
+         "3" ={
+           plotDensBox(x$data$y ~ x$data$x, ...)
            
          }
+         
   )
   
 }
-
 
 
 

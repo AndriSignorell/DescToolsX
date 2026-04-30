@@ -47,8 +47,8 @@
 #' Forecasting: Principles and Practice.
 #'
 #' @examples
-#' Desc(AirPassengers)
-#' Desc(Nile, lag.lb = 10)
+#' desc(AirPassengers)
+#' desc(Nile, lag.lb = 10)
 #'
 #' @importFrom stats acf Box.test lm coef time
 #' @importFrom utils head
@@ -62,10 +62,10 @@
 
 
 
-#' @rdname Desc
-#' @method Desc ts
+#' @rdname desc
+#' @method desc ts
 #' @export
-Desc.ts <- function(x, 
+desc.ts <- function(x, 
                     lag.lb = 12,
                     main = NULL,
                     plotit = NULL,
@@ -144,7 +144,7 @@ Desc.ts <- function(x,
 
 
 
-#' @rdname Desc
+#' @rdname desc
 #' @method print Desc.ts
 #' @export
 print.Desc.ts <- function(x, digits = NULL, ...) {
@@ -187,6 +187,13 @@ print.Desc.ts <- function(x, digits = NULL, ...) {
     plot(x, main=x$meta$main)
   
   
+}
+
+
+
+#'@export
+plot.Desc.ts <- function(x, ...){
+  plotTimeSeries(x$x, ...)
 }
 
 

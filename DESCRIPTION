@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.907
+Version: 0.0.0.909
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -129,7 +129,8 @@ Suggests:
     MASS,
     rstudioapi,
     gld, 
-    lme4
+    lme4, 
+    hexbin
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/

@@ -49,7 +49,7 @@ tob <- as.table(matrix(c(
 ), nrow=3, byrow=TRUE,
    dimnames=list(eye=c("blue","green","brown"),
                  hair=c("fair","red","medium","dark","black")) ))
-Desc(tob)
+desc(tob)
 assocs(tob)
 
 # Example taken from: http://www.math.wpi.edu/saspdf/stat/chap28.pdf
@@ -63,7 +63,7 @@ pain <- as.table(matrix(c(
     9, 23
    ), ncol=2, byrow=TRUE))
 
-Desc(pain)
+desc(pain)
 assocs(pain)
 
 }

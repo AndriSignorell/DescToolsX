@@ -26,24 +26,24 @@
 #' print functions.}\item{:}{the number of \bold{FIXED} digits, used throughout
 #' the print functions.}
 #' 
-#' \item{list("fixedfont")}{this font will be used by default, when \code{Desc}
+#' \item{list("fixedfont")}{this font will be used by default, when \code{desc}
 #' writes to a Word document. Must be defined as a font object, say enumerating
 #' \code{name}, \code{face} and \code{size} of the font and setting the class
 #' \code{font}, e.g. \code{structure(list(name="Courier New", size=7),
 #' class="font")}.  }\item{:}{this font will be used by default, when
-#' \code{Desc} writes to a Word document. Must be defined as a font object, say
+#' \code{desc} writes to a Word document. Must be defined as a font object, say
 #' enumerating \code{name}, \code{face} and \code{size} of the font and setting
 #' the class \code{font}, e.g. \code{structure(list(name="Courier New",
 #' size=7), class="font")}.  }
 #' 
 #' \item{list("fmt")}{Three number format definitions are currently used in the
-#' \code{Desc} routines. The format used for integer values is named
+#' \code{desc} routines. The format used for integer values is named
 #' \code{"abs"}, for percentages \code{"perc"} and for floating point numeric
 #' values \code{"num"}.  The format definitions must be of class \code{"fmt"}
 #' and may contain any argument used in the function \code{\link[aurora]{fm}}.\cr
 #' Use \code{\link[aurora]{style}} to access and update formats (as they are organised in
 #' a nested list).}\item{:}{Three number format definitions are currently used
-#' in the \code{Desc} routines. The format used for integer values is named
+#' in the \code{desc} routines. The format used for integer values is named
 #' \code{"abs"}, for percentages \code{"perc"} and for floating point numeric
 #' values \code{"num"}.  The format definitions must be of class \code{"fmt"}
 #' and may contain any argument used in the function \code{\link[aurora]{fm}}.\cr
@@ -62,10 +62,10 @@
 #' defining the language to be used for the names of weekdays and months when
 #' using \code{\link[aurora]{fm}}.}
 #' 
-#' \item{list("plotit")}{logical, defining whether the \code{Desc}-procedures
+#' \item{list("plotit")}{logical, defining whether the \code{desc}-procedures
 #' should produce plots by default. This is usually a good thing, but it may
 #' clutter up your desktop, if you're not using RStudio. Therefore it can be
-#' turned off.}\item{:}{logical, defining whether the \code{Desc}-procedures
+#' turned off.}\item{:}{logical, defining whether the \code{desc}-procedures
 #' should produce plots by default. This is usually a good thing, but it may
 #' clutter up your desktop, if you're not using RStudio. Therefore it can be
 #' turned off.}

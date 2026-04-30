@@ -40,7 +40,7 @@ zodiac(as.Date(c("1937-07-28", "1936-06-01", "1966-02-25",
 
 d <- sample(seq(as.Date("2015-01-01"), as.Date("2015-12-31"), 1), 120)
 z <- zodiac(d)
-Desc(z)
+desc(z)
 
 }
 \seealso{

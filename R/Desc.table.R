@@ -7,7 +7,7 @@
 #' \code{Desc.qq} and \code{Desc.matrix}.
 #'
 #' @param x a \code{table} or \code{matrix} object. For the formula interface
-#'   use \code{Desc(y ~ x, data)} which dispatches to this function
+#'   use \code{desc(y ~ x, data)} which dispatches to this function
 #'   automatically.
 #' @param prop character string controlling which proportions are shown in the
 #'   cross-tabulation. One of \code{"rows"} (default), \code{"cols"},
@@ -22,6 +22,7 @@
 #'   Default is \code{0.95}.
 #' @param \dots further arguments passed to or from other methods.
 #'
+#' @name desc.table
 #' @details
 #' The \code{verbose} argument controls which statistics are computed and
 #' displayed. The following table gives an overview; items marked with
@@ -77,8 +78,8 @@
 #'
 #' \strong{Dispatching:}
 #'
-#' \code{Desc.matrix} and \code{Desc.qq} both redirect to \code{Desc.table}.
-#' When called via the formula interface \code{Desc(y ~ x, data)}, the type
+#' \code{desc.matrix} and \code{desc.qq} both redirect to \code{desc.table}.
+#' When called via the formula interface \code{desc(y ~ x, data)}, the type
 #' of \code{y} and \code{x} is known and ordinal-specific measures
 #' (tau-b and above) are activated automatically when both variables are
 #' \code{ordered} factors.
@@ -88,11 +89,11 @@
 #'   to be used via its \code{print} and \code{plot} methods.
 #'
 #' @seealso
-#'   \code{\link{Desc}} for the generic function and formula interface,
-#'   \code{\link{Desc.numeric}} for univariate numeric descriptions,
-#'   \code{\link{Desc.factor}} for univariate factor descriptions,
+#'   \code{\link{desc}} for the generic function and formula interface,
+#'   \code{\link{desc.numeric}} for univariate numeric descriptions,
+#'   \code{\link{desc.factor}} for univariate factor descriptions,
 #'   \code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
-#'   \code{\link{CramerV}}, \code{\link{OddsRatio}}
+#'   \code{\link{cramerV}}, \code{\link{oddsRatio}}
 #'
 #' @family plotdesc
 #' @concept contingency table cross-tabulation association measures
@@ -102,28 +103,28 @@
 #' @examples
 #' # from an existing table
 #' tab <- table(d.pizza$driver, d.pizza$area)
-#' Desc(tab)
-#' Desc(tab, prop = "rows", verbose = 3)
+#' desc(tab)
+#' desc(tab, prop = "rows", verbose = 3)
 #'
 #' # 2x2 table — additional measures are shown automatically
 #' tab2 <- tab[1:2, 1:2]
-#' Desc(tab2)
+#' desc(tab2)
 #'
-#' # formula interface — dispatches to Desc.table internally
-#' Desc(driver ~ class, data = d.pizza)
+#' # formula interface — dispatches to desc.table internally
+#' desc(driver ~ class, data = d.pizza)
 #'
 #' # from a matrix
 #' m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),
 #'             nrow = 3, byrow = TRUE,
 #'             dimnames = list(c("Brent","Camden","Westminster"),
 #'                             c("Allanah","Maria","Rhonda")))
-#' Desc(m, verbose = 2)
+#' desc(m, verbose = 2)
 #'
 
 
 #' 
 #' #' @export
-#' Desc.table <- function(x, prop = "rows", verbose = NULL,
+#' desc.table <- function(x, prop = "rows", verbose = NULL,
 #'                        abs.sty = NULL, per.sty = NULL,
 #'                        conf.level = 0.95, ...) {
 #'   
@@ -136,10 +137,9 @@
 #' }
 
 
-#' @rdname Desc
-#' @method Desc table
+#' @method desc table
 #' @export
-Desc.table <- function(x, conf.level = 0.95, prop = "rows",
+desc.table <- function(x, conf.level = 0.95, prop = "rows",
                        main = NULL, verbose = NULL, plotit = NULL,
                        ...) {
 
@@ -267,17 +267,17 @@ Desc.table <- function(x, conf.level = 0.95, prop = "rows",
 
 
 
-#' @rdname Desc
+#' @rdname desc
 #' @export
-Desc.matrix <- Desc.table 
+desc.matrix <- desc.table 
                        
 
-#' @rdname Desc
+#' @rdname desc
 #' @export
-Desc.array <- Desc.table 
+desc.array <- desc.table 
 
 
-#' @rdname Desc
+#' @rdname desc.table
 #' @export
 print.Desc.table <- function(x, print_header=TRUE, ...) {
   
@@ -484,14 +484,40 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
   }
   }
   
-  if(x$meta$plotit)
-    plot(x, main=x$meta$main)
-  
+
 }
 
 
-# no export here, all code in aurora 
-# plot.Desc.table <- aurora::plot.Desc.table
 
+#' @exportS3Method
+#' @rdname desc.table
+plot.Desc.table <- function(x, which = 1, ...) {
+  
+  tab <- x$res$tab
+  
+  if(length(dim(x))>2) {
+    message("Sorry, plot not implemented for higher dimensional tables.")
+    invisible()
+  }  
+  
+  
+  for (j in which) {
+    switch(as.character(j %||% "1"),
+           "1" = {  # spineplot (default)
+             spineplot(tab, ...)
+           },
+           "2" = {  # mosaicplot
+             mosaicplot(tab, ...)
+           },
+           "3" = {  # association plot
+             plotAssoc(tab, ...)
+           },
+           "4" = {  # heatmap
+             plotHeatmap(tab, scale = "prop", ...)
+           }
+    )
+  }
+  
+}
 
 

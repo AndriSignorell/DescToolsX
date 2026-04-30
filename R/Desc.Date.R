@@ -13,7 +13,7 @@
 #' extreme future or implausibly early values) to highlight potential
 #' data-quality issues.
 #'
-#' @inheritParams Desc
+#' @inheritParams desc
 #'
 #' @param wprobs Numeric vector of length 7 specifying expected
 #' probabilities for weekdays (Monday to Sunday). The default is a
@@ -61,14 +61,14 @@
 #'   \item \code{meta}: metadata information
 #' }
 #'
-#' @seealso \code{\link{Desc}}, \code{\link{print.Desc.Date}},
-#'   \code{\link{plot.Desc}}
+#' @seealso \code{\link{desc}}, \code{\link{print.Desc.Date}}
+#'   
 #'
 
 
-#' @method Desc Date
+#' @method desc Date
 #' @export
-Desc.Date <- function(x,
+desc.Date <- function(x,
                       main = NULL,
                       plotit = NULL,
                       verbose = NULL,
@@ -226,7 +226,7 @@ Desc.Date <- function(x,
 #' Print method for \code{"Desc.Date"} objects
 #'
 #' Prints a structured summary of a \code{"Desc.Date"} object as created
-#' by \code{\link{Desc}}. The output includes core time-axis statistics
+#' by \code{\link{desc}}. The output includes core time-axis statistics
 #' such as range, span, coverage and fundamental quantiles.
 #'
 #' Depending on the selected verbosity level, weekday and month
@@ -256,7 +256,7 @@ Desc.Date <- function(x,
 #'
 #' @details
 #' weekday and month distributions are compared to their expected
-#' probabilities as defined in \code{\link{Desc}}.
+#' probabilities as defined in \code{\link{desc}}.
 #'
 #' Standardized residuals are computed as
 #' \deqn{(Observed - Expected) / sqrt(Expected)}.
