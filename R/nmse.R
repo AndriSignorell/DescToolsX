@@ -21,10 +21,6 @@
 #'
 #' If the denominator is zero, \code{NA} is returned.
 #'
-#' @family error metrics
-#' @concept normalized error
-#' @concept regression metrics 
-#' 
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
 #' ref <- c(3.0, 2.5, 3.0)
@@ -35,6 +31,11 @@
 #' @seealso \code{\link{mean}}, \code{\link{sum}}
 #'
 
+#' @family error.measures
+#' @concept prediction-accuracy
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 nmse <- function(x, ref, train.y){
   

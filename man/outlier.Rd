@@ -65,9 +65,16 @@ estimation, \emph{Journal of the American Statistical Association}, 69,
 }
 \seealso{
 \code{\link{boxplot}}
+
+Other outlier: 
+\code{\link{lof}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, performance improvement by
 Luis Gustavo Schuck
 }
+\concept{data-inspection}
+\concept{descriptive-statistics}
+\concept{outlier}
+\concept{outlier-detection}
 \keyword{univar}

@@ -121,6 +121,12 @@
  
 
 #' @rdname percTable
+#' @family freq.tables
+#' @concept frequency-analysis
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 percTable <- function (...) UseMethod("percTable")
 

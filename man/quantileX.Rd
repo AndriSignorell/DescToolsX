@@ -57,9 +57,16 @@ gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
 \seealso{
 \code{\link{medianX}}, \code{\link[stats]{quantile}},
 \code{\link[lumen]{quantileCI}}
+
+Other quantiles: 
+\code{\link{cutQ}()},
+\code{\link{extremes}}
 }
 \author{
 Andreas Alfons, Matthias Templ, some tweaks Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{descriptive-statistics}
+\concept{quantiles}
+\concept{robust-statistics}
 \keyword{univar}

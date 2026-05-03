@@ -52,7 +52,10 @@ conceptAudit("DescToolsX")
 
 
 }
-\concept{Documentation Tools}
-\concept{Infrastructure}
-\concept{Programming Utilities}
-\concept{topic.systemTools}
+\seealso{
+Other pkg.introspection: 
+\code{\link{setDescToolsXOption}()}
+}
+\concept{data-inspection}
+\concept{package-utilities}
+\concept{pkg.introspection}

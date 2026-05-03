@@ -17,13 +17,15 @@
 #' 
 #' @author Andri Signorell <andri@@signorell.net>
 #' 
-#' @family topic.numberTheory
-#' @concept number theory
-#' 
 #' @examples
 #' 
 #' divisors(c(145, 786))
 
+#' @family math.utils
+#' @concept mathematics
+#' @concept number-theory
+#'
+#'
 #' @export 
 divisors <- function(x) {
   sapply(x, divs)

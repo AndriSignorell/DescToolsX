@@ -54,4 +54,19 @@ phi(tab)
 }
 \seealso{
 \code{\link{chisq.test}}, \code{\link{cramerV}}
+
+Other assoc.nominal: 
+\code{\link{assocs}()},
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{lambda}()},
+\code{\link{oddsRatio}()},
+\code{\link{relRisk}()},
+\code{\link{tschuprowT}()},
+\code{\link{uncertCoef}()},
+\code{\link{yule}}
 }
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{table-manipulation}

@@ -60,9 +60,21 @@ Thanks to Antonio:
 \seealso{
 \code{\link{as.ym}}; Date functions: \code{\link{year}},
 \code{\link{month}}, etc.
+
+Other date.utils: 
+\code{\link{as_ym}},
+\code{\link{countWorkDays}()},
+\code{\link{cutAge}()},
+\code{\link{generation}()},
+\code{\link{isDate}()},
+\code{\link{time_conversions}},
+\code{\link{zodiac}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code by Roland
 Rapold and Antonio
 }
+\concept{data-manipulation}
+\concept{date-handling}
+\concept{date.utils}
 \keyword{chron}

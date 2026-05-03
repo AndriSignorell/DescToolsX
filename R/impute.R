@@ -29,10 +29,6 @@
 #' If \code{FUN} does not accept an argument named \code{na.rm},
 #' the function is called again without it.
 #'
-#' @family  topic.dataProcessing
-#' @concept data processing
-#' @concept imputation
-#'
 #' @seealso For direct value replacement see [bedrock::naReplace()].
 #' 
 #' @examples
@@ -52,6 +48,11 @@
 #' 
 
 
+#' @family imputation
+#' @concept missing-data
+#' @concept data-manipulation
+#'
+#'
 #' @export
 impute <- function(x, FUN = median, na.rm = TRUE, ...) {
   

@@ -16,131 +16,84 @@ gini(
 )
 }
 \arguments{
-\item{x}{a vector containing at least non-negative elements. The result will
-be \code{NA}, if x contains negative elements.}
+\item{x}{Numeric vector of non-negative values.}
 
-\item{conf.level}{confidence level for the confidence interval, restricted
-to lie between 0 and 1.  If set to \code{TRUE} the bootstrap confidence
-intervals are calculated.  If set to \code{NA} (default) no confidence
-intervals are returned.}
+\item{conf.level}{Confidence level in (0, 1). If \code{NA} (default),
+no confidence interval is computed.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}.  You can specify just the initial letter. \code{"left"}
-would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\item{sides}{Character string specifying the interval type: \code{"two.sided"}
+(default), \code{"left"}, or \code{"right"}.}
 
-\item{method}{only bootstrap method is implemented.}
+\item{method}{Currently only \code{"boot"} is supported.}
 
-\item{unbiased}{logical. In order for G to be an unbiased estimate of the
-true population value, calculated gini is multiplied by
-\eqn{n/(n-1)}{n/(n-1)}. Default is TRUE. (See Dixon, 1987)}
+\item{unbiased}{Logical. Apply bias correction factor \eqn{1/(1 - \sum w_i^2)}.}
 
-\item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}.}
+\item{weights}{Optional non-negative numeric vector of the same length as \code{x}.}
 
-\item{na.rm}{logical, indicating whether \code{NA} values should be stripped
-before the computation proceeds. Defaults to \code{FALSE}.}
+\item{na.rm}{Logical. Remove missing values before computation.}
 
-\item{\dots}{the dots are passed to the function \code{\link[boot]{boot}},
-when confidence intervals are calculated.}
+\item{\dots}{Additional arguments passed to the bootstrap procedure:
+\describe{
+\item{type}{Confidence interval type (default \code{"bca"})}
+\item{R}{Number of bootstrap replications (default 999)}
+\item{parallel}{Parallelization mode (\code{"no"}, \code{"multicore"}, \code{"snow"})}
+\item{ncpus}{Number of CPUs}
+}}
 }
 \value{
-If \code{conf.level} is set to \code{NA} then the result will be
-\item{a}{ single numeric value} and if a \code{conf.level} is provided, a
-named numeric vector with 3 elements: \item{gini}{gini coefficient}
-\item{lci}{lower bound of the confidence interval} \item{uci}{upper
-bound of the confidence interval}
+If \code{conf.level = NA}, a single numeric value. Otherwise a named
+vector with elements \code{est}, \code{lci}, and \code{uci}.
 }
 \description{
-Compute the Gini coefficient, the most commonly used measure of inequality.
+Computes the Gini coefficient, a widely used measure of inequality,
+optionally with bootstrap confidence intervals.
 }
 \details{
-The range of the Gini coefficient goes from 0 (no concentration) to
-\eqn{\sqrt(\frac{n-1}{n})} (maximal concentration). The bias corrected Gini
-coefficient goes from 0 to 1.\cr The small sample variance properties of the
-Gini coefficient are not known, and large sample approximations to the
-variance of the coefficient are poor (Mills and Zandvakili, 1997; Glasser,
-1962; Dixon et al., 1987), therefore confidence intervals are calculated via
-bootstrap re-sampling methods (Efron and Tibshirani, 1997). \cr Two types of
-bootstrap confidence intervals are commonly used, these are percentile and
-bias-corrected (Mills and Zandvakili, 1997; Dixon et al., 1987; Efron and
-Tibshirani, 1997). The bias-corrected intervals are most appropriate for
-most applications. This is set as default for the \code{type} argument
-(\code{"bca"}). Dixon (1987) describes a refinement of the bias-corrected
-method known as 'accelerated' - this produces values very closed to
-conventional bias corrected intervals.\cr (Iain Buchan (2002)
-\emph{Calculating the Gini coefficient of inequality}, see:
-\url{https://www.statsdirect.com/help/default.htm#nonparametric_methods/gini.htm})
+The Gini coefficient ranges from 0 (perfect equality) to 1 (maximal
+inequality). For finite samples, the uncorrected estimator is biased;
+setting \code{unbiased = TRUE} applies a standard correction factor.
+
+Weights are interpreted as frequency (replication) weights, meaning that
+each observation contributes proportionally to its weight in the empirical
+distribution.
+
+Confidence intervals are obtained via bootstrap resampling using the
+\pkg{boot} package. The default interval type is bias-corrected and
+accelerated ("bca").
+
+The implementation uses a numerically stable formulation based on the Lorenz
+curve:
+
+\deqn{
+G = \frac{1}{\mu} \sum_i w_i x_i (2F_i - 1)
+}
+
+where \eqn{F_i} are midpoints of cumulative weights and \eqn{\mu} is the
+weighted mean.
 }
 \examples{
-
-# generate vector (of incomes)
-x <- c(541, 1463, 2445, 3438, 4437, 5401, 6392, 8304, 11904, 22261)
-
-# compute gini coefficient
+x <- c(10, 20, 30, 40)
 gini(x)
 
-# working with weights
-fl <- c(2.5, 7.5, 15, 35, 75, 150)    # midpoints of classes
-n  <- c(25, 13, 10, 5, 5, 2)          # frequencies
+# weighted example
+gini(c(10, 0), weights = c(2, 3))
 
-# with confidence intervals
-gini(x=fl, weights=n, conf.level=0.95, unbiased=FALSE)
+# with confidence interval
+gini(x, conf.level = 0.95, R = 499)
 
-# some special cases
-x <- c(10, 10, 0, 0, 0)
-# plot(lc(x))
-
-gini(x, unbiased=FALSE)
-
-# the same with weights
-gini(x=c(10, 0), weights=c(2,3), unbiased=FALSE)
-
-# perfect balance
-gini(c(10, 10, 10))
-
-}
-\references{
-Cowell, F. A. (2000) Measurement of Inequality in Atkinson, A.
-B. / Bourguignon, F. (Eds): \emph{Handbook of Income Distribution}.
-Amsterdam.
-
-Cowell, F. A. (1995) \emph{Measuring Inequality} Harvester Wheatshef:
-Prentice Hall.
-
-Marshall, Olkin (1979) \emph{Inequalities: Theory of Majorization and Its
-Applications}. New York: Academic Press.
-
-Glasser C. (1962) Variance formulas for the mean difference and coefficient
-of concentration. \emph{Journal of the American Statistical Association}
-57:648-654.
-
-Mills JA, Zandvakili A. (1997). Statistical inference via bootstrapping for
-measures of inequality. \emph{Journal of Applied Econometrics} 12:133-150.
-
-Dixon, PM, Weiner J., Mitchell-Olds T, Woodley R. (1987) Boot-strapping the
-gini coefficient of inequality. \emph{Ecology} 68:1548-1551.
-
-Efron B, Tibshirani R. (1997) Improvements on cross-validation: The
-bootstrap method. \emph{Journal of the American Statistical Association}
-92:548-560.
 }
 \seealso{
-See \code{\link{herfindahl}}, \code{\link{rosenbluth}} for
-concentration measures, \code{\link{lc}} for the Lorenz curve\cr
-\code{\link[ineq]{ineq}()} in the package \pkg{ineq} contains additional
-inequality measures
-
-Other topic.inequality: 
-\code{\link{Lc}},
+Other inequality: 
 \code{\link{atkinson}()},
+\code{\link{divCoef}()},
+\code{\link{entropy}()},
 \code{\link{herfindahl}()},
+\code{\link{lc}()},
+\code{\link{mutInf}()},
 \code{\link{rosenbluth}()},
+\code{\link{simpson}()},
 \code{\link{theil}()}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{Inequality}
-\concept{Lorenz Curve}
-\concept{topic.inequality}
+\concept{descriptive-statistics}
+\concept{inequality}
+\concept{inequality-measures}

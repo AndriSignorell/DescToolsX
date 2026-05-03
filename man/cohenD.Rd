@@ -63,4 +63,12 @@ in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
 }
 \seealso{
 \code{\link{glassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
+
+Other effect.size: 
+\code{\link{etaSq}()},
+\code{\link{glassDelta}()}
 }
+\concept{descriptive-statistics}
+\concept{effect-size}
+\concept{effect.size}
+\concept{hypothesis-testing}

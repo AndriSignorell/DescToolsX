@@ -95,3 +95,12 @@ Nagelkerke, N. J. D. (1991). A note on a general definition of the coefficient o
 
 Veall, M. R., & Zimmermann, K. F. (1996). Pseudo-R2 measures for some common limited dependent variable models.
 }
+\seealso{
+Other regression.utils: 
+\code{\link{auc}()},
+\code{\link{vif}()}
+}
+\concept{classification-metrics}
+\concept{descriptive-statistics}
+\concept{regression}
+\concept{regression.utils}

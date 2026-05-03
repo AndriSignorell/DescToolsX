@@ -102,6 +102,12 @@
 
 
 #' @rdname etaSq
+#' @family effect.size
+#' @concept effect-size
+#' @concept descriptive-statistics
+#' @concept hypothesis-testing
+#'
+#'
 #' @export
 etaSq <- function (x, type = 2, anova = FALSE) {
   UseMethod("etaSq")

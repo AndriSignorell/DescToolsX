@@ -4,6 +4,8 @@
 \alias{print.Desc.qq}
 \alias{plot.Desc.qq}
 \alias{desc.table}
+\alias{desc.matrix}
+\alias{desc.array}
 \alias{print.Desc.table}
 \alias{plot.Desc.table}
 \title{Describe a Contingency Table}
@@ -22,6 +24,26 @@
   ...
 )
 
+\method{desc}{matrix}(
+  x,
+  conf.level = 0.95,
+  prop = "rows",
+  main = NULL,
+  verbose = NULL,
+  plotit = NULL,
+  ...
+)
+
+\method{desc}{array}(
+  x,
+  conf.level = 0.95,
+  prop = "rows",
+  main = NULL,
+  verbose = NULL,
+  plotit = NULL,
+  ...
+)
+
 \method{print}{Desc.table}(x, print_header = TRUE, ...)
 
 \method{plot}{Desc.table}(x, which = 1, ...)
@@ -31,21 +53,26 @@
 use \code{desc(y ~ x, data)} which dispatches to this function
 automatically.}
 
+\item{digits}{number of digits for numerical output.}
+
 \item{\dots}{further arguments passed to or from other methods.}
+
+\item{which}{selects plots.}
 
 \item{conf.level}{numeric, confidence level for all confidence intervals.
 Default is \code{0.95}.}
 
-\item{prop}{character string controlling which proportions are shown in the
-cross-tabulation. One of \code{"rows"} (default), \code{"cols"},
-\code{"total"}, or \code{"no"} (frequencies only). At \code{verbose = 3}
-all three proportions are shown regardless of this argument.}
+\item{prop}{How proportions are computed in contingency tables.
+One of \code{"rows"} (default), \code{"cols"}, or \code{"all"}.
+Passed to \code{percTable()}.}
 
-\item{verbose}{integer controlling the amount of output (1, 2, or 3).
-\code{NULL} (default) falls back to
-\code{getOption("DescTools.verbose", 2)}. If set explicitly in the
-function call, that value takes priority over the global option.
-See Details for what each level produces.}
+\item{main}{main title for the plot}
+
+\item{verbose}{controls printed output.}
+
+\item{plotit}{should a plot be automatically be produced?}
+
+\item{print_header}{shoul header be printed?}
 }
 \value{
 An object of class \code{c("Desc.table", "Desc")}, invisibly.
@@ -130,7 +157,7 @@ tab2 <- tab[1:2, 1:2]
 desc(tab2)
 
 # formula interface — dispatches to desc.table internally
-desc(driver ~ class, data = d.pizza)
+desc(driver ~ area, data = d.pizza)
 
 # from a matrix
 m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),
@@ -140,18 +167,6 @@ m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),
 desc(m, verbose = 2)
 
 
-#' @export
-desc.table <- function(x, prop = "rows", verbose = NULL,
-                       abs.sty = NULL, per.sty = NULL,
-                       conf.level = 0.95, ...) {
-  
-  # resolve format styles: function arg > global option > package default
-  if (is.null(abs.sty))
-    abs.sty <- getOption("DescTools.abs.sty", default = .default_abs.sty)
-  if (is.null(per.sty))
-    per.sty <- getOption("DescTools.per.sty", default = .default_per.sty)
-  
-}
 }
 \seealso{
 \code{\link{desc}} for the generic function and formula interface,
@@ -159,8 +174,17 @@ desc.table <- function(x, prop = "rows", verbose = NULL,
 \code{\link{desc.factor}} for univariate factor descriptions,
 \code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
 \code{\link{cramerV}}, \code{\link{oddsRatio}}
+
+Other desc: 
+\code{\link{desc}()},
+\code{\link{desc.Date}()},
+\code{\link{desc.factor}()},
+\code{\link{desc.nn}},
+\code{\link{desc.nq}},
+\code{\link{desc.qn}},
+\code{\link{desc.qq}}
 }
-\concept{chi-squared cramér fisher odds-ratio relative-risk}
-\concept{contingency table cross-tabulation association measures}
-\concept{nominal ordinal tau kendall gamma somers lambda}
-\concept{plotdesc}
+\concept{data-description}
+\concept{desc}
+\concept{descriptive-statistics}
+\concept{table-manipulation}

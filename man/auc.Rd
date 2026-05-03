@@ -64,4 +64,12 @@ auc(x, y, absolute_area = TRUE)
 }
 \seealso{
 \code{\link{approx}}, \code{\link{splinefun}}, \code{\link{integrate}}
+
+Other regression.utils: 
+\code{\link{pseudoR2}()},
+\code{\link{vif}()}
 }
+\concept{classification-metrics}
+\concept{descriptive-statistics}
+\concept{regression}
+\concept{regression.utils}

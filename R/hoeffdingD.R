@@ -54,6 +54,12 @@
 #' hoeffdingD(x, y2)               # warning
 #' hoeffdingD(x, y2, jitter=TRUE) # recommended
 #'
+#' @family correlation
+#' @concept correlation
+#' @concept association-measures
+#' @concept nonparametric
+#'
+#'
 #' @export
 
 #' @export

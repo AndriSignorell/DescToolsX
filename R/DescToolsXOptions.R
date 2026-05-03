@@ -120,6 +120,10 @@
 #' 
 
 
+#' @family pkg.introspection
+#' @concept package-utilities
+#'
+#'
 #' @export
 setDescToolsXOption <- function(...) {
   opts <- list(...)

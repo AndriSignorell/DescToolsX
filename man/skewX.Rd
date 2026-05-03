@@ -101,13 +101,8 @@ kurtosis. \emph{The Statistician}, 47, 183-189.
 \code{\link{kurtX}}, \code{\link{meanX}}, \code{\link{sdX}},
 similar code in \code{library(e1071)}
 
-Other topic.dispersion: 
-\code{\link{iqrX}()},
-\code{\link{kurtX}()},
-\code{\link{madX}()},
-\code{\link{meanAD}()},
-\code{\link{rangeX}()},
-\code{\link{varX}()}
+Other shape: 
+\code{\link{kurtX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, David Meyer
@@ -115,5 +110,6 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, David Me
 }
 \concept{descriptive-statistics}
 \concept{moments}
+\concept{robust-statistics}
 \concept{shape}
 \concept{topic.dispersion}

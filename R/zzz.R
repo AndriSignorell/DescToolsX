@@ -66,6 +66,7 @@
 #'             cov2cor vcov model.extract na.pass na.omit na.exclude na.fail
 #'             optim optimise nlm aggregate logLik AIC BIC model.frame predict
 #'             glm loess cooks.distance cor.test density shapiro.test
+#'             cov deviance fitted weights
 #'             
 #' @importFrom graphics hist
 #'             abline barplot box grid layout par points rect 
@@ -77,22 +78,25 @@
 #' @importFrom utils readRegistry head tail capture.output object.size
 #'             str combn find getAnywhere lsf.str write.table
 #'             getFromNamespace stack browseURL help.search
+#'             modifyList
 #'             
 #' @importFrom bedrock `%)(%` `%[]%`  
 #'             abind combPairs maxDigits recycle setNamesX 
 #'             label naIf naReplace isZero isWholeLike 
 #'             isDichotomous `%][%` pairApply appendX sortX 
 #'             inDots revX sampleX untable Coalesce columnWrap 
-#'             splitAt moveAvg stripAttr combLevels
+#'             splitAt moveAvg stripAttr combLevels mergeArgs
+#'             printCharMatrix dummy isEuclid collapseTable
+#'             callIf resolveFormula extractArgs getDotsArg
 #'             
 #' @importFrom aurora plotFdist strAlign strTrim strTrunc 
 #'             fm style lineSep strTrim strPad plotDens2D plotBag
 #'             plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries
-#'             plotCatDist plotPropCI
+#'             plotCatDist plotPropCI alpha plotDensBox drawBand
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mhChisqTest
 #'             varTest meanCI binomCI binomDiffCI bootCI leveneTest
-#'             cochranArmitageTest bpTest             
+#'             cochranArmitageTest bpTest corCI             
 #'             
 #' @importFrom hermes newWrd
 #' 

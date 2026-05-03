@@ -23,6 +23,12 @@
 #' 
 
 
+#' @family date.utils
+#' @concept date-handling
+#' @concept data-manipulation
+#' @concept factor-handling
+#'
+#'
 #' @export
 generation <- function(year){
   

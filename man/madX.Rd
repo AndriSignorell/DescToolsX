@@ -79,16 +79,16 @@ stopifnot(identical(m1, m2))
 \code{\link{IQR}} which is simpler but less robust,
 \code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
 \code{\link{median}}, \code{\link{var}} the base R equivalents
-\cr\code{\link{madCI}} (confidence intervals).
+\cr\code{\link[lumen]{madCI}} (confidence intervals).
 
-Other topic.dispersion: 
+Other dispersion: 
+\code{\link{coefVar}()},
 \code{\link{iqrX}()},
-\code{\link{kurtX}()},
 \code{\link{meanAD}()},
+\code{\link{meanSE}()},
 \code{\link{rangeX}()},
-\code{\link{skewX}()},
 \code{\link{varX}()}
 }
 \concept{descriptive-statistics}
+\concept{dispersion}
 \concept{robust-statistics}
-\concept{topic.dispersion}

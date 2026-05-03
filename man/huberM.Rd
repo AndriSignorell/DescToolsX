@@ -90,9 +90,10 @@ Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
 \code{\link[MASS]{hubers}} (and \code{huber}) in package
 \pkg{MASS}; \code{\link{mad}}.
 
-Other topic.centralTendency: 
+Other location: 
+\code{\link{gmean}()},
+\code{\link{hmean}()},
 \code{\link{hodgesLehmann}()},
-\code{\link{meanX}()},
 \code{\link{medianX}()},
 \code{\link{modeX}()},
 \code{\link{tukeyBiweight}()}
@@ -102,5 +103,5 @@ Martin Maechler, building on the MASS code mentioned.\cr Andri
 Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} (confidence intervals and interface)
 }
 \concept{descriptive-statistics}
+\concept{location}
 \concept{robust-statistics}
-\concept{topic.centralTendency}

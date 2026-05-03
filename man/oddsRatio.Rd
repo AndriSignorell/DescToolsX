@@ -67,3 +67,19 @@ fit <- glm(vs ~ am, data = mtcars, family = binomial)
 oddsRatio(fit)
 
 }
+\seealso{
+Other assoc.nominal: 
+\code{\link{assocs}()},
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{lambda}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
+\code{\link{tschuprowT}()},
+\code{\link{uncertCoef}()},
+\code{\link{yule}}
+}
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{hypothesis-testing}

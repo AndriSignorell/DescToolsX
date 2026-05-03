@@ -47,11 +47,6 @@
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 17--24 
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept nominal-data
-#' @concept proportional-reduction-in-error
-#' 
 #' @examples
 #' 
 #' # example from Goodman Kruskal (1954)
@@ -68,6 +63,12 @@
 #' 
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 lambda <- function(x, y = NULL,  
                    conf.level = NA, 

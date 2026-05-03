@@ -16,10 +16,6 @@
 #' @seealso \code{\link{medianX}()}, \code{\link{quantileX}()},
 #' \code{\link{IQR}()}, \code{\link{quantile}()} 
 #' 
-#' @family topic.dispersion
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#' 
 #' @examples
 #' 
 #' x <- c(3.7,3.3,3.5,2.8)
@@ -29,6 +25,11 @@
 #' 
 
 
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 iqrX <- function (x, weights = NULL, na.rm = FALSE, type = 7) {
   

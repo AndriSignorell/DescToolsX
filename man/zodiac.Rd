@@ -45,9 +45,21 @@ desc(z)
 }
 \seealso{
 \code{\link{year}} and other date functions
+
+Other date.utils: 
+\code{\link{addMonths}()},
+\code{\link{as_ym}},
+\code{\link{countWorkDays}()},
+\code{\link{cutAge}()},
+\code{\link{generation}()},
+\code{\link{isDate}()},
+\code{\link{time_conversions}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code from Markus
 Naepflin
 }
+\concept{data-manipulation}
+\concept{date-handling}
+\concept{date.utils}
 \keyword{chron}

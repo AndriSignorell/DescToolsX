@@ -128,4 +128,9 @@ getOption("DescToolsX.plotit")
 }
 \seealso{
 \code{\link[aurora]{fm}}, \code{\link[aurora]{pal}}
+
+Other pkg.introspection: 
+\code{\link{concepts}}
 }
+\concept{package-utilities}
+\concept{pkg.introspection}

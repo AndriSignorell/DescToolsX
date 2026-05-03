@@ -106,6 +106,11 @@
 
 
 #' @rdname date_functions
+#' @family date.utils
+#' @concept date-handling
+#' @concept data-manipulation
+#'
+#'
 #' @export
 year <-  function(x){
   UseMethod("year")

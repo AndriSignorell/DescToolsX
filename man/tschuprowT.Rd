@@ -66,20 +66,18 @@ https://doi.org/10.1016/j.jkss.2012.10.002
 \seealso{
 \code{\link{chisq.test}}
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
+Other assoc.nominal: 
+\code{\link{assocs}()},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
-\code{\link{entropy}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
 \code{\link{lambda}()},
-\code{\link{mutInf}()},
-\code{\link{somersDelta}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
 \code{\link{uncertCoef}()},
 \code{\link{yule}}
 }
-\concept{association}
-\concept{categorical-data}
-\concept{contingency-tables}
-\concept{topic.associationMeasures}
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{table-manipulation}

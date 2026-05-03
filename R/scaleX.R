@@ -42,6 +42,12 @@
 
 
 
+#' @family transformations
+#' @concept transformation
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 scaleX <- function(x, center = TRUE, scale = TRUE){
   

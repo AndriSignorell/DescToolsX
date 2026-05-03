@@ -38,10 +38,6 @@
 #' \pkg{MASS}; \code{\link{mad}}.
 #' @references Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
 #' 
-#' @family topic.centralTendency
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#' 
 #' @examples
 #' 
 #' huberM(c(1:9, 1000))
@@ -65,6 +61,11 @@
 #' 
 
 
+#' @family location
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 huberM <- function(x, conf.level = NA, sides = c("two.sided","left","right"), 
                    method = c("wald", "boot"), 

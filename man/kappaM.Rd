@@ -91,19 +91,21 @@ scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 \seealso{
 \code{\link{cohenKappa}}
 
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{icc}()},
 \code{\link{kendallW}()},
 \code{\link{krippAlpha}()},
+\code{\link{percAgreement}()},
 \code{\link{randolphKappa}()}
 }
 \author{
 Matthias Gamer, with some modifications by Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{Interrater Agreement}
-\concept{Multi-Rater Agreement}
-\concept{Nominal Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{association-measures}
+\concept{descriptive-statistics}

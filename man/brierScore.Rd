@@ -117,4 +117,17 @@ Chapman & Hall.
 \seealso{
 \code{\link[stats]{predict}},
 \code{\link[boot]{boot}}
+
+Other error.measures: 
+\code{\link{mae}()},
+\code{\link{mape}()},
+\code{\link{mse}()},
+\code{\link{nmae}()},
+\code{\link{nmse}()},
+\code{\link{rmse}()},
+\code{\link{smape}()}
 }
+\concept{classification-metrics}
+\concept{descriptive-statistics}
+\concept{error.measures}
+\concept{prediction-accuracy}

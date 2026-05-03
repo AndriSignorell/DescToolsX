@@ -52,22 +52,21 @@ World Scientific. p. 2. ISBN 978-981-02-0985-8.
 package \pkg{entropy} which implements various estimators of
 entropy
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{lambda}()},
+Other inequality: 
+\code{\link{atkinson}()},
+\code{\link{divCoef}()},
+\code{\link{gini}()},
+\code{\link{herfindahl}()},
+\code{\link{lc}()},
 \code{\link{mutInf}()},
-\code{\link{somersDelta}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
-\code{\link{yule}}
+\code{\link{rosenbluth}()},
+\code{\link{simpson}()},
+\code{\link{theil}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{association}
+\concept{descriptive-statistics}
+\concept{inequality}
+\concept{inequality-measures}
 \concept{information-theory}
-\concept{topic.associationMeasures}

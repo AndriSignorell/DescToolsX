@@ -116,19 +116,15 @@ Newbury Park, CA: Sage, pp. 24--30
 There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{entropy}()},
+Other assoc.ordinal: 
 \code{\link{gkGamma}()},
-\code{\link{lambda}()},
-\code{\link{mutInf}()},
+\code{\link{kendallTauA}()},
+\code{\link{kendallTauB}()},
 \code{\link{somersDelta}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
-\code{\link{yule}}
+\code{\link{spearmanCor}()},
+\code{\link{stuartTauC}()}
 }
-\concept{association}
-\concept{ordinal-data}
-\concept{topic.associationMeasures}
+\concept{assoc.ordinal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{nonparametric}

@@ -27,10 +27,6 @@
 #' @seealso See also the package \pkg{Hmisc} for less coarse imputation
 #' functions.
 #' 
-#' @family topic.dataProcessing
-#' @concept data processing
-#' @concept imputation
-#' 
 #' @examples
 #' 
 #' d.frm <- data.frame(
@@ -41,6 +37,12 @@
 #' d.frm
 
 
+#' @family imputation
+#' @concept missing-data
+#' @concept data-manipulation
+#' @concept time-series
+#'
+#'
 #' @export
 locf <- function(x) {
   

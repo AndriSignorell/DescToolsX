@@ -16,10 +16,6 @@
 #' \sqrt{\frac{1}{n} \sum (ref - x)^2}
 #' }
 #'
-#' @family error metrics
-#' @concept absolute error
-#' @concept regression metrics 
-#' 
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
 #' ref <- c(3.0, 2.5, 3.0)
@@ -33,6 +29,12 @@
 #' @seealso \code{\link{mean}}, \code{\link{sqrt}}
 #'
 
+#' @family error.measures
+#' @concept prediction-accuracy
+#' @concept descriptive-statistics
+#' @concept regression
+#'
+#'
 #' @export
 rmse <- function(x, ...) {
   UseMethod("rmse")
@@ -61,3 +63,5 @@ rmse.default <- function(x, ref, na.rm = FALSE, ...) {
   
   sqrt(mse(x, ref, na.rm = na.rm, ...))
 }
+
+

@@ -78,20 +78,18 @@ Statistical Association} (Part III), 777-780.
 \seealso{
 \code{\link[bedrock]{pairApply}}
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
+Other assoc.nominal: 
+\code{\link{assocs}()},
 \code{\link{cramerV}()},
-\code{\link{entropy}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
 \code{\link{lambda}()},
-\code{\link{mutInf}()},
-\code{\link{somersDelta}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
 \code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yule}}
 }
-\concept{association}
-\concept{contingency-tables}
-\concept{nominal-data}
-\concept{topic.associationMeasures}
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{table-manipulation}

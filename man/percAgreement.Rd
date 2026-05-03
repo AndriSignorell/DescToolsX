@@ -39,3 +39,18 @@ Computes the proportion of agreement (percent agreement) along with
 design-based standard errors and confidence intervals following
 Klein and Gwet.
 }
+\seealso{
+Other assoc.agreement: 
+\code{\link{ccc}()},
+\code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
+\code{\link{icc}()},
+\code{\link{kappaM}()},
+\code{\link{kendallW}()},
+\code{\link{krippAlpha}()},
+\code{\link{randolphKappa}()}
+}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{confidence-intervals}
+\concept{descriptive-statistics}

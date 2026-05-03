@@ -42,9 +42,6 @@
 #' \code{\link[lumen]{varTest}} for tests and base R's implementations 
 #' \code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
 #' 
-#' @family topic.dispersion
-#' @concept descriptive-statistics 
-#' 
 #' @examples
 #' 
 #' varX(1:10)                 # 9.166667
@@ -71,6 +68,10 @@
 
 
 #' @rdname varX
+#' @family dispersion
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 sdX <- function (x, estimator = c("unbiased", "ML"),
                  weights = NULL, na.rm = FALSE, ...)

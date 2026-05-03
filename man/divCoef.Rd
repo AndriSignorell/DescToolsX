@@ -42,3 +42,18 @@ divCoef(df, d)
 divCoef(df, d, normalize = TRUE)
 
 }
+\seealso{
+Other inequality: 
+\code{\link{atkinson}()},
+\code{\link{entropy}()},
+\code{\link{gini}()},
+\code{\link{herfindahl}()},
+\code{\link{lc}()},
+\code{\link{mutInf}()},
+\code{\link{rosenbluth}()},
+\code{\link{simpson}()},
+\code{\link{theil}()}
+}
+\concept{descriptive-statistics}
+\concept{inequality}
+\concept{inequality-measures}

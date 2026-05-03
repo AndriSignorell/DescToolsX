@@ -67,11 +67,6 @@
 #' 
 #' Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409-416.
 #' 
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Rank Agreement
-#' @concept Ordinal Agreement
-#' 
 #' @examples
 #' 
 #' anxiety <- data.frame(rater1=c(3,3,3,4,5,5,2,3,5,2,2,6,1,5,2,2,1,2,4,3),
@@ -104,6 +99,12 @@
 #' 
 
 
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept association-measures
+#' @concept nonparametric
+#'
+#'
 #' @export
 kendallW <- function(x, correct=FALSE, test=FALSE, na.rm=NULL) {
   

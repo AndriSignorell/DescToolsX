@@ -100,9 +100,24 @@ Gerritsen, A (2010)
 }
 \seealso{
 \code{\link{oddsRatio}}
+
+Other assoc.nominal: 
+\code{\link{assocs}()},
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{lambda}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{tschuprowT}()},
+\code{\link{uncertCoef}()},
+\code{\link{yule}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code of Yongyi Min
 and Michael Dewey
 }
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{hypothesis-testing}
 \keyword{multivariate}

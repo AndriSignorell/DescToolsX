@@ -31,11 +31,6 @@
 #' @references Cohen, J. (1960), A coefficient of agreement for nominal scales.
 #' \emph{Educational and Psychological Measurement}, 20, 37-46.
 #' 
-#' @family topic.internalConsistency
-#' @concept Reliability
-#' @concept Internal Consistency
-#' @concept Scale Reliability
-#' 
 #' @examples
 #' 
 #' set.seed(1234)
@@ -66,6 +61,12 @@
 #' }
 #' 
 
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept descriptive-statistics
+#' @concept reliability
+#'
+#'
 #' @export
 cronbachAlpha <- function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
   

@@ -53,11 +53,24 @@ suitable defaults.
 }
 \examples{
 
-desc(cutAge(sample(100, 100)))
+desc(cutAge(sample(0:100, size=100, replace=TRUE)))
 }
 \seealso{
 \code{\link{cut}}, \code{\link{seq}}
+
+Other date.utils: 
+\code{\link{addMonths}()},
+\code{\link{as_ym}},
+\code{\link{countWorkDays}()},
+\code{\link{generation}()},
+\code{\link{isDate}()},
+\code{\link{time_conversions}},
+\code{\link{zodiac}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{data-manipulation}
+\concept{date-handling}
+\concept{date.utils}
+\concept{factor-handling}

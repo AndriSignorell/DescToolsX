@@ -72,10 +72,18 @@ table(deciles) # note that there are only 5 groups (not 10)
 }
 \seealso{
 \code{\link{cut}}, \code{\link{quantile}}
+
+Other quantiles: 
+\code{\link{extremes}},
+\code{\link{quantileX}()}
 }
 \author{
 Gregory R. Warnes \href{mailto:greg@warnes.net}{greg@warnes.net}, some slight modifications
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{data-manipulation}
+\concept{descriptive-statistics}
+\concept{factor-handling}
+\concept{quantiles}
 \keyword{manip}
 \keyword{univar}

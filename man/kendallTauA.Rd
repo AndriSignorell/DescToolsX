@@ -89,17 +89,18 @@ Newbury Park, CA: Sage, pp. 49-56
 \seealso{
 \code{\link{Association}}
 
-Other topic.correlation: 
+Other assoc.ordinal: 
+\code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{kendallTauB}()},
-\code{\link{pearsonCor}()},
+\code{\link{somersDelta}()},
 \code{\link{spearmanCor}()},
 \code{\link{stuartTauC}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{association}
+\concept{assoc.ordinal}
+\concept{association-measures}
+\concept{descriptive-statistics}
 \concept{nonparametric}
-\concept{ordinal-data}
-\concept{rank-methods}
-\concept{topic.correlation}

@@ -65,12 +65,12 @@ rangeX(x)
 \seealso{
 \code{\link{range}}, \code{\link{min}}, \code{\link{max}}
 
-Other topic.dispersion: 
+Other dispersion: 
+\code{\link{coefVar}()},
 \code{\link{iqrX}()},
-\code{\link{kurtX}()},
 \code{\link{madX}()},
 \code{\link{meanAD}()},
-\code{\link{skewX}()},
+\code{\link{meanSE}()},
 \code{\link{varX}()}
 }
 \author{
@@ -78,4 +78,5 @@ Werner Stahel, ETH Zurich (robust range)\cr Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{descriptive-statistics}
-\concept{topic.dispersion}
+\concept{dispersion}
+\concept{robust-statistics}

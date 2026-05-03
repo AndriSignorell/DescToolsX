@@ -76,12 +76,18 @@
 #' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 #' conf(m)
 #'
+#' @family confusion
+#' @concept classification-metrics
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 conf <- function(x, ...) UseMethod("conf")
 
 
 
-# ── conf.table ────────────────────────────────────────────────────────────────
+# -- conf.table ---------------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -94,7 +100,7 @@ conf.table <- function(x, pos = NULL, ...) {
   if (!identical(rownames(x), colnames(x)))
     stop("rownames(x) and colnames(x) must be identical")
   
-  # ── positive class ──────────────────────────────────────────────────────────
+  # -- positive class -----------------------------------------------------------
   if (nrow(x) != 2L) {
     pos <- NULL   # pos only meaningful for binary
   } else {
@@ -106,7 +112,7 @@ conf.table <- function(x, pos = NULL, ...) {
     x   <- as.table(x[ord, ord])
   }
   
-  # ── overall statistics ──────────────────────────────────────────────────────
+  # -- overall statistics -----------------------------------------------------------
   diag_n <- sum(diag(x))
   n      <- sum(x)
   
@@ -130,7 +136,7 @@ conf.table <- function(x, pos = NULL, ...) {
     mcnemar.pval = tryCatch(mcnemar.test(x)$p.value, error = function(e) NA_real_)
   )
   
-  # ── class-wise statistics ───────────────────────────────────────────────────
+  # -- class-wise statistics -----------------------------------------------------------
   lst <- vector("list", nrow(x))
   
   for (i in seq_len(nrow(x))) {
@@ -170,7 +176,7 @@ conf.table <- function(x, pos = NULL, ...) {
 }
 
 
-# ── conf.default ──────────────────────────────────────────────────────────────
+# -- conf.default -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -187,7 +193,7 @@ conf.default <- function(x, ref, pos = NULL, na.rm = TRUE, ...) {
 }
 
 
-# ── conf.matrix ───────────────────────────────────────────────────────────────
+# -- conf.matrix -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -196,7 +202,7 @@ conf.matrix <- function(x, pos = NULL, ...) {
 }
 
 
-# ── conf.rpart ────────────────────────────────────────────────────────────────
+# -- conf.rpart -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -207,20 +213,20 @@ conf.rpart <- function(x, ...) {
 }
 
 
-# ── conf.multinom ─────────────────────────────────────────────────────────────
+# -- conf.multinom -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
 conf.multinom <- function(x, ...) {
   if (is.null(x$model))
-    stop("'x' does not contain model frame — refit with model = TRUE")
+    stop("'x' does not contain model frame - refit with model = TRUE")
   resp <- model.extract(x$model, "response")
   pred <- predict(x, type = "class")
   conf(x = pred, ref = resp, ...)
 }
 
 
-# ── conf.glm ──────────────────────────────────────────────────────────────────
+# -- conf.glm -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -230,7 +236,7 @@ conf.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
   lvl  <- if (is.factor(resp)) levels(resp) else levels(factor(resp))
   
   if (length(lvl) != 2L)
-    stop("conf.glm requires a binary response — use conf.multinom() for multiclass")
+    stop("conf.glm requires a binary response - use conf.multinom() for multiclass")
   
   prob <- predict(x, type = "response")
   pred <- lvl[(prob > cutoff) + 1L]
@@ -241,7 +247,7 @@ conf.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
 }
 
 
-# ── conf.randomForest ─────────────────────────────────────────────────────────
+# -- conf.randomForest -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -250,7 +256,7 @@ conf.randomForest <- function(x, ...) {
 }
 
 
-# ── conf.svm ──────────────────────────────────────────────────────────────────
+# -- conf.svm -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -260,7 +266,7 @@ conf.svm <- function(x, ...) {
 }
 
 
-# ── conf.lda ──────────────────────────────────────────────────────────────────
+# -- conf.lda -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -270,7 +276,7 @@ conf.lda <- function(x, ...) {
 }
 
 
-# ── conf.qda ──────────────────────────────────────────────────────────────────
+# -- conf.qda -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -280,7 +286,7 @@ conf.qda <- function(x, ...) {
 }
 
 
-# ── print.Conf ────────────────────────────────────────────────────────────────
+# -- print.Conf -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -335,7 +341,7 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 }
 
 
-# ── plot.Conf ─────────────────────────────────────────────────────────────────
+# -- plot.conf -----------------------------------------------------------
 
 #' @rdname conf
 #' @export
@@ -344,7 +350,7 @@ plot.Conf <- function(x, main = "Confusion Matrix", ...) {
 }
 
 
-# ── Convenience extractors ────────────────────────────────────────────────────
+# -- Convenience extractors -----------------------------------------------------------
 
 #' Extract Sensitivity from a Confusion Matrix
 #'
@@ -368,7 +374,7 @@ spec <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
 # == internal helper functions==================================================
 
 
-# Safe division — returns NA instead of NaN/Inf when denominator is 0
+# Safe division - returns NA instead of NaN/Inf when denominator is 0
 .safeDiv <- function(a, b) ifelse(b == 0, NA_real_, a / b)
 
 

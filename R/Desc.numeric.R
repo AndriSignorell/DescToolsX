@@ -71,6 +71,11 @@
 
 #' @rdname desc
 #' @method desc numeric
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
                          include_x = TRUE, 

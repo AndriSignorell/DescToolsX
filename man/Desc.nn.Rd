@@ -2,10 +2,13 @@
 % Please edit documentation in R/desc.nn.R
 \name{desc.nn}
 \alias{desc.nn}
+\alias{.desc_nn}
 \alias{print.Desc.nn}
 \alias{plot.Desc.nn}
 \title{Describe a Numeric-Numeric Relationship}
 \usage{
+.desc_nn(x, y, conf.level = 0.95)
+
 \method{print}{Desc.nn}(x, verbose = NULL, abs.sty = NULL, per.sty = NULL, ...)
 
 \method{plot}{Desc.nn}(x, which = 1, verbose = NULL, ...)
@@ -27,6 +30,10 @@
 
 \item{which}{integer vector selecting which plots to draw. See Details.
 \code{NULL} (default) selects plots automatically based on \code{verbose}.}
+
+\item{y}{A categorical variable (factor or coercible to factor).}
+
+\item{conf.level}{Confidence level for interval estimates (default 0.95).}
 }
 \value{
 Both functions return \code{x} invisibly.
@@ -107,11 +114,20 @@ heteroscedasticity and random coefficient variation.
 }
 \seealso{
 \code{\link{desc}} for the generic entry point,
-\code{\link{print.Desc.nq}} for numeric ~ categorical,
-\code{\link{print.Desc.qn}} for categorical ~ numeric,
-\code{\link{print.Desc.qq}} for categorical ~ categorical,
-\code{\link{corCI}}, \code{\link[lumen]{bpTest}},
+\code{\link{desc.nq}} for numeric ~ categorical,
+\code{\link{desc.qn}} for categorical ~ numeric,
+\code{\link{desc.qq}} for categorical ~ categorical,
+\code{\link[lumen]{corCI}}, \code{\link[lumen]{bpTest}},
 \code{\link[stats]{lm}}, \code{\link[stats]{cor.test}}
+
+Other desc: 
+\code{\link{desc}()},
+\code{\link{desc.Date}()},
+\code{\link{desc.factor}()},
+\code{\link{desc.nq}},
+\code{\link{desc.qn}},
+\code{\link{desc.qq}},
+\code{\link{print.Desc.qq}()}
 }
 \concept{bivariate numeric regression correlation scatterplot}
 \concept{desc}

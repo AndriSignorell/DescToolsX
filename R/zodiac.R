@@ -35,6 +35,11 @@
 #' 
 
 
+#' @family date.utils
+#' @concept date-handling
+#' @concept data-manipulation
+#'
+#'
 #' @export
 zodiac <- function(x, lang = c("en","de"), stringsAsFactors = TRUE) {
   

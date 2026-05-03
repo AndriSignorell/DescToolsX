@@ -18,6 +18,12 @@
 #' oddsRatio(fit)
 #'
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept hypothesis-testing
+#'
+#'
 #' @export
 oddsRatio <- function (x, ...) {
   UseMethod("oddsRatio")

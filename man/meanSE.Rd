@@ -37,8 +37,19 @@ sapply(d.pizza[,1:4], meanSE, na.rm=TRUE)
 }
 \seealso{
 \code{\link[lumen]{meanCI}}
+
+Other dispersion: 
+\code{\link{coefVar}()},
+\code{\link{iqrX}()},
+\code{\link{madX}()},
+\code{\link{meanAD}()},
+\code{\link{rangeX}()},
+\code{\link{varX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{confidence-intervals}
+\concept{descriptive-statistics}
+\concept{dispersion}
 \keyword{univar}

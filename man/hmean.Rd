@@ -77,5 +77,16 @@ ed. Ames, \emph{IA: Iowa State University Press }
 }
 \seealso{
 \code{\link{meanX}}, \code{\link{gmean}}
+
+Other location: 
+\code{\link{gmean}()},
+\code{\link{hodgesLehmann}()},
+\code{\link{huberM}()},
+\code{\link{medianX}()},
+\code{\link{modeX}()},
+\code{\link{tukeyBiweight}()}
 }
+\concept{confidence-intervals}
+\concept{descriptive-statistics}
+\concept{location}
 \keyword{arith}

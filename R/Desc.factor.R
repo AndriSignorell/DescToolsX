@@ -58,13 +58,19 @@
 #' character vectors) are by default ordered by their descending frequencies,
 #' ordered factors by their natural order.
 #' 
-#' @seealso \code{\link[aurora]{plot.Desc.factor}} for graphical display
+#' @seealso \code{\link[aurora]{plotCatDist}} for graphical display
 #' 
 
 
 
 #' @rdname desc.factor
 #' @method desc factor
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#' @concept factor-handling
+#'
+#'
 #' @export
 desc.factor <- function(x, maxrows = NULL, ord=NULL, 
                         main = NULL, verbose = NULL, plotit = NULL,
@@ -174,8 +180,10 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 
 
 
-# no export here, all code in aurora 
-# #' @rdname desc.factor
-# #' @export
-# plot.Desc.factor <- aurora::plot.Desc.factor
+
+#' @rdname desc
+#' @export
+plot.Desc.factor <- function(x, ...){
+  aurora::plotCatDist(as.table(x$freq[,2]), na.rm=TRUE, ...)
+}
 

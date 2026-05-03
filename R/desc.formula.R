@@ -1,5 +1,7 @@
 
 
+#' @inheritParams Formulas
+
 #' @rdname desc
 #' @method desc formula
 #' @export

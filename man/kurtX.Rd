@@ -102,19 +102,13 @@ kurtosis. \emph{The Statistician}, 47, 183-189.
 \code{\link{skewX}}, \code{\link{meanX}}, \code{\link{sdX}}, similar code in
 \code{library(e1071)}
 
-Other topic.dispersion: 
-\code{\link{iqrX}()},
-\code{\link{madX}()},
-\code{\link{meanAD}()},
-\code{\link{rangeX}()},
-\code{\link{skewX}()},
-\code{\link{varX}()}
+Other shape: 
+\code{\link{skewX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, David Meyer
 \href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org} (method = 3)
 }
 \concept{descriptive-statistics}
-\concept{moments}
+\concept{robust-statistics}
 \concept{shape}
-\concept{topic.dispersion}

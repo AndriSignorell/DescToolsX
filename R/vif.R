@@ -36,6 +36,11 @@
 #' vif(mod)
 #'
 
+#' @family regression.utils
+#' @concept regression
+#' @concept data-inspection
+#'
+#'
 #' @export
 vif <- function(mod) {
   

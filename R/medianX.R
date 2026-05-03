@@ -50,10 +50,6 @@
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
 #' 
-#' @family topic.centralTendency
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#' 
 #' @examples
 #' 
 #' medianX(1:4)                # = 2.5 [even number]
@@ -95,6 +91,11 @@
 
 
 #' @rdname medianX
+#' @family location
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 medianX <- function(x, ...)
   UseMethod("medianX")

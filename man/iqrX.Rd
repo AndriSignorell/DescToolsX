@@ -35,17 +35,17 @@ iqrX(x=x, weights=w)
 \code{\link{medianX}()}, \code{\link{quantileX}()},
 \code{\link{IQR}()}, \code{\link{quantile}()}
 
-Other topic.dispersion: 
-\code{\link{kurtX}()},
+Other dispersion: 
+\code{\link{coefVar}()},
 \code{\link{madX}()},
 \code{\link{meanAD}()},
+\code{\link{meanSE}()},
 \code{\link{rangeX}()},
-\code{\link{skewX}()},
 \code{\link{varX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{descriptive-statistics}
+\concept{dispersion}
 \concept{robust-statistics}
-\concept{topic.dispersion}

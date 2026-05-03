@@ -42,11 +42,6 @@
 #' Randolph, J. J. (2005). Free-Marginal Multirater Kappa (multirater \eqn{\kappa_{\mathrm{free}}}):
 #' An Alternative to Fleiss’ Fixed-Marginal Multirater Kappa. Online submission.
 #'
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Multi-Rater Agreement
-#' @concept Nominal Agreement
-#'
 #' @examples
 #' ## Matrix (subjects x raters), 5 subjects, 3 raters
 #' x <- matrix(c(
@@ -70,6 +65,12 @@
 
 
 #' @rdname randolphKappa
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept association-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 randolphKappa <- function(x, conf.level = NA, ...) {
 

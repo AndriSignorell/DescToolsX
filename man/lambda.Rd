@@ -94,15 +94,13 @@ Newbury Park, CA: Sage, pp. 17--24
 \seealso{
 \code{\link{Association}}
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
+Other assoc.nominal: 
+\code{\link{assocs}()},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
-\code{\link{entropy}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{mutInf}()},
-\code{\link{somersDelta}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
 \code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yule}}
@@ -112,7 +110,7 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} based on 
 Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}, \cr Nanina Anderegg (confidence interval
 symmetric lambda)
 }
-\concept{association}
-\concept{nominal-data}
-\concept{proportional-reduction-in-error}
-\concept{topic.associationMeasures}
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{table-manipulation}

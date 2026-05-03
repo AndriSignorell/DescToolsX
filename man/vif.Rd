@@ -43,3 +43,11 @@ mod <- lm(mpg ~ wt + cyl, data = mtcars)
 vif(mod)
 
 }
+\seealso{
+Other regression.utils: 
+\code{\link{auc}()},
+\code{\link{pseudoR2}()}
+}
+\concept{data-inspection}
+\concept{regression}
+\concept{regression.utils}

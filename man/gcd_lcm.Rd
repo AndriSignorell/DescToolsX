@@ -47,11 +47,12 @@ LCM(2*3, 3*5, 5*7)
 
 }
 \seealso{
-Other topic.numberTheory: 
+Other math.utils: 
 \code{\link{divisors}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{number theory}
-\concept{topic.numberTheory}
+\concept{math.utils}
+\concept{mathematics}
+\concept{number-theory}

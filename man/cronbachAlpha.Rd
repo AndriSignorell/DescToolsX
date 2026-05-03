@@ -72,12 +72,22 @@ Cohen, J. (1960), A coefficient of agreement for nominal scales.
 }
 \seealso{
 \code{\link{cohenKappa}}, \code{\link{kappaM}}
+
+Other assoc.agreement: 
+\code{\link{ccc}()},
+\code{\link{cohenKappa}()},
+\code{\link{icc}()},
+\code{\link{kappaM}()},
+\code{\link{kendallW}()},
+\code{\link{krippAlpha}()},
+\code{\link{percAgreement}()},
+\code{\link{randolphKappa}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code of Harold C.
 Doran
 }
-\concept{Internal Consistency}
-\concept{Reliability}
-\concept{Scale Reliability}
-\concept{topic.internalConsistency}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{descriptive-statistics}
+\concept{reliability}

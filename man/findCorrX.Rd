@@ -66,3 +66,13 @@ findCorrX(cmat, cutoff = 0.8)
 findCorrX(cmat, cutoff = 0.8, method = "max", return = "names")
 
 }
+\seealso{
+Other correlation: 
+\code{\link{corPart}()},
+\code{\link{corPolychor}()},
+\code{\link{hoeffdingD}()},
+\code{\link{pearsonCor}()}
+}
+\concept{correlation}
+\concept{data-inspection}
+\concept{regression}

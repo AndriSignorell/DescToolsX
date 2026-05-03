@@ -59,3 +59,13 @@ r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
 cStat(r.mod, conf.level=0.95)
 
 }
+\seealso{
+Other confusion: 
+\code{\link{conf}()},
+\code{\link{isConfusionTable}()},
+\code{\link{normalizeToConfusion}()}
+}
+\concept{classification-metrics}
+\concept{confusion}
+\concept{descriptive-statistics}
+\concept{prediction-accuracy}

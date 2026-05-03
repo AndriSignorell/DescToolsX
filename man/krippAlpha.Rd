@@ -96,16 +96,17 @@ Sage Publications.
 \seealso{
 \code{\link[lumen]{bootCI}}
 
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
+\code{\link{percAgreement}()},
 \code{\link{randolphKappa}()}
 }
-\concept{Interrater Agreement}
-\concept{Metric Agreement}
-\concept{Nominal Agreement}
-\concept{Ordinal Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{descriptive-statistics}
+\concept{reliability}

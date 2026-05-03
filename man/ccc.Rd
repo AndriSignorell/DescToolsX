@@ -137,17 +137,20 @@ University Press.
 \seealso{
 \code{\link{icc}}, \code{\link{kendallW}}
 
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
 \code{\link{krippAlpha}()},
+\code{\link{percAgreement}()},
 \code{\link{randolphKappa}()}
 }
 \author{
 Mark Stevenson \href{mailto:mark.stevenson1@unimelb.edu.au}{mark.stevenson1@unimelb.edu.au}
 }
-\concept{Interrater Agreement}
-\concept{Metric Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{correlation}
+\concept{descriptive-statistics}

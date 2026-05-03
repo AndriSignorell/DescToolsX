@@ -11,6 +11,19 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// assoc_revo_cpp
+Rcpp::NumericVector assoc_revo_cpp(Rcpp::NumericVector xR, Rcpp::NumericVector yR, double conf_level);
+RcppExport SEXP _DescToolsX_assoc_revo_cpp(SEXP xRSEXP, SEXP yRSEXP, SEXP conf_levelSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type xR(xRSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type yR(yRSEXP);
+    Rcpp::traits::input_parameter< double >::type conf_level(conf_levelSEXP);
+    rcpp_result_gen = Rcpp::wrap(assoc_revo_cpp(xR, yR, conf_level));
+    return rcpp_result_gen;
+END_RCPP
+}
 // brier_boot_cpp
 arma::vec brier_boot_cpp(const arma::vec& resp, const arma::vec& pred, int R, bool scaled);
 RcppExport SEXP _DescToolsX_brier_boot_cpp(SEXP respSEXP, SEXP predSEXP, SEXP RSEXP, SEXP scaledSEXP) {
@@ -25,21 +38,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// coef_bootstrap_parallel_cpp
-NumericMatrix coef_bootstrap_parallel_cpp(NumericMatrix X, NumericVector y, int B, double alpha, int seed);
-RcppExport SEXP _DescToolsX_coef_bootstrap_parallel_cpp(SEXP XSEXP, SEXP ySEXP, SEXP BSEXP, SEXP alphaSEXP, SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    Rcpp::traits::input_parameter< int >::type B(BSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(coef_bootstrap_parallel_cpp(X, y, B, alpha, seed));
-    return rcpp_result_gen;
-END_RCPP
-}
 // conDisPairsTab
 List conDisPairsTab(IntegerMatrix x);
 RcppExport SEXP _DescToolsX_conDisPairsTab(SEXP xSEXP) {
@@ -48,6 +46,18 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< IntegerMatrix >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(conDisPairsTab(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// conDisPairsXY_ind_cpp
+NumericVector conDisPairsXY_ind_cpp(NumericVector xR, NumericVector yR);
+RcppExport SEXP _DescToolsX_conDisPairsXY_ind_cpp(SEXP xRSEXP, SEXP yRSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type xR(xRSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type yR(yRSEXP);
+    rcpp_result_gen = Rcpp::wrap(conDisPairsXY_ind_cpp(xR, yR));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -66,15 +76,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// conDisPairsXY_ind_cpp
-NumericVector conDisPairsXY_ind_cpp(NumericVector xR, NumericVector yR);
-RcppExport SEXP _DescToolsX_conDisPairsXY_ind_cpp(SEXP xRSEXP, SEXP yRSEXP) {
+// conDisPairsXY_indexed_full
+Rcpp::NumericVector conDisPairsXY_indexed_full(Rcpp::NumericVector xR, Rcpp::NumericVector yR);
+RcppExport SEXP _DescToolsX_conDisPairsXY_indexed_full(SEXP xRSEXP, SEXP yRSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type xR(xRSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type yR(yRSEXP);
-    rcpp_result_gen = Rcpp::wrap(conDisPairsXY_ind_cpp(xR, yR));
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type xR(xRSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type yR(yRSEXP);
+    rcpp_result_gen = Rcpp::wrap(conDisPairsXY_indexed_full(xR, yR));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -357,22 +367,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rsq_bootstrap_parallel_cpp
-NumericVector rsq_bootstrap_parallel_cpp(NumericMatrix X, NumericVector y, int B, double alpha, bool adjusted, int seed);
-RcppExport SEXP _DescToolsX_rsq_bootstrap_parallel_cpp(SEXP XSEXP, SEXP ySEXP, SEXP BSEXP, SEXP alphaSEXP, SEXP adjustedSEXP, SEXP seedSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    Rcpp::traits::input_parameter< int >::type B(BSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< bool >::type adjusted(adjustedSEXP);
-    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(rsq_bootstrap_parallel_cpp(X, y, B, alpha, adjusted, seed));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rskew_cpp
 double rskew_cpp(NumericVector x, double mean);
 RcppExport SEXP _DescToolsX_rskew_cpp(SEXP xSEXP, SEXP meanSEXP) {
@@ -461,11 +455,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_DescToolsX_assoc_revo_cpp", (DL_FUNC) &_DescToolsX_assoc_revo_cpp, 3},
     {"_DescToolsX_brier_boot_cpp", (DL_FUNC) &_DescToolsX_brier_boot_cpp, 4},
-    {"_DescToolsX_coef_bootstrap_parallel_cpp", (DL_FUNC) &_DescToolsX_coef_bootstrap_parallel_cpp, 5},
     {"_DescToolsX_conDisPairsTab", (DL_FUNC) &_DescToolsX_conDisPairsTab, 1},
-    {"_DescToolsX_cstat_bootstrap_parallel_cpp", (DL_FUNC) &_DescToolsX_cstat_bootstrap_parallel_cpp, 5},
     {"_DescToolsX_conDisPairsXY_ind_cpp", (DL_FUNC) &_DescToolsX_conDisPairsXY_ind_cpp, 2},
+    {"_DescToolsX_cstat_bootstrap_parallel_cpp", (DL_FUNC) &_DescToolsX_cstat_bootstrap_parallel_cpp, 5},
+    {"_DescToolsX_conDisPairsXY_indexed_full", (DL_FUNC) &_DescToolsX_conDisPairsXY_indexed_full, 2},
     {"_DescToolsX_bootstrap_contcoef_table_bca_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_bca_cpp, 5},
     {"_DescToolsX_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_cpp, 2},
     {"_DescToolsX_bootstrap_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_cpp, 4},
@@ -490,7 +485,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_hl2qest", (DL_FUNC) &_DescToolsX_hl2qest, 2},
     {"_DescToolsX_hoeffdingD_cpp", (DL_FUNC) &_DescToolsX_hoeffdingD_cpp, 1},
     {"_DescToolsX_n_pow_sum", (DL_FUNC) &_DescToolsX_n_pow_sum, 1},
-    {"_DescToolsX_rsq_bootstrap_parallel_cpp", (DL_FUNC) &_DescToolsX_rsq_bootstrap_parallel_cpp, 6},
     {"_DescToolsX_rskew_cpp", (DL_FUNC) &_DescToolsX_rskew_cpp, 2},
     {"_DescToolsX_rskeww_cpp", (DL_FUNC) &_DescToolsX_rskeww_cpp, 3},
     {"_DescToolsX_rkurt_cpp", (DL_FUNC) &_DescToolsX_rkurt_cpp, 2},

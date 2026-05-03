@@ -108,12 +108,14 @@ Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the 
 \code{\link{cronbachAlpha}}, \code{\link{icc}},
 \code{\link[stats]{friedman.test}}
 
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{krippAlpha}()},
+\code{\link{percAgreement}()},
 \code{\link{randolphKappa}()}
 }
 \author{
@@ -121,7 +123,7 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}\cr
 based on code by Matthias Gamer \href{mailto:m.gamer@uke.uni-hamburg.de}{m.gamer@uke.uni-hamburg.de}\cr
 and Markus Brueckl \href{mailto:markus.brueckl@tu-berlin.de}{markus.brueckl@tu-berlin.de}
 }
-\concept{Interrater Agreement}
-\concept{Ordinal Agreement}
-\concept{Rank Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{association-measures}
+\concept{nonparametric}

@@ -26,6 +26,11 @@
 #' 
 
 
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept confidence-intervals
+#'
+#'
 #' @export
 meanSE <- function(x, sd = NULL, na.rm = FALSE) {
   # standard error of mean

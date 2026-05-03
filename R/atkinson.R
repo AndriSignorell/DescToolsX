@@ -33,16 +33,16 @@
 #' If negative values or missing values (when \code{na.rm = FALSE})
 #' are present, \code{NA} is returned.
 #'
-#' @family topic.inequality
-#' @concept Inequality
-#' @concept Atkinson Index
-#' @concept Welfare-Based Measure
-#'
 #' @references
 #' Atkinson, A. B. (1970). On the measurement of inequality.
 #' Journal of Economic Theory.
 #'
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5, na.rm = FALSE) {
   

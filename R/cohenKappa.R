@@ -63,10 +63,6 @@
 #' Reliability of Scoring EEG Sleep Recordings \emph{American Journal of EEG
 #' Technology}, 11, 101-109.
 #' 
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Nominal Agreement
-#' 
 #' @examples
 #' 
 #' 
@@ -147,6 +143,12 @@
 
 
 
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept association-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 cohenKappa <- function (x, y = NULL, 
                         weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"), 

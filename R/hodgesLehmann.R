@@ -44,10 +44,6 @@
 #' Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 #' 10, No. 3, pp. 265-270
 #' 
-#' @family topic.centralTendency
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#' 
 #' @examples
 #' 
 #' set.seed(1)
@@ -63,6 +59,12 @@
 
 
 
+#' @family location
+#' @concept descriptive-statistics
+#' @concept nonparametric
+#' @concept robust-statistics
+#'
+#'
 #' @export
 hodgesLehmann <- function(x, y = NULL, conf.level = NA, sides = c("two.sided","left","right"), 
                           method = c("boot"), na.rm = FALSE, ...) {

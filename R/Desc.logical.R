@@ -35,11 +35,16 @@
 #' 
 #' @param ord  order of the levels
 #' 
-#' @seealso \code{\link[aurora]{plot.Desc.logical}} for graphical display
+#' @seealso \code{\link[aurora]{plotPropCI}} for graphical display
 
 
 #' @rdname desc
 #' @method desc logical
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 desc.logical <- function(x, ord = "level", conf.level = 0.95, 
                          main = NULL, verbose = NULL, plotit = NULL,
@@ -178,7 +183,13 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
 }
 
 
-# Note:
-# plot.Desc.logical is part of aurora
+
+
+#' @rdname desc
+#' @export
+plot.Desc.logical <- function(x, ...){
+  aurora::plotPropCI(x$x, na.rm=TRUE, ...)
+}
+
 
 

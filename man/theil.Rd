@@ -45,14 +45,18 @@ are present, \code{NA} is returned.
 Theil, H. (1967). Economics and Information Theory.
 }
 \seealso{
-Other topic.inequality: 
-\code{\link{Lc}},
+Other inequality: 
 \code{\link{atkinson}()},
+\code{\link{divCoef}()},
+\code{\link{entropy}()},
 \code{\link{gini}()},
 \code{\link{herfindahl}()},
-\code{\link{rosenbluth}()}
+\code{\link{lc}()},
+\code{\link{mutInf}()},
+\code{\link{rosenbluth}()},
+\code{\link{simpson}()}
 }
-\concept{Entropy Measure}
-\concept{Inequality}
-\concept{Theil Index}
-\concept{topic.inequality}
+\concept{descriptive-statistics}
+\concept{inequality}
+\concept{inequality-measures}
+\concept{information-theory}

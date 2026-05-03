@@ -41,6 +41,12 @@
 #'
 
 
+#' @family regression.utils
+#' @concept regression
+#' @concept classification-metrics
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
                 method=c("trapezoid", "step", "spline"), absolute_area = FALSE,

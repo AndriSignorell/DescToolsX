@@ -50,6 +50,12 @@
 
 
 
+#' @family correlation
+#' @concept correlation
+#' @concept data-inspection
+#' @concept regression
+#'
+#'
 #' @export
 findCorrX <- function(x,
                       cutoff = 0.9,
@@ -151,3 +157,5 @@ findCorrX <- function(x,
   
   return(out)
 }
+
+

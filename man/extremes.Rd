@@ -83,9 +83,16 @@ cat(highLow(d.pizza$temperature, na.last=NA))
 \seealso{
 \code{\link{max}}, \code{\link{min}}, \code{\link{sort}},
 \code{\link{rank}}
+
+Other quantiles: 
+\code{\link{cutQ}()},
+\code{\link{quantileX}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}\cr C++ parts by Nathan
 Russell and Romain Francois
 }
+\concept{descriptive-statistics}
+\concept{quantiles}
+\concept{vector-manipulation}
 \keyword{arith}

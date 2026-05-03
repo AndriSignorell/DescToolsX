@@ -65,17 +65,21 @@ Hirschman, A. O. (1964). The paternity of an index.
 \seealso{
 See \code{\link{gini}}, \code{\link{atkinson}} and
 
-Other topic.inequality: 
-\code{\link{Lc}},
+Other inequality: 
 \code{\link{atkinson}()},
+\code{\link{divCoef}()},
+\code{\link{entropy}()},
 \code{\link{gini}()},
+\code{\link{lc}()},
+\code{\link{mutInf}()},
 \code{\link{rosenbluth}()},
+\code{\link{simpson}()},
 \code{\link{theil}()}
 }
 \author{
 originally based on code of Achim Zeileis \href{mailto:achim.zeileis@r-project.org}{achim.zeileis@r-project.org},
 rewritten by Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{Concentration Measure}
-\concept{Inequality}
-\concept{topic.inequality}
+\concept{descriptive-statistics}
+\concept{inequality}
+\concept{inequality-measures}

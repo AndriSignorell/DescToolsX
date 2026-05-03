@@ -95,6 +95,12 @@
 #' 
 #' 
 #' @keywords internal
+#' @family confusion
+#' @concept classification-metrics
+#' @concept data-manipulation
+#' @concept table-manipulation
+#'
+#'
 #' @export
 normalizeToConfusion <- function(
     x, y = NULL, levels = NULL, useNA = "no") {

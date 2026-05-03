@@ -38,6 +38,12 @@
 #' @seealso \code{\link{cohenD}}
 #'
 
+#' @family effect.size
+#' @concept effect-size
+#' @concept descriptive-statistics
+#' @concept hypothesis-testing
+#'
+#'
 #' @export
 glassDelta <- function(x, y, conf.level=NULL, use_control_sd=TRUE, na.rm=FALSE){
   

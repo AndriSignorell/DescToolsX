@@ -1,6 +1,65 @@
 
+#' @name desc.nq
+#' @aliases .desc_nq
+#'
+#' @title Describe Relationship: Numeric x by Categorical g
+#'
+#' @description
+#' Computes descriptive statistics for a numeric variable \code{x}
+#' grouped by a categorical variable \code{g}.
+#'
+#' @param x A numeric variable.
+#' @param g A categorical grouping variable (factor or coercible to factor).
+#' @param ... Further arguments (currently not used).
+#' @param which integer vector selecting which plots to draw. See Details.
+#'   \code{NULL} (default) selects plots automatically based on \code{verbose}.
+#' @param digits integer. With how many digits should the relative frequencies
+#' be formatted? Default can be set by
+#' \code{\link{setDescToolsXOption}(digits=x)}.
+#'
+#' @details
+#' The function summarizes the distribution of \code{x} across levels of
+#' \code{g} and performs nonparametric tests of group differences.
+#'
+#' \strong{Computed statistics}
+#' \itemize{
+#'   \item Group-wise descriptive statistics (mean, median, SD, IQR, counts)
+#'   \item Kruskal-Wallis test
+#'   \item Effect size (\eqn{\eta^2}) based on the Kruskal-Wallis statistic
+#'   \item Levene's test for homogeneity of variance
+#' }
+#'
+#' \strong{Interpretation}
+#' The Kruskal-Wallis test evaluates whether the distribution of \code{x}
+#' differs between groups defined by \code{g}. The effect size \eqn{\eta^2}
+#' provides a standardized measure of group differences.
+#'
+#' @return
+#' An object of class \code{"Desc.nq"} inheriting from \code{"Desc"}.
+#'
+#' @section Output components:
+#' \itemize{
+#'   \item \code{tab}: group-wise summary table
+#'   \item \code{test}: Kruskal-Wallis test
+#'   \item \code{vtest}: Levene test
+#'   \item \code{eta}: effect size
+#' }
+#'
+#' @seealso
+#' \code{\link{desc}}, \code{\link{desc.qn}}, \code{\link{desc.nn}},
+#' \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
+#'
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#' @concept hypothesis-testing
+#'
+#' @rdname desc.nq
+#' @usage .desc_nq(x, g, ...)
+NULL
 
 
+#' @keywords internal
 .desc_nq <- function(x, g, ... ) {
 
   kw <- kruskal.test(x~g)
@@ -22,7 +81,8 @@
 
 
 
-#' @exportS3Method
+#' @rdname desc.nq
+#' @export
 print.Desc.nq <- function(x, digits = NULL, ...) {
 
   .printHeader(x$meta)
@@ -47,7 +107,8 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 
 
 
-#' @exportS3Method
+#' @rdname desc.nq
+#' @export
 plot.Desc.nq <- function(x, which = NULL, ...){
   
   switch(as.character(which %||% "1"),

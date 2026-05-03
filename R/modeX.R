@@ -56,9 +56,6 @@
 #' @references
 #' \href{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/}{rcpp-fast-statistical-mode}
 #' 
-#' @family topic.centralTendency
-#' @concept descriptive-statistics
-#' 
 #' @examples
 #' 
 #' # normal mode
@@ -85,6 +82,10 @@
  
 
 
+#' @family location
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 modeX <- function(x, na.rm=FALSE) {
   

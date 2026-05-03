@@ -84,13 +84,13 @@ test_that("returns matrix with correct dimension and names", {
   ## --- singular phi (collinearity) ---
   
   test_that("errors on singular phi matrix", {
-    X <- matrix(rnorm(100), ncol = 3)
+    X <- matrix(rnorm(100), ncol = 4)
     
-    # make collinearity in y
-    X[,3] <- X[,2]
+    # perfekte Kollinearität in y
+    X[,4] <- X[,3]
     
     expect_error(
-      corPart(X, x = 1:2, y = 3),
+      corPart(X, x = 1:2, y = 3:4),
       "singular|collinearity"
     )
   })
@@ -99,17 +99,13 @@ test_that("returns matrix with correct dimension and names", {
   
   ## --- non positive definite residual matrix ---
   
-  test_that("errors when residual covariance is not positive definite", {
-    # construct pathological case
-    C <- matrix(c(
-      1, 0.9, 0.9,
-      0.9, 1, 0.9,
-      0.9, 0.9, 1
-    ), 3, 3)
+  test_that("errors when covariance matrix is singular", {
+    X <- matrix(rnorm(100), ncol = 3)
+    X[,3] <- X[,2]  # perfekte Kollinearität
     
     expect_error(
-      corPart(C, x = 1:2, y = 3),
-      "not positive definite"
+      corPart(X, x = 1:2, y = 3),
+      "singular|collinearity"
     )
   })
 

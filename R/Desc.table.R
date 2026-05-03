@@ -21,7 +21,17 @@
 #' @param conf.level numeric, confidence level for all confidence intervals.
 #'   Default is \code{0.95}.
 #' @param \dots further arguments passed to or from other methods.
-#'
+#' 
+#' @param verbose controls printed output.
+#' @param which selects plots.
+#' @param main main title for the plot
+#' @param plotit should a plot be automatically be produced?
+#' @param digits number of digits for numerical output.
+#' @param print_header shoul header be printed?
+#' @param prop How proportions are computed in contingency tables.
+#'   One of \code{"rows"} (default), \code{"cols"}, or \code{"all"}.
+#'   Passed to \code{percTable()}.
+#'   
 #' @name desc.table
 #' @details
 #' The \code{verbose} argument controls which statistics are computed and
@@ -95,11 +105,6 @@
 #'   \code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
 #'   \code{\link{cramerV}}, \code{\link{oddsRatio}}
 #'
-#' @family plotdesc
-#' @concept contingency table cross-tabulation association measures
-#' @concept chi-squared cramér fisher odds-ratio relative-risk
-#' @concept nominal ordinal tau kendall gamma somers lambda
-#'
 #' @examples
 #' # from an existing table
 #' tab <- table(d.pizza$driver, d.pizza$area)
@@ -111,7 +116,7 @@
 #' desc(tab2)
 #'
 #' # formula interface — dispatches to desc.table internally
-#' desc(driver ~ class, data = d.pizza)
+#' desc(driver ~ area, data = d.pizza)
 #'
 #' # from a matrix
 #' m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),
@@ -121,20 +126,13 @@
 #' desc(m, verbose = 2)
 #'
 
-
 #' 
-#' #' @export
-#' desc.table <- function(x, prop = "rows", verbose = NULL,
-#'                        abs.sty = NULL, per.sty = NULL,
-#'                        conf.level = 0.95, ...) {
-#'   
-#'   # resolve format styles: function arg > global option > package default
-#'   if (is.null(abs.sty))
-#'     abs.sty <- getOption("DescTools.abs.sty", default = .default_abs.sty)
-#'   if (is.null(per.sty))
-#'     per.sty <- getOption("DescTools.per.sty", default = .default_per.sty)
-#'   
-#' }
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+
 
 
 #' @method desc table
@@ -267,12 +265,12 @@ desc.table <- function(x, conf.level = 0.95, prop = "rows",
 
 
 
-#' @rdname desc
+#' @rdname desc.table
 #' @export
 desc.matrix <- desc.table 
                        
 
-#' @rdname desc
+#' @rdname desc.table
 #' @export
 desc.array <- desc.table 
 

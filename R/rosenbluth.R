@@ -21,15 +21,16 @@
 #' If negative values or missing values (when \code{na.rm = FALSE})
 #' are present, \code{NA} is returned.
 #'
-#' @family topic.inequality
-#' @concept Inequality
-#' @concept Concentration Measure
-#'
 #' @references
 #' Rosenbluth, G. (1955). Measures of concentration.
 #'
 
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 rosenbluth <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
   

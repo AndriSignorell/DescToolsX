@@ -92,13 +92,13 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \code{\link[lumen]{varTest}} for tests and base R's implementations
 \code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
 
-Other topic.dispersion: 
+Other dispersion: 
+\code{\link{coefVar}()},
 \code{\link{iqrX}()},
-\code{\link{kurtX}()},
 \code{\link{madX}()},
 \code{\link{meanAD}()},
-\code{\link{rangeX}()},
-\code{\link{skewX}()}
+\code{\link{meanSE}()},
+\code{\link{rangeX}()}
 }
 \concept{descriptive-statistics}
-\concept{topic.dispersion}
+\concept{dispersion}

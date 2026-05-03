@@ -166,6 +166,33 @@ ConcordanceResult conDisPairsXY_indexed(const vector<double>& x,
 
 
 
+// [[Rcpp::export]]
+NumericVector conDisPairsXY_ind_cpp(NumericVector xR,
+                                    NumericVector yR) {
+  
+  std::vector<double> x = Rcpp::as<std::vector<double>>(xR);
+  std::vector<double> y = Rcpp::as<std::vector<double>>(yR);
+  
+  int n = x.size();
+  
+  std::vector<int> idx(n);
+  for (int i = 0; i < n; i++) idx[i] = i;
+  
+  auto z = conDisPairsXY_indexed(x, y, idx);
+  
+  NumericVector out(4);
+  out[0] = z.C;
+  out[1] = z.D;
+  out[2] = z.Ties_X;
+  out[3] = z.Ties_Y;
+  
+  out.attr("names") = CharacterVector::create("C","D","Ties_X","Ties_Y");
+  
+  return out;
+}
+
+
+
 
 // ============================================================
 //   parallel processing for speed up bootstraps CIs
@@ -285,33 +312,6 @@ NumericVector cstat_bootstrap_parallel_cpp(NumericVector yR,
   out[2] = s[hi];
   
   out.attr("names") = CharacterVector::create("est","lci","uci");
-  
-  return out;
-}
-
-
-
-// [[Rcpp::export]]
-NumericVector conDisPairsXY_ind_cpp(NumericVector xR,
-                                         NumericVector yR) {
-  
-  std::vector<double> x = Rcpp::as<std::vector<double>>(xR);
-  std::vector<double> y = Rcpp::as<std::vector<double>>(yR);
-  
-  int n = x.size();
-  
-  std::vector<int> idx(n);
-  for (int i = 0; i < n; i++) idx[i] = i;
-  
-  auto z = conDisPairsXY_indexed(x, y, idx);
-  
-  NumericVector out(4);
-  out[0] = z.C;
-  out[1] = z.D;
-  out[2] = z.Ties_X;
-  out[3] = z.Ties_Y;
-  
-  out.attr("names") = CharacterVector::create("C","D","Ties_X","Ties_Y");
   
   return out;
 }

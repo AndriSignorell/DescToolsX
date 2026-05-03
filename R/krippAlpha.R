@@ -60,12 +60,6 @@
 #'
 #' @seealso \code{\link[lumen]{bootCI}}
 #'
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Nominal Agreement
-#' @concept Ordinal Agreement
-#' @concept Metric Agreement
-#'
 #' @examples
 #' # Example with nominal data (3 raters, 5 subjects)
 #' dat <- data.frame(
@@ -87,6 +81,12 @@
 
 
 #' @rdname krippAlpha
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept descriptive-statistics
+#' @concept reliability
+#'
+#'
 #' @export
 krippAlpha <- function(x, method = c("nominal","ordinal",
                                      "interval","ratio"),

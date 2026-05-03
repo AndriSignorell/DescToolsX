@@ -91,6 +91,11 @@
 #' 
 
 #' @rdname gmean
+#' @family location
+#' @concept descriptive-statistics
+#' @concept transformation
+#'
+#'
 #' @export
 gmean <- function (x, conf.level = NA, sides = c("two.sided","left","right"),
                    method = c("classic", "boot"),

@@ -18,9 +18,6 @@
 #' \code{n * m = GCD(n, m) * LCM(n, m)}
 #' @author Andri Signorell <andri@@signorell.net> 
 #' 
-#' @family topic.numberTheory
-#' @concept number theory
-#' 
 #' @examples
 #' GCD(12, 10)
 #' GCD(144, 233)    # Fibonacci numbers are relatively prime to each other
@@ -37,6 +34,11 @@
 
 
 #' @rdname gcd_lcm
+#' @family math.utils
+#' @concept mathematics
+#' @concept number-theory
+#'
+#'
 #' @export
 GCD <- function(..., na.rm = FALSE) {
   

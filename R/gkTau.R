@@ -58,10 +58,6 @@
 #' @seealso There's another implementation of gamma in \pkg{vcdExtra}
 #' \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept ordinal-data
-#' 
 #' @examples
 #' # example in:
 #' # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
@@ -106,6 +102,12 @@
 #' 
 
 #' @rdname gkTau
+#' @family assoc.ordinal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept nonparametric
+#'
+#'
 #' @export
 gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...){
   

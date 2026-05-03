@@ -36,6 +36,11 @@
 
 
 #' @rdname date_functions
+#' @family date.utils
+#' @concept date-handling
+#' @concept mathematics
+#'
+#'
 #' @export
 countWorkDays <- function(from, to, 
                           holiday=NULL, nonworkdays=c("Sat","Sun")) {

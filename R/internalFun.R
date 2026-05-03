@@ -1,0 +1,82 @@
+
+## ============================================================
+## Argument handling utilities (centralized, reusable)
+## ============================================================
+
+.extractBootArgs <- function(dots) {
+  
+  bedrock::extractArgs(
+    dots,
+    defaults = list(
+      type     = "bca",
+      R        = 999,
+      parallel = "no",
+      ncpus    = getOption("boot.ncpus", 1L)
+    ),
+    validate = function(x) {
+      
+      if (!is.numeric(x$R) || length(x$R) != 1 || x$R <= 0)
+        stop("R must be a positive integer")
+      
+      if (!is.numeric(x$ncpus) || x$ncpus < 1)
+        stop("ncpus must be >= 1")
+      
+      if (!x$parallel %in% c("no", "multicore", "snow"))
+        stop("parallel must be 'no', 'multicore', or 'snow'")
+    }
+  )
+}
+
+ 
+# ## ============================================================
+# ## Example usage in gini()
+# ## ============================================================
+# 
+# # inside gini():
+# dots <- list(...)
+# boot_args <- .extractBootArgs(dots)
+# 
+# boot.fun <- boot::boot(
+#   data = x,
+#   statistic = function(z, i, u, unbiased)
+#     i.gini(z[i], u[i], unbiased),
+#   R = boot_args$R,
+#   u = weights,
+#   unbiased = unbiased,
+#   parallel = boot_args$parallel,
+#   ncpus = boot_args$ncpus
+# )
+# 
+# ci <- boot::boot.ci(
+#   boot.fun,
+#   conf = conf.level,
+#   type = boot_args$type
+# )
+# 
+
+## ============================================================
+## CONSOLIDATION CHECKLIST (run across package)
+## ============================================================
+
+# Replace patterns like:
+# inDots(..., arg="type", default="bca")
+# inDots(..., arg="R", default=999)
+# inDots(..., arg="parallel", default="no")
+# inDots(..., arg="ncpus", default=...)
+
+# With:
+# boot_args <- .extractBootArgs(list(...))
+
+# Search targets:
+# grep -R "inDots" .
+# grep -R "type =" .
+# grep -R "R =" .
+# grep -R "parallel =" .
+# grep -R "ncpus =" .
+
+# Goal:
+# unify ALL bootstrap argument handling via .extractBootArgs()
+
+## ============================================================
+## END
+## ============================================================

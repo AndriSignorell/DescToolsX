@@ -159,18 +159,21 @@ Technology}, 11, 101-109.
 \code{\link{cronbachAlpha}}, \code{\link{kappaM}},
 \code{\link{krippAlpha}}
 
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{ccc}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
 \code{\link{krippAlpha}()},
+\code{\link{percAgreement}()},
 \code{\link{randolphKappa}()}
 }
 \author{
 David Meyer \href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org}, some changes and tweaks
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{Interrater Agreement}
-\concept{Nominal Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{association-measures}
+\concept{descriptive-statistics}

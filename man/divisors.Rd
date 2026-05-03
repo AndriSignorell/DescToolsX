@@ -29,11 +29,12 @@ number of its divisors can be determined with the function
 divisors(c(145, 786))
 }
 \seealso{
-Other topic.numberTheory: 
+Other math.utils: 
 \code{\link{gcd_lcm}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{number theory}
-\concept{topic.numberTheory}
+\concept{math.utils}
+\concept{mathematics}
+\concept{number-theory}

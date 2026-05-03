@@ -39,13 +39,6 @@
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 49-56
 #' 
-#' @family topic.correlation
-#' @concept association
-#' @concept ordinal-data
-#' @concept rank-methods
-#' @concept nonparametric
-#' 
-#' 
 #' @examples
 #' 
 #' 
@@ -75,6 +68,12 @@
 #' 
 
 
+#' @family assoc.ordinal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept nonparametric
+#'
+#'
 #' @export 
 kendallTauA <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...){
   

@@ -50,15 +50,16 @@
 #' Robust Geometric Predicates.  \emph{Discrete and Computational Geometry},
 #' 18(3):305-363. Springer.
 #' 
-#' @family topic.centralTendency
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#' 
 #' @examples
 #' 
 #' tukeyBiweight(rnorm(100))
 
 
+#' @family location
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 tukeyBiweight <- function(x, conf.level = NA, sides = c("two.sided","left","right"), 
                           method = c("boot"), const=9,  na.rm = FALSE,  ...) {

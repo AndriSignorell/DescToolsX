@@ -45,6 +45,12 @@
 #'
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 phi  <- function (x, y = NULL, ...) {
   if(!is.null(y)) x <- table(x, y, ...)

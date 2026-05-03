@@ -108,14 +108,15 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 outdated...
 
 Other topic.associationMeasures: 
-\code{\link{Association}},
+\code{\link{Association}}
+
+Other assoc.nominal: 
+\code{\link{assocs}()},
 \code{\link{contCoef}()},
-\code{\link{entropy}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
 \code{\link{lambda}()},
-\code{\link{mutInf}()},
-\code{\link{somersDelta}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
 \code{\link{tschuprowT}()},
 \code{\link{uncertCoef}()},
 \code{\link{yule}}
@@ -124,8 +125,12 @@ Other topic.associationMeasures:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Michael Smithson
 \href{mailto:michael.smithson@anu.edu.au}{michael.smithson@anu.edu.au} (confidence intervals for Cramer V)
 }
+\concept{assoc.nominal}
 \concept{association}
+\concept{association-measures}
 \concept{contingency-tables}
+\concept{descriptive-statistics}
 \concept{effect-size}
 \concept{nominal-data}
+\concept{table-manipulation}
 \concept{topic.associationMeasures}

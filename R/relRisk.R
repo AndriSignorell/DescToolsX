@@ -80,6 +80,12 @@
 #' relRisk(t(mm), conf.level=0.95, method="use.or")
 #' 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept hypothesis-testing
+#'
+#'
 #' @export
 relRisk <- function(x, y = NULL, conf.level = NA, method = c("score", "wald", "use.or"), delta = 0.5, ...) {
   

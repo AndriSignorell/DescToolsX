@@ -51,6 +51,12 @@
 #' 
 #' 
 
+#' @family outlier
+#' @concept outlier-detection
+#' @concept descriptive-statistics
+#' @concept data-inspection
+#'
+#'
 #' @export
 outlier <- function(x, method=c("boxplot", "hampel"), value=TRUE, na.rm=FALSE){
   

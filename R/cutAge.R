@@ -32,10 +32,16 @@
 #' @seealso \code{\link{cut}}, \code{\link{seq}}
 #' @examples
 #' 
-#' desc(cutAge(sample(100, 100)))
+#' desc(cutAge(sample(0:100, size=100, replace=TRUE)))
 
 
  
+#' @family date.utils
+#' @concept date-handling
+#' @concept data-manipulation
+#' @concept factor-handling
+#'
+#'
 #' @export
 cutAge <- function(x, breaks=c(seq(from=0, to=90, by=10), Inf), 
                    right=FALSE, ordered_result=TRUE, full=TRUE, 

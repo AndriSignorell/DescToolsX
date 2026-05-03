@@ -42,7 +42,8 @@ nmse(x, ref, train.y)
 \seealso{
 \code{\link{mean}}, \code{\link{sum}}
 
-Other error metrics: 
+Other error.measures: 
+\code{\link{brierScore}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
@@ -50,6 +51,6 @@ Other error metrics:
 \code{\link{rmse}()},
 \code{\link{smape}()}
 }
-\concept{error metrics}
-\concept{normalized error}
-\concept{regression metrics}
+\concept{descriptive-statistics}
+\concept{error.measures}
+\concept{prediction-accuracy}

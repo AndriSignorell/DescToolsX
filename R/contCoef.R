@@ -34,11 +34,6 @@
 #' 
 #' @seealso \code{\link[bedrock]{pairApply}}
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept contingency-tables
-#' @concept nominal-data
-#' 
 #' @examples
 #' 
 #' tab <- apply(HairEyeColor, c(1,2), sum)
@@ -51,6 +46,12 @@
 #' 
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 contCoef <- function(x, y = NULL, 
                      correct = FALSE,

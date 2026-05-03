@@ -89,6 +89,11 @@
 #   ...
 
 
+#' @family shape
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 skewX <- function (x, 
                   conf.level = NA, sides=c("two.sided", "left", "right"), 

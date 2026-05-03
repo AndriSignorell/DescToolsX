@@ -42,6 +42,12 @@
 # Written by Leanne Chhay
 
 
+#' @family transformations
+#' @concept transformation
+#' @concept descriptive-statistics
+#' @concept regression
+#'
+#'
 #' @export
 boxCoxLambda <- function(x, method=c("guerrero","loglik"), lower=-1, upper=2) {
   

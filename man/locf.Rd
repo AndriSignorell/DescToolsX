@@ -43,14 +43,14 @@ d.frm
 See also the package \pkg{Hmisc} for less coarse imputation
 functions.
 
-Other topic.dataProcessing: 
-\code{\link{dummy}()},
+Other imputation: 
 \code{\link{impute}()},
-\code{\link{scaleX}()}
+\code{\link{imputeKnn}()}
 }
 \author{
 Daniel Wollschlaeger \href{mailto:dwoll@psychologie.uni-kiel.de}{dwoll@psychologie.uni-kiel.de}
 }
-\concept{data processing}
+\concept{data-manipulation}
 \concept{imputation}
-\concept{topic.dataProcessing}
+\concept{missing-data}
+\concept{time-series}

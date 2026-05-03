@@ -69,5 +69,20 @@ assocs(pain)
 }
 \seealso{
 \code{\link{Association}}
+
+Other assoc.nominal: 
+\code{\link{contCoef}()},
+\code{\link{cramerV}()},
+\code{\link{lambda}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
+\code{\link{tschuprowT}()},
+\code{\link{uncertCoef}()},
+\code{\link{yule}}
 }
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{table-manipulation}
 \keyword{multivariate}

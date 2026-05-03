@@ -230,6 +230,12 @@
 
 
 #' @rdname tOne
+#' @family table.utils
+#' @concept table-manipulation
+#' @concept descriptive-statistics
+#' @concept data-description
+#'
+#'
 #' @export
 tOne <- function(x, grp = NA, add.length=TRUE,
                  colnames=NULL, vnames=NULL, total=TRUE,

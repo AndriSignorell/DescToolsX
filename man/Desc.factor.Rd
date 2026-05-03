@@ -103,5 +103,18 @@ frequencies to it's intrinsic order, which means order \code{"level"}
 instead of \code{"desc"} in the factor case.
 }
 \seealso{
-\code{\link[aurora]{plot.Desc.factor}} for graphical display
+\code{\link[aurora]{plotCatDist}} for graphical display
+
+Other desc: 
+\code{\link{desc}()},
+\code{\link{desc.Date}()},
+\code{\link{desc.nn}},
+\code{\link{desc.nq}},
+\code{\link{desc.qn}},
+\code{\link{desc.qq}},
+\code{\link{print.Desc.qq}()}
 }
+\concept{data-description}
+\concept{desc}
+\concept{descriptive-statistics}
+\concept{factor-handling}

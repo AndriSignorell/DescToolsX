@@ -57,12 +57,6 @@
 #' Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 #' kurtosis. \emph{The Statistician}, 47, 183-189.
 #' 
-#' @family topic.dispersion
-#' @concept shape
-#' @concept moments
-#' @concept descriptive-statistics
-#' 
-#' 
 #' @examples
 #' 
 #' kurtX(d.pizza$price, na.rm=TRUE)
@@ -76,6 +70,11 @@
 #' 
 
 
+#' @family shape
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 kurtX <- function (x, 
                    conf.level = NA, sides=c("two.sided", "left", "right"), 

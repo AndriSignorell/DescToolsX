@@ -31,15 +31,16 @@
 #' If negative values or missing values (when \code{na.rm = FALSE})
 #' are present, \code{NA} is returned.
 #'
-#' @family topic.inequality
-#' @concept Inequality
-#' @concept Entropy Measure
-#' @concept Theil Index
-#'
 #' @references
 #' Theil, H. (1967). Economics and Information Theory.
 
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#' @concept information-theory
+#'
+#'
 #' @export
 theil <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
   

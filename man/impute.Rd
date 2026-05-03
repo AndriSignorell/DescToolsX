@@ -59,11 +59,10 @@ impute(x, 99)
 \seealso{
 For direct value replacement see \code{\link[bedrock:naReplace]{bedrock::naReplace()}}.
 
-Other topic.dataProcessing: 
-\code{\link{dummy}()},
-\code{\link{locf}()},
-\code{\link{scaleX}()}
+Other imputation: 
+\code{\link{imputeKnn}()},
+\code{\link{locf}()}
 }
-\concept{data processing}
+\concept{data-manipulation}
 \concept{imputation}
-\concept{topic.dataProcessing}
+\concept{missing-data}

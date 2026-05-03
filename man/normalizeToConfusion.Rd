@@ -107,5 +107,14 @@ normalizeToConfusion(
 }
 \seealso{
 \code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[bedrock:pairApply]{bedrock::pairApply()}}
+
+Other confusion: 
+\code{\link{cStat}()},
+\code{\link{conf}()},
+\code{\link{isConfusionTable}()}
 }
+\concept{classification-metrics}
+\concept{confusion}
+\concept{data-manipulation}
+\concept{table-manipulation}
 \keyword{internal}

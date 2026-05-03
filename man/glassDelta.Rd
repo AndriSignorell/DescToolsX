@@ -49,4 +49,12 @@ glassDelta(x, y, conf.level = 0.95)
 }
 \seealso{
 \code{\link{cohenD}}
+
+Other effect.size: 
+\code{\link{cohenD}()},
+\code{\link{etaSq}()}
 }
+\concept{descriptive-statistics}
+\concept{effect-size}
+\concept{effect.size}
+\concept{hypothesis-testing}

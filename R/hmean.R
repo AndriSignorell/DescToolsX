@@ -57,6 +57,11 @@
 #' 
 
 #' @rdname hmean
+#' @family location
+#' @concept descriptive-statistics
+#' @concept confidence-intervals
+#'
+#'
 #' @export
 hmean <- function(x, conf.level = NA, 
                   sides = c("two.sided","left","right"), method = c("classic", "boot"),

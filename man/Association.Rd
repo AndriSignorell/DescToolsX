@@ -79,17 +79,7 @@ John Wiley and Sons
 }
 \seealso{
 Other topic.associationMeasures: 
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{entropy}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{lambda}()},
-\code{\link{mutInf}()},
-\code{\link{somersDelta}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
-\code{\link{yule}}
+\code{\link{cramerV}()}
 }
 \concept{topic.associationMeasures}
 \keyword{internal}

@@ -46,10 +46,6 @@
 #' American Statistical Association}, 58, 310-364.
 #' 
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept ordinal-data
-#' 
 #' @examples
 #' 
 #' 
@@ -66,6 +62,12 @@
 #' 
 #' 
 
+#' @family assoc.ordinal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept nonparametric
+#'
+#'
 #' @export
 gkGamma <- function(x, y = NULL, conf.level = NA, ...) {
   

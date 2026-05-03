@@ -179,8 +179,17 @@ analysis}. NY: John Wiley and Sons, Section 2.4.5\cr
 functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
 package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of
 the flexibility we needed here. \cr
+
+Other freq.tables: 
+\code{\link{expFreq}()},
+\code{\link{freq}()},
+\code{\link{freq2D}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{descriptive-statistics}
+\concept{freq.tables}
+\concept{frequency-analysis}
+\concept{table-manipulation}
 \keyword{multivariate}

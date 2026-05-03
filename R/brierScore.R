@@ -103,6 +103,12 @@
 #'
 
 
+#' @family error.measures
+#' @concept prediction-accuracy
+#' @concept classification-metrics
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 brierScore <- function(x, pred = NULL,
                        scaled = FALSE,

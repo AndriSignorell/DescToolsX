@@ -31,10 +31,6 @@
 #' Ihara, Shunsuke (1993) \emph{Information theory for continuous systems},
 #' World Scientific. p. 2. ISBN 978-981-02-0985-8.
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept information-theory
-#' 
 #' @examples
 #' examp <- c(1,3)
 #' # todo: some more ********
@@ -42,6 +38,12 @@
 #' 
 
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#' @concept information-theory
+#'
+#'
 #' @export
 entropy <- function(x, y = NULL, base = 2, ...) {
   

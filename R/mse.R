@@ -16,10 +16,6 @@
 #' \frac{1}{n} \sum (ref - x)^2
 #' }
 #'
-#' @family error metrics
-#' @concept absolute error
-#' @concept regression metrics 
-#' 
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
 #' ref <- c(3.0, 2.5, 3.0)
@@ -33,6 +29,12 @@
 #' @seealso \code{\link{mean}}
 #'
 
+#' @family error.measures
+#' @concept prediction-accuracy
+#' @concept descriptive-statistics
+#' @concept regression
+#'
+#'
 #' @export
 mse <- function(x, ...) {
   UseMethod("mse")

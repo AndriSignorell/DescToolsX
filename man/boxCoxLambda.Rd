@@ -49,8 +49,18 @@ transformations. \emph{Journal of Forecasting}, \bold{12}, 37--48.
 }
 \seealso{
 \code{\link{boxCox}}
+
+Other transformations: 
+\code{\link{boxCox}()},
+\code{\link{logSt}()},
+\code{\link{scaleX}()},
+\code{\link{yeoJohnson}()}
 }
 \author{
 Leanne Chhay and Rob J Hyndman
 }
+\concept{descriptive-statistics}
+\concept{regression}
+\concept{transformation}
+\concept{transformations}
 \keyword{ts}

@@ -33,9 +33,6 @@
 #' 
 #' @seealso \code{\link{mad}}
 #' 
-#' @family topic.dispersion
-#' @concept descriptive-statistics
-#' 
 #' @examples
 #' 
 #' x <- runif(100)
@@ -61,6 +58,11 @@
 
 
 
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 meanAD <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
   

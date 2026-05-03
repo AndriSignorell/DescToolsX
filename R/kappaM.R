@@ -52,12 +52,6 @@
 #' Scott, W.A. (1955). Reliability of content analysis: the case of nominal
 #' scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 #' 
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Multi-Rater Agreement
-#' @concept Nominal Agreement
-#' 
-#' 
 #' @examples
 #' 
 #' statement <- data.frame(
@@ -81,6 +75,12 @@
 #' kappaM(statement, method="Light")   # Exact Kappa
 #' 
 
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept association-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) {
   

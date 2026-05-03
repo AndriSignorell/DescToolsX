@@ -19,10 +19,6 @@
 #' Note that values where \code{ref = 0} lead to division by zero and
 #' result in \code{NA}.
 #'
-#' @family error metrics
-#' @concept relative error
-#' @concept regression metrics 
-#' 
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
 #' ref <- c(3.0, 2.5, 3.0)
@@ -35,6 +31,11 @@
 #'
 
 
+#' @family error.measures
+#' @concept prediction-accuracy
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 mape <- function(x, ...) {
   UseMethod("mape")
@@ -68,3 +69,5 @@ mape.default <- function(x, ref, na.rm = FALSE, ...) {
   
   mean(res, na.rm = na.rm, ...)
 }
+
+

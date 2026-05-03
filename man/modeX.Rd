@@ -92,10 +92,11 @@ sapply(d.pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 \seealso{
 \code{\link{meanX}}, \code{\link{medianX}}
 
-Other topic.centralTendency: 
+Other location: 
+\code{\link{gmean}()},
+\code{\link{hmean}()},
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
-\code{\link{meanX}()},
 \code{\link{medianX}()},
 \code{\link{tukeyBiweight}()}
 }
@@ -104,4 +105,4 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr grea
 Wood and Ralf Stubner
 }
 \concept{descriptive-statistics}
-\concept{topic.centralTendency}
+\concept{location}

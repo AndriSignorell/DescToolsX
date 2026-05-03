@@ -102,23 +102,18 @@ sample sizes. However it is restricted to computing Somers' Dxy rank
 correlation between a variable x and a binary (0-1) variable y.\cr
 Other association measures: \code{\link{Association}}
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{entropy}()},
+Other assoc.ordinal: 
 \code{\link{gkGamma}()},
 \code{\link{gkTau}()},
-\code{\link{lambda}()},
-\code{\link{mutInf}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
-\code{\link{yule}}
+\code{\link{kendallTauA}()},
+\code{\link{kendallTauB}()},
+\code{\link{spearmanCor}()},
+\code{\link{stuartTauC}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{association}
-\concept{asymmetric-measures}
-\concept{ordinal-data}
-\concept{topic.associationMeasures}
+\concept{assoc.ordinal}
+\concept{association-measures}
+\concept{descriptive-statistics}
+\concept{nonparametric}

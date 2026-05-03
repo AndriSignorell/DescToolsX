@@ -34,10 +34,6 @@
 #' Ihara, Shunsuke (1993) \emph{Information theory for continuous systems},
 #' World Scientific. p. 2. ISBN 978-981-02-0985-8.
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept information-theory
-#' 
 #' @examples
 #' examp <- c(1,3)
 #' 
@@ -45,6 +41,12 @@
 #' 
 
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept information-theory
+#' @concept association-measures
+#'
+#'
 #' @export
 mutInf <- function(x, y = NULL, base = 2, ...){
   # ### Ref.:  http://en.wikipedia.org/wiki/Cluster_labeling

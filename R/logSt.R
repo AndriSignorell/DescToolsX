@@ -87,6 +87,11 @@
 
 
 #' @rdname logSt
+#' @family transformations
+#' @concept transformation
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 logSt <- function(x, base = 10, calib = x, threshold = NULL, mult = 1) {
 

@@ -35,6 +35,11 @@
  
 # further weighted quantiles in Hmisc and modi, both on CRAN
 
+#' @family quantiles
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export 
 quantileX <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
                      na.rm = FALSE, names=TRUE, type = 7, digits=7) {

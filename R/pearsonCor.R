@@ -23,12 +23,7 @@
 #' slight modifications Andri Signorell
 #' \href{mailto:andri@@signorell.net}{andri@@signorell.net} based on R-Core
 #' code
-#' @seealso \code{\link{fisherZ}}, \code{\link{fisherZInv}}
-#' 
-#' @family topic.correlation
-#' @concept correlation
-#' @concept continuous-data
-#' @concept parametric
+#' @seealso \code{\link[lumen]{fisherZ}}, \code{\link[lumen]{fisherZInv}}
 #' 
 #' @examples
 #' 
@@ -43,6 +38,12 @@
 #' 
 
 
+#' @family correlation
+#' @concept correlation
+#' @concept descriptive-statistics
+#' @concept confidence-intervals
+#'
+#'
 #' @export
 pearsonCor <- function(x, y = NULL,
                        conf.level = NA,

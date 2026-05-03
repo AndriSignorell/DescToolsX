@@ -38,31 +38,52 @@
 #'
 #' @details
 #' \code{desc} is a \strong{generic function}. It dispatches to the
-#' method of the class of its first argument. Typing
-#' \code{?desc} + TAB at the prompt should present a choice of links: the help
-#' pages for each of these \code{desc} methods. You don't need to 
-#' use the full name of the method although you may if you wish; 
-#' i.e., \code{desc(x)} is idiomatic R but you can bypass method 
-#' dispatch by going direct if you wish: \code{desc.numeric(x)}.
-
-#' The most frequent object types are supported, find more specific help in:
-#' \verb{  }Numeric variables: \code{\link{desc.numeric}}\cr
-#' \verb{  }Factors and character vectors: \code{\link{desc.factor}}\cr
-#' \verb{  }Boolean or dichotomous variables: \code{\link{desc.logical}}\cr
-#' \verb{  }Contingency tables and frequencies: \code{\link{desc.table}}\cr
-#' \verb{  }Calender date variables: \code{\link{desc.Date}}\cr
-#' \verb{  }Time series: \code{\link{desc.ts}}\cr
+#' method of the class of its first argument.
+#'
+#' Typing \code{?desc} + TAB at the prompt lists all available methods.
+#' You usually call \code{desc(x)}, but direct calls like
+#' \code{desc.numeric(x)} are also possible.
+#'
+#' \strong{Univariate descriptions}
+#' \itemize{
+#'   \item Numeric variables: \code{\link{desc.numeric}}
+#'   \item Factors and character vectors: \code{\link{desc.factor}}
+#'   \item Boolean variables: \code{\link{desc.logical}}
+#'   \item Contingency tables: \code{\link{desc.table}}
+#'   \item Dates: \code{\link{desc.Date}}
+#'   \item Time series: \code{\link{desc.ts}}
+#' }
+#'
+#' \strong{Bivariate descriptions}
+#' \itemize{
+#'   \item numeric ~ numeric: \code{\link{desc.nn}}
+#'   \item numeric ~ qualitative: \code{\link{desc.nq}}
+#'   \item qualitative ~ numeric: \code{\link{desc.qn}}
+#'   \item qualitative ~ qualitative: \code{\link{desc.qq}} 
+#'      (wrapper around \code{\link{desc.table}})
+#' }
 #' 
-#' 
+#' \strong{Design}
+#' The \code{desc} system separates:
+#' \itemize{
+#'   \item computation (internal \code{.desc_*} functions)
+#'   \item printing (\code{print.Desc.*})
+#'   \item visualization (\code{plot.Desc.*})
+#' }' 
+#'  
 #' @return An object of class \code{"Desc"} with a subclass depending on
 #'   the input type.
+#'   @return An object of class \code{"Desc"} with a subtype depending on
+#'   the input (e.g. \code{"Desc.numeric"}, \code{"Desc.qn"}).
 #'
 #' @seealso \code{\link{summary}}, \code{\link{plot}}
-#' @keywords descriptive statistics
-
-
 
 #' @rdname desc
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 desc <- function(x, ...) {
   UseMethod("desc")

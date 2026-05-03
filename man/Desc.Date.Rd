@@ -94,4 +94,17 @@ as a diagnostic aid rather than a formal validation procedure.
 }
 \seealso{
 \code{\link{desc}}, \code{\link{print.Desc.Date}}
+
+Other desc: 
+\code{\link{desc}()},
+\code{\link{desc.factor}()},
+\code{\link{desc.nn}},
+\code{\link{desc.nq}},
+\code{\link{desc.qn}},
+\code{\link{desc.qq}},
+\code{\link{print.Desc.qq}()}
 }
+\concept{data-description}
+\concept{date-handling}
+\concept{desc}
+\concept{descriptive-statistics}

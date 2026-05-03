@@ -75,16 +75,14 @@ Amsterdam: North-Holland Publishing Company.
 \seealso{
 \code{\link{Association}}
 
-Other topic.associationMeasures: 
-\code{\link{Association}},
+Other assoc.nominal: 
+\code{\link{assocs}()},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
-\code{\link{entropy}()},
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
 \code{\link{lambda}()},
-\code{\link{mutInf}()},
-\code{\link{somersDelta}()},
+\code{\link{oddsRatio}()},
+\code{\link{phi}()},
+\code{\link{relRisk}()},
 \code{\link{tschuprowT}()},
 \code{\link{yule}}
 }
@@ -92,6 +90,7 @@ Other topic.associationMeasures:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} strongly based on code from
 Antti Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}
 }
-\concept{association}
+\concept{assoc.nominal}
+\concept{association-measures}
+\concept{descriptive-statistics}
 \concept{information-theory}
-\concept{topic.associationMeasures}

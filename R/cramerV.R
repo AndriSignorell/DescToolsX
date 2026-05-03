@@ -84,6 +84,12 @@
 #' 
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 cramerV <- function(x, y = NULL, conf.level = NA,
                     method = c("ncchisq", "ncchisqadj", 

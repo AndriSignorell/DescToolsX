@@ -37,11 +37,8 @@
 #' @seealso \code{\link{IQR}} which is simpler but less robust,
 #' \code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
 #' \code{\link{median}}, \code{\link{var}} the base R equivalents
-#' \cr\code{\link{madCI}} (confidence intervals).
+#' \cr\code{\link[lumen]{madCI}} (confidence intervals).
 #' 
-#' @family topic.dispersion
-#' @concept descriptive-statistics
-#' @concept robust-statistics
 #' @examples
 #' 
 #' madX(c(1:9))
@@ -63,6 +60,11 @@
 #' 
 
 
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 madX <- function(x,
                 weights = NULL,

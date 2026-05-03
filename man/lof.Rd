@@ -42,7 +42,14 @@ Breuning, M., Kriegel, H., Ng, R.T, and Sander. J. (2000).  lof:
 Identifying density-based local outliers. \emph{In Proceedings of the ACM
 SIGMOD International Conference on Management of Data}
 }
+\seealso{
+Other outlier: 
+\code{\link{outlier}()}
+}
 \author{
 Caroline Rodriguez
 }
+\concept{descriptive-statistics}
+\concept{outlier}
+\concept{outlier-detection}
 \keyword{methods}

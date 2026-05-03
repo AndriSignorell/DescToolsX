@@ -19,6 +19,12 @@
 #'
 #' @return Either a numeric vector (estimate and CI) or a list.
 #'
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept descriptive-statistics
+#' @concept confidence-intervals
+#'
+#'
 #' @export
 percAgreement <- function(x, y = NULL,
                           input = c("auto", "confusion", "ratings"),

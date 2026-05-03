@@ -22,11 +22,6 @@
 #' @references Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 #' (3rd edition)}. Wiley 
 #' 
-#' @family topic.correlation
-#' @concept correlation
-#' @concept rank-methods
-#' @concept nonparametric
-#' 
 #' @examples
 #' 
 #' pain <- as.table(matrix(c(26,  6, 26, 7, 23, 
@@ -46,6 +41,12 @@
 #'      spearmanCor(adverse, dose, conf.level=0.95))
 #' 
 
+#' @family assoc.ordinal
+#' @concept association-measures
+#' @concept correlation
+#' @concept nonparametric
+#'
+#'
 #' @export 
 spearmanCor <- function(x, y = NULL,
                        conf.level = NA,

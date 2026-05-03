@@ -80,10 +80,6 @@
 #' Forming inferences about some intraclass correlation coefficients.
 #' \emph{Psychological Methods}, 1, 30–46.
 #'
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Metric Agreement
-#' 
 #' @examples
 #' #example from Shrout and Fleiss (1979)
 #' sf <- matrix(c( 9, 2, 5, 8,    6, 1, 3, 2,    8, 4, 6, 8,     
@@ -112,6 +108,13 @@
 
 
 #' @rdname icc
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept correlation
+#' @concept descriptive-statistics
+#' @concept reliability
+#'
+#'
 #' @export
 #' 
 icc <- function(x,

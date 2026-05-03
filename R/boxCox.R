@@ -1,98 +1,126 @@
 
-#' Box Cox Transformation
-#' 
-#' \code{boxCox()} returns a transformation of the input variable using a
-#' Box-Cox transformation.\cr \code{boxCoxInv()} reverses the transformation.
-#' 
-#' The Box-Cox transformation is given by
-#' 
+#' Box-Cox Transformation
+#'
+#' \code{boxCox()} applies the Box-Cox transformation to a numeric vector.
+#' \cr \code{boxCoxInv()} reverses the transformation.
+#'
+#' The Box-Cox transformation is defined for strictly positive values of
+#' \code{x} and is given by
+#'
 #' \deqn{
-#'   f_\lambda(x) =
-#'   \begin{cases}
-#'     \frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
-#'     \log(x) & \text{if } \lambda = 0
-#'   \end{cases}
+#' f_\lambda(x) =
+#' \begin{cases}
+#' \frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
+#' \log(x) & \text{if } \lambda = 0
+#' \end{cases}
 #' }
-#'  
+#'
 #' @name boxCox
 #' @aliases boxCox boxCoxInv
-#' @param x a numeric vector
-#' @param lambda transformation parameter
-#' 
-#' @return a numeric vector of the same length as x.
-#' @note These two functions are borrowed from \code{library(forecast)}.
-#' 
-#' @author Rob J Hyndman <rob.hyndman@@monash.edu>
-#' 
-#' @seealso Use \code{\link{boxCoxLambda}} or \code{\link[MASS]{boxcox}} in
-#' \code{library(MASS)} to find optimal lambda values.
-#' 
-#' @references Box, G. E. P. and Cox, D. R. (1964) An analysis of
-#' transformations. \emph{JRSS B} \bold{26} 211--246.
-#' 
-#' @keywords univar
+#'
+#' @param x A numeric vector. Must contain strictly positive values
+#'   (except \code{NA}s).
+#' @param lambda A single numeric transformation parameter.
+#' @param tol Numeric tolerance for detecting the special case
+#'   \eqn{\lambda \approx 0}.
+#'
+#' @return A numeric vector of the same length as \code{x}.
+#'
+#' @details
+#' The transformation requires strictly positive input values. If
+#' \code{|lambda| < tol}, the logarithmic transformation is used instead
+#' for numerical stability.
+#'
+#' The inverse transformation recovers the original data (up to numerical
+#' precision) when the same \code{lambda} and \code{tol} are used.
+#'
+#' @references
+#' Box, G. E. P. and Cox, D. R. (1964).
+#' An analysis of transformations.
+#' \emph{Journal of the Royal Statistical Society, Series B},
+#' \bold{26}(2), 211--252.
+#'
+#' @seealso \code{\link{yeoJohnson}}, \code{\link{yeoJohnsonInv}}
+#'
+#' @family transformations
+#' @concept transformation
+#' @concept descriptive-statistics
+#' @concept regression
+#'
 #' @examples
-#' 
-#' # example by Greg Snow
-#' x <- rlnorm(500, 3, 2)
-#' 
-#' par(mfrow=c(2,2))
-#' qqnorm(x, main="Lognormal")
-#' qqnorm(boxCox(x, 1/2), main="boxCox(lambda=0.5)")
-#' qqnorm(boxCox(x, 0), main="boxCox(lambda=0)")
-#' 
-#' plotFdist(boxCox(x, 0))
-#' 
-#' bx <- boxCox(x, lambda = boxCoxLambda(x) )
-#' 
+#' set.seed(1)
+#' x <- rlnorm(500, 1, 0.5)
+#'
+#' y <- boxCox(x, lambda = 0.5)
+#' x_back <- boxCoxInv(y, lambda = 0.5)
+#'
+#' # Check inversion
+#' max(abs(x - x_back))
+#'
+#' # Log-transform (lambda ~ 0)
+#' y0 <- boxCox(x, lambda = 0)
+#'
 
 
-#' @rdname boxCox
 #' @export
-boxCox <- function (x, lambda) {
+boxCox <- function(x, lambda, tol = 1e-6) {
   
-  # from library(forecast)
-  
-  # Author: Rob J Hyndman
-  # origin: library(forecast)
-  if (lambda < 0)
-    x[x < 0] <- NA
-  if (lambda == 0)
-    out <- log(x)
-  else out <- (sign(x) * abs(x)^lambda - 1)/lambda
-  if (!is.null(colnames(x)))
-    colnames(out) <- colnames(x)
-  return(out)
-  
-  # Greg Snow's Variant
-  # boxCox <- function (x, lambda)
-  # {
-  # ### Author: Greg Snow
-  # ### Source: Teaching Demos
-  # xx <- exp(mean(log(x)))
-  # if (lambda == 0)
-  # return(log(x) * xx)
-  # res <- (x^lambda - 1)/(lambda * xx^(lambda - 1))
-  # return(res)
-  # }
-  
-}
-
-
-#' @rdname boxCox
-#' @export
-boxCoxInv <- function(x, lambda){
-  if (lambda < 0)
-    x[x > -1/lambda] <- NA
-  if (lambda == 0)
-    out <- exp(x)
-  else {
-    xx <- x * lambda + 1
-    out <- sign(xx) * abs(xx)^(1/lambda)
+  if (!is.numeric(x)) {
+    if (!all(is.na(x)))
+      stop("x must be numeric")
+    x <- as.numeric(x)
   }
-  if (!is.null(colnames(x)))
-    colnames(out) <- colnames(x)
-  return(out)
+  
+  if (!is.numeric(lambda) || length(lambda) != 1 || !is.finite(lambda))
+    stop("lambda must be a single finite number")
+  
+  if (length(x) == 0)
+    return(x)
+  
+  if (all(is.na(x)))
+    stop("x contains only NA values")
+  
+  if (any(x <= 0, na.rm = TRUE))
+    stop("Box-Cox requires strictly positive values")
+  
+  if (abs(lambda) < tol) {
+    log(x)
+  } else {
+    (x^lambda - 1) / lambda
+  }
 }
 
 
+#' @rdname boxCox
+#' @export
+boxCoxInv <- function(x, lambda, tol = 1e-6) {
+  
+  if (!is.numeric(x)) {
+    if (!all(is.na(x)))
+      stop("x must be numeric")
+    x <- as.numeric(x)
+  }
+  
+  if (!is.numeric(lambda) || length(lambda) != 1 || !is.finite(lambda))
+    stop("lambda must be a single finite number")
+  
+  if (length(x) == 0)
+    return(x)
+  
+  if (all(is.na(x)))
+    stop("x contains only NA values")
+  
+  if (abs(lambda) < tol) {
+    return(exp(x))
+  }
+  
+  tmp <- lambda * x + 1
+  
+  if (all(is.na(tmp)))
+    stop("All values lead to invalid inverse transformation")
+  
+  if (any(tmp <= 0, na.rm = TRUE))
+    stop("lambda * x + 1 must be positive")
+  
+  tmp^(1 / lambda)
+}

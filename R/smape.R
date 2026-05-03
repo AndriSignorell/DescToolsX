@@ -19,10 +19,6 @@
 #' Values are bounded between 0 and 2. Division by zero is handled by
 #' returning \code{NA} for those terms.
 #'
-#' @family error metrics
-#' @concept relative error
-#' @concept regression metrics 
-#' 
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
 #' ref <- c(3.0, 2.5, 3.0)
@@ -36,6 +32,11 @@
 
 
 
+#' @family error.measures
+#' @concept prediction-accuracy
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 smape <- function(x, ...) {
   UseMethod("smape")

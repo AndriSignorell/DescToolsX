@@ -50,6 +50,11 @@
 
 
 
+#' @family date.utils
+#' @concept date-handling
+#' @concept data-manipulation
+#'
+#'
 #' @export
 addMonths <- function (x, n, ...) {
   UseMethod("addMonths")

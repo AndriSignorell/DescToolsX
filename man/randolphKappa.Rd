@@ -70,15 +70,17 @@ Randolph, J. J. (2005). Free-Marginal Multirater Kappa (multirater \eqn{\kappa_{
 An Alternative to Fleiss’ Fixed-Marginal Multirater Kappa. Online submission.
 }
 \seealso{
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{icc}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
-\code{\link{krippAlpha}()}
+\code{\link{krippAlpha}()},
+\code{\link{percAgreement}()}
 }
-\concept{Interrater Agreement}
-\concept{Multi-Rater Agreement}
-\concept{Nominal Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{association-measures}
+\concept{descriptive-statistics}

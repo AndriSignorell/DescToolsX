@@ -89,6 +89,12 @@
 
 
 
+#' @family regression.utils
+#' @concept regression
+#' @concept classification-metrics
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 pseudoR2 <- function(x, which = "McFadden") {
   

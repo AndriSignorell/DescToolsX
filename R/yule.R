@@ -40,11 +40,6 @@
 #' @references
 #' Yule, G. U. (1912). On the methods of measuring association between two attributes.
 #'
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept contingency-tables
-#' @concept categorical-data
-#' 
 #' @examples
 #' m <- matrix(c(12, 5, 3, 20), nrow = 2)
 #' yuleQ(m)
@@ -52,6 +47,12 @@
 #'
 #' 
 #' @rdname yule
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 yuleQ <- function(x, y=NULL,
                   conf.level = 0.95,

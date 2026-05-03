@@ -97,9 +97,18 @@ transformations for gene-expression microarray data, \emph{Bioinformatics}.
 }
 \seealso{
 \code{\link{log}}, \code{\link{log10}}
+
+Other transformations: 
+\code{\link{boxCox}()},
+\code{\link{boxCoxLambda}()},
+\code{\link{scaleX}()},
+\code{\link{yeoJohnson}()}
 }
 \author{
 Werner A. Stahel, ETH Zurich \cr slight modifications Andri
 Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{descriptive-statistics}
+\concept{transformation}
+\concept{transformations}
 \keyword{math}

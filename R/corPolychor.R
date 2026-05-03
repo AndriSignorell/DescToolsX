@@ -77,6 +77,12 @@
 #' res$rho
 #'
 
+#' @family correlation
+#' @concept correlation
+#' @concept association-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 corPolychor <- function(x, y = NULL,
                         method = c("two-step", "ML"),

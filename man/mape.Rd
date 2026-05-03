@@ -50,7 +50,8 @@ mape(fit)
 
 }
 \seealso{
-Other error metrics: 
+Other error.measures: 
+\code{\link{brierScore}()},
 \code{\link{mae}()},
 \code{\link{mse}()},
 \code{\link{nmae}()},
@@ -58,6 +59,6 @@ Other error metrics:
 \code{\link{rmse}()},
 \code{\link{smape}()}
 }
-\concept{error metrics}
-\concept{regression metrics}
-\concept{relative error}
+\concept{descriptive-statistics}
+\concept{error.measures}
+\concept{prediction-accuracy}

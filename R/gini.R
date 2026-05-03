@@ -1,272 +1,173 @@
 
-#' Gini Coefficient 
-#' 
-#' Compute the Gini coefficient, the most commonly used measure of inequality.
-#' 
-#' The range of the Gini coefficient goes from 0 (no concentration) to
-#' \eqn{\sqrt(\frac{n-1}{n})} (maximal concentration). The bias corrected Gini
-#' coefficient goes from 0 to 1.\cr The small sample variance properties of the
-#' Gini coefficient are not known, and large sample approximations to the
-#' variance of the coefficient are poor (Mills and Zandvakili, 1997; Glasser,
-#' 1962; Dixon et al., 1987), therefore confidence intervals are calculated via
-#' bootstrap re-sampling methods (Efron and Tibshirani, 1997). \cr Two types of
-#' bootstrap confidence intervals are commonly used, these are percentile and
-#' bias-corrected (Mills and Zandvakili, 1997; Dixon et al., 1987; Efron and
-#' Tibshirani, 1997). The bias-corrected intervals are most appropriate for
-#' most applications. This is set as default for the \code{type} argument
-#' (\code{"bca"}). Dixon (1987) describes a refinement of the bias-corrected
-#' method known as 'accelerated' - this produces values very closed to
-#' conventional bias corrected intervals.\cr (Iain Buchan (2002)
-#' \emph{Calculating the Gini coefficient of inequality}, see:
-#' \url{https://www.statsdirect.com/help/default.htm#nonparametric_methods/gini.htm})
-#' 
-#' @param x a vector containing at least non-negative elements. The result will
-#' be \code{NA}, if x contains negative elements. 
-#' @param conf.level confidence level for the confidence interval, restricted
-#' to lie between 0 and 1.  If set to \code{TRUE} the bootstrap confidence
-#' intervals are calculated.  If set to \code{NA} (default) no confidence
-#' intervals are returned.
-#' @param sides a character string specifying the side of the confidence
-#' interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-#' \code{"right"}.  You can specify just the initial letter. \code{"left"}
-#' would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.
-#' @param method only bootstrap method is implemented.
-#' @param unbiased logical. In order for G to be an unbiased estimate of the
-#' true population value, calculated gini is multiplied by
-#' \eqn{n/(n-1)}{n/(n-1)}. Default is TRUE. (See Dixon, 1987)
-#' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}.
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. Defaults to \code{FALSE}.
-#' @param \dots the dots are passed to the function \code{\link[boot]{boot}},
-#' when confidence intervals are calculated.
-#' @return If \code{conf.level} is set to \code{NA} then the result will be
-#' \item{a}{ single numeric value} and if a \code{conf.level} is provided, a
-#' named numeric vector with 3 elements: \item{gini}{gini coefficient}
-#' \item{lci}{lower bound of the confidence interval} \item{uci}{upper
-#' bound of the confidence interval}
-#' 
-#' @author Andri Signorell <andri@@signorell.net>
-#' 
-#' @seealso See \code{\link{herfindahl}}, \code{\link{rosenbluth}} for
-#' concentration measures, \code{\link{lc}} for the Lorenz curve\cr
-#' \code{\link[ineq]{ineq}()} in the package \pkg{ineq} contains additional
-#' inequality measures
-#' 
-#' @references Cowell, F. A. (2000) Measurement of Inequality in Atkinson, A.
-#' B. / Bourguignon, F. (Eds): \emph{Handbook of Income Distribution}.
-#' Amsterdam.
-#' 
-#' Cowell, F. A. (1995) \emph{Measuring Inequality} Harvester Wheatshef:
-#' Prentice Hall.
-#' 
-#' Marshall, Olkin (1979) \emph{Inequalities: Theory of Majorization and Its
-#' Applications}. New York: Academic Press.
-#' 
-#' Glasser C. (1962) Variance formulas for the mean difference and coefficient
-#' of concentration. \emph{Journal of the American Statistical Association}
-#' 57:648-654.
-#' 
-#' Mills JA, Zandvakili A. (1997). Statistical inference via bootstrapping for
-#' measures of inequality. \emph{Journal of Applied Econometrics} 12:133-150.
-#' 
-#' Dixon, PM, Weiner J., Mitchell-Olds T, Woodley R. (1987) Boot-strapping the
-#' gini coefficient of inequality. \emph{Ecology} 68:1548-1551.
-#' 
-#' Efron B, Tibshirani R. (1997) Improvements on cross-validation: The
-#' bootstrap method. \emph{Journal of the American Statistical Association}
-#' 92:548-560.
-#' 
-#' @family topic.inequality
-#' @concept Inequality
-#' @concept Lorenz Curve
-#' 
+#' Gini Coefficient
+#'
+#' Computes the Gini coefficient, a widely used measure of inequality,
+#' optionally with bootstrap confidence intervals.
+#'
+#' The Gini coefficient ranges from 0 (perfect equality) to 1 (maximal
+#' inequality). For finite samples, the uncorrected estimator is biased;
+#' setting \code{unbiased = TRUE} applies a standard correction factor.
+#'
+#' Weights are interpreted as frequency (replication) weights, meaning that
+#' each observation contributes proportionally to its weight in the empirical
+#' distribution.
+#'
+#' Confidence intervals are obtained via bootstrap resampling using the
+#' \pkg{boot} package. The default interval type is bias-corrected and
+#' accelerated ("bca").
+#'
+#' @param x Numeric vector of non-negative values.
+#' @param conf.level Confidence level in (0, 1). If \code{NA} (default),
+#'   no confidence interval is computed.
+#' @param sides Character string specifying the interval type: \code{"two.sided"}
+#'   (default), \code{"left"}, or \code{"right"}.
+#' @param method Currently only \code{"boot"} is supported.
+#' @param unbiased Logical. Apply bias correction factor \eqn{1/(1 - \sum w_i^2)}.
+#' @param weights Optional non-negative numeric vector of the same length as \code{x}.
+#' @param na.rm Logical. Remove missing values before computation.
+#' @param \dots Additional arguments passed to the bootstrap procedure:
+#'   \describe{
+#'     \item{type}{Confidence interval type (default \code{"bca"})}
+#'     \item{R}{Number of bootstrap replications (default 999)}
+#'     \item{parallel}{Parallelization mode (\code{"no"}, \code{"multicore"}, \code{"snow"})}
+#'     \item{ncpus}{Number of CPUs}
+#'   }
+#'
+#' @return If \code{conf.level = NA}, a single numeric value. Otherwise a named
+#'   vector with elements \code{est}, \code{lci}, and \code{uci}.
+#'
+#' @details
+#' The implementation uses a numerically stable formulation based on the Lorenz
+#' curve:
+#'
+#' \deqn{
+#' G = \frac{1}{\mu} \sum_i w_i x_i (2F_i - 1)
+#' }
+#'
+#' where \eqn{F_i} are midpoints of cumulative weights and \eqn{\mu} is the
+#' weighted mean.
+#'
 #' @examples
-#' 
-#' # generate vector (of incomes)
-#' x <- c(541, 1463, 2445, 3438, 4437, 5401, 6392, 8304, 11904, 22261)
-#' 
-#' # compute gini coefficient
+#' x <- c(10, 20, 30, 40)
 #' gini(x)
-#' 
-#' # working with weights
-#' fl <- c(2.5, 7.5, 15, 35, 75, 150)    # midpoints of classes
-#' n  <- c(25, 13, 10, 5, 5, 2)          # frequencies
-#' 
-#' # with confidence intervals
-#' gini(x=fl, weights=n, conf.level=0.95, unbiased=FALSE)
-#' 
-#' # some special cases
-#' x <- c(10, 10, 0, 0, 0)
-#' # plot(lc(x))
-#' 
-#' gini(x, unbiased=FALSE)
-#' 
-#' # the same with weights
-#' gini(x=c(10, 0), weights=c(2,3), unbiased=FALSE)
-#' 
-#' # perfect balance
-#' gini(c(10, 10, 10))
-#' 
-
-
+#'
+#' # weighted example
+#' gini(c(10, 0), weights = c(2, 3))
+#'
+#' # with confidence interval
+#' gini(x, conf.level = 0.95, R = 499)
+#'
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
 #' @export
 gini <- function(x, 
-                 conf.level = NA, sides = c("two.sided", "left", "right"),
-                 method = c("boot"), unbiased=TRUE, weights=NULL, 
-                 na.rm=FALSE, ...) {
+                 conf.level = NA,
+                 sides = c("two.sided", "left", "right"),
+                 method = c("boot"),
+                 unbiased = TRUE,
+                 weights = NULL,
+                 na.rm = FALSE,
+                 ...) {
   
-  # recoded for better support weights 2022-09-14
-  
-  # https://core.ac.uk/download/pdf/41339501.pdf
-  
+  # --- weights ---
   if (is.null(weights)) {
-    weights <- rep(1, length(x))
+    weights <- rep_len(1, length(x))
   }
   
-  if (na.rm){
-    na <- (is.na(x) | is.na(weights))
-    x <- x[!na]
-    weights <- weights[!na]
-  } 
+  # --- NA handling ---
+  if (na.rm) {
+    keep <- !is.na(x) & !is.na(weights)
+    x <- x[keep]
+    weights <- weights[keep]
+  }
   
-  if (any(is.na(x)) || any(x < 0)) 
+  # --- checks ---
+  if (length(x) == 0)
+    stop("empty input")
+  
+  if (any(is.na(x)) || any(is.na(weights)))
+    stop("missing values not allowed")
+  
+  if (any(x < 0))
+    stop("x must be non-negative")
+  
+  if (any(weights < 0))
+    stop("weights must be non-negative")
+  
+  # sum of weights must be > 0
+  if (sum(weights) == 0)
     return(NA_real_)
   
   
-  
-  i.gini <- function(x, w, unbiased=FALSE) {
+  # --- core gini ---
+  i.gini <- function(x, w, unbiased = FALSE) {
     
-    w <- w/sum(w)
+    o <- order(x)
+    x <- x[o]
+    w <- w[o]
     
-    x <- x[id <- order(x)]
-    w <- w[id]
+    wsum <- sum(w)
+    w <- w / wsum
     
-    f.hat <- w / 2 + c(0, head(cumsum(w), -1))
-    wm <- meanX(x, w)
+    cw <- cumsum(w)
+    F <- cw - w / 2
     
-    res <- 2 / wm * sum(w * (x - wm) * (f.hat - meanX(f.hat, w)))
+    mu <- sum(w * x)
     
-    if(unbiased)
-      res <- res * 1/(1 - sum(w^2))
+    if (mu == 0)
+      return(0)
     
-    return(res)
+    G <- sum(w * x * (2 * F - 1)) / mu
+    
+    if (unbiased)
+      G <- G / (1 - sum(w^2))
+    
+    G
   }
   
   
+  # --- no CI ---
   if (is.na(conf.level)) {
-    res <- i.gini(x, weights, unbiased = unbiased)
-    
-  } else {
-    
-    sides <- match.arg(sides, choices = c("two.sided","left","right"), 
-                       several.ok = FALSE)
-    if(sides!="two.sided")
-      conf.level <- 1 - 2*(1-conf.level)
-    
-    
-    # boot.gini <- boot(data = x,
-    #                   statistic = function(z, i, u, unbiased) 
-    #                     i.gini(x = z[i], w = u[i], unbiased = unbiased), 
-    #                   R=R, u=weights, unbiased=unbiased)
-    # ci <- boot.ci(boot.gini, conf = conf.level, type = type)
-    # res <- c(gini = boot.gini$t0, lci = ci[[4]][4], uci = ci[[4]][5])
-    
-    
-    # boot arguments in dots ...
-    # adjusted bootstrap percentile (BCa) interval
-    btype <- inDots(..., arg="type", default="bca")
-    R <- inDots(..., arg="R", default=999)
-    parallel <- inDots(..., arg="parallel", default="no")
-    ncpus <- inDots(..., arg="ncpus", default=getOption("boot.ncpus", 1L))
-    
-    
-    # ToDo *******************
-    # *******  implement here the two sample case!! ***********
-    # ToDo *******************
-    
-    boot.fun <- boot::boot(x, 
-                           function(z, i, u, unbiased) 
-                             i.gini(x = z[i], w = u[i], unbiased = unbiased), 
-                           u=weights, unbiased=unbiased, 
-                           R=R, parallel=parallel, ncpus=ncpus)
-    ci <- boot::boot.ci(boot.fun, conf=conf.level, type=btype)
-    
-    if(btype == "norm"){
-      res <- c(est=boot.fun$t0, lci=ci[[4]][2], uci=ci[[4]][3])
-    } else {
-      res <- c(est=boot.fun$t0, lci=ci[[4]][4], uci=ci[[4]][5])
-    }
-    
-    
-    
+    return(i.gini(x, weights, unbiased = unbiased))
   }
   
-  return(res)
   
+  # --- CI ---
+  sides <- match.arg(sides)
+  
+  if (sides != "two.sided")
+    conf.level <- 1 - 2 * (1 - conf.level)
+  
+  dots <- list(...)
+  boot_args <- .extractBootArgs(dots)
+  
+  boot.fun <- boot::boot(
+    data = x,
+    statistic = function(z, i, u, unbiased)
+      i.gini(z[i], u[i], unbiased),
+    R = boot_args$R,
+    u = weights,
+    unbiased = unbiased,
+    parallel = boot_args$parallel,
+    ncpus = boot_args$ncpus
+  )
+  
+  ci <- boot::boot.ci(
+    boot.fun,
+    conf = conf.level,
+    type = boot_args$type
+  )
+  
+  if (boot_args$type == "norm") {
+    res <- c(est = boot.fun$t0,
+             lci = ci[[4]][2],
+             uci = ci[[4]][3])
+  } else {
+    res <- c(est = boot.fun$t0,
+             lci = ci[[4]][4],
+             uci = ci[[4]][5])
+  }
+  
+  res
 }
-
-
-
-# == some history ==========================================================
-
-# Original Zeileis:
-# gini <- function(x)
-# {
-#   n <- length(x)
-#   x <- sort(x)
-#   G <- sum(x * 1:n)
-#   G <- 2*G/(n*sum(x))
-#   G - 1 - (1/n)
-# }
-
-
-# other:
-# http://rss.acs.unt.edu/Rdoc/library/reldist/html/gini.html
-# http://finzi.psych.upenn.edu/R/library/dplR/html/gini.coef.html
-
-
-
-# gini <- function(x, n = rep(1, length(x)), unbiased = TRUE, conf.level = NA, R = 1000, type = "bca", na.rm = FALSE) {
-# 
-#   # cast to numeric, as else sum(x * 1:n) might overflow for integers
-#   # http://stackoverflow.com/questions/39579029/integer-overflow-error-using-gini-function-of-package-desctools
-#   x <- as.numeric(x)
-# 
-#   x <- rep(x, n)    # same handling as Lc
-#   if(na.rm) x <- na.omit(x)
-#   if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-# 
-#   i.gini <- function (x, unbiased = TRUE){
-#     n <- length(x)
-#     x <- sort(x)
-# 
-#     res <- 2 * sum(x * 1:n) / (n*sum(x)) - 1 - (1/n)
-#     if(unbiased) res <- n / (n - 1) * res
-# 
-#     # limit gini to 0 here, if negative values appear, which is the case with
-#     # gini( c(10,10,10))
-#     return( pmax(0, res))
-# 
-#     # other guy out there:
-#     #     N <- if (unbiased) n * (n - 1) else n * n
-#     #     dsum <- drop(crossprod(2 * 1:n - n - 1, x))
-#     #     dsum / (mean(x) * N)
-#     # is this slower, than above implementation??
-#   }
-# 
-#   if(is.na(conf.level)){
-#     res <- i.gini(x, unbiased = unbiased)
-# 
-#   } else {
-#     # adjusted bootstrap percentile (BCa) interval
-#     boot.gini <- boot(x, function(x, d) i.gini(x[d], unbiased = unbiased), R=R)
-#     ci <- boot.ci(boot.gini, conf=conf.level, type=type)
-#     res <- c(gini=boot.gini$t0, lci=ci[[4]][4], uci=ci[[4]][5])
-#   }
-# 
-#   return(res)
-# 
-# }
-
-

@@ -48,6 +48,12 @@
 
 
 #' @rdname cohenD
+#' @family effect.size
+#' @concept effect-size
+#' @concept descriptive-statistics
+#' @concept hypothesis-testing
+#'
+#'
 #' @export
 cohenD <- function(x, y=NULL, 
                    conf.level = NA, sides = c("two.sided", "left", "right"), 

@@ -71,16 +71,18 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 \seealso{
 \code{\link{Association}}
 
-Other topic.correlation: 
+Other assoc.ordinal: 
+\code{\link{gkGamma}()},
+\code{\link{gkTau}()},
 \code{\link{kendallTauA}()},
 \code{\link{kendallTauB}()},
-\code{\link{pearsonCor}()},
+\code{\link{somersDelta}()},
 \code{\link{stuartTauC}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
+\concept{assoc.ordinal}
+\concept{association-measures}
 \concept{correlation}
 \concept{nonparametric}
-\concept{rank-methods}
-\concept{topic.correlation}

@@ -67,6 +67,12 @@
 
 
 #' @method desc Date
+#' @family desc
+#' @concept data-description
+#' @concept date-handling
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 desc.Date <- function(x,
                       main = NULL,

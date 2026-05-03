@@ -24,8 +24,13 @@
 #' @param per.sty format style for proportions. \code{NULL} falls back to
 #'   \code{getOption("DescTools.per.sty")}.
 #' @param \dots further arguments passed to the underlying plot functions.
+#' 
+#' @param y A categorical variable (factor or coercible to factor).
+#' @param conf.level Confidence level for interval estimates (default 0.95).
 #'
 #' @name desc.nn
+#' @aliases .desc_nn
+#' 
 #' @details
 #' \strong{Print output by verbose level:}
 #'
@@ -83,10 +88,10 @@
 #'
 #' @seealso
 #'   \code{\link{desc}} for the generic entry point,
-#'   \code{\link{print.Desc.nq}} for numeric ~ categorical,
-#'   \code{\link{print.Desc.qn}} for categorical ~ numeric,
-#'   \code{\link{print.Desc.qq}} for categorical ~ categorical,
-#'   \code{\link{corCI}}, \code{\link[lumen]{bpTest}},
+#'   \code{\link{desc.nq}} for numeric ~ categorical,
+#'   \code{\link{desc.qn}} for categorical ~ numeric,
+#'   \code{\link{desc.qq}} for categorical ~ categorical,
+#'   \code{\link[lumen]{corCI}}, \code{\link[lumen]{bpTest}},
 #'   \code{\link[stats]{lm}}, \code{\link[stats]{cor.test}}
 #'
 #' @family desc
@@ -108,6 +113,8 @@
 #' # pipe
 #' desc(mpg ~ wt, mtcars) |> plot(which = 3)
 #'
+#' @rdname desc.nn
+#' @usage .desc_nn(x, y, conf.level = 0.95)
 NULL
 
 

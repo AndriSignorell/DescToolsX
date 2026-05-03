@@ -60,13 +60,13 @@ bedrock::pairApply(swiss,
 
 }
 \seealso{
-\code{\link{fisherZ}}, \code{\link{fisherZInv}}
+\code{\link[lumen]{fisherZ}}, \code{\link[lumen]{fisherZInv}}
 
-Other topic.correlation: 
-\code{\link{kendallTauA}()},
-\code{\link{kendallTauB}()},
-\code{\link{spearmanCor}()},
-\code{\link{stuartTauC}()}
+Other correlation: 
+\code{\link{corPart}()},
+\code{\link{corPolychor}()},
+\code{\link{findCorrX}()},
+\code{\link{hoeffdingD}()}
 }
 \author{
 William Revelle
@@ -75,7 +75,6 @@ slight modifications Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net} based on R-Core
 code
 }
-\concept{continuous-data}
+\concept{confidence-intervals}
 \concept{correlation}
-\concept{parametric}
-\concept{topic.correlation}
+\concept{descriptive-statistics}

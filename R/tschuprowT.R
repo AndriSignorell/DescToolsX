@@ -41,11 +41,6 @@
 #'
 #' @seealso \code{\link{chisq.test}} 
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept contingency-tables
-#' @concept categorical-data
-#' 
 #' @examples
 #' # Example with vectors
 #' x <- c("A", "A", "B", "B")
@@ -62,6 +57,12 @@
 
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 tschuprowT <- function(x, y = NULL, correct = FALSE, ...){
   

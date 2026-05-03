@@ -33,6 +33,11 @@
 #' (iris.lof <- lof(iris[,-5], 10))
 #' 
 
+#' @family outlier
+#' @concept outlier-detection
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 lof <- function(data, k) {
   

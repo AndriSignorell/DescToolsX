@@ -47,6 +47,12 @@
 
 
 
+#' @family confusion
+#' @concept classification-metrics
+#' @concept prediction-accuracy
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 cStat <- function(x, ...) {
   UseMethod("cStat")

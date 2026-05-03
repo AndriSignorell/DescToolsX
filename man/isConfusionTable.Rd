@@ -57,3 +57,12 @@ ratings <- cbind(r1 = sample(0:1, 50, TRUE), r2 = sample(0:1, 50, TRUE))
 isConfusionTable(ratings)           # FALSE (not square)
 
 }
+\seealso{
+Other confusion: 
+\code{\link{cStat}()},
+\code{\link{conf}()},
+\code{\link{normalizeToConfusion}()}
+}
+\concept{classification-metrics}
+\concept{confusion}
+\concept{data-inspection}

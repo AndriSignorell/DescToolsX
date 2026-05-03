@@ -45,12 +45,6 @@
 #' 
 #' @seealso \code{\link{Association}}
 #' 
-#' @family topic.correlation
-#' @concept association
-#' @concept ordinal-data
-#' @concept rank-methods
-#' @concept nonparametric
-#' 
 #' @examples
 #' 
 #' # example in:
@@ -62,6 +56,12 @@
 #' stuartTauC(tab, conf.level=0.95)
 #' 
 
+#' @family assoc.ordinal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept nonparametric
+#'
+#'
 #' @export
 stuartTauC <- function(x, y = NULL, 
                        conf.level = NA, 

@@ -60,6 +60,12 @@
 
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 assocs <- function(x, conf.level = 0.95, out = c("def", "ext")){
   
@@ -86,7 +92,7 @@ assocs <- function(x, conf.level = 0.95, out = c("def", "ext")){
                  , "Goodman Kruskal Gamma" = gkGamma(x, conf.level=conf.level)
                  , "Stuart Tau-c" = stuartTauC(x, conf.level=conf.level)
                  , "Somers D C|R" = somersDelta(x, direction="column", conf.level=conf.level)
-                 , "Somers D R|C" = somersDelta(x, direction="r", conf.level=conf.level)
+                 , "Somers D R|C" = somersDelta(x, direction="row", conf.level=conf.level)
                  , "Pearson Correlation" = pearsonCor(x, conf.level = conf.level)
                  , "Spearman Correlation" = spearmanCor(x, conf.level=conf.level)
                  , "Lambda C|R" = lambda(x, direction="column", conf.level=conf.level)
@@ -125,5 +131,6 @@ print.Assocs <- function(x, digits=4, ...){
   
   print(data.frame(out), quote=FALSE)
 }
+
 
 

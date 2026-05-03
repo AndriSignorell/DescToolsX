@@ -66,3 +66,13 @@ Fast computation of Hoeffding’s D statistic.
 Hollander, M., Wolfe, D. A., & Chicken, E. (2013).
 Nonparametric Statistical Methods (3rd ed.).
 }
+\seealso{
+Other correlation: 
+\code{\link{corPart}()},
+\code{\link{corPolychor}()},
+\code{\link{findCorrX}()},
+\code{\link{pearsonCor}()}
+}
+\concept{association-measures}
+\concept{correlation}
+\concept{nonparametric}

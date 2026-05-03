@@ -68,6 +68,11 @@
 #' \emph{Review of Economics and Statistics}, 85(1), 226-234.
 #' https://doi.org/10.1162/rest.2003.85.1.226
 #'
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 simpson <- function(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE) {
   

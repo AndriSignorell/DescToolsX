@@ -30,6 +30,12 @@
 #' 
 
 
+#' @family freq.tables
+#' @concept frequency-analysis
+#' @concept table-manipulation
+#' @concept hypothesis-testing
+#'
+#'
 #' @export
 expFreq <- function(x, freq = c("abs", "rel")) {
   

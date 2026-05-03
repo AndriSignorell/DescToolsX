@@ -42,9 +42,6 @@
 #' 
 #' @seealso \code{\link{range}}, \code{\link{min}}, \code{\link{max}} 
 #' 
-#' @family topic.dispersion
-#' @concept descriptive-statistics
-#' 
 #' @examples
 #' 
 #' x <- c(0:10, 50)
@@ -60,6 +57,11 @@
 
 
 
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept robust-statistics
+#'
+#'
 #' @export
 rangeX <- function(x, trim=NULL, robust=FALSE, na.rm = FALSE, ...){
   

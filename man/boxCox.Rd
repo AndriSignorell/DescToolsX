@@ -3,62 +3,77 @@
 \name{boxCox}
 \alias{boxCox}
 \alias{boxCoxInv}
-\title{Box Cox Transformation}
+\title{Box-Cox Transformation}
 \usage{
-boxCox(x, lambda)
+boxCox(x, lambda, tol = 0.000001)
 
-boxCoxInv(x, lambda)
+boxCoxInv(x, lambda, tol = 0.000001)
 }
 \arguments{
-\item{x}{a numeric vector}
+\item{x}{A numeric vector. Must contain strictly positive values
+(except \code{NA}s).}
 
-\item{lambda}{transformation parameter}
+\item{lambda}{A single numeric transformation parameter.}
+
+\item{tol}{Numeric tolerance for detecting the special case
+\eqn{\lambda \approx 0}.}
 }
 \value{
-a numeric vector of the same length as x.
+A numeric vector of the same length as \code{x}.
 }
 \description{
-\code{boxCox()} returns a transformation of the input variable using a
-Box-Cox transformation.\cr \code{boxCoxInv()} reverses the transformation.
+\code{boxCox()} applies the Box-Cox transformation to a numeric vector.
+\cr \code{boxCoxInv()} reverses the transformation.
 }
 \details{
-The Box-Cox transformation is given by
+The Box-Cox transformation is defined for strictly positive values of
+\code{x} and is given by
 
 \deqn{
-  f_\lambda(x) =
-  \begin{cases}
-    \frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
-    \log(x) & \text{if } \lambda = 0
-  \end{cases}
+f_\lambda(x) =
+\begin{cases}
+\frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
+\log(x) & \text{if } \lambda = 0
+\end{cases}
 }
-}
-\note{
-These two functions are borrowed from \code{library(forecast)}.
+
+The transformation requires strictly positive input values. If
+\code{|lambda| < tol}, the logarithmic transformation is used instead
+for numerical stability.
+
+The inverse transformation recovers the original data (up to numerical
+precision) when the same \code{lambda} and \code{tol} are used.
 }
 \examples{
+set.seed(1)
+x <- rlnorm(500, 1, 0.5)
 
-# example by Greg Snow
-x <- rlnorm(500, 3, 2)
+y <- boxCox(x, lambda = 0.5)
+x_back <- boxCoxInv(y, lambda = 0.5)
 
-par(mfrow=c(2,2))
-qqnorm(x, main="Lognormal")
-qqnorm(boxCox(x, 1/2), main="boxCox(lambda=0.5)")
-qqnorm(boxCox(x, 0), main="boxCox(lambda=0)")
+# Check inversion
+max(abs(x - x_back))
 
-plotFdist(boxCox(x, 0))
-
-bx <- boxCox(x, lambda = boxCoxLambda(x) )
+# Log-transform (lambda ~ 0)
+y0 <- boxCox(x, lambda = 0)
 
 }
 \references{
-Box, G. E. P. and Cox, D. R. (1964) An analysis of
-transformations. \emph{JRSS B} \bold{26} 211--246.
+Box, G. E. P. and Cox, D. R. (1964).
+An analysis of transformations.
+\emph{Journal of the Royal Statistical Society, Series B},
+\bold{26}(2), 211--252.
 }
 \seealso{
-Use \code{\link{boxCoxLambda}} or \code{\link[MASS]{boxcox}} in
-\code{library(MASS)} to find optimal lambda values.
+\code{\link{yeoJohnson}}, \code{\link{yeoJohnsonInv}}
+
+Other transformations: 
+\code{\link{boxCoxLambda}()},
+\code{\link{logSt}()},
+\code{\link{scaleX}()},
+\code{\link{yeoJohnson}()}
 }
-\author{
-Rob J Hyndman \href{mailto:rob.hyndman@monash.edu}{rob.hyndman@monash.edu}
-}
-\keyword{univar}
+\concept{descriptive-statistics}
+\concept{regression}
+\concept{transformation}
+\concept{transformations}

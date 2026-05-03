@@ -80,6 +80,12 @@
 
 
 #' @rdname freq
+#' @family freq.tables
+#' @concept frequency-analysis
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, 
                  include.lowest = TRUE,
@@ -129,32 +135,40 @@ freq <- function(x, breaks = hist(x, plot = FALSE)$breaks,
 
 
 
+
 #' @rdname freq
 #' @method print Freq
 #' @param digits digits for displaying relative frequencies to be changed if required
 #' @export
-print.Freq <- function(x, digits=NULL, ...) {
+print.Freq <- function(x, digits = NULL, ...) {
+  
+  print.gap <- bedrock::getDotsArg(list(...), "print.gap", 2)
   
   # print as data.frame if something was changed
-  if(ncol(x) != 5) {
-    print.data.frame(x, digits=digits, ...)
+  if (ncol(x) != 5) {
+    print.data.frame(x, digits = digits, ...)
   } else {
     
     afmt <- style("abs.sty")
     pfmt <- style("per.sty")
-    if(!is.null(digits))
+    
+    if (!is.null(digits))
       pfmt$digits <- digits
     
-    # object x comes as list lacking an as.data.frame option...
-    d.frm <- setNamesX(data.frame(x[,1],
-                                 fm(x$freq, fmt=afmt),
-                                 fm(x$perc, fmt=pfmt),
-                                 fm(x$cumfreq, fmt=afmt),
-                                 fm(x$cumperc, fmt=pfmt)),
-                      colnames=names(x))
+    d.frm <- setNamesX(
+      data.frame(
+        x[,1],
+        fm(x$freq, fmt = afmt),
+        fm(x$perc, fmt = pfmt),
+        fm(x$cumfreq, fmt = afmt),
+        fm(x$cumperc, fmt = pfmt)
+      ),
+      colnames = names(x)
+    )
     
-    print(d.frm,
-          print.gap = inDots(..., arg="print.gap", default=2))
+    print(
+      d.frm,
+      print.gap = print.gap
+    )
   }
 }
-

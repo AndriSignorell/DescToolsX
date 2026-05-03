@@ -114,5 +114,16 @@ SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
 }
 \seealso{
 \code{\link{meanX}}, \code{\link{hmean}}
+
+Other location: 
+\code{\link{hmean}()},
+\code{\link{hodgesLehmann}()},
+\code{\link{huberM}()},
+\code{\link{medianX}()},
+\code{\link{modeX}()},
+\code{\link{tukeyBiweight}()}
 }
+\concept{descriptive-statistics}
+\concept{location}
+\concept{transformation}
 \keyword{arith}

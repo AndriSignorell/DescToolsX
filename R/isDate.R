@@ -20,6 +20,11 @@
 #' isDate(31002)
 #' 
 
+#' @family date.utils
+#' @concept date-handling
+#' @concept data-inspection
+#'
+#'
 #' @export
 isDate <- function(x, what=c('either','both','timeVaries')) {
   

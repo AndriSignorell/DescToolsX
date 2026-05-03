@@ -44,6 +44,11 @@
 #' imputeKnn(dat, k = 2)
 #' 
 
+#' @family imputation
+#' @concept missing-data
+#' @concept data-manipulation
+#'
+#'
 #' @export
 imputeKnn <- function(data,
                       k = 10,

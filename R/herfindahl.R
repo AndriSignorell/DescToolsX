@@ -23,10 +23,6 @@
 #' If negative values or missing values (when \code{na.rm = FALSE})
 #' are present, \code{NA} is returned.
 #'
-#' @family topic.inequality
-#' @concept Inequality
-#' @concept Concentration Measure
-#'
 #' @author originally based on code of Achim Zeileis <achim.zeileis@@r-project.org>, 
 #' rewritten by Andri Signorell <andri@@signorell.net>
 #' 
@@ -59,6 +55,11 @@
 #' 
 #' 
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 herfindahl <- function(x, n = rep(1, length(x)), parameter=1, na.rm = FALSE) {
   

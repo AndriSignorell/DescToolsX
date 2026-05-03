@@ -48,6 +48,12 @@
 
 
 
+#' @family table.utils
+#' @concept table-manipulation
+#' @concept data-manipulation
+#' @concept agreement
+#'
+#'
 #' @export
 raterFrame <- function(formula, data, subset, na.action, drop.subj=FALSE){
   

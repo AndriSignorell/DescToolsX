@@ -69,6 +69,11 @@
 
 
 #' @rdname extremes
+#' @family quantiles
+#' @concept descriptive-statistics
+#' @concept vector-manipulation
+#'
+#'
 #' @export
 large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
   

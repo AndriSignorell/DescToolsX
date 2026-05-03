@@ -95,4 +95,13 @@ Fox, J. (2016). \emph{Applied Regression Analysis and Generalized Linear Models}
 }
 \seealso{
 \code{\link[mvtnorm]{pmvnorm}}, \code{\link[stats]{optim}}
+
+Other correlation: 
+\code{\link{corPart}()},
+\code{\link{findCorrX}()},
+\code{\link{hoeffdingD}()},
+\code{\link{pearsonCor}()}
 }
+\concept{association-measures}
+\concept{correlation}
+\concept{descriptive-statistics}

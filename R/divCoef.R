@@ -32,6 +32,11 @@
 #'
 
 
+#' @family inequality
+#' @concept inequality-measures
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 divCoef <- function(df, dis = NULL, normalize = FALSE, tol = 1e-8) {
   

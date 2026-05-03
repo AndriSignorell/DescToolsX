@@ -31,9 +31,21 @@ isDate(31002)
 }
 \seealso{
 \code{\link{year}}, \code{\link{month}}, etc.
+
+Other date.utils: 
+\code{\link{addMonths}()},
+\code{\link{as_ym}},
+\code{\link{countWorkDays}()},
+\code{\link{cutAge}()},
+\code{\link{generation}()},
+\code{\link{time_conversions}},
+\code{\link{zodiac}()}
 }
 \author{
 Frank E Harrell
 }
+\concept{data-inspection}
+\concept{date-handling}
+\concept{date.utils}
 \keyword{chron}
 \keyword{logic}

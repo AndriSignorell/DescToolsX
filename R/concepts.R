@@ -32,11 +32,6 @@
 #'   \item{\code{conceptAudit}}{Data frame with concept frequencies.}
 #' }
 #'
-#' @family topic.systemTools
-#' @concept Infrastructure
-#' @concept Documentation Tools
-#' @concept Programming Utilities
-#'
 #' @examples 
 #' getConcepts("DescToolsX")
 #' conceptMap("DescToolsX")
@@ -47,6 +42,11 @@
 
 
 #' @rdname concepts  
+#' @family pkg.introspection
+#' @concept package-utilities
+#' @concept data-inspection
+#'
+#'
 #' @export
 getConcepts <- function(pkg) {
   rd_db <- tools::Rd_db(pkg)

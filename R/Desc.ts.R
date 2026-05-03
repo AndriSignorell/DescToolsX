@@ -58,6 +58,12 @@
 #'   \code{\link[tseries]{adf.test}},
 #'   \code{\link[tseries]{kpss.test}}
 #'
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#' @concept time-series
+#'
+#'
 #' @export
 
 

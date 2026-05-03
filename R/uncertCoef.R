@@ -31,10 +31,6 @@
 #' @references Theil, H. (1972), \emph{Statistical Decomposition Analysis},
 #' Amsterdam: North-Holland Publishing Company. 
 #' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept information-theory
-#' 
 #' @examples
 #' 
 #' # example from Goodman Kruskal (1954)
@@ -51,6 +47,12 @@
 #' uncertCoef(m, direction="column")
 
 
+#' @family assoc.nominal
+#' @concept association-measures
+#' @concept information-theory
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 uncertCoef <- function(x, y = NULL, conf.level = NA, 
                        sides = c("two.sided", "left", "right"),

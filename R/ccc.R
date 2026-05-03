@@ -71,10 +71,6 @@
 #' Snedecor G, Cochran W (1989). \emph{Statistical Methods}. Ames: Iowa State
 #' University Press.
 #' 
-#' @family topic.Agreement
-#' @concept Interrater Agreement
-#' @concept Metric Agreement
-#' 
 #' @examples
 #' 
 #' ## Concordance correlation plot:
@@ -129,6 +125,12 @@
      
 
      
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept correlation
+#' @concept descriptive-statistics
+#'
+#'
 #' @export
 ccc <- function(x, y, ci = "z-transform", 
                 conf.level = 0.95, na.rm = FALSE){

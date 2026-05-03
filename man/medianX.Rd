@@ -114,13 +114,14 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \cr
 \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median}
 
-Other topic.centralTendency: 
+Other location: 
+\code{\link{gmean}()},
+\code{\link{hmean}()},
 \code{\link{hodgesLehmann}()},
 \code{\link{huberM}()},
-\code{\link{meanX}()},
 \code{\link{modeX}()},
 \code{\link{tukeyBiweight}()}
 }
 \concept{descriptive-statistics}
+\concept{location}
 \concept{robust-statistics}
-\concept{topic.centralTendency}

@@ -133,14 +133,18 @@ Forming inferences about some intraclass correlation coefficients.
 \emph{Psychological Methods}, 1, 30–46.
 }
 \seealso{
-Other topic.Agreement: 
+Other assoc.agreement: 
 \code{\link{ccc}()},
 \code{\link{cohenKappa}()},
+\code{\link{cronbachAlpha}()},
 \code{\link{kappaM}()},
 \code{\link{kendallW}()},
 \code{\link{krippAlpha}()},
+\code{\link{percAgreement}()},
 \code{\link{randolphKappa}()}
 }
-\concept{Interrater Agreement}
-\concept{Metric Agreement}
-\concept{topic.Agreement}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{correlation}
+\concept{descriptive-statistics}
+\concept{reliability}

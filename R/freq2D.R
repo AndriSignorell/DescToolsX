@@ -55,6 +55,12 @@
 
 
 #' @rdname freq2D
+#' @family freq.tables
+#' @concept frequency-analysis
+#' @concept descriptive-statistics
+#' @concept table-manipulation
+#'
+#'
 #' @export
 freq2D <- function(x, ...)
 {

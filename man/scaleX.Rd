@@ -37,14 +37,18 @@ points(x=seq_along(x), y=scale(x), col="red" )
 \seealso{
 \link[base:scale]{base::scale}, \link[base:sweep]{base::sweep}
 
-Other topic.dataProcessing: 
-\code{\link{dummy}()},
-\code{\link{impute}()},
-\code{\link{locf}()}
+Other transformations: 
+\code{\link{boxCox}()},
+\code{\link{boxCoxLambda}()},
+\code{\link{logSt}()},
+\code{\link{yeoJohnson}()}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{data processing}
+\concept{descriptive-statistics}
 \concept{robust-statistics}
 \concept{topic.dataProcessing}
+\concept{transformation}
+\concept{transformations}

@@ -1,4 +1,77 @@
 
+#' @name desc.qn
+#' @aliases .desc_qn
+#'
+#' @title Describe Relationship: Categorical y vs Numeric x
+#'
+#' @description
+#' Computes descriptive statistics for the relationship between a categorical
+#' variable \code{y} and a numeric variable \code{x}.
+#'
+#' @param y A categorical variable (factor or coercible to factor).
+#' @param x A numeric variable.
+#' @param conf.level Confidence level for interval estimates (default 0.95).
+#' @param breaks Numeric vector defining cut points for \code{x}.
+#'   If not supplied, quartiles of \code{x} are used.
+#' @param right Logical; passed to \code{cut()}, defining interval closure.
+#' 
+#' @param ... further arguments passed to methods.
+#' @param verbose controls printed output.
+#' @param which selects plots.
+#'
+#' @details
+#' The function summarizes how a numeric variable \code{x} differs across
+#' levels of a categorical variable \code{y}.
+#'
+#' \strong{Computed statistics}
+#' \itemize{
+#'   \item Group-wise descriptive statistics (median, IQR, counts)
+#'   \item Kruskal-Wallis test with effect size (\eqn{\eta^2})
+#'   \item Levene's test for homogeneity of variance
+#'   \item Kendall's Tau-b with confidence interval and p-value
+#'   \item Spearman correlation (reported for higher verbosity levels)
+#' }
+#'
+#' \strong{Binary outcomes}
+#' If \code{y} has two levels:
+#' \itemize{
+#'   \item Area under the curve (AUC)
+#'   \item Prevalence across quantile groups of \code{x}
+#'   \item Cochran-Armitage trend test
+#' }
+#'
+#' \strong{Quantile grouping}
+#' The numeric variable \code{x} is optionally discretized using
+#' \code{breaks}. By default, quartiles are used.
+#'
+#' @return
+#' An object of class \code{"Desc.qn"} inheriting from \code{"Desc"}.
+#'
+#' @section Output components:
+#' \itemize{
+#'   \item \code{grpTable}: group-wise summary table
+#'   \item \code{kw}: Kruskal-Wallis test result
+#'   \item \code{eta2}: effect size
+#'   \item \code{levene}: Levene test result
+#'   \item \code{tauB}: Kendall Tau-b (estimate, CI, p-value)
+#'   \item \code{spearman}: Spearman correlation
+#'   \item \code{auc}: AUC (if binary)
+#'   \item \code{prevTable}: prevalence table (if binary)
+#'   \item \code{caTest}: Cochran-Armitage test (if binary)
+#' }
+#'
+#' @seealso
+#' \code{\link{desc}}, \code{\link{desc.nn}}, \code{\link{desc.nq}},
+#' \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
+#'
+#' @family desc
+#' @concept data-description
+#' @concept descriptive-statistics
+#' @concept association-measures
+#'
+#' @rdname desc.qn
+#' @usage .desc_qn(y, x, conf.level = 0.95, breaks, right)
+NULL
 
 
 #' @keywords internal
@@ -14,6 +87,8 @@
   nValid <- sum(ok)
   lvls  <- levels(yOk)
   k     <- nlevels(yOk)
+  if (k < 2L)
+    stop("'y' must contain at least two distinct levels after removing missing values")
   
   # ── 2. Gruppenweise Kennzahlen via .build_summary_table ──────────────────────
   grpTable <- .build_summary_table(
@@ -23,11 +98,11 @@
   # ── 3. Kruskal-Wallis + eta² ─────────────────────────────────────────────────
   kw   <- kruskal.test(xOk ~ yOk)
   eta2   = .eta2_kruskal(H = kw$statistic, 
-                        k = length(unique(y)), 
-                        n = length(x))
+                         k = k,         # already computed
+                         n = nValid)    # also there..
   
   # ── 4. Levene ────────────────────────────────────────────────────────────────
-  levene <- leveneTest(x ~ y, data.frame(x=xOk, y=yOk))
+  levene <- leveneTest(xOk ~ yOk)
   
   # ── 5. AUC via cStat (nur binär) ─────────────────────────────────────────────
   auc <- if (k == 2L) cStat(xOk, yOk) else NULL
@@ -105,10 +180,12 @@
     class = c("Desc.qn", "Desc")
   )
 }
-  # ── Print ─────────────────────────────────────────────────────────────────────
+
+
+
+# ── Print ─────────────────────────────────────────────────────────────────────
   
-#' @rdname desc
-#' @exportS3Method
+#' @rdname desc.qn
 #' @export
 print.Desc.qn <- function(x, verbose = NULL, ...) {
 
@@ -235,7 +312,8 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
 # governed by DescToolsX design rules once defined.
 
 
-#' @exportS3Method
+#' @rdname desc.qn
+#' @export
 plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
   
   verbose <- verbose %||% x$meta$verbose %||%
@@ -245,12 +323,7 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
   
   # ── default which by verbose ──────────────────────────────────────────────
   if (is.null(which)) {
-    # which <- switch(as.character(verbose),
-    #                 "1" = 1L,
-    #                 "2" = 1:2,
-    #                 if (isBinary) c(1L, 2L, 5L) else 1:2   # verbose = 3
-    # )
-    which <-  1
+    which <-  2
   }
   
   # ── layout ───────────────────────────────────────────────────────────────

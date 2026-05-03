@@ -87,6 +87,7 @@ abstract(d.mydata)
 \code{\link[utils:str]{utils::str()}}, \code{\link[base:summary]{base::summary()}}, \code{\link[bedrock:columnWrap]{bedrock::columnWrap()}},
 \code{\link[=desc]{desc()}}
 }
-\concept{Statistical summary functions}
-\concept{desc}
+\concept{data-description}
+\concept{data-inspection}
+\concept{data.description}
 \keyword{print}

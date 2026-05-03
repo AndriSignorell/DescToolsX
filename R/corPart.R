@@ -69,24 +69,30 @@
 #' @seealso \code{\link[stats]{cor}}, \code{\link[stats]{cov}},
 #'   \code{\link[MASS]{ginv}} for generalized inverse
 #'
+
+
 #' @family correlation
-#' @concept partial-correlation
+#' @concept correlation
+#' @concept association-measures
+#' @concept descriptive-statistics
 #'
-
-
+#'
 #' @export
 corPart <- function(m, x, y) {
   
   if (!is.matrix(m)) m <- as.matrix(m)
   
-  # treat non-square input as data matrix
+  # --- wenn Datenmatrix: Kovarianz berechnen ---
   if (nrow(m) != ncol(m)) {
-    m <- cor(m, use = "pairwise.complete.obs")
+    S <- cov(m, use = "pairwise.complete.obs")
+  } else {
+    # Input ist bereits Matrix → als Kovarianz interpretieren
+    S <- m
   }
   
-  p <- ncol(m)
+  p <- ncol(S)
   
-  # --- index checks ---
+  # --- Index Checks ---
   if (any(!is.finite(x)) || any(!is.finite(y)) ||
       any(x %% 1 != 0) || any(y %% 1 != 0) ||
       any(x < 1) || any(y < 1) ||
@@ -94,41 +100,29 @@ corPart <- function(m, x, y) {
     stop("x and y must be integer indices in 1:ncol(m)")
   }
   
-  xy <- c(x, y)
-  numx <- length(x)
-  numy <- length(y)
+  # --- relevante Submatrix ---
+  idx <- c(x, y)
+  S_sub <- S[idx, idx, drop = FALSE]
   
-  # --- reorder ---
-  reorder <- m[xy, xy, drop = FALSE]
-  
-  X <- reorder[1:numx, 1:numx, drop = FALSE]
-  Y <- reorder[1:numx, (numx + 1):(numx + numy), drop = FALSE]
-  phi <- reorder[(numx + 1):(numx + numy),
-                 (numx + 1):(numx + numy),
-                 drop = FALSE]
-  
-  # --- solve system (robust) ---
-  tmp <- tryCatch(
-    solve(phi, t(Y)),
+  # --- Inversion (Präzisionsmatrix) ---
+  P <- tryCatch(
+    solve(S_sub),
     error = function(e) {
-      stop("phi matrix is singular or ill-conditioned (collinearity in 'y')")
+      stop("Covariance matrix is singular or ill-conditioned (collinearity)")
     }
   )
   
-  X.resid <- X - Y %*% tmp
+  k <- length(x)
   
-  # --- normalize to correlation matrix ---
-  d <- diag(X.resid)
+  # --- Partial correlations aus Präzisionsmatrix ---
+  P_xx <- P[1:k, 1:k, drop = FALSE]
   
-  if (any(!is.finite(d)) || any(d <= 0)) {
-    stop("Partial correlation matrix is not positive definite; check inputs")
-  }
+  D <- diag(1 / sqrt(diag(P_xx)))
+  pc <- -D %*% P_xx %*% D
   
-  sc <- diag(1 / sqrt(d))
-  X.resid <- sc %*% X.resid %*% sc
+  diag(pc) <- 1
   
-  colnames(X.resid) <- rownames(X.resid) <- colnames(m)[x]
+  colnames(pc) <- rownames(pc) <- colnames(m)[x]
   
-  return(X.resid)
+  return(pc)
 }
-

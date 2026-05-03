@@ -149,6 +149,11 @@
 
 
 #' @rdname coefVar
+#' @family dispersion
+#' @concept descriptive-statistics
+#' @concept dispersion
+#'
+#'
 #' @export
 coefVar <- function (x, ...) {
   UseMethod("coefVar")
