@@ -18,7 +18,7 @@
 #' @param ... Fitted model objects
 #' @param FUN Formatting function applied to coefficients
 #' @param order Optional ordering of models
-#' @param verb Logical; if \code{TRUE}, show extended statistics
+#' @param verbose Logical; if \code{TRUE}, show extended statistics
 #'
 #' @return
 #' An object of class \code{"TMod"} with components:
@@ -58,7 +58,7 @@
 
 
 #' @export
-tMod <- function(..., FUN = NULL, order = NA, verb = FALSE){
+tMod <- function(..., FUN = NULL, order = NA, verbose = FALSE){
   
 
   if(is.null(FUN)){
@@ -159,7 +159,7 @@ tMod <- function(..., FUN = NULL, order = NA, verb = FALSE){
   
   structure(
     list(m, mm, lcoef = lapply(lst, `[[`, "coef"),
-         mall = mall, terms = mterms, verb = verb),
+         mall = mall, terms = mterms, verbose = verbose),
     class = "TMod"
   )
   
@@ -172,11 +172,11 @@ tMod <- function(..., FUN = NULL, order = NA, verb = FALSE){
 #' @param digits Number of digits for printing
 #' @param na.form String used for missing values
 #' @export
-print.TMod <- function(x, digits=3, na.form = "-", verb = NULL, ...){
+print.TMod <- function(x, digits=3, na.form = "-", verbose = NULL, ...){
   
-  verb <- if(!is.null(verb)) verb else x$verb
+  verbose <- if(!is.null(verbose)) verbose else x$verbose
   
-  if(!verb){
+  if(!verbose){
     x[[2]] <- x[[2]][match(
       c("adj.r.squared","AIC","N","NAs","n vars","n coef","MAE","RMSE","McFadden"),
       x[[2]]$stat, nomatch = 0), ]
@@ -288,5 +288,4 @@ plot.TMod <- function(x, terms=NULL, intercept=FALSE, ...){
   
   lab
 }
-
 

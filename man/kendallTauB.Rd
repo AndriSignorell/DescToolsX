@@ -2,67 +2,82 @@
 % Please edit documentation in R/kendallTauB.R
 \name{kendallTauB}
 \alias{kendallTauB}
-\title{Kendall's \eqn{\tau_{b}}{Tau-b}}
+\title{Kendall's \eqn{\tau_b} (Tau-b)}
 \usage{
-kendallTauB(
-  x,
-  y = NULL,
-  conf.level = NA,
-  sides = c("two.sided", "left", "right"),
-  ...
-)
+kendallTauB(x, y = NULL, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{a numeric vector, matrix or data.frame.}
+\item{x}{A numeric vector or a contingency table (matrix or table).}
 
-\item{y}{NULL (default) or a vector with compatible dimensions to \code{x}.
-If y is provided, \code{table(x, y, \dots)} is calculated.}
+\item{y}{Optional numeric vector. If supplied, must have the same length as \code{x}.}
 
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence interval will be calculated.}
+\item{conf.level}{Confidence level for confidence intervals. If \code{NA},
+no confidence interval is returned.}
 
-\item{sides}{A character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter.}
-
-\item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-vector interface.}
+\item{\dots}{Further arguments passed to \code{\link{table}} in the vector interface.}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+If \code{conf.level = NA}, a single numeric value is returned.
+Otherwise a named numeric vector with elements:
+\itemize{
+\item \code{tau_b}: estimate
+\item \code{lci}: lower confidence interval
+\item \code{uci}: upper confidence interval
+}
 }
 \description{
-Calculate Kendall's tau-b. The estimator could also be calculated with
-\code{cor(..., method="kendall")}. The calculation of confidence intervals
-however would not be found there.
+Computes Kendall's \eqn{\tau_b}, a measure of association for ordinal variables.
+The function provides interfaces for both contingency tables and paired vectors.
+}
+\details{
+Kendall's \eqn{\tau_b} is a symmetric rank-based measure of association that
+adjusts for ties in both variables. It is defined as
+
+\deqn{
+\tau_b = \frac{C - D}{\sqrt{(C + D + T_X)(C + D + T_Y)}}
+}
+
+where \eqn{C} and \eqn{D} denote the number of concordant and discordant pairs,
+and \eqn{T_X}, \eqn{T_Y} the number of pairs tied on \eqn{X} and \eqn{Y},
+respectively.
+
+\eqn{\tau_b} takes values in \eqn{[-1, 1]}. Values close to \eqn{1} indicate
+strong positive association, values close to \eqn{-1} strong negative association.
+
+In contrast to Somers' D, Kendall's \eqn{\tau_b} is symmetric:
+\code{kendallTauB(x, y)} = \code{kendallTauB(y, x)}.
+
+The estimator is equivalent to \code{cor(x, y, method="kendall")} for vectors,
+but additionally provides confidence intervals.
 }
 \examples{
 
-# example in:
-# http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-# pp. S. 1821
+# Example from SAS documentation (PROC FREQ)
+# https://support.sas.com/documentation/
 
-tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
+tab <- as.table(rbind(
+  c(26,26,23,18,9),
+  c(6,7,9,14,23)
+))
 
 kendallTauB(tab, conf.level=0.95)
 
+# Vector interface
+kendallTauB(mtcars$wt, mtcars$mpg)
+
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
-& Sons, pp. 57-59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
 
-Kendall, M. (1955) \emph{Rank Correlation Methods}, Second Edition, London:
-Charles Griffin and Co.
+Kendall, M. (1955) \emph{Rank Correlation Methods}, Second Edition.
+London: Charles Griffin and Co.
 
-Brown, M.B.andBenedetti, J.K.(1977) Sampling Behavior of Tests for
-Correlation in Two-Way Contingency Tables, \emph{Journal of the American
-Statistical Association}, 72, 309-315.
+Brown, M. B., & Benedetti, J. K. (1977).
+Sampling behavior of tests for correlation in two-way contingency tables.
+\emph{Journal of the American Statistical Association}, 72, 309–315.
 }
 \seealso{
-\code{\link{Association}}
+\code{\link{cor}} for the standard Kendall correlation without confidence intervals.
 
 Other assoc.ordinal: 
 \code{\link{gkGamma}()},
@@ -71,9 +86,6 @@ Other assoc.ordinal:
 \code{\link{somersDelta}()},
 \code{\link{spearmanCor}()},
 \code{\link{stuartTauC}()}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

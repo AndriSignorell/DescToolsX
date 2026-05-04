@@ -179,8 +179,7 @@ desc.table <- function(x, conf.level = 0.95, prop = "rows",
   }
 
   # resolve verbose: function arg > global option > hardcoded default
-  verbose <- verbose %||% getOption("DescTools.verbose", default = 2L)
-  
+  verbose <- .checkVerbose(verbose)
   
   ttype <- if (identical(dim(x), c(2L, 2L))) {
     "t2x2"
@@ -234,7 +233,7 @@ desc.table <- function(x, conf.level = 0.95, prop = "rows",
       relRisk(t(revX(x, margin = 1)), conf.level = conf.level, method = "wald", delta = 0)
     },
     assocs = if (ttype %in% c("t2x2", "trxc")) {
-      assocs(x, conf.level = conf.level, out="ext") 
+      assocsTab(x, conf.level = conf.level, verbose=verbose) 
     } else {
       NULL
     },

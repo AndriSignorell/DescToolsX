@@ -2,73 +2,62 @@
 % Please edit documentation in R/kendallTauA.R
 \name{kendallTauA}
 \alias{kendallTauA}
-\title{Kendall's \eqn{\tau_{a}}{Tau-a}}
+\title{Kendall's \eqn{\tau_a} (Tau-a)}
 \usage{
-kendallTauA(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
+kendallTauA(x, y = NULL, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{Either a contingency table, a two-column object
-(matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+\item{x}{A numeric vector or a contingency table (matrix or table).}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
-\code{y} must be \code{NULL}.}
+\item{y}{Optional numeric vector. If supplied, must have the same length as \code{x}.}
 
-\item{direction}{direction of the calculation. Can be \code{"row"} (default)
-or \code{"column"}, where \code{"row"} calculates Kendall's tau-a (R|C)
-("column dependent").}
+\item{conf.level}{Confidence level for confidence intervals. If \code{NA},
+no confidence interval is returned.}
 
-\item{conf.level}{Confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
-
-\item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-vector interface.}
+\item{\dots}{Further arguments passed to \code{\link{table}} in the vector interface.}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+If \code{conf.level = NA}, a single numeric value is returned.
+Otherwise a named numeric vector with elements:
+\itemize{
+\item \code{tau_a}: estimate
+\item \code{lci}: lower confidence interval
+\item \code{uci}: upper confidence interval
+}
 }
 \description{
-Calculate Kendall's tau-a statistic, a measure of association for ordinal
-factors in a two-way table.\cr The function has interfaces for a table
-(matrix) and for single vectors.
+Computes Kendall's \eqn{\tau_a}, a rank-based measure of association for ordinal variables.
+The function provides interfaces for both contingency tables and paired vectors.
 }
 \details{
-Kendall's tau coefficient (sometimes called "Kendall rank correlation
-coefficient"), is a statistic used to measure the association between two
-measured quantities. It is a measure of rank correlation: the similarity of
-the orderings of the data when ranked by each of the quantities. \cr
-Kendall's tau-a is computed as \deqn{ \tau_a(C|R) = \frac{P-Q}{\frac{1}{2}
-\cdot n \cdot (n-1)}}{tau_a = 2 * (P-Q) / (n * (n-1))} where P equals twice
-the number of concordances and Q twice the number of discordances. Its range
-is \verb{[-1, 1]}.\cr (Note that Kendall tau-a does not take into consideration any
-ties, which makes it unpractical. Consider using \code{\link{kendallTauB}}
-(Tau-b) when ties are present.)
+Kendall's \eqn{\tau_a} is defined as
+
+\deqn{
+\tau_a = \frac{C - D}{\frac{1}{2} n (n - 1)}
+}
+
+where \eqn{C} and \eqn{D} denote the number of concordant and discordant pairs.
+
+\eqn{\tau_a} takes values in \eqn{[-1, 1]}. Values close to \eqn{1} indicate
+strong positive association, values close to \eqn{-1} strong negative association.
+
+In contrast to \code{\link{kendallTauB}}, \eqn{\tau_a} does not adjust for ties.
+Therefore, it is generally not recommended when ties are present in the data.
+
+Kendall's \eqn{\tau_a} is symmetric:
+\code{kendallTauA(x, y)} = \code{kendallTauA(y, x)}.
 }
 \examples{
 
+# Table example
+tab <- as.table(rbind(
+  c(26,26,23,18,9),
+  c(6,7,9,14,23)
+))
 
-# example in:
-# http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-# pp. S. 1821
+kendallTauA(tab, conf.level=0.95)
 
-tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
-
-# Kendall's tau-a C|R
-kendallTauA(tab, direction="column", conf.level=0.95)
-# Kendall's tau-a R|C
-kendallTauA(tab, direction="row", conf.level=0.95)
-
-# http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-# pp. 1814 (143)
-tab <- as.table(cbind(c(11,2),c(4,6)))
-
-kendallTauA(tab, direction="row", conf.level=0.95)
-kendallTauA(tab, direction="column", conf.level=0.95)
-
-# Liebetrau, pp. 52
+# Vector example
 x <- c(1,2,2,3,3,3,4,5)
 y <- c(1,3,2,1,5,3,4,5)
 
@@ -76,18 +65,16 @@ kendallTauA(x, y, conf.level=0.95)
 
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
-& Sons, pp. 57-59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
 
-Hollander, M, Wolfe, D. A., Chicken, E. (2014) \emph{Nonparametric
-Statistical Methods}, Third edition, Wiley,
+Hollander, M., Wolfe, D. A., & Chicken, E. (2014)
+\emph{Nonparametric Statistical Methods}, 3rd edition, Wiley.
 
-Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University
-Papers Series on Quantitative Applications in the Social Sciences, 07-004.
-Newbury Park, CA: Sage, pp. 49-56
+Liebetrau, A. M. (1983)
+\emph{Measures of Association}, Sage.
 }
 \seealso{
-\code{\link{Association}}
+\code{\link{kendallTauB}} (recommended when ties are present),
 
 Other assoc.ordinal: 
 \code{\link{gkGamma}()},
@@ -96,9 +83,6 @@ Other assoc.ordinal:
 \code{\link{somersDelta}()},
 \code{\link{spearmanCor}()},
 \code{\link{stuartTauC}()}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

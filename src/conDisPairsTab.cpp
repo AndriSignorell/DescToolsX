@@ -1,6 +1,8 @@
 
 
-//   Rewritten by Andri Signorell in C++ 
+//  Rewritten by Andri Signorell in C++
+//  Concordant and discordant pairs for a contingency table
+
 
 #include <Rcpp.h>
 #include <vector>
@@ -43,7 +45,8 @@ class BIT2D {
 
 
 // [[Rcpp::export]]
-List conDisPairsTab(IntegerMatrix x) {
+List conDisPairsTab_cpp(IntegerMatrix x) {
+  
   int n = x.nrow(), m = x.ncol();
   IntegerMatrix pi_c(n, m), pi_d(n, m);
   
@@ -72,17 +75,54 @@ List conDisPairsTab(IntegerMatrix x) {
   }
   
   long long C = 0, D = 0;
+  long long Ties_XY = 0;
+  
   for (int i = 0; i < n; ++i) {
     for (int j = 0; j < m; ++j) {
-      C += static_cast<long long>(pi_c(i, j)) * x(i, j);
-      D += static_cast<long long>(pi_d(i, j)) * x(i, j);
+      long long nij = x(i, j);
+      
+      C += static_cast<long long>(pi_c(i, j)) * nij;
+      D += static_cast<long long>(pi_d(i, j)) * nij;
+      
+      // joint ties
+      if (nij > 1)
+        Ties_XY += nij * (nij - 1) / 2;
     }
   }
   
+  // ---- row sums ----
+  std::vector<long long> rowSum(n, 0), colSum(m, 0);
+  
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < m; ++j) {
+      rowSum[i] += x(i, j);
+      colSum[j] += x(i, j);
+    }
+  }
+  
+  // ---- Ties_X ----
+  long long Ties_X = 0;
+  for (int i = 0; i < n; ++i) {
+    long long t = rowSum[i];
+    if (t > 1)
+      Ties_X += t * (t - 1) / 2;
+  }
+  
+  // ---- Ties_Y ----
+  long long Ties_Y = 0;
+  for (int j = 0; j < m; ++j) {
+    long long t = colSum[j];
+    if (t > 1)
+      Ties_Y += t * (t - 1) / 2;
+  }
+  
   return List::create(
-    Named("pi.c") = pi_c,
-    Named("pi.d") = pi_d,
     Named("C") = C / 2.0,
-    Named("D") = D / 2.0
+    Named("D") = D / 2.0,
+    Named("Ties_X") = Ties_X,
+    Named("Ties_Y") = Ties_Y,
+    Named("Ties_XY") = Ties_XY,
+    Named("pi.c") = pi_c,
+    Named("pi.d") = pi_d
   );
 }

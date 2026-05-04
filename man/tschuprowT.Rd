@@ -67,7 +67,7 @@ https://doi.org/10.1016/j.jkss.2012.10.002
 \code{\link{chisq.test}}
 
 Other assoc.nominal: 
-\code{\link{assocs}()},
+\code{\link{assocsTab}()},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{lambda}()},

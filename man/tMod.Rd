@@ -6,9 +6,9 @@
 \alias{plot.TMod}
 \title{Compare multiple statistical models}
 \usage{
-tMod(..., FUN = NULL, order = NA, verb = FALSE)
+tMod(..., FUN = NULL, order = NA, verbose = FALSE)
 
-\method{print}{TMod}(x, digits = 3, na.form = "-", verb = NULL, ...)
+\method{print}{TMod}(x, digits = 3, na.form = "-", verbose = NULL, ...)
 
 \method{plot}{TMod}(x, terms = NULL, intercept = FALSE, ...)
 }
@@ -19,7 +19,7 @@ tMod(..., FUN = NULL, order = NA, verb = FALSE)
 
 \item{order}{Optional ordering of models}
 
-\item{verb}{Logical; if \code{TRUE}, show extended statistics}
+\item{verbose}{Logical; if \code{TRUE}, show extended statistics}
 
 \item{x}{A \code{"TMod"} object}
 

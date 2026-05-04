@@ -242,7 +242,7 @@ tmodSummary.glm <- function(x, conf.level = 0.95, use.profile = TRUE, ...){
     statsx <- pseudoR2(x, which = "all")
     
     # Associations
-    statsy <- sapply(assocsXY(pred, y), "[", 1)
+    statsy <- sapply(.assocsGen(pred, y), "[", 1)
     
     statsx <- c(
       statsx,

@@ -2,105 +2,105 @@
 % Please edit documentation in R/somersDelta.R
 \name{somersDelta}
 \alias{somersDelta}
-\title{Somers' Delta}
+\title{Somers' D (Somers' Delta)}
 \usage{
-somersDelta(
-  x,
-  y = NULL,
-  conf.level = NA,
-  sides = c("two.sided", "left", "right"),
-  direction = c("row", "column"),
-  ...
-)
+somersDelta(x, y = NULL, conf.level = NA, direction = c("row", "column"))
 }
 \arguments{
-\item{x}{Either a contingency table, a two-column object
-(matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+\item{x}{A numeric vector or a contingency table (matrix or table).}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
-\code{y} must be \code{NULL}.}
+\item{y}{Optional numeric vector. If supplied, must have the same length as \code{x}.}
 
-\item{conf.level}{Confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
+\item{conf.level}{Confidence level for confidence intervals. If \code{NA},
+no confidence interval is returned.}
 
-\item{sides}{Alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
-
-\item{direction}{direction of the calculation. Can be \code{"row"} (default)
-or \code{"column"}, where \code{"row"} calculates Somers' D (R | C) ("column
-dependent").}
-
-\item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-vector interface.}
+\item{direction}{Direction for contingency tables:
+\code{"row"} (default) computes \eqn{D(Y|X)},
+\code{"column"} computes \eqn{D(X|Y)}.}
 }
 \value{
-a single numeric value if no confidence intervals are requested\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+If \code{conf.level = NA}, a single numeric value is returned.
+Otherwise a named numeric vector with elements:
+\itemize{
+\item \code{somers}: estimate
+\item \code{lci}: lower confidence interval
+\item \code{uci}: upper confidence interval
+}
 }
 \description{
-Calculate Somers' Delta statistic, a measure of association for ordinal
-factors in a two-way table. The function has interfaces for a table (matrix)
-and for single vectors.
+Computes Somers' D, an asymmetric measure of association for ordinal variables.
+The function provides interfaces for both contingency tables and paired vectors.
 }
 \details{
-Somers' D(C|R) and Somers' D(R|C) are asymmetric modifications of
-\eqn{\tau_b} and Goodman-Kruskal's Gamma. C|R indicates that the row
-variable x is regarded as the independent variable and the column variable y
-is regarded as dependent. Similarly, R|C indicates that the column variable
-y is regarded as the independent variable and the row variable x is regarded
-as dependent. It is logically very similar to Gamma, but differs in that it
-uses a correction only for pairs that are tied on the dependent variable. As
-Gamma and the Taus, D is appropriate only when both variables lie on an
-ordinal scale.\cr Somers' D is computed as\cr \deqn{ D(C | R) =
-\frac{P-Q}{n^2 - \sum(n_i.^2)}} \%\% D(C | R) = (P-Q)/(n^2 -
-sum(rowSums(tab)^2)) where P equals twice the number of concordances and Q
-twice the number of discordances and \eqn{n_i.} rowSums(tab). Its range lies
-\verb{[-1, 1]}. The interpretation of d is analogous to Gamma.
+Somers' D is a directional measure of association related to Kendall's
+\eqn{\tau_b} and Goodman–Kruskal's Gamma. It differs from Gamma in that
+it corrects only for ties on the dependent variable.
+
+For two variables \eqn{X} and \eqn{Y}, Somers' D is defined as
+
+\deqn{D(Y|X) = \frac{C - D}{C + D + T_Y}}
+
+where \eqn{C} and \eqn{D} denote the number of concordant and discordant pairs,
+and \eqn{T_Y} the number of pairs tied on the dependent variable.
+
+Somers' D takes values in \eqn{[-1, 1]}. Values close to \eqn{1} indicate
+strong positive association, values close to \eqn{-1} strong negative association.
+
+\strong{Direction:}
+\itemize{
+\item For vectors: \code{somersDelta(x, y)} estimates \eqn{D(Y|X)}.
+\item Reversing the order, \code{somersDelta(y, x)}, estimates \eqn{D(X|Y)}.
+\item For tables: \code{direction="row"} computes \eqn{D(Y|X)},
+\code{direction="column"} computes \eqn{D(X|Y)}.
+}
+
+Somers' D is appropriate only when both variables are ordinal.
 }
 \examples{
 
-# example in:
-# http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-# pp. S. 1821
-# Somers' D C|R 0.4427 0.0837 0.2786 0.6068
-# Somers' D R|C 0.2569 0.0499 0.1592 0.3547
+# Example from SAS documentation (PROC FREQ)
+# https://support.sas.com/documentation/
+#
+# Reported values:
+# Somers' D C|R = 0.4427 (95\% CI: 0.2786, 0.6068)
+# Somers' D R|C = 0.2569 (95\% CI: 0.1592, 0.3547)
 
-tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
+tab <- as.table(rbind(
+  c(26,26,23,18,9),
+  c(6,7,9,14,23)
+))
 
-# Somers' D C|R
-somersDelta(tab, direction="column", conf.level=0.95)
-# Somers' D R|C
+# D(Y|X)  (row direction)
 somersDelta(tab, direction="row", conf.level=0.95)
+
+# D(X|Y)  (column direction)
+somersDelta(tab, direction="column", conf.level=0.95)
+
+# Vector interface
+somersDelta(mtcars$wt, mtcars$mpg)
 
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
-& Sons, pp. 57--59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
 
-Brown, M.B., Benedetti, J.K.(1977) Sampling Behavior of Tests for
-Correlation in Two-Way Contingency Tables, \emph{Journal of the American
-Statistical Association}, 72, 309-315.
+Brown, M. B., & Benedetti, J. K. (1977).
+Sampling behavior of tests for correlation in two-way contingency tables.
+\emph{Journal of the American Statistical Association}, 72, 309–315.
 
-Goodman, L. A., & Kruskal, W. H. (1954) Measures of association for cross
-classifications. \emph{Journal of the American Statistical Association}, 49,
-732-764.
+Goodman, L. A., & Kruskal, W. H. (1954).
+Measures of association for cross classifications.
+\emph{Journal of the American Statistical Association}, 49, 732–764.
 
-Somers, R. H. (1962) A New Asymmetric Measure of Association for Ordinal
-Variables, \emph{American Sociological Review}, 27, 799--811.
+Somers, R. H. (1962).
+A new asymmetric measure of association for ordinal variables.
+\emph{American Sociological Review}, 27, 799–811.
 
-Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
-classifications III: Approximate sampling theory. \emph{Journal of the
-American Statistical Association}, 58, 310--364.
+Goodman, L. A., & Kruskal, W. H. (1963).
+Measures of association for cross classifications III.
+\emph{Journal of the American Statistical Association}, 58, 310–364.
 }
 \seealso{
-There's an implementation of Somers's D in Frank Harrell's
-\pkg{Hmisc} \code{\link[Hmisc]{somers2}}, which is quite fast for large
-sample sizes. However it is restricted to computing Somers' Dxy rank
-correlation between a variable x and a binary (0-1) variable y.\cr
-Other association measures: \code{\link{Association}}
+\code{\link[Hmisc]{somers2}} (restricted to binary response),
 
 Other assoc.ordinal: 
 \code{\link{gkGamma}()},
@@ -109,9 +109,6 @@ Other assoc.ordinal:
 \code{\link{kendallTauB}()},
 \code{\link{spearmanCor}()},
 \code{\link{stuartTauC}()}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

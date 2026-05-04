@@ -78,7 +78,7 @@ Yule, G. U. (1912). On the methods of measuring association between two attribut
 }
 \seealso{
 Other assoc.nominal: 
-\code{\link{assocs}()},
+\code{\link{assocsTab}()},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{lambda}()},

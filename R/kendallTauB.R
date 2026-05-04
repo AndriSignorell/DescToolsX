@@ -1,114 +1,94 @@
 
-#' Kendall's \eqn{\tau_{b}}{Tau-b} 
-#' 
-#' Calculate Kendall's tau-b. The estimator could also be calculated with
-#' \code{cor(..., method="kendall")}. The calculation of confidence intervals
-#' however would not be found there. 
-#' 
-#' 
-#' @param x a numeric vector, matrix or data.frame. 
-#' @param y NULL (default) or a vector with compatible dimensions to \code{x}.
-#' If y is provided, \code{table(x, y, \dots)} is calculated. 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
-#' (which is the default) no confidence interval will be calculated. 
-#' @param \dots further arguments are passed to the function
-#' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-#' vector interface.
-#' 
-#' @inheritParams ConfidenceIntervals
-#' 
-#' @return a single numeric value if no confidence intervals are requested,\cr
-#' and otherwise a numeric vector with 3 elements for the estimate, the lower
-#' and the upper confidence interval 
-#' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{Association}} 
-#' 
-#' @references Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
-#' & Sons, pp. 57-59.
-#' 
-#' Kendall, M. (1955) \emph{Rank Correlation Methods}, Second Edition, London:
-#' Charles Griffin and Co.
-#' 
-#' Brown, M.B.andBenedetti, J.K.(1977) Sampling Behavior of Tests for
-#' Correlation in Two-Way Contingency Tables, \emph{Journal of the American
-#' Statistical Association}, 72, 309-315.
-#' 
+#' Kendall's \eqn{\tau_b} (Tau-b)
+#'
+#' @description
+#' Computes Kendall's \eqn{\tau_b}, a measure of association for ordinal variables.
+#' The function provides interfaces for both contingency tables and paired vectors.
+#'
+#' @details
+#' Kendall's \eqn{\tau_b} is a symmetric rank-based measure of association that
+#' adjusts for ties in both variables. It is defined as
+#'
+#' \deqn{
+#' \tau_b = \frac{C - D}{\sqrt{(C + D + T_X)(C + D + T_Y)}}
+#' }
+#'
+#' where \eqn{C} and \eqn{D} denote the number of concordant and discordant pairs,
+#' and \eqn{T_X}, \eqn{T_Y} the number of pairs tied on \eqn{X} and \eqn{Y},
+#' respectively.
+#'
+#' \eqn{\tau_b} takes values in \eqn{[-1, 1]}. Values close to \eqn{1} indicate
+#' strong positive association, values close to \eqn{-1} strong negative association.
+#'
+#' In contrast to Somers' D, Kendall's \eqn{\tau_b} is symmetric:
+#' \code{kendallTauB(x, y)} = \code{kendallTauB(y, x)}.
+#'
+#' The estimator is equivalent to \code{cor(x, y, method="kendall")} for vectors,
+#' but additionally provides confidence intervals.
+#'
+#' @param x A numeric vector or a contingency table (matrix or table).
+#' @param y Optional numeric vector. If supplied, must have the same length as \code{x}.
+#' @param conf.level Confidence level for confidence intervals. If \code{NA},
+#'   no confidence interval is returned.
+#' @param \dots Further arguments passed to \code{\link{table}} in the vector interface.
+#'
+#' @return
+#' If \code{conf.level = NA}, a single numeric value is returned.
+#' Otherwise a named numeric vector with elements:
+#' \itemize{
+#'   \item \code{tau_b}: estimate
+#'   \item \code{lci}: lower confidence interval
+#'   \item \code{uci}: upper confidence interval
+#' }
+#'
+#' @seealso
+#' \code{\link{cor}} for the standard Kendall correlation without confidence intervals.
+#'
+#' @references
+#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+#'
+#' Kendall, M. (1955) \emph{Rank Correlation Methods}, Second Edition.
+#' London: Charles Griffin and Co.
+#'
+#' Brown, M. B., & Benedetti, J. K. (1977).
+#' Sampling behavior of tests for correlation in two-way contingency tables.
+#' \emph{Journal of the American Statistical Association}, 72, 309–315.
+#'
 #' @examples
-#' 
-#' # example in:
-#' # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-#' # pp. S. 1821
-#' 
-#' tab <- as.table(rbind(c(26,26,23,18,9),c(6,7,9,14,23)))
-#' 
+#'
+#' # Example from SAS documentation (PROC FREQ)
+#' # https://support.sas.com/documentation/
+#'
+#' tab <- as.table(rbind(
+#'   c(26,26,23,18,9),
+#'   c(6,7,9,14,23)
+#' ))
+#'
 #' kendallTauB(tab, conf.level=0.95)
-#' 
-
+#'
+#' # Vector interface
+#' kendallTauB(mtcars$wt, mtcars$mpg)
+#'
 #' @family assoc.ordinal
 #' @concept association-measures
 #' @concept descriptive-statistics
 #' @concept nonparametric
-#'
-#'
+
+
+
 #' @export
-kendallTauB <- function(x, y = NULL, 
-                        conf.level = NA, 
-                        sides = c("two.sided", "left", "right"),
+kendallTauB <- function(x, y = NULL,
+                        conf.level = NA,
                         ...){
   
-  # Ref: http://www.fs.fed.us/psw/publications/lewis/LewisHMP.pdf
-  # pp 2-9
-  #
+  res <- .assocsGen(
+    x = x,
+    y = y,
+    which = "tau_b",
+    conf.level = conf.level
+  )
   
-  if(!is.null(y)) {
-    z <- conDisPairsXY_ind_cpp(x, y)
-    
-  } else {
-    tab <- as.table(x)
-    z <- conDisPairsTab(tab)
-  }
-  
-  n <- sum(tab)
-  n0 <- n*(n-1)/2
-  ti <- rowSums(tab)
-  uj <- colSums(tab)
-  n1 <- sum(ti * (ti-1) / 2)
-  n2 <- sum(uj * (uj-1) / 2)
-  
-  taub <- (z$C - z$D) / sqrt((n0-n1)*(n0-n2))
-  
-  pi <- tab / sum(tab)
-  
-  pdiff <- (z$pi.c - z$pi.d) / sum(tab)
-  Pdiff <- 2 * (z$C - z$D) / sum(tab)^2
-  
-  rowsum <- rowSums(pi) 
-  colsum <- colSums(pi)  
-  
-  rowmat <- matrix(rep(rowsum, dim(tab)[2]), ncol = dim(tab)[2])
-  colmat <- matrix(rep(colsum, dim(tab)[1]), nrow = dim(tab)[1], byrow = TRUE)
-  
-  delta1 <- sqrt(1 - sum(rowsum^2))
-  delta2 <- sqrt(1 - sum(colsum^2))
-  
-  # Compute asymptotic standard errors taub
-  tauphi <- (2 * pdiff + Pdiff * colmat) * delta2 * delta1 + (Pdiff * rowmat * delta2)/delta1
-  sigma2 <- ((sum(pi * tauphi^2) - sum(pi * tauphi)^2)/(delta1 * delta2)^4) / n
-  
-  # for very small pi/tauph it's possible that sigma2 gets negative so we cut small negative values here
-  # example:  kendallTauB(table(iris$Species, iris$Species))
-  if(sigma2 < .Machine$double.eps * 10) sigma2 <- 0
-  
-  if (is.na(conf.level)) {
-    result <- taub
-  }
-  else {
-    pr2 <- 1 - (1 - conf.level)/2
-    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + taub
-    result <- c(tau_b = taub, lci = max(ci[1], -1), uci = min(ci[2], 1))
-  }
-  
-  return(result)
-
+  # unwrap single element list
+  res[[1]]
 }
 

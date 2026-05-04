@@ -1,6 +1,8 @@
 
+//  Association measures including confidence intervals based on fast
+//  concordant discordant pairs calculation
 
-//   Rewritten by Andri Signorell in C++
+//  Rewritten by Andri Signorell in C++
 
 #include <Rcpp.h>
 #include <vector>
@@ -47,9 +49,9 @@ struct BIT2D {
 
 
 // [[Rcpp::export]]
-Rcpp::NumericVector assoc_revo_cpp(Rcpp::NumericVector xR,
-                                     Rcpp::NumericVector yR,
-                                     double conf_level = 0.95) {
+Rcpp::NumericVector assoc_cpp(Rcpp::NumericVector xR,
+                              Rcpp::NumericVector yR,
+                              double conf_level = 0.95) {
   
   using namespace Rcpp;
   using std::vector;
@@ -198,7 +200,7 @@ Rcpp::NumericVector assoc_revo_cpp(Rcpp::NumericVector xR,
     };
     
     // ============================================================
-      // Somers D
+    // Somers D
     // ============================================================
       double T_     = n0 - Ty;
     double somers = S / T_;
@@ -227,7 +229,7 @@ Rcpp::NumericVector assoc_revo_cpp(Rcpp::NumericVector xR,
     // sigma2   = sum(count * psi^2) - (sum(count * psi))^2 / n
     // Ref: gkGamma() in DescTools
     // ============================================================
-      double gamma    = NA_REAL;
+    double gamma    = NA_REAL;
     auto ci_gamma   = std::make_pair(NA_REAL, NA_REAL);
     
     if (C + D > 0.0) {
@@ -256,7 +258,7 @@ Rcpp::NumericVector assoc_revo_cpp(Rcpp::NumericVector xR,
     // sigma2  = 2/(n*(n-1)) * ((2*(n-2))/(n*(n-1)^2)*sum((Ci-C_)^2) + 1 - tau_a^2)
     // Ref: kendallTauA() in DescTools
     // ============================================================
-      double tau_a    = S / n0;
+    double tau_a    = S / n0;
     auto   ci_tau_a = std::make_pair(NA_REAL, NA_REAL);
     {
       vector<double> CiVec;

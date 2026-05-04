@@ -102,7 +102,7 @@ Gerritsen, A (2010)
 \code{\link{oddsRatio}}
 
 Other assoc.nominal: 
-\code{\link{assocs}()},
+\code{\link{assocsTab}()},
 \code{\link{contCoef}()},
 \code{\link{cramerV}()},
 \code{\link{lambda}()},
