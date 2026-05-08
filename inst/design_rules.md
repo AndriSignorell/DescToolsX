@@ -1,3 +1,4 @@
+
 # DescToolsX — Design Rules & Architecture
 
 Version: 0.4  
@@ -5,37 +6,37 @@ Maintainer: Andri Signorell
 
 ---
 
-# 1. Projektphilosophie
+# 1. Project Philosophy
 
-DescToolsX ist der konzeptionelle Nachfolger von DescTools mit folgenden Leitprinzipien:
+DescToolsX is the conceptual successor to DescTools and follows these guiding principles:
 
-- API-konsistent und vorhersagbar
-- Methodisch transparent
-- Defensive-programming-orientiert
-- CRAN-sauber
-- Klar strukturiert (Engine / Interface / Resolver getrennt)
+- API-consistent and predictable
+- Methodologically transparent
+- Defensive-programming-oriented
+- CRAN-clean
+- Clearly structured, with engine, interface, and resolver separated
 
-Übergeordnetes Stilziel: DescToolsX soll wirken wie `survival`, `boot`, `stats` — ein statistisches Framework, kein historisch gewachsener Werkzeugkasten.
+Overall style goal: DescToolsX should feel like `survival`, `boot`, or `stats` — a statistical framework, not a historically grown toolbox.
 
-**Grundsatz:**  
-Konsistenz > Perfektion  
-Base-R-Kompatibilität > stylistische Reinheit
+**Core principle:**  
+Consistency > Perfection  
+Base-R compatibility > stylistic purity
 
 ---
 
-# 2. Architektur
+# 2. Architecture
 
-## 2.1 Trennung der Ebenen
+## 2.1 Separation of Layers
 
-Jede Methodenfamilie folgt diesem Schema:
+Each method family follows this structure:
 
-```
+```text
 Interface → Resolver → Engine → Recycle Layer
 ```
 
-Beispiel für `binomCI`:
+Example for `binomCI`:
 
-```
+```text
 binomCI()
  ├── .resolveMethod()
  ├── .recycleApply()
@@ -45,57 +46,57 @@ binomCI()
       └── ...
 ```
 
-## 2.2 Recycling-Framework
+## 2.2 Recycling Framework
 
-- Vektorisierung erfolgt ausschliesslich über `.recycleApply()`
-- Kein implizites Recycling in Engines
-- Engines arbeiten skalare Fälle
-- Das Interface garantiert konsistente Längen
+- Vectorization is handled exclusively via `.recycleApply()`
+- No implicit recycling inside engines
+- Engines operate on scalar cases
+- The interface guarantees consistent lengths
 
 ### Vectorization Contract
 
-- Interface garantiert Vektorisierung
-- Engines dürfen niemals Vektoren erwarten
-- Recycling erfolgt zentral
+- The interface guarantees vectorization
+- Engines must never expect vectors
+- Recycling is centralized
 
-## 2.3 Keine Metaprogramming-Hacks
+## 2.3 No Metaprogramming Hacks
 
-Verboten:
+Forbidden:
 
 - `eval(parse())`
-- unnötige String-Evaluation
-- dynamisches Zusammenbauen von Funktionen
+- unnecessary string evaluation
+- dynamic function construction
 
-Erlaubt:
+Allowed:
 
-- saubere Funktions-Dispatch-Tabellen
-- explizite `switch`- / Lookup-Tabellen
-- klar dokumentierte Resolver
+- clean function dispatch tables
+- explicit `switch` / lookup tables
+- clearly documented resolvers
 
 ## 2.4 Imports vs. Depends
 
-- `Depends` nur für die R-Version
+- `Depends` only for the R version
 - Packages via `Imports`
-- Keine unnötige Namespace-Verschmutzung
+- No unnecessary namespace pollution
 
 ---
 
 # 3. Naming Rules
 
-## 3.1 Funktionen und API
+## 3.1 Functions and API
 
-### 3.1.1 Allgemein
+### 3.1.1 General
 
-| Ebene | Stil | Beispiel |
+| Layer | Style | Example |
 |---|---|---|
-| Exportierte Funktionen | lowerCamelCase | `fitModel()` |
-| Interne Funktionen | `.lowerCamelCase` | `.computeWeights()` |
-| Helper-Funktionen | `.prefix` | `.checkInput()` |
+| Exported functions | lowerCamelCase | `fitModel()` |
+| Internal functions | `.lowerCamelCase` | `.computeWeights()` |
+| Helper functions | `.prefix` | `.checkInput()` |
 | Engines | `.familyEngine` | `.binomCI_engine()` |
-| Klassen | UpperCamelCase | `LinearModel` |
-| User-visible Strings | kebab-case | `"log-scale"` |
+| Classes | UpperCamelCase | `LinearModel` |
+| User-visible strings | kebab-case | `"log-scale"` |
 
-S3-Methoden erhalten niemals ein X-Suffix und bleiben base-konform:
+S3 methods never receive an X suffix and remain base-compliant:
 
 ```r
 print.PercTable
@@ -103,65 +104,46 @@ plot.Desc.numeric
 lines.Lc
 ```
 
-
 ### 3.1.2 Naming Across R and C++ (Rcpp Integration)
 
-🎯 Ziel
-Klare, konsistente und sofort erkennbare Trennung zwischen:
-- R-Code (User/API-orientiert)
-- C++-Code (algorithmische Implementierung / Performance Layer)
+**Goal:**  
+Clear, consistent, and immediately recognizable separation between:
 
----
+- R code, which is user/API-oriented
+- C++ code, which is the algorithmic implementation / performance layer
 
-R (User-facing & intern)
+#### R: User-facing and internal
 
-Ebene                  Stil
----------------------  ------------------------
-API                    lowerCamelCase
-intern                 .lowerCamelCase
-Dispatch               .familyDispatch
-Engine (R, optional)   .familyEngine
-Helper                 .prefix
+| Layer | Style |
+|---|---|
+| API | lowerCamelCase |
+| Internal | .lowerCamelCase |
+| Dispatch | .familyDispatch |
+| Engine, optional R-side | .familyEngine |
+| Helper | .prefix |
 
----
+#### C++ / Rcpp
 
-C++ (Rcpp)
+| Layer | Style |
+|---|---|
+| C++ functions | snake_case |
+| Files | snake_case.cpp |
 
-Ebene                  Stil
----------------------  ------------------------
-C++ Funktionen         snake_case
-Dateien                snake_case.cpp
+R wrappers act as bridges and also use snake_case:
 
----
-
-R Wrapper fungieren als Bridge und sind auch snake_case
-```
+```r
 between_num <- function(...) {
   .Call(between_num_engine, ...)
 }
 ```
 
-## 3.7 C++ Funktionen
+## 3.2 Function Classification and X Suffix
 
-C++ Funktionen verwenden snake_case mit `_cpp`-Suffix und werden via
-`// [[Rcpp::export]]` registriert. Sie sind nicht im NAMESPACE exportiert
-und damit für User nicht via `::` zugänglich. Der `_cpp`-Suffix
-kennzeichnet sie konventionell als interne Implementierungsdetails.
+The X suffix applies exclusively to **statistical summary measures** whose names collide with a function in `base`, `stats`, `graphics`, or `utils`.
 
-Beispiele:
+**Statistical summary measures, collision-prone → lowercase + X:**
 
-  kurt_cpp
-  kurt_weighted_cpp
-  conDisPairsTab_cpp
-
-
-## 3.2 Funktionsklassifikation und X-Suffix
-
-Das X-Suffix gilt ausschliesslich für **statistische Kennzahlen**, deren Name mit einer Funktion in `base`, `stats`, `graphics` oder `utils` kollidiert.
-
-**Statistische Kennzahlen (kollisionsgefährdet) → lowercase + X:**
-
-```
+```text
 meanX       medianX     sdX         varX
 madX        iqrwX       rangeX      coefvarX
 gmeanX      hmeanX      skewX       kurtX
@@ -169,155 +151,165 @@ maeX        mseX        rmseX       mapeX
 smapeX      quantileX   percentRankX
 ```
 
-Regeln:
-- Keine Ausnahmen
-- Keine Grossschreibung: `madX`, nicht `MADX`
+Rules:
 
+- No exceptions
+- No all-caps spelling: `madX`, not `MADX`
 
-**Regel: Wann genau wird X verwendet?**
+**Rule: When exactly is X used?**
 
-X wird verwendet, wenn:
+X is used when:
 
-1. Eine Funktion konzeptionell eine statistische Kennzahl ist
-2. UND der Name mit einer bestehenden Base-R Funktion kollidiert
+1. A function conceptually represents a statistical summary measure
+2. AND the name collides with an existing base-R function
 
-Beispiele:
+Examples:
 
+```text
 mean → meanX
 var  → varX
 rank → rankX
-
-Nicht verwenden bei:
-- Tests
-- CI-Funktionen
-- Transformationen ohne Kollision
-
-
-**Konfidenzintervalle → `basisnameCI` (kein X sofern keine Kollision):**
-
 ```
+
+Do not use X for:
+
+- Tests
+- CI functions
+- Transformations without collision
+
+**Confidence intervals → `baseNameCI`, no X unless there is a collision:**
+
+```text
 meanCI      medianCI    varCI       sdCI
 quantileCI  binomCI     poissonCI   rateCI
 ```
 
-**Benannte Tests und Verfahren → lowerCamelCase, kein X:**
+**Named tests and procedures → lowerCamelCase, no X:**
 
-Tests kollidieren in der Regel nicht mit base und repräsentieren benannte statistische Verfahren. Das X-Suffix entfällt daher.
+Tests generally do not collide with base and represent named statistical procedures. Therefore, the X suffix is omitted.
 
 ```r
-# korrekt
+# correct
 jarqueBeraTest()
 bartelsRankTest()
 shapiroFranciaTest()
 
-# falsch
+# incorrect
 ShapiroFranciaTest()
 AndersonDarlingTest()
 ```
 
-**Transformationen und Utilities → lowercase, kein X** (ausser bei Kollision mit base):
+**Transformations and utilities → lowercase, no X**, except when colliding with base:
 
-```
+```text
 winsorize    roundTo    cutAge    cutQ
-sortX        rankX      sampleX   # mit X wegen base-Kollision
+sortX        rankX      sampleX   # with X because of base collision
 ```
 
-**Plot-Funktionen → lowerCamelCase mit Plot-Prefix, kein X:**
+**Plot functions → lowerCamelCase with plot prefix, no X:**
 
-```
+```text
 plotQQ       plotECDF     plotCorr
 plotPairs    plotViolin   plotBar
 ```
 
-**Sonderregel: Etablierte Abkürzungen**
+**Special rule: established abbreviations**
 
-Bekannte statistische Abkürzungen dürfen Grossbuchstaben behalten:
+Well-known statistical abbreviations may retain uppercase letters:
 
 - CI (confidence interval)
 - QQ (quantile-quantile)
 - ECDF
 
-Beispiele:
+Examples:
 
-- meanCI
-- plotQQ
-- plotECDF
-
-## 3.3 Argument-Namen
-
-**(A) Base-R-Argumente unverändert übernehmen** — diese behalten bewusst den Punkt:
-
+```text
+meanCI
+plotQQ
+plotECDF
 ```
+
+## 3.3 Argument Names
+
+**(A) Preserve Base-R argument names unchanged** — these intentionally keep the dot:
+
+```text
 na.rm       conf.level      xlab    ylab    xlim    ylim
 ```
 
-**(B) Neue Argumente → lowerCamelCase:**
+**(B) New arguments → lowerCamelCase:**
 
-```
+```text
 groupSize   numBootstrap    showLegend    maxIter
 ```
 
-**(C) Keine neuen Punkt-Namen einführen** — der Punkt ist ausschliesslich für Legacy/Base-R reserviert:
+**(C) Do not introduce new dot-separated names** — the dot is reserved exclusively for legacy/base-R conventions:
 
 ```r
-# falsch
+# incorrect
 group.size
 num.bootstrap
 ```
 
-**(D) Konsistente Begriffe im ganzen Package** — ein Konzept, ein Name:
+**(D) Consistent terminology throughout the package** — one concept, one name:
 
+```text
+data      for data.frames / matrices
+x         for vector input
+y         second vector
+groups    not grp or grouping
+weights   not w or weightVec
+data      not mixed with df or dataset
 ```
-data      für data.frames / matrices
-x         für Vektorinput
-y         zweiter Vektor
-groups    (nicht: grp, grouping)
-weights   (nicht: w, weightVec)
-data      (nicht: df, dataset gemischt)
-```
 
-siehe auch core vocabulary!
+See also the core vocabulary.
 
+**(E) Boolean arguments**
 
-**(E) Boolean Argumente**
-
-Boolean Argumente beginnen mit:
+Boolean arguments begin with:
 
 - is*
 - has*
 - show*
 - use*
 
-Beispiele:
+Examples:
 
-- showLegend
-- useWeights
-- isSorted
+```text
+showLegend
+useWeights
+isSorted
+```
 
-Nicht erlaubt:
-
-- legend = TRUE  (ambiguous)
-- weights = TRUE (semantic overload)
-
-
-**(F) Steuerungsbegriffe**
-
-Verwende keine numerischen Begriffe wie `tol`, `eps`, `precision`,
-wenn das Argument eigentlich ein User-facing Verhalten steuert
-(z. B. Formatierung, Anzeigegrenzen).
-
-→ Bevorzuge semantische Namen wie `threshold`, `cutoff`, `limit`.
-
-## 3.4 Rückgabewerte
-
-Output ist Teil der API und muss strikt konsistent sein:
-
-- immer lowerCamelCase
-- keine Punkte
-- sprechende Namen
+Not allowed:
 
 ```r
-# korrekt
+legend = TRUE   # ambiguous
+weights = TRUE  # semantic overload
+```
+
+**(F) Control terminology**
+
+Do not use numeric terms such as `tol`, `eps`, or `precision` if the argument actually controls user-facing behavior, such as formatting or display boundaries.
+
+Prefer semantic names such as:
+
+```text
+threshold
+cutoff
+limit
+```
+
+## 3.4 Return Values
+
+Output is part of the API and must be strictly consistent:
+
+- always lowerCamelCase
+- no dots
+- descriptive names
+
+```r
+# correct
 list(
   pValue        = 0.03,
   testStatistic = 2.1,
@@ -325,80 +317,99 @@ list(
   nObs          = 120
 )
 
-# falsch
+# incorrect
 list(p.value = 0.03, test.statistic = 2.1)
 ```
 
-**Standardisierte Statistik-Namen**
+**Standardized statistic names**
 
-Wo möglich, werden folgende Namen verwendet:
+Where possible, use:
 
 - pValue
 - testStatistic
-- df (bleibt base-R)
+- df (kept base-R compatible)
 - estimate
 
+## 3.5 Method Strings (User Interface)
 
-## 3.5 Method-Strings (User Interface)
-
-Externe Optionen:
+External options:
 
 - lowercase
-- Bindestrich-getrennt (kebab-case)
-- keine Leerzeichen
-- keine kryptischen Abkürzungen
-- literaturnahe Bezeichnungen
+- hyphen-separated, kebab-case
+- no spaces
+- no cryptic abbreviations
+- terminology close to the literature
 
+```text
+"wald"            "wald-cc"        "wilson"
+"wilson-cc"       "wilson-mod"     "jeffreys"
+"clopper-pearson" "agresti-coull"  "mid-p"
 ```
-"wald"           "wald-cc"        "wilson"
-"wilson-cc"      "wilson-mod"     "jeffreys"
-"clopper-pearson" "agresti-coull" "mid-p"
-```
 
-Intern:
+Internal naming:
 
-- Unterstrich `_`
-- Private Funktionen mit `.`-Prefix
+- underscore `_`
+- private functions with `.` prefix
 
-```
+```text
 .binomCI.wilson_mod
 .binomCI.clopper_pearson
 ```
 
-## 3.6 Namespace-Nutzung für Base-R-Funktionen
+## 3.6 Namespace Usage for Base-R Functions
 
-Funktionen aus den standard-attached Packages (`base`, `stats`, `graphics`, `grDevices`, `utils`, `methods`) werden **ohne** explizite Namespace-Qualifizierung aufgerufen:
+Functions from the standard attached packages (`base`, `stats`, `graphics`, `grDevices`, `utils`, `methods`) are called **without** explicit namespace qualification:
 
 ```r
-# korrekt
+# correct
 plot(...)
 lines(...)
 density(...)
 
-# falsch
+# incorrect
 graphics::plot(...)
 stats::density(...)
 ```
 
-Explizite Qualifizierung (`pkg::fun`) nur bei Funktionen aus Nicht-Base-Packages oder bei Namenskonflikten.
+Explicit qualification (`pkg::fun`) is used only for functions from non-base packages or in case of name conflicts.
+
+## 3.7 C++ Functions
+
+C++ functions use snake_case with a `_cpp` suffix and are registered via:
+
+```cpp
+// [[Rcpp::export]]
+```
+
+They are not exported in the NAMESPACE and therefore are not accessible to users via `::`.
+
+The `_cpp` suffix conventionally marks them as internal implementation details.
+
+Examples:
+
+```text
+kurt_cpp
+kurt_weighted_cpp
+conDisPairsTab_cpp
+```
 
 ---
 
-# 4. Argumentreihenfolge in Funktionen
+# 4. Argument Order in Functions
 
-## 4.1 Statistische Funktionen
+## 4.1 Statistical Functions
 
-Exportierte statistische Funktionen halten folgende Reihenfolge ein:
+Exported statistical functions follow this order:
 
-1. **Daten** — `x`, `y`, `n`, ggf. Matrix- oder Formeleingaben
-2. **Estimator-Definition** — `estimator`, `model`, `type`, `unit`, `weights`
-3. **Inferenz-/CI-Steuerung** — `conf.level`, `sides`, `method`
-4. **Datenbehandlung** — `na.rm`, `subset`
+1. **Data** — `x`, `y`, `n`, possibly matrix or formula inputs
+2. **Estimator definition** — `estimator`, `model`, `type`, `unit`, `weights`
+3. **Inference / CI control** — `conf.level`, `sides`, `method`
+4. **Data handling** — `na.rm`, `subset`
 5. **`...`**
 
-Grundsatz: Die CI-Konstruktion hängt vom Estimator ab, niemals umgekehrt.
+Core principle: CI construction depends on the estimator, never the other way around.
 
-Beispiel `Skew`:
+Example `skewX`:
 
 ```r
 skewX(
@@ -416,16 +427,16 @@ skewX(
 )
 ```
 
-**`conf.level`-Default:**
+**`conf.level` default:**
 
-- Funktionen, die das CI zusammen mit dem Ergebnis zurückgeben (z.B. `skewX`, `ICC`): `conf.level = NA` (kein CI per default)
-- Dedizierte CI-Funktionen (z.B. `meanCI`, `binomCI`): `conf.level = 0.95`
+- Functions that return a CI together with the result, e.g. `skewX`, `ICC`: `conf.level = NA`, no CI by default
+- Dedicated CI functions, e.g. `meanCI`, `binomCI`: `conf.level = 0.95`
 
-## 4.2 Plot-Funktionen
+## 4.2 Plot Functions
 
-Plot-Funktionen halten folgende Reihenfolge ein:
+Plot functions follow this order:
 
-```
+```text
 DATA
 LABELS
 AXES
@@ -436,9 +447,9 @@ FRAMEWORK
 ...
 ```
 
-| Gruppe | Typische Argumente |
+| Group | Typical arguments |
 |---|---|
-| DATA | `x`, ggf. `y` |
+| DATA | `x`, possibly `y` |
 | LABELS | `main`, `xlab`, `ylab` |
 | AXES | `xlim`, `ylim` |
 | STRUCTURE | `cluster`, `order`, `groups`, `gap`, `items` |
@@ -446,30 +457,32 @@ FRAMEWORK
 | FEATURES | `legend`, `text`, `connlines`, `labels` |
 | FRAMEWORK | `stamp` |
 
-STRUCTURE-Argumente dürfen niemals grafische Style-Parameter enthalten. Colors gehören immer zu STYLE.
+STRUCTURE arguments must never contain graphical style parameters. Colors always belong to STYLE.
 
 ---
 
-# 5. Programmierung
+# 5. Programming
 
-## 5.1 Default-Handling
+## 5.1 Default Handling
 
-- Alle zulässigen Optionen stehen im `formals()`-Default
-- Erster Eintrag = Default
-- Keine hartcodierten Default-Strings im Body
-- Keine doppelte Definitionsquelle
+- All valid options appear in the `formals()` default
+- First entry = default
+- No hardcoded default strings in the body
+- No duplicate source of truth
 
-## 5.2 Method-Resolver
+## 5.2 Method Resolver
 
-DescToolsX verwendet `.resolveMethod()` anstelle von `match.arg()`, wo eine erweiterte Auflösung nötig ist (Alias-Mapping, Mehrfachauswahl, Hidden Options). `match.arg()` bleibt zulässig für einfache Fälle.
+DescToolsX uses `.resolveMethod()` instead of `match.arg()` where extended resolution is needed, such as alias mapping, multiple selections, or hidden options.
 
-.resolveMethod() muss:
+`match.arg()` remains allowed for simple cases.
 
-- Partial Matching unterstützen
-- Alias Mapping unterstützen
-- deterministisch sein (kein guessing bei Mehrdeutigkeit)
+`.resolveMethod()` must:
 
-Muster mit `.resolveMethod()`:
+- support partial matching
+- support alias mapping
+- be deterministic, with no guessing in ambiguous cases
+
+Pattern with `.resolveMethod()`:
 
 ```r
 if (missing(method)) {
@@ -481,67 +494,79 @@ if (missing(method)) {
 
 ## 5.3 Defensive Programming
 
-Exportierte Funktionen müssen:
+Exported functions must:
 
-- Typprüfung durchführen
-- Längenprüfung durchführen
-- Skalare Rückgaben validieren
-- Keine stillen NA-Kaskaden erzeugen
-- Boundary-Handling explizit dokumentieren
+- perform type checks
+- perform length checks
+- validate scalar returns
+- avoid silent NA cascades
+- explicitly document boundary handling
 
 ## 5.4 Error Messages
 
-- Klar und konkret
-- Kein Humor
-- Keine internen Begriffe
-- Immer mit Argumentnamen
+- Clear and concrete
+- No humor
+- No internal terminology
+- Always include argument names
 
-Beispiel:
+Example:
 
+```text
 "Argument 'x' must be numeric and non-empty."
+```
 
 ## 5.5 Backward Compatibility
 
-- Alte Method-Namen werden als Alias akzeptiert
-- Intern sofort auf kanonische Namen gemappt
-- Keine Breaking Changes ohne Alias-Schicht
+- Old method names are accepted as aliases
+- Internally, they are immediately mapped to canonical names
+- No breaking changes without an alias layer
 
 ## 5.6 Confidence Interval Output Convention
 
-Alle CI-Funktionen verwenden folgende Spaltennamen:
+All CI functions use the following column names:
 
 - `estimate`
 - `lci` (lower confidence interval bound)
 - `uci` (upper confidence interval bound)
 
-Diese Konvention ist verbindlich und ändert sich nicht ohne Major-Version-Bump.
+This convention is binding and must not be changed without a major version bump.
 
 ---
 
-# 6. Umgang mit `...`
+# 6. Handling `...`
 
-## 6.1 Grafische Parameter in Plot-Funktionen
+## 6.1 Graphical Parameters in Plot Functions
 
-Grafische Parameter werden via `...` übergeben und durch `.applyParFromDots()` angewendet. Plot-Funktionen verarbeiten grafische Parameter aus `...` nicht manuell.
+Graphical parameters are passed via `...` and applied through `.applyParFromDots()`.
 
-Welche Argumente explizit benannt werden und welche über `...` laufen, ist **kontextabhängig**: Die 2–3 für die jeweilige Funktion wichtigsten visuellen Parameter werden explizit benannt (damit der User den Quicktip sieht); weniger zentrale Parameter (`cex`, `cex.axis`, `las`, `mar`, `oma`) laufen über `...`.
+Plot functions do not manually process graphical parameters from `...`.
 
-Beispiel `plotDot`: `col` und `pch` sind explizit; `cex` und `las` gehen über `...`.
+Which arguments are explicit and which are passed via `...` is **context-dependent**:
 
-**Explizite vs implizite Grafikparameter
+- the 2–3 most important visual parameters for the given function are explicit, so users see them in quick tips
+- less central parameters such as `cex`, `cex.axis`, `las`, `mar`, `oma` go through `...`
 
-- Schlüsselparameter der jeweiligen Funktion dürfen explizit sein
-- generische Base-Parameter laufen immer über `...`
+Example `plotDot`:
 
-Beispiel:
+- explicit: `col`, `pch`
+- through `...`: `cex`, `las`
 
+**Explicit vs. implicit graphical parameters**
+
+- Key parameters of the respective function may be explicit
+- Generic base parameters always go through `...`
+
+Example:
+
+```text
 plotDot():
-- explizit: col, pch
-- über ...: cex, lwd, las
+- explicit: col, pch
+- through ...: cex, lwd, las
+```
 
-## 6.2 Bootstrap-Argumente
+## 6.2 Bootstrap Arguments
 
-Bootstrap-Argumente (`method`, `R`, `parallel`, etc.) gehen immer über `...` und werden intern über `.extractBootArgs()` extrahiert:
+Bootstrap arguments (`method`, `R`, `parallel`, etc.) always go through `...` and are internally extracted via `.extractBootArgs()`:
 
 ```r
 dots      <- list(...)
@@ -550,38 +575,44 @@ boot_args <- .extractBootArgs(dots)
 boot::boot(..., R = boot_args$R, parallel = boot_args$parallel)
 ```
 
-Verboten:
+Forbidden:
 
-- Direkte Verwendung von `inDots()`
-- Direkter Zugriff auf `...` im Funktionskörper
-- Argument-Parsing innerhalb von `apply` / `replicate`
+- direct use of `inDots()`
+- direct access to `...` in the function body
+- argument parsing inside `apply` / `replicate`
 
-## 6.3 Flexible Argument-Pattern für grafische Elemente
+## 6.3 Flexible Argument Pattern for Graphical Elements
 
-Argumente wie `xax`, `yax`, `grid`, `legend` folgen einem einheitlichen flexiblen Pattern:
+Arguments such as `xax`, `yax`, `grid`, and `legend` follow a unified flexible pattern:
 
-| Wert | Bedeutung |
+| Value | Meaning |
 |---|---|
-| `TRUE` | Element zeichnen mit Package-Defaults |
-| `FALSE` | Element unterdrücken |
-| `NULL` / `NA` | Package-Option verwenden |
-| `list(...)` | Element mit custom Parametern zeichnen |
+| `TRUE` | Draw element with package defaults |
+| `FALSE` | Suppress element |
+| `NULL` / `NA` | Use package option |
+| `list(...)` | Draw element with custom parameters |
 
-Implementierung via `.callIf()`:
+Implementation via `.callIf()`:
 
 ```r
 .callIf(graphics::grid, grid, defaults = th$grid)
 ```
 
-DescToolsX verwendet **keine** Legacy-Base-Graphics-String-Flags wie `xaxt = "n"`. Stattdessen: `yax = FALSE`.
+DescToolsX does **not** use legacy base-graphics string flags such as `xaxt = "n"`.
+
+Instead:
+
+```r
+yax = FALSE
+```
 
 ---
 
-# 7. Color-Konventionen
+# 7. Color Conventions
 
-## 7.1 Argument-Name
+## 7.1 Argument Name
 
-Immer `col`, nie `cols` — auch für Paletten oder mehrere Farben:
+Always use `col`, never `cols` — also for palettes or multiple colors:
 
 ```r
 col = "red"
@@ -589,38 +620,40 @@ col = c("red", "blue", "green")
 col = colorRampPalette(...)(20)
 ```
 
-## 7.2 Verwandte Color-Argumente
+## 7.2 Related Color Arguments
 
-Wenn verschiedene grafische Elemente unterschiedliche Farben benötigen, folgt man base R:
+If different graphical elements require different colors, follow base R:
 
 ```r
-col     # Hauptfarbe
-border  # Rahmenfarbe (Polygon/Box)
-bg      # Füllfarbe von Symbolen
+col     # main color
+border  # border color for polygons/boxes
+bg      # symbol fill color
 ```
 
 ---
 
-# 8. Statistikfunktionen
+# 8. Statistical Functions
 
-## 8.1 CI-Funktionen
+## 8.1 CI Functions
 
-Dedizierte CI-Funktionen (`meanCI`, `binomCI`, etc.) haben `conf.level = 0.95` als Default. Funktionen, die CI optional mitliefern, haben `conf.level = NA`.
+Dedicated CI functions (`meanCI`, `binomCI`, etc.) use `conf.level = 0.95` as default.
 
-## 8.2 Numerisches Verhalten
+Functions that optionally include a CI use `conf.level = NA`.
 
-- Extreme Fälle explizit behandeln
-- Keine impliziten Korrekturen
-- Randomisierte Verfahren dokumentieren (z.B. Witting)
-- RNG-Abhängigkeit erwähnen
+## 8.2 Numerical Behavior
+
+- Handle extreme cases explicitly
+- No implicit corrections
+- Document randomized procedures, e.g. Witting
+- Mention RNG dependence
 
 ---
 
-# 9. Plot-Funktionen
+# 9. Plot Functions
 
 ## 9.1 Graphics State Management
 
-Alle Plot-Funktionen werden in `.withGraphicsState()` gewrappt:
+All plot functions are wrapped in `.withGraphicsState()`:
 
 ```r
 .withGraphicsState({
@@ -629,13 +662,13 @@ Alle Plot-Funktionen werden in `.withGraphicsState()` gewrappt:
 }, stamp = stamp)
 ```
 
-Kein direkter `par()`-Aufruf ausserhalb von `.applyParFromDots()`.
+No direct `par()` calls outside `.applyParFromDots()`.
 
-## 9.2 Helper-Funktionen
+## 9.2 Helper Functions
 
-Plot-Funktionen nutzen diese internen Helpers:
+Plot functions use these internal helpers:
 
-```
+```text
 .withGraphicsState()
 .applyParFromDots()
 .resolveNames()
@@ -645,9 +678,9 @@ Plot-Funktionen nutzen diese internen Helpers:
 .drawAxis()
 ```
 
-## 9.3 Theme-System
+## 9.3 Theme System
 
-Plot-Funktionen nutzen `.theme()` für zentralisierte Stil-Defaults:
+Plot functions use `.theme()` for centralized style defaults:
 
 ```r
 th <- .theme(
@@ -655,17 +688,17 @@ th <- .theme(
 )
 ```
 
-Theme-Subsetting: Plot-Funktionen modifizieren das Theme nicht global, sondern selektieren lokal den relevanten Subset:
+Theme subsetting: plot functions do not modify the theme globally, but select the relevant subset locally:
 
 ```r
 defaults = th$grid[!startsWith(names(th$grid), "group.")]
 ```
 
-Theme-Werte dürfen nur STYLE definieren, niemals STRUCTURE.
+Theme values may define STYLE only, never STRUCTURE.
 
 ## 9.4 `stamp`
 
-`stamp` wird via globale Option gesteuert und nur als explizites Argument exponiert, wenn der User den globalen Default überschreiben muss:
+`stamp` is controlled via a global option and is exposed as an explicit argument only when the user must be able to override the global default:
 
 ```r
 .withGraphicsState(expr, stamp = .getOption("stamp", NULL))
@@ -673,185 +706,188 @@ Theme-Werte dürfen nur STYLE definieren, niemals STRUCTURE.
 
 ---
 
-# 10. Verbose-Konzept
+# 10. Verbose Concept
 
-> [TODO: Verbose-Konzept einfügen]
+> [TODO: Insert verbose concept]
 
 ---
 
-# 11. Dokumentation
+# 11. Documentation
 
 ## 11.1 Description vs. Details
 
-| Sektion | Inhalt | Nicht enthalten |
+| Section | Contains | Does not contain |
 |---|---|---|
-| `@description` | Was die Methode ist; statistischer Zweck; konzeptionelle Grundlage | Vergleiche; asymptotisches Verhalten; Empfehlungen; Einschränkungen |
-| `@details` | Beziehungen zu anderen Methoden; Asymptotics; Power; Annahmen; Einschränkungen; Vergleiche | Die primäre Definition der Methode |
+| `@description` | What the method is; statistical purpose; conceptual foundation | Comparisons; asymptotic behavior; recommendations; limitations |
+| `@details` | Relations to other methods; asymptotics; power; assumptions; limitations; comparisons | The primary definition of the method |
 
-Description bleibt konzis und in sich geschlossen. Vergleiche zwischen Methoden gehören immer in Details — wenn ein Vergleich kurz genug für Description erscheint, ist das ein Signal, ihn in Details zu verschieben.
+Description remains concise and self-contained.
 
+Comparisons between methods always belong in Details. If a comparison seems short enough for Description, that is a signal that it should be moved to Details.
 
-## 11.1a. Roxygen Topic Naming (`@name`, `@rdname`)
+## 11.1a Roxygen Topic Naming (`@name`, `@rdname`)
 
 ### Purpose
 
 Roxygen topic names define:
-- the **filename of the Rd documentation**
-- the **grouping of related functions**
-- the **anchor structure for pkgdown and help pages**
 
-They are **not function names** and therefore follow **string-style conventions**, not API naming rules.
+- the filename of the Rd documentation
+- the grouping of related functions
+- the anchor structure for pkgdown and help pages
 
----
+They are **not function names** and therefore follow string-style conventions, not API naming rules.
 
 ### Naming Style
 
 All topic names MUST use:
 
-kebab-case (lowercase + hyphen)
+```text
+kebab-case
+```
 
-#### Example
+lowercase + hyphen.
 
-@name extreme-value-moments  
+Example:
+
+```r
+@name extreme-value-moments
 @rdname extreme-value-moments
-
----
+```
 
 ### Allowed Binding Element
 
-- Hyphen (`-`) → **mandatory**
-
----
+- Hyphen (`-`) → mandatory
 
 ### Forbidden Styles
 
 The following MUST NOT be used:
 
 | Style | Example | Reason |
-|------|--------|--------|
+|---|---|---|
 | underscore | extreme_value_moments | conflicts with C++ naming |
 | dot | extreme.value.moments | legacy base R style |
 | camelCase | extremeValueMoments | reserved for functions |
 | mixed styles | extreme-valueMoments | inconsistent |
 
----
-
 ### Structural Guidelines
 
-Topic names should follow a **semantic grouping pattern**:
+Topic names should follow a semantic grouping pattern:
 
+```text
 <domain>-<concept>[-<detail>]
+```
 
-#### Examples
+Examples:
 
-- extreme-value-moments
-- extreme-value-distribution
-- extreme-value-quantiles
-- robust-statistics-location
-- robust-statistics-scale
-
----
+```text
+extreme-value-moments
+extreme-value-distribution
+extreme-value-quantiles
+robust-statistics-location
+robust-statistics-scale
+```
 
 ### Grouping Across Functions
 
 Multiple functions can share the same documentation topic:
 
-@name extreme-value-moments  
-@rdname extreme-value-moments  
+```r
+@name extreme-value-moments
+@rdname extreme-value-moments
 
 gumbel <- function(...) {}
 
-@rdname extreme-value-moments  
+@rdname extreme-value-moments
 
 gev <- function(...) {}
+```
 
-This creates a **single unified help page**.
-
----
+This creates a single unified help page.
 
 ### Design Principles
 
-- Topic names describe **conceptual domains**, not implementations
+- Topic names describe conceptual domains, not implementations
 - Names must be:
   - short
   - descriptive
   - reusable across functions
-- Prefer **stable vocabulary** to enable consistent grouping
-
----
+- Prefer stable vocabulary to enable consistent grouping
 
 ### Summary
 
 | Element | Rule |
-|--------|------|
+|---|---|
 | Case | lowercase |
 | Separator | hyphen (`-`) |
 | Style | kebab-case |
-| Scope | conceptual grouping (not function naming) |
+| Scope | conceptual grouping, not function naming |
 
+## 11.2 Required Sections
 
+All exported functions must contain:
 
+**`@param`** — for every argument: type, meaning, constraints, and default behavior. Precise enough to prevent misuse.
 
-## 11.2 Pflicht-Sektionen
+**`@return`** — structure and type of the returned object. For complex outputs such as lists, the most important components are described.
 
-Alle exportierten Funktionen müssen enthalten:
+**`@examples`** — minimal, reproducible, no external data, primary use case. Where useful: a second example for a non-default or edge case.
 
-**`@param`** — für jedes Argument: Typ, Bedeutung, Constraints und Default-Verhalten. Präzise genug, um Fehlanwendung zu verhindern.
+**`@examples`** should be deterministic → use `set.seed()` where needed.
 
-**`@return`** — Struktur und Typ des Rückgabeobjekts. Bei komplexen Outputs (Listen) werden die wichtigsten Komponenten beschrieben.
+## 11.3 Error Handling in Documentation
 
-**`@examples`** — minimal, reproduzierbar, ohne externe Daten, primärer Use Case. Wo sinnvoll: zweites Beispiel für Non-Default oder Edge-Case.
-**`@examples`** sollen deterministisch sein → set.seed() wenn nötig
+Document where relevant:
 
-## 11.3 Error Handling in der Dokumentation
+- handling of missing values (`NA`, `NaN`)
+- behavior at boundary values
+- violation of assumptions
+- warnings or errors triggered
 
-Zu dokumentieren, wo relevant:
-
-- Umgang mit fehlenden Werten (`NA`, `NaN`)
-- Verhalten an Grenzwerten
-- Verletzung von Annahmen
-- ausgelöste Fehlermeldungen oder Warnings
-
-Ziel: Verhalten dokumentieren, das für korrekten und vorhersagbaren Gebrauch wichtig ist — keine vollständige Fehler-Enumeration.
+Goal: document behavior important for correct and predictable use — not a complete enumeration of all possible errors.
 
 ## 11.4 Authorship
 
-Der Package-Maintainer ist der Default-Autor aller Funktionen und wird in Einzelfunktionen nicht explizit genannt.
+The package maintainer is the default author of all functions and is not explicitly mentioned in individual functions.
 
-| Contributor-Typ | Wo erwähnen |
+| Contributor type | Where to mention |
 |---|---|
-| Package Maintainer | Nur in `DESCRIPTION` |
-| Externer Contributor (signifikanter Code) | `@note` der Funktion |
-| Externer Contributor (geringer Beitrag) | `DESCRIPTION` oder `NEWS`, nicht per Funktion |
+| Package maintainer | Only in `DESCRIPTION` |
+| External contributor, significant code | `@note` of the function |
+| External contributor, minor contribution | `DESCRIPTION` or `NEWS`, not per function |
 
-**`@note`-Formulierungen (abgestuft):**
+**`@note` wording, graded:**
 
-Geringer Beitrag:
+Minor contribution:
+
 ```r
 #' @note
 #' Parts of the code contributed by [Name].
 ```
 
-Adaptierter Beitrag:
+Adapted contribution:
+
 ```r
 #' @note
 #' Based on code by [Name], adapted to conform to package standards.
 ```
 
-Substantieller Beitrag:
+Substantial contribution:
+
 ```r
 #' @note
 #' Substantially based on code by [Name], with major extensions
 #' and improvements by the package author.
 ```
 
-Im Zweifelsfall die grosszügigere Formulierung wählen. `@note` ist eine Höflichkeitsattribution, keine Rechtserklärung. Lizenzkompatibilität externer Code-Bestandteile muss geprüft sein.
+When in doubt, choose the more generous wording.
 
-## 11.5 Referenzen
+`@note` is a courtesy attribution, not a legal statement. License compatibility of external code components must be checked.
 
-Jede Funktion, die eine benannte Methode, einen Test oder einen Schätzer implementiert, zitiert die primäre methodologische Quelle in `@references`.
+## 11.5 References
 
-**Format (APA-basiert):**
+Every function implementing a named method, test, or estimator cites the primary methodological source in `@references`.
+
+**APA-based format:**
 
 ```r
 #' @references
@@ -862,78 +898,78 @@ Jede Funktion, die eine benannte Methode, einen Test oder einen Schätzer implem
 #' Author, A. B. (Year). \emph{Title of Book}. Publisher.
 ```
 
-**Was zitieren:**
+**What to cite:**
 
-- Paper oder Buch, das die Methode erstmals formal hergeleitet hat
-- Zugänglichere Sekundärquelle, falls Primärquelle schwer zugänglich (nach der Primärquelle)
-- Software-/Algorithmus-Paper, wenn die Implementierung einem spezifischen Algorithmus folgt
+- paper or book where the method was first formally derived
+- more accessible secondary source if the primary source is difficult to access, after the primary source
+- software or algorithm paper if the implementation follows a specific algorithm
 
-**Was nicht zitieren:**
+**What not to cite:**
 
-- Lehrbücher als Primärquellen (ausser die Methode entstand dort)
-- R-Packages oder Online-Ressourcen nicht als primäre methodologische Referenz,
-  wenn eine theoretische Originalquelle existiert
-- Ausnahme:
-  Wenn die Implementierung explizit auf einem Package basiert
-  (z. B. übernommener Algorithmus), kann dieses zusätzlich referenziert werden
+- textbooks as primary sources, unless the method originated there
+- R packages or online resources as primary methodological references if a theoretical original source exists
 
-Bei mehreren Referenzen steht die theoretische zuerst. Verglichene Methoden in Details werden alle referenziert.
+Exception:
 
+If the implementation is explicitly based on a package, for example an adopted algorithm, that package may additionally be referenced.
 
-### Abgrenzung: Implementierung vs. Anwendung
+If several references are listed, the theoretical source comes first. Methods compared in Details are all referenced.
 
-Referenzen werden **nur dann gesetzt**, wenn die Funktion selbst
-eine methodologische Innovation oder konkrete Implementierung
-einer publizierten Methode darstellt.
+### Distinction: Implementation vs. Application
 
-Es werden **keine Referenzen gesetzt**, wenn:
+References are used **only when the function itself** represents a methodological innovation or a concrete implementation of a published method.
 
-- die Funktion lediglich bestehende Base-R-Funktionalität kapselt
-- eine bekannte Methode **nur angewendet**, aber nicht implementiert wird
-- die mathematische Definition trivial oder allgemein bekannt ist
-  (z. B. Mittelwert, Varianz, Dummy-Codierung)
-- die Referenz keinen direkten Mehrwert für das Verständnis der Funktion bietet
+References are **not used** when:
 
-Beispiele:
+- the function merely wraps existing base-R functionality
+- a known method is only applied, but not implemented
+- the mathematical definition is trivial or generally known, e.g. mean, variance, dummy coding
+- the reference adds no direct value for understanding the function
 
-- ❌ `dummy()` → keine Referenz (nutzt `contr.*`)
-- ❌ Wrapper um `mean()`, `sd()` → keine Referenz
-- ✅ eigener Bootstrap-Algorithmus → Referenz
-- ✅ implementierter statistischer Test → Referenz
+Examples:
 
+```text
+❌ dummy() → no reference, uses contr.*
+❌ wrapper around mean(), sd() → no reference
+✅ custom bootstrap algorithm → reference
+✅ implemented statistical test → reference
+```
 
+## 11.6 Mathematical Notation
 
-## 11.6 Mathematische Notation
-
-- `\eqn{}` für Inline-Mathe
-- `\deqn{}` nur wenn wirklich nötig
-- Parameter kursiv
-- Literatur sauber referenziert
+- Use `\eqn{}` for inline math
+- Use `\deqn{}` only when truly necessary
+- Parameters are italicized
+- Literature is referenced cleanly
 
 ---
 
-# 12. Family und Concepts
+# 12. Family and Concepts
 
-## 12.1 Überblick
+## 12.1 Overview
 
-Das Package verwendet `@family` und `@concept` zur Funktionsorganisation nach strikter Aufgabentrennung:
+The package uses `@family` and `@concept` for function organization with strict separation of roles:
 
-- `@family` definiert die primäre Klassifikation (Navigation)
-- `@concept` liefert zusätzliche semantische Tags (Suche, Kontext, Cross-linking)
+- `@family` defines the primary classification, used for navigation
+- `@concept` provides additional semantic tags, used for search, context, and cross-linking
 
-## 12.2 @family
+## 12.2 `@family`
 
-**Genau eine Familie pro Funktion:**
+**Exactly one family per function:**
 
 ```r
 @family topic.<categoryName>
 ```
 
-Naming Convention: `topic.` Prefix + camelCase Suffix.
+Naming convention:
 
-Beispiele:
-
+```text
+topic. prefix + camelCase suffix
 ```
+
+Examples:
+
+```text
 topic.hypothesisTests
 topic.nonparametricTests
 topic.distributions
@@ -942,16 +978,18 @@ topic.goodnessOfFit
 topic.contingencyTests
 ```
 
-**Entscheidungsregel:** *Wo würde ein User diese Funktion zuerst suchen?*
+**Decision rule:**  
+Where would a user look for this function first?
 
-## 12.3 @concept
+## 12.3 `@concept`
 
-Jede Funktion sollte typischerweise 2–4 `@concept`-Tags haben.
+Each function should typically have 2–4 `@concept` tags.
 
-Regeln:
-- Concepts sind nicht gegenseitig exklusiv
-- Concepts sind deskriptiv, nicht hierarchisch
-- Keine Redundanz mit der Family
+Rules:
+
+- Concepts are not mutually exclusive
+- Concepts are descriptive, not hierarchical
+- No redundancy with the family
 - lowercase kebab-case: `goodness-of-fit`, `heavy-tailed`
 
 ```r
@@ -965,21 +1003,21 @@ Regeln:
 
 | Feature | `@family` | `@concept` |
 |---|---|---|
-| Kardinalität | genau eine | mehrere |
-| Zweck | Navigation | semantisches Tagging |
-| Struktur | hierarchisch (`topic.*`) | flach |
-| Stabilität | hoch | flexibel |
-| Beispiel | `topic.nonparametricTests` | `rank-based, paired` |
+| Cardinality | exactly one | several |
+| Purpose | navigation | semantic tagging |
+| Structure | hierarchical (`topic.*`) | flat |
+| Stability | high | flexible |
+| Example | `topic.nonparametricTests` | `rank-based`, `paired` |
 
-## 12.5 Sonderfall: Distributionen
+## 12.5 Special Case: Distributions
 
-Alle Distributionsfunktionen (d/p/q/r) werden unter einer einzigen Familie gruppiert:
+All distribution functions (`d` / `p` / `q` / `r`) are grouped under one single family:
 
 ```r
 @family topic.distributions
 ```
 
-Spezifische Eigenschaften via `@concept`:
+Specific properties are expressed via `@concept`:
 
 ```r
 @concept continuous distribution
@@ -988,127 +1026,136 @@ Spezifische Eigenschaften via `@concept`:
 @concept dpqr
 ```
 
-**Rationale:** Distributionen folgen einer uniformen API-Struktur (dpqr) und User suchen nach Distributionsnamen, nicht nach Kategorie.
+**Rationale:**  
+Distributions follow a uniform API structure (`dpqr`), and users search by distribution name, not by category.
 
 ## 12.6 Hypothesis Tests
 
-Tests sind heterogen und verwenden deshalb mehrere Familien, entsprechend der natürlichen Suchweise der User:
+Tests are heterogeneous and therefore use several families, according to the natural way users search for them:
 
-```
+```text
 topic.goodnessOfFit
 topic.nonparametricTests
 topic.contingencyTests
 topic.timeSeriesTests
 ```
 
-## 12.7 @seealso
+## 12.7 `@seealso`
 
-`@seealso` ist reserviert für enge funktionale Verwandtschaft: Funktionen, die direkte Alternativen sind, oder Hilfsfunktionen, die typischerweise zusammen verwendet werden.
+`@seealso` is reserved for close functional relationships: functions that are direct alternatives, or helper functions typically used together.
 
+---
 
-# 13 DescToolsX — Core Vocabulary
+# 13. DescToolsX — Core Vocabulary
 
-## 13.1. Datenstruktur
+## 13.1 Data Structure
 
-| Bedeutung | Name | Kommentar |
-|----------|------|----------|
-| Vektor (Hauptinput) | `x` | Standard |
-| Zweiter Vektor | `y` | Standard |
-| Data Frame / Matrix | `data` | wie lm, ggplot |
-| Formel | `formula` | Base-R kompatibel |
+| Meaning | Name | Comment |
+|---|---|---|
+| Vector, primary input | `x` | Standard |
+| Second vector | `y` | Standard |
+| Data frame / matrix | `data` | as in `lm`, `ggplot` |
+| Formula | `formula` | Base-R compatible |
 
-## 13.2. Gruppierung & Struktur
+## 13.2 Grouping and Structure
 
-| Bedeutung | Name |
-|----------|------|
-| Gruppenvariable | `groups` |
+| Meaning | Name |
+|---|---|
+| Grouping variable | `groups` |
 | Strata | `strata` |
 | Cluster | `cluster` |
 
-## 13.3. Gewichte & Subsetting
+## 13.3 Weights and Subsetting
 
-| Bedeutung | Name |
-|----------|------|
-| Gewichte | `weights` |
+| Meaning | Name |
+|---|---|
+| Weights | `weights` |
 | Subset | `subset` |
 
-## 13.4. Statistik / Inferenz
+## 13.4 Statistics / Inference
 
-| Bedeutung | Name |
-|----------|------|
-| Konfidenzniveau | `conf.level` |
-| p-Wert | `pValue` |
-| Teststatistik | `testStatistic` |
-| Freiheitsgrade | `df` |
-| Schätzer | `estimate` |
+| Meaning | Name |
+|---|---|
+| Confidence level | `conf.level` |
+| p-value | `pValue` |
+| Test statistic | `testStatistic` |
+| Degrees of freedom | `df` |
+| Estimator | `estimate` |
 
-## 13.5. Methodensteuerung
+## 13.5 Method Control
 
-| Bedeutung | Name |
-|----------|------|
-| Methode | `method` |
-| Engine intern | `engine` |
-| Typ | `type` |
+| Meaning | Name |
+|---|---|
+| Method | `method` |
+| Internal engine | `engine` |
+| Type | `type` |
 
-## 13.6. Simulation / Bootstrap
+## 13.6 Simulation / Bootstrap
 
-| Bedeutung | Name |
-|----------|------|
-| Iterationen | `R` |
+| Meaning | Name |
+|---|---|
+| Iterations | `R` |
 
-## 13.7. Reihenfolge / Bereich
+## 13.7 Order / Range
 
-| Bedeutung | Name |
-|----------|------|
-| Sortierung | `order` |
-| Wertebereich | `range` |
-| decreasing | `decreasing` |
+| Meaning | Name |
+|---|---|
+| Sorting / ordering | `order` |
+| Value range | `range` |
+| Decreasing | `decreasing` |
 
-## 13.8. Missing Values
+## 13.8 Missing Values
 
-| Bedeutung | Name |
-|----------|------|
-| NA entfernen | `na.rm` |
-| NA Position | `na.last` |
+| Meaning | Name |
+|---|---|
+| Remove NA | `na.rm` |
+| NA position | `na.last` |
 
-## 13.9. Plotting
+## 13.9 Plotting
 
-| Bedeutung | Name |
-|----------|------|
-| Farbe | `col` |
+| Meaning | Name |
+|---|---|
+| Color | `col` |
 | Symbol | `pch` |
-| Linienbreite | `lwd` |
-| Linientyp | `lty` |
+| Line width | `lwd` |
+| Line type | `lty` |
 
-## 13.10. Boolean Flags
+## 13.10 Boolean Flags
 
-| Typ | Präfix |
-|-----|--------|
-| Anzeige | `show*` |
-| Verwendung | `use*` |
-| Zustand | `is*` |
-| Besitz | `has*` |
+| Type | Prefix |
+|---|---|
+| Display | `show*` |
+| Use | `use*` |
+| State | `is*` |
+| Possession / availability | `has*` |
 
-## 13.11. Intervalle
+## 13.11 Intervals
 
-| Bedeutung | Name |
-|----------|------|
-| linke Grenze geschlossen | `leftClosed` |
-| rechte Grenze geschlossen | `rightClosed` |
+| Meaning | Name |
+|---|---|
+| Left boundary closed | `leftClosed` |
+| Right boundary closed | `rightClosed` |
 
-## 13.12. Output
+## 13.12 Output
 
-| Bedeutung | Name |
-|----------|------|
-| p-Wert | `pValue` |
-| Statistik | `testStatistic` |
-| CI unten | `lci` |
-| CI oben | `uci` |
-| Konfidenzintervall | `confInt` |
+| Meaning | Name |
+|---|---|
+| p-value | `pValue` |
+| Statistic | `testStatistic` |
+| Lower CI | `lci` |
+| Upper CI | `uci` |
+| Confidence interval | `confInt` |
 
-## 13.13 Verbotene Namen
+## 13.13 Forbidden Names
 
-df (für data), dat, grp, w, level, alpha, color
+Do not use:
 
-
-
+```text
+df     for data
+dat
+grp
+w
+level
+alpha
+color
+```

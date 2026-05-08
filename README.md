@@ -1,7 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# DescToolsX
+
+# 📊 DescToolsX
+
+**Version:** 0.0.0.912\
+**Title:** Tools for Descriptive Statistics -- New Generation\
+**License:** GPL (≥ 2)
 
 <!-- badges: start -->
 
@@ -48,51 +53,346 @@ package, so the user does not need to do anything further.
 - 📨 **[hermes](https://github.com/AndriSignorell/hermes/)**  
   → MS Office interface and reporting tools
 
-## Installation
 
-You can install the development version of DescToolsX from
-[GitHub](https://github.com/) with:
+## 🧩 Overview
+
+`DescToolsX` provides a modern, redesigned framework for:
+
+-   descriptive statistics
+-   effect sizes
+-   agreement measures
+-   association statistics
+-   transformations
+-   model diagnostics
+-   inequality metrics
+-   epidemiological utilities
+-   robust statistics
+-   date/time utilities
+
+The package emphasizes:
+
+-   improved consistency
+-   cleaner APIs
+-   better performance
+-   maintainability
+-   modern R infrastructure
+
+It depends on the companion ecosystem packages:
+
+-   `aurora`
+-   `lumen`
+-   `bedrock`
+-   `hermes`
+
+fileciteturn4file0
+
+------------------------------------------------------------------------
+
+## ⚙️ Installation
 
 ``` r
-# install.packages("pak")
-pak::pak("AndriSignorell/DescToolsX")
+remotes::install_github("AndriSignorell/DescToolsX")
 ```
 
-## Example
+------------------------------------------------------------------------
 
-This is a basic example which shows you how to solve a common problem:
+# 📚 Main Function Categories
+
+------------------------------------------------------------------------
+
+## 📈 Descriptive Statistics
+
+Core descriptive statistics utilities:
+
+-   `desc()`
+-   `abstract()`
+-   `freq()`
+-   `freq2D()`
+-   `percTable()`
+-   `quantileX()`
+-   `meanX()`
+-   `medianX()`
+-   `modeX()`
+-   `varX()`
+-   `skewX()`
+-   `kurtX()`
+
+Example:
+
+``` r
+desc(mtcars)
+abstract(mtcars)
+```
+
+------------------------------------------------------------------------
+
+## 📊 Effect Sizes
+
+Includes classical effect size statistics:
+
+-   `cohenD()`
+-   `glassDelta()`
+-   `etaSq()`
+
+Example:
+
+``` r
+cohenD(x, y, conf.level = 0.95)
+```
+
+------------------------------------------------------------------------
+
+## 🤝 Agreement & Reliability
+
+Advanced inter-rater and reliability statistics:
+
+-   `cohenKappa()`
+-   `ccc()` -- concordance correlation coefficient
+-   `cronbachAlpha()`
+-   `icc()`
+-   `kendallW()`
+-   `krippAlpha()`
+-   `randolphKappa()`
+
+Useful for:
+
+-   clinical agreement studies
+-   reliability analysis
+-   psychometrics
+-   medical validation studies
+
+------------------------------------------------------------------------
+
+## 🔗 Association Measures
+
+Nominal and ordinal association metrics:
+
+-   `cramerV()`
+-   `phi()`
+-   `lambda()`
+-   `somersDelta()`
+-   `gkGamma()`
+-   `kendallTauA()`
+-   `kendallTauB()`
+-   `stuartTauC()`
+-   `tschuprowT()`
+-   `uncertCoef()`
+-   `mutInf()`
+
+Wrapper function:
+
+``` r
+assocsTab(table_data)
+```
+
+------------------------------------------------------------------------
+
+## 📉 Inequality & Diversity Metrics
+
+Includes metrics from economics and ecology:
+
+-   `gini()`
+-   `atkinson()`
+-   `theil()`
+-   `simpson()`
+-   `entropy()`
+-   `herfindahl()`
+-   `rosenbluth()`
+
+Example:
+
+``` r
+gini(income)
+atkinson(income, epsilon = 0.5)
+```
+
+------------------------------------------------------------------------
+
+## 🔄 Transformations
+
+Data transformation tools:
+
+-   `boxCox()`
+-   `boxCoxLambda()`
+-   `yeoJohnson()`
+-   `scaleX()`
+-   `logSt()`
+
+Example:
+
+``` r
+lambda <- boxCoxLambda(x)
+x_bc <- boxCox(x, lambda)
+```
+
+------------------------------------------------------------------------
+
+## 🧪 Model Diagnostics & Performance
+
+Regression and predictive diagnostics:
+
+-   `auc()`
+-   `brierScore()`
+-   `pseudoR2()`
+-   `vif()`
+
+Error metrics:
+
+-   `mae()`
+-   `mse()`
+-   `rmse()`
+-   `mape()`
+-   `smape()`
+
+------------------------------------------------------------------------
+
+## 📅 Date & Time Utilities
+
+Convenient helpers:
+
+-   `addMonths()`
+-   `as_ym()`
+-   `countWorkDays()`
+-   `cutAge()`
+-   `generation()`
+-   `zodiac()`
+
+Example:
+
+``` r
+addMonths("2025-01-31", 1)
+```
+
+------------------------------------------------------------------------
+
+## 🧠 Robust Statistics
+
+Robust estimators and resistant methods:
+
+-   `huberM()`
+-   `tukeyBiweight()`
+-   `hodgesLehmann()`
+-   `madX()`
+-   `meanAD()`
+
+------------------------------------------------------------------------
+
+## 🧰 Utility Functions
+
+Additional utilities include:
+
+-   imputation tools (`impute()`, `imputeKnn()`)
+-   confusion matrix utilities
+-   correlation tools
+-   contingency analysis
+-   weighted statistics
+-   scaling helpers
+-   date conversions
+
+------------------------------------------------------------------------
+
+# 🚀 Design Philosophy
+
+DescToolsX was designed to modernize the original DescTools package
+while preserving:
+
+-   statistical breadth
+-   practical workflows
+-   lightweight usage
+-   compatibility with base R
+
+Key improvements include:
+
+-   consistent naming conventions
+-   modular architecture
+-   improved documentation
+-   vectorized implementations
+-   cleaner confidence interval handling
+-   modern package ecosystem integration
+
+------------------------------------------------------------------------
+
+# 📦 Dependencies
+
+Core dependencies include:
+
+-   `Rcpp`
+-   `RcppParallel`
+-   `RcppArmadillo`
+-   `stats`
+-   `boot`
+-   `cli`
+-   `stringi`
+
+Companion ecosystem:
+
+-   `aurora`
+-   `bedrock`
+-   `lumen`
+-   `hermes`
+
+------------------------------------------------------------------------
+
+# 🧪 Example Workflow
 
 ``` r
 library(DescToolsX)
-#> Loading required package: aurora
-#> Part of the DescTools ecosystem. Use DescToolsX for full functionality.
-#> Loading required package: lumen
-#> Part of the DescTools ecosystem. Use DescToolsX for full functionality.
-#> Loading required package: bedrock
-#> Loading required package: hermes
-## basic example code
+
+# descriptive statistics
+desc(iris)
+
+# effect size
+cohenD(
+  iris$Sepal.Length[iris$Species == "setosa"],
+  iris$Sepal.Length[iris$Species == "virginica"]
+)
+
+# agreement
+cohenKappa(matrix(c(50,5,4,40), nrow=2))
+
+# inequality
+gini(c(1,2,3,10))
+
+# transformations
+lambda <- boxCoxLambda(AirPassengers)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+------------------------------------------------------------------------
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+# 🌐 Documentation
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+-   Website:\
+    https://andrisignorell.github.io/DescToolsX/
 
-You can also embed plots, for example:
+-   GitHub:\
+    https://github.com/AndriSignorell/DescToolsX
 
-<img src="man/figures/README-pressure-1.png" alt="" width="100%" />
+-   Issues:\
+    https://github.com/AndriSignorell/DescToolsX/issues
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+------------------------------------------------------------------------
+
+# 📖 Notes
+
+`DescToolsX` is not merely a direct port of `DescTools`.\
+It is a structural redesign emphasizing:
+
+-   clearer statistical APIs
+-   long-term maintainability
+-   separation into ecosystem modules
+-   improved computational performance
+-   better consistency across functions
+
+------------------------------------------------------------------------
+
+# 📜 License
+
+GPL (≥ 2)
+
+------------------------------------------------------------------------
+
+# 📎 Source
+
+Based on package documentation from the uploaded
+`DescToolsX_0.0.0.912.pdf`. 
+
