@@ -81,13 +81,13 @@ stopifnot(identical(m1, m2))
 \code{\link{median}}, \code{\link{var}} the base R equivalents
 \cr\code{\link[lumen]{madCI}} (confidence intervals).
 
-Other dispersion: 
-\code{\link{coefVar}()},
-\code{\link{iqrX}()},
-\code{\link{meanAD}()},
-\code{\link{meanSE}()},
-\code{\link{rangeX}()},
-\code{\link{varX}()}
+Other dispersion:
+\code{\link[=coefVar]{coefVar()}},
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=rangeX]{rangeX()}},
+\code{\link[=varX]{varX()}}
 }
 \concept{descriptive-statistics}
 \concept{dispersion}

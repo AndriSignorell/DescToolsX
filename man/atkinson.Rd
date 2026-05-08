@@ -50,16 +50,16 @@ Atkinson, A. B. (1970). On the measurement of inequality.
 Journal of Economic Theory.
 }
 \seealso{
-Other inequality: 
-\code{\link{divCoef}()},
-\code{\link{entropy}()},
-\code{\link{gini}()},
-\code{\link{herfindahl}()},
-\code{\link{lc}()},
-\code{\link{mutInf}()},
-\code{\link{rosenbluth}()},
-\code{\link{simpson}()},
-\code{\link{theil}()}
+Other inequality:
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=gini]{gini()}},
+\code{\link[=herfindahl]{herfindahl()}},
+\code{\link[=lc]{lc()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{descriptive-statistics}
 \concept{inequality}

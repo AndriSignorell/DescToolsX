@@ -1,6 +1,6 @@
 
 #' @name desc.qq
-#' @aliases .desc_qq
+#' @aliases .descQQ
 #'
 #' @title Describe Relationship: Categorical x by Categorical y
 #'
@@ -45,12 +45,12 @@
 #' @concept association-measures
 #'
 #' @rdname desc.qq
-#' @usage .desc_qq(x, y)
+#' @usage .descQQ(x, y)
 NULL
 
 
 #' @keywords internal
-.desc_qq <- function(x, y) {
+.descQQ <- function(x, y) {
   desc(table(x, y))
 }
 

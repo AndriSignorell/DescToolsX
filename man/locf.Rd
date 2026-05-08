@@ -43,9 +43,9 @@ d.frm
 See also the package \pkg{Hmisc} for less coarse imputation
 functions.
 
-Other imputation: 
-\code{\link{impute}()},
-\code{\link{imputeKnn}()}
+Other imputation:
+\code{\link[=impute]{impute()}},
+\code{\link[=imputeKnn]{imputeKnn()}}
 }
 \author{
 Daniel Wollschlaeger \href{mailto:dwoll@psychologie.uni-kiel.de}{dwoll@psychologie.uni-kiel.de}

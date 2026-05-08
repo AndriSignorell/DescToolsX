@@ -67,11 +67,11 @@ findCorrX(cmat, cutoff = 0.8, method = "max", return = "names")
 
 }
 \seealso{
-Other correlation: 
-\code{\link{corPart}()},
-\code{\link{corPolychor}()},
-\code{\link{hoeffdingD}()},
-\code{\link{pearsonCor}()}
+Other correlation:
+\code{\link[=corPart]{corPart()}},
+\code{\link[=corPolychor]{corPolychor()}},
+\code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=pearsonCor]{pearsonCor()}}
 }
 \concept{correlation}
 \concept{data-inspection}

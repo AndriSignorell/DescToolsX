@@ -70,6 +70,7 @@ as.ym <- function(x){
 
 #' @rdname as_ym
 #' @method as.Date ym
+#' @export
 as.Date.ym <- function(x, d=1, ...){
   as.Date(gsub("([0-9]{4})([0-9]{2})([0-9]{2})", "\\1-\\2-\\3", 
                x*100 + d))

@@ -180,10 +180,10 @@ functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
 package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of
 the flexibility we needed here. \cr
 
-Other freq.tables: 
-\code{\link{expFreq}()},
-\code{\link{freq}()},
-\code{\link{freq2D}()}
+Other freq.tables:
+\code{\link[=expFreq]{expFreq()}},
+\code{\link[=freq]{freq()}},
+\code{\link[=freq2D]{freq2D()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

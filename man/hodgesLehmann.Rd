@@ -83,13 +83,13 @@ Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 \code{\link{wilcox.test}}, \code{\link{median}},
 \code{\link[lumen]{medianCI}}
 
-Other location: 
-\code{\link{gmean}()},
-\code{\link{hmean}()},
-\code{\link{huberM}()},
-\code{\link{medianX}()},
-\code{\link{modeX}()},
-\code{\link{tukeyBiweight}()}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \author{
 Cyril Flurin Moser (Cyril did the lion's share and coded Monahan's

@@ -175,10 +175,10 @@ desc(m, verbose = 2)
 \code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
 \code{\link{cramerV}}, \code{\link{oddsRatio}}
 
-Other desc: 
-\code{\link{desc}()},
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
+Other desc:
+\code{\link[=desc]{desc()}},
+\code{\link[=desc.Date]{desc.Date()}},
+\code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
 \code{\link{desc.qn}},

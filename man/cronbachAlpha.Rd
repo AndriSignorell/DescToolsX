@@ -73,15 +73,15 @@ Cohen, J. (1960), A coefficient of agreement for nominal scales.
 \seealso{
 \code{\link{cohenKappa}}, \code{\link{kappaM}}
 
-Other assoc.agreement: 
-\code{\link{ccc}()},
-\code{\link{cohenKappa}()},
-\code{\link{icc}()},
-\code{\link{kappaM}()},
-\code{\link{kendallW}()},
-\code{\link{krippAlpha}()},
-\code{\link{percAgreement}()},
-\code{\link{randolphKappa}()}
+Other assoc.agreement:
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code of Harold C.

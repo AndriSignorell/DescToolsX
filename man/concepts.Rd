@@ -53,8 +53,8 @@ conceptAudit("DescToolsX")
 
 }
 \seealso{
-Other pkg.introspection: 
-\code{\link{setDescToolsXOption}()}
+Other pkg.introspection:
+\code{\link[=setDescToolsXOption]{setDescToolsXOption()}}
 }
 \concept{data-inspection}
 \concept{package-utilities}

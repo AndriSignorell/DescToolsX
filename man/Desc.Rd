@@ -301,41 +301,14 @@ Other Statistical summary functions: \code{\link{abstract}()}
 \code{\link[tseries]{adf.test}},
 \code{\link[tseries]{kpss.test}}
 
-Other desc: 
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
+Other desc:
+\code{\link[=desc.Date]{desc.Date()}},
+\code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
-
-Other desc: 
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
-\code{\link{desc.nn}},
-\code{\link{desc.nq}},
-\code{\link{desc.qn}},
-\code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
-
-Other desc: 
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
-\code{\link{desc.nn}},
-\code{\link{desc.nq}},
-\code{\link{desc.qn}},
-\code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
-
-Other desc: 
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
-\code{\link{desc.nn}},
-\code{\link{desc.nq}},
-\code{\link{desc.qn}},
-\code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

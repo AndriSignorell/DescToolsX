@@ -78,8 +78,8 @@ Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
 John Wiley and Sons
 }
 \seealso{
-Other topic.associationMeasures: 
-\code{\link{cramerV}()}
+Other topic.associationMeasures:
+\code{\link[=cramerV]{cramerV()}}
 }
 \concept{topic.associationMeasures}
 \keyword{internal}

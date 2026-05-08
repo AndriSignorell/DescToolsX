@@ -3,52 +3,52 @@
 \name{time_conversions}
 \alias{time_conversions}
 \alias{hmsToMinute}
-\alias{HmsToSec}
+\alias{hmsToSec}
 \alias{secToHms}
 \title{Convert h:m:s To/From seconds}
 \usage{
 hmsToMinute(x)
 
-HmsToSec(x)
+hmsToSec(x)
 
 secToHms(x, digits = NULL)
 }
 \arguments{
-\item{x}{A vector of times in h:m:s (for \code{HmsToSec}) or seconds (for
+\item{x}{A vector of times in h:m:s (for \code{hmsToSec}) or seconds (for
 \code{secToHms}).}
 
 \item{digits}{the number of digits to use for potential fractions of
 seconds.}
 }
 \value{
-\code{HmsToSec} - Returns a vector of times in seconds.
+\code{hmsToSec} - Returns a vector of times in seconds.
 
 \code{secToHms} - Returns a vector of times in h:m:s format.
 }
 \description{
-\code{HmsToSec} - Converts a vector of h:m:s to seconds.
+\code{hmsToSec} - Converts a vector of h:m:s to seconds.
 }
 \details{
 \code{secToHms} - Converts a vector of seconds to h:m:s.
 }
 \examples{
 
-HmsToSec(c("02:00:03", "04:03:01"))
-HmsToSec(secToHms(c(222, 1234, 55)))
+hmsToSec(c("02:00:03", "04:03:01"))
+hmsToSec(secToHms(c(222, 1234, 55)))
 secToHms(c(256, 3456, 56565))
 
 }
 \seealso{
 \code{\link[chron]{times}}
 
-Other date.utils: 
-\code{\link{addMonths}()},
+Other date.utils:
+\code{\link[=addMonths]{addMonths()}},
 \code{\link{as_ym}},
-\code{\link{countWorkDays}()},
-\code{\link{cutAge}()},
-\code{\link{generation}()},
-\code{\link{isDate}()},
-\code{\link{zodiac}()}
+\code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link[=cutAge]{cutAge()}},
+\code{\link[=generation]{generation()}},
+\code{\link[=isDate]{isDate()}},
+\code{\link[=zodiac]{zodiac()}}
 }
 \author{
 Tyler Rinker \href{mailto:tyler.rinker@gmail.com}{tyler.rinker@gmail.com}

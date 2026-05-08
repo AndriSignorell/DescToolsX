@@ -1,6 +1,6 @@
 
 #' @name desc.qn
-#' @aliases .desc_qn
+#' @aliases .descQN
 #'
 #' @title Describe Relationship: Categorical y vs Numeric x
 #'
@@ -70,12 +70,12 @@
 #' @concept association-measures
 #'
 #' @rdname desc.qn
-#' @usage .desc_qn(y, x, conf.level = 0.95, breaks, right)
+#' @usage .descQN(y, x, conf.level = 0.95, breaks, right)
 NULL
 
 
 #' @keywords internal
-.desc_qn <- function(y, x, conf.level = 0.95,
+.descQN <- function(y, x, conf.level = 0.95,
                      breaks = quantile(x, probs = c(0.25, 0.5, 0.75),
                                          na.rm = TRUE),
                      right=FALSE) {
@@ -90,14 +90,14 @@ NULL
   if (k < 2L)
     stop("'y' must contain at least two distinct levels after removing missing values")
   
-  # ── 2. Gruppenweise Kennzahlen via .build_summary_table ──────────────────────
-  grpTable <- .build_summary_table(
+  # ── 2. Gruppenweise Kennzahlen via .buildSummaryTable ──────────────────────
+  grpTable <- .buildSummaryTable(
     tapply(xOk, yOk, desc, plotit = FALSE)
   )
   
   # ── 3. Kruskal-Wallis + eta² ─────────────────────────────────────────────────
   kw   <- kruskal.test(xOk ~ yOk)
-  eta2   = .eta2_kruskal(H = kw$statistic, 
+  eta2   = .eta2Kruskal(H = kw$statistic, 
                          k = k,         # already computed
                          n = nValid)    # also there..
   

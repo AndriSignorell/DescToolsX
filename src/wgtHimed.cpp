@@ -170,7 +170,7 @@ double _WHIMED_(double *a, _WGT_TYPE_ *w, int n,
  */
 
 // [[Rcpp::export]]
-double wgtHimed_cpp(NumericVector x, NumericVector w)
+double himed_weighted_cpp(NumericVector x, NumericVector w)
 {
   int n = x.size();
   if (w.size() != n)
@@ -184,7 +184,7 @@ double wgtHimed_cpp(NumericVector x, NumericVector w)
 }
 
 // [[Rcpp::export]]
-double wgtHimedInt_cpp(NumericVector x, IntegerVector iw)
+double himed_int_weighted_cpp(NumericVector x, IntegerVector iw)
 {
   int n = x.size();
   if (iw.size() != n)

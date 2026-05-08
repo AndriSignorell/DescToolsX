@@ -29,7 +29,7 @@ number of its divisors can be determined with the function
 divisors(c(145, 786))
 }
 \seealso{
-Other math.utils: 
+Other math.utils:
 \code{\link{gcd_lcm}}
 }
 \author{

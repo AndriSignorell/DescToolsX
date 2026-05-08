@@ -58,8 +58,8 @@ gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
 \code{\link{medianX}}, \code{\link[stats]{quantile}},
 \code{\link[lumen]{quantileCI}}
 
-Other quantiles: 
-\code{\link{cutQ}()},
+Other quantiles:
+\code{\link[=cutQ]{cutQ()}},
 \code{\link{extremes}}
 }
 \author{

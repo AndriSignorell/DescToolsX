@@ -63,9 +63,9 @@ imputeKnn(dat, k = 2)
 \seealso{
 \code{\link{impute}}, \code{\link{locf}}
 
-Other imputation: 
-\code{\link{impute}()},
-\code{\link{locf}()}
+Other imputation:
+\code{\link[=impute]{impute()}},
+\code{\link[=locf]{locf()}}
 }
 \concept{data-manipulation}
 \concept{imputation}

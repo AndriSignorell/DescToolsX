@@ -2,10 +2,10 @@
 % Please edit documentation in R/desc.qq.R
 \name{desc.qq}
 \alias{desc.qq}
-\alias{.desc_qq}
+\alias{.descQQ}
 \title{Describe Relationship: Categorical x by Categorical y}
 \usage{
-.desc_qq(x, y)
+.descQQ(x, y)
 }
 \arguments{
 \item{x}{A categorical variable.}
@@ -44,14 +44,14 @@ desc(table(x, y))
 \code{\link{desc}}, \code{\link{desc.table}},
 \code{\link{desc.qn}}, \code{\link{desc.nn}}
 
-Other desc: 
-\code{\link{desc}()},
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
+Other desc:
+\code{\link[=desc]{desc()}},
+\code{\link[=desc.Date]{desc.Date()}},
+\code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
 \code{\link{desc.qn}},
-\code{\link{print.Desc.qq}()}
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{association-measures}
 \concept{data-description}

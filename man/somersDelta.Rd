@@ -102,13 +102,13 @@ Measures of association for cross classifications III.
 \seealso{
 \code{\link[Hmisc]{somers2}} (restricted to binary response),
 
-Other assoc.ordinal: 
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{kendallTauA}()},
-\code{\link{kendallTauB}()},
-\code{\link{spearmanCor}()},
-\code{\link{stuartTauC}()}
+Other assoc.ordinal:
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=spearmanCor]{spearmanCor()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

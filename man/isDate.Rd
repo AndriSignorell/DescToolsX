@@ -32,14 +32,14 @@ isDate(31002)
 \seealso{
 \code{\link{year}}, \code{\link{month}}, etc.
 
-Other date.utils: 
-\code{\link{addMonths}()},
+Other date.utils:
+\code{\link[=addMonths]{addMonths()}},
 \code{\link{as_ym}},
-\code{\link{countWorkDays}()},
-\code{\link{cutAge}()},
-\code{\link{generation}()},
+\code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link[=cutAge]{cutAge()}},
+\code{\link[=generation]{generation()}},
 \code{\link{time_conversions}},
-\code{\link{zodiac}()}
+\code{\link[=zodiac]{zodiac()}}
 }
 \author{
 Frank E Harrell

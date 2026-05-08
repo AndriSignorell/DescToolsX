@@ -98,11 +98,11 @@ transformations for gene-expression microarray data, \emph{Bioinformatics}.
 \seealso{
 \code{\link{log}}, \code{\link{log10}}
 
-Other transformations: 
-\code{\link{boxCox}()},
-\code{\link{boxCoxLambda}()},
-\code{\link{scaleX}()},
-\code{\link{yeoJohnson}()}
+Other transformations:
+\code{\link[=boxCox]{boxCox()}},
+\code{\link[=boxCoxLambda]{boxCoxLambda()}},
+\code{\link[=scaleX]{scaleX()}},
+\code{\link[=yeoJohnson]{yeoJohnson()}}
 }
 \author{
 Werner A. Stahel, ETH Zurich \cr slight modifications Andri

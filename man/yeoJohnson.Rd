@@ -67,11 +67,11 @@ A new family of power transformations to improve normality or symmetry.
 \seealso{
 \code{\link{boxCox}}, \code{\link{boxCoxInv}}
 
-Other transformations: 
-\code{\link{boxCox}()},
-\code{\link{boxCoxLambda}()},
-\code{\link{logSt}()},
-\code{\link{scaleX}()}
+Other transformations:
+\code{\link[=boxCox]{boxCox()}},
+\code{\link[=boxCoxLambda]{boxCoxLambda()}},
+\code{\link[=logSt]{logSt()}},
+\code{\link[=scaleX]{scaleX()}}
 }
 \concept{descriptive-statistics}
 \concept{regression}

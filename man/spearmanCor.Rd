@@ -71,13 +71,13 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 \seealso{
 \code{\link{Association}}
 
-Other assoc.ordinal: 
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{kendallTauA}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()},
-\code{\link{stuartTauC}()}
+Other assoc.ordinal:
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

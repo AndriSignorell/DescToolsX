@@ -81,7 +81,7 @@ contCoef <- function(x, y = NULL,
   # ------------------------------------------
   # Normalize input
   # ------------------------------------------
-  tab <- .normalizeToConfusion(x, y, mode = "association")
+  tab <- normalizeToConfusion(x, y, mode = "association")
   
   # ------------------------------------------
   # Point estimate (C++)
@@ -106,7 +106,7 @@ contCoef <- function(x, y = NULL,
   # ------------------------------------------
   if (type == "perc") {
     
-    boot_vals <- bootstrap_contcoef_table_cpp(
+    boot_vals <- contcoef_table_boot_cpp(
       tab     = tab,
       R       = R,
       seed    = base_seed,
@@ -129,7 +129,7 @@ contCoef <- function(x, y = NULL,
   # ------------------------------------------
   if (type == "bca") {
     
-    res <- bootstrap_contcoef_table_bca_cpp(
+    res <- contcoef_table_boot_bca_cpp(
       tab,
       R,
       base_seed,

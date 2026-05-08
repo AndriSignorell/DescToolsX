@@ -153,9 +153,9 @@ icc <- function(x,
   if(na.rm) ratings <- na.omit(ratings)
   
   if(method == "anova" || method == "boot") {
-    estObj <- .iccEstimate_anova(ratings, model, type, unit)
+    estObj <- .iccEstimateAnova(ratings, model, type, unit)
   } else {
-    estObj <- .iccEstimate_reml(ratings, model, type, unit)
+    estObj <- .iccEstimateReml(ratings, model, type, unit)
   }
   
   if(!is.na(conf.level)) {
@@ -173,7 +173,7 @@ icc <- function(x,
 ## ANOVA Estimator
 ############################################################
 
-.iccEstimate_anova <- function(ratings, model, type, unit) {
+.iccEstimateAnova <- function(ratings, model, type, unit) {
   
   ns <- nrow(ratings)
   nr <- ncol(ratings)
@@ -221,7 +221,7 @@ icc <- function(x,
 ## REML Estimator
 ############################################################
 
-.iccEstimate_reml <- function(ratings, model, type, unit) {
+.iccEstimateReml <- function(ratings, model, type, unit) {
   
   if(!requireNamespace("lme4", quietly=TRUE))
     stop("Package 'lme4' required for REML.")
@@ -261,9 +261,9 @@ icc <- function(x,
                    model, type, unit, method, R) {
   
   switch(method,
-         anova = .iccCI_anova(obj, conf.level, model, type, unit),
-         reml  = .iccCI_reml(obj, conf.level),
-         boot  = .iccCI_boot(ratings, conf.level,
+         anova = .iccCIAnova(obj, conf.level, model, type, unit),
+         reml  = .iccCIReml(obj, conf.level),
+         boot  = .iccCIBoot(ratings, conf.level,
                              model, type, unit, R)
   )
 }
@@ -272,7 +272,7 @@ icc <- function(x,
 ## ANOVA CI  (Shrout & Fleiss exact)
 ############################################################
 
-.iccCI_anova <- function(obj, conf.level, model, type, unit) {
+.iccCIAnova <- function(obj, conf.level, model, type, unit) {
   
   alpha <- 1 - conf.level
   
@@ -352,7 +352,7 @@ icc <- function(x,
 ## REML CI (Wald on Fisher-z)
 ############################################################
 
-.iccCI_reml <- function(obj, conf.level) {
+.iccCIReml <- function(obj, conf.level) {
   
   alpha <- 1-conf.level
   z <- atanh(obj$est)
@@ -366,7 +366,7 @@ icc <- function(x,
 ## Bootstrap CI (percentile)
 ############################################################
 
-.iccCI_boot <- function(ratings, conf.level,
+.iccCIBoot <- function(ratings, conf.level,
                         model, type, unit, R) {
   
   alpha <- 1-conf.level
@@ -374,7 +374,7 @@ icc <- function(x,
   
   vals <- replicate(R,{
     idx <- sample(seq_len(ns),replace=TRUE)
-    .iccEstimate_anova(ratings[idx,,drop=FALSE],
+    .iccEstimateAnova(ratings[idx,,drop=FALSE],
                        model,type,unit)$est
   })
   

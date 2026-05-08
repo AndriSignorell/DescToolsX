@@ -253,8 +253,8 @@ ToWrd(
 \seealso{
 \code{\link[bedrock]{appendX}()}
 
-Other table.utils: 
-\code{\link{raterFrame}()}
+Other table.utils:
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \concept{data-description}
 \concept{descriptive-statistics}

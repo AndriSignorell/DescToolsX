@@ -43,8 +43,8 @@ Identifying density-based local outliers. \emph{In Proceedings of the ACM
 SIGMOD International Conference on Management of Data}
 }
 \seealso{
-Other outlier: 
-\code{\link{outlier}()}
+Other outlier:
+\code{\link[=outlier]{outlier()}}
 }
 \author{
 Caroline Rodriguez

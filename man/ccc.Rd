@@ -137,15 +137,15 @@ University Press.
 \seealso{
 \code{\link{icc}}, \code{\link{kendallW}}
 
-Other assoc.agreement: 
-\code{\link{cohenKappa}()},
-\code{\link{cronbachAlpha}()},
-\code{\link{icc}()},
-\code{\link{kappaM}()},
-\code{\link{kendallW}()},
-\code{\link{krippAlpha}()},
-\code{\link{percAgreement}()},
-\code{\link{randolphKappa}()}
+Other assoc.agreement:
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \author{
 Mark Stevenson \href{mailto:mark.stevenson1@unimelb.edu.au}{mark.stevenson1@unimelb.edu.au}

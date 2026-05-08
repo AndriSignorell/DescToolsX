@@ -108,15 +108,15 @@ Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the 
 \code{\link{cronbachAlpha}}, \code{\link{icc}},
 \code{\link[stats]{friedman.test}}
 
-Other assoc.agreement: 
-\code{\link{ccc}()},
-\code{\link{cohenKappa}()},
-\code{\link{cronbachAlpha}()},
-\code{\link{icc}()},
-\code{\link{kappaM}()},
-\code{\link{krippAlpha}()},
-\code{\link{percAgreement}()},
-\code{\link{randolphKappa}()}
+Other assoc.agreement:
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}\cr

@@ -95,7 +95,7 @@ cStat.default <- function(x, resp, conf.level=NA, ...) {
   }
   
   # --- compute concordance ---
-  z <- conDisPairsXY_ind_cpp(y, x)
+  z <- condis_pairs_xy_cpp(y, x)
   
   res <- (z["C"] + 0.5 * z["Ties_Y"]) / (z["D"] + z["C"] + z["Ties_Y"])
   
@@ -104,7 +104,7 @@ cStat.default <- function(x, resp, conf.level=NA, ...) {
     seed <- sample.int(.Machine$integer.max, 1)
     
     R <- list(...)$R %||% 1000 
-    ci <- cstat_bootstrap_parallel_cpp(y, x, R, 
+    ci <- cstat_boot_cpp(y, x, R, 
                                        alpha = 1-conf.level, 
                                        seed = seed)
     
@@ -132,7 +132,7 @@ cStat.default <- function(x, resp, conf.level=NA, ...) {
     stop("`resp` must be binary.", call. = FALSE)
   }
   
-  cstat_bootstrap_parallel_cpp(x, y, R, alpha = 1-conf.level)
+  cstat_boot_cpp(x, y, R, alpha = 1-conf.level)
   
 }
 

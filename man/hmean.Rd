@@ -78,13 +78,13 @@ ed. Ames, \emph{IA: Iowa State University Press }
 \seealso{
 \code{\link{meanX}}, \code{\link{gmean}}
 
-Other location: 
-\code{\link{gmean}()},
-\code{\link{hodgesLehmann}()},
-\code{\link{huberM}()},
-\code{\link{medianX}()},
-\code{\link{modeX}()},
-\code{\link{tukeyBiweight}()}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \concept{confidence-intervals}
 \concept{descriptive-statistics}

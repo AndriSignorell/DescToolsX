@@ -303,7 +303,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     cat("\n\n")
   }
   
-  if (.has_color()) {
+  if (.hasColor()) {
     cat(cli::col_silver(gettextf(
       "%s %s%s-CI (classic)\n\n",
       .getOption("footnote")[1], x$conf.level * 100, "%"
@@ -372,7 +372,7 @@ plot.Desc.numeric <- function(x, ...){
   # we send the SORTED vector WITHOUT NAs to the C++ function to calc
   # the power sum(s), extreme values and the mode
   # NOTE: this is highly performance relevant!
-  psum <- n_pow_sum(x)
+  psum <- n_pow_sum_cpp(x)
   
   # this is method 3 in the usual functions Skew and Kurt
   skewx <- ((1 / n * psum$sum3) / (psum$sum2 / n)^1.5) * ((n - 1) / n)^(3 / 2)

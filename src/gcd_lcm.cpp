@@ -7,7 +7,7 @@ using namespace Rcpp;
 // least common multiple
 
 // [[Rcpp::export]]
-long long compute_LCM(long long int a, long long int b){
+long long lcm_cpp(long long int a, long long int b){
   return
   std::lcm(a,b);
 }
@@ -16,7 +16,7 @@ long long compute_LCM(long long int a, long long int b){
 // greatest common divisor
 
 // [[Rcpp::export]]
-long long compute_GCD(long long int a, long long int b){
+long long gcd_cpp(long long int a, long long int b){
   return
   std::gcd(a,b);
 }

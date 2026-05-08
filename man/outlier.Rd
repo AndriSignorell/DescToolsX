@@ -66,8 +66,8 @@ estimation, \emph{Journal of the American Statistical Association}, 69,
 \seealso{
 \code{\link{boxplot}}
 
-Other outlier: 
-\code{\link{lof}()}
+Other outlier:
+\code{\link[=lof]{lof()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, performance improvement by

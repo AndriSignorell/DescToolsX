@@ -5,10 +5,11 @@
 # function. Therefore the filename must start with 'aaa'.
 
 
-.ChisqWarning <- function(){
-  cat(cli::col_red("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n\n"))
-}
-
+# dead code... 
+# .ChisqWarning <- function(){
+#   cat(cli::col_red("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n\n"))
+# }
+# 
 
 
 .notThere <- function(object, ...){
@@ -25,9 +26,9 @@
 }
 
 
-# check if the user system supports colors
 
-.has_color <- function() {
+# check if the user system supports colors
+.hasColor <- function() {
   .rstudio_with_ansi_support <- function() {
     if (Sys.getenv("RSTUDIO", "") == "") {
       return(FALSE)
@@ -164,7 +165,7 @@
 # of a chi-square statistic
 # Author: cleaned-up version of Smithson (2001)
 
-.ncp_ci_chisq <- function(chisq, df, conf = 0.95,
+.chisqNcpCI <- function(chisq, df, conf = 0.95,
                           tol = 1e-6,
                           max_ncp = 1e6) {
   
@@ -204,193 +205,191 @@
 
 
 
+# 
+# .normalizeToConfusion <- function(
+#     x,
+#     y = NULL,
+#     levels = NULL,
+#     useNA = "no",
+#     mode = c("agreement", "association")
+# ) {
+# 
+# 
+#   # Normalize Input to a Contingency / Agreement Table
+#   #
+#   # Normalizes diverse input formats into a contingency table.
+#   # Supports both agreement measures (e.g. Cohen's Kappa)
+#   # and association measures (e.g. Cramer's V).
+#   #
+#   # @param x Input object (table, matrix, data.frame, list, or vector).
+#   # @param y Optional second vector of observations.
+#   # @param levels Optional category levels.
+#   #   - agreement: atomic vector of common levels
+#   #   - association: list(x_levels, y_levels)
+#   # @param useNA Passed to table()
+#   # @param mode Either "agreement" or "association"
+#   #
+#   # @return Numeric matrix (contingency table)
+#   #
+#   # @keywords internal
+# 
+# 
+#   mode <- match.arg(mode)
+# 
+#   #--------------------------------------------------
+#   # Helper: build table from two vectors
+#   #--------------------------------------------------
+#   two_vec_to_tab <- function(a, b, levels, useNA, mode) {
+# 
+#     if (mode == "agreement") {
+# 
+#       if (is.null(levels)) {
+#         levels <- sort(unique(c(a, b)))
+#       }
+# 
+#       a <- factor(a, levels = levels)
+#       b <- factor(b, levels = levels)
+# 
+#     } else { # association
+# 
+#       if (is.null(levels)) {
+# 
+#         a <- factor(a)
+#         b <- factor(b)
+# 
+#       } else {
+# 
+#         if (!is.list(levels) || length(levels) != 2L) {
+#           stop("For mode='association', 'levels' must be a list(x_levels, y_levels).")
+#         }
+# 
+#         a <- factor(a, levels = levels[[1]])
+#         b <- factor(b, levels = levels[[2]])
+#       }
+#     }
+# 
+#     as.matrix(table(a, b, useNA = useNA))
+#   }
+# 
+#   #--------------------------------------------------
+#   # 1) table input
+#   #--------------------------------------------------
+#   if (inherits(x, c("table", "matrix", "array")) && length(dim(x)) == 2L) {
+# 
+#     tab <- as.matrix(x)
+# 
+#     if (mode == "agreement") {
+# 
+#       if (nrow(tab) != ncol(tab)) {
+#         stop("Agreement measures require a square table.")
+#       }
+# 
+#       if (!do.call(identical, unname(dimnames(tab)))) {
+#         stop("For agreement measures, row and column names must match.")
+#       }
+# 
+#       if (!is.null(levels)) {
+#         if (length(levels) != nrow(tab)) {
+#           stop("'levels' must match table dimensions.")
+#         }
+#         dimnames(tab) <- list(levels, levels)
+#       }
+# 
+#     } else { # association
+# 
+#       if (!is.null(levels)) {
+#         if (!is.list(levels) || length(levels) != 2L) {
+#           stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
+#         }
+#         dimnames(tab) <- list(levels[[1]], levels[[2]])
+#       }
+#     }
+# 
+#     return(tab)
+#   }
+# 
+#   #--------------------------------------------------
+#   # 2) confusion-like matrix
+#   #--------------------------------------------------
+#   if (is.matrix(x) && isConfusionTable(x, require_dimnames = FALSE)) {
+# 
+#     tab <- as.matrix(x)
+# 
+#     if (mode == "agreement") {
+# 
+#       if (nrow(tab) != ncol(tab)) {
+#         stop("Agreement measures require a square matrix.")
+#       }
+# 
+#       if (!is.null(levels)) {
+#         dimnames(tab) <- list(levels, levels)
+#       }
+# 
+#     } else {
+# 
+#       if (!is.null(levels)) {
+#         if (!is.list(levels) || length(levels) != 2L) {
+#           stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
+#         }
+#         dimnames(tab) <- list(levels[[1]], levels[[2]])
+#       }
+#     }
+# 
+#     return(tab)
+#   }
+# 
+#   #--------------------------------------------------
+#   # 3) Two vectors explicitly provided
+#   #--------------------------------------------------
+#   if (!is.null(y)) {
+#     return(two_vec_to_tab(x, y, levels, useNA, mode))
+#   }
+# 
+#   #--------------------------------------------------
+#   # 4) matrix with exactly 2 columns
+#   #--------------------------------------------------
+#   if (is.matrix(x)) {
+# 
+#     if (ncol(x) != 2L) {
+#       stop("Matrix input must have exactly 2 columns.")
+#     }
+# 
+#     return(two_vec_to_tab(x[, 1], x[, 2], levels, useNA, mode))
+#   }
+# 
+#   #--------------------------------------------------
+#   # 5) list with exactly 2 elements
+#   #--------------------------------------------------
+#   if (is.list(x)) {
+# 
+#     if (length(x) != 2L) {
+#       stop("List input must contain exactly 2 elements.")
+#     }
+# 
+#     return(two_vec_to_tab(x[[1]], x[[2]], levels, useNA, mode))
+#   }
+# 
+#   stop("Unsupported input type or missing second variable.")
+# }
+# 
+# 
 
-.normalizeToConfusion <- function(
-    x,
-    y = NULL,
-    levels = NULL,
-    useNA = "no",
-    mode = c("agreement", "association")
-) {
-  
-  
-  # Normalize Input to a Contingency / Agreement Table
-  #
-  # Normalizes diverse input formats into a contingency table.
-  # Supports both agreement measures (e.g. Cohen's Kappa)
-  # and association measures (e.g. Cramer's V).
-  #
-  # @param x Input object (table, matrix, data.frame, list, or vector).
-  # @param y Optional second vector of observations.
-  # @param levels Optional category levels.
-  #   - agreement: atomic vector of common levels
-  #   - association: list(x_levels, y_levels)
-  # @param useNA Passed to table()
-  # @param mode Either "agreement" or "association"
-  #
-  # @return Numeric matrix (contingency table)
-  #
-  # @keywords internal
-  
-  
-  mode <- match.arg(mode)
-  
-  #--------------------------------------------------
-  # Helper: build table from two vectors
-  #--------------------------------------------------
-  two_vec_to_tab <- function(a, b, levels, useNA, mode) {
-    
-    if (mode == "agreement") {
-      
-      if (is.null(levels)) {
-        levels <- sort(unique(c(a, b)))
-      }
-      
-      a <- factor(a, levels = levels)
-      b <- factor(b, levels = levels)
-      
-    } else { # association
-      
-      if (is.null(levels)) {
-        
-        a <- factor(a)
-        b <- factor(b)
-        
-      } else {
-        
-        if (!is.list(levels) || length(levels) != 2L) {
-          stop("For mode='association', 'levels' must be a list(x_levels, y_levels).")
-        }
-        
-        a <- factor(a, levels = levels[[1]])
-        b <- factor(b, levels = levels[[2]])
-      }
-    }
-    
-    as.matrix(table(a, b, useNA = useNA))
-  }
-  
-  #--------------------------------------------------
-  # 1) table input
-  #--------------------------------------------------
-  if (inherits(x, c("table", "matrix", "array")) && length(dim(x)) == 2L) {
-    
-    tab <- as.matrix(x)
-    
-    if (mode == "agreement") {
-      
-      if (nrow(tab) != ncol(tab)) {
-        stop("Agreement measures require a square table.")
-      }
-      
-      if (!do.call(identical, unname(dimnames(tab)))) {
-        stop("For agreement measures, row and column names must match.")
-      }
-      
-      if (!is.null(levels)) {
-        if (length(levels) != nrow(tab)) {
-          stop("'levels' must match table dimensions.")
-        }
-        dimnames(tab) <- list(levels, levels)
-      }
-      
-    } else { # association
-      
-      if (!is.null(levels)) {
-        if (!is.list(levels) || length(levels) != 2L) {
-          stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
-        }
-        dimnames(tab) <- list(levels[[1]], levels[[2]])
-      }
-    }
-    
-    return(tab)
-  }
-  
-  #--------------------------------------------------
-  # 2) confusion-like matrix
-  #--------------------------------------------------
-  if (is.matrix(x) && isConfusionTable(x, require_dimnames = FALSE)) {
-    
-    tab <- as.matrix(x)
-    
-    if (mode == "agreement") {
-      
-      if (nrow(tab) != ncol(tab)) {
-        stop("Agreement measures require a square matrix.")
-      }
-      
-      if (!is.null(levels)) {
-        dimnames(tab) <- list(levels, levels)
-      }
-      
-    } else {
-      
-      if (!is.null(levels)) {
-        if (!is.list(levels) || length(levels) != 2L) {
-          stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
-        }
-        dimnames(tab) <- list(levels[[1]], levels[[2]])
-      }
-    }
-    
-    return(tab)
-  }
-  
-  #--------------------------------------------------
-  # 3) Two vectors explicitly provided
-  #--------------------------------------------------
-  if (!is.null(y)) {
-    return(two_vec_to_tab(x, y, levels, useNA, mode))
-  }
-  
-  #--------------------------------------------------
-  # 4) matrix with exactly 2 columns
-  #--------------------------------------------------
-  if (is.matrix(x)) {
-    
-    if (ncol(x) != 2L) {
-      stop("Matrix input must have exactly 2 columns.")
-    }
-    
-    return(two_vec_to_tab(x[, 1], x[, 2], levels, useNA, mode))
-  }
-  
-  #--------------------------------------------------
-  # 5) list with exactly 2 elements
-  #--------------------------------------------------
-  if (is.list(x)) {
-    
-    if (length(x) != 2L) {
-      stop("List input must contain exactly 2 elements.")
-    }
-    
-    return(two_vec_to_tab(x[[1]], x[[2]], levels, useNA, mode))
-  }
-  
-  stop("Unsupported input type or missing second variable.")
-}
-
-
-
-
-.ci_tails <- function(conf.level, sides) {
-  
-  if (is.na(conf.level))
-    return(NULL)
-  
-  sides <- match.arg(sides, c("two-sided","left","right"))
-  
-  alpha <- 1 - conf.level
-  
-  switch(sides,
-         "two-sided" = list(alpha_l = alpha/2, alpha_u = alpha/2),
-         "left"      = list(alpha_l = alpha,   alpha_u = 0),
-         "right"     = list(alpha_l = 0,       alpha_u = alpha)
-  )
-}
-
-
-
+# not used: dead code 
+# .ci_tails <- function(conf.level, sides) {
+#   
+#   if (is.na(conf.level))
+#     return(NULL)
+#   
+#   sides <- match.arg(sides, c("two-sided","left","right"))
+#   
+#   alpha <- 1 - conf.level
+#   
+#   switch(sides,
+#          "two-sided" = list(alpha_l = alpha/2, alpha_u = alpha/2),
+#          "left"      = list(alpha_l = alpha,   alpha_u = 0),
+#          "right"     = list(alpha_l = 0,       alpha_u = alpha)
+#   )
+# }
+# 
 
 

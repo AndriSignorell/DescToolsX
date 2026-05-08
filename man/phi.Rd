@@ -55,15 +55,15 @@ phi(tab)
 \seealso{
 \code{\link{chisq.test}}, \code{\link{cramerV}}
 
-Other assoc.nominal: 
-\code{\link{assocsTab}()},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{lambda}()},
-\code{\link{oddsRatio}()},
-\code{\link{relRisk}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
+Other assoc.nominal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=relRisk]{relRisk()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }
 \concept{assoc.nominal}

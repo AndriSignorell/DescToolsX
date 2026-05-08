@@ -62,11 +62,11 @@ bedrock::pairApply(swiss,
 \seealso{
 \code{\link[lumen]{fisherZ}}, \code{\link[lumen]{fisherZInv}}
 
-Other correlation: 
-\code{\link{corPart}()},
-\code{\link{corPolychor}()},
-\code{\link{findCorrX}()},
-\code{\link{hoeffdingD}()}
+Other correlation:
+\code{\link[=corPart]{corPart()}},
+\code{\link[=corPolychor]{corPolychor()}},
+\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=hoeffdingD]{hoeffdingD()}}
 }
 \author{
 William Revelle

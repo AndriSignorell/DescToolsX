@@ -25,7 +25,7 @@ Extract Specificity from a Confusion Matrix
 \seealso{
 \code{\link{conf}}, \code{\link{sens}}
 
-Other classification: 
-\code{\link{sens}()}
+Other classification:
+\code{\link[=sens]{sens()}}
 }
 \concept{classification}

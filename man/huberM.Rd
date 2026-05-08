@@ -90,13 +90,13 @@ Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
 \code{\link[MASS]{hubers}} (and \code{huber}) in package
 \pkg{MASS}; \code{\link{mad}}.
 
-Other location: 
-\code{\link{gmean}()},
-\code{\link{hmean}()},
-\code{\link{hodgesLehmann}()},
-\code{\link{medianX}()},
-\code{\link{modeX}()},
-\code{\link{tukeyBiweight}()}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \author{
 Martin Maechler, building on the MASS code mentioned.\cr Andri

@@ -9,28 +9,28 @@ brier_boot_cpp <- function(resp, pred, R, scaled) {
     .Call(`_DescToolsX_brier_boot_cpp`, resp, pred, R, scaled)
 }
 
-conDisPairsTab_cpp <- function(x) {
-    .Call(`_DescToolsX_conDisPairsTab_cpp`, x)
+condis_pairs_tab_cpp <- function(x) {
+    .Call(`_DescToolsX_condis_pairs_tab_cpp`, x)
 }
 
-conDisPairsXY_ind_cpp <- function(xR, yR) {
-    .Call(`_DescToolsX_conDisPairsXY_ind_cpp`, xR, yR)
+condis_pairs_xy_cpp <- function(xR, yR) {
+    .Call(`_DescToolsX_condis_pairs_xy_cpp`, xR, yR)
 }
 
-cstat_bootstrap_parallel_cpp <- function(yR, xR, B = 1000L, alpha = 0.05, seed = -1L) {
-    .Call(`_DescToolsX_cstat_bootstrap_parallel_cpp`, yR, xR, B, alpha, seed)
+cstat_boot_cpp <- function(yR, xR, B = 1000L, alpha = 0.05, seed = -1L) {
+    .Call(`_DescToolsX_cstat_boot_cpp`, yR, xR, B, alpha, seed)
 }
 
-bootstrap_contcoef_table_bca_cpp <- function(tab, R, seed, correct, conf_level) {
-    .Call(`_DescToolsX_bootstrap_contcoef_table_bca_cpp`, tab, R, seed, correct, conf_level)
+contcoef_table_boot_bca_cpp <- function(tab, R, seed, correct, conf_level) {
+    .Call(`_DescToolsX_contcoef_table_boot_bca_cpp`, tab, R, seed, correct, conf_level)
 }
 
 contcoef_table_cpp <- function(tab, correct = FALSE) {
     .Call(`_DescToolsX_contcoef_table_cpp`, tab, correct)
 }
 
-bootstrap_contcoef_table_cpp <- function(tab, R = 5000L, seed = 0L, correct = FALSE) {
-    .Call(`_DescToolsX_bootstrap_contcoef_table_cpp`, tab, R, seed, correct)
+contcoef_table_boot_cpp <- function(tab, R = 5000L, seed = 0L, correct = FALSE) {
+    .Call(`_DescToolsX_contcoef_table_boot_cpp`, tab, R, seed, correct)
 }
 
 isoWeek <- function(x) {
@@ -65,36 +65,36 @@ isLeapYearInt <- function(x) {
     .Call(`_DescToolsX_isLeapYearInt`, x)
 }
 
-top_n <- function(x, n = 5L) {
-    .Call(`_DescToolsX_top_n`, x, n)
+top_n_cpp <- function(x, n = 5L) {
+    .Call(`_DescToolsX_top_n_cpp`, x, n)
 }
 
-bottom_n <- function(x, n = 5L) {
-    .Call(`_DescToolsX_bottom_n`, x, n)
+bottom_n_cpp <- function(x, n = 5L) {
+    .Call(`_DescToolsX_bottom_n_cpp`, x, n)
 }
 
-top_i <- function(v, n) {
-    .Call(`_DescToolsX_top_i`, v, n)
+top_i_cpp <- function(v, n) {
+    .Call(`_DescToolsX_top_i_cpp`, v, n)
 }
 
-bottom_i <- function(v, n) {
-    .Call(`_DescToolsX_bottom_i`, v, n)
+bottom_i_cpp <- function(v, n) {
+    .Call(`_DescToolsX_bottom_i_cpp`, v, n)
 }
 
 fastMode <- function(x, narm = FALSE) {
     .Call(`_DescToolsX_fastMode`, x, narm)
 }
 
-fastModeX <- function(x, narm = FALSE) {
-    .Call(`_DescToolsX_fastModeX`, x, narm)
+fast_mode_cpp <- function(x, narm = FALSE) {
+    .Call(`_DescToolsX_fast_mode_cpp`, x, narm)
 }
 
-compute_LCM <- function(a, b) {
-    .Call(`_DescToolsX_compute_LCM`, a, b)
+lcm_cpp <- function(a, b) {
+    .Call(`_DescToolsX_lcm_cpp`, a, b)
 }
 
-compute_GCD <- function(a, b) {
-    .Call(`_DescToolsX_compute_GCD`, a, b)
+gcd_cpp <- function(a, b) {
+    .Call(`_DescToolsX_gcd_cpp`, a, b)
 }
 
 divs <- function(x) {
@@ -113,35 +113,35 @@ hoeffdingD_cpp <- function(perm) {
     .Call(`_DescToolsX_hoeffdingD_cpp`, perm)
 }
 
-n_pow_sum <- function(x) {
-    .Call(`_DescToolsX_n_pow_sum`, x)
+n_pow_sum_cpp <- function(x) {
+    .Call(`_DescToolsX_n_pow_sum_cpp`, x)
 }
 
-rskew_cpp <- function(x, mean) {
-    .Call(`_DescToolsX_rskew_cpp`, x, mean)
+skew_cpp <- function(x, mean) {
+    .Call(`_DescToolsX_skew_cpp`, x, mean)
 }
 
-rskeww_cpp <- function(x, mean, w) {
-    .Call(`_DescToolsX_rskeww_cpp`, x, mean, w)
+skew_weighted_cpp <- function(x, mean, w) {
+    .Call(`_DescToolsX_skew_weighted_cpp`, x, mean, w)
 }
 
-rkurt_cpp <- function(x, mean) {
-    .Call(`_DescToolsX_rkurt_cpp`, x, mean)
+kurt_cpp <- function(x, mean) {
+    .Call(`_DescToolsX_kurt_cpp`, x, mean)
 }
 
-rkurtw_cpp <- function(x, mean, w) {
-    .Call(`_DescToolsX_rkurtw_cpp`, x, mean, w)
+kurt_weighted_cpp <- function(x, mean, w) {
+    .Call(`_DescToolsX_kurt_weighted_cpp`, x, mean, w)
 }
 
 tbrm <- function(x, C) {
     .Call(`_DescToolsX_tbrm`, x, C)
 }
 
-wgtHimed_cpp <- function(x, w) {
-    .Call(`_DescToolsX_wgtHimed_cpp`, x, w)
+himed_weighted_cpp <- function(x, w) {
+    .Call(`_DescToolsX_himed_weighted_cpp`, x, w)
 }
 
-wgtHimedInt_cpp <- function(x, iw) {
-    .Call(`_DescToolsX_wgtHimedInt_cpp`, x, iw)
+himed_int_weighted_cpp <- function(x, iw) {
+    .Call(`_DescToolsX_himed_int_weighted_cpp`, x, iw)
 }
 

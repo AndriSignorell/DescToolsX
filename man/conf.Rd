@@ -129,10 +129,10 @@ conf(m)
 
 }
 \seealso{
-Other confusion: 
-\code{\link{cStat}()},
-\code{\link{isConfusionTable}()},
-\code{\link{normalizeToConfusion}()}
+Other confusion:
+\code{\link[=cStat]{cStat()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}}
 }
 \concept{classification-metrics}
 \concept{confusion}

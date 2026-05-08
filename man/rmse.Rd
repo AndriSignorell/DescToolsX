@@ -49,14 +49,14 @@ rmse(fit)
 \seealso{
 \code{\link{mean}}, \code{\link{sqrt}}
 
-Other error.measures: 
-\code{\link{brierScore}()},
-\code{\link{mae}()},
-\code{\link{mape}()},
-\code{\link{mse}()},
-\code{\link{nmae}()},
-\code{\link{nmse}()},
-\code{\link{smape}()}
+Other error.measures:
+\code{\link[=brierScore]{brierScore()}},
+\code{\link[=mae]{mae()}},
+\code{\link[=mape]{mape()}},
+\code{\link[=mse]{mse()}},
+\code{\link[=nmae]{nmae()}},
+\code{\link[=nmse]{nmse()}},
+\code{\link[=smape]{smape()}}
 }
 \concept{descriptive-statistics}
 \concept{error.measures}

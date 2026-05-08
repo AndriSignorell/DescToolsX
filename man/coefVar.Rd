@@ -181,13 +181,13 @@ Statistics Theory and Methods}, Volume 36, No. 12, pp 2187-2206.
 \seealso{
 \code{\link{meanX}}, \code{\link{sdX}}, (both supporting weights)
 
-Other dispersion: 
-\code{\link{iqrX}()},
-\code{\link{madX}()},
-\code{\link{meanAD}()},
-\code{\link{meanSE}()},
-\code{\link{rangeX}()},
-\code{\link{varX}()}
+Other dispersion:
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=rangeX]{rangeX()}},
+\code{\link[=varX]{varX()}}
 }
 \concept{descriptive-statistics}
 \concept{dispersion}

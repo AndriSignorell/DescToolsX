@@ -91,15 +91,15 @@ scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 \seealso{
 \code{\link{cohenKappa}}
 
-Other assoc.agreement: 
-\code{\link{ccc}()},
-\code{\link{cohenKappa}()},
-\code{\link{cronbachAlpha}()},
-\code{\link{icc}()},
-\code{\link{kendallW}()},
-\code{\link{krippAlpha}()},
-\code{\link{percAgreement}()},
-\code{\link{randolphKappa}()}
+Other assoc.agreement:
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \author{
 Matthias Gamer, with some modifications by Andri Signorell

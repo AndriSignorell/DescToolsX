@@ -50,7 +50,7 @@ inline double compute_cc(
 
 
 // [[Rcpp::export]]
-List bootstrap_contcoef_table_bca_cpp(
+List contcoef_table_boot_bca_cpp(
   IntegerMatrix tab,
   int R,
   unsigned int seed,

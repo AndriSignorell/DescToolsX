@@ -37,11 +37,11 @@ points(x=seq_along(x), y=scale(x), col="red" )
 \seealso{
 \link[base:scale]{base::scale}, \link[base:sweep]{base::sweep}
 
-Other transformations: 
-\code{\link{boxCox}()},
-\code{\link{boxCoxLambda}()},
-\code{\link{logSt}()},
-\code{\link{yeoJohnson}()}
+Other transformations:
+\code{\link[=boxCox]{boxCox()}},
+\code{\link[=boxCoxLambda]{boxCoxLambda()}},
+\code{\link[=logSt]{logSt()}},
+\code{\link[=yeoJohnson]{yeoJohnson()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

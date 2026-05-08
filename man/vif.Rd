@@ -44,9 +44,9 @@ vif(mod)
 
 }
 \seealso{
-Other regression.utils: 
-\code{\link{auc}()},
-\code{\link{pseudoR2}()}
+Other regression.utils:
+\code{\link[=auc]{auc()}},
+\code{\link[=pseudoR2]{pseudoR2()}}
 }
 \concept{data-inspection}
 \concept{regression}

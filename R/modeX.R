@@ -110,7 +110,7 @@ modeX <- function(x, na.rm=FALSE) {
   
   # we don't have NAs so far, either there were then we've already stopped
   # or they've been stripped above
-  res <- fastModeX(x, narm=FALSE)
+  res <- fast_mode_cpp(x, narm=FALSE)
   
   # no mode existing, if max freq is only 1 observation
   if(length(res)== 0L & attr(res, "freq")==1L)

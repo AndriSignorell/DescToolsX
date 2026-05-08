@@ -219,9 +219,9 @@ huberM <- function(x, conf.level = NA, sides = c("two.sided","left","right"),
     stop("'weights' must have same length as 'x'")
 
   if(is.integer(weights))
-    wgtHimedInt_cpp(x, weights)
+    himed_int_weighted_cpp(x, weights)
   else
-    wgtHimed_cpp(x, weights)
+    himed_weighted_cpp(x, weights)
 
 }
 

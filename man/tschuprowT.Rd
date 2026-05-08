@@ -66,15 +66,15 @@ https://doi.org/10.1016/j.jkss.2012.10.002
 \seealso{
 \code{\link{chisq.test}}
 
-Other assoc.nominal: 
-\code{\link{assocsTab}()},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{lambda}()},
-\code{\link{oddsRatio}()},
-\code{\link{phi}()},
-\code{\link{relRisk}()},
-\code{\link{uncertCoef}()},
+Other assoc.nominal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=relRisk]{relRisk()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }
 \concept{assoc.nominal}

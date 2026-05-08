@@ -68,7 +68,7 @@ conDisPairs <- function(x, y = NULL){
     }
     
     # ---- call C++ ----
-    z <- conDisPairsXY_ind_cpp(x, y)
+    z <- condis_pairs_xy_cpp(x, y)
     
     # expect C++ to return all 5
     res <- z[c("C","D","Ties_X","Ties_Y","Ties_XY")]
@@ -93,7 +93,7 @@ conDisPairs <- function(x, y = NULL){
     }
     
     # ---- call table version ----
-    z <- conDisPairsTab_cpp(x)
+    z <- condis_pairs_tab_cpp(x)
     
     # ensure same output structure
     res <- z[c("C","D","Ties_X","Ties_Y","Ties_XY")]

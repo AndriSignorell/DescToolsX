@@ -42,14 +42,14 @@ nmse(x, ref, train.y)
 \seealso{
 \code{\link{mean}}, \code{\link{sum}}
 
-Other error.measures: 
-\code{\link{brierScore}()},
-\code{\link{mae}()},
-\code{\link{mape}()},
-\code{\link{mse}()},
-\code{\link{nmae}()},
-\code{\link{rmse}()},
-\code{\link{smape}()}
+Other error.measures:
+\code{\link[=brierScore]{brierScore()}},
+\code{\link[=mae]{mae()}},
+\code{\link[=mape]{mape()}},
+\code{\link[=mse]{mse()}},
+\code{\link[=nmae]{nmae()}},
+\code{\link[=rmse]{rmse()}},
+\code{\link[=smape]{smape()}}
 }
 \concept{descriptive-statistics}
 \concept{error.measures}

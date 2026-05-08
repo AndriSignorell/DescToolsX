@@ -80,7 +80,7 @@ cohenD <- function(x, y=NULL,
       # res <- c(d=d, lwr.ci=ci[1]/sqrt(n), upr.ci=ci[3]/sqrt(n))
       
       # changed to Revelle 2022-10-22:
-      ci <- .cohen_d_ci(d = d, n = n, alpha = 1-conf.level)
+      ci <- .cohenDCI(d = d, n = n, alpha = 1-conf.level)
       
       if(sides=="left")        ci[1] <- Inf
       else if(sides=="right")  ci[3] <- -Inf
@@ -123,7 +123,7 @@ cohenD <- function(x, y=NULL,
       # res <- c(d=d, lwr.ci=ci[1]/sqrt(nx*ny/(nx+ny)), upr.ci=ci[3]/sqrt(nx*ny/(nx+ny)))
       
       # changed to Revelle      
-      ci <- .cohen_d_ci(d, n2 = nx, n1 = ny, alpha = 1-conf.level)
+      ci <- .cohenDCI(d, n2 = nx, n1 = ny, alpha = 1-conf.level)
       
       if(correct){  # "Hedges' g"
         # Hedges, L. V. & Olkin, I. (1985). Statistical methods for meta-analysis. Orlando, FL: Academic Press.
@@ -160,7 +160,7 @@ cohenD <- function(x, y=NULL,
 }
 
 
-.cohen_d_ci <- function (d, 
+.cohenDCI <- function (d, 
                          n = NULL, n2 = NULL, n1 = NULL, 
                          alpha = 0.05) {
   

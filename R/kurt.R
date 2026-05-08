@@ -88,15 +88,15 @@ kurtX <- function (x,
     if(!is.null(weights)){
       # use a standard treatment for weights
       z <- .normWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
-      r.kurt <- rkurtw_cpp(as.numeric(z$x), 
+      r.kurt <- kurt_weighted_cpp(as.numeric(z$x), 
                            as.numeric(meanX(z$x, weights = z$weights)), 
                            as.numeric(z$weights))
       n <- z$wsum
       
     } else {
       if (na.rm) x <- na.omit(x)
-      r.kurt <- rkurt_cpp(as.numeric(x), 
-                          as.numeric(mean(x)))
+      r.kurt <- kurt_cpp(as.numeric(x), 
+                     as.numeric(mean(x)))
       n <- length(x)
       
     }

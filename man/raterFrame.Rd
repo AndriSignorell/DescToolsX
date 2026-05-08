@@ -61,8 +61,8 @@ raterFrame(rating ~ subj | rater, data=d.long, drop.subj=TRUE)
 \seealso{
 \code{\link{krippAlpha}}
 
-Other table.utils: 
-\code{\link{tOne}()}
+Other table.utils:
+\code{\link[=tOne]{tOne()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

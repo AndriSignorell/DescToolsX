@@ -159,15 +159,15 @@ Technology}, 11, 101-109.
 \code{\link{cronbachAlpha}}, \code{\link{kappaM}},
 \code{\link{krippAlpha}}
 
-Other assoc.agreement: 
-\code{\link{ccc}()},
-\code{\link{cronbachAlpha}()},
-\code{\link{icc}()},
-\code{\link{kappaM}()},
-\code{\link{kendallW}()},
-\code{\link{krippAlpha}()},
-\code{\link{percAgreement}()},
-\code{\link{randolphKappa}()}
+Other assoc.agreement:
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \author{
 David Meyer \href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org}, some changes and tweaks

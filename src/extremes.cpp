@@ -153,7 +153,7 @@ class hist_top {
 
 
 // [[Rcpp::export]]
-Rcpp::List top_n(Rcpp::NumericVector x, int n = 5) {
+Rcpp::List top_n_cpp(Rcpp::NumericVector x, int n = 5) {
   hist_top h(n);
   h.insert(x.begin(), x.end());
   return h.get();
@@ -298,7 +298,7 @@ class hist_bottom {
 };
 
 // [[Rcpp::export]]
-Rcpp::List bottom_n(Rcpp::NumericVector x, int n = 5) {
+Rcpp::List bottom_n_cpp(Rcpp::NumericVector x, int n = 5) {
   hist_bottom h(n);
   h.insert(x.begin(), x.end());
   return h.get();
@@ -311,7 +311,7 @@ Rcpp::List bottom_n(Rcpp::NumericVector x, int n = 5) {
   //   http://gallery.rcpp.org/articles/top-elements-from-vectors-using-priority-queue/
   
   // [[Rcpp::export]]
-IntegerVector top_i(NumericVector v, unsigned int n)
+IntegerVector top_i_cpp(NumericVector v, unsigned int n)
 {
   typedef pair<double, int> Elt;
   priority_queue< Elt, vector<Elt>, greater<Elt> > pq;
@@ -340,7 +340,7 @@ IntegerVector top_i(NumericVector v, unsigned int n)
 
 
 // [[Rcpp::export]]
-IntegerVector bottom_i(NumericVector v, unsigned int n)
+IntegerVector bottom_i_cpp(NumericVector v, unsigned int n)
 {
   typedef pair<double, int> Elt;
   priority_queue< Elt, vector<Elt>, less <Elt> > pq;
@@ -487,8 +487,8 @@ template <>
   }
 
 
-// [[Rcpp::export(name="fastModeX", rng=false)]]
-SEXP fastModeX( SEXP x, bool narm = false ){
+// [[Rcpp::export(name="fast_mode_cpp", rng=false)]]
+SEXP fast_mode_cpp( SEXP x, bool narm = false ){
   RCPP_RETURN_VECTOR(fastModeImplX, x, narm);
 }
 

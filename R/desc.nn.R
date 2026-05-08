@@ -29,7 +29,7 @@
 #' @param conf.level Confidence level for interval estimates (default 0.95).
 #'
 #' @name desc.nn
-#' @aliases .desc_nn
+#' @aliases .descNN
 #' 
 #' @details
 #' \strong{Print output by verbose level:}
@@ -114,7 +114,7 @@
 #' desc(mpg ~ wt, mtcars) |> plot(which = 3)
 #'
 #' @rdname desc.nn
-#' @usage .desc_nn(x, y, conf.level = 0.95)
+#' @usage .descNN(x, y, conf.level = 0.95)
 NULL
 
 
@@ -144,7 +144,7 @@ NULL
 # ── Calc ──────────────────────────────────────────────────────────────────────
 
 #' @keywords internal
-.desc_nn <- function(x, y, conf.level = 0.95) {
+.descNN <- function(x, y, conf.level = 0.95) {
   
   # ── 1. Basic counts ──────────────────────────────────────────────────────────
   nTotal  <- length(x)

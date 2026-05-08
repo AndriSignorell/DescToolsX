@@ -47,8 +47,8 @@ LCM(2*3, 3*5, 5*7)
 
 }
 \seealso{
-Other math.utils: 
-\code{\link{divisors}()}
+Other math.utils:
+\code{\link[=divisors]{divisors()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

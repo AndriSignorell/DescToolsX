@@ -107,18 +107,18 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 \%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
 outdated...
 
-Other topic.associationMeasures: 
+Other topic.associationMeasures:
 \code{\link{Association}}
 
-Other assoc.nominal: 
-\code{\link{assocsTab}()},
-\code{\link{contCoef}()},
-\code{\link{lambda}()},
-\code{\link{oddsRatio}()},
-\code{\link{phi}()},
-\code{\link{relRisk}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
+Other assoc.nominal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=relRisk]{relRisk()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }
 \author{

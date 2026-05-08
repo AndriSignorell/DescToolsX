@@ -205,7 +205,7 @@ plot.Desc <- function(x, ...) {
     header <- gettextf("%s (%s)", meta$main, 
                        paste(naReplace(meta$class, "-"), collapse=", ")) 
     
-    if (.has_color()) 
+    if (.hasColor()) 
       header <- cli::style_bold(header)
     
     cat(header) 

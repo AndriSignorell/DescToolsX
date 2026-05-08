@@ -68,15 +68,15 @@ oddsRatio(fit)
 
 }
 \seealso{
-Other assoc.nominal: 
-\code{\link{assocsTab}()},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{lambda}()},
-\code{\link{phi}()},
-\code{\link{relRisk}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
+Other assoc.nominal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=relRisk]{relRisk()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }
 \concept{assoc.nominal}

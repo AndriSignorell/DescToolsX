@@ -53,8 +53,8 @@ comparison across different model types.
 \seealso{
 \code{\link{tMod}}
 
-Other topic.modelComparison: 
-\code{\link{tMod}()}
+Other topic.modelComparison:
+\code{\link[=tMod]{tMod()}}
 }
 \concept{model comparison}
 \concept{regression}

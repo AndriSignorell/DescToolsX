@@ -96,15 +96,15 @@ Sage Publications.
 \seealso{
 \code{\link[lumen]{bootCI}}
 
-Other assoc.agreement: 
-\code{\link{ccc}()},
-\code{\link{cohenKappa}()},
-\code{\link{cronbachAlpha}()},
-\code{\link{icc}()},
-\code{\link{kappaM}()},
-\code{\link{kendallW}()},
-\code{\link{percAgreement}()},
-\code{\link{randolphKappa}()}
+Other assoc.agreement:
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \concept{agreement}
 \concept{assoc.agreement}

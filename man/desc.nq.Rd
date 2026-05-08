@@ -2,12 +2,12 @@
 % Please edit documentation in R/desc.nq.R
 \name{desc.nq}
 \alias{desc.nq}
-\alias{.desc_nq}
+\alias{.descNQ}
 \alias{print.Desc.nq}
 \alias{plot.Desc.nq}
 \title{Describe Relationship: Numeric x by Categorical g}
 \usage{
-.desc_nq(x, g, ...)
+.descNQ(x, g, ...)
 
 \method{print}{Desc.nq}(x, digits = NULL, ...)
 
@@ -65,14 +65,14 @@ provides a standardized measure of group differences.
 \code{\link{desc}}, \code{\link{desc.qn}}, \code{\link{desc.nn}},
 \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
 
-Other desc: 
-\code{\link{desc}()},
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
+Other desc:
+\code{\link[=desc]{desc()}},
+\code{\link[=desc.Date]{desc.Date()}},
+\code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{data-description}
 \concept{desc}

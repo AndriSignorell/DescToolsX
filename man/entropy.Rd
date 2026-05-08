@@ -52,16 +52,16 @@ World Scientific. p. 2. ISBN 978-981-02-0985-8.
 package \pkg{entropy} which implements various estimators of
 entropy
 
-Other inequality: 
-\code{\link{atkinson}()},
-\code{\link{divCoef}()},
-\code{\link{gini}()},
-\code{\link{herfindahl}()},
-\code{\link{lc}()},
-\code{\link{mutInf}()},
-\code{\link{rosenbluth}()},
-\code{\link{simpson}()},
-\code{\link{theil}()}
+Other inequality:
+\code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=gini]{gini()}},
+\code{\link[=herfindahl]{herfindahl()}},
+\code{\link[=lc]{lc()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

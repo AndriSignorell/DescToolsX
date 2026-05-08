@@ -96,7 +96,7 @@ cramerV <- function(x, y = NULL, conf.level = NA,
                                "fisher", "fisheradj"), 
                     correct=FALSE, ...){
 
-  tab <- .normalizeToConfusion(x, y, mode = "association")
+  tab <- normalizeToConfusion(x, y, mode = "association")
 
   # CIs and power for the noncentral chi-sq noncentrality parameter (ncp):
   # The function lochi computes the lower CI limit and hichi computes the upper limit.
@@ -135,14 +135,14 @@ cramerV <- function(x, y = NULL, conf.level = NA,
     
     switch(match.arg(method),
            ncchisq={
-             ci <- .ncp_ci_chisq(chisq.hat, df, conf.level)
+             ci <- .chisqNcpCI(chisq.hat, df, conf.level)
              # corrected by michael smithson, 17.5.2014:
              #    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
              ci <- unname(sqrt( (ci) / (n * (min(dim(tab)) - 1)) ))
            },
            
            ncchisqadj={
-             ci <- .ncp_ci_chisq(chisq.hat, df, conf.level) + df
+             ci <- .chisqNcpCI(chisq.hat, df, conf.level) + df
              # corrected by michael smithson, 17.5.2014:
              #    ci <- unname(sqrt( (ci + df) / (sum(x) * (min(dim(x)) - 1)) ))
              ci <- unname(sqrt( (ci) / (n * (min(dim(tab)) - 1)) ))

@@ -25,7 +25,7 @@ Extract Sensitivity from a Confusion Matrix
 \seealso{
 \code{\link{conf}}, \code{\link{spec}}
 
-Other classification: 
-\code{\link{spec}()}
+Other classification:
+\code{\link[=spec]{spec()}}
 }
 \concept{classification}

@@ -76,13 +76,13 @@ Liebetrau, A. M. (1983)
 \seealso{
 \code{\link{kendallTauB}} (recommended when ties are present),
 
-Other assoc.ordinal: 
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()},
-\code{\link{spearmanCor}()},
-\code{\link{stuartTauC}()}
+Other assoc.ordinal:
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=spearmanCor]{spearmanCor()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

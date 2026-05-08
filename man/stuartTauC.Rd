@@ -85,13 +85,13 @@ Measures of association for cross classifications III.
 \seealso{
 \code{\link{kendallTauB}} for Kendall's \eqn{\tau_b},
 
-Other assoc.ordinal: 
-\code{\link{gkGamma}()},
-\code{\link{gkTau}()},
-\code{\link{kendallTauA}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()},
-\code{\link{spearmanCor}()}
+Other assoc.ordinal:
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

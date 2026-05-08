@@ -78,8 +78,8 @@ if(requireNamespace("survival", quietly = TRUE)){
 \seealso{
 \code{\link{tmodSummary}}
 
-Other topic.modelComparison: 
-\code{\link{tmodSummary}()}
+Other topic.modelComparison:
+\code{\link[=tmodSummary]{tmodSummary()}}
 }
 \concept{coefficient analysis}
 \concept{model comparison}

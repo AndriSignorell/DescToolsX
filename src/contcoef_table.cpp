@@ -158,7 +158,7 @@ double contcoef_table_cpp(IntegerMatrix tab, bool correct = false)
   //
   
   // [[Rcpp::export]]
-NumericVector bootstrap_contcoef_table_cpp(
+NumericVector contcoef_table_boot_cpp(
   IntegerMatrix tab,
   int R = 5000,
   unsigned int seed = 0,

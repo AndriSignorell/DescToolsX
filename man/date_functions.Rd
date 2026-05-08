@@ -251,23 +251,14 @@ lastDayOfMonth(as.Date(c("2014-10-12","2013-01-31","2011-12-05")))
 \code{\link{strptime}}, \code{\link{DateTimeClasses}},
 \code{\link{as.POSIXlt}}
 
-Other date.utils: 
-\code{\link{addMonths}()},
+Other date.utils:
+\code{\link[=addMonths]{addMonths()}},
 \code{\link{as_ym}},
-\code{\link{cutAge}()},
-\code{\link{generation}()},
-\code{\link{isDate}()},
+\code{\link[=cutAge]{cutAge()}},
+\code{\link[=generation]{generation()}},
+\code{\link[=isDate]{isDate()}},
 \code{\link{time_conversions}},
-\code{\link{zodiac}()}
-
-Other date.utils: 
-\code{\link{addMonths}()},
-\code{\link{as_ym}},
-\code{\link{cutAge}()},
-\code{\link{generation}()},
-\code{\link{isDate}()},
-\code{\link{time_conversions}},
-\code{\link{zodiac}()}
+\code{\link[=zodiac]{zodiac()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

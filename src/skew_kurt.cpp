@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-double rskew_cpp(NumericVector x, double mean) {
+double skew_cpp(NumericVector x, double mean) {
   
   int n = x.size();
   double sum2 = 0.0, sum3 = 0.0, d;
@@ -20,7 +20,7 @@ double rskew_cpp(NumericVector x, double mean) {
 
 
 // [[Rcpp::export]]
-double rskeww_cpp(NumericVector x, double mean, NumericVector w) {
+double skew_weighted_cpp(NumericVector x, double mean, NumericVector w) {
   
   int n = x.size();
   double sum2 = 0.0, sum3 = 0.0, wsum = 0.0, d;
@@ -37,7 +37,7 @@ double rskeww_cpp(NumericVector x, double mean, NumericVector w) {
 
 
 // [[Rcpp::export]]
-double rkurt_cpp(NumericVector x, double mean) {
+double kurt_cpp(NumericVector x, double mean) {
   
   int n = x.size();
   double sum2 = 0.0, sum4 = 0.0, d;
@@ -53,7 +53,7 @@ double rkurt_cpp(NumericVector x, double mean) {
 
 
 // [[Rcpp::export]]
-double rkurtw_cpp(NumericVector x, double mean, NumericVector w) {
+double kurt_weighted_cpp(NumericVector x, double mean, NumericVector w) {
   
   int n = x.size();
   double sum2 = 0.0, sum4 = 0.0, wsum = 0.0, d;

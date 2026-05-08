@@ -45,7 +45,7 @@ class BIT2D {
 
 
 // [[Rcpp::export]]
-List conDisPairsTab_cpp(IntegerMatrix x) {
+List condis_pairs_tab_cpp(IntegerMatrix x) {
   
   int n = x.nrow(), m = x.ncol();
   IntegerMatrix pi_c(n, m), pi_d(n, m);

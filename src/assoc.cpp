@@ -50,8 +50,8 @@ struct BIT2D {
 
 // [[Rcpp::export]]
 Rcpp::NumericVector assoc_cpp(Rcpp::NumericVector xR,
-                              Rcpp::NumericVector yR,
-                              double conf_level = 0.95) {
+                                 Rcpp::NumericVector yR,
+                                 double conf_level = 0.95) {
   
   using namespace Rcpp;
   using std::vector;

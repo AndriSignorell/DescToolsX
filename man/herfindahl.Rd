@@ -65,16 +65,16 @@ Hirschman, A. O. (1964). The paternity of an index.
 \seealso{
 See \code{\link{gini}}, \code{\link{atkinson}} and
 
-Other inequality: 
-\code{\link{atkinson}()},
-\code{\link{divCoef}()},
-\code{\link{entropy}()},
-\code{\link{gini}()},
-\code{\link{lc}()},
-\code{\link{mutInf}()},
-\code{\link{rosenbluth}()},
-\code{\link{simpson}()},
-\code{\link{theil}()}
+Other inequality:
+\code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=gini]{gini()}},
+\code{\link[=lc]{lc()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \author{
 originally based on code of Achim Zeileis \href{mailto:achim.zeileis@r-project.org}{achim.zeileis@r-project.org},

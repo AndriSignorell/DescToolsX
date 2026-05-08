@@ -54,22 +54,22 @@ desc.formula <- function(formula, data, subset, na.action=na.pass,
   # --------------------------------------------------------------
   # got the data so far, now do the calculations....
 
-  ty <- .type_of(y)
+  ty <- .typeOf(y)
   
   call <- match.call()
   
   res <- lapply(names(x_list), function(nm) {
     
     xi <- x_list[[nm]]
-    type <- paste(ty, .type_of(xi), sep = "")
+    type <- paste(ty, .typeOf(xi), sep = "")
     
     FUN <- switch(type,
            # choose evaluating function in dependence of the y- and x types
            # these function take y and x variables in this sequence (!)
-             "nn" = .desc_nn,
-             "qn"  = .desc_qn,
-             "nq"  = .desc_nq,
-             "qq"   = .desc_qq,
+             "nn" = .descNN,
+             "qn"  = .descQN,
+             "nq"  = .descNQ,
+             "qq"   = .descQQ,
            stop("Unknown type combination")
     )
 
@@ -175,7 +175,7 @@ desc.formula <- function(formula, data, subset, na.action=na.pass,
 
 
 # only used in this context...
-.type_of <- function(x) {
+.typeOf <- function(x) {
   if (is.numeric(x)) return("n")
   if (is.factor(x) || is.character(x) || is.logical(x)) return("q")
   stop("Unsupported type")

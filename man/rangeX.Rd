@@ -65,13 +65,13 @@ rangeX(x)
 \seealso{
 \code{\link{range}}, \code{\link{min}}, \code{\link{max}}
 
-Other dispersion: 
-\code{\link{coefVar}()},
-\code{\link{iqrX}()},
-\code{\link{madX}()},
-\code{\link{meanAD}()},
-\code{\link{meanSE}()},
-\code{\link{varX}()}
+Other dispersion:
+\code{\link[=coefVar]{coefVar()}},
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=varX]{varX()}}
 }
 \author{
 Werner Stahel, ETH Zurich (robust range)\cr Andri Signorell

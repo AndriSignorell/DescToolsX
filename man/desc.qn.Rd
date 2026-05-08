@@ -2,12 +2,12 @@
 % Please edit documentation in R/desc.qn.R
 \name{desc.qn}
 \alias{desc.qn}
-\alias{.desc_qn}
+\alias{.descQN}
 \alias{print.Desc.qn}
 \alias{plot.Desc.qn}
 \title{Describe Relationship: Categorical y vs Numeric x}
 \usage{
-.desc_qn(y, x, conf.level = 0.95, breaks, right)
+.descQN(y, x, conf.level = 0.95, breaks, right)
 
 \method{print}{Desc.qn}(x, verbose = NULL, ...)
 
@@ -82,14 +82,14 @@ The numeric variable \code{x} is optionally discretized using
 \code{\link{desc}}, \code{\link{desc.nn}}, \code{\link{desc.nq}},
 \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
 
-Other desc: 
-\code{\link{desc}()},
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
+Other desc:
+\code{\link[=desc]{desc()}},
+\code{\link[=desc.Date]{desc.Date()}},
+\code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
 \code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{association-measures}
 \concept{data-description}

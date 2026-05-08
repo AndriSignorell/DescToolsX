@@ -41,9 +41,9 @@
 #' always be reported in English.
 #' 
 #' @name date_functions
-#' @aliases year quarter month week Day Day<- weekday yearDay yearWeek
-#' yearMonth isWeekend isLeapYear hour minute second now today diffDays360
-#' lastDayOfMonth timezone yearDays monthDays month.ym year.ym
+#' 
+#' @aliases year quarter month week Day Day<- weekday yearDay yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone yearDays monthDays month.ym year.ym
+#' 
 #' @param x the date to be evaluated. 
 #' @param fmt format string, defines how the month or the weekday are to be
 #' formatted. Defaults to \code{"m"}, resp. \code{"d"}. Is ignored for other

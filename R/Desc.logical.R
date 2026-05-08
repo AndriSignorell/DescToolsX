@@ -161,7 +161,7 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
     
     cat(paste(txt[1], footer, sep = ""), txt[-1], sep = "\n")
     
-    if (.has_color()) {
+    if (.hasColor()) {
       cat(cli::col_silver(gettextf("\n%s %s%s-CI (Wilson)\n\n",
                                    footer, x$conf.level * 100, "%"
       )))

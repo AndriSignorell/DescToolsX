@@ -2,44 +2,71 @@
 % Please edit documentation in R/normalizeToConfusion.R
 \name{normalizeToConfusion}
 \alias{normalizeToConfusion}
-\title{Normalize Input to a 2-Rater Confusion/Coincidence Matrix}
+\title{Normalize Input to a Contingency or Agreement Table}
 \usage{
-normalizeToConfusion(x, y = NULL, levels = NULL, useNA = "no")
+normalizeToConfusion(
+  x,
+  y = NULL,
+  levels = NULL,
+  useNA = "no",
+  mode = c("agreement", "association")
+)
 }
 \arguments{
-\item{x}{Input object (see details).}
+\item{x}{Input object. Accepted formats: a \code{\link{table}} representing
+a pre-computed contingency table; a square numeric \code{matrix}
+representing a pre-computed contingency table; a numeric \code{matrix}
+with exactly 2 columns (one per rater); a \code{list} or
+\code{data.frame} with exactly 2 elements; or a vector if \code{y} is
+also supplied.}
 
-\item{y}{Optional second vector of ratings (used only if \code{x} is a single vector).}
+\item{y}{Optional second rating vector. If supplied, \code{x} and \code{y}
+are tabulated together.}
 
-\item{levels}{Optional vector of category levels to enforce (same order for rows/cols).
-If \code{NULL}, levels are inferred from the union of observed categories.}
+\item{levels}{Optional category levels.\cr
+For \code{mode = "agreement"}: an atomic vector of common levels shared
+by both raters.\cr
+For \code{mode = "association"}: a list of length 2,
+\code{list(x_levels, y_levels)}.}
 
-\item{useNA}{Passed to \code{table()} when building the contingency table
-(e.g., \code{"no"}, \code{"ifany"}, \code{"always"}).}
+\item{useNA}{Passed to \code{\link{table}}. Controls whether \code{NA}
+values appear as a level. One of \code{"no"} (default), \code{"ifany"},
+or \code{"always"}.}
+
+\item{mode}{Character string, either \code{"agreement"} (default) or
+\code{"association"}. Agreement mode enforces a square table with
+identical row and column names. Association mode allows rectangular
+tables with independent row and column levels.}
 }
 \value{
-A square numeric \code{matrix} with dimnames (rows = rater A
-levels, cols = rater B levels).
+A numeric matrix representing the contingency table, with dimnames
+set according to \code{levels} (if supplied) or derived from the input.
 }
 \description{
-Accepts diverse inputs and returns a square contingency table (matrix)
-for exactly two raters across \eqn{k} categories.
+Converts diverse input formats into a numeric contingency matrix suitable
+for agreement measures (e.g. Cohen's Kappa) or association measures
+(e.g. Cramer's V). Accepted input formats include tables, matrices,
+data frames, lists, and raw rating vectors.
 }
 \details{
-Supported inputs:
-\itemize{
-\item \strong{table} (2D): already a confusion table.
-\item \strong{matrix} that looks like a confusion table
-(square, non-negative, etc.).
-\item \strong{matrix/data.frame} with 2 columns and >2 rows:
-interpreted as raw ratings
-(subjects in rows, raters in columns).
-\item \strong{list} of 2 vectors: each element is one rater's ratings.
-\item \strong{two vectors} \code{x}, \code{y}: ratings of two raters.
+The function handles the following input formats:
+\describe{
+\item{\code{table}}{A pre-computed 2D contingency table. Validated via
+\code{\link{isConfusionTable}}. For \code{mode = "agreement"}, the
+table must be square with identical row and column names.}
+\item{\code{matrix}}{Either a pre-computed contingency matrix (square,
+passing \code{\link{isConfusionTable}} validation) or a two-rater
+matrix with exactly 2 columns. A 2-column non-square matrix is always
+treated as a rater matrix; each column is one rater's ratings.}
+\item{two vectors}{If both \code{x} and \code{y} are supplied, they are
+tabulated via \code{\link{table}} after coercing to factors.}
+\item{\code{list} or \code{data.frame} with 2 elements}{Each element is
+treated as one rater's ratings.}
 }
 
-If you have more than two raters, select the required pair before passing
-the data to the function.
+For \code{mode = "agreement"}, levels must be shared between both raters
+and the resulting table is square. For \code{mode = "association"}, row and
+column levels may differ and the table may be rectangular.
 }
 \examples{
 A <- c("pos","neg","pos","inc")
@@ -60,7 +87,7 @@ normalizeToConfusion(list(A, B))
 
 # use NAs
 B[2] <- NA
-normalizeToConfusion(A, B, useNA="always")
+normalizeToConfusion(A, B, useNA = "always")
 
 anxiety <- data.frame(
   rater1 = c(3,3,3,4,5,5,2),
@@ -71,50 +98,49 @@ anxiety <- data.frame(
 x <- anxiety[, 1]
 y <- anxiety[, 2]
 
-# Two vectors:
+# two vectors:
 normalizeToConfusion(x, y)
-# matrix/data.frame with 2 columns (subjects x raters):
+
+# matrix / data.frame with 2 columns (subjects x raters):
 normalizeToConfusion(cbind(x, y))
 normalizeToConfusion(data.frame(x, y))
-# list with 2 elements (same as vector interface):
+
+# list with 2 elements:
 normalizeToConfusion(list(x, y))
 
-# table:
+# pre-built table:
 ratingscale <- sort(unique(c(x, y)))
-normalizeToConfusion(table(factor(x, levels=ratingscale), 
-                           factor(y, levels=ratingscale)))
+normalizeToConfusion(table(factor(x, levels = ratingscale),
+                           factor(y, levels = ratingscale)))
 
 d.anxiety <- data.frame(
-  rater  = c("rater1", "rater1", "rater1", "rater1", "rater1", "rater1", "rater1", 
-             "rater2", "rater2", "rater2", "rater2", "rater2", "rater2", "rater2", 
-             "rater3", "rater3", "rater3", "rater3", "rater3", "rater3", "rater3"), 
-  rating = c(3, 3, 3, 4, 5, 5, 2, 
-             3, 6, 4, 6, 2, 4, 2, 
-             2, 1, 4, 4, 3, 2, 1), 
-  subj   = c(1, 2, 3, 4, 5, 6, 7, 
-             1, 2, 3, 4, 5, 6, 7, 
+  rater  = c("rater1", "rater1", "rater1", "rater1", "rater1", "rater1", "rater1",
+             "rater2", "rater2", "rater2", "rater2", "rater2", "rater2", "rater2",
+             "rater3", "rater3", "rater3", "rater3", "rater3", "rater3", "rater3"),
+  rating = c(3, 3, 3, 4, 5, 5, 2,
+             3, 6, 4, 6, 2, 4, 2,
+             2, 1, 4, 4, 3, 2, 1),
+  subj   = c(1, 2, 3, 4, 5, 6, 7,
+             1, 2, 3, 4, 5, 6, 7,
              1, 2, 3, 4, 5, 6, 7)
 )
 
-# matrix/data.frame with 2 columns (subjects x raters):
+# via raterFrame (wide format, subjects x raters):
 normalizeToConfusion(
-  raterFrame(rating ~ subj | rater, data=d.anxiety, 
-             subset=rater \%in\% c("rater1","rater2"), drop.subj=TRUE)
+  raterFrame(rating ~ subj | rater, data = d.anxiety,
+             subset = rater \%in\% c("rater1", "rater2"), drop.subj = TRUE)
 )
-
-
 
 }
 \seealso{
-\code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[bedrock:pairApply]{bedrock::pairApply()}}
+\code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[bedrock:pairApply]{pairApply()}}
 
-Other confusion: 
-\code{\link{cStat}()},
-\code{\link{conf}()},
-\code{\link{isConfusionTable}()}
+Other confusion:
+\code{\link[=cStat]{cStat()}},
+\code{\link[=conf]{conf()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}}
 }
 \concept{classification-metrics}
 \concept{confusion}
 \concept{data-manipulation}
 \concept{table-manipulation}
-\keyword{internal}

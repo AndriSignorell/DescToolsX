@@ -80,16 +80,16 @@ Results and implications for empirical research.
 https://doi.org/10.1162/rest.2003.85.1.226
 }
 \seealso{
-Other inequality: 
-\code{\link{atkinson}()},
-\code{\link{divCoef}()},
-\code{\link{entropy}()},
-\code{\link{gini}()},
-\code{\link{herfindahl}()},
-\code{\link{lc}()},
-\code{\link{mutInf}()},
-\code{\link{rosenbluth}()},
-\code{\link{theil}()}
+Other inequality:
+\code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=gini]{gini()}},
+\code{\link[=herfindahl]{herfindahl()}},
+\code{\link[=lc]{lc()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{descriptive-statistics}
 \concept{inequality}

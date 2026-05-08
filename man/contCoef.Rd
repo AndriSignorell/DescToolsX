@@ -78,15 +78,15 @@ Statistical Association} (Part III), 777-780.
 \seealso{
 \code{\link[bedrock]{pairApply}}
 
-Other assoc.nominal: 
-\code{\link{assocsTab}()},
-\code{\link{cramerV}()},
-\code{\link{lambda}()},
-\code{\link{oddsRatio}()},
-\code{\link{phi}()},
-\code{\link{relRisk}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()},
+Other assoc.nominal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=relRisk]{relRisk()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }
 \concept{assoc.nominal}

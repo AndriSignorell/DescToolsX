@@ -6,30 +6,30 @@
 \usage{
 isConfusionTable(
   x,
-  require_dimnames = TRUE,
-  require_same_levels = TRUE,
-  integer_tol = sqrt(.Machine$double.eps),
-  accept_proportions = TRUE,
-  require_square = TRUE
+  requireDimnames = TRUE,
+  requireSameLevels = TRUE,
+  integerTol = sqrt(.Machine$double.eps),
+  acceptProportions = TRUE,
+  requireSquare = TRUE
 )
 }
 \arguments{
 \item{x}{Object to check (typically a \code{table}, \code{matrix}, or
 numeric \code{data.frame}).}
 
-\item{require_dimnames}{Logical; if \code{TRUE}, both row and column names
+\item{requireDimnames}{Logical; if \code{TRUE}, both row and column names
 must be present. Defaults to \code{TRUE}.}
 
-\item{require_same_levels}{Logical; if \code{TRUE} and dimnames are present,
+\item{requireSameLevels}{Logical; if \code{TRUE} and dimnames are present,
 row and column names must be the same set (order ignored). Defaults to \code{TRUE}.}
 
-\item{integer_tol}{Numeric tolerance for "integer-like" counts. Defaults to
+\item{integerTol}{Numeric tolerance for "integer-like" counts. Defaults to
 \code{sqrt(.Machine$double.eps)}.}
 
-\item{accept_proportions}{Logical; if \code{TRUE}, also accepts proportion
+\item{acceptProportions}{Logical; if \code{TRUE}, also accepts proportion
 tables (all entries in [0,1] and total sum approx. 1). Defaults to \code{TRUE}.}
 
-\item{require_square}{Logical; require a square table. Defaults to \code{TRUE}.}
+\item{requireSquare}{Logical; require a square table. Defaults to \code{TRUE}.}
 }
 \value{
 \code{TRUE} if \code{x} looks like a confusion/coincidence matrix,
@@ -47,7 +47,7 @@ isConfusionTable(tab)               # TRUE
 
 M <- as.matrix(tab)
 isConfusionTable(M)                 # TRUE (dimnames present)
-isConfusionTable(M, require_dimnames = FALSE)  # TRUE even without names
+isConfusionTable(M, requireDimnames = FALSE)  # TRUE even without names
 
 df <- as.data.frame.matrix(tab)
 isConfusionTable(df)                # TRUE (numeric data.frame)
@@ -58,10 +58,10 @@ isConfusionTable(ratings)           # FALSE (not square)
 
 }
 \seealso{
-Other confusion: 
-\code{\link{cStat}()},
-\code{\link{conf}()},
-\code{\link{normalizeToConfusion}()}
+Other confusion:
+\code{\link[=cStat]{cStat()}},
+\code{\link[=conf]{conf()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}}
 }
 \concept{classification-metrics}
 \concept{confusion}

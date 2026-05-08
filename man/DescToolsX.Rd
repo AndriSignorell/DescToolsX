@@ -159,6 +159,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Andri Signorell \email{andri@signorell.net} (\href{https://orcid.org/0000-0003-4311-1969}{ORCID})
 
+Authors:
+\itemize{
+  \item Andri Signorell \email{andri@signorell.net} (\href{https://orcid.org/0000-0003-4311-1969}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Ken Aho [contributor]

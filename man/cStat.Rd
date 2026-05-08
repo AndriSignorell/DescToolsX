@@ -60,10 +60,10 @@ cStat(r.mod, conf.level=0.95)
 
 }
 \seealso{
-Other confusion: 
-\code{\link{conf}()},
-\code{\link{isConfusionTable}()},
-\code{\link{normalizeToConfusion}()}
+Other confusion:
+\code{\link[=conf]{conf()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}}
 }
 \concept{classification-metrics}
 \concept{confusion}

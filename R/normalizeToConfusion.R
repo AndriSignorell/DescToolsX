@@ -1,36 +1,58 @@
 
-#' Normalize Input to a 2-Rater Confusion/Coincidence Matrix
+#' Normalize Input to a Contingency or Agreement Table
 #'
-#' Accepts diverse inputs and returns a square contingency table (matrix)
-#' for exactly two raters across \eqn{k} categories.
+#' Converts diverse input formats into a numeric contingency matrix suitable
+#' for agreement measures (e.g. Cohen's Kappa) or association measures
+#' (e.g. Cramer's V). Accepted input formats include tables, matrices,
+#' data frames, lists, and raw rating vectors.
 #'
-#' Supported inputs:
-#' \itemize{
-#'   \item \strong{table} (2D): already a confusion table.
-#'   \item \strong{matrix} that looks like a confusion table 
-#'      (square, non-negative, etc.).
-#'   \item \strong{matrix/data.frame} with 2 columns and >2 rows: 
-#'         interpreted as raw ratings
-#'         (subjects in rows, raters in columns). 
-#'   \item \strong{list} of 2 vectors: each element is one rater's ratings.
-#'   \item \strong{two vectors} \code{x}, \code{y}: ratings of two raters.
+#' @details
+#' The function handles the following input formats:
+#' \describe{
+#'   \item{\code{table}}{A pre-computed 2D contingency table. Validated via
+#'     \code{\link{isConfusionTable}}. For \code{mode = "agreement"}, the
+#'     table must be square with identical row and column names.}
+#'   \item{\code{matrix}}{Either a pre-computed contingency matrix (square,
+#'     passing \code{\link{isConfusionTable}} validation) or a two-rater
+#'     matrix with exactly 2 columns. A 2-column non-square matrix is always
+#'     treated as a rater matrix; each column is one rater's ratings.}
+#'   \item{two vectors}{If both \code{x} and \code{y} are supplied, they are
+#'     tabulated via \code{\link{table}} after coercing to factors.}
+#'   \item{\code{list} or \code{data.frame} with 2 elements}{Each element is
+#'     treated as one rater's ratings.}
 #' }
+#'
+#' For \code{mode = "agreement"}, levels must be shared between both raters
+#' and the resulting table is square. For \code{mode = "association"}, row and
+#' column levels may differ and the table may be rectangular.
 #' 
-#' If you have more than two raters, select the required pair before passing 
-#' the data to the function.
+#' 
+#' @param x Input object. Accepted formats: a \code{\link{table}} representing
+#'   a pre-computed contingency table; a square numeric \code{matrix}
+#'   representing a pre-computed contingency table; a numeric \code{matrix}
+#'   with exactly 2 columns (one per rater); a \code{list} or
+#'   \code{data.frame} with exactly 2 elements; or a vector if \code{y} is
+#'   also supplied.
+#' @param y Optional second rating vector. If supplied, \code{x} and \code{y}
+#'   are tabulated together.
+#' @param levels Optional category levels.\cr
+#'   For \code{mode = "agreement"}: an atomic vector of common levels shared
+#'   by both raters.\cr
+#'   For \code{mode = "association"}: a list of length 2,
+#'   \code{list(x_levels, y_levels)}.
+#' @param useNA Passed to \code{\link{table}}. Controls whether \code{NA}
+#'   values appear as a level. One of \code{"no"} (default), \code{"ifany"},
+#'   or \code{"always"}.
+#' @param mode Character string, either \code{"agreement"} (default) or
+#'   \code{"association"}. Agreement mode enforces a square table with
+#'   identical row and column names. Association mode allows rectangular
+#'   tables with independent row and column levels.
 #'
-#'
-#' @param x Input object (see details).
-#' @param y Optional second vector of ratings (used only if \code{x} is a single vector).
-#' @param levels Optional vector of category levels to enforce (same order for rows/cols).
-#'               If \code{NULL}, levels are inferred from the union of observed categories.
-#' @param useNA Passed to \code{table()} when building the contingency table
-#'   (e.g., \code{"no"}, \code{"ifany"}, \code{"always"}).
-#'
-#' @return A square numeric \code{matrix} with dimnames (rows = rater A 
-#' levels, cols = rater B levels).
+#' @return A numeric matrix representing the contingency table, with dimnames
+#'   set according to \code{levels} (if supplied) or derived from the input.
 #'
 #' @seealso [isConfusionTable()], [raterFrame()], [pairApply()]
+#'
 #' @examples
 #' A <- c("pos","neg","pos","inc")
 #' B <- c("pos","pos","neg","inc")
@@ -50,137 +72,189 @@
 #'
 #' # use NAs
 #' B[2] <- NA
-#' normalizeToConfusion(A, B, useNA="always")
-#' 
+#' normalizeToConfusion(A, B, useNA = "always")
+#'
 #' anxiety <- data.frame(
 #'   rater1 = c(3,3,3,4,5,5,2),
 #'   rater2 = c(3,6,4,6,2,4,2),
 #'   rater3 = c(2,1,4,4,3,2,1)
 #' )
-#' 
+#'
 #' x <- anxiety[, 1]
 #' y <- anxiety[, 2]
-#' 
-#' # Two vectors:
+#'
+#' # two vectors:
 #' normalizeToConfusion(x, y)
-#' # matrix/data.frame with 2 columns (subjects x raters):
+#'
+#' # matrix / data.frame with 2 columns (subjects x raters):
 #' normalizeToConfusion(cbind(x, y))
 #' normalizeToConfusion(data.frame(x, y))
-#' # list with 2 elements (same as vector interface):
+#'
+#' # list with 2 elements:
 #' normalizeToConfusion(list(x, y))
-#' 
-#' # table:
+#'
+#' # pre-built table:
 #' ratingscale <- sort(unique(c(x, y)))
-#' normalizeToConfusion(table(factor(x, levels=ratingscale), 
-#'                            factor(y, levels=ratingscale)))
-#' 
+#' normalizeToConfusion(table(factor(x, levels = ratingscale),
+#'                            factor(y, levels = ratingscale)))
+#'
 #' d.anxiety <- data.frame(
-#'   rater  = c("rater1", "rater1", "rater1", "rater1", "rater1", "rater1", "rater1", 
-#'              "rater2", "rater2", "rater2", "rater2", "rater2", "rater2", "rater2", 
-#'              "rater3", "rater3", "rater3", "rater3", "rater3", "rater3", "rater3"), 
-#'   rating = c(3, 3, 3, 4, 5, 5, 2, 
-#'              3, 6, 4, 6, 2, 4, 2, 
-#'              2, 1, 4, 4, 3, 2, 1), 
-#'   subj   = c(1, 2, 3, 4, 5, 6, 7, 
-#'              1, 2, 3, 4, 5, 6, 7, 
+#'   rater  = c("rater1", "rater1", "rater1", "rater1", "rater1", "rater1", "rater1",
+#'              "rater2", "rater2", "rater2", "rater2", "rater2", "rater2", "rater2",
+#'              "rater3", "rater3", "rater3", "rater3", "rater3", "rater3", "rater3"),
+#'   rating = c(3, 3, 3, 4, 5, 5, 2,
+#'              3, 6, 4, 6, 2, 4, 2,
+#'              2, 1, 4, 4, 3, 2, 1),
+#'   subj   = c(1, 2, 3, 4, 5, 6, 7,
+#'              1, 2, 3, 4, 5, 6, 7,
 #'              1, 2, 3, 4, 5, 6, 7)
 #' )
-#' 
-#' # matrix/data.frame with 2 columns (subjects x raters):
+#'
+#' # via raterFrame (wide format, subjects x raters):
 #' normalizeToConfusion(
-#'   raterFrame(rating ~ subj | rater, data=d.anxiety, 
-#'              subset=rater %in% c("rater1","rater2"), drop.subj=TRUE)
+#'   raterFrame(rating ~ subj | rater, data = d.anxiety,
+#'              subset = rater %in% c("rater1", "rater2"), drop.subj = TRUE)
 #' )
-#' 
-#' 
-#' 
-#' @keywords internal
+#'
 #' @family confusion
 #' @concept classification-metrics
 #' @concept data-manipulation
 #' @concept table-manipulation
-#'
-#'
+
+
+
 #' @export
 normalizeToConfusion <- function(
-    x, y = NULL, levels = NULL, useNA = "no") {
+    x,
+    y      = NULL,
+    levels = NULL,
+    useNA  = "no",
+    mode   = c("agreement", "association")
+) {
   
-  # helper: two vectors -> table (matrix)
-  two_vec_to_tab <- function(a, b, levels, useNA) {
-    # confusion matrix must be symmetric with the same levels in 
-    # x AND y !
-    if (is.null(levels)) {
-      levels <- sort(unique(c(a,b)))
+  mode <- match.arg(mode)
+  
+  #------------------------------------------------
+  # Helper: build table from two vectors
+  #------------------------------------------------
+  two_vec_to_tab <- function(a, b, levels, useNA, mode) {
+    if (mode == "agreement") {
+      if (is.null(levels))
+        levels <- sort(unique(c(a, b)))
+      a <- factor(a, levels = levels)
+      b <- factor(b, levels = levels)
+    } else {
+      if (is.null(levels)) {
+        a <- factor(a)
+        b <- factor(b)
+      } else {
+        if (!is.list(levels) || length(levels) != 2L)
+          stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
+        a <- factor(a, levels = levels[[1L]])
+        b <- factor(b, levels = levels[[2L]])
+      }
     }
-    a <- factor(a, levels = levels)
-    b <- factor(b, levels = levels)
-    
     as.matrix(table(a, b, useNA = useNA))
   }
   
-  # 1) Already a (2D) table?
+  #------------------------------------------------
+  # Helper: apply levels to an existing table
+  #------------------------------------------------
+  apply_levels <- function(tab, levels, mode) {
+    if (is.null(levels)) return(tab)
+    if (mode == "agreement") {
+      if (!is.atomic(levels) || length(levels) != nrow(tab))
+        stop("'levels' must be an atomic vector matching the table dimensions.")
+      dimnames(tab) <- list(levels, levels)
+    } else {
+      if (!is.list(levels) || length(levels) != 2L)
+        stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
+      dimnames(tab) <- list(levels[[1L]], levels[[2L]])
+    }
+    tab
+  }
+  
+  #------------------------------------------------
+  # 1) table input only
+  #------------------------------------------------
   if (inherits(x, "table") && length(dim(x)) == 2L) {
     
+    if (!isConfusionTable(x,
+                          requireDimnames   = FALSE,
+                          requireSameLevels = FALSE,
+                          requireSquare     = (mode == "agreement")))
+      stop("'x' does not look like a valid contingency table ",
+           "(negative values, non-finite entries, or wrong shape).")
+    
     tab <- as.matrix(x)
-    # enforce levels if provided
-    if (!is.null(levels)) {
-      if (length(levels) != nrow(tab) || length(levels) != ncol(tab)) {
-        stop("'levels' must match the dimension of the supplied table.")
+    
+    if (mode == "agreement") {
+      dn <- dimnames(tab)
+      if (is.null(dn[[1L]]) || is.null(dn[[2L]])) {
+        if (is.null(levels))
+          warning("Table has no dimnames; consider supplying 'levels=' for stable ordering.")
+      } else if (!identical(dn[[1L]], dn[[2L]])) {
+        stop("For agreement measures, row and column names must match.")
       }
-      dimnames(tab) <- list(levels, levels)
-    } else if (is.null(rownames(tab)) || is.null(colnames(tab))) {
-      warning("Input 'table' has no dimnames; consider supplying 'levels=' for stable ordering.")
+    }
+    
+    return(apply_levels(tab, levels, mode))
+  }
+  
+  #------------------------------------------------
+  # 2) matrix: confusion table OR rater matrix
+  #------------------------------------------------
+  if (is.matrix(x) && length(dim(x)) == 2L) {
+    
+    is_conf        <- isConfusionTable(x,
+                                       requireDimnames   = FALSE,
+                                       requireSameLevels = FALSE,
+                                       requireSquare     = (mode == "agreement"))
+    is_rater_matrix <- ncol(x) == 2L && nrow(x) != ncol(x)
+    
+    if (is_conf && !is_rater_matrix) {
+      tab <- as.matrix(x)
       
-    } else if(!do.call(identical, unname(dimnames(x)))) {
-      stop("rownames and columnnames must match in coincindence table.")
-    }
-    return(tab)
-  }
-  
-  # 2) Matrix that looks like a confusion table?
-  if (is.matrix(x) && isConfusionTable(x, require_dimnames = FALSE)) {
-    tab <- as.matrix(x)
-    if (!is.null(levels)) {
-      if (length(levels) != nrow(tab)) {
-        stop("'levels' must match the dimension of the supplied matrix.")
+      if (mode == "agreement") {
+        dn <- dimnames(tab)
+        if (is.null(dn[[1L]]) || is.null(dn[[2L]])) {
+          if (is.null(levels))
+            warning("Matrix has no dimnames; consider supplying 'levels=' for stable ordering.")
+        } else if (!identical(dn[[1L]], dn[[2L]])) {
+          stop("For agreement measures, row and column names must match.")
+        }
       }
-      dimnames(tab) <- list(levels, levels)
-    } else if (is.null(rownames(tab)) || is.null(colnames(tab))) {
-      warning("Matrix looks like a confusion table but has no dimnames; supply 'levels=' for stable ordering.")
+      
+      return(apply_levels(tab, levels, mode))
     }
-    return(tab)
+    
+    # not a confusion table or looks like a rater matrix: fall through
   }
   
-  # 3) Two vectors provided?
-  if (!is.null(y)) {
-    return(two_vec_to_tab(x, y, levels, useNA))
-  }
+  #------------------------------------------------
+  # 3) Two vectors explicitly provided
+  #------------------------------------------------
+  if (!is.null(y))
+    return(two_vec_to_tab(x, y, levels, useNA, mode))
   
-  # data.frame is handled by the list interface
-  # # 4) data.frame with >= 2 columns -> choose rater pair
-  # if (is.data.frame(x)) {
-  #   if (ncol(x) < 2L) stop("data.frame must have at least 2 columns (raters).")
-  #   if (length(rater.pair) != 2L) stop("'rater.pair' must be length 2.")
-  #   rp <- as.integer(rater.pair)
-  #   if (any(is.na(rp)) || any(rp < 1L | rp > ncol(x))) {
-  #     stop("'rater.pair' indices out of bounds for data.frame.")
-  #   }
-  #   return(two_vec_to_tab(x[[rp[1]]], x[[rp[2]]], levels, useNA))
-  # }
-  
-  # 5) matrix with >= 2 columns -> choose rater pair
+  #------------------------------------------------
+  # 4) matrix with exactly 2 columns (rater matrix)
+  #------------------------------------------------
   if (is.matrix(x)) {
-    if (ncol(x) != 2L) stop("matrix must have exactly 2 columns (raters).")
-    return(two_vec_to_tab(x[, 1], x[, 2], levels, useNA))
+    if (ncol(x) != 2L)
+      stop("Matrix input must have exactly 2 columns.")
+    return(two_vec_to_tab(x[, 1L], x[, 2L], levels, useNA, mode))
   }
   
-  # 6) list of rating vectors -> choose rater pair
+  #------------------------------------------------
+  # 5) list or data.frame with exactly 2 elements
+  #------------------------------------------------
   if (is.list(x)) {
-    if (length(x) != 2L) stop("data.frame/list must contain exactly 2 rating vectors.")
-    return(two_vec_to_tab(x[[1]], x[[2]], levels, useNA))
+    if (length(x) != 2L)
+      stop("List/data.frame input must contain exactly 2 elements.")
+    return(two_vec_to_tab(x[[1L]], x[[2L]], levels, useNA, mode))
   }
   
-  # 7) single vector without y -> not enough info
-  stop("Unsupported input type or missing second rater: provide 'y' or a multi-column/list input.")
+  stop("Unsupported input type or missing second variable.")
 }
 

@@ -116,13 +116,13 @@ Newbury Park, CA: Sage, pp. 24--30
 There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 
-Other assoc.ordinal: 
-\code{\link{gkGamma}()},
-\code{\link{kendallTauA}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()},
-\code{\link{spearmanCor}()},
-\code{\link{stuartTauC}()}
+Other assoc.ordinal:
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=spearmanCor]{spearmanCor()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

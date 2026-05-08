@@ -58,14 +58,14 @@ desc(cutAge(sample(0:100, size=100, replace=TRUE)))
 \seealso{
 \code{\link{cut}}, \code{\link{seq}}
 
-Other date.utils: 
-\code{\link{addMonths}()},
+Other date.utils:
+\code{\link[=addMonths]{addMonths()}},
 \code{\link{as_ym}},
-\code{\link{countWorkDays}()},
-\code{\link{generation}()},
-\code{\link{isDate}()},
+\code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link[=generation]{generation()}},
+\code{\link[=isDate]{isDate()}},
 \code{\link{time_conversions}},
-\code{\link{zodiac}()}
+\code{\link[=zodiac]{zodiac()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

@@ -38,13 +38,13 @@ sapply(d.pizza[,1:4], meanSE, na.rm=TRUE)
 \seealso{
 \code{\link[lumen]{meanCI}}
 
-Other dispersion: 
-\code{\link{coefVar}()},
-\code{\link{iqrX}()},
-\code{\link{madX}()},
-\code{\link{meanAD}()},
-\code{\link{rangeX}()},
-\code{\link{varX}()}
+Other dispersion:
+\code{\link[=coefVar]{coefVar()}},
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=rangeX]{rangeX()}},
+\code{\link[=varX]{varX()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}

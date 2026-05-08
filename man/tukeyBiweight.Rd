@@ -77,13 +77,13 @@ Robust Geometric Predicates.  \emph{Discrete and Computational Geometry},
 \seealso{
 \code{\link{huberM}}, \code{\link{rangeX}}, \code{\link{scaleX}}
 
-Other location: 
-\code{\link{gmean}()},
-\code{\link{hmean}()},
-\code{\link{hodgesLehmann}()},
-\code{\link{huberM}()},
-\code{\link{medianX}()},
-\code{\link{modeX}()}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}}
 }
 \author{
 originally written by Mikko Korpela \href{mailto:mikko.korpela@aalto.fi}{mikko.korpela@aalto.fi}\cr

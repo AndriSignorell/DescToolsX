@@ -105,14 +105,14 @@ instead of \code{"desc"} in the factor case.
 \seealso{
 \code{\link[aurora]{plotCatDist}} for graphical display
 
-Other desc: 
-\code{\link{desc}()},
-\code{\link{desc.Date}()},
+Other desc:
+\code{\link[=desc]{desc()}},
+\code{\link[=desc.Date]{desc.Date()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{data-description}
 \concept{desc}

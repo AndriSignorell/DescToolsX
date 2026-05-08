@@ -1,6 +1,6 @@
 
 #' @name desc.nq
-#' @aliases .desc_nq
+#' @aliases .descNQ
 #'
 #' @title Describe Relationship: Numeric x by Categorical g
 #'
@@ -55,22 +55,22 @@
 #' @concept hypothesis-testing
 #'
 #' @rdname desc.nq
-#' @usage .desc_nq(x, g, ...)
+#' @usage .descNQ(x, g, ...)
 NULL
 
 
 #' @keywords internal
-.desc_nq <- function(x, g, ... ) {
+.descNQ <- function(x, g, ... ) {
 
   kw <- kruskal.test(x~g)
   
   res <- list(
-          tab = .build_summary_table(
+          tab = .buildSummaryTable(
                    tapply(x, g, desc, plotit=FALSE)   # groupwise numeric description
                   ),
           test  = kw,
           vtest = leveneTest(x~g),
-          eta   = .eta2_kruskal(H = kw$statistic, 
+          eta   = .eta2Kruskal(H = kw$statistic, 
                                 k = length(unique(g)), 
                                 n = length(x))
           
@@ -140,7 +140,7 @@ plot.Desc.nq <- function(x, which = NULL, ...){
 # == internal helper functions ===============================================
 
 
-.extract_nq_summary <- function(x) {
+.extractNqSummary <- function(x) {
   
   out <- c(
     mean   = x$mean,
@@ -157,11 +157,11 @@ plot.Desc.nq <- function(x, which = NULL, ...){
 }
 
 
-.build_summary_table <- function(x) {
+.buildSummaryTable <- function(x) {
   
   # dd = Liste von Resultaten (benannt!)
   
-  mat <- sapply(x, .extract_nq_summary)
+  mat <- sapply(x, .extractNqSummary)
   
   # calc percentages of valid cases
   mat[6,] <- mat[5,] / sum(mat[5,])
@@ -184,7 +184,7 @@ plot.Desc.nq <- function(x, which = NULL, ...){
 
 # Eta² aus Kruskal-Wallis (Tomczak & Tomczak 2014)
 # H = Kruskal-Wallis Statistik, k = Anzahl Gruppen, n = Gesamtn
-.eta2_kruskal <- function(H, k, n) {
+.eta2Kruskal <- function(H, k, n) {
   eta2 <- (H - k + 1) / (n - k)
   eta2 <- max(0, eta2)   # kann bei kleinen n leicht negativ werden
   

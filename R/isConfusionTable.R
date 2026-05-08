@@ -8,15 +8,15 @@
 #'
 #' @param x Object to check (typically a \code{table}, \code{matrix}, or
 #'   numeric \code{data.frame}).
-#' @param require_dimnames Logical; if \code{TRUE}, both row and column names
+#' @param requireDimnames Logical; if \code{TRUE}, both row and column names
 #'   must be present. Defaults to \code{TRUE}.
-#' @param require_same_levels Logical; if \code{TRUE} and dimnames are present,
+#' @param requireSameLevels Logical; if \code{TRUE} and dimnames are present,
 #'   row and column names must be the same set (order ignored). Defaults to \code{TRUE}.
-#' @param integer_tol Numeric tolerance for "integer-like" counts. Defaults to
+#' @param integerTol Numeric tolerance for "integer-like" counts. Defaults to
 #'   \code{sqrt(.Machine$double.eps)}.
-#' @param accept_proportions Logical; if \code{TRUE}, also accepts proportion
+#' @param acceptProportions Logical; if \code{TRUE}, also accepts proportion
 #'   tables (all entries in \[0,1\] and total sum approx. 1). Defaults to \code{TRUE}.
-#' @param require_square Logical; require a square table. Defaults to \code{TRUE}.
+#' @param requireSquare Logical; require a square table. Defaults to \code{TRUE}.
 #'
 #' @return \code{TRUE} if \code{x} looks like a confusion/coincidence matrix,
 #'   otherwise \code{FALSE}.
@@ -28,7 +28,7 @@
 #'
 #' M <- as.matrix(tab)
 #' isConfusionTable(M)                 # TRUE (dimnames present)
-#' isConfusionTable(M, require_dimnames = FALSE)  # TRUE even without names
+#' isConfusionTable(M, requireDimnames = FALSE)  # TRUE even without names
 #'
 #' df <- as.data.frame.matrix(tab)
 #' isConfusionTable(df)                # TRUE (numeric data.frame)
@@ -46,18 +46,18 @@
 #' @export
 isConfusionTable <- function(
     x,
-    require_dimnames   = TRUE,
-    require_same_levels= TRUE,
-    integer_tol        = sqrt(.Machine$double.eps),
-    accept_proportions = TRUE,
-    require_square     = TRUE
+    requireDimnames   = TRUE,
+    requireSameLevels= TRUE,
+    integerTol        = sqrt(.Machine$double.eps),
+    acceptProportions = TRUE,
+    requireSquare     = TRUE
 ) {
   
   # Normalize input to a numeric matrix 'm' if eligible
   if (inherits(x, "table")) {
     d <- dim(x)
     if (length(d) != 2L) return(FALSE)
-    if (require_square && d[1L] != d[2L]) return(FALSE)
+    if (requireSquare && d[1L] != d[2L]) return(FALSE)
     m  <- as.matrix(x)
     rn <- rownames(m)
     cn <- colnames(m)
@@ -65,7 +65,7 @@ isConfusionTable <- function(
   } else if (is.matrix(x)) {
     d <- dim(x)
     if (length(d) != 2L) return(FALSE)
-    if (require_square && d[1L] != d[2L]) return(FALSE)
+    if (requireSquare && d[1L] != d[2L]) return(FALSE)
     if (!is.numeric(x)) return(FALSE)
     m  <- x
     rn <- rownames(m)
@@ -76,7 +76,7 @@ isConfusionTable <- function(
     if (!all(vapply(x, is.numeric, logical(1)))) return(FALSE)
     d <- dim(x)
     if (length(d) != 2L) return(FALSE)
-    if (require_square && d[1L] != d[2L]) return(FALSE)
+    if (requireSquare && d[1L] != d[2L]) return(FALSE)
     m  <- as.matrix(x)
     rn <- rownames(m)
     cn <- colnames(m)
@@ -90,16 +90,16 @@ isConfusionTable <- function(
   if (any(m < 0)) return(FALSE)
   
   # Dimname checks
-  if (require_dimnames && (is.null(rn) || is.null(cn))) return(FALSE)
-  if (require_same_levels && !is.null(rn) && !is.null(cn)) {
+  if (requireDimnames && (is.null(rn) || is.null(cn))) return(FALSE)
+  if (requireSameLevels && !is.null(rn) && !is.null(cn)) {
     if (length(rn) != length(cn)) return(FALSE)
     if (!setequal(rn, cn)) return(FALSE)
   }
   
   # Counts (integer-like) OR proportions (optional)
-  if (all(abs(m - round(m)) <= integer_tol)) return(TRUE)
+  if (all(abs(m - round(m)) <= integerTol)) return(TRUE)
   
-  if (accept_proportions) {
+  if (acceptProportions) {
     s <- sum(m)
     if (s > 0 && abs(s - 1) <= 1e-8 && all(m <= 1)) return(TRUE)
   }

@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-List n_pow_sum(NumericVector x) {
+List n_pow_sum_cpp(NumericVector x) {
   
   // x must be a nonempty numeric vector with NAs omitted
   

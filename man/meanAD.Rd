@@ -62,13 +62,13 @@ meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 \seealso{
 \code{\link{mad}}
 
-Other dispersion: 
-\code{\link{coefVar}()},
-\code{\link{iqrX}()},
-\code{\link{madX}()},
-\code{\link{meanSE}()},
-\code{\link{rangeX}()},
-\code{\link{varX}()}
+Other dispersion:
+\code{\link[=coefVar]{coefVar()}},
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=madX]{madX()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=rangeX]{rangeX()}},
+\code{\link[=varX]{varX()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} following an idea of Danielle

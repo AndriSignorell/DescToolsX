@@ -167,8 +167,8 @@ ConcordanceResult conDisPairsXY_indexed(const vector<double>& x,
 
 
 // [[Rcpp::export]]
-NumericVector conDisPairsXY_ind_cpp(NumericVector xR,
-                                    NumericVector yR) {
+NumericVector condis_pairs_xy_cpp(NumericVector xR,
+                                     NumericVector yR) {
   
   std::vector<double> x = Rcpp::as<std::vector<double>>(xR);
   std::vector<double> y = Rcpp::as<std::vector<double>>(yR);
@@ -260,7 +260,7 @@ struct CStatWorker : public Worker {
 
 
 // [[Rcpp::export]]
-NumericVector cstat_bootstrap_parallel_cpp(NumericVector yR,
+NumericVector cstat_boot_cpp(NumericVector yR,
                                            NumericVector xR,
                                            int B = 1000,
                                            double alpha = 0.05,

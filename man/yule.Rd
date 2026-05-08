@@ -77,16 +77,16 @@ yuleY(m, conf.level = 0.95)
 Yule, G. U. (1912). On the methods of measuring association between two attributes.
 }
 \seealso{
-Other assoc.nominal: 
-\code{\link{assocsTab}()},
-\code{\link{contCoef}()},
-\code{\link{cramerV}()},
-\code{\link{lambda}()},
-\code{\link{oddsRatio}()},
-\code{\link{phi}()},
-\code{\link{relRisk}()},
-\code{\link{tschuprowT}()},
-\code{\link{uncertCoef}()}
+Other assoc.nominal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=relRisk]{relRisk()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}}
 }
 \concept{assoc.nominal}
 \concept{association-measures}

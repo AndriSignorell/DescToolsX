@@ -2,12 +2,12 @@
 % Please edit documentation in R/desc.nn.R
 \name{desc.nn}
 \alias{desc.nn}
-\alias{.desc_nn}
+\alias{.descNN}
 \alias{print.Desc.nn}
 \alias{plot.Desc.nn}
 \title{Describe a Numeric-Numeric Relationship}
 \usage{
-.desc_nn(x, y, conf.level = 0.95)
+.descNN(x, y, conf.level = 0.95)
 
 \method{print}{Desc.nn}(x, verbose = NULL, abs.sty = NULL, per.sty = NULL, ...)
 
@@ -120,14 +120,14 @@ heteroscedasticity and random coefficient variation.
 \code{\link[lumen]{corCI}}, \code{\link[lumen]{bpTest}},
 \code{\link[stats]{lm}}, \code{\link[stats]{cor.test}}
 
-Other desc: 
-\code{\link{desc}()},
-\code{\link{desc.Date}()},
-\code{\link{desc.factor}()},
+Other desc:
+\code{\link[=desc]{desc()}},
+\code{\link[=desc.Date]{desc.Date()}},
+\code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nq}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link{print.Desc.qq}()}
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{bivariate numeric regression correlation scatterplot}
 \concept{desc}

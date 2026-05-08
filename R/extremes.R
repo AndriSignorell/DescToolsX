@@ -88,7 +88,7 @@ large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
   
   if (unique==TRUE) {
     
-    res <- top_n(x, k)
+    res <- top_n_cpp(x, k)
     
     if(na_n > 0){
       if(!is.na(na.last)){
@@ -113,7 +113,7 @@ large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
     # do not allow k be bigger than n
     k <- min(k, n)
     
-    res <- x[top_i(x, k)]
+    res <- x[top_i_cpp(x, k)]
     
     if(!is.na(na.last)){
       if(na.last==FALSE)
@@ -145,7 +145,7 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
   
   if (unique==TRUE) {
     
-    res <- bottom_n(x, k)
+    res <- bottom_n_cpp(x, k)
     
     if(na_n > 0L){
       if(!is.na(na.last)){
@@ -171,7 +171,7 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
     # do not allow k be bigger than n
     k <- min(k, n)
     
-    res <- rev(x[bottom_i(x, k)])
+    res <- rev(x[bottom_i_cpp(x, k)])
     
     if(!is.na(na.last)){
       if(na.last==FALSE)

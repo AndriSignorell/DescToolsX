@@ -67,11 +67,11 @@ An analysis of transformations.
 \seealso{
 \code{\link{yeoJohnson}}, \code{\link{yeoJohnsonInv}}
 
-Other transformations: 
-\code{\link{boxCoxLambda}()},
-\code{\link{logSt}()},
-\code{\link{scaleX}()},
-\code{\link{yeoJohnson}()}
+Other transformations:
+\code{\link[=boxCoxLambda]{boxCoxLambda()}},
+\code{\link[=logSt]{logSt()}},
+\code{\link[=scaleX]{scaleX()}},
+\code{\link[=yeoJohnson]{yeoJohnson()}}
 }
 \concept{descriptive-statistics}
 \concept{regression}

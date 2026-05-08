@@ -25,8 +25,8 @@
 #' 
 #' @name percTable
 #' @inheritParams Association
-#' @aliases percTable percTable.default percTable.table percTable.formula
-#' percTable.matrix print.PercTable
+#' @aliases percTable percTable.default percTable.table percTable.formula percTable.matrix print.PercTable
+#' 
 #' @param row.vars a vector of row variables (see Details). 
 #' @param col.vars a vector of column variables (see Details). If this is left
 #' to \code{NULL} the table structure will be preserved. 

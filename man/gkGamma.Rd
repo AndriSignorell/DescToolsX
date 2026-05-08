@@ -85,13 +85,13 @@ Measures of association for cross classifications III.
 \seealso{
 \code{\link{yuleQ}} for \eqn{2 \times 2} tables,
 
-Other assoc.ordinal: 
-\code{\link{gkTau}()},
-\code{\link{kendallTauA}()},
-\code{\link{kendallTauB}()},
-\code{\link{somersDelta}()},
-\code{\link{spearmanCor}()},
-\code{\link{stuartTauC}()}
+Other assoc.ordinal:
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=spearmanCor]{spearmanCor()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measures}

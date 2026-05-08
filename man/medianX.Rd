@@ -114,13 +114,13 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \cr
 \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median}
 
-Other location: 
-\code{\link{gmean}()},
-\code{\link{hmean}()},
-\code{\link{hodgesLehmann}()},
-\code{\link{huberM}()},
-\code{\link{modeX}()},
-\code{\link{tukeyBiweight}()}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \concept{descriptive-statistics}
 \concept{location}

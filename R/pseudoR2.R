@@ -98,16 +98,16 @@
 #' @export
 pseudoR2 <- function(x, which = "McFadden") {
   
-  info <- .get_model_info(x)
+  info <- .getModelInfo(x)
   
-  preds <- .get_predictions(x, info)
+  preds <- .getPredictions(x, info)
   
-  nullmod <- .get_null_model(x, info)
+  nullmod <- .getNullModel(x, info)
   
-  core <- .compute_core_metrics(x, nullmod, info)
+  core <- .computeCoreMetrics(x, nullmod, info)
   
   if(info$type == "glm") {
-    extra <- .compute_glm_metrics(x, preds, core, info)
+    extra <- .computeGLMMetrics(x, preds, core, info)
     core[names(extra)] <- extra
   }
   
@@ -125,7 +125,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 
 #' @keywords internal
 #' @noRd
-.is_vglm <- function(x) {
+.isVglm <- function(x) {
   inherits(x, "vglm")
 }
 
@@ -133,7 +133,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 
 #' @keywords internal
 #' @noRd
-.get_model_info <- function(x) {
+.getModelInfo <- function(x) {
   
   if(inherits(x, "glm")) {
     type <- "glm"
@@ -150,7 +150,7 @@ pseudoR2 <- function(x, which = "McFadden") {
     ))
   }
   
-  if(.is_vglm(x)) {
+  if(.isVglm(x)) {
     
     if(!requireNamespace("VGAM", quietly = TRUE)) {
       stop("Package 'VGAM' required for vglm models")
@@ -196,7 +196,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 
 #' @keywords internal
 #' @noRd
-.get_predictions <- function(x, info) {
+.getPredictions <- function(x, info) {
   
   if(info$type == "glm") {
     return(list(
@@ -239,7 +239,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 
 #' @keywords internal
 #' @noRd
-.get_null_model <- function(x, info) {
+.getNullModel <- function(x, info) {
   
   f <- formula(x)
   yname <- all.vars(f)[1]
@@ -296,7 +296,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 
 #' @keywords internal
 #' @noRd
-.compute_glm_metrics <- function(x, preds, core, info) {
+.computeGLMMetrics <- function(x, preds, core, info) {
   
   if(info$type %notin% c("glm", "vglm"))
     return(NULL)
@@ -338,7 +338,7 @@ pseudoR2 <- function(x, which = "McFadden") {
 
 #' @keywords internal
 #' @noRd
-.compute_core_metrics <- function(x, nullmod, info) {
+.computeCoreMetrics <- function(x, nullmod, info) {
   
   L.full <- info$logLik
   L.base <- logLik(nullmod)

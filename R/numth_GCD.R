@@ -59,11 +59,11 @@ GCD <- function(..., na.rm = FALSE) {
   } else if (n == 1L) {
     g <- x
   } else if (n == 2L) {
-    g <- compute_GCD( x[1L], x[2L])
+    g <- gcd_cpp( x[1L], x[2L])
   } else {
-    g <- compute_GCD( x[1L], x[2L])
+    g <- gcd_cpp( x[1L], x[2L])
     for (i in 3L:n) {
-      g <- compute_GCD( g, x[i])
+      g <- gcd_cpp( g, x[i])
       if (g == 1) break
     }
   }
@@ -95,11 +95,11 @@ LCM <- function(..., na.rm = FALSE) {
   } else if (n == 1L) {
     l <- x
   } else if (n == 2L) {
-    l <- compute_LCM( x[1], x[2])
+    l <- lcm_cpp( x[1], x[2])
   } else {
-    l <- compute_LCM( x[1], x[2])
+    l <- lcm_cpp( x[1], x[2])
     for (i in 3L:n) {
-      l <- compute_LCM( l, x[i])
+      l <- lcm_cpp( l, x[i])
     }
   }
   return(l)

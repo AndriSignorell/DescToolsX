@@ -122,9 +122,9 @@ Psychological Methods 8(4), 434-447.
 \seealso{
 \code{\link{aov}}, \code{\link{anova}}, \code{\link[car]{Anova}}
 
-Other effect.size: 
-\code{\link{cohenD}()},
-\code{\link{glassDelta}()}
+Other effect.size:
+\code{\link[=cohenD]{cohenD()}},
+\code{\link[=glassDelta]{glassDelta()}}
 }
 \concept{descriptive-statistics}
 \concept{effect-size}

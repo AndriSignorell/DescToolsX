@@ -469,7 +469,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
         out <- gettextf( "\n%s\n%s %s%s conf. level\n", 
                          strrep("\u2500", 20), 
                          footnote, x$conf.level * 100, "%" )
-        if (.has_color()) {
+        if (.hasColor()) {
           cat(cli::col_silver(out))
         } else {
           cat(out)

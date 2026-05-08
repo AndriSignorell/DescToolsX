@@ -59,9 +59,9 @@ impute(x, 99)
 \seealso{
 For direct value replacement see \code{\link[bedrock:naReplace]{bedrock::naReplace()}}.
 
-Other imputation: 
-\code{\link{imputeKnn}()},
-\code{\link{locf}()}
+Other imputation:
+\code{\link[=imputeKnn]{imputeKnn()}},
+\code{\link[=locf]{locf()}}
 }
 \concept{data-manipulation}
 \concept{imputation}

@@ -534,7 +534,7 @@ print.tOne <- function(x, ...){
   
   cat("\n")
   
-  if(.has_color()){
+  if(.hasColor()){
     
     t1 <- as.data.frame.matrix(x)
     colnames(t1) <- colnames(x)

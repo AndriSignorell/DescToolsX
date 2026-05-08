@@ -96,6 +96,7 @@ hoeffdingD <- function(x, y, jitter = FALSE, eps = NULL, seed = NULL) {
   perm <- rank_y[ord_x] - 1
   
   hoeffdingD_cpp(perm)
+  
 }
 
 

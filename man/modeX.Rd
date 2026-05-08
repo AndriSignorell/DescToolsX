@@ -92,13 +92,13 @@ sapply(d.pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 \seealso{
 \code{\link{meanX}}, \code{\link{medianX}}
 
-Other location: 
-\code{\link{gmean}()},
-\code{\link{hmean}()},
-\code{\link{hodgesLehmann}()},
-\code{\link{huberM}()},
-\code{\link{medianX}()},
-\code{\link{tukeyBiweight}()}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr great Rcpp part by Joseph

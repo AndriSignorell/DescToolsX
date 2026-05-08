@@ -38,32 +38,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// conDisPairsTab_cpp
-List conDisPairsTab_cpp(IntegerMatrix x);
-RcppExport SEXP _DescToolsX_conDisPairsTab_cpp(SEXP xSEXP) {
+// condis_pairs_tab_cpp
+List condis_pairs_tab_cpp(IntegerMatrix x);
+RcppExport SEXP _DescToolsX_condis_pairs_tab_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< IntegerMatrix >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(conDisPairsTab_cpp(x));
+    rcpp_result_gen = Rcpp::wrap(condis_pairs_tab_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// conDisPairsXY_ind_cpp
-NumericVector conDisPairsXY_ind_cpp(NumericVector xR, NumericVector yR);
-RcppExport SEXP _DescToolsX_conDisPairsXY_ind_cpp(SEXP xRSEXP, SEXP yRSEXP) {
+// condis_pairs_xy_cpp
+NumericVector condis_pairs_xy_cpp(NumericVector xR, NumericVector yR);
+RcppExport SEXP _DescToolsX_condis_pairs_xy_cpp(SEXP xRSEXP, SEXP yRSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type xR(xRSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type yR(yRSEXP);
-    rcpp_result_gen = Rcpp::wrap(conDisPairsXY_ind_cpp(xR, yR));
+    rcpp_result_gen = Rcpp::wrap(condis_pairs_xy_cpp(xR, yR));
     return rcpp_result_gen;
 END_RCPP
 }
-// cstat_bootstrap_parallel_cpp
-NumericVector cstat_bootstrap_parallel_cpp(NumericVector yR, NumericVector xR, int B, double alpha, int seed);
-RcppExport SEXP _DescToolsX_cstat_bootstrap_parallel_cpp(SEXP yRSEXP, SEXP xRSEXP, SEXP BSEXP, SEXP alphaSEXP, SEXP seedSEXP) {
+// cstat_boot_cpp
+NumericVector cstat_boot_cpp(NumericVector yR, NumericVector xR, int B, double alpha, int seed);
+RcppExport SEXP _DescToolsX_cstat_boot_cpp(SEXP yRSEXP, SEXP xRSEXP, SEXP BSEXP, SEXP alphaSEXP, SEXP seedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -72,13 +72,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type B(BSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
-    rcpp_result_gen = Rcpp::wrap(cstat_bootstrap_parallel_cpp(yR, xR, B, alpha, seed));
+    rcpp_result_gen = Rcpp::wrap(cstat_boot_cpp(yR, xR, B, alpha, seed));
     return rcpp_result_gen;
 END_RCPP
 }
-// bootstrap_contcoef_table_bca_cpp
-List bootstrap_contcoef_table_bca_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct, double conf_level);
-RcppExport SEXP _DescToolsX_bootstrap_contcoef_table_bca_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP, SEXP conf_levelSEXP) {
+// contcoef_table_boot_bca_cpp
+List contcoef_table_boot_bca_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct, double conf_level);
+RcppExport SEXP _DescToolsX_contcoef_table_boot_bca_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP, SEXP conf_levelSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -87,7 +87,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
     Rcpp::traits::input_parameter< double >::type conf_level(conf_levelSEXP);
-    rcpp_result_gen = Rcpp::wrap(bootstrap_contcoef_table_bca_cpp(tab, R, seed, correct, conf_level));
+    rcpp_result_gen = Rcpp::wrap(contcoef_table_boot_bca_cpp(tab, R, seed, correct, conf_level));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -103,9 +103,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// bootstrap_contcoef_table_cpp
-NumericVector bootstrap_contcoef_table_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct);
-RcppExport SEXP _DescToolsX_bootstrap_contcoef_table_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP) {
+// contcoef_table_boot_cpp
+NumericVector contcoef_table_boot_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct);
+RcppExport SEXP _DescToolsX_contcoef_table_boot_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -113,7 +113,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type R(RSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
-    rcpp_result_gen = Rcpp::wrap(bootstrap_contcoef_table_cpp(tab, R, seed, correct));
+    rcpp_result_gen = Rcpp::wrap(contcoef_table_boot_cpp(tab, R, seed, correct));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -205,51 +205,51 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// top_n
-Rcpp::List top_n(Rcpp::NumericVector x, int n);
-RcppExport SEXP _DescToolsX_top_n(SEXP xSEXP, SEXP nSEXP) {
+// top_n_cpp
+Rcpp::List top_n_cpp(Rcpp::NumericVector x, int n);
+RcppExport SEXP _DescToolsX_top_n_cpp(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(top_n(x, n));
+    rcpp_result_gen = Rcpp::wrap(top_n_cpp(x, n));
     return rcpp_result_gen;
 END_RCPP
 }
-// bottom_n
-Rcpp::List bottom_n(Rcpp::NumericVector x, int n);
-RcppExport SEXP _DescToolsX_bottom_n(SEXP xSEXP, SEXP nSEXP) {
+// bottom_n_cpp
+Rcpp::List bottom_n_cpp(Rcpp::NumericVector x, int n);
+RcppExport SEXP _DescToolsX_bottom_n_cpp(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(bottom_n(x, n));
+    rcpp_result_gen = Rcpp::wrap(bottom_n_cpp(x, n));
     return rcpp_result_gen;
 END_RCPP
 }
-// top_i
-IntegerVector top_i(NumericVector v, unsigned int n);
-RcppExport SEXP _DescToolsX_top_i(SEXP vSEXP, SEXP nSEXP) {
+// top_i_cpp
+IntegerVector top_i_cpp(NumericVector v, unsigned int n);
+RcppExport SEXP _DescToolsX_top_i_cpp(SEXP vSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(top_i(v, n));
+    rcpp_result_gen = Rcpp::wrap(top_i_cpp(v, n));
     return rcpp_result_gen;
 END_RCPP
 }
-// bottom_i
-IntegerVector bottom_i(NumericVector v, unsigned int n);
-RcppExport SEXP _DescToolsX_bottom_i(SEXP vSEXP, SEXP nSEXP) {
+// bottom_i_cpp
+IntegerVector bottom_i_cpp(NumericVector v, unsigned int n);
+RcppExport SEXP _DescToolsX_bottom_i_cpp(SEXP vSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(bottom_i(v, n));
+    rcpp_result_gen = Rcpp::wrap(bottom_i_cpp(v, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -264,38 +264,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// fastModeX
-SEXP fastModeX(SEXP x, bool narm);
-RcppExport SEXP _DescToolsX_fastModeX(SEXP xSEXP, SEXP narmSEXP) {
+// fast_mode_cpp
+SEXP fast_mode_cpp(SEXP x, bool narm);
+RcppExport SEXP _DescToolsX_fast_mode_cpp(SEXP xSEXP, SEXP narmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
-    rcpp_result_gen = Rcpp::wrap(fastModeX(x, narm));
+    rcpp_result_gen = Rcpp::wrap(fast_mode_cpp(x, narm));
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_LCM
-long long compute_LCM(long long int a, long long int b);
-RcppExport SEXP _DescToolsX_compute_LCM(SEXP aSEXP, SEXP bSEXP) {
+// lcm_cpp
+long long lcm_cpp(long long int a, long long int b);
+RcppExport SEXP _DescToolsX_lcm_cpp(SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< long long int >::type a(aSEXP);
     Rcpp::traits::input_parameter< long long int >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_LCM(a, b));
+    rcpp_result_gen = Rcpp::wrap(lcm_cpp(a, b));
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_GCD
-long long compute_GCD(long long int a, long long int b);
-RcppExport SEXP _DescToolsX_compute_GCD(SEXP aSEXP, SEXP bSEXP) {
+// gcd_cpp
+long long gcd_cpp(long long int a, long long int b);
+RcppExport SEXP _DescToolsX_gcd_cpp(SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< long long int >::type a(aSEXP);
     Rcpp::traits::input_parameter< long long int >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_GCD(a, b));
+    rcpp_result_gen = Rcpp::wrap(gcd_cpp(a, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -344,64 +344,64 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// n_pow_sum
-List n_pow_sum(NumericVector x);
-RcppExport SEXP _DescToolsX_n_pow_sum(SEXP xSEXP) {
+// n_pow_sum_cpp
+List n_pow_sum_cpp(NumericVector x);
+RcppExport SEXP _DescToolsX_n_pow_sum_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(n_pow_sum(x));
+    rcpp_result_gen = Rcpp::wrap(n_pow_sum_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// rskew_cpp
-double rskew_cpp(NumericVector x, double mean);
-RcppExport SEXP _DescToolsX_rskew_cpp(SEXP xSEXP, SEXP meanSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
-    rcpp_result_gen = Rcpp::wrap(rskew_cpp(x, mean));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rskeww_cpp
-double rskeww_cpp(NumericVector x, double mean, NumericVector w);
-RcppExport SEXP _DescToolsX_rskeww_cpp(SEXP xSEXP, SEXP meanSEXP, SEXP wSEXP) {
+// skew_cpp
+double skew_cpp(NumericVector x, double mean);
+RcppExport SEXP _DescToolsX_skew_cpp(SEXP xSEXP, SEXP meanSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(rskeww_cpp(x, mean, w));
+    rcpp_result_gen = Rcpp::wrap(skew_cpp(x, mean));
     return rcpp_result_gen;
 END_RCPP
 }
-// rkurt_cpp
-double rkurt_cpp(NumericVector x, double mean);
-RcppExport SEXP _DescToolsX_rkurt_cpp(SEXP xSEXP, SEXP meanSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
-    rcpp_result_gen = Rcpp::wrap(rkurt_cpp(x, mean));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rkurtw_cpp
-double rkurtw_cpp(NumericVector x, double mean, NumericVector w);
-RcppExport SEXP _DescToolsX_rkurtw_cpp(SEXP xSEXP, SEXP meanSEXP, SEXP wSEXP) {
+// skew_weighted_cpp
+double skew_weighted_cpp(NumericVector x, double mean, NumericVector w);
+RcppExport SEXP _DescToolsX_skew_weighted_cpp(SEXP xSEXP, SEXP meanSEXP, SEXP wSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(rkurtw_cpp(x, mean, w));
+    rcpp_result_gen = Rcpp::wrap(skew_weighted_cpp(x, mean, w));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kurt_cpp
+double kurt_cpp(NumericVector x, double mean);
+RcppExport SEXP _DescToolsX_kurt_cpp(SEXP xSEXP, SEXP meanSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
+    rcpp_result_gen = Rcpp::wrap(kurt_cpp(x, mean));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kurt_weighted_cpp
+double kurt_weighted_cpp(NumericVector x, double mean, NumericVector w);
+RcppExport SEXP _DescToolsX_kurt_weighted_cpp(SEXP xSEXP, SEXP meanSEXP, SEXP wSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(kurt_weighted_cpp(x, mean, w));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -417,27 +417,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// wgtHimed_cpp
-double wgtHimed_cpp(NumericVector x, NumericVector w);
-RcppExport SEXP _DescToolsX_wgtHimed_cpp(SEXP xSEXP, SEXP wSEXP) {
+// himed_weighted_cpp
+double himed_weighted_cpp(NumericVector x, NumericVector w);
+RcppExport SEXP _DescToolsX_himed_weighted_cpp(SEXP xSEXP, SEXP wSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(wgtHimed_cpp(x, w));
+    rcpp_result_gen = Rcpp::wrap(himed_weighted_cpp(x, w));
     return rcpp_result_gen;
 END_RCPP
 }
-// wgtHimedInt_cpp
-double wgtHimedInt_cpp(NumericVector x, IntegerVector iw);
-RcppExport SEXP _DescToolsX_wgtHimedInt_cpp(SEXP xSEXP, SEXP iwSEXP) {
+// himed_int_weighted_cpp
+double himed_int_weighted_cpp(NumericVector x, IntegerVector iw);
+RcppExport SEXP _DescToolsX_himed_int_weighted_cpp(SEXP xSEXP, SEXP iwSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type iw(iwSEXP);
-    rcpp_result_gen = Rcpp::wrap(wgtHimedInt_cpp(x, iw));
+    rcpp_result_gen = Rcpp::wrap(himed_int_weighted_cpp(x, iw));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -445,12 +445,12 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_assoc_cpp", (DL_FUNC) &_DescToolsX_assoc_cpp, 3},
     {"_DescToolsX_brier_boot_cpp", (DL_FUNC) &_DescToolsX_brier_boot_cpp, 4},
-    {"_DescToolsX_conDisPairsTab_cpp", (DL_FUNC) &_DescToolsX_conDisPairsTab_cpp, 1},
-    {"_DescToolsX_conDisPairsXY_ind_cpp", (DL_FUNC) &_DescToolsX_conDisPairsXY_ind_cpp, 2},
-    {"_DescToolsX_cstat_bootstrap_parallel_cpp", (DL_FUNC) &_DescToolsX_cstat_bootstrap_parallel_cpp, 5},
-    {"_DescToolsX_bootstrap_contcoef_table_bca_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_bca_cpp, 5},
+    {"_DescToolsX_condis_pairs_tab_cpp", (DL_FUNC) &_DescToolsX_condis_pairs_tab_cpp, 1},
+    {"_DescToolsX_condis_pairs_xy_cpp", (DL_FUNC) &_DescToolsX_condis_pairs_xy_cpp, 2},
+    {"_DescToolsX_cstat_boot_cpp", (DL_FUNC) &_DescToolsX_cstat_boot_cpp, 5},
+    {"_DescToolsX_contcoef_table_boot_bca_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_boot_bca_cpp, 5},
     {"_DescToolsX_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_cpp, 2},
-    {"_DescToolsX_bootstrap_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_bootstrap_contcoef_table_cpp, 4},
+    {"_DescToolsX_contcoef_table_boot_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_boot_cpp, 4},
     {"_DescToolsX_isoWeek", (DL_FUNC) &_DescToolsX_isoWeek, 1},
     {"_DescToolsX_usWeek", (DL_FUNC) &_DescToolsX_usWeek, 1},
     {"_DescToolsX_isoYear", (DL_FUNC) &_DescToolsX_isoYear, 1},
@@ -459,26 +459,26 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_usYearmonth", (DL_FUNC) &_DescToolsX_usYearmonth, 1},
     {"_DescToolsX_isLeapYearDate", (DL_FUNC) &_DescToolsX_isLeapYearDate, 1},
     {"_DescToolsX_isLeapYearInt", (DL_FUNC) &_DescToolsX_isLeapYearInt, 1},
-    {"_DescToolsX_top_n", (DL_FUNC) &_DescToolsX_top_n, 2},
-    {"_DescToolsX_bottom_n", (DL_FUNC) &_DescToolsX_bottom_n, 2},
-    {"_DescToolsX_top_i", (DL_FUNC) &_DescToolsX_top_i, 2},
-    {"_DescToolsX_bottom_i", (DL_FUNC) &_DescToolsX_bottom_i, 2},
+    {"_DescToolsX_top_n_cpp", (DL_FUNC) &_DescToolsX_top_n_cpp, 2},
+    {"_DescToolsX_bottom_n_cpp", (DL_FUNC) &_DescToolsX_bottom_n_cpp, 2},
+    {"_DescToolsX_top_i_cpp", (DL_FUNC) &_DescToolsX_top_i_cpp, 2},
+    {"_DescToolsX_bottom_i_cpp", (DL_FUNC) &_DescToolsX_bottom_i_cpp, 2},
     {"_DescToolsX_fastMode", (DL_FUNC) &_DescToolsX_fastMode, 2},
-    {"_DescToolsX_fastModeX", (DL_FUNC) &_DescToolsX_fastModeX, 2},
-    {"_DescToolsX_compute_LCM", (DL_FUNC) &_DescToolsX_compute_LCM, 2},
-    {"_DescToolsX_compute_GCD", (DL_FUNC) &_DescToolsX_compute_GCD, 2},
+    {"_DescToolsX_fast_mode_cpp", (DL_FUNC) &_DescToolsX_fast_mode_cpp, 2},
+    {"_DescToolsX_lcm_cpp", (DL_FUNC) &_DescToolsX_lcm_cpp, 2},
+    {"_DescToolsX_gcd_cpp", (DL_FUNC) &_DescToolsX_gcd_cpp, 2},
     {"_DescToolsX_divs", (DL_FUNC) &_DescToolsX_divs, 1},
     {"_DescToolsX_hlqest", (DL_FUNC) &_DescToolsX_hlqest, 1},
     {"_DescToolsX_hl2qest", (DL_FUNC) &_DescToolsX_hl2qest, 2},
     {"_DescToolsX_hoeffdingD_cpp", (DL_FUNC) &_DescToolsX_hoeffdingD_cpp, 1},
-    {"_DescToolsX_n_pow_sum", (DL_FUNC) &_DescToolsX_n_pow_sum, 1},
-    {"_DescToolsX_rskew_cpp", (DL_FUNC) &_DescToolsX_rskew_cpp, 2},
-    {"_DescToolsX_rskeww_cpp", (DL_FUNC) &_DescToolsX_rskeww_cpp, 3},
-    {"_DescToolsX_rkurt_cpp", (DL_FUNC) &_DescToolsX_rkurt_cpp, 2},
-    {"_DescToolsX_rkurtw_cpp", (DL_FUNC) &_DescToolsX_rkurtw_cpp, 3},
+    {"_DescToolsX_n_pow_sum_cpp", (DL_FUNC) &_DescToolsX_n_pow_sum_cpp, 1},
+    {"_DescToolsX_skew_cpp", (DL_FUNC) &_DescToolsX_skew_cpp, 2},
+    {"_DescToolsX_skew_weighted_cpp", (DL_FUNC) &_DescToolsX_skew_weighted_cpp, 3},
+    {"_DescToolsX_kurt_cpp", (DL_FUNC) &_DescToolsX_kurt_cpp, 2},
+    {"_DescToolsX_kurt_weighted_cpp", (DL_FUNC) &_DescToolsX_kurt_weighted_cpp, 3},
     {"_DescToolsX_tbrm", (DL_FUNC) &_DescToolsX_tbrm, 2},
-    {"_DescToolsX_wgtHimed_cpp", (DL_FUNC) &_DescToolsX_wgtHimed_cpp, 2},
-    {"_DescToolsX_wgtHimedInt_cpp", (DL_FUNC) &_DescToolsX_wgtHimedInt_cpp, 2},
+    {"_DescToolsX_himed_weighted_cpp", (DL_FUNC) &_DescToolsX_himed_weighted_cpp, 2},
+    {"_DescToolsX_himed_int_weighted_cpp", (DL_FUNC) &_DescToolsX_himed_int_weighted_cpp, 2},
     {NULL, NULL, 0}
 };
 
