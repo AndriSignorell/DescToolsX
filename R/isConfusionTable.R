@@ -43,6 +43,8 @@
 #' @concept data-inspection
 #'
 #'
+
+
 #' @export
 isConfusionTable <- function(
     x,

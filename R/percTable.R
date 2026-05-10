@@ -227,13 +227,15 @@ percTable.table <- function(x, freq=TRUE,
 
 #' @rdname percTable
 #' @export
+#' @rdname percTable
+#' @export
 print.PercTable <- function(x,
-                       margins = NULL,
-                       col.vars = NULL,
-                       row.vars = NULL,
-                       justify = NULL,
-                       blockSep = NULL,
-                       ...) {
+                            margins = NULL,
+                            col.vars = NULL,
+                            row.vars = NULL,
+                            justify = NULL,
+                            blockSep = NULL,
+                            ...) {
   
   .printArgs <- x$.printArgs
   x$.printArgs <- NULL
@@ -267,12 +269,34 @@ print.PercTable <- function(x,
     # else: both are defined by the user
   }
   
-  # margins only here
   if (!is.null(mar)) {
     if(!is.numeric(mar))
       mar <- match(mar, c("rows", "cols"))
-    tables <- lapply(tables, addmargins, margin = mar)
-  }
+    
+    hasFreq <- "freq" %in% names(tables)
+    
+    tableNames <- names(tables)  # Namen vorher sichern
+    tables <- lapply(tableNames, function(nm) {
+      tab <- tables[[nm]]
+      if (nm %in% c("p.row", "p.col", "perc")) {
+        if (hasFreq) {
+          freqWithMar <- addmargins(tables[["freq"]], margin = mar)
+          total <- freqWithMar[nrow(freqWithMar), ncol(freqWithMar)]
+          result <- addmargins(tab, margin = mar)
+          if (1 %in% mar)
+            result[nrow(result), ] <- freqWithMar[nrow(freqWithMar), ] / total
+          if (2 %in% mar)
+            result[, ncol(result)] <- freqWithMar[, ncol(freqWithMar)] / total
+          result
+        } else {
+          addmargins(tab, margin = mar)
+        }
+      } else {
+        addmargins(tab, margin = mar)
+      }
+    })
+    names(tables) <- tableNames  # Namen direkt wiederverwenden
+  }  
   
   abstab <- names(tables) %in% c("freq", "expected")
   tables[abstab] <- lapply(tables[abstab], fm, fmt="abs.sty")
@@ -280,17 +304,30 @@ print.PercTable <- function(x,
   tables[ptab] <- lapply(tables[ptab], fm, fmt="per.sty")
   
   if (!is.null(mar)) {
-    # Only for conditional proportion tables
+    hasPerc <- "perc" %in% names(tables)
     condTabs <- names(tables) %in% c("p.row", "p.col")
-    
-    tables[condTabs] <- lapply(tables[condTabs], function(tab) {
-      
-      if (1 %in% mar)  # rows margin
-        tab[nrow(tab), ] <- "."
-      
-      if (2 %in% mar)  # cols margin
-        tab[, ncol(tab)] <- "."
-      
+    tables[condTabs] <- lapply(names(tables[condTabs]), function(nm) {
+      tab <- tables[[nm]]
+      if (nm == "p.row") {
+        if (hasPerc) {
+          # perc already shows all margins → suppress both in p.row
+          if (1 %in% mar) tab[nrow(tab), ] <- "."
+          if (2 %in% mar) tab[, ncol(tab)] <- "."
+        } else {
+          # standalone p.row: sum column is meaningless (adds to >100%)
+          if (2 %in% mar) tab[, ncol(tab)] <- "."
+        }
+      }
+      if (nm == "p.col") {
+        if (hasPerc) {
+          # perc already shows all margins → suppress both in p.col
+          if (1 %in% mar) tab[nrow(tab), ] <- "."
+          if (2 %in% mar) tab[, ncol(tab)] <- "."
+        } else {
+          # standalone p.col: sum row is meaningless (adds to >100%)
+          if (1 %in% mar) tab[nrow(tab), ] <- "."
+        }
+      }
       tab
     })
   }

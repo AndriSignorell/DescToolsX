@@ -137,7 +137,7 @@
 
 #' @method desc table
 #' @export
-desc.table <- function(x, conf.level = 0.95, prop = "rows",
+desc.table <- function(x, conf.level = 0.95, prop = NULL,
                        main = NULL, verbose = NULL, plotit = NULL,
                        ...) {
 
@@ -180,6 +180,8 @@ desc.table <- function(x, conf.level = 0.95, prop = "rows",
 
   # resolve verbose: function arg > global option > hardcoded default
   verbose <- .checkVerbose(verbose)
+  
+  prop <- prop %||% (if(verbose>2) c("rows","cols","total") else "rows")
   
   ttype <- if (identical(dim(x), c(2L, 2L))) {
     "t2x2"

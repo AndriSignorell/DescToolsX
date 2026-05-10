@@ -7,117 +7,124 @@
 relRisk(
   x,
   y = NULL,
-  conf.level = NA,
-  method = c("score", "wald", "use.or"),
+  method = c("score", "wald", "use-or"),
   delta = 0.5,
+  conf.level = NA,
   ...
 )
 }
 \arguments{
-\item{x}{a numeric vector or a 2x2 numeric matrix, resp. table.}
+\item{x}{A numeric 2x2 matrix or table containing non-negative counts.}
 
-\item{y}{\code{NULL} (default) or a vector with compatible dimensions to
-\code{x}. If y is provided, \code{table(x, y, ...)} will be calculated.}
+\item{y}{An optional vector. If supplied, \code{table(x, y, ...)} is
+computed.}
 
-\item{conf.level}{confidence level. Default is \code{NA}, meaning no
-confidence intervals will be reported.}
+\item{method}{Character string specifying the confidence interval method.
+One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
 
-\item{method}{method for calculating the relative risk and the confidence
-intervals. Can be one out of \code{"score"}, \code{"wald"}, \code{"use.or"}.
-Default is \code{"score"}.}
+\item{delta}{Small continuity correction added to the event counts for the
+Wald interval. Only used if \code{method = "wald"}.}
 
-\item{delta}{small constant to be added to the numerator for calculating the
-log risk ratio (Wald method). Usual choice is 0.5 although there does not
-seem to be any theory behind this. (Dewey, M. 2006)}
+\item{conf.level}{Confidence level for the interval estimate. If
+\code{NA} (default), only the point estimate is returned.}
 
-\item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set \code{useNA}.}
+\item{\dots}{Further arguments passed to \code{\link{table}}.}
 }
 \value{
-If \code{conf.level} is not \code{NA} then the result will be a
-vector with 3 elements for estimate, lower confidence intervall and upper
-for the upper one.  Else the relative risk will be reported as a single
-value.
+If \code{conf.level = NA}, a numeric scalar containing the relative risk.
+
+Otherwise a named numeric vector with elements:
+
+\itemize{
+\item \code{estimate} Relative risk estimate.
+\item \code{lci} Lower confidence interval bound.
+\item \code{uci} Upper confidence interval bound.
+}
 }
 \description{
-Computes the relative risk and its confidence intervals.  Confidence
-intervals are calculated using normal approximation (\code{"wald"}),
-(\code{"score"}) or by using odds ratio (\code{"use.or"})
+Computes the relative risk for a 2x2 contingency table together with
+optional confidence intervals.
 }
 \details{
-Best is to always put the outcome variable (disease yes/no) in the columns
-and the exposure variable in the rows. In other words, put the dependent
-variable - the one that describes the problem under study - in the columns.
-And put the independent variable - the factor assumed to cause the problem -
-in the rows. (Gerritsen, 2010)
+The relative risk compares the event probability in the exposed group with
+the event probability in the unexposed group.
 
-According to this, the function expects the following table structure:
-\preformatted{ diseased=1 diseased=0 exposed=1 (ref) n00 n01 exposed=0 n10
-n11 }
+The function expects the exposure groups in the rows and the outcome in the
+columns:
 
-The relative risk is then calculated as:
+\preformatted{
+               outcome = 1   outcome = 0
+exposed = 1        n00           n01
+exposed = 0        n10           n11
+}
 
-\preformatted{ (exposed & diseased) / exposed rr =
----------------------------------- (unexposed & diseased) / unexposed }
+The relative risk is defined as:
 
-If the table to be used is not in the required shape, use the function
-\code{\link[bedrock]{revX}()} and/or \code{\link{t}()} to reverse rows, columns, or
-both, resp. to transpose the table.
+\deqn{
+RR =
+\frac{n_{00} / (n_{00} + n_{01})}
+     {n_{10} / (n_{10} + n_{11})}
+}
+
+Confidence intervals can be calculated using the score method of Koopman
+(1984), a Wald approximation, or via transformation of the odds ratio.
+
+The score interval is based on the method of Koopman (1984) and
+Miettinen and Nurminen (1985). The Wald interval is asymptotic and may
+perform poorly for small counts or extreme probabilities.
+
+If the table orientation differs from the required structure, rows or
+columns can be reversed using \code{\link[bedrock]{revX}} or transposed
+with \code{\link{t}}.
 }
 \examples{
-
-m <- matrix(c(78,50,1422,950), 
-            nrow=2, 
-            dimnames = list(water=c("cont", "clean"), 
-                            diarrhea=c("yes", "no")))
+m <- matrix(
+  c(78, 50,
+    1422, 950),
+  nrow = 2,
+  dimnames = list(
+    water = c("cont", "clean"),
+    diarrhea = c("yes", "no")
+  )
+)
 
 relRisk(m, conf.level = 0.95)
 
 
-mm <- cbind(c(9,20),c(41,29))
-mm
- 
-relRisk(t(mm), conf.level=0.95)
-relRisk(t(mm), conf.level=0.95, method="wald")
-relRisk(t(mm), conf.level=0.95, method="use.or")
+mm <- cbind(c(9, 20), c(41, 29))
+
+relRisk(t(mm), conf.level = 0.95)
+
+relRisk(
+  t(mm),
+  conf.level = 0.95,
+  method = "wald"
+)
+
+relRisk(
+  t(mm),
+  conf.level = 0.95,
+  method = "use-or"
+)
 
 }
 \references{
-Rothman, K. J. and Greenland, S. (1998) \emph{Modern
-Epidemiology}.  Lippincott-Raven Publishers
+Koopman, P. A. R. (1984). Confidence intervals for the ratio of two
+binomial proportions. \emph{Biometrics}, \emph{40}(2), 513--517.
 
-Rothman, K. J. (2002) \emph{Epidemiology: An Introduction}. Oxford
-University Press
+Miettinen, O., & Nurminen, M. (1985). Comparative analysis of two rates.
+\emph{Statistics in Medicine}, \emph{4}(2), 213--226.
 
-Jewell, N. P. (2004) \emph{Statistics for Epidemiology}. 1st Edition, 2004,
-Chapman & Hall, pp. 73-81
-
-Selvin, S. (1998) \emph{Modern Applied Biostatistical Methods Using S-Plus}.
-1st Edition, Oxford University Press
-
-Gerritsen, A (2010)
-\url{https://www.theanalysisfactor.com/cross-tabulation-in-cohort-and-case-control-studies/}
+Rothman, K. J., Greenland, S., & Lash, T. L. (2008).
+\emph{Modern Epidemiology} (3rd ed.). Lippincott Williams & Wilkins.
 }
 \seealso{
 \code{\link{oddsRatio}}
 
-Other assoc.nominal:
-\code{\link[=assocsTab]{assocsTab()}},
-\code{\link[=contCoef]{contCoef()}},
-\code{\link[=cramerV]{cramerV()}},
-\code{\link[=lambda]{lambda()}},
-\code{\link[=oddsRatio]{oddsRatio()}},
-\code{\link[=phi]{phi()}},
-\code{\link[=tschuprowT]{tschuprowT()}},
-\code{\link[=uncertCoef]{uncertCoef()}},
-\code{\link{yule}}
+Other topic.contingencyTables:
+\code{\link[=oddsRatio]{oddsRatio()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code of Yongyi Min
-and Michael Dewey
-}
-\concept{assoc.nominal}
-\concept{association-measures}
-\concept{descriptive-statistics}
-\concept{hypothesis-testing}
-\keyword{multivariate}
+\concept{contingency-tables}
+\concept{epidemiology}
+\concept{relative-risk}
+\concept{topic.contingencyTables}

@@ -1,143 +1,209 @@
 
 #' Compute Odds Ratios
 #'
-#' Generic function to compute odds ratios from different object types.
+#' Computes odds ratios for 2x2 contingency tables or binomial
+#' generalized linear models.
 #'
-#' @param x An object for which an odds ratio can be computed.
-#' @param ... Additional arguments passed to methods.
+#' For contingency tables, the function returns the odds ratio together with
+#' optional confidence intervals. For binomial generalized linear models,
+#' exponentiated regression coefficients together with confidence intervals
+#' are returned.
 #'
-#' @return An object of class `"OddsRatio"`.
+#' @param x An object for which odds ratios should be computed.
+#' @param ... Further arguments passed to methods.
+#'
+#' @return
+#' The returned value depends on the input:
+#'
+#' \itemize{
+#'   \item For contingency tables, a numeric scalar containing the odds ratio
+#'     if \code{conf.level = NA}, otherwise a named numeric vector with
+#'     elements \code{estimate}, \code{lci}, and \code{uci}.
+#'   \item For binomial generalized linear models, an object of class
+#'     \code{"OddsRatio"}.
+#' }
+#'
+#' @details
+#' For 2x2 contingency tables, the odds ratio is defined as:
+#'
+#' \deqn{
+#' OR = \frac{n_{11} n_{22}}{n_{12} n_{21}}
+#' }
+#'
+#' The following confidence interval methods are available:
+#'
+#' \itemize{
+#'   \item \code{"wald"} Asymptotic Wald interval.
+#'   \item \code{"exact"} Fisher exact interval.
+#'   \item \code{"midp"} Median unbiased mid-p interval.
+#' }
+#'
+#' For generalized linear models, exponentiated regression coefficients are
+#' reported together with Wald or profile likelihood confidence intervals.
+#'
+#' @references
+#' Agresti, A. (2013). \emph{Categorical Data Analysis} (3rd ed.).
+#' Wiley.
+#'
+#' Fisher, R. A. (1935). The logic of inductive inference.
+#' \emph{Journal of the Royal Statistical Society},
+#' \emph{98}(1), 39--82.
+#'
+#' Gart, J. J. (1966). Alternative analyses of contingency tables.
+#' \emph{Journal of the Royal Statistical Society Series B},
+#' \emph{28}(1), 164--179.
+#'
+#' @seealso
+#' \code{\link{relRisk}}
 #'
 #' @examples
-#' # 2x2 table
-#' tab <- matrix(c(10, 20, 5, 30), 2)
+#' # 2x2 contingency table
+#' tab <- matrix(
+#'   c(10, 20,
+#'     5, 30),
+#'   nrow = 2
+#' )
+#'
 #' oddsRatio(tab)
 #'
+#' oddsRatio(
+#'   tab,
+#'   conf.level = 0.95
+#' )
+#'
+#'
 #' # logistic regression
-#' fit <- glm(vs ~ am, data = mtcars, family = binomial)
+#' fit <- glm(
+#'   vs ~ am,
+#'   data = mtcars,
+#'   family = binomial
+#' )
+#'
 #' oddsRatio(fit)
 #'
+#' @family topic.contingencyTables
+#' @family topic.regressionModels
+#'
+#' @concept odds-ratio
+#' @concept contingency-tables
+#' @concept logistic-regression
+#' @concept epidemiology
+#'
 
-#' @family assoc.nominal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept hypothesis-testing
-#'
-#'
+
+
 #' @export
-oddsRatio <- function (x, ...) {
+oddsRatio <- function(x, ...) {
   UseMethod("oddsRatio")
 }
 
 
 
+#' @param y Optional second variable. If supplied,
+#'   \code{table(x, y, ...)} is computed.
+#' @param conf.level Confidence level for interval estimation.
+#'   If \code{NA}, only the point estimate is returned.
+#' @param sides Type of confidence interval. One of
+#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}.
+#' @param method Character string specifying the estimation method.
+#'   One of \code{"wald"}, \code{"exact"}, or \code{"midp"}.
+#' @param interval Numeric vector of length two specifying the search interval
+#'   used by the mid-p method.
+
 #' @rdname oddsRatio
 #' @method oddsRatio default
 #' @export
-#'
-#' @param y Optional second variable to form a 2x2 table.
-#' @param conf.level Confidence level for interval estimation.
-#' @param sides Type of alternative hypothesis.
-#' @param method Method for estimation. One of `"wald"`, `"exact"`, `"midp"`.
-#' @param interval Interval for root finding (mid-p method).
-
-oddsRatio.default <- function(x, y = NULL, 
-                              conf.level = NA, sides=c("two.sided", "left", "right"), 
-                              method = c("wald", "exact", "midp"), 
-                              interval = c(0, 1000), ...) {
+oddsRatio.default <- function(
+    x,
+    y = NULL,
+    conf.level = NA,
+    sides = c("two.sided", "left", "right"),
+    method = c("wald", "exact", "midp"),
+    interval = c(0, 1000),
+    ...
+) {
   
-  if(!is.null(y)) x <- table(x, y, ...)
+  if (!is.null(y))
+    x <- table(x, y, ...)
   
-  if(is.null(conf.level)) conf.level <- NA
+  if (!is.numeric(x))
+    stop("Argument 'x' must be numeric.")
   
-  p <- (d <- dim(x))[1L]
-  if(!is.numeric(x) || length(d) != 2L || p != d[2L] || p != 2L)
-    stop("'x' is not a 2x2 numeric matrix")
+  if (anyNA(x))
+    stop("Argument 'x' must not contain missing values.")
   
-  switch( match.arg(arg = method)
-          , "wald" = {
-            if (any(x == 0)) x <- x + 0.5
-            lx <- log(x)
-            or <- exp(lx[1, 1] + lx[2, 2] - lx[1, 2] - lx[2, 1])
-            
-            if(is.na(conf.level)){
-              res <- or
-            } else {
-              # Agresti Categorical Data Analysis, 3.1.1
-              sigma2lor <- sum(1/x)
-              ci <- or * exp(c(1,-1) * qnorm((1-conf.level)/2) * sqrt(sigma2lor))
-              res <- c("odds ratio"=or, lci=ci[1], uci=ci[2])
-            }
-          }
-          , "exact" = {
-            if(is.na(conf.level)){
-              res <- unname(fisher.test(x, conf.int=FALSE)$estimate)
-            } else {
-              res <- fisher.test(x, conf.level=conf.level)
-              res <- c(res$estimate, lci=res$conf.int[1], uci=res$conf.int[2])
-            }
-          }
-          , "midp" = {
-            
-            # based on code from Tomas J. Aragon Developer <aragon at berkeley.edu>
-            
-            a1 <- x[1,1]; a0 <- x[1,2]; b1 <- x[2,1]; b0 <- x[2,2]; or <- 1
-            
-            # median-unbiased estimate function
-            mue <- function(a1, a0, b1, b0, or){
-              mm <- matrix(c(a1,a0,b1,b0), 2, 2, byrow=TRUE)
-              fisher.test(mm, or=or, alternative="l")$p-fisher.test(x=x, or=or, alternative="g")$p
-            }
-            # mid-p function
-            midp <- function(a1, a0, b1, b0, or = 1){
-              mm <- matrix(c(a1,a0,b1,b0),2,2, byrow=TRUE)
-              lteqtoa1 <- fisher.test(mm,or=or,alternative="l")$p.val
-              gteqtoa1 <- fisher.test(mm,or=or,alternative="g")$p.val
-              0.5*(lteqtoa1-gteqtoa1+1)
-            }
-            
-            # root finding
-            EST <- uniroot(
-              function(or){ mue(a1, a0, b1, b0, or)},
-              interval = interval)$root
-            
-            if(is.na(conf.level)){
-              res <- EST
-            } else {
-              
-              alpha <- 1 - conf.level
-              LCL <- uniroot(function(or){
-                1-midp(a1, a0, b1, b0, or)-alpha/2
-              },  interval = interval)$root
-              UCL <- 1/uniroot(function(or){
-                midp(a1, a0, b1, b0, or=1/or)-alpha/2
-              },  interval = interval)$root
-              
-              res <- c("odds ratio" = EST, lci=LCL, uci= UCL)
-            }
-          }
+  if (length(dim(x)) != 2L)
+    stop("Argument 'x' must be a matrix.")
+  
+  if (!all(dim(x) == c(2L, 2L)))
+    stop("Argument 'x' must be a 2x2 matrix.")
+  
+  if (any(x < 0))
+    stop("Argument 'x' must contain non-negative counts.")
+  
+  if (any(x %% 1 != 0))
+    stop("Argument 'x' must contain integer counts.")
+  
+  if (any(rowSums(x) == 0))
+    stop("Rows of 'x' must contain positive totals.")
+  
+  method <- match.arg(method)
+  sides  <- match.arg(sides)
+  
+  res <- switch(
+    method,
+    
+    "wald" = .oddsRatioWald(
+      x = x,
+      conf.level = conf.level,
+      sides = sides
+    ),
+    
+    "exact" = .oddsRatioExact(
+      x = x,
+      conf.level = conf.level,
+      sides = sides
+    ),
+    
+    "midp" = .oddsRatioMidP(
+      x = x,
+      conf.level = conf.level,
+      sides = sides,
+      interval = interval
+    )
   )
-  return(res)
+  
+  res
+  
 }
+
+
+#' Alias for \code{\link{oddsRatio}}.
+#'
+#' @rdname oddsRatio
+#' @export
+OR <- oddsRatio
+
+
 
 
 
 #' @rdname oddsRatio
+#' @param method Character string specifying the interval method.
+#'   One of \code{"wald"} or \code{"profile"}.
+
 #' @method oddsRatio glm
 #' @export
-#'
-#' @param conf.level Confidence level for interval estimation.
-#' @param digits Number of digits for printing.
-#' @param method = c("wald", "profile") use wald or profile likelihood confidence intervals.
-#' 
-oddsRatio.glm <- function(x,
-                          conf.level = 0.95,
-                          method = c("wald", "profile"),
-                          sides = c("two.sided", "left", "right"),
-                          ...) {
+oddsRatio.glm <- function(
+    x,
+    conf.level = 0.95,
+    method = c("wald", "profile"),
+    sides = c("two.sided", "left", "right"),
+    ...
+) {
   
   if (!inherits(x, "glm"))
-    stop("Object must be of class 'glm'.")
+    stop("Object must inherit from class 'glm'.")
   
   if (family(x)$family != "binomial")
     stop("Model must use binomial family.")
@@ -145,184 +211,313 @@ oddsRatio.glm <- function(x,
   method <- match.arg(method)
   sides  <- match.arg(sides)
   
+  coefTable <- summary(x)$coefficients
+  
+  beta <- coefTable[, "Estimate"]
+  se   <- coefTable[, "Std. Error"]
+  pval <- coefTable[, "Pr(>|z|)"]
+  
+  estimate <- exp(beta)
+  
   alpha <- 1 - conf.level
-  
-  coef_table <- summary(x)$coefficients
-  coef_names <- rownames(coef_table)
-  
-  beta  <- coef_table[, "Estimate"]
-  se    <- coef_table[, "Std. Error"]
-  pval  <- coef_table[, "Pr(>|z|)"]
-  
-  OR <- exp(beta)
-  
-  # ---------- Confidence intervals ----------
   
   if (method == "wald") {
     
     if (sides == "two.sided") {
-      z <- qnorm(1 - alpha/2)
-      lci <- beta - z * se
-      uci <- beta + z * se
       
-    } else if (sides == "right") {
-      z <- qnorm(1 - alpha)
-      lci <- rep(-Inf, length(beta))
-      uci <- beta + z * se
+      z <- qnorm(1 - alpha / 2)
       
-    } else { # left
+      lci <- exp(beta - z * se)
+      uci <- exp(beta + z * se)
+      
+    } else if (sides == "left") {
+      
       z <- qnorm(1 - alpha)
-      lci <- beta - z * se
-      uci <- rep(Inf, length(beta))
+      
+      lci <- exp(beta - z * se)
+      uci <- Inf
+      
+    } else {
+      
+      z <- qnorm(1 - alpha)
+      
+      lci <- 0
+      uci <- exp(beta + z * se)
+      
     }
-    
-    lci <- exp(lci)
-    uci <- exp(uci)
     
   } else {
     
-    if (sides != "two.sided")
-      warning("Profile likelihood intervals are always two-sided.")
+    if (sides != "two.sided") {
+      warning(
+        "Profile likelihood intervals are always two-sided."
+      )
+    }
     
-    ci  <- exp(confint(x, level = conf.level))
-    ci  <- ci[coef_names, , drop = FALSE]
+    ci <- exp(
+      confint(
+        x,
+        level = conf.level
+      )
+    )
+    
+    ci <- ci[rownames(coefTable), , drop = FALSE]
+    
     lci <- ci[, 1]
     uci <- ci[, 2]
+    
   }
   
-  result <- data.frame(
-    term      = coef_names,
-    estimate  = beta,
-    std.error = se,
-    p.value   = pval,
-    OR        = OR,
-    OR.lci    = lci,
-    OR.uci    = uci,
+  coefficients <- data.frame(
+    term = rownames(coefTable),
+    estimate = estimate,
+    logEstimate = beta,
+    stdError = se,
+    pValue = pval,
+    lci = lci,
+    uci = uci,
     row.names = NULL
   )
   
   res <- list(
-    coefficients = result,
-    call = x$call,
+    coefficients = coefficients,
+    source = "glm",
     method = method,
     conf.level = conf.level,
     sides = sides,
-    nobs = nobs(x)
+    nObs = nobs(x),
+    call = x$call
   )
   
   class(res) <- "OddsRatio"
-  return(res)
+  
+  res
+  
 }
 
 
-
 #' @rdname oddsRatio
+#' @param digits Number of digits used for printing.
 #' @export
 print.OddsRatio <- function(x, digits = 3, ...) {
   
   cat("\nCall:\n")
   print(x$call)
   
-  cat("\nOdds Ratios (",
-      x$conf.level * 100,
-      "% ",
-      x$sides,
-      " CI, method = ",
-      x$method,
-      "):\n\n", sep = "")
+  cat(
+    "\nOdds Ratios (",
+    x$conf.level * 100,
+    "% ",
+    x$sides,
+    " CI, method = ",
+    x$method,
+    "):\n\n",
+    sep = ""
+  )
   
   tab <- x$coefficients
   
-  tab_print <- data.frame(
-    OR      = round(tab$OR, digits),
-    LCI     = round(tab$OR.lci, digits),
-    UCI     = round(tab$OR.uci, digits),
-    p.value = signif(tab$p.value, digits)
+  tabPrint <- data.frame(
+    estimate = round(tab$estimate, digits),
+    lci = round(tab$lci, digits),
+    uci = round(tab$uci, digits),
+    pValue = signif(tab$pValue, digits)
   )
   
-  rownames(tab_print) <- tab$term
+  rownames(tabPrint) <- tab$term
   
-  print(tab_print)
+  print(tabPrint)
+  
   cat("\n")
   
   invisible(x)
-}
-
-
-
-
-#' @rdname oddsRatio
-#' @export
-#' 
-#' @param intercept Confidence level for interval estimation.
-plot.OddsRatio <- function(x, intercept=FALSE, ...){
-  
-  # , group=NULL, subset = NULL
-  
-  if(!intercept)
-    # x$res <- x$res[rownames(x$res)!="(Intercept)", ]
-    x$res <- x$res[!grepl("(Intercept)", rownames(x$res)), ]
-  
-  args <- list(...)
-  
-  # here the defaults
-  args.errbars1 <- list(from=cbind(x$res$or, x$res$or.lci, x$res$or.uci))
-  
-  # overwrite with userdefined values
-  if (!is.null(args[["args.errbars"]])) {
-    args.errbars1[names(args[["args.errbars"]])] <- args[["args.errbars"]][]
-    args[["args.errbars"]] <- NULL
-  }
-  
-  # here the defaults for PlotDot
-  args.plotdot1 <- list(x=x$res$or, args.errbars=args.errbars1, labels=rownames(x$res),
-                        panel.first=quote(abline(v=1, col="grey")))
-  
-  if (!is.null(args)) {
-    args.plotdot1[names(args)] <- args
-  }
-  
-  do.call(aurora::plotDot, args=args.plotdot1)
   
 }
 
 
 
+# == internal helper functions ==============================================
+
+.oddsRatioWald <- function(
+    x,
+    conf.level,
+    sides
+) {
+  
+  if (any(x == 0))
+    x <- x + 0.5
+  
+  logEstimate <- (
+    log(x[1, 1]) +
+      log(x[2, 2]) -
+      log(x[1, 2]) -
+      log(x[2, 1])
+  )
+  
+  estimate <- exp(logEstimate)
+  
+  if (is.na(conf.level))
+    return(estimate)
+  
+  se <- sqrt(sum(1 / x))
+  
+  alpha <- 1 - conf.level
+  
+  if (sides == "two.sided") {
+    
+    z <- qnorm(1 - alpha / 2)
+    
+    lci <- exp(logEstimate - z * se)
+    uci <- exp(logEstimate + z * se)
+    
+  } else if (sides == "left") {
+    
+    z <- qnorm(1 - alpha)
+    
+    lci <- exp(logEstimate - z * se)
+    uci <- Inf
+    
+  } else {
+    
+    z <- qnorm(1 - alpha)
+    
+    lci <- 0
+    uci <- exp(logEstimate + z * se)
+    
+  }
+  
+  c(
+    estimate = estimate,
+    lci = lci,
+    uci = uci
+  )
+  
+}
 
 
 
-# move to ModTools!
-# oddsRatio.zeroinfl <- function (x, conf.level = NULL, digits = 3, ...) {
-#   
-#   if(is.null(conf.level)) conf.level <- 0.95
-#   
-#   d.res <- data.frame(summary(x)$coefficients$zero)
-#   names(d.res)[c(2, 4)] <- c("Std. Error", "Pr(>|z|)")
-#   
-#   d.res$or <- exp(d.res$Estimate)
-#   d.res$or.lci <- exp(d.res$Estimate + qnorm(0.025) * d.res$"Std. Error")
-#   d.res$or.uci <- exp(d.res$Estimate + qnorm(0.975) * d.res$"Std. Error")
-#   d.res["(Intercept)", c("or", "or.lci", "or.uci")] <- NA
-#   d.res$sig <- format(as.character(cut(d.res$"Pr(>|z|)", breaks = c(0,
-#                                                                     0.001, 0.01, 0.05, 0.1, 1), include.lowest = TRUE, labels = c("***",
-#                                                                                                                                   "**", "*", ".", " "))), justify = "left")
-#   d.res$"Pr(>|z|)" <- fm(d.res$"Pr(>|z|)", fmt="p")
-#   d.res["(Intercept)", "Pr(>|z|)"] <- "NA"
-#   d.res["(Intercept)", " "] <- ""
-#   d.print <- data.frame(lapply(d.res[, 5:7], fm, digits=digits),
-#                         p.value = d.res[,4], sig = d.res[, 8], stringsAsFactors = FALSE)
-#   
-#   rownames(d.print) <- rownames(d.res)
-#   res <- list(or = d.print, call = x$call,
-#               BrierScore = BrierScore(resp=(model.response(model.frame(x)) > 0) * 1L,
-#                                       pred=predict(x, type="zero")),
-#               PseudoR2 = PseudoR2(x, which="all"), res=d.res)
-#   
-#   class(res) <- "OddsRatio"
-#   
-#   return(res)
-# }
-# 
+.oddsRatioExact <- function(
+    x,
+    conf.level,
+    sides
+) {
+  
+  alternative <- switch(
+    sides,
+    "two.sided" = "two.sided",
+    "left" = "less",
+    "right" = "greater"
+  )
+  
+  fit <- fisher.test(
+    x,
+    conf.int = !is.na(conf.level),
+    conf.level = conf.level,
+    alternative = alternative
+  )
+  
+  estimate <- unname(fit$estimate)
+  
+  if (is.na(conf.level))
+    return(estimate)
+  
+  c(
+    estimate = estimate,
+    lci = fit$conf.int[1],
+    uci = fit$conf.int[2]
+  )
+  
+}
 
+
+
+.oddsRatioMidP <- function(
+    x,
+    conf.level,
+    sides,
+    interval
+) {
+  
+  a1 <- x[1, 1]
+  a0 <- x[1, 2]
+  b1 <- x[2, 1]
+  b0 <- x[2, 2]
+  
+  .mue <- function(or) {
+    
+    mm <- matrix(
+      c(a1, a0, b1, b0),
+      nrow = 2,
+      byrow = TRUE
+    )
+    
+    fisher.test(
+      mm,
+      or = or,
+      alternative = "less"
+    )$p.value -
+      fisher.test(
+        mm,
+        or = or,
+        alternative = "greater"
+      )$p.value
+    
+  }
+  
+  .midp <- function(or) {
+    
+    mm <- matrix(
+      c(a1, a0, b1, b0),
+      nrow = 2,
+      byrow = TRUE
+    )
+    
+    pLower <- fisher.test(
+      mm,
+      or = or,
+      alternative = "less"
+    )$p.value
+    
+    pUpper <- fisher.test(
+      mm,
+      or = or,
+      alternative = "greater"
+    )$p.value
+    
+    0.5 * (pLower - pUpper + 1)
+    
+  }
+  
+  estimate <- uniroot(
+    .mue,
+    interval = interval
+  )$root
+  
+  if (is.na(conf.level))
+    return(estimate)
+  
+  alpha <- 1 - conf.level
+  
+  lci <- uniroot(
+    function(or) {
+      1 - .midp(or) - alpha / 2
+    },
+    interval = interval
+  )$root
+  
+  uci <- 1 / uniroot(
+    function(or) {
+      .midp(1 / or) - alpha / 2
+    },
+    interval = interval
+  )$root
+  
+  c(
+    estimate = estimate,
+    lci = lci,
+    uci = uci
+  )
+  
+}
 
 

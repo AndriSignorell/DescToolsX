@@ -51,7 +51,7 @@
 #' @return A numeric matrix representing the contingency table, with dimnames
 #'   set according to \code{levels} (if supplied) or derived from the input.
 #'
-#' @seealso [isConfusionTable()], [raterFrame()], [pairApply()]
+#' @seealso \code{\link{isConfusionTable}()}, \code{\link{raterFrame}()}, [pairApply()]
 #'
 #' @examples
 #' A <- c("pos","neg","pos","inc")

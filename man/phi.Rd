@@ -60,8 +60,6 @@ Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
 \code{\link[=lambda]{lambda()}},
-\code{\link[=oddsRatio]{oddsRatio()}},
-\code{\link[=relRisk]{relRisk()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

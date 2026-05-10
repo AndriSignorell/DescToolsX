@@ -133,7 +133,7 @@ normalizeToConfusion(
 
 }
 \seealso{
-\code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[bedrock:pairApply]{pairApply()}}
+\code{\link{isConfusionTable}()}, \code{\link{raterFrame}()}, \code{\link[bedrock:pairApply]{pairApply()}}
 
 Other confusion:
 \code{\link[=cStat]{cStat()}},
