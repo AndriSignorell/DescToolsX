@@ -17,7 +17,7 @@
 \method{desc}{table}(
   x,
   conf.level = 0.95,
-  prop = "rows",
+  prop = NULL,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -27,7 +27,7 @@
 \method{desc}{matrix}(
   x,
   conf.level = 0.95,
-  prop = "rows",
+  prop = NULL,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -37,7 +37,7 @@
 \method{desc}{array}(
   x,
   conf.level = 0.95,
-  prop = "rows",
+  prop = NULL,
   main = NULL,
   verbose = NULL,
   plotit = NULL,

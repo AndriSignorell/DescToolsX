@@ -50,8 +50,8 @@ NULL
 
 
 #' @keywords internal
-.descQQ <- function(x, y) {
-  desc(table(x, y))
+.descQQ <- function(x, y, ...) {
+  desc(table(x, y), ...)
 }
 
 
@@ -66,7 +66,6 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
   print.Desc.table(x$res, print_header=FALSE, ...)
 
 }
-
 
 
 #' @exportS3Method

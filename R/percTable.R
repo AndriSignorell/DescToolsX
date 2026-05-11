@@ -120,7 +120,6 @@
 #' 
  
 
-#' @rdname percTable
 #' @family freq.tables
 #' @concept frequency-analysis
 #' @concept descriptive-statistics
@@ -225,8 +224,6 @@ percTable.table <- function(x, freq=TRUE,
 
 
 
-#' @rdname percTable
-#' @export
 #' @rdname percTable
 #' @export
 print.PercTable <- function(x,

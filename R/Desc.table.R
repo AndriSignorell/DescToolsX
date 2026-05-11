@@ -141,43 +141,6 @@ desc.table <- function(x, conf.level = 0.95, prop = NULL,
                        main = NULL, verbose = NULL, plotit = NULL,
                        ...) {
 
-  
-  .chisq_independence <- function(x, correct = FALSE) {
-    
-    d <- dim(x)
-    n <- sum(x)
-    
-    # expected values under complete independence
-    marg_probs <- lapply(seq_along(d), function(j) {
-      prop.table(margin.table(x, j))
-    })
-    E <- Reduce(function(a, b) outer(a, b), marg_probs) * n
-    
-    O <- x
-    df <- prod(d - 1)
-    
-    stat <- if (correct && identical(d, c(2L, 2L))) {
-      sum((pmax(abs(O - E) - 0.5, 0))^2 / E)
-    } else {
-      sum((O - E)^2 / E)
-    }
-    
-    structure(
-      list(
-        statistic = c("X-squared" = stat),
-        parameter = c("df" = df),
-        p.value   = pchisq(stat, df, lower.tail = FALSE),
-        method    = if (correct && identical(d, c(2L, 2L)))
-          "Pearson's Chi-squared test with Yates' continuity correction"
-        else
-          "Pearson's Chi-squared test for independence",
-        expected  = E,
-        approx.ok = !any(E < 5)
-      ),
-      class = "htest"
-    )
-  }
-
   # resolve verbose: function arg > global option > hardcoded default
   verbose <- .checkVerbose(verbose)
   
@@ -233,6 +196,9 @@ desc.table <- function(x, conf.level = 0.95, prop = NULL,
     },
     relRisk2r = if (ttype == "t2x2") {
       relRisk(t(revX(x, margin = 1)), conf.level = conf.level, method = "wald", delta = 0)
+    },
+    cohenH = if (ttype == "t2x2") {
+      cohenH(x, conf.level = conf.level)
     },
     assocs = if (ttype %in% c("t2x2", "trxc")) {
       assocsTab(x, conf.level = conf.level, verbose=verbose) 
@@ -382,31 +348,29 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
         if (x$meta$verbose %in% c("2", "3")) { # print only with verbosity > 1
           cat("", .captOut(x$mcnemar.test)[5], "\n", sep = "")
         }
-        
-        # if (!x$approx.ok) {
-        #   .ChisqWarning()
-        # }
-        
+
         if (x$meta$verbose %in% c("2", "3")) { # print only with verbosity > 1
           cat("\n")
           if (x$meta$verbose == "2") {
             m <- ftable(fm(rbind(
               "odds ratio    " = x$or,
-              "rel. risk (col1)  " = x$relrisk1,
-              "rel. risk (col2)  " = x$relrisk2,
-              "prop. diff " = x$propdiff
-            ), digits = 3, nsmall = 3))
+              "rel. risk (col1)  " = x$relRisk1,
+              "rel. risk (col2)  " = x$relRisk2,
+              "prop. diff        " = x$propdiff
+            ), digits = 3, nsmall = 3, align="right"))
           } else {
             m <- ftable(fm(rbind(
               "odds ratio    " = x$or,
-              "rel. risk (col1)  " = x$relrisk1,
-              "rel. risk (col2)  " = x$relrisk2,
-              "rel. risk (row1)  " = x$relrisk1r,
-              "rel. risk (row2)  " = x$relrisk2r,
-              "prop. diff        " = x$propdiff
-            ), digits = 3, nsmall = 3))
+              "rel. risk (col1)  " = x$relRisk1,
+              "rel. risk (col2)  " = x$relRisk2,
+              "rel. risk (row1)  " = x$relRisk1r,
+              "rel. risk (row2)  " = x$relRisk2r,
+              "prop. diff        " = x$propdiff,
+              "Cramer's V        " = x$assocs[1,],
+              "Cohen's H         " = x$cohenH
+            ), digits = 3, nsmall = 3, align = "right"))
           }
-          attr(m, "col.vars")[[1]][1] <- "estimate"
+          attr(m, "col.vars")[[1]][1] <- "est"
           txt <- capture.output(print(m))
           txt[1] <- paste(txt[1], footnote, sep = "")
           cat(txt, sep = "\n")
@@ -459,10 +423,12 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
              },
              "3" = {
                cat("\n")
-               txt <- capture.output(x$assocs)
+               txt <- capture.output(
+                        x$assocs |> fm(fmt="num.sty", na.form="-  ") |> 
+                          as.data.frame() |> print(print.gap=2)
+                      )
                txt[1] <- paste(txt[1], footnote, sep = "")
                cat(txt, sep = "\n")
-               cat("\n")
              }
       )
       
@@ -519,4 +485,43 @@ plot.Desc.table <- function(x, which = 1, ...) {
   
 }
 
+
+
+# == internal helper functions =================================================
+
+.chisq_independence <- function(x, correct = FALSE) {
+  
+  d <- dim(x)
+  n <- sum(x)
+  
+  # expected values under complete independence
+  marg_probs <- lapply(seq_along(d), function(j) {
+    prop.table(margin.table(x, j))
+  })
+  E <- Reduce(function(a, b) outer(a, b), marg_probs) * n
+  
+  O <- x
+  df <- prod(d - 1)
+  
+  stat <- if (correct && identical(d, c(2L, 2L))) {
+    sum((pmax(abs(O - E) - 0.5, 0))^2 / E)
+  } else {
+    sum((O - E)^2 / E)
+  }
+  
+  structure(
+    list(
+      statistic = c("X-squared" = stat),
+      parameter = c("df" = df),
+      p.value   = pchisq(stat, df, lower.tail = FALSE),
+      method    = if (correct && identical(d, c(2L, 2L)))
+        "Pearson's Chi-squared test with Yates' continuity correction"
+      else
+        "Pearson's Chi-squared test for independence",
+      expected  = E,
+      approx.ok = !any(E < 5)
+    ),
+    class = "htest"
+  )
+}
 

@@ -108,8 +108,9 @@ NULL
   auc <- if (k == 2L) cStat(xOk, yOk) else NULL
   
   # ── 6. Kendall Tau-b ─────────────────────────────────────────────────────────
-  tauB   <- cor(as.integer(yOk), xOk, method = "kendall")
-  tauBCI <- corCI(tauB, n = nValid, conf.level = conf.level)
+  tauB   <- kendallTauB(as.integer(yOk), xOk, conf.level = conf.level)
+  tauBCI <- tauB
+  tauB <- tauB[1]
   tauBP  <- cor.test(as.integer(yOk), xOk,
                      method = "kendall", exact = FALSE)$p.value
   
@@ -211,10 +212,10 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
   }
   
   
-  fmtR <- function(r, ci, p)
+  fmtR <- function(r, ci, p){
     sprintf("%6.3f  (%6.3f, %6.3f)  %s  %s",
-            r, ci["lwr.ci"], ci["upr.ci"], .stars(p), .rLabel(r))
-  
+            r, ci[2], ci[3], .stars(p), .rLabel(r))
+  }
 
   # ── Kruskal-Wallis + eta² ────────────────────────────────────────────────────
   cat("Kruskal-Wallis rank sum test:\n")

@@ -98,7 +98,7 @@ assocsTab <- function(x, conf.level = 0.95, verbose = 2){
 #                 , "Uncertainty Coeff. C|R" = uncertCoef(x, direction="column", conf.level=conf.level)
                  , "Uncertainty Coeff. R|C" = uncertCoef(x, direction="row", conf.level=conf.level)
                  , "Uncertainty Coeff. sym" = uncertCoef(x, direction="sym", conf.level=conf.level)
-                 # , "Mutual Information" = c(MutInf(x),NA,NA)
+                 , "Mutual Information" = c(mutInf(x),NA,NA)
     ) }
   
   if(verbose == 3)

@@ -268,7 +268,7 @@ print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
 
   fmtR <- function(r, ci, p)
     sprintf("%6.3f  (%6.3f, %6.3f)  %s  %s",
-            r, ci["lwr.ci"], ci["upr.ci"], .stars(p), .rLabel(r))
+            r, ci["lci"], ci["uci"], .stars(p), .rLabel(r))
 
   cat("\n")
 

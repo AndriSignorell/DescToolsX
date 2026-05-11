@@ -113,13 +113,21 @@ plot.Desc.nq <- function(x, which = NULL, ...){
   
   switch(as.character(which %||% "1"),
          "1" = {
-           boxplot(x$data$y ~ x$data$x, ...)
+           boxplot(x$data$y ~ x$data$x, 
+                   xlab=x$meta$xname, ylab=x$meta$yname, ...)
            
-           abline(h=mean(x$data$y, na.rm=TRUE), col="grey", lty="dotted")
+           grid(nx=NA, ny=NULL)
            
-           points(x=seq(length(unique(x$data$x))), 
+           abline(h=mean(x$data$y, na.rm=TRUE), col="darkblue", lty="dashed", lwd=1)
+           
+           points(x=seq(ncol(x$res$tab)), 
                   y=tapply(x$data$y, x$data$x, mean, na.rm=TRUE),
-                  pch=4)
+                  pch=4, col="darkblue", cex=1.5)
+           
+           mtext(text=gettextf("n = %s", 
+                               fm(tapply(x$data$y, x$data$x, 
+                                      function(z) sum(!is.na(z))), fmt="abs.sty")), 
+                 side = 3, at=seq(ncol(x$res$tab)), cex=0.8, line = 1)
            
          },
          "2" ={
