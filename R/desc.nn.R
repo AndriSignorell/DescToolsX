@@ -332,7 +332,9 @@ plot.Desc.nn <- function(x, which = 1, verbose = NULL, ...) {
     
     switch(as.character(j %||% "1"),
            "1" = {
-             plot(x$data$y ~ x$data$x, ...,type="n")
+             plot(x$data$y ~ x$data$x, ..., 
+                  xlab=x$meta$xname, ylab=x$meta$yname,
+                  type="n")
              
              points(x=x$data$x, y=x$data$y, ...)
              

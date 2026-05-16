@@ -68,10 +68,8 @@ See \code{\link{gini}}, \code{\link{atkinson}} and
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=divCoef]{divCoef()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=mutInf]{mutInf()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
 \code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}

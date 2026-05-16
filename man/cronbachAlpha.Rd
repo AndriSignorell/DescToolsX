@@ -75,7 +75,6 @@ Cohen, J. (1960), A coefficient of agreement for nominal scales.
 
 Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},
-\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=kendallW]{kendallW()}},

@@ -50,7 +50,6 @@ mse(fit)
 \code{\link{mean}}
 
 Other error.measures:
-\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=nmae]{nmae()}},

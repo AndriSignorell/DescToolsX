@@ -52,11 +52,9 @@ Journal of Economic Theory.
 \seealso{
 Other inequality:
 \code{\link[=divCoef]{divCoef()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=mutInf]{mutInf()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
 \code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}

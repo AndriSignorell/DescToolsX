@@ -1,226 +1,252 @@
 
 #' Cohen's Kappa and Weighted Kappa
-#' 
-#' Computes the agreement rates Cohen's kappa and weighted kappa and their
-#' confidence intervals.
-#' 
+#'
+#' Computes Cohen's kappa and weighted kappa as measures of inter-rater
+#' agreement, together with asymptotic confidence intervals.
+#'
+#' @details
 #' Cohen's kappa is the diagonal sum of the (possibly weighted) relative
-#' frequencies, corrected for expected values and standardized by its maximum
-#' value. \cr The equal-spacing weights (see Cicchetti and Allison 1971) are
-#' defined by \deqn{1 - \frac{|i - j|}{r - 1}} \code{r} being the number of
-#' columns/rows, and the Fleiss-Cohen weights by \deqn{1 - \frac{(i - j)^2}{(r
-#' - 1)^2}} The latter attaches greater importance to closer disagreements.\cr
-#' \cr Data can be passed to the function either as matrix or data.frame in
-#' \code{x}, or as two numeric vectors \code{x} and \code{y}. In the latter
-#' case \code{table(x, y, ...)} is calculated. Thus \code{NA}s are handled the
-#' same way as \code{\link{table}} does. Note that tables are by default
-#' calculated \bold{without} NAs. The specific argument \code{useNA} can be
-#' passed via the ... argument.\cr The vector interface \code{(x, y)} is only
-#' supported for the calculation of unweighted kappa. This is because we cannot
-#' ensure a safe construction of a confusion table for two factors with
-#' different levels, which is independent of the order of the levels in
-#' \code{x} and \code{y}. So weights might lead to inconsistent results. The
-#' function will raise an error in this case.
-#' 
-#' @param x can either be a numeric vector or a confusion matrix. In the latter
-#' case x must be a square matrix.
-#' @param y \code{NULL} (default) or a vector with compatible dimensions to
-#' \code{x}. If \code{y} is provided, \code{table(x, y, \dots)} is calculated.
-#' In order to get a square matrix, \code{x} and \code{y} are coerced to
-#' factors with synchronized levels. (Note, that the vector interface can not
-#' be used together with weights.)
-#' @param weights either one out of \code{"Unweighted"} (default),
-#' \code{"Equal-Spacing"}, \code{"Fleiss-Cohen"}, which will calculate the
-#' weights accordingly, or a user-specified matrix having the same dimensions
-#' as x containing the weights for each cell.
-#' @param conf.level confidence level of the interval. If set to \code{NA}
-#' (which is the default) no confidence intervals will be calculated.
-#' @param \dots further arguments are passed to the function
-#' \code{\link{table}}, allowing i.e. to set \code{useNA}. This refers only to
-#' the vector interface.
-#' 
-#' @return if no confidence intervals are requested: the estimate as numeric
-#' value\cr\cr else a named numeric vector with 3 elements \item{est}{estimate}
-#' \item{lci}{lower confidence interval} \item{uci}{upper confidence interval}
-#' @author David Meyer <david.meyer@@r-project.org>, some changes and tweaks
-#' Andri Signorell <andri@@signorell.net>
-#' 
-#' @seealso \code{\link{cronbachAlpha}}, \code{\link{kappaM}},
-#' \code{\link{krippAlpha}}
-#' 
-#' @references Cohen, J. (1960) A coefficient of agreement for nominal scales.
-#' \emph{Educational and Psychological Measurement}, 20, 37-46.
-#' 
-#' Everitt, B.S. (1968), Moments of statistics kappa and weighted kappa.
-#' \emph{The British Journal of Mathematical and Statistical Psychology}, 21,
-#' 97-103.
-#' 
-#' Fleiss, J.L., Cohen, J., and Everitt, B.S. (1969), Large sample standard
-#' errors of kappa and weighted kappa. \emph{Psychological Bulletin}, 72,
-#' 332-327.
-#' 
-#' Cicchetti, D.V., Allison, T. (1971) A New Procedure for Assessing
-#' Reliability of Scoring EEG Sleep Recordings \emph{American Journal of EEG
-#' Technology}, 11, 101-109.
-#' 
+#' frequencies, corrected for chance agreement and standardised by its
+#' maximum value.
+#'
+#' The equal-spacing weights (Cicchetti & Allison, 1971) are defined as
+#' \deqn{1 - \frac{|i - j|}{r - 1}}
+#' and the Fleiss-Cohen weights as
+#' \deqn{1 - \frac{(i - j)^2}{(r - 1)^2}}
+#' where \eqn{r} is the number of rows/columns.  The Fleiss-Cohen weights
+#' attach greater importance to closer disagreements.
+#'
+#' Data can be passed either as a square confusion matrix (or data frame)
+#' in \code{x}, or as two vectors \code{x} and \code{y}, in which case
+#' \code{table(x, y, \dots)} is computed internally.  Note that the vector
+#' interface supports \strong{unweighted kappa only}: the function raises
+#' an error if \code{weights} is not \code{"unweighted"} and \code{y} is
+#' supplied, because the level ordering of two independent factors cannot
+#' be guaranteed to be consistent when constructing the confusion table.
+#'
+#' Missing values are handled as \code{\link{table}} does — excluded by
+#' default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
+#'
+#' @param x        A square confusion matrix (or data frame), or a
+#'   categorical vector when \code{y} is provided.
+#' @param y        \code{NULL} (default) or a categorical vector with
+#'   compatible dimensions to \code{x}.  When supplied,
+#'   \code{table(x, y, \dots)} is computed.  The vector interface is
+#'   available for unweighted kappa only (see Details).
+#' @param weights  Either a character string selecting a built-in weight
+#'   scheme — \code{"unweighted"} (default), \code{"equal-spacing"}, or
+#'   \code{"fleiss-cohen"} — or a numeric matrix with the same dimensions
+#'   as \code{x} supplying user-defined weights for each cell.
+#' @param conf.level Confidence level of the interval.  A single numeric
+#'   value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
+#'   point estimate.
+#' @param sides    A character string specifying the side of the interval:
+#'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
+#'   Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
+#'   \code{"right"} sets \code{lci = -Inf}.  Ignored when
+#'   \code{conf.level = NA}.
+#' @param ...      Further arguments passed to \code{\link{table}} (vector
+#'   interface only), e.g. \code{useNA}.
+#'
+#' @return
+#' If \code{conf.level = NA}: a single numeric value (kappa).
+#'
+#' If \code{conf.level} is specified: a named numeric vector with elements
+#' \describe{
+#'   \item{\code{est}}{Kappa estimate.}
+#'   \item{\code{lci}}{Lower confidence bound.}
+#'   \item{\code{uci}}{Upper confidence bound.}
+#' }
+#'
+#' @note
+#' Based on code by David Meyer, adapted to conform to package standards.
+#'
+#' @references
+#' Cohen, J. (1960). A coefficient of agreement for nominal scales.
+#'   \emph{Educational and Psychological Measurement}, \emph{20}(1),
+#'   37–46.
+#'
+#' Everitt, B. S. (1968). Moments of statistics kappa and weighted kappa.
+#'   \emph{The British Journal of Mathematical and Statistical Psychology},
+#'   \emph{21}(1), 97–103.
+#'
+#' Fleiss, J. L., Cohen, J., & Everitt, B. S. (1969). Large sample
+#'   standard errors of kappa and weighted kappa.
+#'   \emph{Psychological Bulletin}, \emph{72}(5), 323–327.
+#'
+#' Cicchetti, D. V., & Allison, T. (1971). A new procedure for assessing
+#'   reliability of scoring EEG sleep recordings.
+#'   \emph{American Journal of EEG Technology}, \emph{11}(3), 101–109.
+#'
+#' @seealso \code{\link{kappaM}}, \code{\link[bedrock]{pairApply}}
+#'
+#' @family topic.agreement
+#' @concept agreement
+#' @concept inter-rater-reliability
+#' @concept association-measures
+#'
 #' @examples
-#' 
-#' 
-#' # from Bortz et. al (1990) Verteilungsfreie Methoden in der Biostatistik, Springer, pp. 459
+#' # from Bortz et al. (1990), p. 459
 #' m <- matrix(c(53,  5, 2,
 #'               11, 14, 5,
-#'                1,  6, 3), nrow=3, byrow=TRUE,
-#'             dimnames = list(rater1 = c("V","N","P"), rater2 = c("V","N","P")) )
-#' 
-#' # confusion matrix interface
-#' cohenKappa(m, weight="Unweighted")
-#' 
-#' # vector interface
-#' x <- bedrock::untable(m)
-#' cohenKappa(x$rater1, x$rater2, weight="Unweighted")
-#' 
-#' # pairwise Kappa
-#' rating <- data.frame(
-#'   rtr1 = c(4,2,2,5,2, 1,3,1,1,5, 1,1,2,1,2, 3,1,1,2,1, 5,2,2,1,1, 2,1,2,1,5),
-#'   rtr2 = c(4,2,3,5,2, 1,3,1,1,5, 4,2,2,4,2, 3,1,1,2,3, 5,4,2,1,4, 2,1,2,3,5),
-#'   rtr3 = c(4,2,3,5,2, 3,3,3,4,5, 4,4,2,4,4, 3,1,1,4,3, 5,4,4,4,4, 2,1,4,3,5),
-#'   rtr4 = c(4,5,3,5,4, 3,3,3,4,5, 4,4,3,4,4, 3,4,1,4,5, 5,4,5,4,4, 2,1,4,3,5),
-#'   rtr5 = c(4,5,3,5,4, 3,5,3,4,5, 4,4,3,4,4, 3,5,1,4,5, 5,4,5,4,4, 2,5,4,3,5),
-#'   rtr6 = c(4,5,5,5,4, 3,5,4,4,5, 4,4,3,4,5, 5,5,2,4,5, 5,4,5,4,5, 4,5,4,3,5)
-#' )
-#' 
-#' pairApply(rating, FUN=cohenKappa, symmetric=TRUE)
-#' 
-#' # Weighted Kappa
-#' cats <- c("<10%", "11-20%", "21-30%", "31-40%", "41-50%", ">50%")
-#' m <- matrix(c(5,8,1,2,4,2, 3,5,3,5,5,0, 1,2,6,11,2,1,
-#'               0,1,5,4,3,3, 0,0,1,2,5,2, 0,0,1,2,1,4), nrow=6, byrow=TRUE,
-#'             dimnames = list(rater1 = cats, rater2 = cats) )
-#' cohenKappa(m, weight="Equal-Spacing")
-#' 
-#' 
-#' # supply an explicit weight matrix
-#' ncol(m)
-#' (wm <- outer(1:ncol(m), 1:ncol(m), function(x, y) {
-#'         1 - ((abs(x-y)) / (ncol(m)-1)) } ))
-#' cohenKappa(m, weight=wm, conf.level=0.95)
-#' 
-#' 
-#' # however, Fleiss, Cohen and Everitt weight similarities
-#' fleiss <- matrix(c(
-#'   106, 10,  4,
-#'   22,  28, 10,
-#'    2,  12,  6
-#'   ), ncol=3, byrow=TRUE)
-#' 
-#' #Fleiss weights the similarities
-#' weights <- matrix(c(
-#'  1.0000, 0.0000, 0.4444,
-#'  0.0000, 1.0000, 0.6666,
-#'  0.4444, 0.6666, 1.0000
-#'  ), ncol=3)
-#' 
-#' cohenKappa(fleiss, weights)
-#' 
-#' 
-#' # using the formula interface
-#' d.long <- data.frame(
-#'   subj = c("1", "2", "3", "4", "5", "1", "2", "3", "4", "5", 
-#'            "1", "2", "3", "4", "5", "1", "2", "3", "4", "5"), 
-#'   rater = c("rtr1", "rtr1", "rtr1", "rtr1", "rtr1", "rtr2", 
-#'             "rtr2", "rtr2", "rtr2", "rtr2", "rtr3", "rtr3", 
-#'             "rtr3", "rtr3", "rtr3", "rtr4", "rtr4", "rtr4", 
-#'             "rtr4", "rtr4"), 
-#'   rat = factor(c("V","V","V","V","P","V","N","V","V","P","V",
-#'                  "P","V","V","P","V","V","V","V","N")))
-#' 
-#' cohenKappa(raterFrame(rat ~ subj | rater, d.long, 
-#'                       subset=rater %in% c("rtr1","rtr2"))[, -1], 
-#'            conf.level = 0.95)
-#' 
-#' 
-
-
-
-
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept association-measures
-#' @concept descriptive-statistics
+#'                1,  6, 3), nrow = 3, byrow = TRUE,
+#'             dimnames = list(rater1 = c("V","N","P"),
+#'                             rater2 = c("V","N","P")))
 #'
+#' cohenKappa(m)
+#' cohenKappa(m, conf.level = 0.95)
+#'
+#' # vector interface (unweighted only)
+#' x <- bedrock::untable(m)
+#' cohenKappa(x$rater1, x$rater2)
+#'
+#' # equal-spacing weights
+#' cats <- c("<10%","11-20%","21-30%","31-40%","41-50%",">50%")
+#' mw <- matrix(
+#'   c(5,8,1,2,4,2, 3,5,3,5,5,0, 1,2,6,11,2,1,
+#'     0,1,5,4,3,3, 0,0,1,2,5,2, 0,0,1,2,1,4),
+#'   nrow = 6, byrow = TRUE,
+#'   dimnames = list(rater1 = cats, rater2 = cats))
+#'
+#' cohenKappa(mw, weights = "equal-spacing", conf.level = 0.95)
+#'
+#' # user-supplied weight matrix
+#' wm <- outer(1:6, 1:6, function(i, j) 1 - abs(i - j) / (6 - 1))
+#' cohenKappa(mw, weights = wm, conf.level = 0.95)
+#'
+#' # pairwise kappa across raters
+#' rating <- data.frame(
+#'   rtr1 = c(4,2,2,5,2,1,3,1,1,5,1,1,2,1,2,3,1,1,2,1,5,2,2,1,1,2,1,2,1,5),
+#'   rtr2 = c(4,2,3,5,2,1,3,1,1,5,4,2,2,4,2,3,1,1,2,3,5,4,2,1,4,2,1,2,3,5))
+#'
+#' pairApply(rating, FUN = cohenKappa, symmetric = TRUE)
 #'
 #' @export
-cohenKappa <- function (x, y = NULL, 
-                        weights = c("Unweighted", "Equal-Spacing", "Fleiss-Cohen"), 
-                        conf.level = NA, ...) {
+cohenKappa <- function(x,
+                       y          = NULL,
+                       weights    = c("unweighted", "equal-spacing",
+                                      "fleiss-cohen"),
+                       conf.level = NA,
+                       sides      = c("two.sided", "left", "right"),
+                       ...) {
   
-  # originally based on Kappa from library(vcd)
-  # author: David Meyer
-  # see also: kappa in library(psych)
+  # --- conf.level: length check first (before NA test) -----------------
+  if (!is.null(conf.level) &&
+      !(length(conf.level) == 1L && is.atomic(conf.level)))
+    stop("Argument 'conf.level' must be a single value or NA.")
   
-  
-  if (is.character(weights)) 
+  # --- weight argument -------------------------------------------------
+  if (is.matrix(weights)) {
+    
+    # validate user-supplied weight matrix (needs nc, computed below)
+    # validation deferred until after normalizeToConfusion()
+    
+  } else if (is.character(weights)) {
     weights <- match.arg(weights)
-  
-  if (!is.null(y) & !identical(weights, "Unweighted")) {
-    # we can not ensure a reliable weighted kappa for 2 factors with different levels
-    # so refuse trying it... (unweighted is no problem)
-    stop("Vector interface for weighted Kappa is not supported. Provide confusion matrix.")
-  }
-  
-  x <- normalizeToConfusion(x=x, y=y, ...)
-  
-  d <- diag(x)
-  n <- sum(x)
-  nc <- ncol(x)
-  colFreqs <- colSums(x)/n
-  rowFreqs <- rowSums(x)/n
-  
-  kappa <- function(po, pc) {
-    (po - pc)/(1 - pc)
-  }
-  
-  std <- function(p, pc, k, W = diag(1, ncol = nc, nrow = nc)) {
-    sqrt((sum(p * sweep(sweep(W, 1, W %*% colSums(p) * (1 - k)), 
-                        2, W %*% rowSums(p) * (1 - k))^2) - 
-            (k - pc * (1 - k))^2) / crossprod(1 - pc)/n)
-  }
-  
-  if(identical(weights, "Unweighted")) {
-    
-    po <- sum(d)/n
-    pc <- as.vector(crossprod(colFreqs, rowFreqs))
-    k <- kappa(po, pc)
-    s <- as.vector(std(x/n, pc, k))
-    
-  } else {  
-    
-    # some kind of weights defined
-    W <- if (is.matrix(weights)) 
-      weights
-    
-    else if (weights == "Equal-Spacing") 
-      1 - abs(outer(1:nc, 1:nc, "-"))/(nc - 1)
-    
-    else # weights == "Fleiss-Cohen"
-      1 - (abs(outer(1:nc, 1:nc, "-"))/(nc - 1))^2
-    
-    po <- sum(W * x)/n
-    pc <- sum(W * colFreqs %o% rowFreqs)
-    k <- kappa(po, pc)
-    s <- as.vector(std(x/n, pc, k, W))
-  }
-  
-  if (is.na(conf.level)) {
-    res <- k
   } else {
-    ci <- k + c(1, -1) * qnorm((1 - conf.level)/2) * s
-    res <- c(est = k, lci = ci[1], uci = ci[2])
+    stop("Argument 'weights' must be a character string or a numeric matrix.")
   }
   
-  return(res)
+  if (!is.null(y) && !identical(weights, "unweighted"))
+    stop(
+      "The vector interface supports unweighted kappa only. ",
+      "Provide a confusion matrix for weighted kappa."
+    )
   
+  # --- build / validate confusion matrix --------------------------------
+  # normalizeToConfusion() guarantees a square numeric matrix
+  x  <- normalizeToConfusion(x = x, y = y, ...)
+  nc <- ncol(x)   # == nrow(x) guaranteed by normalizeToConfusion
+  
+  # --- guard: empty table ----------------------------------------------
+  n <- sum(x)
+  if (n == 0)
+    stop("Confusion matrix is empty (all cells zero).")
+  
+  # --- shared quantities -----------------------------------------------
+  p        <- x / n                       # relative frequencies
+  colFreqs <- colSums(p)
+  rowFreqs <- rowSums(p)
+  
+  # --- weight matrix W -------------------------------------------------
+  W <- if (is.matrix(weights)) {
+    
+    # validate user-supplied weight matrix
+    if (!is.numeric(weights))
+      stop("Weight matrix must be numeric.")
+    if (!all(dim(weights) == nc))
+      stop("Weight matrix must have the same dimensions as 'x' (",
+           nc, " x ", nc, ").")
+    if (any(!is.finite(weights)))
+      stop("Weight matrix must not contain NA, NaN, or Inf.")
+    if (any(weights < 0 | weights > 1))
+      warning("Weight matrix contains values outside [0, 1]; ",
+              "results may not be interpretable as kappa.")
+    if (!isTRUE(all.equal(weights, t(weights))))
+      warning("Weight matrix is not symmetric; weighted kappa assumes ",
+              "symmetric weights.")
+    weights
+    
+  } else {
+    idx <- outer(seq_len(nc), seq_len(nc), `-`)
+    switch(weights,
+           "unweighted"    = diag(nc),
+           "equal-spacing" = 1 - abs(idx) / (nc - 1),
+           "fleiss-cohen"  = 1 - (idx / (nc - 1))^2
+    )
+  }
+  
+  # --- point estimate --------------------------------------------------
+  po    <- sum(W * p)
+  pc    <- sum(W * (colFreqs %o% rowFreqs))   # = sum(w_ij * p_.j * p_i.)
+  denom <- 1 - pc
+  
+  # guard: degenerate marginal structure where pc ≈ 1
+  if (abs(denom) < sqrt(.Machine$double.eps))
+    stop(
+      "Expected agreement (pc) is too close to 1; kappa is undefined. ",
+      "This occurs with degenerate marginal distributions."
+    )
+  
+  k <- (po - pc) / denom
+  
+  if (is.na(conf.level))
+    return(k)
+  
+  # --- asymptotic SE (Fleiss, Cohen & Everitt 1969) --------------------
+  #
+  # SE = sqrt( [sum_ij p_ij (w_ij - (W %*% p_.j + W^T %*% p_i.) (1-k))^2
+  #             - (k - pc(1-k))^2 ] / (1-pc)^2 / n )
+  #
+  Wc  <- as.vector(W  %*% colFreqs)   # row-wise weighted column marginals
+  Wr  <- as.vector(t(W) %*% rowFreqs) # col-wise weighted row marginals
+  D   <- outer(Wc, Wr, `+`) * (1 - k) # correction matrix
+  num <- sum(p * (W - D)^2) - (k - pc * (1 - k))^2
+  
+  # clamp numerical noise: num should be >= 0 by construction
+  num <- max(num, 0)
+  se  <- sqrt(num / denom^2 / n)
+  
+  # --- CI --------------------------------------------------------------
+  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
+      conf.level <= 0 || conf.level >= 1)
+    stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
+  
+  sides <- match.arg(sides)
+  
+  conf_adj <- if (sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
+  alpha    <- 1 - conf_adj
+  z        <- qnorm(1 - alpha / 2)
+  
+  res <- c(est = k, lci = k - z * se, uci = k + z * se)
+  
+  if (sides == "left")  res[["uci"]] <- Inf
+  if (sides == "right") res[["lci"]] <- -Inf
+  
+  res
 }
+
+
 
 
 # Use as test:

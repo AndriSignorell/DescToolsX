@@ -43,7 +43,6 @@ nmse(x, ref, train.y)
 \code{\link{mean}}, \code{\link{sum}}
 
 Other error.measures:
-\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=mse]{mse()}},

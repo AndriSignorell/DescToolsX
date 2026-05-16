@@ -180,10 +180,8 @@ Methods of measuring the concentration of wealth.
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=divCoef]{divCoef()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
-\code{\link[=mutInf]{mutInf()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
 \code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}

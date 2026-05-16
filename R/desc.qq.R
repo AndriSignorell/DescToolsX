@@ -10,6 +10,7 @@
 #'
 #' @param x A categorical variable.
 #' @param y A categorical variable.
+#' @param ... Further arguments (currently not used).
 #'
 #' @details
 #' This function is a wrapper around \code{\link{desc.table}} applied to
@@ -45,7 +46,7 @@
 #' @concept association-measures
 #'
 #' @rdname desc.qq
-#' @usage .descQQ(x, y)
+#' @usage .descQQ(x, y, ...)
 NULL
 
 

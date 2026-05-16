@@ -73,7 +73,7 @@ as.ym <- function(x){
 #' @export
 as.Date.ym <- function(x, d=1, ...){
   as.Date(gsub("([0-9]{4})([0-9]{2})([0-9]{2})", "\\1-\\2-\\3", 
-               x*100 + d))
+               as.integer(x)*100 + d))
 }
 
 
@@ -118,4 +118,20 @@ addMonths.ym <- function (x, n, ...) {
   return(res)
   
 }
+
+
+#' @export
+`+.ym` <- function(x, y){
+  addMonths(x, y)
+}
+
+#' @export
+`-.ym` <- function(x, y){
+  addMonths(x, -y)
+}
+
+
+
+
+
 

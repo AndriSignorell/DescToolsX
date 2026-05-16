@@ -330,6 +330,54 @@ Where possible, use:
 - df (kept base-R compatible)
 - estimate
 
+
+
+### Design Rule: Missing-value handling (`NA` policy)
+
+Functions should follow standard R semantics for missing values:
+
+- If `na.rm = FALSE` (default) and the input contains `NA` values, the function should generally return `NA` rather than throw an error.
+- If `na.rm = TRUE`, missing values are removed before computation.
+- Functions should only error when missing values make computation structurally impossible (e.g. all observations removed, incompatible dimensions after omission, singular systems caused by complete missingness, etc.).
+- This behaviour should mirror the expectations established by base R summary/statistical functions such as `mean()`, `sd()`, `median()`, and related estimators.
+
+#### Examples
+
+```r
+mean(c(1, NA))
+# NA
+
+mean(c(1, NA), na.rm = TRUE)
+# 1
+```
+
+#### Recommended implementation pattern
+
+#### Univariate input
+
+```r
+if (na.rm)
+  x <- x[!is.na(x)]
+
+if (anyNA(x))
+  return(NA_real_)
+```
+
+#### Multivariate input
+
+```r
+if (na.rm)
+  x <- x[complete.cases(x), , drop = FALSE]
+
+if (anyNA(x))
+  return(NA_real_)
+```
+
+This rule prioritises predictable R-like behaviour over defensive failure for ordinary missing-data situations.
+
+
+
+
 ## 3.5 Method Strings (User Interface)
 
 External options:

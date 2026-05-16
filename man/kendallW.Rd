@@ -110,7 +110,6 @@ Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the 
 
 Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},
-\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},

@@ -4,69 +4,68 @@
 \alias{entropy}
 \title{Shannon Entropy}
 \usage{
-entropy(x, y = NULL, base = 2, ...)
+entropy(x, y = NULL, base = 2, normalize = FALSE, ...)
 }
 \arguments{
-\item{x}{a vector or a matrix of numerical or categorical type. If only x is
-supplied it will be interpreted as contingency table.}
+\item{x}{A vector, table, matrix, or array of counts.}
 
-\item{y}{a vector with the same type and dimension as x. If y is not
-\code{NULL} then the entropy of \code{table(x, y, ...)} will be calculated.}
+\item{y}{An optional second variable used together with
+\code{x} to create a contingency table via
+\code{table(x, y, ...)}.}
 
-\item{base}{base of the logarithm to be used, defaults to 2.}
+\item{base}{Logarithm base.
+Defaults to \code{2} (bits).}
 
-\item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set \code{useNA}.}
+\item{normalize}{Logical.
+If \code{TRUE}, entropy is normalized to the interval
+\eqn{[0,1]}.}
+
+\item{...}{Additional arguments passed to \code{table()}.}
 }
 \value{
-a numeric value.
+A numeric scalar containing the entropy.
 }
 \description{
-Computes Shannon entropy of two variables. The
-entropy quantifies the expected value of the information contained in a
-vector. The mutual information is a quantity that measures the mutual
-dependence of the two random variables.
+Computes the Shannon entropy of a vector, contingency table,
+or matrix.
 }
 \details{
-The Shannon entropy equation provides a way to estimate the average minimum
-number of bits needed to encode a string of symbols, based on the frequency
-of the symbols.\cr It is given by the formula \eqn{H = - \sum(\pi log(\pi))}
-where \eqn{\pi} is the probability of character number i showing up in a
-stream of characters of the given "script".\cr The entropy is ranging from 0
-to Inf.
+Entropy is defined as:
+
+\deqn{
+H(X) = - \sum_i p_i \log_b(p_i)
+}
+
+where \eqn{p_i} are empirical probabilities and
+\eqn{b} is the logarithm base.
+
+Common logarithm bases:
+
+\tabular{ll}{
+base = 2 \tab entropy in bits \cr
+base = exp(1) \tab entropy in nats \cr
+base = 10 \tab entropy in bans
+}
+
+Zero probabilities are ignored in the summation.
 }
 \examples{
-examp <- c(1,3)
-# todo: some more ********
+x <- c("A", "A", "B", "B", "C")
 
+entropy(x)
+
+tab <- matrix(
+  c(10, 20,
+    30, 40),
+  nrow = 2
+)
+
+entropy(tab)
+
+entropy(tab, normalize = TRUE)
 
 }
 \references{
-Shannon, Claude E. (July/October 1948). A Mathematical Theory of
-Communication, \emph{Bell System Technical Journal} 27 (3): 379-423.
-
-Ihara, Shunsuke (1993) \emph{Information theory for continuous systems},
-World Scientific. p. 2. ISBN 978-981-02-0985-8.
+Shannon CE (1948). A Mathematical Theory of Communication.
+Bell System Technical Journal, 27, 379-423.
 }
-\seealso{
-package \pkg{entropy} which implements various estimators of
-entropy
-
-Other inequality:
-\code{\link[=atkinson]{atkinson()}},
-\code{\link[=divCoef]{divCoef()}},
-\code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
-\code{\link[=lc]{lc()}},
-\code{\link[=mutInf]{mutInf()}},
-\code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{descriptive-statistics}
-\concept{inequality}
-\concept{inequality-measures}
-\concept{information-theory}

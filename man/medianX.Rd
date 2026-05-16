@@ -118,9 +118,7 @@ Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=huberM]{huberM()}},
-\code{\link[=modeX]{modeX()}},
-\code{\link[=tukeyBiweight]{tukeyBiweight()}}
+\code{\link[=modeX]{modeX()}}
 }
 \concept{descriptive-statistics}
 \concept{location}

@@ -43,7 +43,6 @@ nmae(x, ref, train.y)
 \code{\link{mean}}, \code{\link{abs}}
 
 Other error.measures:
-\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=mse]{mse()}},

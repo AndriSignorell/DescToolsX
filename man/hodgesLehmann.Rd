@@ -86,10 +86,8 @@ Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
-\code{\link[=huberM]{huberM()}},
 \code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}},
-\code{\link[=tukeyBiweight]{tukeyBiweight()}}
+\code{\link[=modeX]{modeX()}}
 }
 \author{
 Cyril Flurin Moser (Cyril did the lion's share and coded Monahan's

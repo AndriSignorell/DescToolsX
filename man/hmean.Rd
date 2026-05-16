@@ -81,10 +81,8 @@ ed. Ames, \emph{IA: Iowa State University Press }
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=huberM]{huberM()}},
 \code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}},
-\code{\link[=tukeyBiweight]{tukeyBiweight()}}
+\code{\link[=modeX]{modeX()}}
 }
 \concept{confidence-intervals}
 \concept{descriptive-statistics}

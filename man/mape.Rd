@@ -51,7 +51,6 @@ mape(fit)
 }
 \seealso{
 Other error.measures:
-\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mse]{mse()}},
 \code{\link[=nmae]{nmae()}},

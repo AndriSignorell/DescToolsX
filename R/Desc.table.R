@@ -156,7 +156,7 @@ desc.table <- function(x, conf.level = 0.95, prop = NULL,
     "trxc"
   }
   
-  r.chisq <- .chisq_independence(x)
+  r.chisq <- .chisqIndependence(x)
   
   res <- list(
     
@@ -170,12 +170,12 @@ desc.table <- function(x, conf.level = 0.95, prop = NULL,
     conf.level = conf.level,
     chisq.test = r.chisq, 
     chisq.test.cont = if (ttype == "t2x2") {
-                        .chisq_independence(x, correct = TRUE)
+                        .chisqIndependence(x, correct = TRUE)
                       } else { NULL },
     loglik.chisq.test = if (ttype != "tndim") {
                           suppressWarnings(gTest(x))
                         } else { NULL },
-    mh.test = if (ttype %in% c("t2x2", "trxc")) mhChisqTest(x) else NULL,
+    mh.test = if (ttype %in% c("t2x2", "trxc")) mantelTrendTest(x) else NULL,
     fisher.test = if (ttype == "t2x2") fisher.test(x) else NULL,
     mcnemar.test = if (ttype == "t2x2") mcnemar.test(x),
     or = if (ttype == "t2x2") oddsRatio(x, conf.level = conf.level),
@@ -295,11 +295,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
       if (!x$approx.ok) {
         cat(cli::col_cyan("  Note: expected counts < 5 in some cells\n"))
       }
-      
-      # if (!x$approx.ok) {
-      #   .ChisqWarning()
-      # }
-      
+
       print(x$perctab)
       
     } else { # 2-dim tabl *****
@@ -489,7 +485,7 @@ plot.Desc.table <- function(x, which = 1, ...) {
 
 # == internal helper functions =================================================
 
-.chisq_independence <- function(x, correct = FALSE) {
+.chisqIndependence <- function(x, correct = FALSE) {
   
   d <- dim(x)
   n <- sum(x)

@@ -5,12 +5,14 @@
 \alias{.descQQ}
 \title{Describe Relationship: Categorical x by Categorical y}
 \usage{
-.descQQ(x, y)
+.descQQ(x, y, ...)
 }
 \arguments{
 \item{x}{A categorical variable.}
 
 \item{y}{A categorical variable.}
+
+\item{...}{Further arguments (currently not used).}
 }
 \value{
 An object of class \code{"Desc.qq"} inheriting from \code{"Desc"}.

@@ -45,11 +45,9 @@ divCoef(df, d, normalize = TRUE)
 \seealso{
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=mutInf]{mutInf()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
 \code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}

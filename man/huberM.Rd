@@ -2,7 +2,7 @@
 % Please edit documentation in R/huberM.R
 \name{huberM}
 \alias{huberM}
-\title{Safe (generalized) Huber M-Estimator of Location}
+\title{Safe (Generalized) Huber M-Estimator of Location}
 \usage{
 huberM(
   x,
@@ -10,98 +10,118 @@ huberM(
   sides = c("two.sided", "left", "right"),
   method = c("wald", "boot"),
   k = 1.345,
-  mu = median(x),
-  s = mad(x, center = mu),
+  mu = NULL,
+  s = NULL,
   na.rm = FALSE,
   ...
 )
 }
 \arguments{
-\item{x}{numeric vector.}
+\item{x}{A numeric vector of data values.}
 
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence interval will be calculated.}
+\item{conf.level}{Confidence level of the interval.  A single numeric
+value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
+point estimate.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}.  You can specify just the initial letter. \code{"left"}
-would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\item{sides}{A character string specifying the side of the interval:
+\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
+Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
+\code{"right"} sets \code{lci = -Inf}.  Ignored when
+\code{conf.level = NA}.}
 
-\item{method}{The type of confidence interval required. The value should be
-any subset of the values \code{"wald"}, \code{"boot"}.}
+\item{method}{CI method: \code{"wald"} (default) or \code{"boot"}.}
 
-\item{k}{positive factor; the algorithm winsorizes at \code{k} standard
-deviations.}
+\item{k}{Positive tuning constant; the algorithm winsorizes at
+\code{k} standard deviations.  Default \code{1.345}.}
 
-\item{mu}{initial location estimator.}
+\item{mu}{Initial location estimate.  \code{NULL} (default)
+uses \code{median(x)}, computed after \code{na.rm} is applied.}
 
-\item{s}{scale estimator held constant through the iterations.}
+\item{s}{Scale estimate, held constant through the iterations.
+\code{NULL} (default) uses \code{mad(x, center = mu)}, computed
+after \code{na.rm} is applied.}
 
-\item{na.rm}{logical, indicating whether \code{NA} values should be stripped
-before the computation proceeds. Defaults to FALSE.}
+\item{na.rm}{Logical.  Should missing values be removed before
+computation?  Default \code{FALSE}.}
 
-\item{\dots}{the dots are passed to the function
-\code{\link[boot]{boot.ci}}, when confidence intervalls are calculated.}
+\item{...}{Further arguments passed to the bootstrap engine when
+\code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
+\code{ncpus}.  See Details.}
 }
 \value{
-If \code{conf.level} is set to \code{NA} then the result will be
-\item{a}{ single numeric value} and if a \code{conf.level} is provided, a
-named numeric vector with 3 elements: \item{est}{the estimate for location}
-\item{lci}{lower bound of the confidence interval} \item{uci}{upper bound of
-the confidence interval}
+If \code{conf.level = NA}: a single numeric value (the location estimate).
+
+If \code{conf.level} is specified: a named numeric vector with elements
+\item{est}{Huber M-estimate of location.}
+\item{lci}{Lower confidence bound.}
+\item{uci}{Upper confidence bound.}
 }
 \description{
-(Generalized) Huber M-estimator of location with MAD scale, being sensible
-also when the scale is zero where \code{\link[MASS]{huber}()} returns an
-error.
+A (generalized) Huber M-estimator of location with MAD scale that handles
+the degenerate case of zero scale gracefully, where
+\code{\link[MASS]{huber}()} would return an error.
 }
 \details{
-The standard error is computed using the \eqn{\tau} correction factor but no
-finite sample correction.\cr The original function is not exported, but can
-be accessed as \code{DescToolsX::.huberM}.  \% and as if \code{s} was not
-estimated from the data.
+\strong{Wald interval} (\code{method = "wald"})
+
+Uses the \eqn{\tau} correction factor of Ruckstuhl following
+\deqn{
+  \hat\mu \;\pm\; t_{\alpha/2,\,n-1}
+  \sqrt{\hat\tau(x,\hat\mu)} \;\frac{\hat s}{\sqrt{n}}
+}
+No finite-sample correction is applied beyond the t-quantile.
+
+\strong{Bootstrap interval} (\code{method = "boot"})
+
+The statistic \eqn{\hat\mu} is resampled \eqn{R} times.  Note that
+\code{mu} and \code{s} are fixed at their initial values (computed from
+the full data before resampling) and are not re-estimated on each
+resample.  The bootstrap therefore targets the variability of the
+location estimator with fixed scale initialization, not a fully
+re-estimated robust estimator.  Bootstrap
+arguments are passed through \code{...} and extracted via
+\code{.extractBootArgs()}:
+\describe{
+\item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
+\item{\code{type}}{CI type: \code{"perc"} or \code{"bca"} (default).}
+\item{\code{parallel}}{Parallelisation: \code{"no"}, \code{"multicore"},
+or \code{"snow"} (default \code{"no"}).}
+\item{\code{ncpus}}{Number of CPUs for parallel bootstrap
+(default \code{getOption("boot.ncpus", 1L)}).}
+}
+
+The original internal estimator is accessible as
+\code{DescToolsX:::.huberM}.
+}
+\note{
+Adapted from code by Martin Maechler to conform to package standards
 }
 \examples{
-
 huberM(c(1:9, 1000))
-mad   (c(1:9, 1000))
+mad(c(1:9, 1000))
 
 set.seed(7)
-x <- c(round(rnorm(1000), 1), round(rnorm(50, m=10, sd = 10)))
-huberM(x, conf.level=0.95)
+x <- c(round(rnorm(1000), 1), round(rnorm(50, mean = 10, sd = 10)))
 
+huberM(x, conf.level = 0.95)
+huberM(x, conf.level = 0.95, method = "boot", R = 499, type = "bca")
 
-\dontrun{
-
-# scale zero
+# degenerate case: scale zero
 huberM(rep(9, 100))
-mad   (rep(9, 100))
-
-# bootstrap confidence intervals
-huberM(x, conf.level=0.95, method="boot")
-}
- 
 
 }
 \references{
-Huber, P. J. (1981) \emph{Robust Statistics.} Wiley.
+Huber, P. J. (1981). \emph{Robust Statistics}. Wiley.
 }
 \seealso{
-\code{\link[MASS]{hubers}} (and \code{huber}) in package
-\pkg{MASS}; \code{\link{mad}}.
+\code{\link[MASS]{huber}}, \code{\link{mad}},
+\code{\link{tukeyBiweight}}
 
-Other location:
-\code{\link[=gmean]{gmean()}},
-\code{\link[=hmean]{hmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}},
+Other topic.robustStatistics:
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
-\author{
-Martin Maechler, building on the MASS code mentioned.\cr Andri
-Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} (confidence intervals and interface)
-}
+\concept{bootstrap}
 \concept{descriptive-statistics}
 \concept{location}
 \concept{robust-statistics}
+\concept{topic.robustStatistics}

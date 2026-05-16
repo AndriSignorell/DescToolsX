@@ -137,6 +137,10 @@ tbrm <- function(x, C) {
     .Call(`_DescToolsX_tbrm`, x, C)
 }
 
+tbrm_boot_cpp <- function(x, R = 999L, alpha = 0.05, constant = 9.0, seed = -1L, method = "perc") {
+    .Call(`_DescToolsX_tbrm_boot_cpp`, x, R, alpha, constant, seed, method)
+}
+
 himed_weighted_cpp <- function(x, w) {
     .Call(`_DescToolsX_himed_weighted_cpp`, x, w)
 }

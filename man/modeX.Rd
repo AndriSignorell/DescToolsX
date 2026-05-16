@@ -96,9 +96,7 @@ Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=huberM]{huberM()}},
-\code{\link[=medianX]{medianX()}},
-\code{\link[=tukeyBiweight]{tukeyBiweight()}}
+\code{\link[=medianX]{medianX()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr great Rcpp part by Joseph

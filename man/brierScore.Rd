@@ -2,7 +2,7 @@
 % Please edit documentation in R/brierScore.R
 \name{brierScore}
 \alias{brierScore}
-\title{Brier Score for Binary Outcomes}
+\title{Brier Score}
 \usage{
 brierScore(
   x,
@@ -10,124 +10,105 @@ brierScore(
   scaled = FALSE,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("percentile", "normal", "student", "bca"),
-  R = 1999,
+  method = c("normal", "boot"),
   ...
 )
 }
 \arguments{
-\item{x}{A binary response vector coded as \code{0} and \code{1},
-or a fitted model object (e.g., \code{glm}) providing predicted
-probabilities.}
+\item{x}{Either a numeric vector of observed binary outcomes
+(\eqn{0}/\eqn{1}) when \code{pred} is supplied, or a fitted model
+object (\code{glm} or similar) from which both response and
+predictions are extracted.}
 
-\item{pred}{A numeric vector of predicted probabilities for the event
-coded as \code{1}. If \code{NULL}, predictions are extracted from
-the supplied model object.}
+\item{pred}{A numeric vector of predicted probabilities in
+\eqn{[0,1]}.  Required when \code{x} is a numeric vector; ignored
+when \code{x} is a model object.}
 
-\item{scaled}{Logical. If \code{FALSE} (default), the raw Brier score
-is returned. If \code{TRUE}, a scaled version is computed:
-\deqn{1 - \frac{BS}{BS_{max}}}
-where \eqn{BS_{max}} is the Brier score of a non-informative model.}
+\item{scaled}{Logical.  Should the scaled Brier score be returned?
+Default \code{FALSE}.}
 
-\item{conf.level}{Confidence level of the interval. If set to \code{NA}
-(default), no confidence interval is computed.}
+\item{conf.level}{Confidence level of the interval.  A single numeric
+value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
+point estimate.}
 
-\item{sides}{A character string specifying the side of the confidence
-interval, one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. Partial matching is allowed.}
+\item{sides}{A character string specifying the side of the interval:
+\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
+Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
+\code{"right"} sets \code{lci = -Inf}.  Ignored when
+\code{conf.level = NA}.}
 
-\item{method}{Character string specifying the type of confidence interval.
-One of:
-\itemize{
-\item \code{"none"} - no interval (default if \code{conf.level = NA})
-\item \code{"normal"} - analytic normal approximation
-\item \code{"percentile"} - bootstrap percentile interval
-\item \code{"student"} - studentized bootstrap interval
-\item \code{"bca"} - bias-corrected and accelerated bootstrap interval
-}}
+\item{method}{CI method: \code{"normal"} (delta-method approximation,
+default) or \code{"boot"} (bootstrap via \code{brier_boot_cpp()}).}
 
-\item{R}{Number of bootstrap resamples used for bootstrap-based
-confidence intervals. Ignored for analytic intervals.}
-
-\item{...}{Further arguments (currently not used).}
+\item{...}{Further arguments passed to the bootstrap engine when
+\code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
+\code{ncpus}.  See Details.}
 }
 \value{
-If \code{conf.level = NA}, a numeric scalar containing the Brier score.
+If \code{conf.level = NA}: a single numeric value (the Brier score).
 
-Otherwise, a named numeric vector with components:
-\itemize{
-\item \code{brier} - the point estimate
-\item \code{lci} - lower confidence limit
-\item \code{uci} - upper confidence limit
-}
+If \code{conf.level} is specified: a named numeric vector with elements
+\item{brier}{Brier score estimate.}
+\item{lci}{Lower confidence bound.}
+\item{uci}{Upper confidence bound.}
 }
 \description{
-Computes the Brier score for probabilistic predictions of a binary outcome.
-The function accepts either a binary response vector with predicted
-probabilities, or a fitted classification model object.
+Computes the Brier score for binary probabilistic predictions, optionally
+with a confidence interval via a normal approximation or bootstrap.
 }
 \details{
 The Brier score is defined as
-\deqn{
-BS = \frac{1}{n} \sum_{i=1}^{n}
-\left( y_i (1 - \hat{p}_i)^2 +
-(1 - y_i) \hat{p}_i^2 \right),
+\deqn{BS = \frac{1}{n}\sum_{i=1}^n
+  \bigl[y_i(1-\hat p_i)^2 + (1-y_i)\hat p_i^2\bigr]}
+where \eqn{y_i \in \{0,1\}} and \eqn{\hat p_i} is the predicted
+probability.  Lower is better; a perfect model scores 0.
+
+The scaled Brier score (\code{scaled = TRUE}) expresses skill relative
+to the climatological baseline \eqn{BS_{\max}}, yielding 1 for a
+perfect model and 0 for the no-skill reference.
+
+\strong{Normal interval} (\code{method = "normal"})
+
+A delta-method normal approximation based on the variance of the
+per-observation Brier losses.  Fast and deterministic; reliable for
+moderate to large samples.
+
+\strong{Bootstrap interval} (\code{method = "boot"})
+
+Case-resampling bootstrap via \code{brier_boot_cpp()}.  The bootstrap
+type is controlled by the \code{type} argument (passed through
+\code{...}):
+\describe{
+\item{\code{"bca"}}{Bias-corrected and accelerated (default).
+Most accurate; requires \eqn{R \geq 200}.}
+\item{\code{"perc"}}{Percentile interval.}
+\item{\code{"norm"}}{Normal approximation using bootstrap standard
+error.}
 }
-where \eqn{y_i} is the observed binary outcome and \eqn{\hat{p}_i}
-the predicted probability of the event.
-
-Smaller values indicate better predictive accuracy.
-
-If a model object is supplied, predicted probabilities are extracted
-using \code{predict()}. For \code{glm} objects, \code{type = "response"}
-is used.
-
-Confidence intervals can be computed either analytically (normal
-approximation) or via bootstrap methods. Bootstrap intervals are
-generally applicable and do not require closed-form variance
-expressions. The \code{"bca"} method provides improved coverage in
-the presence of bias or skewness.
+Further bootstrap arguments passed through \code{...} via
+\code{.extractBootArgs()}:
+\describe{
+\item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
+\item{\code{parallel}}{Parallelisation: \code{"no"},
+\code{"multicore"}, or \code{"snow"} (default \code{"no"}).}
+\item{\code{ncpus}}{Number of CPUs (default
+\code{getOption("boot.ncpus", 1L)}).}
+}
 }
 \examples{
-y <- rbinom(200, 1, 0.4)
-p <- runif(200)
+set.seed(1)
+resp <- rbinom(200, 1, 0.4)
+pred <- plogis(rnorm(200, ifelse(resp == 1, 0.5, -0.5)))
 
-# Raw Brier score
-brierScore(y, p)
+brierScore(resp, pred)
+brierScore(resp, pred, conf.level = 0.95)
+brierScore(resp, pred, conf.level = 0.95, method = "boot", type = "bca")
+brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
 
-# Scaled Brier score
-brierScore(y, p, scaled = TRUE)
-
-# Bootstrap confidence interval
-brierScore(y, p,
-           conf.level = 0.95,
-           method = "percentile",
-           R = 999)
-
-}
-\references{
-Brier, G. W. (1950).
-Verification of forecasts expressed in terms of probability.
-\emph{Monthly Weather Review}, 78(1), 1-3.
-
-Efron, B., & Tibshirani, R. J. (1993).
-\emph{An Introduction to the Bootstrap}.
-Chapman & Hall.
 }
 \seealso{
-\code{\link[stats]{predict}},
-\code{\link[boot]{boot}}
-
-Other error.measures:
-\code{\link[=mae]{mae()}},
-\code{\link[=mape]{mape()}},
-\code{\link[=mse]{mse()}},
-\code{\link[=nmae]{nmae()}},
-\code{\link[=nmse]{nmse()}},
-\code{\link[=rmse]{rmse()}},
-\code{\link[=smape]{smape()}}
+\code{\link[stats]{predict}}
 }
-\concept{classification-metrics}
-\concept{descriptive-statistics}
-\concept{error.measures}
-\concept{prediction-accuracy}
+\concept{bootstrap}
+\concept{predictive-accuracy}
+\concept{topic.modelEvaluation}

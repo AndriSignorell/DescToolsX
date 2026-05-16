@@ -417,6 +417,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tbrm_boot_cpp
+NumericVector tbrm_boot_cpp(NumericVector x, int R, double alpha, double constant, int seed, String method);
+RcppExport SEXP _DescToolsX_tbrm_boot_cpp(SEXP xSEXP, SEXP RSEXP, SEXP alphaSEXP, SEXP constantSEXP, SEXP seedSEXP, SEXP methodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type R(RSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< double >::type constant(constantSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< String >::type method(methodSEXP);
+    rcpp_result_gen = Rcpp::wrap(tbrm_boot_cpp(x, R, alpha, constant, seed, method));
+    return rcpp_result_gen;
+END_RCPP
+}
 // himed_weighted_cpp
 double himed_weighted_cpp(NumericVector x, NumericVector w);
 RcppExport SEXP _DescToolsX_himed_weighted_cpp(SEXP xSEXP, SEXP wSEXP) {
@@ -477,6 +493,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_kurt_cpp", (DL_FUNC) &_DescToolsX_kurt_cpp, 2},
     {"_DescToolsX_kurt_weighted_cpp", (DL_FUNC) &_DescToolsX_kurt_weighted_cpp, 3},
     {"_DescToolsX_tbrm", (DL_FUNC) &_DescToolsX_tbrm, 2},
+    {"_DescToolsX_tbrm_boot_cpp", (DL_FUNC) &_DescToolsX_tbrm_boot_cpp, 6},
     {"_DescToolsX_himed_weighted_cpp", (DL_FUNC) &_DescToolsX_himed_weighted_cpp, 2},
     {"_DescToolsX_himed_int_weighted_cpp", (DL_FUNC) &_DescToolsX_himed_int_weighted_cpp, 2},
     {NULL, NULL, 0}

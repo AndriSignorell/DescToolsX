@@ -138,7 +138,6 @@ University Press.
 \code{\link{icc}}, \code{\link{kendallW}}
 
 Other assoc.agreement:
-\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},

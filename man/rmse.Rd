@@ -50,7 +50,6 @@ rmse(fit)
 \code{\link{mean}}, \code{\link{sqrt}}
 
 Other error.measures:
-\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=mse]{mse()}},

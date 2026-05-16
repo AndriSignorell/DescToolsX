@@ -93,7 +93,6 @@ scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 
 Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},
-\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kendallW]{kendallW()}},
