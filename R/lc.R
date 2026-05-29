@@ -128,16 +128,16 @@ lc.formula <- function(formula, data, subset, na.action = na.pass, ...) {
     data       = data,
     subset     = subset_expr,
     na.action  = na.action,
-    allowed    = c("one.sample", "n.sample.independent")
+    allowed    = c("one-sample", "n-sample-independent")
   )
   
   # --- one sample ---
-  if (rf$type == "one.sample") {
+  if (rf$type == "one-sample") {
     return(lc(rf$x, ...))
   }
   
   # --- grouped ---
-  if (rf$type == "n.sample.independent") {
+  if (rf$type == "n-sample-independent") {
     
     split_data <- split(rf$x, rf$group)
     

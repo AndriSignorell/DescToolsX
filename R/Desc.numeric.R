@@ -184,7 +184,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   nlow <- 5
   nhigh <- 5
   
-  # digits <- Coalesce(digits, x$digits, .getOption("digits"))
+  # digits <- coalesceX(digits, x$digits, .getOption("digits"))
   
   if (is.null(digits) && !is.null(x$digits)) digits <- x$digits
   defdigits <- is.null(digits)

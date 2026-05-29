@@ -136,6 +136,9 @@ reliability of scoring EEG sleep recordings.
 }
 \seealso{
 \code{\link{kappaM}}, \code{\link[bedrock]{pairApply}}
+
+Other topic.agreement:
+\code{\link[=pabak]{pabak()}}
 }
 \concept{agreement}
 \concept{association-measures}

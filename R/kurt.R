@@ -42,13 +42,19 @@
 #' before the computation proceeds. Defaults to \code{FALSE}.
 #' @param \dots the dots are passed to the function \code{\link[boot]{boot}},
 #' when confidence intervalls are calculated.
-#' @return If \code{conf.level} is set to \code{NA} then the result will be
-#' \item{a}{ single numeric value} and if a \code{conf.level} is provided, a
-#' named numeric vector with 3 elements: \item{est}{the specific estimate,
-#' either skewness or kurtosis} \item{lci}{lower bound of the confidence
-#' interval} \item{uci}{upper bound of the confidence interval}
-#' @author Andri Signorell <andri@@signorell.net>, David Meyer
-#' <david.meyer@@r-project.org> (method = 3)
+#' 
+#' @return
+#' If \code{conf.level = NA}:
+#' numeric kurtosis estimate.
+#'
+#' Otherwise:
+#' named numeric vector with:
+#' \itemize{
+#'   \item \code{est}: kurtosis estimate
+#'   \item \code{lci}: lower confidence limit
+#'   \item \code{uci}: upper confidence limit
+#' }
+#' 
 #' @seealso \code{\link{skewX}}, \code{\link{meanX}}, \code{\link{sdX}}, similar code in
 #' \code{library(e1071)}
 #' @references Cramer, D. (1997): \emph{Basic Statistics for Social Research}
@@ -76,116 +82,245 @@
 #'
 #'
 #' @export
-kurtX <- function (x, 
-                   conf.level = NA, sides=c("two.sided", "left", "right"), 
-                   method = c("boot", "classic"), 
-                   estimator = 3, weights=NULL, na.rm = FALSE, ...) {
+kurtX <- function(x,
+                  conf.level = NA,
+                  sides = c("two.sided", "left", "right"),
+                  method = c("boot", "classic"),
+                  estimator = 3,
+                  weights = NULL,
+                  na.rm = FALSE,
+                  ...) {
   
+  if (!is.numeric(x))
+    stop("'x' must be numeric")
   
-  i.kurt <- function(x, weights=NULL, na.rm = FALSE, estimator = 3) {
+  if (!is.null(weights) &&
+      length(weights) != length(x))
+    stop("'weights' must have same length as 'x'")
+  
+  if (!estimator %in% c(1, 2, 3))
+    stop("'estimator' must be one of 1, 2, or 3")
+  
+  if (is.na(conf.level)) {
     
-    # estimator 1: older textbooks
-    if(!is.null(weights)){
-      # use a standard treatment for weights
-      z <- .normWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
-      r.kurt <- kurt_weighted_cpp(as.numeric(z$x), 
-                           as.numeric(meanX(z$x, weights = z$weights)), 
-                           as.numeric(z$weights))
-      n <- z$wsum
-      
-    } else {
-      if (na.rm) x <- na.omit(x)
-      r.kurt <- kurt_cpp(as.numeric(x), 
-                     as.numeric(mean(x)))
-      n <- length(x)
-      
-    }
-    
-    se <- sqrt((24*n*(n-2)*(n-3))/((n+1)^2*(n+3)*(n+5)))
-    #    se <- sqrt((24 * n * (n - 1)^2) / ((n - 3) * (n - 2) * (n + 3) * (n + 5)))
-    
-    if (estimator == 2) {
-      # estimator 2: SAS/SPSS
-      r.kurt <- ((r.kurt + 3) * (n + 1)/(n - 1) - 3) * (n - 1)^2/(n - 2)/(n - 3)
-      se <- se * (((n-1)*(n+1))/((n-2)*(n-3)))
-    }
-    else if (estimator == 3) {
-      # estimator 3: MINITAB/BDMP
-      r.kurt <- (r.kurt + 3) * (1 - 1/n)^2 - 3
-      se <- se * ((n-1)/n)^2
-    }
-    return(c(r.kurt, se^2))
-  }
-  
-  
-  if(is.na(conf.level)){
-    res <- i.kurt(x, weights=weights, na.rm=na.rm, estimator=estimator)[1]
+    res <- .i.kurt(
+      x,
+      weights = weights,
+      na.rm = na.rm,
+      estimator = estimator
+    )["est"]
     
   } else {
     
-    sides <- match.arg(sides, choices = c("two.sided","left","right"), 
-                       several.ok = FALSE)
+    sides <- match.arg(
+      sides,
+      choices = c("two.sided", "left", "right"),
+      several.ok = FALSE
+    )
     
-    if(sides!="two.sided")
-      conf.level <- 1 - 2*(1-conf.level)
+    if (sides != "two.sided")
+      conf.level <- 1 - 2 * (1 - conf.level)
     
+    method <- match.arg(method)
     
-    if(method == "classic") {
+    res <- switch(
       
-      res <- i.kurt(x, weights=weights, estimator=estimator)
-      res <- c(
-        est = res[1],
-        lci = qnorm((1-conf.level)/2) * sqrt(res[2]),
-        uci = qnorm(1-(1-conf.level)/2) * sqrt(res[2])) 
+      method,
       
-    } else {
-      # Problematic standard errors and confidence intervals for skewness and kurtosis.
-      # Wright DB, Herrington JA. (2011) recommend only bootstrap intervals
-      # adjusted bootstrap percentile (BCa) interval
+      classic = .kurtX.classic(
+        x,
+        conf.level = conf.level,
+        estimator = estimator,
+        weights = weights,
+        na.rm = na.rm
+      ),
       
-      # boot arguments in dots ...
-      btype <- inDots(..., arg="type", default="bca")
-      R <- inDots(..., arg="R", default=999)
-      parallel <- inDots(..., arg="parallel", default="no")
-      ncpus <- inDots(..., arg="ncpus", default=getOption("boot.ncpus", 1L))
-      
-      boot.fun <- boot::boot(x, function(x, d) 
-        i.kurt(x[d], weights=weights, estimator=estimator), 
-        R=R, parallel=parallel, ncpus=ncpus)
-      ci <- boot::boot.ci(boot.fun, conf=conf.level, type=btype)
-      
-      
-      if(method == "norm"){
-        res <- c(est=boot.fun$t0, lci=ci[[4]][2], uci=ci[[4]][3])
-      } else {
-        res <- c(est=boot.fun$t0, lci=ci[[4]][4], uci=ci[[4]][5])
-      }
-      
-    }
+      boot = .kurtX.boot(
+        x,
+        conf.level = conf.level,
+        estimator = estimator,
+        weights = weights,
+        na.rm = na.rm,
+        ...
+      )
+    )
     
-    if(sides=="left")
+    if (sides == "left") {
+      
       res[3] <- Inf
-    else if(sides=="right")
+      
+    } else if (sides == "right") {
+      
       res[2] <- -Inf
-    
+    }
   }
   
-  return(res)
-  
+  res
 }
 
 
+# == internal helper functions ================================================
 
 
 
+.i.kurt <- function(x,
+                    weights = NULL,
+                    na.rm = FALSE,
+                    estimator = 3) {
+  
+  # estimator 1: older textbooks
+  
+  if (!is.null(weights)) {
+    
+    # use a standard treatment for weights
+    z <- .normWeights(
+      x,
+      weights,
+      na.rm = na.rm,
+      zero.rm = TRUE
+    )
+    
+    r.kurt <- kurt_weighted_cpp(
+      as.numeric(z$x),
+      as.numeric(meanX(
+        z$x,
+        weights = z$weights
+      )),
+      as.numeric(z$weights)
+    )
+    
+    n <- z$wsum
+    
+  } else {
+    
+    if (na.rm)
+      x <- na.omit(x)
+    
+    r.kurt <- kurt_cpp(
+      as.numeric(x),
+      as.numeric(mean(x))
+    )
+    
+    n <- length(x)
+  }
+  
+  se <- sqrt(
+    (24 * n * (n - 2) * (n - 3)) /
+      ((n + 1)^2 * (n + 3) * (n + 5))
+  )
+  
+  # se <- sqrt(
+  #   (24 * n * (n - 1)^2) /
+  #   ((n - 3) * (n - 2) * (n + 3) * (n + 5))
+  # )
+  
+  if (estimator == 2) {
+    
+    # estimator 2: SAS/SPSS
+    
+    r.kurt <- (
+      ((r.kurt + 3) * (n + 1) / (n - 1) - 3) *
+        (n - 1)^2 / (n - 2) / (n - 3)
+    )
+    
+    se <- se * (
+      ((n - 1) * (n + 1)) /
+        ((n - 2) * (n - 3))
+    )
+    
+  } else if (estimator == 3) {
+    
+    # estimator 3: MINITAB/BDMP
+    
+    r.kurt <- (r.kurt + 3) * (1 - 1 / n)^2 - 3
+    
+    se <- se * ((n - 1) / n)^2
+  }
+  
+  c(
+    est = r.kurt,
+    var = se^2
+  )
+}
 
 
+.kurtX.classic <- function(x,
+                           conf.level,
+                           estimator = 3,
+                           weights = NULL,
+                           na.rm = FALSE) {
+  
+  res <- .i.kurt(
+    x,
+    weights = weights,
+    na.rm = na.rm,
+    estimator = estimator
+  )
+  
+  c(
+    est = res["est"],
+    lci = qnorm((1 - conf.level) / 2) * sqrt(res["var"]),
+    uci = qnorm(1 - (1 - conf.level) / 2) * sqrt(res["var"])
+  )
+}
 
 
-
-
-
-
+.kurtX.boot <- function(x,
+                        conf.level,
+                        estimator = 3,
+                        weights = NULL,
+                        na.rm = FALSE,
+                        ...) {
+  
+  # Problematic standard errors and confidence intervals
+  # for skewness and kurtosis.
+  #
+  # Wright DB, Herrington JA. (2011)
+  # recommend only bootstrap intervals.
+  #
+  # adjusted bootstrap percentile (BCa) interval
+  
+  args <- .extractBootArgs(list(...))
+  
+  boot.fun <- boot::boot(
+    
+    x,
+    
+    function(x, d)
+      .i.kurt(
+        x[d],
+        weights = weights,
+        estimator = estimator
+      ),
+    
+    R        = args$R,
+    parallel = args$parallel,
+    ncpus    = args$ncpus
+  )
+  
+  ci <- boot::boot.ci(
+    boot.fun,
+    conf = conf.level,
+    type = args$type
+  )
+  
+  if (args$type == "norm") {
+    
+    c(
+      est = unname(boot.fun$t0[1]),
+      lci = ci[[4]][2],
+      uci = ci[[4]][3]
+    )
+    
+  } else {
+    
+    c(
+      est = unname(boot.fun$t0[1]),
+      lci = ci[[4]][4],
+      uci = ci[[4]][5]
+    )
+  }
+}
 
 
 

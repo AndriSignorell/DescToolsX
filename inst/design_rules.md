@@ -300,6 +300,67 @@ cutoff
 limit
 ```
 
+**(G) Output Representation, Return-control arguments**
+
+When a function supports multiple mutually exclusive output
+representations, use an `output` argument with enumerated character
+options rather than Boolean switches.
+
+Preferred pattern:
+
+```r
+output = c("value", "index")
+```
+
+Examples:
+
+```r
+closest(x, 3.1, output = "value")
+closest(x, 3.1, output = "index")
+```
+
+This pattern is preferred because it:
+
+- scales naturally when additional output representations are added
+- produces clearer error messages via `match.arg()`
+- avoids Boolean API proliferation
+- improves readability and discoverability
+- makes the API self-documenting
+
+Avoid Boolean arguments for mutually exclusive output formats.
+
+Incorrect:
+
+```r
+idx          = TRUE
+returnIndex  = TRUE
+returnList   = TRUE
+asMatrix     = TRUE
+```
+
+Boolean `return*`, `keep*`, or `drop*` arguments remain appropriate
+when they control independent optional output components rather than
+exclusive output modes.
+
+Examples:
+
+```r
+returnNames      = TRUE
+returnCall       = FALSE
+keepAttributes   = TRUE
+dropUnusedLevels = FALSE
+```
+
+Conceptual distinction:
+
+| Type | Purpose | Example |
+|---|---|---|
+| `output` | select one output representation | `output = "index"` |
+| `return*` | optionally add information | `returnNames = TRUE` |
+| `keep*` / `drop*` | modify retained structure | `dropNA = TRUE` |
+
+
+
 ## 3.4 Return Values
 
 Output is part of the API and must be strictly consistent:
@@ -614,7 +675,10 @@ plotDot():
 
 ## 6.2 Bootstrap Arguments
 
-Bootstrap arguments (`method`, `R`, `parallel`, etc.) always go through `...` and are internally extracted via `.extractBootArgs()`:
+Bootstrap arguments (`method`, `R`, `parallel`, etc.) always go through 
+`...` and are internally extracted via `.extractBootArgs()`. This
+function is available internally in several packages in the file
+utils-ecosys:
 
 ```r
 dots      <- list(...)
@@ -625,7 +689,7 @@ boot::boot(..., R = boot_args$R, parallel = boot_args$parallel)
 
 Forbidden:
 
-- direct use of `inDots()`
+- direct use of `getDotsArg()`
 - direct access to `...` in the function body
 - argument parsing inside `apply` / `replicate`
 
@@ -694,6 +758,35 @@ Functions that optionally include a CI use `conf.level = NA`.
 - No implicit corrections
 - Document randomized procedures, e.g. Witting
 - Mention RNG dependence
+
+## 8.3 Random Number Generation (RNG) Policy
+
+Functions in this package may rely on random number generation
+provided by R's global RNG state.
+
+Design principles:
+  1) No internal seeding
+     Functions do not call set.seed() internally. The RNG state is
+     entirely controlled by the user.
+
+  2) No side effects
+     Functions do not modify or restore the global RNG state.
+
+  3) Reproducibility by user control
+     Users are expected to ensure reproducibility by calling
+     set.seed() prior to invoking functions that involve randomness.
+
+  4) Deterministic behaviour under fixed seed
+     Given identical inputs and RNG state, functions produce
+     reproducible results.
+
+  5) Explicit documentation
+     All functions involving randomness document this behaviour
+     and refer users to set.seed() for reproducibility.
+ 
+Example:
+    set.seed(42)
+    idx <- splitTrainTest(x)
 
 ---
 
@@ -1176,6 +1269,7 @@ topic.timeSeriesTests
 | Use | `use*` |
 | State | `is*` |
 | Possession / availability | `has*` |
+| Return structure | `return*` |
 
 ## 13.11 Intervals
 

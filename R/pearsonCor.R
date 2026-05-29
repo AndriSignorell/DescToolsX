@@ -14,7 +14,7 @@
 #' \code{x}. If y is provided, \code{table(x, y, ...)} will be calculated.
 #' @param method method to calculate confidence intervals, implemented is 
 #'         only "fisher". 
-#' @param scores.type type of calculating scores for the table.
+#' @param scoresType type of calculating scores for the table.
 #' @param na.rm logical, default \code{FALSE} determining if complete cases
 #' should be respected
 #' @return est, lower and upper confidence intervals
@@ -49,7 +49,7 @@ pearsonCor <- function(x, y = NULL,
                        conf.level = NA,
                        sides = c("two.sided","left","right"),
                        method = c("fisher"),
-                       scores.type = "table",
+                       scoresType = "table",
                        na.rm = FALSE) {
   
   sides  <- match.arg(sides)
@@ -63,8 +63,8 @@ pearsonCor <- function(x, y = NULL,
   if (is.null(y)) {
     
     # Table interface
-    sR <- scores(x, 1, scores.type)
-    sC <- scores(x, 2, scores.type)
+    sR <- scores(x, 1, scoresType)
+    sC <- scores(x, 2, scoresType)
     
     n  <- sum(x)
     

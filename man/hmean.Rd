@@ -80,7 +80,6 @@ ed. Ames, \emph{IA: Iowa State University Press }
 
 Other location:
 \code{\link[=gmean]{gmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}}
 }

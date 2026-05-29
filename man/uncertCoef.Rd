@@ -10,7 +10,7 @@ uncertCoef(
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   direction = c("symmetric", "row", "column"),
-  p.zero.correction = 1/sum(x)^2,
+  pZeroCorrection = 1/sum(x)^2,
   ...
 )
 }
@@ -31,7 +31,7 @@ interval, must be one of \code{"two.sided"} (default), \code{"left"} or
 or \code{"column"}, where \code{"row"} calculates uncertCoef (R|C) ("column
 dependent").}
 
-\item{p.zero.correction}{slightly nudge zero values so that their logarithm
+\item{pZeroCorrection}{slightly nudge zero values so that their logarithm
 can be calculated}
 
 \item{\dots}{further arguments are passed to the function
@@ -52,6 +52,9 @@ single vectors.
 \details{
 The uncertainty coefficient is computed as \deqn{U(C|R) = \frac{H(X) + H(Y)
 - H(XY)}{H(Y)} } and ranges from \verb{[0, 1]}.
+}
+\note{
+Based on code from Antti Arppe
 }
 \examples{
 
@@ -83,10 +86,6 @@ Other assoc.nominal:
 \code{\link[=phi]{phi()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link{yule}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} strongly based on code from
-Antti Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}
 }
 \concept{assoc.nominal}
 \concept{association-measures}

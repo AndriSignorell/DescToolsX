@@ -44,11 +44,16 @@ before the computation proceeds. Defaults to \code{FALSE}.}
 when confidence intervalls are calculated.}
 }
 \value{
-If \code{conf.level} is set to \code{NA} then the result will be
-\item{a}{ single numeric value} and if a \code{conf.level} is provided, a
-named numeric vector with 3 elements: \item{est}{the specific estimate,
-either skewness or kurtosis} \item{lci}{lower bound of the confidence
-interval} \item{uci}{upper bound of the confidence interval}
+If \code{conf.level = NA}:
+numeric kurtosis estimate.
+
+Otherwise:
+named numeric vector with:
+\itemize{
+\item \code{est}: kurtosis estimate
+\item \code{lci}: lower confidence limit
+\item \code{uci}: upper confidence limit
+}
 }
 \description{
 \code{kurtX()} returns the excess kurtosis, therefore the kurtosis calculates
@@ -104,10 +109,6 @@ kurtosis. \emph{The Statistician}, 47, 183-189.
 
 Other shape:
 \code{\link[=skewX]{skewX()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, David Meyer
-\href{mailto:david.meyer@r-project.org}{david.meyer@r-project.org} (method = 3)
 }
 \concept{descriptive-statistics}
 \concept{robust-statistics}

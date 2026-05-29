@@ -188,7 +188,7 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
 #' @rdname desc
 #' @export
 plot.Desc.logical <- function(x, ...){
-  aurora::plotPropCI(x$x, na.rm=TRUE, ...)
+  aurora::plotPropCI(x$afrq, labels=names(x$afrq), ...)
 }
 
 

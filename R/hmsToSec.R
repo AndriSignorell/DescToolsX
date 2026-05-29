@@ -34,6 +34,7 @@
 #' @concept string-manipulation
 #'
 #'
+
 #' @export
 hmsToMinute <- function(x){
   hour(x)*60 + minute(x) + second(x)/60
@@ -45,9 +46,11 @@ hmsToMinute <- function(x){
 hmsToSec <- function(x) {
   
   hms <- as.character(x)
-  z <- sapply(data.frame(do.call(rbind, strsplit(hms, ":"))),
-              function(x) { as.numeric(as.character(x)) })
-  z[,1] * 3600 + z[,2] * 60 + z[,3]
+  # t(sapply(...)) always produces an n x 3 matrix, even for a single string.
+  # The old sapply-over-data.frame returned a plain vector for length-1 input,
+  # causing z[, 1] to fail with "incorrect number of dimensions".
+  z <- t(sapply(strsplit(hms, ":"), as.numeric))
+  z[, 1] * 3600 + z[, 2] * 60 + z[, 3]
 }
 
 

@@ -15,85 +15,50 @@ hodgesLehmann(
 )
 }
 \arguments{
-\item{x}{a numeric vector.}
+\item{x}{Numeric vector.}
 
-\item{y}{an optional numeric vector of data values: as with x non-finite
-values will be omitted.}
+\item{y}{Optional numeric vector.}
 
-\item{conf.level}{confidence level of the interval.}
+\item{conf.level}{Confidence level.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}.  You can specify just the initial letter. \code{"left"}
-would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\item{sides}{Character string specifying the side of the interval:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
 
-\item{method}{only bootstrap method is implemented so far. Others might be
-implemented in future.}
+\item{method}{Confidence interval method.}
 
-\item{na.rm}{logical. Should missing values be removed? Defaults to
-\code{FALSE}.}
+\item{na.rm}{Logical; should missing values be removed?}
 
-\item{\dots}{the dots are passed to the function \code{\link[boot]{boot}},
-when confidence intervals are calculated.}
+\item{...}{Additional arguments passed to bootstrap procedures.}
 }
 \value{
-the Hodges-Lehmann estimator of location as a single numeric value
-if no confidence intervals are requested,\cr and otherwise a numeric vector
-with 3 elements for the estimate, the lower and the upper confidence
-interval
+If \code{conf.level = NA}:
+a single numeric estimate.
+
+Otherwise:
+named numeric vector with:
+\itemize{
+\item \code{est}: Hodges-Lehmann estimate
+\item \code{lci}: lower confidence limit
+\item \code{uci}: upper confidence limit
+}
 }
 \description{
-Function to compute the Hodges-Lehmann estimator of location in the one and
-two sample case following a clever fast algorithm by John Monahan (1984).
+Function to compute the Hodges-Lehmann estimator of location
+in the one and two sample case following a clever fast algorithm
+by John Monahan (1984).
 }
 \details{
-The Hodges-Lehmann estimator is the median of the combined data points and
-Walsh averages.  It is the same as the Pseudo Median returned as a
-by-product of the function \code{\link{wilcox.test}} (which however does not
-calculate correctly as soon as ties are present).\cr Note that in the
-two-sample case the estimator for the difference in location parameters does
-not estimate the difference in medians (a common misconception) but rather
-the median of the difference between a sample from x and a sample from y.
+The Hodges-Lehmann estimator is the median of the combined
+data points and Walsh averages.
 
-(The calculation of the confidence intervals is not yet implemented.)
+It is the same as the pseudo median returned as a by-product
+of \code{\link{wilcox.test}}
+(which however does not calculate correctly as soon as ties
+are present).
+
+Note that in the two-sample case the estimator for the
+difference in location parameters does not estimate the
+difference in medians (a common misconception) but rather
+the median of the difference between a sample from x and
+a sample from y.
 }
-\examples{
-
-set.seed(1)
-x <- rt(100, df = 3)
-y <- rt(100, df = 5)
-
-hodgesLehmann(x)
-hodgesLehmann(x, y)
-
-# same as
-wilcox.test(x, conf.int = TRUE)$estimate
-
-}
-\references{
-Hodges, J.L., and Lehmann, E.L. (1963), Estimates of location
-based on rank tests. \emph{The Annals of Mathematical Statistics},
-\bold{34}, 598--611.
-
-Monahan, J. (1984), Algorithm 616: Fast Computation of the Hodges-Lehmann
-Location Estimator, \emph{ACM Transactions on Mathematical Software}, Vol.
-10, No. 3, pp. 265-270
-}
-\seealso{
-\code{\link{wilcox.test}}, \code{\link{median}},
-\code{\link[lumen]{medianCI}}
-
-Other location:
-\code{\link[=gmean]{gmean()}},
-\code{\link[=hmean]{hmean()}},
-\code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}}
-}
-\author{
-Cyril Flurin Moser (Cyril did the lion's share and coded Monahan's
-algorithm in C++), Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{descriptive-statistics}
-\concept{location}
-\concept{nonparametric}
-\concept{robust-statistics}

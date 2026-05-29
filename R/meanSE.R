@@ -35,8 +35,6 @@
 meanSE <- function(x, sd = NULL, na.rm = FALSE) {
   # standard error of mean
   if(na.rm) x <- na.omit(x)
-  if(is.null(sd)) s <- sd(x)
+  s <- if(is.null(sd)) sd(x) else sd
   s/sqrt(length(x))
 }
-
-

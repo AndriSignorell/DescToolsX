@@ -41,14 +41,18 @@
 #' @param \dots the dots are passed to the function \code{\link[boot]{boot}},
 #' when confidence intervalls are calculated.
 #' 
-#' @return If \code{conf.level} is set to \code{NA} then the result will be
-#' \item{a}{ single numeric value} and if a \code{conf.level} is provided, a
-#' named numeric vector with 3 elements: \item{est}{the specific estimate,
-#' either skewness or kurtosis} \item{lci}{lower bound of the confidence
-#' interval} \item{uci}{upper bound of the confidence interval}
+#' @return
+#' If \code{conf.level = NA}:
+#' numeric skewness estimate.
+#'
+#' Otherwise:
+#' named numeric vector with:
+#' \itemize{
+#'   \item \code{est}: skewness estimate
+#'   \item \code{lci}: lower confidence limit
+#'   \item \code{uci}: upper confidence limit
+#' }
 #' 
-#' @author Andri Signorell <andri@@signorell.net>, David Meyer
-#' <david.meyer@@r-project.org> (method = 3)
 #' @seealso \code{\link{kurtX}}, \code{\link{meanX}}, \code{\link{sdX}}, 
 #' similar code in \code{library(e1071)}
 #' 
@@ -94,144 +98,248 @@
 #' @concept robust-statistics
 #'
 #'
+
 #' @export
-skewX <- function (x, 
-                  conf.level = NA, sides=c("two.sided", "left", "right"), 
-                  method = c("boot", "classic"), 
-                  estimator = 3, weights=NULL, na.rm = FALSE, ...) {
+skewX <- function(x,
+                  conf.level = NA,
+                  sides = c("two.sided", "left", "right"),
+                  method = c("boot", "classic"),
+                  estimator = 3,
+                  weights = NULL,
+                  na.rm = FALSE,
+                  ...) {
   
-  # C++ part for the expensive (x - mean(x))^2 etc. is roughly 14 times faster
-  #   > x <- rchisq(100000000, df=2)
-  #   > system.time(skew(x))
-  #   user  system elapsed
-  #   6.32    0.30    6.62
-  #   > system.time(skew2(x))
-  #   user  system elapsed
-  #   0.47    0.00    0.47
+  if (!is.numeric(x))
+    stop("'x' must be numeric")
   
+  if (!is.null(weights) &&
+      length(weights) != length(x))
+    stop("'weights' must have same length as 'x'")
   
-  i.skew <- function(x, weights=NULL, estimator = 3) {
+  if (!estimator %in% c(1, 2, 3))
+    stop("'estimator' must be one of 1, 2, or 3")
+  
+  if (is.na(conf.level)) {
     
-    # estimator 1: older textbooks
-    if(!is.null(weights)){
-      # use a standard treatment for weights
-      z <- .normWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
-      r.skew <- skew_weighted_cpp(as.numeric(z$x), as.numeric(meanX(z$x, weights = z$weights)), 
-                       as.numeric(z$weights))
-      n <- z$wsum
-      
-    } else {
-      if (na.rm) x <- na.omit(x)
-      r.skew <- skew_cpp(as.numeric(x), as.numeric(mean(x)))
-      n <- length(x)
-      
-    }
-    
-    se <- sqrt((6*(n-2))/((n+1)*(n+3)))
-    
-    if (estimator == 2) {
-      # estimator 2: SAS/SPSS
-      r.skew <- r.skew * n^0.5 * (n - 1)^0.5/(n - 2)
-      se <- se * sqrt(n*(n-1))/(n-2)
-    }
-    else if (estimator == 3) {
-      # estimator 3: MINITAB/BDMP
-      r.skew <- r.skew * ((n - 1)/n)^(3/2)
-      se <- se * ((n - 1)/n)^(3/2)
-    }
-    
-    return(c(r.skew, se^2))
-  }
-  
-  
-  
-  
-  
-  if(is.na(conf.level)){
-    res <- i.skew(x, weights=weights, estimator=estimator)[1]
+    res <- .i.skew(
+      x,
+      weights = weights,
+      estimator = estimator,
+      na.rm = na.rm
+    )["est"]
     
   } else {
     
-    sides <- match.arg(sides, choices = c("two.sided","left","right"), 
-                       several.ok = FALSE)
+    sides <- match.arg(
+      sides,
+      choices = c("two.sided", "left", "right"),
+      several.ok = FALSE
+    )
     
-    if(sides!="two.sided")
-      conf.level <- 1 - 2*(1-conf.level)
+    if (sides != "two.sided")
+      conf.level <- 1 - 2 * (1 - conf.level)
     
+    method <- match.arg(method)
     
-    if(method == "classic") {
-      res <- i.skew(x, weights=weights, estimator=estimator)
-      res <- c(est=res[1],
-               lci=qnorm((1-conf.level)/2) * sqrt(res[2]),
-               uci=qnorm(1-(1-conf.level)/2) * sqrt(res[2]))
+    res <- switch(
       
-    } else {
-      # Problematic standard errors and confidence intervals for skewness and kurtosis.
-      # Wright DB, Herrington JA. (2011) recommend only bootstrap intervals
-      # adjusted bootstrap percentile (BCa) interval
+      method,
       
-      # boot arguments in dots ...
-      btype <- inDots(..., arg="type", default="bca")
-      R <- inDots(..., arg="R", default=999)
-      parallel <- inDots(..., arg="parallel", default="no")
-      ncpus <- inDots(..., arg="ncpus", default=getOption("boot.ncpus", 1L))
+      classic = .skewX.classic(
+        x,
+        conf.level = conf.level,
+        estimator = estimator,
+        weights = weights,
+        na.rm = na.rm
+      ),
       
-      boot.fun <- boot::boot(x, function(x, d) 
-        i.skew(x[d], weights=weights, estimator=estimator), 
-        R=R, parallel=parallel, ncpus=ncpus)
-      ci <- boot::boot.ci(boot.fun, conf=conf.level, type=btype)
-      
-      
-      if(method == "norm"){
-        res <- c(est=boot.fun$t0, lci=ci[[4]][2], uci=ci[[4]][3])
-      } else {
-        res <- c(est=boot.fun$t0, lci=ci[[4]][4], uci=ci[[4]][5])
-      }
-      
-    }
+      boot = .skewX.boot(
+        x,
+        conf.level = conf.level,
+        estimator = estimator,
+        weights = weights,
+        na.rm = na.rm,
+        ...
+      )
+    )
     
-    if(sides=="left")
+    if (sides == "left") {
+      
       res[3] <- Inf
-    else if(sides=="right")
+      
+    } else if (sides == "right") {
+      
       res[2] <- -Inf
-    
+    }
   }
   
-  return(res)
-  
+  res
 }
 
 
-# @param conf.level confidence level of the interval. If set to \code{NA}
-# (which is the default) no confidence interval will be calculated.
-# @param sides a character string specifying the side of the confidence
-# interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-# \code{"right"}. \code{"left"} would be analogue to a hypothesis of
-# \code{"greater"} in a \code{t.test}. You can specify just the initial
-# letter.
-# @param method a character string, defining the type of intervals required.
-# The value should be one out of \code{"classic"}, \code{"boot"} (default).
-# Further arguments for the boot function (as \code{R}, \code{type}, ...) can
-# be provided by the dots' argument if needed.
+# == internal helper functions ================================================
 
 
+.i.skew <- function(x,
+                    weights = NULL,
+                    estimator = 3,
+                    na.rm = FALSE) {
+  
+  # C++ part for the expensive
+  # (x - mean(x))^2 etc.
+  # is roughly 14 times faster
+  
+  # estimator 1: older textbooks
+  
+  if (!is.null(weights)) {
+    
+    # use a standard treatment for weights
+    z <- .normWeights(
+      x,
+      weights,
+      na.rm = na.rm,
+      zero.rm = TRUE
+    )
+    
+    r.skew <- skew_weighted_cpp(
+      as.numeric(z$x),
+      as.numeric(meanX(
+        z$x,
+        weights = z$weights
+      )),
+      as.numeric(z$weights)
+    )
+    
+    n <- z$wsum
+    
+  } else {
+    
+    if (na.rm)
+      x <- na.omit(x)
+    
+    r.skew <- skew_cpp(
+      as.numeric(x),
+      as.numeric(mean(x))
+    )
+    
+    n <- length(x)
+  }
+  
+  se <- sqrt(
+    (6 * (n - 2)) /
+      ((n + 1) * (n + 3))
+  )
+  
+  if (estimator == 2) {
+    
+    # estimator 2: SAS/SPSS
+    
+    r.skew <- r.skew *
+      sqrt(n) *
+      sqrt(n - 1) /
+      (n - 2)
+    
+    se <- se *
+      sqrt(n * (n - 1)) /
+      (n - 2)
+    
+  } else if (estimator == 3) {
+    
+    # estimator 3: MINITAB/BDMP
+    
+    r.skew <- r.skew *
+      ((n - 1) / n)^(3 / 2)
+    
+    se <- se *
+      ((n - 1) / n)^(3 / 2)
+  }
+  
+  c(
+    est = r.skew,
+    var = se^2
+  )
+}
 
 
+.skewX.classic <- function(x,
+                           conf.level,
+                           estimator = 3,
+                           weights = NULL,
+                           na.rm = FALSE) {
+  
+  res <- .i.skew(
+    x,
+    weights = weights,
+    estimator = estimator,
+    na.rm = na.rm
+  )
+  
+  c(
+    est = res["est"],
+    lci = qnorm((1 - conf.level) / 2) *
+      sqrt(res["var"]),
+    uci = qnorm(1 - (1 - conf.level) / 2) *
+      sqrt(res["var"])
+  )
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+.skewX.boot <- function(x,
+                        conf.level,
+                        estimator = 3,
+                        weights = NULL,
+                        na.rm = FALSE,
+                        ...) {
+  
+  # Problematic standard errors and confidence intervals
+  # for skewness and kurtosis.
+  #
+  # Wright DB, Herrington JA. (2011)
+  # recommend only bootstrap intervals.
+  #
+  # adjusted bootstrap percentile (BCa) interval
+  
+  args <- .extractBootArgs(list(...))
+  
+  boot.fun <- boot::boot(
+    
+    x,
+    
+    function(x, d)
+      .i.skew(
+        x[d],
+        weights = weights,
+        estimator = estimator
+      ),
+    
+    R        = args$R,
+    parallel = args$parallel,
+    ncpus    = args$ncpus
+  )
+  
+  ci <- boot::boot.ci(
+    boot.fun,
+    conf = conf.level,
+    type = args$type
+  )
+  
+  if (args$type == "norm") {
+    
+    c(
+      est = unname(boot.fun$t0[1]),
+      lci = ci[[4]][2],
+      uci = ci[[4]][3]
+    )
+    
+  } else {
+    
+    c(
+      est = unname(boot.fun$t0[1]),
+      lci = ci[[4]][4],
+      uci = ci[[4]][5]
+    )
+  }
+}
 
 
 

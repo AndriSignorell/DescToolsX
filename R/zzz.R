@@ -59,9 +59,9 @@
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size str combn find getAnywhere lsf.str write.table getFromNamespace stack browseURL help.search modifyList
 #'             
-#' @importFrom bedrock `%)(%` `%[]%` abind combPairs maxDigits recycle setNamesX label naIf naReplace isZero isWholeLike isDichotomous `%][%` pairApply appendX sortX inDots revX sampleX untable Coalesce columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg
+#' @importFrom bedrock `%)(%` `%[]%` abind combPairs maxDigits recycle setNamesX label naIf naReplace isZero isWholeLike isDichotomous `%][%` pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg
 #'             
-#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI alpha plotDensBox drawBand
+#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox drawBand
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest bpTest corCI
 #'             

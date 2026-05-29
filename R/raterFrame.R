@@ -21,7 +21,7 @@
 #' @param data the data
 #' @param subset potential subset
 #' @param na.action what should happen with missings
-#' @param drop.subj logical, should the subject column be included (default
+#' @param dropSubj logical, should the subject column be included (default
 #' \code{FALSE})
 #' @return a data.frame containing structured data
 #' @author Andri Signorell <andri@@signorell.net>
@@ -43,7 +43,7 @@
 #'            na.action=na.omit)
 #'            
 #' # omit the subject column
-#' raterFrame(rating ~ subj | rater, data=d.long, drop.subj=TRUE)
+#' raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
 #' 
 
 
@@ -55,7 +55,7 @@
 #'
 #'
 #' @export
-raterFrame <- function(formula, data, subset, na.action, drop.subj=FALSE){
+raterFrame <- function(formula, data, subset, na.action, dropSubj=FALSE){
   
 
   # *** Attention !!! ***: 
@@ -67,7 +67,7 @@ raterFrame <- function(formula, data, subset, na.action, drop.subj=FALSE){
   #    Error in `[.default`(xj, i) : invalid subscript type 'closure'
   # thus we simply pass the call unevaluated to the next function
   cl <- match.call(expand.dots = FALSE)
-  cl$drop.subj <- NULL
+  cl$dropSubj <- NULL
   
   # this would work, but ::: are not allowed for CRAN check!
   # cl[[1L]] <- quote(DescToolsX:::.LongToSquare) 
@@ -76,7 +76,7 @@ raterFrame <- function(formula, data, subset, na.action, drop.subj=FALSE){
   m <- eval.parent(cl)
   
   # remove the first column if subject information not required
-  if(drop.subj) m <- m[, -1]
+  if(dropSubj) m <- m[, -1]
   
   class(m) <- c("raterFrame", class(m))
   

@@ -117,7 +117,6 @@ SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
 
 Other location:
 \code{\link[=hmean]{hmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}}
 }

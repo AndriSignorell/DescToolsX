@@ -191,7 +191,7 @@ percTable.table <- function(x, freq=TRUE,
   if (!is.array(x) ||
       length(dim(x)) != 2 ||
       any(dim(x) == 0) ||
-      !isWholeLike(x, nonNegative = TRUE)) {
+      !isWholeLike(x, isNonNegative = TRUE)) {
     
     stop("'x' must be a 2-dimensional array of non-negative integer-like counts.")
   }

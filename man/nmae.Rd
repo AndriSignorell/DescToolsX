@@ -4,14 +4,14 @@
 \alias{nmae}
 \title{Normalized Mean Absolute Error}
 \usage{
-nmae(x, ref, train.y)
+nmae(x, ref, trainY)
 }
 \arguments{
 \item{x}{Numeric vector of predicted values.}
 
 \item{ref}{Numeric vector of reference (true) values.}
 
-\item{train.y}{Numeric vector used as baseline to compute normalization.}
+\item{trainY}{Numeric vector used as baseline to compute normalization.}
 }
 \value{
 A numeric value representing the normalized mean absolute error.
@@ -23,7 +23,7 @@ and reference values.
 \details{
 The normalized mean absolute error is defined as:
 \deqn{
-\frac{\sum |ref - x|}{\sum |ref - mean(train.y)|}
+\frac{\sum |ref - x|}{\sum |ref - mean(trainY)|}
 }
 
 The denominator represents the absolute deviation from the mean of the
@@ -34,9 +34,9 @@ If the denominator is zero, \code{NA} is returned.
 \examples{
 x <- c(2.5, 3.0, 2.8)
 ref <- c(3.0, 2.5, 3.0)
-train.y <- c(2, 3, 4, 3)
+trainY <- c(2, 3, 4, 3)
 
-nmae(x, ref, train.y)
+nmae(x, ref, trainY)
 
 }
 \seealso{

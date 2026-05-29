@@ -95,7 +95,6 @@ sapply(d.pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=medianX]{medianX()}}
 }
 \author{

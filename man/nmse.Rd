@@ -4,14 +4,14 @@
 \alias{nmse}
 \title{Normalized Mean Squared Error}
 \usage{
-nmse(x, ref, train.y)
+nmse(x, ref, trainY)
 }
 \arguments{
 \item{x}{Numeric vector of predicted values.}
 
 \item{ref}{Numeric vector of reference (true) values.}
 
-\item{train.y}{Numeric vector used as baseline to compute normalization.}
+\item{trainY}{Numeric vector used as baseline to compute normalization.}
 }
 \value{
 A numeric value representing the normalized mean squared error.
@@ -23,7 +23,7 @@ and reference values.
 \details{
 The normalized mean squared error is defined as:
 \deqn{
-\frac{\sum (ref - x)^2}{\sum (ref - mean(train.y))^2}
+\frac{\sum (ref - x)^2}{\sum (ref - mean(trainY))^2}
 }
 
 The denominator represents the squared deviation from the mean of the
@@ -34,9 +34,9 @@ If the denominator is zero, \code{NA} is returned.
 \examples{
 x <- c(2.5, 3.0, 2.8)
 ref <- c(3.0, 2.5, 3.0)
-train.y <- c(2, 3, 4, 3)
+trainY <- c(2, 3, 4, 3)
 
-nmse(x, ref, train.y)
+nmse(x, ref, trainY)
 
 }
 \seealso{

@@ -84,7 +84,7 @@ abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
     nr = 1:length(x),
     class = shortclass(x),
     varname = colnames(x),
-    label = unlist(lapply(lapply(x, label), Coalesce, "-")),
+    label = unlist(lapply(lapply(x, label), coalesceX, "-")),
     levels = unlist(lapply(
       x,
       function(z) {
@@ -211,7 +211,7 @@ print.Abstract <- function(x, sep = NULL, width = NULL,
   
   colnames(res) <- colnames(x)
   
-  if (Coalesce(trunc, attr(x, "trunc"), TRUE)) {
+  if (coalesceX(trunc, attr(x, "trunc"), TRUE)) {
     res[, ] <- sapply(
       1:ncol(res),
       function(i) strTrunc(res[, i], maxlen = width[i])

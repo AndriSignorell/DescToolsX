@@ -4,7 +4,7 @@
 \alias{raterFrame}
 \title{Create a Data.frame for Interrater Agreement}
 \usage{
-raterFrame(formula, data, subset, na.action, drop.subj = FALSE)
+raterFrame(formula, data, subset, na.action, dropSubj = FALSE)
 }
 \arguments{
 \item{formula}{something like \code{rating ~ subjects | raters}}
@@ -15,7 +15,7 @@ raterFrame(formula, data, subset, na.action, drop.subj = FALSE)
 
 \item{na.action}{what should happen with missings}
 
-\item{drop.subj}{logical, should the subject column be included (default
+\item{dropSubj}{logical, should the subject column be included (default
 \code{FALSE})}
 }
 \value{
@@ -55,7 +55,7 @@ raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ],
            na.action=na.omit)
            
 # omit the subject column
-raterFrame(rating ~ subj | rater, data=d.long, drop.subj=TRUE)
+raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
 
 }
 \seealso{

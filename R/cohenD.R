@@ -1,4 +1,3 @@
-
 #' Cohen's and Hedges' Effect Size
 #' 
 #' Computes the Cohen's d and Hedges' g effect size statistics.
@@ -68,7 +67,8 @@ cohenD <- function(x, y=NULL,
                      several.ok = FALSE)
   
   if(is.null(y)){   # one sample Cohen d
-    d <- mean(x) / sd(x)
+    .sd <- sd(x)
+    d <- mean(x) / .sd
     n <- length(x)
     if(!is.na(conf.level)){
       
@@ -161,8 +161,8 @@ cohenD <- function(x, y=NULL,
 
 
 .cohenDCI <- function (d, 
-                         n = NULL, n2 = NULL, n1 = NULL, 
-                         alpha = 0.05) {
+                       n = NULL, n2 = NULL, n1 = NULL, 
+                       alpha = 0.05) {
   
   # William Revelle in psych
   
@@ -237,6 +237,3 @@ cohenD <- function(x, y=NULL,
   return(ci)
   
 }
-
-
-

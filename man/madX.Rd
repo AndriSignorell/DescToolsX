@@ -9,7 +9,7 @@ madX(
   weights = NULL,
   center = medianX,
   constant = 1.4826,
-  median.type = c("standard", "low", "high"),
+  medianType = c("standard", "low", "high"),
   na.rm = FALSE
 )
 }
@@ -26,7 +26,7 @@ weights. If this is not possible fall back to a numeric value.}
 
 \item{constant}{scale factor (default is \code{1.4826})}
 
-\item{median.type}{if \code{TRUE}, compute the \sQuote{lo-median}, i.e., for
+\item{medianType}{if \code{TRUE}, compute the \sQuote{lo-median}, i.e., for
 even sample size, do not average the two middle values, but take the smaller
 one, if \code{TRUE}, compute the \sQuote{hi-median}, i.e., take the larger
 of the two middle values for even sample size.}
@@ -62,9 +62,9 @@ print(madX(c(1:9),     constant = 1)) ==
       madX(c(1:8, 100), constant = 1)       # = 2 ; TRUE
 x <- c(1,2,3,5,7,8)
 sort(abs(x - median(x)))
-c(madX(x, constant = 1, median.type="standard"),
-  madX(x, constant = 1, median.type="low"),
-  madX(x, constant = 1, median.type="high"))
+c(madX(x, constant = 1, medianType="standard"),
+  madX(x, constant = 1, medianType="low"),
+  madX(x, constant = 1, medianType="high"))
 
 # use weights
 x <- sample(20, 30, replace = TRUE)

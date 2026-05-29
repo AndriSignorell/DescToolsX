@@ -6,14 +6,14 @@
 #'
 #' @param x Numeric vector of predicted values.
 #' @param ref Numeric vector of reference (true) values.
-#' @param train.y Numeric vector used as baseline to compute normalization.
+#' @param trainY Numeric vector used as baseline to compute normalization.
 #'
 #' @return A numeric value representing the normalized mean squared error.
 #'
 #' @details
 #' The normalized mean squared error is defined as:
 #' \deqn{
-#' \frac{\sum (ref - x)^2}{\sum (ref - mean(train.y))^2}
+#' \frac{\sum (ref - x)^2}{\sum (ref - mean(trainY))^2}
 #' }
 #'
 #' The denominator represents the squared deviation from the mean of the
@@ -24,9 +24,9 @@
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
 #' ref <- c(3.0, 2.5, 3.0)
-#' train.y <- c(2, 3, 4, 3)
+#' trainY <- c(2, 3, 4, 3)
 #'
-#' nmse(x, ref, train.y)
+#' nmse(x, ref, trainY)
 #'
 #' @seealso \code{\link{mean}}, \code{\link{sum}}
 #'
@@ -37,14 +37,14 @@
 #'
 #'
 #' @export
-nmse <- function(x, ref, train.y){
+nmse <- function(x, ref, trainY){
   
   if(length(x) != length(ref))
     stop("'x' and 'ref' must have same length")
   
   sse <- sum((ref - x)^2)
   
-  den <- sum((ref - mean(train.y))^2)
+  den <- sum((ref - mean(trainY))^2)
   if(den == 0)
     return(NA_real_)
   

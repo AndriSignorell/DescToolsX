@@ -117,7 +117,6 @@ New S Language}.  Wadsworth & Brooks/Cole.
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=modeX]{modeX()}}
 }
 \concept{descriptive-statistics}

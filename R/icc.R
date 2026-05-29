@@ -1,3 +1,4 @@
+
 #' Intraclass Correlation Coefficient (ICC)
 #'
 #' Computes intraclass correlation coefficients (ICC) according to
@@ -126,7 +127,7 @@ icc <- function(x,
                 method = c("anova","reml","boot"),
                 na.rm = FALSE,
                 ...) {
-
+  
   
   # Shrout & Fleiss	Deine API	McGraw & Wong
   # ICC(1)	oneway_agreement_single	    Single_raters_absolute
@@ -264,7 +265,7 @@ icc <- function(x,
          anova = .iccCIAnova(obj, conf.level, model, type, unit),
          reml  = .iccCIReml(obj, conf.level),
          boot  = .iccCIBoot(ratings, conf.level,
-                             model, type, unit, R)
+                            model, type, unit, R)
   )
 }
 
@@ -367,7 +368,7 @@ icc <- function(x,
 ############################################################
 
 .iccCIBoot <- function(ratings, conf.level,
-                        model, type, unit, R) {
+                       model, type, unit, R) {
   
   alpha <- 1-conf.level
   ns <- nrow(ratings)
@@ -375,9 +376,10 @@ icc <- function(x,
   vals <- replicate(R,{
     idx <- sample(seq_len(ns),replace=TRUE)
     .iccEstimateAnova(ratings[idx,,drop=FALSE],
-                       model,type,unit)$est
+                      model,type,unit)$est
   })
   
-  quantile(vals,c(alpha/2,1-alpha/2))
+  unname(quantile(vals, c(alpha/2, 1-alpha/2)))
 }
+
 

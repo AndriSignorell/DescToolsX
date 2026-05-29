@@ -28,7 +28,7 @@
 #' in cases when weights are defined to provide a function that also support
 #' weights. If this is not possible fall back to a numeric value.
 #' @param constant scale factor (default is \code{1.4826})
-#' @param median.type if \code{TRUE}, compute the \sQuote{lo-median}, i.e., for
+#' @param medianType if \code{TRUE}, compute the \sQuote{lo-median}, i.e., for
 #' even sample size, do not average the two middle values, but take the smaller
 #' one, if \code{TRUE}, compute the \sQuote{hi-median}, i.e., take the larger
 #' of the two middle values for even sample size.
@@ -46,9 +46,9 @@
 #'       madX(c(1:8, 100), constant = 1)       # = 2 ; TRUE
 #' x <- c(1,2,3,5,7,8)
 #' sort(abs(x - median(x)))
-#' c(madX(x, constant = 1, median.type="standard"),
-#'   madX(x, constant = 1, median.type="low"),
-#'   madX(x, constant = 1, median.type="high"))
+#' c(madX(x, constant = 1, medianType="standard"),
+#'   madX(x, constant = 1, medianType="low"),
+#'   madX(x, constant = 1, medianType="high"))
 #' 
 #' # use weights
 #' x <- sample(20, 30, replace = TRUE)
@@ -70,10 +70,10 @@ madX <- function(x,
                 weights = NULL,
                 center = medianX,
                 constant = 1.4826,
-                median.type = c("standard", "low", "high"),
+                medianType = c("standard", "low", "high"),
                 na.rm = FALSE) {
   
-  median.type <- match.arg(median.type)
+  medianType <- match.arg(medianType)
   
   ## NA handling
   if (na.rm) {
@@ -104,12 +104,12 @@ madX <- function(x,
   ## Median-Index
   n <- length(z$x)
   
-  if (median.type == "standard" || n %% 2 == 1) {
+  if (medianType == "standard" || n %% 2 == 1) {
     m <- medianX(z$x, z$weights)
   } else {
     k <- n %/% 2
     o <- order(z$x)
-    m <- if (median.type == "low")
+    m <- if (medianType == "low")
       z$x[o[k]]
     else
       z$x[o[k + 1]]

@@ -16,7 +16,7 @@
 #' @param direction direction of the calculation. Can be \code{"row"} (default)
 #' or \code{"column"}, where \code{"row"} calculates uncertCoef (R|C) ("column
 #' dependent"). 
-#' @param p.zero.correction slightly nudge zero values so that their logarithm
+#' @param pZeroCorrection slightly nudge zero values so that their logarithm
 #' can be calculated 
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
@@ -25,8 +25,9 @@
 #' required, \cr or a vector with 3 elements for estimate, lower and upper
 #' confidence intervall.  
 #' 
-#' @author Andri Signorell <andri@@signorell.net> strongly based on code from
-#' Antti Arppe <antti.arppe@@helsinki.fi> 
+#' @note Based on code from Antti Arppe
+#' 
+#' 
 #' @seealso \code{\link{Association}}
 #' @references Theil, H. (1972), \emph{Statistical Decomposition Analysis},
 #' Amsterdam: North-Holland Publishing Company. 
@@ -57,7 +58,7 @@
 uncertCoef <- function(x, y = NULL, conf.level = NA, 
                        sides = c("two.sided", "left", "right"),
                        direction = c("symmetric", "row", "column"),
-                       p.zero.correction = 1/sum(x)^2, ... ) {
+                       pZeroCorrection = 1/sum(x)^2, ... ) {
   
   # Theil's UC (1970)
   # slightly nudge zero values so that their logarithm can be 
@@ -65,7 +66,7 @@ uncertCoef <- function(x, y = NULL, conf.level = NA,
   
   if(!is.null(y)) x <- table(x, y, ...)
   
-  x[x == 0] <- p.zero.correction
+  x[x == 0] <- pZeroCorrection
   
   n <- sum(x)
   rsum <- rowSums(x)

@@ -10,7 +10,7 @@ pearsonCor(
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("fisher"),
-  scores.type = "table",
+  scoresType = "table",
   na.rm = FALSE
 )
 }
@@ -30,7 +30,7 @@ interval, must be one of \code{"two.sided"} (default), \code{"left"} or
 \item{method}{method to calculate confidence intervals, implemented is
 only "fisher".}
 
-\item{scores.type}{type of calculating scores for the table.}
+\item{scoresType}{type of calculating scores for the table.}
 
 \item{na.rm}{logical, default \code{FALSE} determining if complete cases
 should be respected}
