@@ -5,7 +5,7 @@
 #' 
 #' Calculates the eta-squared, partial eta-squared, and generalized eta-squared
 #' measures of effect size that are commonly used in analysis of variance. The
-#' input \code{x} should be the analysis of variance object itself. For
+#' input \code{fit} should be the analysis of variance object itself. For
 #' between-subjects designs, generalized eta-squared equals partial
 #' eta-squared. The reported generalized eta-squared for repeated-measures
 #' designs assumes that all factors are manipulated, i.e., that there are no
@@ -20,13 +20,13 @@
 #' 
 #' @name etaSq
 #' @aliases etaSq etaSq.lm etaSq.aovlist aovlDetails aovlErrorTerms
-#' @param x An analysis of variance (\code{aov}, \code{aovlist}) object.
+#' @param fit An analysis of variance (\code{aov}, \code{aovlist}) object.
 #' @param type What type of sum of squares to calculate? \code{etaSq.aovlist}
 #' requires \code{type=1}.
 #' @param anova Should the full ANOVA table be printed out in addition to the
 #' effect sizes?
 #' 
-#' @return If \code{anova=FALSE}, the output for \code{etaSq.lm} is an M x 2
+#' @return If \code{anova=FALSE}, the output for \code{etaSq.lm} is an M fit 2
 #' matrix, for \code{etaSq.aovlist} it is an M x 3 matrix. Each of the M rows
 #' corresponds to one of the terms in the ANOVA (e.g., main effect 1, main
 #' effect 2, interaction, etc), and each of the columns corresponds to a
@@ -109,13 +109,13 @@
 #'
 #'
 #' @export
-etaSq <- function (x, type = 2, anova = FALSE) {
+etaSq <- function (fit, type = 2, anova = FALSE) {
   UseMethod("etaSq")
 }
 
 #' @rdname etaSq
 #' @export
-etaSq.lm <- function (x, type = 2, anova = FALSE) {
+etaSq.lm <- function (fit, type = 2, anova = FALSE) {
   
   # file:    etaSquared.R
   # author:  Dan Navarro
@@ -139,7 +139,7 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
   }
   
   if (type == 1) {
-    ss <- anova(x)[, "Sum Sq", drop = FALSE]
+    ss <- anova(fit)[, "Sum Sq", drop = FALSE]
     ss.res <- ss[dim(ss)[1], ]
     ss.tot <- sum(ss)
     ss <- ss[-dim(ss)[1], , drop = FALSE]
@@ -147,22 +147,22 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
   }
   else {
     if (type == 2) {
-      ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
-      ss.res <- sum((x$residuals)^2)
-      terms <- attr(x$terms, "factors")[-1, , drop = FALSE]
-      l <- attr(x$terms, "term.labels")
+      ss.tot <- sum((fit$model[, 1] - mean(fit$model[, 1]))^2)
+      ss.res <- sum((fit$residuals)^2)
+      terms <- attr(fit$terms, "factors")[-1, , drop = FALSE]
+      l <- attr(fit$terms, "term.labels")
       ss <- matrix(NA, length(l), 1)
       rownames(ss) <- l
       for (i in seq_along(ss)) {
         vars.this.term <- which(terms[, i] != 0)
         dependent.terms <- which(apply(terms[vars.this.term, , drop = FALSE], 2, prod) > 0)
-        m0 <- lm(x$terms[-dependent.terms], x$model)
+        m0 <- lm(fit$terms[-dependent.terms], fit$model)
         if (length(dependent.terms) > 1) {
-          m1 <- lm(x$terms[-setdiff(dependent.terms, i)], x$model)
+          m1 <- lm(fit$terms[-setdiff(dependent.terms, i)], fit$model)
           ss[i] <- anova(m0, m1)$`Sum of Sq`[2]
         }
         else {
-          ss[i] <- anova(m0, x)$`Sum of Sq`[2]
+          ss[i] <- anova(m0, fit)$`Sum of Sq`[2]
         }
       }
     }
@@ -170,18 +170,18 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
       if (type == 3) {
         ## check if model was fitted with sum-to-zero contrasts
         ## necessary for valid SS type 3 (e.g., contr.sum, contr.helmert)
-        IVs <- names(attr(model.matrix(x), "contrasts"))
+        IVs <- names(attr(model.matrix(fit), "contrasts"))
         ## only relevant for more than one factor
         ## (and for unbalanced cell sizes and interactions, not tested here)
         if(length(IVs) > 1) {
           isSumToZero <- function(IV) {
             ## check if factor has directly associated contrasts
-            if(!is.null(attr(x$model[, IV], "contrasts"))) {
-              cm <- contrasts(x$model[, IV])
+            if(!is.null(attr(fit$model[, IV], "contrasts"))) {
+              cm <- contrasts(fit$model[, IV])
               all(colSums(cm) == 0)
             } else {
               ## check attributes from model matrix
-              attr(model.matrix(x), "contrasts")[[IV]] %in% c("contr.sum", "contr.helmert")
+              attr(model.matrix(fit), "contrasts")[[IV]] %in% c("contr.sum", "contr.helmert")
             }
           }
           
@@ -200,10 +200,10 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
           }
         }
         
-        mod <- drop1(x, scope = x$terms)
+        mod <- drop1(fit, scope = fit$terms)
         ss <- mod[-1, "Sum of Sq", drop = FALSE]
         ss.res <- mod[1, "RSS"]
-        ss.tot <- sum((x$model[, 1] - mean(x$model[, 1]))^2)
+        ss.tot <- sum((fit$model[, 1] - mean(fit$model[, 1]))^2)
         ss <- as.matrix(ss)
       }
       else {
@@ -224,7 +224,7 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
     eta2p <- ss/(ss + ss.res)
     k <- length(ss)
     eta2p[k] <- NA
-    df <- anova(x)[, "Df"]
+    df <- anova(fit)[, "Df"]
     ms <- ss/df
     Fval <- ms/ms[k]
     p <- 1 - pf(Fval, df, rep.int(df[k], k))
@@ -240,7 +240,7 @@ etaSq.lm <- function (x, type = 2, anova = FALSE) {
 
 #' @rdname etaSq
 #' @export
-etaSq.aovlist <-  function (x, type = 2, anova = FALSE) {
+etaSq.aovlist <-  function (fit, type = 2, anova = FALSE) {
   
   # author:  Daniel Wollschlaeger
   # contact: contact@dwoll.de
@@ -262,9 +262,9 @@ etaSq.aovlist <-  function (x, type = 2, anova = FALSE) {
     stop("type must be equal to 1")
   }
   
-  details <- aovlDetails(x)
+  details <- aovlDetails(fit)
   ss      <- details$Sum.Sq             # effect SS
-  ss.res  <- sum(aovlErrorTerms(x)$SS)  # total error SS
+  ss.res  <- sum(aovlErrorTerms(fit)$SS)  # total error SS
   ss.tot  <- sum(ss) + sum(ss.res)
   
   # eta squared
@@ -304,11 +304,11 @@ etaSq.aovlist <-  function (x, type = 2, anova = FALSE) {
 
 #' @rdname etaSq
 #' @export 
-aovlDetails <- function(x) {
+aovlDetails <- function(fit) {
   
   # author:  Daniel Wollschlaeger
   
-  aovSum  <- summary(x)
+  aovSum  <- summary(fit)
   etNames <- names(aovSum)  # error terms
   
   getOneRes <- function(tt, tab) {  # tab=anova table, tt = tested term
@@ -358,8 +358,8 @@ aovlDetails <- function(x) {
 
 #' @rdname etaSq
 #' @export
-aovlErrorTerms <- function(x) {
-  aovSum  <- summary(x)
+aovlErrorTerms <- function(fit) {
+  aovSum  <- summary(fit)
   etNames <- names(aovSum)
   getSS <- function(z) {
     aovSum[[z]][[1]]["Residuals", "Sum Sq"]

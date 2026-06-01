@@ -288,6 +288,22 @@ legend = TRUE   # ambiguous
 weights = TRUE  # semantic overload
 ```
 
+**Exception: established Base-R boolean argument names**
+
+If a boolean argument has a well-established, unambiguous counterpart in
+Base R or widely used R packages, that name takes precedence over the
+`show*` / `use*` / `is*` / `has*` convention.  The rationale is the
+core principle *Base-R compatibility > stylistic purity*.
+
+| Established name | Do not use |
+|---|---|
+| `warn` | `showWarnings` |
+| `verbose` | `showProgress` |
+| `recursive` | `isRecursive` |
+
+Rule: adopt the Base-R name only when it is unambiguous and directly
+inherited — not as a general escape hatch from the naming convention.
+
 **(F) Control terminology**
 
 Do not use numeric terms such as `tol`, `eps`, or `precision` if the argument actually controls user-facing behavior, such as formatting or display boundaries.
@@ -344,6 +360,7 @@ exclusive output modes.
 
 Examples:
 
+
 ```r
 returnNames      = TRUE
 returnCall       = FALSE
@@ -359,6 +376,72 @@ Conceptual distinction:
 | `return*` | optionally add information | `returnNames = TRUE` |
 | `keep*` / `drop*` | modify retained structure | `dropNA = TRUE` |
 
+
+
+**(H) Argument Naming **
+
+Use argument names that communicate the **role** of the object, 
+not merely its storage type.
+
+### General Principles
+
+- Use short, conventional names where their meaning is universally understood.
+- Prefer consistency across the package over local optimization.
+- Follow established R conventions whenever they are clear and widely adopted.
+
+### Recommended Names
+
+| Object type | Preferred name |
+|-------------|----------------|
+| Numeric vector, factor, table, generic object | `x` |
+| Second object of same type | `y` |
+| Matrix | `m` |
+| Data frame | `data` |
+| Formula | `formula` |
+| Model fit object (`lm`, `glm`, `coxph`, etc.) | `fit` |
+| User-supplied function | `FUN` |
+| Internal function object | `fun` |
+
+### Examples
+
+Good:
+
+```r
+meanCI(x)
+corCI(x, y)
+
+fit <- lm(y ~ x)
+
+coefCI(fit)
+pseudoR2(fit)
+vif(fit)
+
+model.frame(formula, data)
+```
+
+Avoid:
+
+```r
+coefCI(x)
+vif(mod)
+bpTest(lm_fit)
+pseudoR2(model_object)
+```
+
+### Rationale
+
+For raw data, `x` and `y` are concise and familiar. For fitted models, `fit` immediately signals that a model object is expected and aligns with common usage throughout the R ecosystem:
+
+```r
+fit <- lm(y ~ x)
+
+coef(fit)
+predict(fit)
+residuals(fit)
+fitted(fit)
+```
+
+Using `fit` consistently improves readability and reduces ambiguity compared with alternatives such as `x`, `mod`, `model`, `lm_fit`, or `glm_fit`.
 
 
 ## 3.4 Return Values

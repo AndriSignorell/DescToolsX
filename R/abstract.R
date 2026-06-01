@@ -20,7 +20,7 @@
 #' 
 #' @param x a `data.frame` to be described
 #' @param sep the separator for concatenating the levels of a factor
-#' @param zero.form a symbol to be used, when a variable has zero NAs.
+#' @param zeroForm a symbol to be used, when a variable has zero NAs.
 #' @param maxlevels (integer, `Inf`) Max. number of factor levels to display.
 #'        Default is 5. Set this to `Inf`, if all levels are needed.
 #' @param trunc logical, defining if level names exceeding the column with
@@ -68,7 +68,7 @@
 #'
 #'
 #' @export
-abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
+abstract <- function(x, sep = ", ", zeroForm = ".", maxlevels = 5,
                      trunc = TRUE, list.len = 999) {
   
   shortclass <- function(x) {
@@ -118,7 +118,7 @@ abstract <- function(x, sep = ", ", zero.form = ".", maxlevels = 5,
                     paste(res$NAs, " (",
                           fm(res$NAs / dim(x)[1], fmt = "%", digits = 1), ")",
                           sep = ""
-                    ), zero.form
+                    ), zeroForm
   )
   
   rownames(res) <- NULL

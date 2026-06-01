@@ -8,7 +8,7 @@
 abstract(
   x,
   sep = ", ",
-  zero.form = ".",
+  zeroForm = ".",
   maxlevels = 5,
   trunc = TRUE,
   list.len = 999
@@ -21,7 +21,7 @@ abstract(
 
 \item{sep}{the separator for concatenating the levels of a factor}
 
-\item{zero.form}{a symbol to be used, when a variable has zero NAs.}
+\item{zeroForm}{a symbol to be used, when a variable has zero NAs.}
 
 \item{maxlevels}{(integer, \code{Inf}) Max. number of factor levels to display.
 Default is 5. Set this to \code{Inf}, if all levels are needed.}

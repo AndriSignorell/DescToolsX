@@ -5,7 +5,7 @@
 #' for a fitted model. For multi-parameter terms (e.g., factors),
 #' GVIFs are returned along with a scaled version \code{GVIF^(1/(2*Df))}.
 #'
-#' @param mod A fitted model object. Currently supports objects of class
+#' @param fit A fitted model object. Currently supports objects of class
 #'   \code{lm}, \code{glm}, and \code{gls}.
 #'
 #' @return
@@ -42,27 +42,27 @@
 #'
 #'
 #' @export
-vif <- function(mod) {
+vif <- function(fit) {
   
-  if (!inherits(mod, c("lm", "glm", "gls"))) {
+  if (!inherits(fit, c("lm", "glm", "gls"))) {
     stop("Unsupported model type.", call. = FALSE)
   }
   
-  if (any(is.na(coef(mod))))
+  if (any(is.na(coef(fit))))
     stop("There are aliased coefficients in the model.", call. = FALSE)
   
-  v <- vcov(mod)
-  mm <- model.matrix(mod)
+  v <- vcov(fit)
+  mm <- model.matrix(fit)
   assign <- attr(mm, "assign")
   
-  if (names(coef(mod))[1] == "(Intercept)") {
+  if (names(coef(fit))[1] == "(Intercept)") {
     v <- v[-1, -1, drop = FALSE]
     assign <- assign[-1]
   } else {
     warning("No intercept: VIFs may not be sensible.")
   }
   
-  terms <- attr(terms(mod), "term.labels")
+  terms <- attr(terms(fit), "term.labels")
   n.terms <- length(terms)
   
   if (n.terms < 2)

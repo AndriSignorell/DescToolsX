@@ -1,115 +1,152 @@
-
-#' Lorenz Curve Estimation and Visualization
+#' Lorenz Curve
 #'
-#' \code{lc()} computes the empirical Lorenz curve for a numeric vector.
-#' It returns an object of class \code{"lc"} which can be visualized using
-#' \code{plot()}, \code{lines()}, and \code{points()}.
-#'
-#' The Lorenz curve represents the cumulative proportion of a variable
-#' (e.g., income) as a function of the cumulative population share.
-#'
-#' @name lc
-#'
-#' @param x A numeric vector of non-negative values.
-#' @param n Optional vector of non-negative weights of the same length as \code{x}.
-#'   Defaults to equal weights.
-#' @param na.rm Logical. Should missing values be removed?
-#'
-#' @param formula A formula of the form \code{y ~ group} for grouped Lorenz curves.
-#' @param data Optional data frame.
-#' @param subset Optional subset expression.
-#' @param na.action Function to handle missing values.
-#'
-#' @param object Object of class \code{"lc"}.
-#' @param newdata Optional numeric vector of values in \eqn{[0,1]} at which to
-#'   evaluate the Lorenz curve.
-#' @param conf.level Confidence level for bootstrap confidence intervals.
-#' @param general Logical. If \code{TRUE}, the generalized Lorenz curve is used.
-#' @param n Number of bootstrap replications.
-#'
-#' @param main,xlab,ylab Graphical parameters passed to \code{plot()}.
-#' @param xlim,ylim Axis limits.
-#' @param col,lwd,lty Graphical parameters for line drawing.
-#' @param pch Plotting symbol for points.
-#' @param grid Logical or list. Draw grid lines.
-#' @param box Logical. Draw box around the plot.
-#' @param cband Logical or list. Draw confidence band in \code{lines()}.
-#' @param stamp Optional annotation handled by the graphics framework.
-#' @param ... Further arguments passed to underlying methods.
-#'
-#' @return
-#' \itemize{
-#'   \item \code{lc()} returns an object of class \code{"lc"} with components:
-#'     \describe{
-#'       \item{p}{Cumulative population share}
-#'       \item{L}{Lorenz curve}
-#'       \item{L.general}{Generalized Lorenz curve}
-#'       \item{Gini}{Gini coefficient}
-#'       \item{x}{Original data}
-#'       \item{n}{Weights}
-#'     }
-#'   \item \code{lc.formula()} returns either a single \code{"lc"} object or a
-#'     list of such objects of class \code{"lclist"} for grouped data.
-#'   \item \code{predict.lc()} returns a data frame with columns \code{p} and
-#'     \code{L}, optionally including \code{lci} and \code{uci}.
-#' }
+#' Computes the empirical Lorenz curve for a numeric vector, optionally with
+#' weights and grouped via formula interface.  Returns an object of class
+#' \code{"lc"} (or \code{"lclist"} for grouped data) that can be visualized
+#' with \code{plot()}, \code{lines()}, and \code{points()} from the
+#' \pkg{aurora} package.
 #'
 #' @details
 #' The Lorenz curve is defined as
 #'
-#' \deqn{
-#' L(p) = \frac{\sum_{i=1}^{k} w_i x_i}{\sum_{i=1}^{n} w_i x_i}
+#' \deqn{L(p) = \frac{\sum_{i=1}^{k} w_i x_i}{\sum_{i=1}^{n} w_i x_i}}
+#'
+#' where observations are sorted in increasing order and \eqn{p} denotes
+#' the cumulative proportion of weights up to rank \eqn{k}.
+#'
+#' The generalized Lorenz curve scales the standard curve by the weighted
+#' mean \eqn{\mu}:
+#'
+#' \deqn{L_{\text{general}}(p) = L(p) \cdot \mu}
+#'
+#' For formula input of the form \code{y ~ group}, the data are split by
+#' group and a separate Lorenz curve is computed for each level.  A single
+#' \code{"lc"} object is returned when there is only one group; otherwise
+#' an \code{"lclist"}.
+#'
+#' Bootstrap confidence intervals in \code{predict.lc()} are based on
+#' resampling with replacement from the (weighted) empirical distribution,
+#' followed by pointwise quantiles across bootstrap replicates.  The number
+#' of replications is controlled by \code{R} passed via \code{...} and
+#' extracted by \code{.extractBootArgs()} (default \code{R = 999}).
+#'
+#' @param x Numeric vector of non-negative values.
+#' @param n Numeric vector of non-negative weights of the same length as
+#'   \code{x}.  Defaults to equal weights (\code{rep(1, length(x))}).
+#' @param na.rm Logical.  If \code{TRUE}, observations with \code{NA} in
+#'   \code{x} or \code{n} are removed before computation.  Default is
+#'   \code{FALSE}.
+#' @param formula A formula of the form \code{y ~ group} specifying the
+#'   response and grouping variable.
+#' @param data Optional data frame in which to evaluate \code{formula}.
+#' @param subset Optional expression indicating which rows of \code{data}
+#'   to use.
+#' @param na.action Function for handling missing values in the model frame.
+#'   Default is \code{\link[stats]{na.pass}}.
+#' @param object Object of class \code{"lc"} as returned by \code{lc()}.
+#' @param newdata Optional numeric vector of values in \eqn{[0, 1]} at
+#'   which to evaluate the Lorenz curve via linear interpolation.  If
+#'   omitted, the original grid points are returned.
+#' @param conf.level Numeric scalar in \eqn{(0, 1)}.  If supplied,
+#'   bootstrap confidence intervals at level \code{conf.level} are added
+#'   as columns \code{lci} and \code{uci}.  Set to \code{NA} (default)
+#'   to suppress intervals.
+#' @param general Logical.  If \code{TRUE}, the generalized Lorenz curve
+#'   is used.  Default is \code{FALSE}.
+#' @param ... Further arguments passed to \code{lc.default()} (from
+#'   \code{lc.formula()}).  In \code{predict.lc()}, the argument \code{R}
+#'   (positive integer, default \code{999}) controls the number of bootstrap
+#'   replications when \code{conf.level} is supplied; it is extracted via
+#'   \code{.extractBootArgs()} and ignored otherwise.
+#'
+#' @return
+#' \describe{
+#'   \item{\code{lc.default()}}{An object of class \code{"lc"}, a list
+#'     with components:
+#'     \describe{
+#'       \item{\code{p}}{Numeric vector of cumulative population shares
+#'         (starting at 0).}
+#'       \item{\code{L}}{Numeric vector of Lorenz curve values at \code{p}.}
+#'       \item{\code{L.general}}{Generalized Lorenz curve values.}
+#'       \item{\code{Gini}}{Gini coefficient (scalar).}
+#'       \item{\code{x}}{Original (unsorted) data vector.}
+#'       \item{\code{n}}{Original weight vector.}
+#'     }
+#'   }
+#'   \item{\code{lc.formula()}}{A single \code{"lc"} object if the formula
+#'     specifies one group, otherwise an object of class \code{"lclist"}
+#'     (a named list of \code{"lc"} objects, one per group level).}
+#'   \item{\code{predict.lc()}}{A data frame with columns \code{p} and
+#'     \code{L} (interpolated curve values at \code{newdata}).  If
+#'     \code{conf.level} is supplied, columns \code{lci} and \code{uci}
+#'     are appended.}
 #' }
-#'
-#' where observations are ordered increasingly and \eqn{p} denotes the cumulative
-#' proportion of weights.
-#'
-#' The generalized Lorenz curve scales the Lorenz curve by the mean:
-#'
-#' \deqn{
-#' L_{general}(p) = L(p) \cdot \mu
-#' }
-#'
-#' where \eqn{\mu} is the weighted mean of \code{x}.
-#'
-#' For formula input, data are split by group and separate Lorenz curves
-#' are computed.
-#'
-#' Bootstrap confidence intervals in \code{predict()} and \code{lines()}
-#' are based on resampling with replacement.
 #'
 #' @examples
 #' set.seed(1)
 #' x <- rlnorm(100)
 #'
-#' # basic Lorenz curve
+#' # default method
 #' lc_obj <- lc(x)
+#' lc_obj$Gini
+#'
+#' # with weights
+#' w <- runif(100, 0.5, 2)
+#' lc(x, n = w)
+#'
+#' # formula interface: grouped Lorenz curves
+#' g <- sample(letters[1:3], 100, replace = TRUE)
+#' d <- data.frame(x = x, g = g)
+#' lc_grp <- lc(x ~ g, data = d)
+#'
+#' # prediction on a regular grid
+#' predict(lc_obj, newdata = seq(0, 1, by = 0.1))
+#'
+#' # with 95% bootstrap confidence intervals (R = 200 for speed)
+#' predict(lc_obj, newdata = seq(0, 1, by = 0.25),
+#'         conf.level = 0.95, R = 200)
+#'         
+#'         
+#' # plotting routines from package aurora         
+#' set.seed(1)
+#' x <- rlnorm(100)
+#' lc_obj <- lc(x)
+#'
+#' # basic plot
 #' plot(lc_obj)
+#'
+#' # overlay confidence band
+#' lines(lc_obj, cbandArgs = list(conf.level = 0.95))
 #'
 #' # add points
 #' points(lc_obj, pch = 16)
 #'
-#' # add confidence band
-#' lines(lc_obj, conf.level = 0.95, cband = TRUE)
+#' # generalized Lorenz curve
+#' plot(lc_obj, general = TRUE)
 #'
 #' # grouped Lorenz curves
 #' g <- sample(letters[1:3], 100, replace = TRUE)
 #' lc_grp <- lc(x ~ g)
-#'
 #' plot(lc_grp)
 #' lines(lc_grp)
+#' points(lc_grp, pch = 16)
+#' 
 #'
 #' @references
-#' Lorenz, M. O. (1905).
-#' Methods of measuring the concentration of wealth.
-#' \emph{Publications of the American Statistical Association}.
+#' Lorenz, M. O. (1905). Methods of measuring the concentration of wealth.
+#' \emph{Publications of the American Statistical Association}, \bold{9},
+#' 209--219.
 #'
-#' @seealso \code{\link{gini}}, \code{\link{predict.lc}}
+#' @seealso
+#'   \code{\link{gini}} for the Gini coefficient,
+#'   \code{\link[aurora]{plot.lc}} for visualization.
 #'
+#' @name lc
 #' @family inequality
 #' @concept descriptive-statistics
 #' @concept inequality
 NULL
+
 
 
 #' @export
@@ -201,7 +238,7 @@ lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
 
 #' @rdname lc
 #' @export
-predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, n = 1000, ...) {
+predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, ...) {
   
   if (!inherits(object, "lc"))
     stop("object must be of class 'lc'")
@@ -229,9 +266,8 @@ predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, n = 10
   # --- helper: safe interpolation ---
   interp_safe <- function(x, y, xout) {
     ok <- is.finite(x) & is.finite(y)
-    if (sum(ok) < 2) {
+    if (sum(ok) < 2)
       return(rep(NA_real_, length(xout)))
-    }
     approx(x[ok], y[ok], xout = xout, rule = 2)$y
   }
   
@@ -240,7 +276,10 @@ predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, n = 10
     
     if (!is.numeric(conf.level) || length(conf.level) != 1 ||
         conf.level <= 0 || conf.level >= 1)
-      stop("conf.level must be a single number in (0,1)")
+      stop("conf.level must be a single number in (0, 1)")
+    
+    bootArgs <- .extractBootArgs(match.call(expand.dots = FALSE)$`...`)
+    R <- bootArgs$R
     
     # --- reconstruct weighted sample ---
     wsum <- sum(object$n)
@@ -252,13 +291,13 @@ predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, n = 10
     
     x_full <- sample(
       object$x,
-      size = wsum,
+      size    = wsum,
       replace = TRUE,
-      prob = object$n
+      prob    = object$n
     )
     
     # --- bootstrap ---
-    lst <- replicate(n, lc(x_full, ...), simplify = FALSE)
+    lst <- replicate(R, lc(x_full), simplify = FALSE)
     
     curve_name <- if (general) "L.general" else "L"
     
@@ -271,22 +310,15 @@ predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, n = 10
     
     # --- handle degenerate bootstrap ---
     if (is.null(mat) || nrow(mat) == 0) {
-      
       lci <- rep(NA_real_, length(newdata))
       uci <- rep(NA_real_, length(newdata))
-      
     } else {
-      
-      # --- compute quantiles ---
       lci_raw <- apply(mat, 2, quantile,
                        probs = (1 - conf.level) / 2,
                        na.rm = TRUE)
-      
       uci_raw <- apply(mat, 2, quantile,
                        probs = 1 - (1 - conf.level) / 2,
                        na.rm = TRUE)
-      
-      # --- interpolate safely ---
       lci <- interp_safe(ci_x, lci_raw, newdata)
       uci <- interp_safe(ci_x, uci_raw, newdata)
     }
@@ -295,244 +327,5 @@ predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, n = 10
   }
   
   res
-}
-
-
-
-#' @rdname lc
-#' @export
-plot.lc <- function(
-    
-  # DATA
-  x,
-  
-  # LABELS
-  main = "Lorenz curve",
-  xlab = "p",
-  ylab = "L(p)",
-  
-  # AXES
-  xlim = NULL,
-  ylim = NULL,
-  
-  # STRUCTURE
-  general = FALSE,
-  
-  # STYLE
-  col = NULL,
-  lwd = 2,
-  lty = 1,
-  pch = NULL,
-  grid = FALSE,
-  box = TRUE,
-  
-  # FRAMEWORK
-  stamp = NULL,
-  
-  ...
-) {
-  
-  if (!inherits(x, "lc"))
-    stop("x must be of class 'lc'")
-  
-  .withGraphicsState({
-    
-    .applyParFromDots(...)
-    
-    # --- data selection ---
-    L <- if (!general) x$L else x$L.general
-    p <- x$p
-    
-    # --- axis limits ---
-    if (is.null(xlim)) xlim <- c(0, 1)
-    if (is.null(ylim)) ylim <- c(0, 1)
-    
-    # --- base plot ---
-    plot(
-      p, L,
-      type = "n",
-      main = main,
-      xlab = xlab,
-      ylab = ylab,
-      xlim = xlim,
-      ylim = ylim
-    )
-    
-    # --- grid ---
-    callIf(
-      graphics::grid,
-      grid,
-      defaults = list(col = "grey90", lty = 1)
-    )
-
-    # --- Lorenz curve ---
-    lines(p, L, col = col, lwd = lwd, lty = lty)
-    
-    # --- equality line ---
-    abline(0, 1, col = "grey50", lty = 2)
-    
-    # --- points ---
-    if (!is.null(pch)) {
-      points(p, L, pch = pch, col = col)
-    }
-    
-    # --- box ---
-    if (isTRUE(box)) box()
-    
-  }, stamp = stamp)
-}
-
-
-#' @rdname lc
-#' @export
-lines.lc <- function(
-    
-  # DATA
-  x,
-  
-  # STRUCTURE
-  general = FALSE,
-  
-  # STYLE
-  col = NULL,
-  lwd = 2,
-  lty = 1,
-  
-  # FEATURES
-  conf.level = NA,
-  cband = FALSE,
-  
-  ...
-) {
-  
-  if (!inherits(x, "lc"))
-    stop("x must be of class 'lc'")
-  
-  # --- select curve ---
-  L <- if (!general) x$L else x$L.general
-  
-  # --- confidence band ---
-  if (!is.na(conf.level)) {
-    
-    if (!is.numeric(conf.level) || length(conf.level) != 1 ||
-        conf.level <= 0 || conf.level >= 1)
-      stop("conf.level must be a number in (0,1)")
-    
-    ci <- predict(x, conf.level = conf.level, general = general)
-    
-    defaults <- list(
-      col = grDevices::adjustcolor("black", alpha.f = 0.12),
-      border = NA
-    )
-    
-    band_args <- list(
-      x = c(ci$p, rev(ci$p)),
-      y = c(ci$lci, rev(ci$uci))
-    )
-
-    callIf(
-        drawBand,
-        cband,
-        defaults = modifyList(defaults, band_args),
-        forbidden = c("x", "y")
-      )
-
-  }
-  
-  # --- draw line ---
-  lines(x$p, L, col = col, lwd = lwd, lty = lty, ...)
-  
-  invisible(NULL)
-}
-
-
-#' @rdname lc
-#' @export
-points.lc <- function(
-    
-  # DATA
-  x,
-  
-  # STRUCTURE
-  general = FALSE,
-  
-  # STYLE
-  pch = 16,
-  col = NULL,
-  
-  ...
-) {
-  
-  if (!inherits(x, "lc"))
-    stop("x must be of class 'lc'")
-  
-  # --- select curve ---
-  L <- if (!general) x$L else x$L.general
-  
-  # --- draw points ---
-  points(x$p, L, pch = pch, col = col, ...)
-  
-  invisible(NULL)
-}
-
-
-
-#' @rdname lc
-#' @export
-lines.lclist <- function(x, col = NULL, ...) {
-  
-  k <- length(x)
-  
-  if (is.null(col))
-    col <- seq_len(k)
-  
-  for (i in seq_along(x)) {
-    lines(x[[i]], col = col[i], ...)
-  }
-  
-  invisible(NULL)
-}
-
-
-
-#' @rdname lc
-#' @export
-points.lclist <- function(x, col = NULL, ...) {
-  
-  k <- length(x)
-  
-  if (is.null(col))
-    col <- seq_len(k)
-  
-  for (i in seq_along(x)) {
-    points(x[[i]], col = col[i], ...)
-  }
-  
-  invisible(NULL)
-}
-
-
-
-#' @rdname lc
-#' @export
-plot.lclist <- function(x, col = NULL, ...) {
-  
-  k <- length(x)
-  
-  if (k == 0)
-    stop("empty lclist")
-  
-  if (is.null(col))
-    col <- seq_len(k)
-  
-  plot(x[[1]], col = col[1], ...)
-  
-  if (k > 1) {
-    for (i in 2:k) {
-      lines(x[[i]], col = col[i], ...)
-    }
-  }
-  
-  invisible(NULL)
 }
 

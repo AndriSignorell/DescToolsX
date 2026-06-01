@@ -25,7 +25,7 @@ test_that("abstract ColName column matches names of input data frame", {
 
 test_that("abstract NAs column shows '.' when there are no NAs", {
   res <- abstract(iris)
-  # iris has no NAs → zero.form '.' in all rows
+  # iris has no NAs → zeroForm '.' in all rows
   expect_true(all(res$NAs == "."))
 })
 

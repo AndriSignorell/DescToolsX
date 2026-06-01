@@ -32,7 +32,7 @@
 
 
 #' @param conf.level Confidence level for intervals
-#' @param use.profile Logical; use profile likelihood for CI (glm only)
+#' @param useProfile Logical; use profile likelihood for CI (glm only)
 #' @export
 tmodSummary <- function(x, ...){
   UseMethod("tmodSummary")
@@ -192,12 +192,12 @@ tmodSummary.lmrob <- function(x, conf.level = 0.95, ...){
 #' @export
 #' @method tmodSummary glm
 #' @rdname tmodSummary
-tmodSummary.glm <- function(x, conf.level = 0.95, use.profile = TRUE, ...){
+tmodSummary.glm <- function(x, conf.level = 0.95, useProfile = TRUE, ...){
   
   sm <- summary(x)
   
   # --- CI ---
-  ci <- if(use.profile) {
+  ci <- if(useProfile) {
     suppressMessages(confint(x, level = conf.level))
   } else {
     confint.default(x, level = conf.level)

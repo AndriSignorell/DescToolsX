@@ -8,7 +8,7 @@
 \usage{
 tMod(..., FUN = NULL, order = NA, verbose = FALSE)
 
-\method{print}{TMod}(x, digits = 3, na.form = "-", verbose = NULL, ...)
+\method{print}{TMod}(x, digits = 3, naForm = "-", verbose = NULL, ...)
 
 \method{plot}{TMod}(x, terms = NULL, intercept = FALSE, ...)
 }
@@ -25,7 +25,7 @@ tMod(..., FUN = NULL, order = NA, verbose = FALSE)
 
 \item{digits}{Number of digits for printing}
 
-\item{na.form}{String used for missing values}
+\item{naForm}{String used for missing values}
 
 \item{terms}{Optional character vector specifying which model terms
 should be displayed in the plot. If \code{NULL}, all terms are shown.}

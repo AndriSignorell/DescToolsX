@@ -12,7 +12,7 @@ tOne(
   align = "\\\\l", FUN = NULL, TEST = NULL,
   intref = "high",
   fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty", 
-             pval = style(fmt = "*", na.form = "   "))
+             pval = style(fmt = "*", naForm = "   "))
 )
 
 \method{print}{tOne}(x, ...)
@@ -134,7 +134,7 @@ See examples which show several different implementations.
   fmt = list(abs  = "abs.sty", 
              num  = "num.sty", 
              per  = "per.sty", 
-             pval = style(fmt = "*", na.form = " ")
+             pval = style(fmt = "*", naForm = " ")
              ) }
 
 Several tables can be appended using \code{\link[bedrock]{appendX}()}.
@@ -188,7 +188,7 @@ tOne(x = iris[, -5], grp = iris[, 5],
                dich = list(fun = function(x, g){fisher.test(table(x, g))$p.val},
                          lbl = "Fisher exact test")),
        fmt = list(abs = "abs.sty", num  = "num.sty", per = "per.sty",
-                pval = style(fmt = "*", na.form = "   ")) 
+                pval = style(fmt = "*", naForm = "   ")) 
 )
 
 t1 <- tOne(x     = d.pizza[,c("temperature", "driver", "rabate")], 
@@ -207,7 +207,7 @@ t1 <- tOne(x     = d.pizza[,c("temperature", "driver", "rabate")],
                       num  = style(big.mark = " ", digits=1), 
                       per  = style(fmt=function(x) 
                           strPad(fm(x, fmt="\%", digits=1), width=5, adj = "r")), 
-                      pval = style(fmt = "*", na.form = "   ")) 
+                      pval = style(fmt = "*", naForm = "   ")) 
 )
 # add a userdefined legend
 attr(t1, "legend") <- "numeric: mean / sd (median)), factor: n (n\%)"

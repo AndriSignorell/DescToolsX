@@ -21,6 +21,8 @@
 #' the variables in \code{formula} should be taken.
 #' @param subset an optional vector specifying a subset of observations to be
 #' used.
+#' @param na.action a function which indicates what should happen when the data
+#' contain NAs. Defaults to \code{getOption("na.action")}.
 #' @param n the desired number of bins for the output, a scalar or a vector of
 #' length 2.
 #' @param pad number of rows and columns to add to each margin, containing only
@@ -70,18 +72,34 @@ freq2D <- function(x, ...)
 
 #' @rdname freq2D
 #' @export
-freq2D.formula <- function(formula, data, subset, ...) {
+freq2D.formula <- function(formula, data, subset, na.action, 
+                           n=20, pad=0, dnn=NULL, ...) {
   
-  m <- match.call(expand.dots=FALSE)
-  if(is.matrix(eval(m$data,parent.frame())))
-    m$data <- as.data.frame(data)
-  m$... <- NULL
-  m[[1L]] <- as.name("model.frame")
-  mf <- eval(m, parent.frame())
+  if (missing(formula) || length(formula) != 3L)
+    stop("'formula' missing or incorrect")
   
-  freq2D.default(mf[2:1], ...)
+  ## IMPORTANT!!
+  ## --- capture subset / na.action HERE ---
+  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
+  na_expr     <- if (!missing(na.action)) substitute(na.action) else NULL
+  
+  pf <- resolveFormula(
+    formula   = formula,
+    data      = data,
+    subset    = subset_expr,
+    na.action = na_expr,
+    allowed   = "n-sample-independent"
+  )
+  
+  y <- do.call(freq2D, c(list(pf$mf[2:1]), ...))
+  attr(y, "data.name") <- pf$data.name
+
+  y
   
 }
+
+
+
 
 
 #' @rdname freq2D

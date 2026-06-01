@@ -420,7 +420,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
              "3" = {
                cat("\n")
                txt <- capture.output(
-                        x$assocs |> fm(fmt="num.sty", na.form="-  ") |> 
+                        x$assocs |> fm(fmt="num.sty", naForm="-  ") |> 
                           as.data.frame() |> print(print.gap=2)
                       )
                txt[1] <- paste(txt[1], footnote, sep = "")

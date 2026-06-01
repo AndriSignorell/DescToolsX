@@ -53,7 +53,7 @@ test_that("predict.lc returns a data frame with p and L columns", {
 test_that("predict.lc with conf.level adds lci and uci columns", {
   set.seed(5)
   obj <- lc(rlnorm(50))
-  pred <- predict(obj, conf.level=0.95, n=200)
+  pred <- predict(obj, conf.level=0.95, R=200)
   expect_named(pred, c("p","L","lci","uci"))
 })
 

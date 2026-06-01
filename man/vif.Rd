@@ -4,10 +4,10 @@
 \alias{vif}
 \title{Variance Inflation Factors (VIF / GVIF)}
 \usage{
-vif(mod)
+vif(fit)
 }
 \arguments{
-\item{mod}{A fitted model object. Currently supports objects of class
+\item{fit}{A fitted model object. Currently supports objects of class
 \code{lm}, \code{glm}, and \code{gls}.}
 }
 \value{

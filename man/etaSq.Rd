@@ -8,18 +8,18 @@
 \alias{aovlErrorTerms}
 \title{Effect Size Calculations for ANOVAs}
 \usage{
-etaSq(x, type = 2, anova = FALSE)
+etaSq(fit, type = 2, anova = FALSE)
 
-\method{etaSq}{lm}(x, type = 2, anova = FALSE)
+\method{etaSq}{lm}(fit, type = 2, anova = FALSE)
 
-\method{etaSq}{aovlist}(x, type = 2, anova = FALSE)
+\method{etaSq}{aovlist}(fit, type = 2, anova = FALSE)
 
-aovlDetails(x)
+aovlDetails(fit)
 
-aovlErrorTerms(x)
+aovlErrorTerms(fit)
 }
 \arguments{
-\item{x}{An analysis of variance (\code{aov}, \code{aovlist}) object.}
+\item{fit}{An analysis of variance (\code{aov}, \code{aovlist}) object.}
 
 \item{type}{What type of sum of squares to calculate? \code{etaSq.aovlist}
 requires \code{type=1}.}
@@ -28,7 +28,7 @@ requires \code{type=1}.}
 effect sizes?}
 }
 \value{
-If \code{anova=FALSE}, the output for \code{etaSq.lm} is an M x 2
+If \code{anova=FALSE}, the output for \code{etaSq.lm} is an M fit 2
 matrix, for \code{etaSq.aovlist} it is an M x 3 matrix. Each of the M rows
 corresponds to one of the terms in the ANOVA (e.g., main effect 1, main
 effect 2, interaction, etc), and each of the columns corresponds to a
@@ -46,7 +46,7 @@ Calculates eta-squared, partial eta-squared and generalized eta-squared
 \details{
 Calculates the eta-squared, partial eta-squared, and generalized eta-squared
 measures of effect size that are commonly used in analysis of variance. The
-input \code{x} should be the analysis of variance object itself. For
+input \code{fit} should be the analysis of variance object itself. For
 between-subjects designs, generalized eta-squared equals partial
 eta-squared. The reported generalized eta-squared for repeated-measures
 designs assumes that all factors are manipulated, i.e., that there are no

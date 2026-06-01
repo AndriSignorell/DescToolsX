@@ -77,7 +77,7 @@ desc(x, ...)
 
 \method{plot}{Desc.numeric}(x, ...)
 
-\method{desc}{ts}(x, lag.lb = 12, main = NULL, plotit = NULL, verbose = NULL, ...)
+\method{desc}{ts}(x, maxLag = 12, main = NULL, plotit = NULL, verbose = NULL, ...)
 
 \method{print}{Desc.ts}(x, digits = NULL, ...)
 }
@@ -137,7 +137,7 @@ in the result object. This is necessary for producing specific plot
 (e.g. the density, ecdf, etc.). However if no plots are required the result
 object can be kept small and handy without the original data.}
 
-\item{lag.lb}{Integer. Number of lags used in the Ljung-Box test.
+\item{maxLag}{Integer. Number of lags used in the Ljung-Box test.
 Default is 12.}
 }
 \value{
@@ -275,7 +275,7 @@ The Box-Cox transformation parameter is estimated using
 
 desc(d.pizza$delivery_min)             # numeric
 desc(AirPassengers)
-desc(Nile, lag.lb = 10)
+desc(Nile, maxLag = 10)
 
 }
 \references{

@@ -162,22 +162,31 @@ percTable.default <- function (x, y = NULL, ...) {
 #' @export
 percTable.formula <- function(formula, data, subset, na.action, ...) {
   
-  # this is taken basically from wilcox.test.formula
-  
-  if (missing(formula) || (length(formula) != 3L) || (length(attr(terms(formula[-2L]),
-                                                                  "term.labels")) != 1L))
+  if (missing(formula) || (length(formula) != 3L) || 
+      (length(attr(terms(formula[-2L]), "term.labels")) != 1L))
     stop("'formula' missing or incorrect")
-  m <- match.call(expand.dots = FALSE)
-  if (is.matrix(eval(m$data, parent.frame())))
-    m$data <- as.data.frame(data)
-  m[[1L]] <- as.name("model.frame")
-  m$... <- NULL
-  mf <- eval(m, parent.frame())
-  DNAME <- paste(names(mf), collapse = " by ")
   
-  DATA <- list(table(mf))
-  do.call("percTable", c(DATA, list(...)))
+    
+  ## IMPORTANT!!
+  ## --- capture subset / na.action HERE ---
+  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
+  na_expr     <- if (!missing(na.action)) substitute(na.action) else NULL
+  
+  pf <- resolveFormula(
+    formula   = formula,
+    data      = data,
+    subset    = subset_expr,
+    na.action = na_expr,
+    allowed   = c("two-sample-independent", "n-sample-independent")
+  )
+  
+  y <- do.call("percTable", c(list(table(pf$mf)), list(...)))
+  attr(y, "data.name") <- pf$data.name
+  y
+  
 }
+
+
 
 
 

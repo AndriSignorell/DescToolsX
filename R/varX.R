@@ -110,7 +110,7 @@ varX.default <- function(x, estimator = c("unbiased", "ML"),
     
   } else {
     
-    z <- .normWeights(x, weights, na.rm = FALSE, zero.rm = TRUE)
+    z <- .normWeights(x, weights, na.rm = FALSE)
     
     if (estimator == "ML"){
       res <- as.numeric(stats::cov.wt(cbind(z$x), z$weights, method = "ML")$cov)

@@ -30,7 +30,7 @@
 #'   \item \code{VGAM::vglm} (requires package \pkg{VGAM})
 #' }
 #' 
-#' @param x A fitted model object. Supported classes include:
+#' @param fit A fitted model object. Supported classes include:
 #' \itemize{
 #'   \item \code{glm}
 #'   \item \code{nnet::multinom}
@@ -96,18 +96,18 @@
 #'
 #'
 #' @export
-pseudoR2 <- function(x, which = "McFadden") {
+pseudoR2 <- function(fit, which = "McFadden") {
   
-  info <- .getModelInfo(x)
+  info <- .getModelInfo(fit)
   
-  preds <- .getPredictions(x, info)
+  preds <- .getPredictions(fit, info)
   
-  nullmod <- .getNullModel(x, info)
+  nullmod <- .getNullModel(fit, info)
   
-  core <- .computeCoreMetrics(x, nullmod, info)
+  core <- .computeCoreMetrics(fit, nullmod, info)
   
   if(info$type == "glm") {
-    extra <- .computeGLMMetrics(x, preds, core, info)
+    extra <- .computeGLMMetrics(fit, preds, core, info)
     core[names(extra)] <- extra
   }
   

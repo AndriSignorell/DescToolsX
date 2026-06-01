@@ -108,7 +108,7 @@ meanX.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
     # sum((x * weights)[weights != 0])/sum(weights)
     
     # use a standard treatment for weights
-    z <- .normWeights(x, weights, na.rm=na.rm, zero.rm=TRUE)
+    z <- .normWeights(x, weights, na.rm=na.rm)
     
     # we get no 0-weights back here...
     sum(z$x * z$weights) / z$wsum

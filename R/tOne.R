@@ -62,7 +62,7 @@
 #'   fmt = list(abs  = "abs.sty", 
 #'              num  = "num.sty", 
 #'              per  = "per.sty", 
-#'              pval = style(fmt = "*", na.form = " ")
+#'              pval = style(fmt = "*", naForm = " ")
 #'              ) }
 #' 
 #' Several tables can be appended using \code{\link[bedrock]{appendX}()}. 
@@ -81,7 +81,7 @@
 #'   align = "\\\\l", FUN = NULL, TEST = NULL,
 #'   intref = "high",
 #'   fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty", 
-#'              pval = style(fmt = "*", na.form = "   "))
+#'              pval = style(fmt = "*", naForm = "   "))
 #' )
 #' 
 #' @name tOne
@@ -166,7 +166,7 @@
 #'                dich = list(fun = function(x, g){fisher.test(table(x, g))$p.val},
 #'                          lbl = "Fisher exact test")),
 #'        fmt = list(abs = "abs.sty", num  = "num.sty", per = "per.sty",
-#'                 pval = style(fmt = "*", na.form = "   ")) 
+#'                 pval = style(fmt = "*", naForm = "   ")) 
 #' )
 #' 
 #' t1 <- tOne(x     = d.pizza[,c("temperature", "driver", "rabate")], 
@@ -185,7 +185,7 @@
 #'                       num  = style(big.mark = " ", digits=1), 
 #'                       per  = style(fmt=function(x) 
 #'                           strPad(fm(x, fmt="%", digits=1), width=5, adj = "r")), 
-#'                       pval = style(fmt = "*", na.form = "   ")) 
+#'                       pval = style(fmt = "*", naForm = "   ")) 
 #' )
 #' # add a userdefined legend
 #' attr(t1, "legend") <- "numeric: mean / sd (median)), factor: n (n%)"
@@ -242,7 +242,7 @@ tOne <- function(x, grp = NA, add.length=TRUE,
                  align="\\l", FUN = NULL, TEST = NULL, intref="high",
                  fmt=list(abs  = "abs.sty",
                           num  = "num.sty", per="per.sty",
-                          pval = style(fmt = "*", na.form = "   ")) ) {
+                          pval = style(fmt = "*", naForm = "   ")) ) {
   
   
   # set the fms, take the provided fmt and combine with defaults
@@ -250,7 +250,7 @@ tOne <- function(x, grp = NA, add.length=TRUE,
            list(abs  = "abs.sty",
                 num  = "num.sty", 
                 per =  "per.sty",
-                pval = style(fmt = "*", na.form = "   ")))
+                pval = style(fmt = "*", naForm = "   ")))
   # use the first instance, so user defined fms are preferred 
   # and the standards come into effect if there are no user specifications
   fmt <- fmt[!duplicated(fmt)]

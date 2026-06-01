@@ -8,7 +8,7 @@
 \usage{
 freq2D(x, ...)
 
-\method{freq2D}{formula}(formula, data, subset, ...)
+\method{freq2D}{formula}(formula, data, subset, na.action, n = 20, pad = 0, dnn = NULL, ...)
 
 \method{freq2D}{default}(x, y, n = 20, pad = 0, dnn = NULL, ...)
 }
@@ -26,7 +26,8 @@ the variables in \code{formula} should be taken.}
 \item{subset}{an optional vector specifying a subset of observations to be
 used.}
 
-\item{y}{a vector of y values.}
+\item{na.action}{a function which indicates what should happen when the data
+contain NAs. Defaults to \code{getOption("na.action")}.}
 
 \item{n}{the desired number of bins for the output, a scalar or a vector of
 length 2.}
@@ -35,6 +36,8 @@ length 2.}
 zeros.}
 
 \item{dnn}{the names to be given to the dimensions in the result.}
+
+\item{y}{a vector of y values.}
 }
 \value{
 The \code{layout} argument specifies one of the following formats

@@ -19,7 +19,7 @@
 #'
 #' @name Timeseries
 #' @param x A univariate object of class \code{"ts"}.
-#' @param lag.lb Integer. Number of lags used in the Ljung-Box test.
+#' @param maxLag Integer. Number of lags used in the Ljung-Box test.
 #'   Default is 12.
 #'
 #' @details
@@ -48,7 +48,7 @@
 #'
 #' @examples
 #' desc(AirPassengers)
-#' desc(Nile, lag.lb = 10)
+#' desc(Nile, maxLag = 10)
 #'
 #' @importFrom stats acf Box.test lm coef time
 #' @importFrom utils head
@@ -72,7 +72,7 @@
 #' @method desc ts
 #' @export
 desc.ts <- function(x, 
-                    lag.lb = 12,
+                    maxLag = 12,
                     main = NULL,
                     plotit = NULL,
                     verbose = NULL,
@@ -84,8 +84,8 @@ desc.ts <- function(x,
   # cat("Lag-1 Autocorrelation:", round(acf1, 3), "\n\n")
   # 
   # # Ljung-Box
-  # lb <- Box.test(x, lag = lag.lb, type = "Ljung")
-  # cat("Ljung-Box Test (lag =", lag.lb, ")\n")
+  # lb <- Box.test(x, lag = maxLag, type = "Ljung")
+  # cat("Ljung-Box Test (lag =", maxLag, ")\n")
   # cat("  Statistic:", round(lb$statistic, 3), "\n")
   # cat("  p-value :", round(lb$p.value, 4), "\n\n")
   # 
@@ -136,7 +136,7 @@ desc.ts <- function(x,
     start = start(x),
     end = end(x),
     acf1 = acf(x, plot = FALSE)$acf[2],
-    ljungbox=Box.test(x, lag = lag.lb, type = "Ljung"),
+    ljungbox=Box.test(x, lag = maxLag, type = "Ljung"),
     adf = adfTest(x),
     kpss = kpssTest(x), 
     fit <- lm(x ~ time(x)),

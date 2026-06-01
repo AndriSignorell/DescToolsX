@@ -53,7 +53,7 @@
 #' 
 #' @importFrom stats na.omit filter is.ts mad median pbinom qbinom qchisq qnorm qt quantile sd t.test var runif binom.test complete.cases addmargins chisq.test ftable terms dbinom qbeta uniroot IQR approx ppois dchisq pchisq var.test frequency lm optimize relevel anova na.pass pnorm p.adjust rnorm cor ppoints model.tables pt ptukey qtukey aov pf qf filter relevel fisher.test mcnemar.test coefficients confint confint.default formula model.frame model.matrix model.response nobs predict family as.formula xtabs end start AIC embed residuals kruskal.test reshape contr.helmert contr.poly contr.sum contr.treatment poisson.test contrasts drop1 integrate splinefun cov2cor vcov model.extract na.pass na.omit na.exclude na.fail optim optimise nlm aggregate logLik AIC BIC model.frame predict glm loess cooks.distance cor.test density shapiro.test cov deviance fitted weights
 #'             
-#' @importFrom graphics hist abline barplot box grid layout par points rect segments strwidth text title axis mosaicplot spineplot arrows boxplot cdplot legend lines mtext
+#' @importFrom graphics hist abline barplot box grid layout par points rect segments strwidth text title axis mosaicplot spineplot arrows boxplot cdplot legend lines mtext polygon
 #'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
@@ -61,7 +61,7 @@
 #'             
 #' @importFrom bedrock `%)(%` `%[]%` abind combPairs maxDigits recycle setNamesX label naIf naReplace isZero isWholeLike isDichotomous `%][%` pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg
 #'             
-#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox drawBand
+#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox band
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest bpTest corCI
 #'             

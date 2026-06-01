@@ -176,8 +176,7 @@ kurtX <- function(x,
     z <- .normWeights(
       x,
       weights,
-      na.rm = na.rm,
-      zero.rm = TRUE
+      na.rm = na.rm
     )
     
     r.kurt <- kurt_weighted_cpp(

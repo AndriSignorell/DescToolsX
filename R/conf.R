@@ -313,9 +313,9 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
                fm(x$acc.lci,     digits = digits),
                fm(x$acc.uci,     digits = digits),
                fm(x$nir,         digits = digits),
-               fm(x$acc.pval,    fmt = "p", na.form = "NA"),
+               fm(x$acc.pval,    fmt = "p", naForm = "NA"),
                fm(x$kappa,       digits = digits),
-               fm(x$mcnemar.pval, fmt = "p", na.form = "NA")
+               fm(x$mcnemar.pval, fmt = "p", naForm = "NA")
   ))
   
   rownames(x$byclass) <- c("Sensitivity", "Specificity",
@@ -333,7 +333,7 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
     
   } else {
     cat("\nStatistics by Class:\n\n")
-    print(fm(x$byclass, digits = digits, na.form = "NA"), quote = FALSE)
+    print(fm(x$byclass, digits = digits, naForm = "NA"), quote = FALSE)
     cat("\n")
   }
   

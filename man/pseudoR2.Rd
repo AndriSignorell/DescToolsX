@@ -4,10 +4,10 @@
 \alias{pseudoR2}
 \title{Pseudo R-squared Measures for Regression Models}
 \usage{
-pseudoR2(x, which = "McFadden")
+pseudoR2(fit, which = "McFadden")
 }
 \arguments{
-\item{x}{A fitted model object. Supported classes include:
+\item{fit}{A fitted model object. Supported classes include:
 \itemize{
 \item \code{glm}
 \item \code{nnet::multinom}

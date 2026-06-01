@@ -16,7 +16,7 @@ tmodSummary(x, ...)
 
 \method{tmodSummary}{lmrob}(x, conf.level = 0.95, ...)
 
-\method{tmodSummary}{glm}(x, conf.level = 0.95, use.profile = TRUE, ...)
+\method{tmodSummary}{glm}(x, conf.level = 0.95, useProfile = TRUE, ...)
 
 \method{tmodSummary}{coxph}(x, conf.level = 0.95, ...)
 
@@ -31,7 +31,7 @@ tmodSummary(x, ...)
 
 \item{conf.level}{Confidence level for intervals}
 
-\item{use.profile}{Logical; use profile likelihood for CI (glm only)}
+\item{useProfile}{Logical; use profile likelihood for CI (glm only)}
 }
 \value{
 A list with components:

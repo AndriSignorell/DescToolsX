@@ -170,9 +170,9 @@ tMod <- function(..., FUN = NULL, order = NA, verbose = FALSE){
 #' @rdname tMod
 #' @param x A \code{"TMod"} object
 #' @param digits Number of digits for printing
-#' @param na.form String used for missing values
+#' @param naForm String used for missing values
 #' @export
-print.TMod <- function(x, digits=3, na.form = "-", verbose = NULL, ...){
+print.TMod <- function(x, digits=3, naForm = "-", verbose = NULL, ...){
   
   verbose <- if(!is.null(verbose)) verbose else x$verbose
   
@@ -183,13 +183,13 @@ print.TMod <- function(x, digits=3, na.form = "-", verbose = NULL, ...){
   }
   
   colnames(x[[1]])[-1] <- paste0(colnames(x[[1]])[-1], strrep(" ", 4))
-  x[[1]][, -1] <- fm(x[[1]][, -1], digits=digits, na.form = na.form)
+  x[[1]][, -1] <- fm(x[[1]][, -1], digits=digits, naForm = naForm)
   
   x2 <- x[[2]]
-  x[[2]][, -1] <- fm(x[[2]][, -1], digits=digits, na.form = na.form)
+  x[[2]][, -1] <- fm(x[[2]][, -1], digits=digits, naForm = naForm)
   
   idx <- x[[2]]$stat %in% c("numdf","dendf","N","NAs","n vars","n coef")
-  x[[2]][idx, -1] <- fm(x2[idx, -1], digits=0, na.form=na.form)
+  x[[2]][idx, -1] <- fm(x2[idx, -1], digits=0, naForm=naForm)
   
   mm <- x[[2]]
   colnames(mm) <- colnames(x[[1]])
