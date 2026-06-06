@@ -1,210 +1,414 @@
 
-#' Concordance Correlation Coefficient
-#' 
-#' Calculates Lin's concordance correlation coefficient for agreement on a
-#' continuous measure.
-#' 
-#' Computes Lin's (1989, 2000) concordance correlation coefficient for
-#' agreement on a continuous measure obtained by two methods. The concordance
-#' correlation coefficient combines measures of both precision and accuracy to
-#' determine how far the observed data deviate from the line of perfect
-#' concordance (that is, the line at 45 degrees on a square scatter plot).
-#' Lin's coefficient increases in value as a function of the nearness of the
-#' data's reduced major axis to the line of perfect concordance (the accuracy
-#' of the data) and of the tightness of the data about its reduced major axis
-#' (the precision of the data).
-#' 
-#' Both \code{x} and \code{y} values need to be present for a measurement pair
-#' to be included in the analysis. If either or both values are missing (i.e.
-#' coded \code{NA}) then the measurement pair is deleted before analysis.
-#' 
-#' @param x a vector, representing the first set of measurements.
-#' @param y a vector, representing the second set of measurements.
-#' @param ci a character string, indicating the method to be used. Options are
-#' \code{z-transform} or \code{asymptotic}.
-#' @param conf.level magnitude of the returned confidence interval. Must be a
-#' single number between 0 and 1.
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. If set to \code{TRUE} only the complete
-#' cases of the ratings will be used. Defaults to \code{FALSE}.  
-#' @return A list containing the following: \item{rho.c}{the concordance
-#' correlation coefficient.} \item{s.shift}{the scale shift.}
-#' \item{l.shift}{the location shift.} \item{C.b}{a bias correction factor that
-#' measures how far the best-fit line deviates from a line at 45 degrees. No
-#' deviation from the 45 degree line occurs when C.b = 1. See Lin (1989, page
-#' 258).} \item{blalt}{a data frame with two columns: \code{mean} the mean of
-#' each pair of measurements, \code{delta} vector \code{y} minus vector
-#' \code{x}.} 
-#' 
-#' @author Mark Stevenson <mark.stevenson1@@unimelb.edu.au>
-#' 
-#' @seealso \code{\link{icc}}, \code{\link{kendallW}}
-#' 
-#' @references Bland J, Altman D (1986). Statistical methods for assessing
-#' agreement between two methods of clinical measurement. \emph{The Lancet}
-#' 327: 307 - 310.
-#' 
-#' Bradley E, Blackwood L (1989). Comparing paired data: a simultaneous test
-#' for means and variances. \emph{American Statistician} 43: 234 - 235.
-#' 
-#' Dunn G (2004). \emph{Statistical Evaluation of Measurement Errors: Design
-#' and Analysis of Reliability Studies}. London: Arnold.
-#' 
-#' Hsu C (1940). On samples from a normal bivariate population. \emph{Annals of
-#' Mathematical Statistics} 11: 410 - 426.
-#' 
-#' Krippendorff K (1970). Bivariate agreement coefficients for reliability of
-#' data. In: Borgatta E, Bohrnstedt G (eds) \emph{Sociological Methodology}.
-#' San Francisco: Jossey-Bass, pp. 139 - 150.
-#' 
-#' Lin L (1989). A concordance correlation coefficient to evaluate
-#' reproducibility. \emph{Biometrics} 45: 255 - 268.
-#' 
-#' Lin L (2000). A note on the concordance correlation coefficient.
-#' \emph{Biometrics} 56: 324 - 325.
-#' 
-#' Pitman E (1939). A note on normal correlation. \emph{Biometrika} 31: 9 - 12.
-#' 
-#' Reynolds M, Gregoire T (1991). Comment on Bradley and Blackwood.
-#' \emph{American Statistician} 45: 163 - 164.
-#' 
-#' Snedecor G, Cochran W (1989). \emph{Statistical Methods}. Ames: Iowa State
-#' University Press.
-#' 
-#' @examples
-#' 
-#' ## Concordance correlation plot:
-#' set.seed(seed = 1234)
-#' method1 <- rnorm(n = 100, mean = 0, sd = 1)
-#' method2 <- method1 + runif(n = 100, min = 0, max = 1)
-#' 
-#' ## Introduce some missing values:
-#' method1[50] <- NA
-#' method2[75] <- NA
-#' 
-#' tmp.ccc <- ccc(method1, method2, ci = "z-transform",
-#'    conf.level = 0.95)
-#' 
-#' lab <- paste("ccc: ", round(tmp.ccc$rho.c[,1], digits = 2), " (95% CI ", 
-#'    round(tmp.ccc$rho.c[,2], digits = 2), " - ",
-#'    round(tmp.ccc$rho.c[,3], digits = 2), ")", sep = "")
-#' z <- lm(method2 ~ method1)
-#' 
-#' par(pty = "s")
-#' plot(method1, method2, xlim = c(0, 5), ylim = c(0,5), xlab = "Method 1", 
-#'    ylab = "Method 2", pch = 16)
-#' abline(a = 0, b = 1, lty = 2)
-#' abline(z, lty = 1)
-#' legend(x = "topleft", legend = c("Line of perfect concordance", 
-#'    "Reduced major axis"), lty = c(2,1), lwd = c(1,1), bty = "n")
-#' text(x = 1.55, y = 3.8, labels = lab)
-#' 
-#' ## Bland and Altman plot (Figure 2 from Bland and Altman 1986):
-#' x <- c(494,395,516,434,476,557,413,442,650,433,417,656,267,
-#'    478,178,423,427)
-#' 
-#' y <- c(512,430,520,428,500,600,364,380,658,445,432,626,260,
-#'    477,259,350,451)
-#' 
-#' tmp.ccc <- ccc(x, y, ci = "z-transform", conf.level = 0.95)
-#' tmp.mean <- mean(tmp.ccc$blalt$delta)
-#' tmp.sd <- sqrt(var(tmp.ccc$blalt$delta))
-#' 
-#' plot(tmp.ccc$blalt$mean, tmp.ccc$blalt$delta, pch = 16, 
-#'    xlab = "Average PEFR by two meters (L/min)", 
-#'    ylab = "Difference in PEFR (L/min)", xlim = c(0,800), 
-#'    ylim = c(-140,140)) 
-#' abline(h = tmp.mean, lty = 1, col = "gray")
-#' abline(h = tmp.mean - (2 * tmp.sd), lty = 2, col = "gray")
-#' abline(h = tmp.mean + (2 * tmp.sd), lty = 2, col = "gray")
-#' legend(x = "topleft", legend = c("Mean difference", 
-#'    "Mean difference +/ 2SD"), lty = c(1,2), bty = "n")
-#' legend(x = 0, y = 125, legend = c("Difference"), pch = 16, 
-#'     bty = "n")
-#'     
-     
-
-     
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept correlation
-#' @concept descriptive-statistics
+#' Lin's Concordance Correlation Coefficient
 #'
+#' Computes Lin's concordance correlation coefficient (CCC) for assessing
+#' agreement between two continuous measurements.
+#'
+#' The CCC combines measures of precision and accuracy and quantifies the
+#' deviation of the observed data from the line of perfect concordance.
+#' Values range from -1 to 1, where 1 indicates perfect agreement.
+#'
+#' Confidence intervals can be computed using a Fisher z-transformation,
+#' a nonparametric bootstrap, or the asymptotic approximation of
+#' Lin (2000).
+#'
+#' Missing values are handled according to package conventions:
+#' if \code{na.rm = FALSE} and either \code{x} or \code{y} contains missing
+#' values, \code{NA} is returned. If \code{na.rm = TRUE}, complete cases are
+#' used.
+#'
+#' @param x Numeric vector.
+#' @param y Numeric vector of equal length to \code{x}.
+#' @param conf.level Confidence level for the returned confidence interval.
+#' Set to \code{NA} (default) to suppress confidence interval calculation.
+#' @param sides Character string specifying a two-sided or one-sided
+#' confidence interval.
+#' @param method Character string specifying the confidence interval method.
+#' One of \code{"z-transform"}, \code{"boot"}, or \code{"asymptotic"}.
+#' @param na.rm Logical; if \code{TRUE}, incomplete observation pairs are
+#' removed before computation.
+#' @param ... Additional arguments passed to bootstrap procedures. For
+#' \code{method = "boot"} these may include \code{R},
+#' \code{parallel}, and related bootstrap controls.
+#'
+#' @return
+#' A named numeric vector.
+#'
+#' If \code{conf.level = NA}:
+#'
+#' \preformatted{
+#'       est
+#' 0.9123457
+#' }
+#'
+#' Otherwise:
+#'
+#' \preformatted{
+#'       est       lci       uci
+#' 0.9123457 0.8734211 0.9412837
+#' }
+#'
+#' Additional diagnostics are stored as attributes:
+#'
+#' \describe{
+#'   \item{nObs}{Number of observations used.}
+#'   \item{scaleShift}{Scale shift parameter.}
+#'   \item{locationShift}{Location shift parameter.}
+#'   \item{biasCorrection}{Bias correction factor.}
+#'   \item{method}{Confidence interval method (if applicable).}
+#'   \item{conf.level}{Confidence level (if applicable).}
+#'   \item{sides}{Confidence interval type (if applicable).}
+#' }
+#'
+#' @references
+#' Lin, L. I.-K. (1989). A concordance correlation coefficient to evaluate
+#' reproducibility. \emph{Biometrics}, \emph{45}(1), 255-268.
+#'
+#' Lin, L. I.-K. (2000). A note on the concordance correlation coefficient.
+#' \emph{Biometrics}, \emph{56}(1), 324-325.
+#'
+#' @examples
+#' set.seed(123)
+#'
+#' x <- rnorm(100)
+#' y <- x + rnorm(100, sd = 0.2)
+#'
+#' ccc(x, y)
+#'
+#' ccc(x, y, conf.level = 0.95)
+#'
+#' ccc(
+#'   x, y,
+#'   conf.level = 0.95,
+#'   method = "boot",
+#'   R = 999
+#' )
+#'
+#' @family topic.association
+#' @concept agreement
+#' @concept concordance
+#' @concept correlation
 #'
 #' @export
-ccc <- function(x, y, ci = "z-transform", 
-                conf.level = 0.95, na.rm = FALSE){
+ccc <- function(
+    x,
+    y,
+    conf.level = NA,
+    sides = c("two.sided", "left", "right"),
+    method = c("z-transform", "boot", "asymptotic"),
+    na.rm = FALSE,
+    ...
+){
   
-  dat <- data.frame(x, y)
+  if(!is.numeric(x))
+    stop("Argument 'x' must be numeric.")
   
-  if(na.rm) dat <- na.omit(dat)
-  #   id <- complete.cases(dat)
-  #   nmissing <- sum(!complete.cases(dat))
-  #   dat <- dat[id,]
+  if(!is.numeric(y))
+    stop("Argument 'y' must be numeric.")
   
+  if(length(x) != length(y))
+    stop("Arguments 'x' and 'y' must have equal length.")
   
-  N. <- 1 - ((1 - conf.level) / 2)
-  zv <- qnorm(N., mean = 0, sd = 1)
-  lower <- "lci"
-  upper <- "uci"
+  sides <- match.arg(sides)
+  method <- match.arg(method)
   
-  k <- length(dat$y)
-  yb <- mean(dat$y)
-  sy2 <- var(dat$y) * (k - 1) / k
-  sd1 <- sd(dat$y)
-  
-  xb <- mean(dat$x)
-  sx2 <- var(dat$x) * (k - 1) / k
-  sd2 <- sd(dat$x)
-  
-  r <- cor(dat$x, dat$y)
-  sl <- r * sd1 / sd2
-  
-  sxy <- r * sqrt(sx2 * sy2)
-  p <- 2 * sxy / (sx2 + sy2 + (yb - xb)^2)
-  
-  delta <- (dat$x - dat$y)
-  
-  # we remove the names here, because otherwise only the assignment of 
-  # na.rm would cause the row names to be defined as characters.
-  # see: https://github.com/AndriSignorell/DescTools/issues/172
-  rmean <- unname(apply(dat, MARGIN = 1, FUN = mean))
-  
-  blalt <- data.frame(mean = rmean, delta)
-  
-  # Scale shift:
-  v <- sd1 / sd2
-  # Location shift relative to the scale:
-  u <- (yb - xb) / ((sx2 * sy2)^0.25)
-  # Variable C.b is a bias correction factor that measures how far the best-fit line deviates from a line at 45 degrees (a measure of accuracy). No deviation from the 45 degree line occurs when C.b = 1. See Lin (1989 page 258).
-  # C.b <- (((v + 1) / (v + u^2)) / 2)^-1
-  
-  # The following taken from the Stata code for function "concord" (changed 290408):
-  C.b <- p / r
-  
-  # Variance, test, and CI for asymptotic normal approximation (per Lin (March 2000) Biometrics 56:325-5):
-  sep = sqrt(((1 - ((r)^2)) * (p)^2 * (1 - ((p)^2)) / (r)^2 + (2 * (p)^3 * (1 - p) * (u)^2 / r) - 0.5 * (p)^4 * (u)^4 / (r)^2 ) / (k - 2))
-  ll = p - zv * sep
-  ul = p + zv * sep
-  
-  # Statistic, variance, test, and CI for inverse hyperbolic tangent transform to improve asymptotic normality:
-  t <- log((1 + p) / (1 - p)) / 2
-  set = sep / (1 - ((p)^2))
-  llt = t - zv * set
-  ult = t + zv * set
-  llt = (exp(2 * llt) - 1) / (exp(2 * llt) + 1)
-  ult = (exp(2 * ult) - 1) / (exp(2 * ult) + 1)
-  
-  if(ci == "asymptotic"){
-    rho.c <- as.data.frame(cbind(p, ll, ul))
-    names(rho.c) <- c("est", lower, upper)
-    rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt ) # , nmissing = nmissing)
+  if(!is.na(conf.level)) {
+    
+    if(!is.numeric(conf.level) ||
+       length(conf.level) != 1L ||
+       conf.level <= 0 ||
+       conf.level >= 1) {
+      
+      stop(
+        "Argument 'conf.level' must be a single number between 0 and 1."
+      )
+      
+    }
+    
   }
   
-  else if(ci == "z-transform"){
-    rho.c <- as.data.frame(cbind(p, llt, ult))
-    names(rho.c) <- c("est", lower, upper)
-    rval <- list(rho.c = rho.c, s.shift = v, l.shift = u, C.b = C.b, blalt = blalt) #, nmissing = nmissing)
+  if(na.rm) {
+    
+    keep <- complete.cases(x, y)
+    
+    x <- x[keep]
+    y <- y[keep]
+    
+    if(length(x) < 3L) {
+      
+      stop(
+        "After removing missing values, fewer than 3 observations remain."
+      )
+      
+    }
+    
   }
-  return(rval)
+  
+  if(anyNA(x) || anyNA(y))
+    return(NA_real_)
+  
+  .cccEngine(
+    x = x,
+    y = y,
+    conf.level = conf.level,
+    sides = sides,
+    method = method,
+    ...
+  )
+  
 }
+
+
+.cccEngine <- function(
+    x,
+    y,
+    conf.level,
+    sides,
+    method,
+    ...
+){
+  
+  nObs <- length(x)
+  
+  if(nObs < 3L)
+    stop("At least 3 complete observations are required.")
+  
+  sx2 <- var(x) * (nObs - 1) / nObs
+  sy2 <- var(y) * (nObs - 1) / nObs
+  
+  if(sx2 <= 0)
+    stop("Argument 'x' must have positive variance.")
+  
+  if(sy2 <= 0)
+    stop("Argument 'y' must have positive variance.")
+  
+  xb <- mean(x)
+  yb <- mean(y)
+  
+  sdx <- sqrt(sx2)
+  sdy <- sqrt(sy2)
+  
+  r <- cor(x, y)
+  
+  rhoC <- .cccPoint(x, y)
+  
+  geomMeanSd <- (sx2 * sy2)^0.25
+  
+  scaleShift <- sdy / sdx
+  
+  locationShift <-
+    (yb - xb) / geomMeanSd
+  
+  if(abs(r) < sqrt(.Machine$double.eps)) {
+    
+    biasCorrection <- NA_real_
+    
+  } else {
+    
+    biasCorrection <- rhoC / r
+    
+  }
+  
+  attrs <- list(
+    nObs = nObs,
+    scaleShift = scaleShift,
+    locationShift = locationShift,
+    biasCorrection = biasCorrection
+  )
+  
+  if(is.na(conf.level)) {
+    
+    return(
+      .makeEstimateResult(
+        est = rhoC,
+        attrs = attrs
+      )
+    )
+    
+  }
+  
+  alpha <- 1 - conf.level
+  
+  if(method == "boot") {
+    
+    dots <- list(...)
+    bootArgs <- .extractBootArgs(dots)
+    
+    statFun <- function(data, idx) {
+      
+      .cccPoint(
+        data[idx, 1],
+        data[idx, 2]
+      )
+      
+    }
+    
+    bootObj <- boot::boot(
+      data = cbind(x, y),
+      statistic = statFun,
+      R = bootArgs$R
+    )
+    
+    probs <- switch(
+      sides,
+      "two.sided" = c(alpha / 2, 1 - alpha / 2),
+      "left"      = c(0, conf.level),
+      "right"     = c(1 - conf.level, 1)
+    )
+    
+    ci <- quantile(
+      bootObj$t,
+      probs = probs,
+      na.rm = TRUE
+    )
+    
+    if(sides == "two.sided") {
+      
+      lci <- ci[1]
+      uci <- ci[2]
+      
+    } else if(sides == "left") {
+      
+      lci <- -1
+      uci <- ci[2]
+      
+    } else {
+      
+      lci <- ci[1]
+      uci <- 1
+      
+    }
+    
+  } else {
+    
+    zCrit <- if(sides == "two.sided")
+      qnorm(1 - alpha / 2)
+    else
+      qnorm(conf.level)
+    
+    se <- sqrt(
+      (
+        (1 - r^2) * rhoC^2 * (1 - rhoC^2) / r^2 +
+          2 * rhoC^3 * (1 - rhoC) * locationShift^2 / r -
+          0.5 * rhoC^4 * locationShift^4 / r^2
+      ) / (nObs - 2)
+    )
+    
+    if(method == "asymptotic") {
+      
+      if(sides == "two.sided") {
+        
+        lci <- rhoC - zCrit * se
+        uci <- rhoC + zCrit * se
+        
+      } else if(sides == "left") {
+        
+        lci <- -1
+        uci <- rhoC + zCrit * se
+        
+      } else {
+        
+        lci <- rhoC - zCrit * se
+        uci <- 1
+        
+      }
+      
+      lci <- max(lci, -1)
+      uci <- min(uci,  1)
+      
+    } else {
+      
+      # Avoid infinities in Fisher's z-transformation.
+      rhoAdj <- pmin(
+        pmax(rhoC, -1 + sqrt(.Machine$double.eps)),
+        1 - sqrt(.Machine$double.eps)
+      )
+      
+      z <- fisherZ(rhoAdj)
+      
+      # Delta-method variance transformation:
+      # d atanh(rho) / d rho = 1 / (1 - rho^2)
+      seZ <- se / (1 - rhoAdj^2)
+      
+      if(sides == "two.sided") {
+        
+        lci <- fisherZInv(
+          z - zCrit * seZ
+        )
+        
+        uci <- fisherZInv(
+          z + zCrit * seZ
+        )
+        
+      } else if(sides == "left") {
+        
+        lci <- -1
+        
+        uci <- fisherZInv(
+          z + zCrit * seZ
+        )
+        
+      } else {
+        
+        lci <- fisherZInv(
+          z - zCrit * seZ
+        )
+        
+        uci <- 1
+        
+      }
+      
+    }
+    
+  }
+  
+  attrs$method <- method
+  attrs$conf.level <- conf.level
+  attrs$sides <- sides
+  
+  .makeEstimateResult(
+    est = rhoC,
+    lci = lci,
+    uci = uci,
+    attrs = attrs
+  )
+  
+}
+
+
+
+.makeEstimateResult <- function(
+    est,
+    lci = NULL,
+    uci = NULL,
+    attrs = NULL
+){
+  
+  res <- c(est = est)
+  
+  if(!is.null(lci))
+    res <- c(res, lci = lci)
+  
+  if(!is.null(uci))
+    res <- c(res, uci = uci)
+  
+  if(!is.null(attrs) && length(attrs))
+    attributes(res) <- c(attributes(res), attrs)
+  
+  res
+  
+}
+
+
+.cccPoint <- function(x, y){
+  
+  nObs <- length(x)
+  sx2 <- var(x) * (nObs - 1) / nObs
+  sy2 <- var(y) * (nObs - 1) / nObs
+  r <- cor(x, y)
+  sxy <- r * sqrt(sx2 * sy2)
+  
+  2 * sxy / (sx2 + sy2 + (mean(y) - mean(x))^2)
+  
+}
+

@@ -83,6 +83,11 @@ desc.factor <- function(x, maxrows = NULL, ord=NULL,
   ok <- !is.na(x)         # non NAs
   n <- sum(ok)            # valid n
   
+  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
+  if (n == 0L)
+    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+  
+  
   if (is.null(main)) 
     main <- deparse(substitute(x))
 

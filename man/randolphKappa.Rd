@@ -71,7 +71,6 @@ An Alternative to Fleiss’ Fixed-Marginal Multirater Kappa. Online submission.
 }
 \seealso{
 Other assoc.agreement:
-\code{\link[=ccc]{ccc()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},

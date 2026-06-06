@@ -71,7 +71,7 @@ assocsTab <- function(x, conf.level = 0.95, verbose = 2){
   
   # all association measures combined for table description
   # get generic hard assocs for tables
-  ords <- .assocsGen(x, conf.level = conf.level)
+  ords <- assocsXY(x, conf.level = conf.level)
 
   if(is.na(conf.level)){
     res <- rbind("Contingency Coeff." = c(contCoef(x), NA, NA))
@@ -131,10 +131,70 @@ print.AssocsTab <- function(x, digits=4, ...){
 
 
 
-# == internal helper functions ================================================
+#' Ordinal association measures for two variables or a contingency table
+#'
+#' Computes concordance-based association measures (Goodman-Kruskal
+#' \eqn{\gamma}, Kendall's \eqn{\tau_a}, \eqn{\tau_b}, \eqn{\tau_c},
+#' Somers' \eqn{D}, and the c-statistic) for a pair of ordinal vectors or
+#' a pre-computed contingency table.  Optionally returns confidence
+#' intervals.
+#'
+#' @param x Either a numeric vector (when \code{y} is supplied) or a
+#'   matrix / table representing a contingency table (when \code{y} is
+#'   \code{NULL}).
+#' @param y Optional numeric vector of the same length as \code{x}.  If
+#'   supplied, the measures are computed from the raw paired observations
+#'   via a fast C++ routine.  If \code{NULL}, \code{x} is treated as a
+#'   contingency table.
+#' @param which Character string selecting which measure(s) to return.
+#'   One of \code{"all"} (default), \code{"gamma"}, \code{"tau_a"},
+#'   \code{"tau_b"}, \code{"tau_c"}, \code{"somers"}, or \code{"cstat"}.
+#' @param conf.level Numeric scalar in \eqn{(0, 1)}.  If supplied,
+#'   confidence intervals are appended to each measure.  Default
+#'   \code{NA} suppresses intervals.
+#' @param direction Character string controlling the direction for
+#'   Somers' \eqn{D} when \code{y = NULL} (table mode): \code{"row"}
+#'   (default) treats row totals as the dependent variable;
+#'   \code{"column"} treats column totals as dependent.
+#'
+#' @return A named list with one element per requested measure.  Each
+#'   element is a named numeric scalar (point estimate only) or a named
+#'   numeric vector of length 3 (estimate, lower CI, upper CI) when
+#'   \code{conf.level} is supplied.
+#'
+#' @details
+#' Two computational paths are used:
+#'
+#' \describe{
+#'   \item{XY mode (\code{y} supplied)}{A compiled C++ routine
+#'     (\code{assoc_cpp}) processes the raw paired observations directly.
+#'     This is substantially faster than the table path for large
+#'     vectors.}
+#'   \item{Table mode (\code{y = NULL})}{Concordant and discordant pairs
+#'     are counted via \code{\link{conDisPairs}}.  Confidence intervals
+#'     are obtained from \code{.tableAssocCI}.}
+#' }
+#'
+#' The c-statistic (area under the ROC curve for a binary outcome) equals
+#' \eqn{(\text{Somers' } D + 1) / 2}.
+#'
+#' @examples
+#' # From raw vectors
+#' x <- c(1, 2, 3, 2, 1, 3)
+#' y <- c(2, 3, 3, 1, 1, 2)
+#' assocsXY(x, y)
+#' assocsXY(x, y, which = "cstat")
+#' assocsXY(x, y, conf.level = 0.95)
+#'
+#' # From a contingency table
+#' tab <- table(cut(swiss$Fertility, 3), cut(swiss$Education, 3))
+#' assocsXY(tab)
+#' assocsXY(tab, which = "gamma", conf.level = 0.95)
+#'
+#' @seealso \code{\link{conDisPairs}}
 
-
-.assocsGen <- function(x, y = NULL,
+#' @export
+assocsXY <- function(x, y = NULL,
                        which = c("all","gamma","tau_a","tau_b","tau_c","somers","cstat"),
                        conf.level = NA,
                        direction = c("row","column")) {
@@ -230,6 +290,7 @@ print.AssocsTab <- function(x, digits=4, ...){
 }
 
 
+# == internal helper functions ================================================
 
 
 .tableAssocCI <- function(tab, conf.level=0.95, direction="row"){

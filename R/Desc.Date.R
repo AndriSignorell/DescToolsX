@@ -90,8 +90,13 @@ desc.Date <- function(x,
   x_ok <- x[ok]
   n <- length(x_ok)
   
-  if(n == 0)
-    stop("No valid (non-NA) dates available.")
+  # if(n == 0)
+  #   stop("No valid (non-NA) dates available.")
+
+  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
+  if (n == 0L)
+    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+  
   
   if(is.null(main))
     main <- deparse(substitute(x))

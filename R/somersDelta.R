@@ -118,7 +118,7 @@ somersDelta <- function(x, y = NULL,
       tab <- t(tab)
     }
     
-    res <- .assocsGen(
+    res <- assocsXY(
       x = tab,
       which = "somers",
       conf.level = conf.level
@@ -137,7 +137,7 @@ somersDelta <- function(x, y = NULL,
       y <- tmp
     }
     
-    res <- .assocsGen(
+    res <- assocsXY(
       x = x,
       y = y,
       which = "somers",

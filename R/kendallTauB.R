@@ -81,7 +81,7 @@ kendallTauB <- function(x, y = NULL,
                         conf.level = NA,
                         ...){
   
-  res <- .assocsGen(
+  res <- assocsXY(
     x = x,
     y = y,
     which = "tau_b",

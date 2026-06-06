@@ -109,7 +109,6 @@ Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the 
 \code{\link[stats]{friedman.test}}
 
 Other assoc.agreement:
-\code{\link[=ccc]{ccc()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},

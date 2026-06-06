@@ -134,7 +134,6 @@ Forming inferences about some intraclass correlation coefficients.
 }
 \seealso{
 Other assoc.agreement:
-\code{\link[=ccc]{ccc()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=kendallW]{kendallW()}},

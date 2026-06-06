@@ -89,7 +89,11 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   
   if (is.null(main)) 
     main <- deparse(substitute(x))
-
+  
+  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
+  if (n == 0L)
+    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+  
   nstat <- .numStats(x[ok])
   
   # meanCI
@@ -154,7 +158,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
     var = nstat$var,
     vcoef = nstat$vcoef,
     mad = nstat$mad,
-    IQR = nstat$IQR,
+    iqr = nstat$iqr,
     skew = nstat$skew,
     kurt = nstat$kurt,
     small = nstat$small,
@@ -178,7 +182,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
 #' @rdname desc
 #' @export
 print.Desc.numeric <- function(x, digits = NULL, ...) {
-
+  
   .printHeader(x$meta)
   
   nlow <- 5
@@ -195,7 +199,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   
   if (x[["n"]] > 1) {
     a <- qt(p = (1 - x[["conf.level"]]) / 2, df = x[["n"]] - 1, 
-             lower.tail = FALSE) * x[["meanSE"]]
+            lower.tail = FALSE) * x[["meanSE"]]
   } else {
     a <- NA
   }
@@ -221,7 +225,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   x[["quant"]][] <- fm(x[["quant"]], fmt = style("num.sty", digits = digits))
   
   x[c("mean", "meanCI", "meanUCI", "range", "sd", "vcoef", "mad", "iqr", "skew", "kurt")] <-
-    lapply(x[c("mean", "meanCI", "meanUCI", "range", "sd", "vcoef", "mad", "IQR", "skew", "kurt")],
+    lapply(x[c("mean", "meanCI", "meanUCI", "range", "sd", "vcoef", "mad", "iqr", "skew", "kurt")],
            fm,
            fmt = style("num.sty", digits = digits)
     )
@@ -323,13 +327,13 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 
 
 
-
 #' @rdname desc
 #' @export
-plot.Desc.numeric <- function(x, ...){
-  aurora::plotFdist(x$x, na.rm=TRUE, ...)
+plot.Desc.numeric <- function(x, ...) {
+  if (x$n <= 1L)
+    return(plot.Desc.AllNA(x, ...))
+  aurora::plotFdist(x$x, na.rm = TRUE, ...)
 }
-
 
 
 # ===========================================================================
@@ -399,7 +403,7 @@ plot.Desc.numeric <- function(x, ...){
     var = varx,
     vcoef = sdx / psum$mean,
     mad = mad(x, center = qs[5]),
-    IQR = unname(diff(qs[c(4, 6)])),
+    iqr = unname(diff(qs[c(4, 6)])),
     skew = skewx,
     kurt = kurtx,
     small = data.frame(val  = psum$small_val,
@@ -413,4 +417,5 @@ plot.Desc.numeric <- function(x, ...){
   return(res)
   
 }
+
 

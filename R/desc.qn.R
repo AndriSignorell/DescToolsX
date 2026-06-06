@@ -201,7 +201,7 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
   # Zeilenauswahl nach verbose
   rows <- switch(as.character(verbose),
                  "1" = c("median", "n", "np"),
-                 "2" = c("median", "IQR", "n", "np"),
+                 "2" = c("median", "iqr", "n", "np"),
                  x$res$grpTable   # verbose = 3: alles, direkt zurückgeben
   )
   

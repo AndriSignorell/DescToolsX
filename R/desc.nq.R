@@ -150,38 +150,43 @@ plot.Desc.nq <- function(x, which = NULL, ...){
 
 .extractNqSummary <- function(x) {
   
-  out <- c(
+  if (inherits(x, "Desc.AllNA"))
+    return(c(mean = NA_real_, median = NA_real_, sd = NA_real_,
+             iqr  = NA_real_, n = 0L, np = NA_real_,
+             NAs  = x$NAs,   zeros = 0L))
+  
+  c(
     mean   = x$mean,
     median = unname(x$quant["median"]),
     sd     = x$sd,
-    IQR    = x$IQR,
+    iqr    = x$iqr,
     n      = x$n,
-    np     = x$n /x$length,
+    np     = x$n / x$length,
     NAs    = x$NAs,
     zeros  = x$`0s`
   )
-  
-  return(out)
 }
 
 
 .buildSummaryTable <- function(x) {
   
-  # dd = Liste von Resultaten (benannt!)
+  # x = Liste von Desc-Resultaten (benannt!)
   
   mat <- sapply(x, .extractNqSummary)
   
   # calc percentages of valid cases
-  mat[6,] <- mat[5,] / sum(mat[5,])
+  mat[6,] <- mat[5,] / sum(mat[5,], na.rm = TRUE)
   
   # sicherstellen, dass Matrix
   mat <- as.matrix(mat)
+  print(mat)        # <-- temporär
+  print(dim(mat))   # <-- temporär
   
   res <- rbind(
-    fm(mat[c(1:4),], fmt=style("num.sty")),
-    fm(mat[c(5),, drop=FALSE], fmt=style("abs.sty")),
-    fm(mat[c(6),, drop=FALSE], fmt=style("per.sty")),
-    mat[c(7:8),] <- fm(mat[c(7:8),], fmt=style("abs.sty"))
+    fm(mat[c(1:4),  , drop = FALSE], fmt = style("num.sty")),
+    fm(mat[c(5),    , drop = FALSE], fmt = style("abs.sty")),
+    fm(mat[c(6),    , drop = FALSE], fmt = style("per.sty")),
+    fm(mat[c(7:8),  , drop = FALSE], fmt = style("abs.sty"))
   )
   
   return(res)

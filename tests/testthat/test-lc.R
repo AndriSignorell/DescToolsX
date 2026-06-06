@@ -1,5 +1,5 @@
-test_that("lc returns an object of class 'lc'", {
-  expect_s3_class(lc(c(1,2,3,4,5)), "lc")
+test_that("lc returns an object of class 'Lc'", {
+  expect_s3_class(lc(c(1,2,3,4,5)), "Lc")
 })
 
 test_that("lc object has required components", {
@@ -34,23 +34,23 @@ test_that("lc Gini = 0 for a constant vector (perfect equality)", {
   expect_equal(obj$Gini, 0, tolerance = 1e-10)
 })
 
-test_that("lc formula interface returns class lc or lclist", {
+test_that("lc formula interface returns class lc or LcList", {
   set.seed(1)
   x <- rlnorm(60)
   g <- sample(c("a","b"), 60, replace=TRUE)
   df <- data.frame(x=x, g=g)
   res <- lc(x ~ g, data=df)
-  expect_true(inherits(res, "lc") || inherits(res, "lclist"))
+  expect_true(inherits(res, "lc") || inherits(res, "LcList"))
 })
 
-test_that("predict.lc returns a data frame with p and L columns", {
+test_that("predict.Lc returns a data frame with p and L columns", {
   obj <- lc(runif(50))
   pred <- predict(obj)
   expect_s3_class(pred, "data.frame")
   expect_named(pred, c("p","L"))
 })
 
-test_that("predict.lc with conf.level adds lci and uci columns", {
+test_that("predict.Lc with conf.level adds lci and uci columns", {
   set.seed(5)
   obj <- lc(rlnorm(50))
   pred <- predict(obj, conf.level=0.95, R=200)
@@ -59,5 +59,7 @@ test_that("predict.lc with conf.level adds lci and uci columns", {
 
 test_that("lc na.rm = TRUE removes NAs", {
   x <- c(1, 2, NA, 4, 5)
-  expect_s3_class(lc(x, na.rm=TRUE), "lc")
+  expect_s3_class(lc(x, na.rm=TRUE), "Lc")
 })
+
+

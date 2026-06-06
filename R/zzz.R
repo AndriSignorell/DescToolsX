@@ -61,9 +61,9 @@
 #'             
 #' @importFrom bedrock `%)(%` `%[]%` abind combPairs maxDigits recycle setNamesX label naIf naReplace isZero isWholeLike isDichotomous `%][%` pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg
 #'             
-#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox band
+#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox band canvas fade pal
 #'             
-#' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest bpTest corCI
+#' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest bpTest corCI fisherZ fisherZInv
 #'             
 #' @importFrom hermes newWrd
 #' 

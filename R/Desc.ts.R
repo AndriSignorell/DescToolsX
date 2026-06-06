@@ -79,52 +79,16 @@ desc.ts <- function(x,
                     ...) {
   
   
-  # # Lag-1 ACF
-  # acf1 <- acf(x, plot = FALSE)$acf[2]
-  # cat("Lag-1 Autocorrelation:", round(acf1, 3), "\n\n")
-  # 
-  # # Ljung-Box
-  # lb <- Box.test(x, lag = maxLag, type = "Ljung")
-  # cat("Ljung-Box Test (lag =", maxLag, ")\n")
-  # cat("  Statistic:", round(lb$statistic, 3), "\n")
-  # cat("  p-value :", round(lb$p.value, 4), "\n\n")
-  # 
-  # # Stationarity Tests
-  # if(requireNamespace("tseries", quietly = TRUE)) {
-  #   adf  <- tseries::adf.test(x)
-  #   kpss <- tseries::kpss.test(x)
-  #   
-  #   cat("ADF Test p-value :", round(adf$p.value, 4), "\n")
-  #   cat("KPSS Test p-value:", round(kpss$p.value, 4), "\n")
-  #   
-  #   stationary <- (adf$p.value < 0.05) & (kpss$p.value > 0.05)
-  #   cat("Stationary (combined decision):", stationary, "\n\n")
-  # } else {
-  #   cat("Install package 'tseries' for stationarity tests.\n\n")
-  # }
-  # 
-  # # Linear Trend
-  # t <- time(x)
-  # fit <- lm(x ~ t)
-  # slope <- coef(fit)[2]
-  # pval  <- summary(fit)$coefficients[2,4]
-  # 
-  # cat("Linear Trend\n")
-  # cat("  Slope  :", round(slope, 4), "\n")
-  # cat("  p-value:", round(pval, 4), "\n\n")
-  # 
-  # # BoxCox Lambda
-  # if(requireNamespace("forecast", quietly = TRUE)) {
-  #   lambda <- forecast::BoxCox.lambda(x)
-  #   cat("Suggested BoxCox Lambda:", round(lambda, 3), "\n")
-  #   
-  #   if(abs(lambda) < 0.15)
-  #     cat(" Log transformation recommended\n")
-  # } else {
-  #   cat("Install package 'forecast' for BoxCox suggestion.\n")
-  # }
+  total_n <- length(x)    # total n
+  ok <- !is.na(x)         # non NAs
+  n <- sum(ok)            # valid n
   
-
+  
+  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
+  if (n == 0L)
+    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+  
+  
   res <- list(
     
     meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
@@ -156,17 +120,7 @@ desc.ts <- function(x,
 print.Desc.ts <- function(x, digits = NULL, ...) {
   
   .printHeader(x$meta)
-  
-  # x["nperc"] <- fm(x[["n"]] / x[["length"]], fmt = "%", digits = 1)
-  # x["naperc"] <- fm(x[["NAs"]] / x[["length"]], fmt = "%", digits = 1)
-  # x["zeroperc"] <- fm(x[["0s"]] / x[["length"]], fmt = "%", digits = 1)
-  # 
-  # x[c("length", "n", "NAs", "unique", "0s")] <-
-  #   lapply(x[c("length", "n", "NAs", "unique", "0s")],
-  #          fm,
-  #          fmt = "abs.sty"
-  #   )
-  
+ 
   lst <- list(
     l1 = unlist(x[c("length", "n", "NAs", "unique", "0s")]),
     l2 = c("", x[["nperc"]], x[["naperc"]], "", x[["zeroperc"]]),

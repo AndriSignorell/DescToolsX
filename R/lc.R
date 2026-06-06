@@ -2,7 +2,7 @@
 #'
 #' Computes the empirical Lorenz curve for a numeric vector, optionally with
 #' weights and grouped via formula interface.  Returns an object of class
-#' \code{"lc"} (or \code{"lclist"} for grouped data) that can be visualized
+#' \code{"Lc"} (or \code{"LcList"} for grouped data) that can be visualized
 #' with \code{plot()}, \code{lines()}, and \code{points()} from the
 #' \pkg{aurora} package.
 #'
@@ -22,7 +22,7 @@
 #' For formula input of the form \code{y ~ group}, the data are split by
 #' group and a separate Lorenz curve is computed for each level.  A single
 #' \code{"lc"} object is returned when there is only one group; otherwise
-#' an \code{"lclist"}.
+#' an \code{"LcList"}.
 #'
 #' Bootstrap confidence intervals in \code{predict.lc()} are based on
 #' resampling with replacement from the (weighted) empirical distribution,
@@ -74,7 +74,7 @@
 #'     }
 #'   }
 #'   \item{\code{lc.formula()}}{A single \code{"lc"} object if the formula
-#'     specifies one group, otherwise an object of class \code{"lclist"}
+#'     specifies one group, otherwise an object of class \code{"LcList"}
 #'     (a named list of \code{"lc"} objects, one per group level).}
 #'   \item{\code{predict.lc()}}{A data frame with columns \code{p} and
 #'     \code{L} (interpolated curve values at \code{newdata}).  If
@@ -139,12 +139,13 @@
 #'
 #' @seealso
 #'   \code{\link{gini}} for the Gini coefficient,
-#'   \code{\link[aurora]{plot.lc}} for visualization.
+#'   \code{aurora{plot.Lc}} for visualization.
 #'
 #' @name lc
 #' @family inequality
 #' @concept descriptive-statistics
 #' @concept inequality
+#' 
 NULL
 
 
@@ -180,7 +181,7 @@ lc.formula <- function(formula, data, subset, na.action = na.pass, ...) {
     
     res <- lapply(split_data, function(x) lc(x, ...))
     
-    class(res) <- c("lclist", "list")
+    class(res) <- c("LcList", "list")
     
     attr(res, "groups") <- levels(rf$group)
     attr(res, "data.name") <- rf$data.name
@@ -229,7 +230,7 @@ lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   L2 <- L * sum(wx) / sum(n)
   
   lc <- list(p = p, L = L, L.general = L2, Gini = g, x = xx, n = nn)
-  class(lc) <- "lc"
+  class(lc) <- "Lc"
   
   lc
 }
@@ -238,10 +239,10 @@ lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
 
 #' @rdname lc
 #' @export
-predict.lc <- function(object, newdata, conf.level = NA, general = FALSE, ...) {
+predict.Lc <- function(object, newdata, conf.level = NA, general = FALSE, ...) {
   
-  if (!inherits(object, "lc"))
-    stop("object must be of class 'lc'")
+  if (!inherits(object, "Lc"))
+    stop("object must be of class 'Lc'")
   
   # --- newdata validation ---
   if (!missing(newdata)) {

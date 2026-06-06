@@ -96,6 +96,12 @@ Allowed:
 | Classes | UpperCamelCase | `LinearModel` |
 | User-visible strings | kebab-case | `"log-scale"` |
 
+Kategorie,Stil,Beispiele
+Datensätze,PascalCase,"Kunden, Messdaten, RawData"
+Modell-Objekte,lowerCamelCase,"fit, modKunden, regOut"
+Funktionen,lowerCamelCase,"fitMod(), calcSummary(), plotResults()"
+
+
 S3 methods never receive an X suffix and remain base-compliant:
 
 ```r

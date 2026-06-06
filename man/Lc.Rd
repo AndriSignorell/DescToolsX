@@ -4,14 +4,14 @@
 \alias{lc}
 \alias{lc.formula}
 \alias{lc.default}
-\alias{predict.lc}
+\alias{predict.Lc}
 \title{Lorenz Curve}
 \usage{
 \method{lc}{formula}(formula, data, subset, na.action = na.pass, ...)
 
 \method{lc}{default}(x, n = rep(1, length(x)), na.rm = FALSE, ...)
 
-\method{predict}{lc}(object, newdata, conf.level = NA, general = FALSE, ...)
+\method{predict}{Lc}(object, newdata, conf.level = NA, general = FALSE, ...)
 }
 \arguments{
 \item{formula}{A formula of the form \code{y ~ group} specifying the
@@ -69,7 +69,7 @@ with components:
 }
 }
 \item{\code{lc.formula()}}{A single \code{"lc"} object if the formula
-specifies one group, otherwise an object of class \code{"lclist"}
+specifies one group, otherwise an object of class \code{"LcList"}
 (a named list of \code{"lc"} objects, one per group level).}
 \item{\code{predict.lc()}}{A data frame with columns \code{p} and
 \code{L} (interpolated curve values at \code{newdata}).  If
@@ -80,7 +80,7 @@ are appended.}
 \description{
 Computes the empirical Lorenz curve for a numeric vector, optionally with
 weights and grouped via formula interface.  Returns an object of class
-\code{"lc"} (or \code{"lclist"} for grouped data) that can be visualized
+\code{"Lc"} (or \code{"LcList"} for grouped data) that can be visualized
 with \code{plot()}, \code{lines()}, and \code{points()} from the
 \pkg{aurora} package.
 }
@@ -100,7 +100,7 @@ mean \eqn{\mu}:
 For formula input of the form \code{y ~ group}, the data are split by
 group and a separate Lorenz curve is computed for each level.  A single
 \code{"lc"} object is returned when there is only one group; otherwise
-an \code{"lclist"}.
+an \code{"LcList"}.
 
 Bootstrap confidence intervals in \code{predict.lc()} are based on
 resampling with replacement from the (weighted) empirical distribution,
@@ -166,7 +166,7 @@ Lorenz, M. O. (1905). Methods of measuring the concentration of wealth.
 }
 \seealso{
 \code{\link{gini}} for the Gini coefficient,
-\code{\link[aurora]{plot.lc}} for visualization.
+\code{aurora{plot.Lc}} for visualization.
 
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},

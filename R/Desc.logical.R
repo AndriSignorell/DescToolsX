@@ -30,10 +30,15 @@
 #'   base R plotting functions.
 #'   
 #' @param digits integer. With how many digits should the relative frequencies
-#' be fmted? Default can be set by
+#' be formatted? Default can be set by
 #' \code{\link{setDescToolsXOption}(digits=x)}.
-#' 
 #' @param ord  order of the levels
+#' @param include_x (logical) if \code{TRUE} (default) the original vector 
+#' will be returned
+#' in the result object. This is necessary for producing specific plot 
+#' (e.g. the density, ecdf, etc.). However if no plots are required the result
+#' object can be kept small and handy without the original data.
+#' 
 #' 
 #' @seealso \code{\link[aurora]{plotPropCI}} for graphical display
 
@@ -45,11 +50,14 @@
 #' @concept descriptive-statistics
 #'
 #'
+
+
 #' @export
 desc.logical <- function(x, ord = "level", conf.level = 0.95, 
+                         include_x = TRUE,
                          main = NULL, verbose = NULL, plotit = NULL,
                          digits=NULL, ...) {
-
+  
   # ----------------------------------------------------
   # general handling  
   
@@ -60,11 +68,15 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
   if (is.null(main)) 
     main <- deparse(substitute(x))
   
+  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
+  if (n == 0L)
+    return(.descAllNA(x, main, main, plotit, verbose))
+  
   
   # ----------------------------------------------------
   # class specific handling  
   
-    
+  
   ff <- table(x)
   
   # how should the table be sorted, by name, level or frq? (NULL means "desc")
@@ -81,8 +93,13 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
          }
   )
   
-  bf <- as.matrix(binomCI(ff, n, conf.level = conf.level)[, 1:3])
-  rownames(bf) <- names(ff)
+  bf <- binomCI(ff, n, conf.level = conf.level)
+  if (is.null(dim(bf))) {
+    bf <- matrix(bf, nrow = 1, dimnames = list(names(ff), names(bf)))
+  } else {
+    bf <- as.matrix(bf[, c("est", "lci", "uci")])
+  }
+  
   
   res <- list(
     
@@ -97,8 +114,9 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
     unique = length(ff),
     afrq = ff, 
     rfrq = bf, 
-    conf.level = conf.level
-    
+    conf.level = conf.level,
+    x = if (include_x) x else NULL
+
   )
   
   class(res) <- c("Desc.logical", "Desc")
@@ -113,7 +131,7 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
 print.Desc.logical <- function(x, digits = NULL, ...) {
   
   digits <- digits %||% x$digits
-
+  
   .printHeader(x$meta)
   
   if (!is.null(digits)) {
@@ -142,7 +160,9 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
     )
     
     out <- apply(out, 2, strTrim)
-    
+    if (is.null(dim(out))) 
+      out <- matrix(out, nrow = 1, dimnames = list(NULL, names(out)))
+
     rownames(out) <- rownames(x$afrq)
     colnames(out) <- c(
       "freq", "perc",
@@ -173,6 +193,12 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
     }
   }
   
+  if (!is.null(attr(x$x, "coding"))) {
+    cod <- attr(x$x, "coding")
+    cat(gettextf("coding (original x): '%s' = FALSE, '%s' = TRUE\n\n",
+                 names(cod)[1], names(cod)[2]))
+  }
+  
   if (identical(x$noplot, TRUE)) {
     cat(gettextf("Nothing to plot in %s\n\n", x$xname))
   }
@@ -187,9 +213,11 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
 
 #' @rdname desc
 #' @export
-plot.Desc.logical <- function(x, ...){
-  aurora::plotPropCI(x$afrq, labels=names(x$afrq), ...)
+plot.Desc.logical <- function(x, ...) {
+  ff <- x$afrq
+  lbs <- names(ff)
+  if (length(lbs) == 1L)
+    lbs <- if (lbs == "TRUE") c("FALSE", "TRUE") else c("FALSE", "TRUE")
+  aurora::plotPropCI(as.matrix(t(ff)), labels = lbs, ...)
 }
-
-
 
