@@ -71,12 +71,12 @@
 #' # returns all encountered modes, if several exist
 #' modeX(c(0:5, 4, 5, 6))
 #' 
-#' modeX(d.pizza$driver)
-#' modeX(d.pizza$driver, na.rm=TRUE)
-#' modeX(as.character(d.pizza$driver), na.rm=TRUE)
+#' modeX(Pizza$driver)
+#' modeX(Pizza$driver, na.rm=TRUE)
+#' modeX(as.character(Pizza$driver), na.rm=TRUE)
 #' 
 #' # use sapply for evaluating data.frames (resp. apply for matrices)
-#' sapply(d.pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
+#' sapply(Pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 #' 
 #' 
  

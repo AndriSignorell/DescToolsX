@@ -45,8 +45,8 @@ Based on code by William Revelle.
 }
 \examples{
 
-x <- d.pizza$price[d.pizza$driver=="Carter"]
-y <- d.pizza$price[d.pizza$driver=="Miller"]
+x <- Pizza$price[Pizza$driver=="Carter"]
+y <- Pizza$price[Pizza$driver=="Miller"]
 
 cohenD(x, y, conf.level=0.95, na.rm=TRUE)
 

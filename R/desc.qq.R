@@ -69,9 +69,11 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
 }
 
 
+#' @param main a main title for the plot. Defaults to the title stored in
+#'   \code{x$meta$main}.
 #' @exportS3Method
 #' @rdname desc.table
-plot.Desc.qq <- function(x, which = 1,  ...) {
-  plot.Desc.table(x, which, ...)
+plot.Desc.qq <- function(x, main = x$meta$main, which = 1, ...) {
+  plot.Desc.table(x, main = main, which = which, ...)
 }
 

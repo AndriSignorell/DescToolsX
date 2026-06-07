@@ -39,11 +39,11 @@ test_that("percTable print method works without error", {
 })
 
 test_that("percTable formula interface works", {
-  res <- percTable(driver ~ area, data = d.pizza)
+  res <- percTable(driver ~ area, data = Pizza)
   expect_s3_class(res, "PercTable")
 })
 
 test_that("percTable vector interface works", {
-  res <- percTable(x = d.pizza$driver, y = d.pizza$area)
+  res <- percTable(x = Pizza$driver, y = Pizza$area)
   expect_s3_class(res, "PercTable")
 })

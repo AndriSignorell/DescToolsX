@@ -82,7 +82,7 @@ desc(x, ...)
 
 \method{print}{Desc.numeric}(x, digits = NULL, ...)
 
-\method{plot}{Desc.numeric}(x, ...)
+\method{plot}{Desc.numeric}(x, main = x$meta$main, ...)
 
 \method{desc}{ts}(x, maxLag = 12, main = NULL, plotit = NULL, verbose = NULL, ...)
 
@@ -280,7 +280,7 @@ The Box-Cox transformation parameter is estimated using
 }
 \examples{
 
-desc(d.pizza$delivery_min)             # numeric
+desc(Pizza$delivery_min)             # numeric
 desc(AirPassengers)
 desc(Nile, maxLag = 10)
 

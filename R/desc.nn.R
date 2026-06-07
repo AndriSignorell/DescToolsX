@@ -323,44 +323,40 @@ print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
 
 
 
-
 #' @exportS3Method
+#' @param main a main title for the plot. Defaults to the title stored in
+#'   \code{x$meta$main}.
 #' @rdname desc.nn
-plot.Desc.nn <- function(x, which = 1, verbose = NULL, ...) {
+plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) {
   
-  for(j in which){
+  for (j in which) {
     
     switch(as.character(j %||% "1"),
            "1" = {
-             plot(x$data$y ~ x$data$x, ..., 
-                  xlab=x$meta$xname, ylab=x$meta$yname,
-                  type="n")
+             plot(x$data$y ~ x$data$x, ...,
+                  main = main,
+                  xlab = x$meta$xname, ylab = x$meta$yname,
+                  type = "n")
              
-             points(x=x$data$x, y=x$data$y, ...)
+             points(x = x$data$x, y = x$data$y, ...)
              
              lines(loess(y ~ x, x$data))
              abline(lm(y ~ x, x$data), lwd = 1.5, col = "darkgray")
-             
            },
-           "2" ={
-             
+           "2" = {
              zz <- as.data.frame(x$data)
              zz <- zz[complete.cases(zz), ]
              
-             plotDens2D(x=zz$x, y=zz$y, ...)
-             
+             plotDens2D(x = zz$x, y = zz$y, main = main, ...)
            },
-           "3" ={
-             plotBag(x=cbind(x$data$x, y=x$data$y), ...)
-             
+           "3" = {
+             plotBag(x = cbind(x$data$x, y = x$data$y), main = main, ...)
            },
-           "4" ={
-             plotHexbin(x=x$data$x, y=x$data$y, ...)
-             
-           },
+           "4" = {
+             plotHexbin(x = x$data$x, y = x$data$y, main = main, ...)
+           }
     )
   }
-  
 }
 
 

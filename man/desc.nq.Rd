@@ -11,7 +11,7 @@
 
 \method{print}{Desc.nq}(x, digits = NULL, ...)
 
-\method{plot}{Desc.nq}(x, which = NULL, ...)
+\method{plot}{Desc.nq}(x, main = x$meta$main, which = NULL, ...)
 }
 \arguments{
 \item{x}{A numeric variable.}
@@ -21,6 +21,9 @@ be formatted? Default can be set by
 \code{\link{setDescToolsXOption}(digits=x)}.}
 
 \item{...}{Further arguments (currently not used).}
+
+\item{main}{a main title for the plot. Defaults to the title stored in
+\code{x$meta$main}.}
 
 \item{which}{integer vector selecting which plots to draw. See Details.
 \code{NULL} (default) selects plots automatically based on \code{verbose}.}

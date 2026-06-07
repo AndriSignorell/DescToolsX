@@ -64,7 +64,7 @@
 #' @keywords multivariate print univar
 #' @examples
 #' 
-#' desc(d.pizza$delivery_min)             # numeric
+#' desc(Pizza$delivery_min)             # numeric
 
 
 
@@ -329,12 +329,11 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 
 #' @rdname desc
 #' @export
-plot.Desc.numeric <- function(x, ...) {
+plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
   if (x$n <= 1L)
     return(plot.Desc.AllNA(x, ...))
-  aurora::plotFdist(x$x, na.rm = TRUE, ...)
+  aurora::plotFdist(x$x, na.rm = TRUE, main = main, ...)
 }
-
 
 # ===========================================================================
 # internal helper functions

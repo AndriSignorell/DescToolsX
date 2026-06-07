@@ -107,7 +107,7 @@
 #'
 #' @examples
 #' # from an existing table
-#' tab <- table(d.pizza$driver, d.pizza$area)
+#' tab <- table(Pizza$driver, Pizza$area)
 #' desc(tab)
 #' desc(tab, prop = "rows", verbose = 3)
 #'
@@ -116,7 +116,7 @@
 #' desc(tab2)
 #'
 #' # formula interface — dispatches to desc.table internally
-#' desc(driver ~ area, data = d.pizza)
+#' desc(driver ~ area, data = Pizza)
 #'
 #' # from a matrix
 #' m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),

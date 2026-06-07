@@ -65,13 +65,13 @@
 #' 
 #' @examples
 #' 
-#' kurtX(d.pizza$price, na.rm=TRUE)
+#' kurtX(Pizza$price, na.rm=TRUE)
 #' 
 #' # use sapply to calculate skewness for a data.frame
-#' sapply(d.pizza[,c("temperature","price","delivery_min")], kurtX, na.rm=TRUE)
+#' sapply(Pizza[,c("temperature","price","delivery_min")], kurtX, na.rm=TRUE)
 #' 
 #' # or apply to do that columnwise with a matrix
-#' apply(as.matrix(d.pizza[,c("temperature","price","delivery_min")]), 2, 
+#' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
 #'       kurtX, na.rm=TRUE)
 #' 
 

@@ -77,10 +77,10 @@ value.) See \code{\link{cut}}.
 }
 \examples{
 
-data(d.pizza)
+data(Pizza)
 
 # result is a data.frame
-d.freq <- freq(d.pizza$price)
+d.freq <- freq(Pizza$price)
 d.freq
 
 # it is printed by default with 3 digits for the percent values,
@@ -88,10 +88,10 @@ d.freq
 print(d.freq, digits=5)
 
 # sorted by frequency
-freq(d.pizza$driver, ord="desc")
+freq(Pizza$driver, ord="desc")
 
 # sorted by name using all the observations, say including NAs
-freq(d.pizza$driver, ord="name", useNA="ifany")
+freq(Pizza$driver, ord="name", useNA="ifany")
 
 # percentages and cumulative frequencies for a vector of count data
 freq(as.table(c(2,4,12,8)))

@@ -150,7 +150,7 @@ percTable(tab, col.vars=c(3,2))
 percTable(tab, col.vars=c(3,1), prob="total", margins=c(1,2))
 
 # formula interface with subset
-percTable(driver ~ area, data=d.pizza, subset=wine_delivered==0)
+percTable(driver ~ area, data=Pizza, subset=wine_delivered==0)
 
 # sort the table by rows, order first column (Zurich), then third, then row.names (0)
 percTable(sortX(tab, ord=c(1,3,0)))
@@ -160,12 +160,12 @@ percTable(sortX(tab, ord=c(1,3,0)))
 percTable(tab, row.vars=c(3, 1))
 
 # the vector interface
-percTable(x=d.pizza$driver, y=d.pizza$area)
-percTable(x=d.pizza$driver, y=d.pizza$area, prop="rows", 
+percTable(x=Pizza$driver, y=Pizza$area)
+percTable(x=Pizza$driver, y=Pizza$area, prop="rows", 
 margins=c("rows","cols"))
 
 # one dimensional x falls back to the function freq()
-# percTable(x=d.pizza$driver)
+# percTable(x=Pizza$driver)
 
 }
 \references{

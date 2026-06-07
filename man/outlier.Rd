@@ -36,25 +36,25 @@ deviation) to be outliers.
 }
 \examples{
 
-outlier(d.pizza$temperature, na.rm=TRUE)
+outlier(Pizza$temperature, na.rm=TRUE)
 
 # it's the same as the result from boxplot
-sort(d.pizza$temperature[outlier(d.pizza$temperature, value=FALSE, na.rm=TRUE)])
-b <- boxplot(d.pizza$temperature, plot=FALSE)
+sort(Pizza$temperature[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE)])
+b <- boxplot(Pizza$temperature, plot=FALSE)
 sort(b$out)
 
 # nice to find the corresponding rows
-d.pizza[outlier(d.pizza$temperature, value=FALSE, na.rm=TRUE), ]
+Pizza[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE), ]
 
 # compare to Hampel's rule
-outlier(d.pizza$temperature, method="hampel", na.rm=TRUE)
+outlier(Pizza$temperature, method="hampel", na.rm=TRUE)
 
 
 # outliers for the each driver
-tapply(d.pizza$temperature, d.pizza$driver, outlier, na.rm=TRUE)
+tapply(Pizza$temperature, Pizza$driver, outlier, na.rm=TRUE)
 
 # the same as:
-boxplot(temperature ~ driver, d.pizza)$out
+boxplot(temperature ~ driver, Pizza)$out
 
 
 }

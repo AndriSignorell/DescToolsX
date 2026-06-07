@@ -19,10 +19,10 @@
 #' @keywords univar
 #' @examples
 #' 
-#' meanSE(d.pizza$price, na.rm=TRUE)
+#' meanSE(Pizza$price, na.rm=TRUE)
 #' 
 #' # evaluate data.frame
-#' sapply(d.pizza[,1:4], meanSE, na.rm=TRUE)
+#' sapply(Pizza[,1:4], meanSE, na.rm=TRUE)
 #' 
 
 

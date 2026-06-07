@@ -47,7 +47,7 @@ The implementation strictly follows the Eurostat definition.
 }
 \examples{
 
-quantileX(d.pizza$temperature, rep(c(1:3), length.out=nrow(d.pizza)))
+quantileX(Pizza$temperature, rep(c(1:3), length.out=nrow(Pizza)))
 }
 \references{
 Working group on Statistics on Income and Living Conditions

@@ -62,6 +62,7 @@ NULL
 #' @keywords internal
 .descNQ <- function(x, g, ... ) {
 
+  g <- droplevels(factor(g))
   kw <- kruskal.test(x~g)
   
   res <- list(
@@ -73,7 +74,6 @@ NULL
           eta   = .eta2Kruskal(H = kw$statistic, 
                                 k = length(unique(g)), 
                                 n = length(x))
-          
         )
           
 }  
@@ -107,42 +107,39 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 
 
 
+#' @param main a main title for the plot. Defaults to the title stored in
+#'   \code{x$meta$main}.
 #' @rdname desc.nq
 #' @export
-plot.Desc.nq <- function(x, which = NULL, ...){
+plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
   
   switch(as.character(which %||% "1"),
          "1" = {
-           boxplot(x$data$y ~ x$data$x, 
-                   xlab=x$meta$xname, ylab=x$meta$yname, ...)
+           boxplot(x$data$y ~ x$data$x,
+                   main = main,
+                   xlab = x$meta$xname, ylab = x$meta$yname, ...)
            
-           grid(nx=NA, ny=NULL)
+           grid(nx = NA, ny = NULL)
            
-           abline(h=mean(x$data$y, na.rm=TRUE), col="darkblue", lty="dashed", lwd=1)
+           abline(h = mean(x$data$y, na.rm = TRUE), col = "darkblue", lty = "dashed", lwd = 1)
            
-           points(x=seq(ncol(x$res$tab)), 
-                  y=tapply(x$data$y, x$data$x, mean, na.rm=TRUE),
-                  pch=4, col="darkblue", cex=1.5)
+           points(x = seq(ncol(x$res$tab)),
+                  y = tapply(x$data$y, x$data$x, mean, na.rm = TRUE),
+                  pch = 4, col = "darkblue", cex = 1.5)
            
-           mtext(text=gettextf("n = %s", 
-                               fm(tapply(x$data$y, x$data$x, 
-                                      function(z) sum(!is.na(z))), fmt="abs.sty")), 
-                 side = 3, at=seq(ncol(x$res$tab)), cex=0.8, line = 1)
-           
+           mtext(text = gettextf("n = %s",
+                                 fm(tapply(x$data$y, x$data$x,
+                                           function(z) sum(!is.na(z))), fmt = "abs.sty")),
+                 side = 3, at = seq(ncol(x$res$tab)), cex = 0.8, line = 1)
          },
-         "2" ={
-           plotDens(x$data$y ~ x$data$x, ...)
+         "2" = {
+           plotDens(x$data$y ~ x$data$x, main = main, ...)
          },
-         
-         "3" ={
-           plotDensBox(x$data$y ~ x$data$x, ...)
-           
+         "3" = {
+           plotDensBox(x$data$y ~ x$data$x, main = main, ...)
          }
-         
   )
-  
 }
-
 
 
 # == internal helper functions ===============================================
@@ -179,9 +176,7 @@ plot.Desc.nq <- function(x, which = NULL, ...){
   
   # sicherstellen, dass Matrix
   mat <- as.matrix(mat)
-  print(mat)        # <-- temporär
-  print(dim(mat))   # <-- temporär
-  
+
   res <- rbind(
     fm(mat[c(1:4),  , drop = FALSE], fmt = style("num.sty")),
     fm(mat[c(5),    , drop = FALSE], fmt = style("abs.sty")),

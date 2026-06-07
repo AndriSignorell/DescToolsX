@@ -12,7 +12,7 @@
 \usage{
 \method{print}{Desc.qq}(x, digits = NULL, ...)
 
-\method{plot}{Desc.qq}(x, which = 1, ...)
+\method{plot}{Desc.qq}(x, main = x$meta$main, which = 1, ...)
 
 \method{desc}{table}(
   x,
@@ -57,6 +57,8 @@ automatically.}
 
 \item{\dots}{further arguments passed to or from other methods.}
 
+\item{main}{main title for the plot}
+
 \item{which}{selects plots.}
 
 \item{conf.level}{numeric, confidence level for all confidence intervals.
@@ -65,8 +67,6 @@ Default is \code{0.95}.}
 \item{prop}{How proportions are computed in contingency tables.
 One of \code{"rows"} (default), \code{"cols"}, or \code{"all"}.
 Passed to \code{percTable()}.}
-
-\item{main}{main title for the plot}
 
 \item{verbose}{controls printed output.}
 
@@ -148,7 +148,7 @@ of \code{y} and \code{x} is known and ordinal-specific measures
 }
 \examples{
 # from an existing table
-tab <- table(d.pizza$driver, d.pizza$area)
+tab <- table(Pizza$driver, Pizza$area)
 desc(tab)
 desc(tab, prop = "rows", verbose = 3)
 
@@ -157,7 +157,7 @@ tab2 <- tab[1:2, 1:2]
 desc(tab2)
 
 # formula interface — dispatches to desc.table internally
-desc(driver ~ area, data = d.pizza)
+desc(driver ~ area, data = Pizza)
 
 # from a matrix
 m <- matrix(c(153, 153, 167, 123, 108, 109, 89, 122, 167),

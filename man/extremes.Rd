@@ -72,7 +72,7 @@ small(x, 3, unique=TRUE)
 small(x, 3, unique=FALSE)
 
 # Both ends
-cat(highLow(d.pizza$temperature, na.last=NA))
+cat(highLow(Pizza$temperature, na.last=NA))
 
 }
 \references{

@@ -11,7 +11,7 @@
 
 \method{print}{Desc.qn}(x, verbose = NULL, ...)
 
-\method{plot}{Desc.qn}(x, which = NULL, verbose = NULL, ...)
+\method{plot}{Desc.qn}(x, main = NULL, which = NULL, verbose = NULL, ...)
 }
 \arguments{
 \item{x}{A numeric variable.}
@@ -19,6 +19,8 @@
 \item{verbose}{controls printed output.}
 
 \item{...}{further arguments passed to methods.}
+
+\item{main}{a main title for the plot. Defaults to type description.}
 
 \item{which}{selects plots.}
 

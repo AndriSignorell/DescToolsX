@@ -54,21 +54,21 @@ The minimum value for all is 0 under statistical independence.
 }
 \examples{
 
-tab <- table(d.pizza$driver, d.pizza$wine_delivered)
+tab <- table(Pizza$driver, Pizza$wine_delivered)
 cramerV(tab)
 
 # just x and y
-cramerV(d.pizza$driver, d.pizza$wine_delivered)
+cramerV(Pizza$driver, Pizza$wine_delivered)
 
 # data.frame
-bedrock::pairApply(d.pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
+bedrock::pairApply(Pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
 
 
 # useNA is passed to table
-bedrock::pairApply(d.pizza[,c("driver","operator","area")], cramerV,
+bedrock::pairApply(Pizza[,c("driver","operator","area")], cramerV,
           useNA="ifany", symmetric = TRUE)
 
-d.frm <- d.pizza[,c("driver","operator","area")]
+d.frm <- Pizza[,c("driver","operator","area")]
 bedrock::pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
 
 

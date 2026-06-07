@@ -29,7 +29,7 @@
 #' 
 #' @examples
 #' 
-#' x <- d.pizza$temperature
+#' x <- Pizza$temperature
 #' plot(x=seq_along(x), y=scaleX(x), xlim=c(0,100))
 #' points(x=seq_along(x), y=scale(x), col="red" )
 #' 

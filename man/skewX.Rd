@@ -85,13 +85,13 @@ expensive sums are coded in C++.
 }
 \examples{
 
-skewX(d.pizza$price, na.rm=TRUE)
+skewX(Pizza$price, na.rm=TRUE)
 
 # use sapply to calculate skewness for a data.frame
-sapply(d.pizza[,c("temperature","price","delivery_min")], skewX, na.rm=TRUE)
+sapply(Pizza[,c("temperature","price","delivery_min")], skewX, na.rm=TRUE)
 
 # or apply to do that columnwise with a matrix
-apply(as.matrix(d.pizza[,c("temperature","price","delivery_min")]), 2, 
+apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
       skewX, na.rm=TRUE)
 
 }

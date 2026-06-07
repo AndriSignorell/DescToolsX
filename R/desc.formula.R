@@ -1,96 +1,71 @@
 
 
 #' @inheritParams Formulas
-
 #' @rdname desc
 #' @method desc formula
 #' @export
-desc.formula <- function(formula, data, subset, na.action=na.pass, 
+desc.formula <- function(formula, data, subset, na.action = na.pass,
                          main = NULL, verbose = NULL, plotit = NULL, ...) {
   
-  # Call rekonstruieren
-  m <- match.call(expand.dots = FALSE)
-  m$na.action <- na.action
+  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
+  call        <- match.call()
   
-  # Nur relevante Argumente behalten
-  m <- m[c(1, match(c("formula", "data", "subset", "na.action"), names(m), 0))]
+  # ── Zielgrösse und RHS-Terme bestimmen ─────────────────────────────────────
+  y_name  <- deparse(formula[[2L]])
+  x_names <- attr(terms(formula), "term.labels")
   
-  # model.frame call setzen
-  m[[1]] <- quote(stats::model.frame)
-  
-  ## >>> IMPORTANT: Treat subset correctly due to collision with subset()
-  if (!missing(subset)) {
-    m$subset <- substitute(subset)
-  } else {
-    m$subset <- NULL
-  }
-  
-  # Evaluieren im Parent Frame
-  mf <- eval(m, parent.frame())
-  
-  # Terms extrahieren
-  terms_obj <- attr(mf, "terms")
-  
-  # Namen bestimmen
-  y_name <- all.vars(formula[[2]])
-  x_names <- attr(terms_obj, "term.labels")
-  
-  # y
-  y <- mf[[y_name]]
-  
-  # x (Liste)
-  x_list <- lapply(x_names, function(n) mf[[n]])
-  names(x_list) <- x_names
-  
-  # Output
-  z <- list(
-    y = y,
-    x = x_list,
-    y_name = y_name,
-    x_names = x_names,
-    formula = formula
-  )
-
-  # --------------------------------------------------------------
-  # got the data so far, now do the calculations....
-
-  ty <- .typeOf(y)
-  
-  call <- match.call()
-  
-  res <- lapply(names(x_list), function(nm) {
+  # ── Pro RHS-Term eine eigene resolveFormula ─────────────────────────────────
+  res <- lapply(x_names, function(nm) {
     
-    xi <- x_list[[nm]]
-    type <- paste(ty, .typeOf(xi), sep = "")
+    f1 <- as.formula(paste(y_name, "~", nm), env = environment(formula))
+    
+    rf <- do.call(resolveFormula, list(
+      formula   = f1,
+      data      = data,
+      subset    = subset_expr,
+      na.action = na.action,
+      allowed   = c("one-sample", "n-sample-independent", "numeric-numeric")
+    ))
+    
+    # ── Variablen aus rf ──────────────────────────────────────────────────────
+    y  <- rf$x                                                # response
+    xi <- if (rf$type == "one-sample") NULL else rf$group    # Gruppierung/Prädiktor
+    
+    # ── one-sample: direkt zu desc() ─────────────────────────────────────────
+    if (rf$type == "one-sample")
+      return(desc(y,
+                  main    = main %||% gettextf("%s[%s]", y_name, deparse(subset_expr)),
+                  plotit  = plotit,
+                  verbose = verbose, ...))
+    
+    # ── Typ bestimmen ─────────────────────────────────────────────────────────
+    ty   <- .typeOf(y)
+    type <- if (is.null(xi)) ty else paste0(ty, .typeOf(xi))
     
     FUN <- switch(type,
-           # choose evaluating function in dependence of the y- and x types
-           # these function take y and x variables in this sequence (!)
-             "nn" = .descNN,
-             "qn"  = .descQN,
-             "nq"  = .descNQ,
-             "qq"   = .descQQ,
-           stop("Unknown type combination")
+                  "nn" = .descNN,
+                  "nq" = .descNQ,
+                  "qn" = .descQN,
+                  "qq" = .descQQ,
+                  stop(gettextf("Unknown type combination: %s", type))
     )
-
-    structure(list(
-      meta = .descMetaXY(nm, y_name, main, plotit, verbose, 
-                         gettextf("Desc.%s", type), call=call ),
-      pair = .calcPairSummary(xi, y),
-      res  = FUN(y, xi, ... ),
-      data = list(x=xi, y=y)
-      
-    ), class=c(gettextf("Desc.%s", type), "Desc"))
     
+    structure(
+      list(
+        meta = .descMetaXY(nm, y_name, main, plotit, verbose,
+                           gettextf("Desc.%s", type), call = call),
+        pair = .calcPairSummary(xi, y),
+        res  = FUN(y, xi, ...),
+        data = list(x = xi, y = y)
+      ),
+      class = c(gettextf("Desc.%s", type), "Desc")
+    )
   })
   
-  names(res) <- names(x_list)
+  names(res) <- x_names
   class(res) <- c("Desc", "list")
-  
-  return(res)
-
+  res
 }
-
 
 
 

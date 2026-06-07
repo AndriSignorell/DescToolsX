@@ -41,7 +41,7 @@
 #'
 #' # GLM method
 #' r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered, 
-#'              data = bedrock::d.pizza, family = binomial)
+#'              data = bedrock::Pizza, family = binomial)
 #' cStat(r.mod, conf.level=0.95)
 #'
 

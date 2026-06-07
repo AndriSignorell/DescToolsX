@@ -11,7 +11,7 @@
 
 \method{print}{Desc.nn}(x, verbose = NULL, abs.sty = NULL, per.sty = NULL, ...)
 
-\method{plot}{Desc.nn}(x, which = 1, verbose = NULL, ...)
+\method{plot}{Desc.nn}(x, main = x$meta$main, which = 1, verbose = NULL, ...)
 }
 \arguments{
 \item{x}{an object of class \code{"Desc.nn"} as returned by \code{desc()}.}
@@ -27,6 +27,9 @@
 \code{getOption("DescTools.per.sty")}.}
 
 \item{\dots}{further arguments passed to the underlying plot functions.}
+
+\item{main}{a main title for the plot. Defaults to the title stored in
+\code{x$meta$main}.}
 
 \item{which}{integer vector selecting which plots to draw. See Details.
 \code{NULL} (default) selects plots automatically based on \code{verbose}.}

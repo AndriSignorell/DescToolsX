@@ -73,11 +73,11 @@ medianX(c(1:3, 100, 1000))  # = 3 [odd, robust]
 # Approximation for classified data
 breaks <- seq(10,70, 10)
 medianX(
-  freq(cut(d.pizza$temperature, breaks=breaks)),
+  freq(cut(Pizza$temperature, breaks=breaks)),
   breaks=breaks)
 
 # compared to
-medianX(d.pizza$temperature)
+medianX(Pizza$temperature)
 
 # starting from a classified table
 # from     to  income

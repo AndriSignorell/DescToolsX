@@ -30,7 +30,7 @@
 #' @keywords univar
 #' @examples
 #' 
-#' quantileX(d.pizza$temperature, rep(c(1:3), length.out=nrow(d.pizza)))
+#' quantileX(Pizza$temperature, rep(c(1:3), length.out=nrow(Pizza)))
 
  
 # further weighted quantiles in Hmisc and modi, both on CRAN

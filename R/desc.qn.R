@@ -313,28 +313,31 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
 # governed by DescToolsX design rules once defined.
 
 
+#' @param main a main title for the plot. Defaults to type description.
 #' @rdname desc.qn
 #' @export
-plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
+plot.Desc.qn <- function(x, main = NULL, which = NULL, verbose = NULL, ...) {
   
   verbose <- verbose %||% x$meta$verbose %||%
     getOption("DescTools.verbose", default = 2L)
   
   isBinary <- x$res$k == 2L
   
-  # ── default which by verbose ──────────────────────────────────────────────
-  if (is.null(which)) {
-    which <-  2
-  }
+  # ── helper: title mit fallback auf plot-spezifischen default ─────────────
+  .main <- function(default) main %||% default
   
-  # ── layout ───────────────────────────────────────────────────────────────
+  # ── default which by verbose ──────────────────────────────────────────────
+  if (is.null(which))
+    which <- 2
+  
+  # ── layout ────────────────────────────────────────────────────────────────
   nPlots <- length(which)
   if (nPlots > 1L) {
     op <- par(mfrow = c(nPlots, 1L), mar = c(4, 4, 2, 1))
     on.exit(par(op))
   }
   
-  # ── shorthand ────────────────────────────────────────────────────────────
+  # ── shorthand ─────────────────────────────────────────────────────────────
   xOk  <- x$res$xOk
   yOk  <- x$res$yOk
   lvls <- x$res$lvls
@@ -346,27 +349,26 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
     
     switch(as.character(w),
            
-           # ── 1: Spineplot ───────────────────────────────────────────────────────
+           # ── 1: Conditional density plot ───────────────────────────────────────
            "1" = {
              cdplot(yOk ~ xOk,
                     xlab = xLab,
                     ylab = sprintf("P(%s)", yLab),
-                    main = "Conditional density",
+                    main = .main("Conditional density"),
                     ...)
            },
            
-           # ── 2: Conditional density plot ───────────────────────────────────────
+           # ── 2: Spineplot ──────────────────────────────────────────────────────
            "2" = {
              spineplot(yOk ~ xOk,
                        xlab = xLab,
                        ylab = yLab,
-                       main = "Spineplot",
+                       main = .main("Spineplot"),
                        ...)
            },
            
            # ── 3: Overlapping density per group ──────────────────────────────────
            "3" = {
-             # compute densities first to get common xlim/ylim
              dens <- lapply(lvls, function(lv)
                density(xOk[yOk == lv], na.rm = TRUE))
              names(dens) <- lvls
@@ -377,7 +379,7 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
                   ylim = c(0, yMax * 1.05),
                   xlab = xLab,
                   ylab = "Density",
-                  main = "Density by group",
+                  main = .main("Density by group"),
                   col  = 1L, ...)
              
              for (i in seq_along(lvls)[-1L])
@@ -393,9 +395,9 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
            # ── 4: Boxplot ────────────────────────────────────────────────────────
            "4" = {
              boxplot(xOk ~ yOk,
-                     xlab = yLab,
+                     xlab = xLab,
                      ylab = xLab,
-                     main = "Boxplot",
+                     main = .main("Boxplot"),
                      ...)
            },
            
@@ -408,13 +410,11 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
              
              pt <- x$res$prevTable
              
-             # x-position: median of xOk per quantile class
              xCut <- cut(xOk,
                          breaks         = c(-Inf, x$res$breaks, Inf),
                          include.lowest = TRUE)
              xPos <- as.numeric(tapply(xOk, xCut, median))
              
-             # overall prevalence as reference line
              prevTotal <- sum(yOk == lvls[2L]) / length(yOk)
              
              plot(xPos, pt$prev,
@@ -422,21 +422,18 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
                   pch  = 19,
                   xlab = xLab,
                   ylab = sprintf("P(\"%s\")", lvls[2L]),
-                  main = "Prevalence by x-quantile",
+                  main = .main("Prevalence by x-quantile"),
                   ...)
              
-             # T-shaped error bars (design params via DescToolsX rules later)
              arrows(xPos, pt$lci, xPos, pt$uci,
                     angle  = 90,
                     code   = 3,
                     length = 0.05)
              
-             # reference line: overall prevalence
              abline(h   = prevTotal,
                     lty = 2,
                     col = "gray50")
              
-             # label
              text(x      = min(xPos),
                   y      = prevTotal,
                   labels = sprintf("overall: %s",
@@ -453,7 +450,8 @@ plot.Desc.qn <- function(x, which = NULL, verbose = NULL, ...) {
   
   invisible(x)
 }
-  
+
+
 
 # == internal helper functions =================================================
 

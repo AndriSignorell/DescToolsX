@@ -136,11 +136,11 @@
 #' per.sty <- style(digits = 1, fmt = "%")        # percentages
 #' num.sty <- style(digits = 1, big.mark = "'")   # numeric
 #' 
-#' tOne(x = d.pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
-#'   grp = d.pizza$quality)
+#' tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
+#'   grp = Pizza$quality)
 #' 
 #' # the same but no groups now...
-#' tOne(x = d.pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")])
+#' tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")])
 #' 
 #' # define median/IQR as describing functions for the numeric variables
 #' tOne(iris[, -5], iris[, 5],
@@ -169,8 +169,8 @@
 #'                 pval = style(fmt = "*", naForm = "   ")) 
 #' )
 #' 
-#' t1 <- tOne(x     = d.pizza[,c("temperature", "driver", "rabate")], 
-#'            grp   = d.pizza$area, 
+#' t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rabate")], 
+#'            grp   = Pizza$area, 
 #'            align = " ", 
 #'            total = FALSE,
 #'             
@@ -217,8 +217,8 @@
 #' # Send the whole stuff to Word
 #' wrd <- GetNewWrd()
 #' ToWrd(
-#'   tOne(x   = d.pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
-#'        grp = d.pizza$quality,
+#'   tOne(x   = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
+#'        grp = Pizza$quality,
 #'        fmt = list(num=Fmt("num", digits=1))
 #'        ),
 #'   font = list(name="Arial narrow", size=8),
