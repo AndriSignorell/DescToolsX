@@ -110,6 +110,49 @@ plot.Desc.numeric
 lines.Lc
 ```
 
+#### 3.1.1.1 Exporting S3 Methods Callable From Other Packages
+
+**Problem:** roxygen2 detects functions named `generic.class` (e.g.
+`plot.Desc.table`) as S3 methods via naming convention. For such a
+function, `@export` and `@exportS3Method` are **not additive** - roxygen2
+picks one registration mode and writes only `S3method(generic, class)` to
+`NAMESPACE`, never an additional `export(generic.class)` entry, no matter
+which combination of the two tags is tried. This is true even when both
+tags are present on the same function.
+
+**Symptom:** `plot(obj)` works fine within the defining package (and for
+anyone calling it via plain `UseMethod` dispatch, since R's S3 dispatch
+searches the registered `S3method()` table regardless of export status).
+But another package that calls the method **by name**, unqualified (e.g.
+`plot.Desc.table(x, ...)` inside a wrapper like `plot.Desc.qq`), fails
+with `could not find function "plot.Desc.table"` - even after
+`@importFrom otherPkg plot.Desc.table` - because the symbol was never
+actually exported, only registered as an S3 method.
+
+**Fix:** add an explicit `@rawNamespace` line to force the export, on top
+of `@exportS3Method` for the dispatch registration:
+
+```r
+#' @exportS3Method
+#' @rawNamespace export(plot.Desc.table)
+plot.Desc.table <- function(x, ...) { ... }
+```
+
+This produces both `NAMESPACE` lines:
+
+```
+S3method(plot, Desc.table)
+export(plot.Desc.table)
+```
+
+**When this applies:** any `plot.Desc.*`/`print.Desc.*`/etc. method that
+(a) lives in `aurora` (or another helper package) rather than in
+`DescToolsX` where the class itself is defined, **and** (b) is called by
+unqualified name from `DescToolsX` code rather than purely through
+`UseMethod` dispatch. Methods only ever reached via `plot(obj)` dispatch
+do not need the `@rawNamespace` line - plain `@export` (or
+`@exportS3Method`) is sufficient there.
+
 ### 3.1.2 Naming Across R and C++ (Rcpp Integration)
 
 **Goal:**  
@@ -858,6 +901,11 @@ Implementation via `.callIf()`:
 .callIf(graphics::grid, grid, defaults = th$grid)
 ```
 
+For `grid` and `box` specifically, use the dedicated dispatchers
+`.drawGrid()`/`.drawBox()` (see 9.2) rather than calling `.callIf()`
+directly - they wrap the same pattern and additionally understand the
+`.useTheme` sentinel (9.3), which raw `.callIf()` does not.
+
 DescToolsX does **not** use legacy base-graphics string flags such as `xaxt = "n"`.
 
 Instead:
@@ -942,42 +990,171 @@ Example:
 
 ## 9.1 Graphics State Management
 
-All plot functions are wrapped in `.withGraphicsState()`:
+All plot functions are wrapped in `.withGraphicsState()`, with `stamp`
+passed as an argument to the wrapper, not drawn manually inside it:
 
 ```r
 .withGraphicsState({
-  .applyParFromDots(...)
+
+  .applyParFromDots(
+    ...,
+    defaults = list(mar = c(bottom = 5, left = lmar, top = .marTop(main), right = 3.1))
+  )
+
   # plotting code
+
 }, stamp = stamp)
 ```
 
 No direct `par()` calls outside `.applyParFromDots()`.
 
+`.withGraphicsState()` only stamps if its body completes without error
+(it sets an internal `ok` flag to `TRUE` after `eval.parent()` returns,
+and the `on.exit()` stamp call checks that flag) - a plot that errors
+partway through is never stamped. This is by design, not a bug to work
+around: don't add manual stamp suppression for the error case.
+
+**`oma`/`omi` must never be added to a `par()` save/restore list.**
+`.withGraphicsState()` saves a fixed set of graphical parameters before
+drawing and restores them afterward (`op <- par(keep); ...;
+withr::defer(par(op))`). `"oma"`/`"omi"` must not appear in `keep` (or in
+any similar save/restore list elsewhere) - merely reading them via
+`par(c(...))` and writing the *same*, unchanged value back via
+`par(op)` breaks an active `par(mfrow = ...)`/`layout()` grid. Confirmed
+empirically:
+
+```r
+par(mfrow = c(1, 2))
+op <- par(c("oma", "omi"))
+barplot(1:3)
+par(op)          # writes back the unchanged oma/omi - no-op in theory
+barplot(4:6)     # ...but this opens a NEW page instead of filling panel 2
+```
+
+`oma`/`omi` describe the page-wide outer margin around the *entire*
+`mfrow`/`layout` grid, not a per-panel setting; re-setting them via
+`par()`, even to a value identical to the current one, appears to
+invalidate R's internal page/layout progress on at least some graphics
+devices. None of the current plot functions set `oma`/`omi` themselves
+(via `defaults` in `.applyParFromDots()` or otherwise), so there is
+nothing that legitimately needs saving/restoring here - if that ever
+changes, the interaction with an active `mfrow`/`layout` needs to be
+re-verified before adding `oma`/`omi` back to any such list.
+
+**Stamp is currently drawn on every panel, not only the last.** With a
+`par(mfrow = c(1, 2))` call, the corner stamp from `.withGraphicsState()`
+is drawn after each panel - so it currently appears once per panel, not
+once per page. A `.isLastPanel()` helper exists (9.2) but is **not**
+wired into the stamp call as of this writing; do not assume it is in
+effect, and do not document or rely on once-per-page stamping until this
+is actually implemented.
+
 ## 9.2 Helper Functions
 
-Plot functions use these internal helpers:
+Plot functions use these internal helpers, as established in
+`plotXY.R`/`plotBox.R` (reference implementations) and ported to
+`plotAssoc.R`/`plotHeatmap.R`:
 
 ```text
 .withGraphicsState()
 .applyParFromDots()
-.resolveNames()
-.normalizeDotData()
-.adjustLeftMarginForLabels()
-.callIf()
-.drawAxis()
+.resolveTitle()
+.marTop()
+.marginLines()
+.drawGrid()
+.drawBox()
+.useTheme           (sentinel value, not a function - see 9.3)
 ```
 
-## 9.3 Theme System
+`.isLastPanel()` also exists in `utils-plot.R` (intended to detect the
+last panel of an `mfrow`/`layout` grid for once-per-page stamping) but
+is currently **not** called from anywhere, including
+`.withGraphicsState()` - see 9.1's note on stamp-per-panel behavior.
+Treat it as available-but-unused until it is actually wired in; don't
+assume it is already affecting stamp placement.
 
-Plot functions use `.theme()` for centralized style defaults:
+`bedrock::callIf()` is used for one-off graphical elements that follow
+the flexible TRUE/FALSE/NA/list pattern (see 6.3) but are not already
+covered by `.drawGrid()`/`.drawBox()` - e.g. a legend
+(`bedrock::callIf(graphics::legend, legend, defaults = ...)`).
+
+`callIf()` does **not** understand the `.useTheme` sentinel - never pass
+a raw, unresolved `.useTheme`-valued argument into `callIf()` directly.
+Resolve it first (e.g. via `.resolveToggle()`, or by branching on
+`identical(x, .useTheme)` as in `resolveCol()`, 9.3) before handing the
+result to `callIf()`.
+
+### 9.2.1 Standard Set of FRAMEWORK/FEATURES Arguments
+
+Every plot function exposes `grid`, `box`, and `stamp` wherever the
+element is geometrically meaningful for that plot type - these are not
+optional extras added case-by-case, but the expected baseline API for
+any new plot function. Each follows the flexible
+`TRUE`/`FALSE`/`NA`/`list(...)` pattern (6.3), defaults to `.useTheme`,
+and is wired through `.drawGrid()`/`.drawBox()` or
+`.withGraphicsState(..., stamp = stamp)` rather than a bespoke
+implementation:
 
 ```r
-th <- .theme(
-  grid = list(col = "grey", lwd = 1, lty = "dotted")
-)
+grid  = .useTheme,   # FEATURES
+box   = .useTheme,   # STYLE
+stamp = .useTheme,   # FRAMEWORK
 ```
 
-Theme subsetting: plot functions do not modify the theme globally, but select the relevant subset locally:
+"Wherever meaningful" excludes the element only when the underlying
+drawing function makes it structurally impossible or redundant to offer
+a toggle - not merely inconvenient to wire up:
+
+- a panel that delegates to a base-R function with no native
+  suppression path for its own frame (e.g. `spineplot()`'s
+  unconditional `box()`) has no working `box` toggle, and the argument
+  is documented as having no effect there rather than omitted from the
+  function signature entirely (see `plot.Desc.table`'s `@param box` for
+  the documented-no-op pattern in a dispatching method);
+- a plot type with no rectangular coordinate frame at all (e.g.
+  `plotAssoc()`, which draws cell rectangles directly with no
+  `box()`/frame concept) legitimately has no `box` argument;
+- `stamp` is omitted only on the inner leg of a delegation chain
+  pattern, never on a function callable directly by the end user (9.5).
+
+When in doubt, add the argument and document precisely what it does (or
+doesn't) affect, rather than leaving it out silently.
+
+## 9.3 Theme System and the `.useTheme` Sentinel
+
+Plot functions resolve style defaults from the active theme via
+`getTheme()`, not via a function call per parameter. The default value of
+a STYLE argument is the sentinel `.useTheme`, never a literal color or a
+computed value, so the call site can tell "use the theme" apart from "the
+user explicitly chose this":
+
+```r
+plotHeatmap <- function(x,
+                        col  = .useTheme,
+                        box  = .useTheme,
+                        stamp = .useTheme,
+                        ...)
+```
+
+Inside the function, resolve `.useTheme` against `getTheme()` (for a
+single, unambiguous default) or against multiple panel-specific defaults
+when one shared default would not be meaningful (e.g. a dispatching
+`plot.Desc.*` method covering several different panel types - a grey fill
+ramp and a diverging residual palette are not interchangeable defaults
+for the same `col` argument):
+
+```r
+resolveCol <- function(default) {
+  if (identical(col, .useTheme)) default else col
+}
+
+colSpineDefault <- colorRampPalette(c("grey30", "grey90"))(ncolTab)
+# ...
+spineplot(tab, col = resolveCol(colSpineDefault), ...)
+```
+
+Theme subsetting: plot functions do not modify the theme globally, but
+select the relevant subset locally:
 
 ```r
 defaults = th$grid[!startsWith(names(th$grid), "group.")]
@@ -985,17 +1162,116 @@ defaults = th$grid[!startsWith(names(th$grid), "group.")]
 
 Theme values may define STYLE only, never STRUCTURE.
 
-## 9.4 `stamp`
+## 9.4 `main` / Title Resolution
 
-`stamp` is controlled via a global option and is exposed as an explicit argument only when the user must be able to override the global default:
+The `main` argument follows a three-state contract, resolved via
+`.resolveTitle(main, default = ...)`:
+
+| Value | Meaning |
+|---|---|
+| `NULL` (default) | derive a title from the call (see below) |
+| `""` / `NA` / `FALSE` | suppress the title; the top margin is compacted accordingly (`.marTop(main)` returns a smaller value) |
+| any other string | used as-is |
+
+The derived default follows "substitute magic": `match.call()` is
+captured early (before the data argument is reassigned/transformed), and
+the default title is built from the deparsed expression(s) the caller
+actually wrote, not from variable names inside the function:
 
 ```r
-.withGraphicsState(expr, stamp = .getOption("stamp", NULL))
+mc <- match.call()
+
+.withGraphicsState({
+  main <- .resolveTitle(main, default = deparse(mc$x))   # single-argument functions
+  # or, for a y ~ x pair:
+  main <- .resolveTitle(main, default = paste(deparse(mc$y), "~", deparse(mc$x)))
+  ...
+})
 ```
+
+`mc <- match.call()` is placed *before* `.withGraphicsState()`, at the
+same point in every function, for consistency and so it captures the
+original argument expressions before any internal reassignment
+(transpose, reorder, etc.).
+
+Dispatching `plot.Desc.*` methods that have no `y ~ x` formula pair at
+their level (e.g. a table built outside a formula) have no reliable
+source for separate "x" and "y" names; do not invent one. Use whatever
+single name is actually available (e.g. `x$meta$xname`), optionally with
+a panel-type suffix for context, rather than fabricating a placeholder
+like `"y"`.
+
+## 9.5 `stamp`
+
+`stamp` is an explicit, documented argument on every plot function for
+which a corner stamp is meaningful, defaulting to `.useTheme`:
+
+```r
+stamp = .useTheme
+```
+
+It is passed straight through to `.withGraphicsState(expr, stamp = stamp)`
+- never drawn manually inside the function body.
+
+**Nested calls:** when a `plot.Desc.*` dispatch method delegates to
+another plot function that itself draws a stamp (e.g.
+`plot.Desc.table()` calling `plotMosaic()`/`plotAssoc()`/`plotHeatmap()`),
+the inner call passes `stamp = NA` to suppress its own stamp, so the
+stamp is drawn exactly once, by the outermost `.withGraphicsState()`
+after all selected panels have been drawn:
+
+```r
+plotHeatmap(tab, ..., stamp = NA)   # inside plot.Desc.table()
+```
+
+Functions that are always called directly by the end user (never
+delegated to) do not need this - only the inner leg of a
+delegation chain does.
+
+## 9.6 Left-Margin Auto-Sizing
+
+The left margin (`mar[2]`) is sized automatically from the longest of the
+labels actually drawn on that axis - the y-axis label and, where the
+panel draws categorical level names as axis tick labels (e.g.
+`spineplot()`, `cdplot()`), those level names too - via `.marginLines()`:
+
+```r
+lmar <- max(4.1, .marginLines(tickLabels, side = 2, las = 1, pad = 1))
+```
+
+Only the axis tick-label text itself sizes the margin this way; a y-axis
+*label* (`ylab`) is drawn rotated and needs roughly constant width
+regardless of its string length, so it must not be mixed into the same
+`strwidth()`-based comparison as the (horizontal) tick labels - doing so
+overestimates the needed margin for a long `ylab` and produces an
+inconsistent layout.
+
+Functions that delegate to a base-R plotting function with its own
+internal margin logic (e.g. `spineplot()`) are not exempt from this -
+`spineplot()` does respect `par(mar = ...)` set beforehand via
+`.applyParFromDots()`; if labels still appear clipped, the cause is
+almost always that the margin was not sized from the actual labels being
+drawn (e.g. a leftover fixed value), not that the underlying function
+ignores `par()`.
+
+## 9.7 Dispatching `plot.Desc.*` Methods
+
+`plot.Desc.*` S3 methods (one per `Desc` subclass) typically live in
+`aurora`, not in `DescToolsX` where the `Desc` classes themselves are
+constructed, because they require `aurora`'s internal plotting helpers
+(9.2) which cannot be used from outside `aurora`'s namespace. See
+3.1.1.1 for the resulting export requirements - this is the most common
+case where the `@rawNamespace export()` pattern is needed.
+
+Selecting multiple panels via `which = c(...)` never implies an internal
+layout decision (no `mfrow` is ever set by the function itself).
+Arranging multiple panels on one device (`par(mfrow = c(2, 1))` or
+similar) is left entirely to the caller.
 
 ---
 
 # 10. Verbose Concept
+
 
 > [TODO: Insert verbose concept]
 

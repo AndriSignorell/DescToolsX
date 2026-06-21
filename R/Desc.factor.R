@@ -193,6 +193,6 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 #' @rdname desc
 #' @export
 plot.Desc.factor <- function(x, ...){
-  aurora::plotCatDist(as.table(x$freq[,2]), na.rm=TRUE, ...)
+  aurora::plotCatDist(setNamesX(x$freq[,2], x$freq[,1]), na.rm=TRUE, ...)
 }
 
