@@ -128,6 +128,7 @@ Other desc:
 \code{\link[=desc.Date]{desc.Date()}},
 \code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nq}},
+\code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}

@@ -12,6 +12,7 @@
   x,
   maxrows = NULL,
   ord = NULL,
+  conf.level = 0.95,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -23,6 +24,7 @@
   x,
   maxrows = NULL,
   ord = NULL,
+  conf.level = 0.95,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -64,6 +66,10 @@ frequencies descending) defining the order for a frequency table as used for
 factors, numerics with few unique values and logicals. Factors (and
 character vectors) are by default ordered by their descending frequencies,
 ordered factors by their natural order.}
+
+\item{conf.level}{Confidence level of the interval (default 0.95).
+If set to \code{NA} (which is the default) no confidence interval
+will be calculated.}
 
 \item{main}{Character string (character|\code{NULL}|\code{NA})
 defining the main title. By default (\code{main = NULL}) the title will
@@ -110,6 +116,7 @@ Other desc:
 \code{\link[=desc.Date]{desc.Date()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
+\code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}

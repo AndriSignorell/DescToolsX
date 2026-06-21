@@ -449,40 +449,6 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
 }
 
 
-
-#' @exportS3Method
-#' @rdname desc.table
-plot.Desc.table <- function(x, which = 1, ...) {
-  
-  tab <- x$res$tab
-  
-  if(length(dim(x))>2) {
-    message("Sorry, plot not implemented for higher dimensional tables.")
-    invisible()
-  }  
-  
-  
-  for (j in which) {
-    switch(as.character(j %||% "1"),
-           "1" = {  # spineplot (default)
-             spineplot(tab, ...)
-           },
-           "2" = {  # mosaicplot
-             mosaicplot(tab, ...)
-           },
-           "3" = {  # association plot
-             plotAssoc(tab, ...)
-           },
-           "4" = {  # heatmap
-             plotHeatmap(tab, scale = "prop", ...)
-           }
-    )
-  }
-  
-}
-
-
-
 # == internal helper functions =================================================
 
 .chisqIndependence <- function(x, correct = FALSE) {

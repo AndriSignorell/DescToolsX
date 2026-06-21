@@ -74,6 +74,12 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
 #' @exportS3Method
 #' @rdname desc.table
 plot.Desc.qq <- function(x, main = x$meta$main, which = 1, ...) {
-  plot.Desc.table(x, main = main, which = which, ...)
+  
+  names(dimnames(x$res$tab)) <- c(
+    x$meta$xname,
+    x$meta$yname
+  )
+  
+  plot.Desc.table(x$res, main = main, which = which, ...)
+  
 }
-

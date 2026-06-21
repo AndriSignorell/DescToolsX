@@ -28,8 +28,17 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
     ))
     
     # ── Variablen aus rf ──────────────────────────────────────────────────────
-    y  <- rf$x                                                # response
-    xi <- if (rf$type == "one-sample") NULL else rf$group    # Gruppierung/Prädiktor
+    y <- rf$x                                                 # response
+    
+    # 'group' (categorical) and 'predictor' (continuous) are distinct
+    # fields under the resolveFormula() contract - reading rf$group for
+    # a numeric-numeric design returns NULL and silently degrades the
+    # pair to a one-sample case, failing downstream with
+    # "Unknown type combination: n".
+    xi <- switch(rf$type,
+                 "one-sample"      = NULL,
+                 "numeric-numeric" = rf$predictor,
+                 rf$group)                                     # n-sample-independent
     
     # ── one-sample: direkt zu desc() ─────────────────────────────────────────
     if (rf$type == "one-sample")

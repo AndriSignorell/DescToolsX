@@ -15,9 +15,8 @@
 \alias{desc.logical}
 \alias{print.Desc.logical}
 \alias{plot.Desc.logical}
-\alias{desc.numeric}
-\alias{plot.Desc.numeric}
 \alias{print.Desc.numeric}
+\alias{plot.Desc.numeric}
 \alias{Timeseries}
 \alias{desc.ts}
 \alias{print.Desc.ts}
@@ -67,18 +66,6 @@ desc(x, ...)
 \method{print}{Desc.logical}(x, digits = NULL, ...)
 
 \method{plot}{Desc.logical}(x, ...)
-
-\method{desc}{numeric}(
-  x,
-  maxrows = NULL,
-  conf.level = 0.95,
-  include_x = TRUE,
-  main = NULL,
-  verbose = NULL,
-  plotit = NULL,
-  digits = NULL,
-  ...
-)
 
 \method{print}{Desc.numeric}(x, digits = NULL, ...)
 
@@ -135,14 +122,9 @@ in the result object. This is necessary for producing specific plot
 (e.g. the density, ecdf, etc.). However if no plots are required the result
 object can be kept small and handy without the original data.}
 
-\item{digits}{integer. With how many digits should the real numbers
-be formatted? Default is taken from \code{\link{setDescToolsXOption}(digits=x)}.}
-
-\item{maxrows}{numeric; defines the maximum number of rows in a frequency
-table to be reported. For factors with many levels it is often not
-interesting to see all of them. Default is set to 12 most frequent ones
-(resp. the first ones if \code{ord} is set to \code{"levels"} or
-\code{"names"}).}
+\item{digits}{integer. With how many digits should the relative frequencies
+be formatted? Default can be set by
+\code{\link{setDescToolsXOption}(digits=x)}.}
 
 \item{maxLag}{Integer. Number of lags used in the Ljung-Box test.
 Default is 12.}
@@ -152,8 +134,6 @@ An object of class \code{"Desc"} with a subclass depending on
 the input type.
 @return An object of class \code{"Desc"} with a subtype depending on
 the input (e.g. \code{"Desc.numeric"}, \code{"Desc.qn"}).
-
-Invisibly returns \code{NULL}.
 
 The function prints a structured diagnostic summary to the console.
 Invisibly returns a named list containing all computed statistics.
@@ -167,11 +147,6 @@ Displays a set of statistical measures describing a dichotomous variable.
 Visualizes the distribution of a numeric \code{Desc} object.
 The plot consists of a pair of horizontally organized barplots
 displaying the absolute and relative frequencies.
-
-Displays a set of statistical measures describing a numeric data vector.
-Visualizes the distribution of a numeric \code{Desc} object.
-The plot may include a histogram, density curve, boxplot
-and empirical distribution.
 
 Provides a compact diagnostic summary for univariate \code{ts} objects,
 extending classical descriptive statistics with key time series diagnostics.
@@ -234,28 +209,6 @@ function is, that dichotomous variable in general do not contain intense
 infmion. Therefore it makes sense to condense the description of sets of
 dichotomous variables.
 
-This function is an S3 method for \code{\link[graphics]{plot}}.
-It is automatically dispatched when calling \code{plot(x)} on a
-\code{Desc.numeric} object.
-
-For a numeric argument x \code{maxrows} is the minimum number of unique
-values needed for a numeric variable to be treated as continuous. If left to
-its default \code{NULL}, x will be regarded as continuous if it has more
-than 12 single values. In this case the list of extreme values will be
-displayed and the frequency table else.
-
-If \code{maxrows} is < 1 it will be interpreted as percentage. In this case
-just as many rows, as the \code{maxrows} most frequent levels will be shown.
-Say, if \code{maxrows} is set to \code{0.8}, then the number of rows is
-fixed so, that the highest cumulative relative frequency is the first one
-going beyond 0.8.
-
-Setting \code{maxrows} to \code{Inf} will unconditionally report all values
-and also produce a plot with type "h" instead of a histogram.
-
-Named colors defined by \code{DescToolsX} (e.g. \code{"hred"},
-\code{"hblue"}) can be used directly.
-
 The function reports:
 \itemize{
 \item Lag-1 autocorrelation
@@ -279,8 +232,6 @@ The Box-Cox transformation parameter is estimated using
 \code{\link{boxCoxLambda}()}.
 }
 \examples{
-
-desc(Pizza$delivery_min)             # numeric
 desc(AirPassengers)
 desc(Nile, maxLag = 10)
 
@@ -297,11 +248,6 @@ Forecasting: Principles and Practice.
 
 \code{\link[aurora]{plotPropCI}} for graphical display
 
-\code{\link[base:summary]{base::summary()}},
-\code{\link[base:plot]{base::plot()}}
-
-Other Statistical summary functions: \code{\link{abstract}()}
-
 \code{\link[stats]{acf}},
 \code{\link[stats]{Box.test}},
 \code{\link[forecast]{BoxCox.lambda}},
@@ -313,6 +259,7 @@ Other desc:
 \code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
+\code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
@@ -324,6 +271,3 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 \concept{desc}
 \concept{descriptive-statistics}
 \concept{time-series}
-\keyword{multivariate}
-\keyword{print}
-\keyword{univar}

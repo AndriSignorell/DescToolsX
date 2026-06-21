@@ -450,6 +450,47 @@ fitted(fit)
 Using `fit` consistently improves readability and reduces ambiguity compared with alternatives such as `x`, `mod`, `model`, `lm_fit`, or `glm_fit`.
 
 
+**(I) Argument matching & signature design **
+
+R's partial argument matching cannot be disabled, but signatures can be
+designed so it never bites.
+
+**Rules**
+
+1. **No prefix families in signatures.** Never expose two or more formals
+   sharing a common prefix that is itself a plausible argument name
+   (e.g. `cex.axis` + `cex.names` → `cex=` errors with
+   "matches multiple formal arguments", as in `barplot()`).
+   Worse than the error is the silent case: a prefix matching exactly
+   *one* formal the caller did not intend.
+
+2. **Route par-parameters through the dots.** Graphics parameters
+   (`cex`, `lwd`, `col`, ...) are not formals; they pass via `...`
+   to `.applyParFromDots()` / `plot()` / `points()`. The dots never
+   partially match, so no collisions arise.
+
+3. **List arguments instead of prefixed formals.** Substructure goes
+   into a single list argument (`qqline = list(col=, lty=)`), never
+   into `qqline.col`, `qqline.lty`, ... formals.
+
+4. **Critical options go after the dots.** (unsure whether to retain: observe) 
+   Formals placed after `...`
+   require exact names — partial matching is off for them:
+
+```r
+   f <- function(x, ..., conf.level = 0.95)
+```
+
+   Trade-off: a typo (`conf.lvl=`) silently falls into the dots instead
+   of matching. Acceptable for a documented API; consider validating
+   unused dots where feasible.
+
+**Development setting**
+
+Run tests with `options(warnPartialMatchArgs = TRUE)` to surface any
+partial matches the API still permits.
+
+
 ## 3.4 Return Values
 
 Output is part of the API and must be strictly consistent:
@@ -761,6 +802,24 @@ plotDot():
 - explicit: col, pch
 - through ...: cex, lwd, las
 ```
+
+## cex policy
+
+`cex` means symbol size, nothing else.
+
+- Functions that draw symbols (`plotXY`, `plotDot`, `plotQQ`, ...) declare
+  `cex` as a documented formal placed after the dots, resolved against the
+  theme (`cex = NULL` -> `.theme()`), and pass it explicitly to `points()`.
+- All other plot functions do not know `cex`. It is never routed to `par()`
+  (`.applyParFromDots()` excludes it by default): setting `par(cex=)` scales
+  the text line height and thereby the margins (`mai = mar * line height`),
+  silently changing the plot layout.
+- Fine-grained text sizing uses the specific parameters (`cex.axis`,
+  `cex.lab`, `cex.main`), which pass through the dots to `par()` without
+  side effects.
+- Global scaling (e.g. presentation mode) is a theme concern, declared once
+  via options and resolved in `.theme()` — never per call site via `cex`.
+
 
 ## 6.2 Bootstrap Arguments
 

@@ -63,47 +63,51 @@
 
 
 
-#' @rdname desc.factor
-#' @method desc factor
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
 #' @concept factor-handling
 #'
 #'
+
+
+
+#' @rdname desc.factor
+#' @method desc factor
 #' @export
-desc.factor <- function(x, maxrows = NULL, ord=NULL, 
+desc.factor <- function(x, maxrows = NULL, ord = NULL,
+                        conf.level = 0.95,
                         main = NULL, verbose = NULL, plotit = NULL,
-                        digits=NULL, ...) {
+                        digits = NULL, ...) {
   
-  # ----------------------------------------------------
-  # general handling  
-  
-  total_n <- length(x)    # total n
-  ok <- !is.na(x)         # non NAs
-  n <- sum(ok)            # valid n
+  xname   <- deparse(substitute(x))
+  total_n <- length(x)
+  ok      <- !is.na(x)
+  n       <- sum(ok)
   
   # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
   if (n == 0L)
-    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+    return(.descAllNA(x, xname, main, plotit, verbose))
   
+  if (is.null(main))
+    main <- xname
   
-  if (is.null(main)) 
-    main <- deparse(substitute(x))
-
+  # k = 2: any 2-level factor/character is inherently yes/no-like (unlike
+  # two arbitrary numeric measurements), so the dichotomous proportion
+  # view applies unconditionally, not just for a specific value pair.
+  if (length(unique(x[ok])) == 2L)
+    return(.descLogicalCore(x, xname = xname,
+                            ord = ord %||% "level",
+                            conf.level = conf.level, include_x = TRUE,
+                            main = main, verbose = verbose, plotit = plotit,
+                            digits = digits, ...))
   
-  # ----------------------------------------------------
-  # class specific handling  
-  
-  if(is.null(ord)){
-    if(is.ordered(x))
-      ord <- "level"
-    else
-      ord <- "desc"
+  if (is.null(ord)) {
+    if (is.ordered(x)) ord <- "level" else ord <- "desc"
   }
   
   freq <- freq(x, ord = ord, ...)
-  
+
   if (is.null(maxrows)) {
     maxrows <- 12
   }

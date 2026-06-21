@@ -333,15 +333,10 @@ plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) 
     
     switch(as.character(j %||% "1"),
            "1" = {
-             plot(x$data$y ~ x$data$x, ...,
-                  main = main,
-                  xlab = x$meta$xname, ylab = x$meta$yname,
-                  type = "n")
-             
-             points(x = x$data$x, y = x$data$y, ...)
-             
-             lines(loess(y ~ x, x$data))
-             abline(lm(y ~ x, x$data), lwd = 1.5, col = "darkgray")
+             plotXY(x$data$y ~ x$data$x,
+                    main = main,
+                    xlab = x$meta$xname, 
+                    ylab = x$meta$yname, ...)
            },
            "2" = {
              zz <- as.data.frame(x$data)
@@ -354,7 +349,8 @@ plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) 
            },
            "4" = {
              plotHexbin(x = x$data$x, y = x$data$y, main = main, ...)
-           }
+           },
+           warning(gettextf("No plot defined for which = %s (valid: 1-4).", which))
     )
   }
 }

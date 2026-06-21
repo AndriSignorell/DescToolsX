@@ -7,7 +7,6 @@
 \alias{desc.matrix}
 \alias{desc.array}
 \alias{print.Desc.table}
-\alias{plot.Desc.table}
 \title{Describe a Contingency Table}
 \usage{
 \method{print}{Desc.qq}(x, digits = NULL, ...)
@@ -45,8 +44,6 @@
 )
 
 \method{print}{Desc.table}(x, print_header = TRUE, ...)
-
-\method{plot}{Desc.table}(x, which = 1, ...)
 }
 \arguments{
 \item{x}{a \code{table} or \code{matrix} object. For the formula interface
@@ -181,6 +178,7 @@ Other desc:
 \code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
+\code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}}
 }

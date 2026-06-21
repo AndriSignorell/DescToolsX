@@ -115,29 +115,18 @@ plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
   
   switch(as.character(which %||% "1"),
          "1" = {
-           boxplot(x$data$y ~ x$data$x,
-                   main = main,
-                   xlab = x$meta$xname, ylab = x$meta$yname, ...)
-           
-           grid(nx = NA, ny = NULL)
-           
-           abline(h = mean(x$data$y, na.rm = TRUE), col = "darkblue", lty = "dashed", lwd = 1)
-           
-           points(x = seq(ncol(x$res$tab)),
-                  y = tapply(x$data$y, x$data$x, mean, na.rm = TRUE),
-                  pch = 4, col = "darkblue", cex = 1.5)
-           
-           mtext(text = gettextf("n = %s",
-                                 fm(tapply(x$data$y, x$data$x,
-                                           function(z) sum(!is.na(z))), fmt = "abs.sty")),
-                 side = 3, at = seq(ncol(x$res$tab)), cex = 0.8, line = 1)
-         },
+           plotBox(x$data$y, g = x$data$x,
+                           main = main,
+                           xlab = x$meta$xname, 
+                           ylab = x$meta$yname, mar=mar(left=6), ...)         },
          "2" = {
            plotDens(x$data$y ~ x$data$x, main = main, ...)
          },
          "3" = {
            plotDensBox(x$data$y ~ x$data$x, main = main, ...)
-         }
+         },
+         warning(gettextf("No plot defined for which = %s (valid: 1-3).", which))
+         
   )
 }
 

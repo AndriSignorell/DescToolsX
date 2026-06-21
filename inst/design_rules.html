@@ -483,6 +483,9 @@ Base-R compatibility &gt; stylistic purity</p>
 </tr>
 </tbody>
 </table>
+<p>Kategorie,Stil,Beispiele Datensätze,PascalCase,“Kunden, Messdaten,
+RawData” Modell-Objekte,lowerCamelCase,“fit, modKunden, regOut”
+Funktionen,lowerCamelCase,“fitMod(), calcSummary(), plotResults()”</p>
 <p>S3 methods never receive an X suffix and remain base-compliant:</p>
 <pre class="r"><code>print.PercTable
 plot.Desc.numeric
@@ -860,6 +863,39 @@ fitted(fit)</code></pre>
 ambiguity compared with alternatives such as <code>x</code>,
 <code>mod</code>, <code>model</code>, <code>lm_fit</code>, or
 <code>glm_fit</code>.</p>
+<p><strong>(I) Argument matching &amp; signature design </strong></p>
+<p>R’s partial argument matching cannot be disabled, but signatures can
+be designed so it never bites.</p>
+<p><strong>Rules</strong></p>
+<ol style="list-style-type: decimal">
+<li><p><strong>No prefix families in signatures.</strong> Never expose
+two or more formals sharing a common prefix that is itself a plausible
+argument name (e.g. <code>cex.axis</code> + <code>cex.names</code> →
+<code>cex=</code> errors with “matches multiple formal arguments”, as in
+<code>barplot()</code>). Worse than the error is the silent case: a
+prefix matching exactly <em>one</em> formal the caller did not
+intend.</p></li>
+<li><p><strong>Route par-parameters through the dots.</strong> Graphics
+parameters (<code>cex</code>, <code>lwd</code>, <code>col</code>, …) are
+not formals; they pass via <code>...</code> to
+<code>.applyParFromDots()</code> / <code>plot()</code> /
+<code>points()</code>. The dots never partially match, so no collisions
+arise.</p></li>
+<li><p><strong>List arguments instead of prefixed formals.</strong>
+Substructure goes into a single list argument
+(<code>qqline = list(col=, lty=)</code>), never into
+<code>qqline.col</code>, <code>qqline.lty</code>, … formals.</p></li>
+<li><p><strong>Critical options go after the dots.</strong> (unsure
+whether to retain: observe) Formals placed after <code>...</code>
+require exact names — partial matching is off for them:</p></li>
+</ol>
+<pre class="r"><code>   f &lt;- function(x, ..., conf.level = 0.95)</code></pre>
+<p>Trade-off: a typo (<code>conf.lvl=</code>) silently falls into the
+dots instead of matching. Acceptable for a documented API; consider
+validating unused dots where feasible.</p>
+<p><strong>Development setting</strong></p>
+<p>Run tests with <code>options(warnPartialMatchArgs = TRUE)</code> to
+surface any partial matches the API still permits.</p>
 </div>
 </div>
 <div id="return-values" class="section level2">
@@ -1193,6 +1229,29 @@ explicit, so users see them in quick tips</li>
 <pre class="text"><code>plotDot():
 - explicit: col, pch
 - through ...: cex, lwd, las</code></pre>
+</div>
+<div id="cex-policy" class="section level2">
+<h2>cex policy</h2>
+<p><code>cex</code> means symbol size, nothing else.</p>
+<ul>
+<li>Functions that draw symbols (<code>plotXY</code>,
+<code>plotDot</code>, <code>plotQQ</code>, …) declare <code>cex</code>
+as a documented formal placed after the dots, resolved against the theme
+(<code>cex = NULL</code> -&gt; <code>.theme()</code>), and pass it
+explicitly to <code>points()</code>.</li>
+<li>All other plot functions do not know <code>cex</code>. It is never
+routed to <code>par()</code> (<code>.applyParFromDots()</code> excludes
+it by default): setting <code>par(cex=)</code> scales the text line
+height and thereby the margins (<code>mai = mar * line height</code>),
+silently changing the plot layout.</li>
+<li>Fine-grained text sizing uses the specific parameters
+(<code>cex.axis</code>, <code>cex.lab</code>, <code>cex.main</code>),
+which pass through the dots to <code>par()</code> without side
+effects.</li>
+<li>Global scaling (e.g. presentation mode) is a theme concern, declared
+once via options and resolved in <code>.theme()</code> — never per call
+site via <code>cex</code>.</li>
+</ul>
 </div>
 <div id="bootstrap-arguments" class="section level2">
 <h2>6.2 Bootstrap Arguments</h2>

@@ -61,11 +61,10 @@ imputeKnn(dat, k = 2)
 
 }
 \seealso{
-\code{\link{impute}}, \code{\link{locf}}
+\code{\link{impute}}, \code{\link[bedrock]{locf}}
 
 Other imputation:
-\code{\link[=impute]{impute()}},
-\code{\link[=locf]{locf()}}
+\code{\link[=impute]{impute()}}
 }
 \concept{data-manipulation}
 \concept{imputation}

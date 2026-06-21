@@ -43,8 +43,6 @@
 #' @seealso \code{\link[aurora]{plotPropCI}} for graphical display
 
 
-#' @rdname desc
-#' @method desc logical
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
@@ -52,45 +50,51 @@
 #'
 
 
+
+#' @rdname desc
+#' @method desc logical
 #' @export
-desc.logical <- function(x, ord = "level", conf.level = 0.95, 
+desc.logical <- function(x, ord = "level", conf.level = 0.95,
                          include_x = TRUE,
                          main = NULL, verbose = NULL, plotit = NULL,
-                         digits=NULL, ...) {
+                         digits = NULL, ...) {
+  .descLogicalCore(x, xname = deparse(substitute(x)), ord = ord,
+                   conf.level = conf.level, include_x = include_x,
+                   main = main, verbose = verbose, plotit = plotit,
+                   digits = digits, ...)
+}
+
+
+
+
+# .descLogicalCore: shared engine for desc.logical() and for dichotomous
+# routing from desc.numeric()/desc.factor() (0/1 numerics, 2-level
+# factors/characters). xname is captured explicitly by the caller via
+# deparse(substitute(x)) rather than re-derived here, since substitute()
+# does not see through the extra call frame when this is invoked from
+# desc.numeric()/desc.factor() rather than directly by the user.
+.descLogicalCore <- function(x, xname, ord = "level", conf.level = 0.95,
+                             include_x = TRUE,
+                             main = NULL, verbose = NULL, plotit = NULL,
+                             digits = NULL, ...) {
   
-  # ----------------------------------------------------
-  # general handling  
+  total_n <- length(x)
+  ok <- !is.na(x)
+  n <- sum(ok)
   
-  total_n <- length(x)    # total n
-  ok <- !is.na(x)         # non NAs
-  n <- sum(ok)            # valid n
+  if (is.null(main))
+    main <- xname
   
-  if (is.null(main)) 
-    main <- deparse(substitute(x))
-  
-  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
   if (n == 0L)
-    return(.descAllNA(x, main, main, plotit, verbose))
-  
-  
-  # ----------------------------------------------------
-  # class specific handling  
-  
+    return(.descAllNA(x, xname, main, plotit, verbose))
   
   ff <- table(x)
   
-  # how should the table be sorted, by name, level or frq? (NULL means "desc")
   switch(match.arg(ord, c("level", "desc", "asc", "name")),
          level = {  },
-         name = {
-           ff <- ff[names(ff)]
-         },
-         asc = {
-           ff <- sort(ff)
-         },
-         desc = {
-           ff <- -sort(-ff)
-         }
+         name  = { ff <- ff[names(ff)] },
+         asc   = { ff <- sort(ff) },
+         desc  = { ff <- -sort(-ff) }
   )
   
   bf <- binomCI(ff, n, conf.level = conf.level)
@@ -100,28 +104,21 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
     bf <- as.matrix(bf[, c("est", "lci", "uci")])
   }
   
-  
   res <- list(
-    
-    meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
-    
+    meta = .descMeta(x, xname, main, plotit, verbose),
     length = total_n,
     n = n,
     NAs = total_n - n,
-    
     digits = digits,
-    
     unique = length(ff),
-    afrq = ff, 
-    rfrq = bf, 
+    afrq = ff,
+    rfrq = bf,
     conf.level = conf.level,
     x = if (include_x) x else NULL
-
   )
   
   class(res) <- c("Desc.logical", "Desc")
-  return(res)
-  
+  res
 }
 
 
@@ -214,10 +211,17 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
 #' @rdname desc
 #' @export
 plot.Desc.logical <- function(x, ...) {
-  ff <- x$afrq
+  ff  <- x$afrq
   lbs <- names(ff)
+  
+  # Only one level observed (e.g. a constant logical vector, all-TRUE or
+  # all-FALSE) - the missing complement is always unambiguous for a
+  # logical variable. plotPropCI() always normalizes its matrix columns
+  # to c("FALSE","TRUE") order regardless of which single value was
+  # observed, so the labels must match that fixed order here too.
   if (length(lbs) == 1L)
-    lbs <- if (lbs == "TRUE") c("FALSE", "TRUE") else c("FALSE", "TRUE")
+    lbs <- c("FALSE", "TRUE")
+  
   aurora::plotPropCI(as.matrix(t(ff)), labels = lbs, ...)
 }
 

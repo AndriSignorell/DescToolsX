@@ -28,7 +28,7 @@
 #'
 #' @return A data frame with imputed values.
 #'
-#' @seealso \code{\link{impute}}, \code{\link{locf}}
+#' @seealso \code{\link{impute}}, \code{\link[bedrock]{locf}}
 #'
 #' @examples
 #' set.seed(123)

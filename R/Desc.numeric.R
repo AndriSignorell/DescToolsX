@@ -9,7 +9,7 @@
 #' 
 #' 
 #' @name desc.numeric
-#' @aliases desc.numeric plot.Desc.numeric print.Desc.numeric
+#' @inheritParams desc 
 #' 
 #' @param x An object of class \code{"Desc.numeric"}.
 #' 
@@ -30,6 +30,7 @@
 #' in the result object. This is necessary for producing specific plot 
 #' (e.g. the density, ecdf, etc.). However if no plots are required the result
 #' object can be kept small and handy without the original data.
+#' @param conf.level Confidence level for interval estimates (default 0.95).
 #' 
 #' @details
 #' This function is an S3 method for \code{\link[graphics]{plot}}.
@@ -69,31 +70,46 @@
 
 
 
-#' @rdname desc
-#' @method desc numeric
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
 #'
 #'
+
+#' @rdname desc.numeric
+#' @method desc numeric
 #' @export
 desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
-                         include_x = TRUE, 
+                         include_x = TRUE,
                          main = NULL, verbose = NULL, plotit = NULL,
-                         digits=NULL, 
+                         digits = NULL,
                          ...) {
   
-  total_n <- length(x)    # total n
-  ok <- !is.na(x)         # non NAs
-  n <- sum(ok)            # valid n
+  xname   <- deparse(substitute(x))
+  total_n <- length(x)
+  ok      <- !is.na(x)
+  n       <- sum(ok)
   
-  if (is.null(main)) 
-    main <- deparse(substitute(x))
+  if (is.null(main))
+    main <- xname
   
   # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
   if (n == 0L)
-    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+    return(.descAllNA(x, xname, main, plotit, verbose))
   
+  # 0/1 indicator: route to the dichotomous (logical) engine. Only literal
+  # 0/1 values qualify - this is not a general "k=2" check. Two arbitrary
+  # numeric values (e.g. c(3.2, 7.8)) remain two distinct measurements
+  # with a meaningful mean/sd/skew; only 0/1 carries an inherent
+  # "event occurred / did not occur" interpretation, for which the
+  # proportion-with-CI view is the more honest description than
+  # mean/skew/kurtosis of a Bernoulli variable.
+  if (isTRUE(all(x[ok] %in% c(0, 1))) && length(unique(x[ok])) == 2L)
+    return(.descLogicalCore(x, xname = xname, conf.level = conf.level,
+                            include_x = include_x, main = main,
+                            verbose = verbose, plotit = plotit,
+                            digits = digits, ...))
+
   nstat <- .numStats(x[ok])
   
   # meanCI
@@ -334,6 +350,8 @@ plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
     return(plot.Desc.AllNA(x, ...))
   aurora::plotFdist(x$x, na.rm = TRUE, main = main, ...)
 }
+
+
 
 # ===========================================================================
 # internal helper functions

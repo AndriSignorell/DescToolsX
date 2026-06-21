@@ -57,11 +57,11 @@
 #'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
-#' @importFrom utils readRegistry head tail capture.output object.size str combn find getAnywhere lsf.str write.table getFromNamespace stack browseURL help.search modifyList
+#' @importFrom utils readRegistry head tail capture.output object.size str combn find getAnywhere lsf.str write.table getFromNamespace stack browseURL help.search modifyList getS3method
 #'             
 #' @importFrom bedrock `%)(%` `%[]%` abind combPairs maxDigits recycle setNamesX label naIf naReplace isZero isWholeLike isDichotomous `%][%` pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg
 #'             
-#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox band canvas fade pal
+#' @importFrom aurora plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addAlpha plotDensBox band canvas fade pal plotBox plotXY mar plot.Desc.qn plot.Desc.table
 #'             
 #' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest bpTest corCI fisherZ fisherZInv
 #'             

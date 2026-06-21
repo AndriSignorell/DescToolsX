@@ -4,14 +4,11 @@
 \alias{desc.qn}
 \alias{.descQN}
 \alias{print.Desc.qn}
-\alias{plot.Desc.qn}
 \title{Describe Relationship: Categorical y vs Numeric x}
 \usage{
 .descQN(y, x, conf.level = 0.95, breaks, right)
 
 \method{print}{Desc.qn}(x, verbose = NULL, ...)
-
-\method{plot}{Desc.qn}(x, main = NULL, which = NULL, verbose = NULL, ...)
 }
 \arguments{
 \item{x}{A numeric variable.}
@@ -19,10 +16,6 @@
 \item{verbose}{controls printed output.}
 
 \item{...}{further arguments passed to methods.}
-
-\item{main}{a main title for the plot. Defaults to type description.}
-
-\item{which}{selects plots.}
 
 \item{y}{A categorical variable (factor or coercible to factor).}
 
@@ -90,6 +83,7 @@ Other desc:
 \code{\link[=desc.factor]{desc.factor()}},
 \code{\link{desc.nn}},
 \code{\link{desc.nq}},
+\code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qq}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }

@@ -17,7 +17,6 @@
 #' 
 #' @param ... further arguments passed to methods.
 #' @param verbose controls printed output.
-#' @param which selects plots.
 #'
 #' @details
 #' The function summarizes how a numeric variable \code{x} differs across
@@ -293,7 +292,7 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
 }
 
   
-  # ── Plot ──────────────────────────────────────────────────────────────────────
+# ── Plot ──────────────────────────────────────────────────────────────────────
   
 # ── plot.Desc.qn — qualitative y ~ quantitative x ────────────────────────────
 #
@@ -313,144 +312,144 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
 # governed by DescToolsX design rules once defined.
 
 
-#' @param main a main title for the plot. Defaults to type description.
-#' @rdname desc.qn
-#' @export
-plot.Desc.qn <- function(x, main = NULL, which = NULL, verbose = NULL, ...) {
-  
-  verbose <- verbose %||% x$meta$verbose %||%
-    getOption("DescTools.verbose", default = 2L)
-  
-  isBinary <- x$res$k == 2L
-  
-  # ── helper: title mit fallback auf plot-spezifischen default ─────────────
-  .main <- function(default) main %||% default
-  
-  # ── default which by verbose ──────────────────────────────────────────────
-  if (is.null(which))
-    which <- 2
-  
-  # ── layout ────────────────────────────────────────────────────────────────
-  nPlots <- length(which)
-  if (nPlots > 1L) {
-    op <- par(mfrow = c(nPlots, 1L), mar = c(4, 4, 2, 1))
-    on.exit(par(op))
-  }
-  
-  # ── shorthand ─────────────────────────────────────────────────────────────
-  xOk  <- x$res$xOk
-  yOk  <- x$res$yOk
-  lvls <- x$res$lvls
-  xLab <- x$meta$xname %||% "x"
-  yLab <- x$meta$yname %||% "y"
-  
-  # ── plot loop ─────────────────────────────────────────────────────────────
-  for (w in which) {
-    
-    switch(as.character(w),
-           
-           # ── 1: Conditional density plot ───────────────────────────────────────
-           "1" = {
-             cdplot(yOk ~ xOk,
-                    xlab = xLab,
-                    ylab = sprintf("P(%s)", yLab),
-                    main = .main("Conditional density"),
-                    ...)
-           },
-           
-           # ── 2: Spineplot ──────────────────────────────────────────────────────
-           "2" = {
-             spineplot(yOk ~ xOk,
-                       xlab = xLab,
-                       ylab = yLab,
-                       main = .main("Spineplot"),
-                       ...)
-           },
-           
-           # ── 3: Overlapping density per group ──────────────────────────────────
-           "3" = {
-             dens <- lapply(lvls, function(lv)
-               density(xOk[yOk == lv], na.rm = TRUE))
-             names(dens) <- lvls
-             
-             yMax <- max(sapply(dens, function(d) max(d$y)))
-             
-             plot(dens[[1L]],
-                  ylim = c(0, yMax * 1.05),
-                  xlab = xLab,
-                  ylab = "Density",
-                  main = .main("Density by group"),
-                  col  = 1L, ...)
-             
-             for (i in seq_along(lvls)[-1L])
-               lines(dens[[i]], col = i)
-             
-             legend("topright",
-                    legend = lvls,
-                    col    = seq_along(lvls),
-                    lty    = 1L,
-                    bty    = "n")
-           },
-           
-           # ── 4: Boxplot ────────────────────────────────────────────────────────
-           "4" = {
-             boxplot(xOk ~ yOk,
-                     xlab = xLab,
-                     ylab = xLab,
-                     main = .main("Boxplot"),
-                     ...)
-           },
-           
-           # ── 5: Prevalence + Wilson-CI along x (binary only) ───────────────────
-           "5" = {
-             if (!isBinary) {
-               message("which=5 (prevalence plot) is only available for binary y")
-               next
-             }
-             
-             pt <- x$res$prevTable
-             
-             xCut <- cut(xOk,
-                         breaks         = c(-Inf, x$res$breaks, Inf),
-                         include.lowest = TRUE)
-             xPos <- as.numeric(tapply(xOk, xCut, median))
-             
-             prevTotal <- sum(yOk == lvls[2L]) / length(yOk)
-             
-             plot(xPos, pt$prev,
-                  ylim = c(0, 1),
-                  pch  = 19,
-                  xlab = xLab,
-                  ylab = sprintf("P(\"%s\")", lvls[2L]),
-                  main = .main("Prevalence by x-quantile"),
-                  ...)
-             
-             arrows(xPos, pt$lci, xPos, pt$uci,
-                    angle  = 90,
-                    code   = 3,
-                    length = 0.05)
-             
-             abline(h   = prevTotal,
-                    lty = 2,
-                    col = "gray50")
-             
-             text(x      = min(xPos),
-                  y      = prevTotal,
-                  labels = sprintf("overall: %s",
-                                   fm(prevTotal, fmt = "per.sty")),
-                  adj    = c(0, -0.5),
-                  col    = "gray50",
-                  cex    = 0.8)
-           },
-           
-           # ── unknown which ─────────────────────────────────────────────────────
-           message(sprintf("which=%d not defined for Desc.qn", w))
-    )
-  }
-  
-  invisible(x)
-}
+# plot.Desc.qn is defined in aurora
 
+
+# plot.Desc.qn <- function(x, main = NULL, which = NULL, verbose = NULL, ...) {
+#   
+#   verbose <- verbose %||% x$meta$verbose %||%
+#     getOption("DescTools.verbose", default = 2L)
+#   
+#   isBinary <- x$res$k == 2L
+#   
+#   # ── helper: title mit fallback auf plot-spezifischen default ─────────────
+#   .main <- function(default) main %||% default
+#   
+#   # ── default which by verbose ──────────────────────────────────────────────
+#   if (is.null(which))
+#     which <- 2
+#   
+#   # ── layout ────────────────────────────────────────────────────────────────
+#   nPlots <- length(which)
+#   if (nPlots > 1L) {
+#     op <- par(mfrow = c(nPlots, 1L), mar = c(4, 4, 2, 1))
+#     on.exit(par(op))
+#   }
+#   
+#   # ── shorthand ─────────────────────────────────────────────────────────────
+#   xOk  <- x$res$xOk
+#   yOk  <- x$res$yOk
+#   lvls <- x$res$lvls
+#   xLab <- x$meta$xname %||% "x"
+#   yLab <- x$meta$yname %||% "y"
+#   
+#   # ── plot loop ─────────────────────────────────────────────────────────────
+#   for (w in which) {
+#     
+#     switch(as.character(w),
+#            
+#            # ── 1: Conditional density plot ───────────────────────────────────────
+#            "1" = {
+#              cdplot(yOk ~ xOk,
+#                     xlab = xLab,
+#                     ylab = sprintf("P(%s)", yLab),
+#                     main = .main("Conditional density"),
+#                     ...)
+#            },
+#            
+#            # ── 2: Spineplot ──────────────────────────────────────────────────────
+#            "2" = {
+#              spineplot(yOk ~ xOk,
+#                        xlab = xLab,
+#                        ylab = yLab,
+#                        main = .main("Spineplot"),
+#                        ...)
+#            },
+#            
+#            # ── 3: Overlapping density per group ──────────────────────────────────
+#            "3" = {
+#              dens <- lapply(lvls, function(lv)
+#                density(xOk[yOk == lv], na.rm = TRUE))
+#              names(dens) <- lvls
+#              
+#              yMax <- max(sapply(dens, function(d) max(d$y)))
+#              
+#              plot(dens[[1L]],
+#                   ylim = c(0, yMax * 1.05),
+#                   xlab = xLab,
+#                   ylab = "Density",
+#                   main = .main("Density by group"),
+#                   col  = 1L, ...)
+#              
+#              for (i in seq_along(lvls)[-1L])
+#                lines(dens[[i]], col = i)
+#              
+#              legend("topright",
+#                     legend = lvls,
+#                     col    = seq_along(lvls),
+#                     lty    = 1L,
+#                     bty    = "n")
+#            },
+#            
+#            # ── 4: Boxplot ────────────────────────────────────────────────────────
+#            "4" = {
+#              boxplot(xOk ~ yOk,
+#                      xlab = xLab,
+#                      ylab = xLab,
+#                      main = .main("Boxplot"),
+#                      ...)
+#            },
+#            
+#            # ── 5: Prevalence + Wilson-CI along x (binary only) ───────────────────
+#            "5" = {
+#              if (!isBinary) {
+#                message("which=5 (prevalence plot) is only available for binary y")
+#                next
+#              }
+#              
+#              pt <- x$res$prevTable
+#              
+#              xCut <- cut(xOk,
+#                          breaks         = c(-Inf, x$res$breaks, Inf),
+#                          include.lowest = TRUE)
+#              xPos <- as.numeric(tapply(xOk, xCut, median))
+#              
+#              prevTotal <- sum(yOk == lvls[2L]) / length(yOk)
+#              
+#              plot(xPos, pt$prev,
+#                   ylim = c(0, 1),
+#                   pch  = 19,
+#                   xlab = xLab,
+#                   ylab = sprintf("P(\"%s\")", lvls[2L]),
+#                   main = .main("Prevalence by x-quantile"),
+#                   ...)
+#              
+#              arrows(xPos, pt$lci, xPos, pt$uci,
+#                     angle  = 90,
+#                     code   = 3,
+#                     length = 0.05)
+#              
+#              abline(h   = prevTotal,
+#                     lty = 2,
+#                     col = "gray50")
+#              
+#              text(x      = min(xPos),
+#                   y      = prevTotal,
+#                   labels = sprintf("overall: %s",
+#                                    fm(prevTotal, fmt = "per.sty")),
+#                   adj    = c(0, -0.5),
+#                   col    = "gray50",
+#                   cex    = 0.8)
+#            },
+#            
+#            # ── unknown which ─────────────────────────────────────────────────────
+#            message(sprintf("which=%d not defined for Desc.qn", w))
+#     )
+#   }
+#   
+#   invisible(x)
+# }
+# 
 
 
 # == internal helper functions =================================================
