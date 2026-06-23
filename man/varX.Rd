@@ -8,11 +8,11 @@
 \alias{varX.Freq}
 \title{(Weighted) Variance and Standard Deviation}
 \usage{
-sdX(x, estimator = c("unbiased", "ML"), weights = NULL, na.rm = FALSE, ...)
+sdX(x, estimator = c("unbiased", "ml"), weights = NULL, na.rm = FALSE, ...)
 
 varX(x, ...)
 
-\method{varX}{default}(x, estimator = c("unbiased", "ML"), weights = NULL, na.rm = FALSE, ...)
+\method{varX}{default}(x, estimator = c("unbiased", "ml"), weights = NULL, na.rm = FALSE, ...)
 
 \method{varX}{Freq}(x, breaks, ...)
 }
@@ -21,7 +21,7 @@ varX(x, ...)
 
 \item{estimator}{determines the estimator type; if \code{"unbiased"} (the
 default) then the usual unbiased estimate (using \eqn{n - 1} as denominator)
-is returned, if \code{"ML"} then it is the maximum likelihood estimate for a
+is returned, if \code{"ml"} then it is the maximum likelihood estimate for a
 Gaussian distribution (denominator \eqn{n}). Internally \code{\link{cov.wt}}
 is used for both methods.}
 
@@ -42,14 +42,14 @@ single numeric value
 \description{
 \code{varX()} computes the variance of \code{x}, allowing the definition of
 weights (unlike base R's \code{\link{var}()} function). Using the estimator
-\code{ML} returns the uncorrected sample variance (which is a biased
+\code{ml} returns the uncorrected sample variance (which is a biased
 estimator for the sample variance). \cr\code{sdX} yields the standard
 deviation following the same logic.
 }
 \details{
 Using estimator \code{"unbiased"} the denominator \eqn{n - 1} is used (known
 as "Bessel's correction") which gives an unbiased estimator of the
-(co)variance for i.i.d. observations.\cr \code{"ML"} yields the biased
+(co)variance for i.i.d. observations.\cr \code{"ml"} yields the biased
 version using the denominator \eqn{n}.
 
 These functions return \code{\link{NA}} when there is only one observation,

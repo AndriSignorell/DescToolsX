@@ -4,7 +4,7 @@
 \alias{glassDelta}
 \title{Glass's Delta Effect Size}
 \usage{
-glassDelta(x, y, conf.level = NULL, use_control_sd = TRUE, na.rm = FALSE)
+glassDelta(x, y, conf.level = NA, useControlSd = TRUE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{Numeric vector. Typically the treatment group.}
@@ -14,7 +14,7 @@ glassDelta(x, y, conf.level = NULL, use_control_sd = TRUE, na.rm = FALSE)
 \item{conf.level}{Optional numeric. Confidence level for the confidence interval.
 If \code{NULL}, no confidence interval is computed.}
 
-\item{use_control_sd}{Logical. If \code{TRUE} (default), uses the standard
+\item{useControlSd}{Logical. If \code{TRUE} (default), uses the standard
 deviation of \code{y} (control group). Otherwise uses \code{x}.}
 
 \item{na.rm}{Logical. Should missing values be removed? Passed to \code{mean()} and \code{sd()}.}
@@ -23,7 +23,7 @@ deviation of \code{y} (control group). Otherwise uses \code{x}.}
 If \code{conf.level = NULL}, returns a numeric value (Glass's delta).
 
 Otherwise returns a named numeric vector with elements:
-\item{delta}{Point estimate}
+\item{est}{Point estimate}
 \item{lci}{Lower confidence bound}
 \item{uci}{Upper confidence bound}
 }

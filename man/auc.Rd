@@ -10,7 +10,7 @@ auc(
   from = min(x, na.rm = TRUE),
   to = max(x, na.rm = TRUE),
   method = c("trapezoid", "step", "spline"),
-  absolute_area = FALSE,
+  absoluteArea = FALSE,
   subdivisions = 100,
   na.rm = FALSE,
   ...
@@ -25,7 +25,7 @@ the range of \code{x}.}
 \item{method}{Character string specifying the integration method:
 \code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}.}
 
-\item{absolute_area}{Logical; if \code{TRUE}, the absolute area is computed,
+\item{absoluteArea}{Logical; if \code{TRUE}, the absolute area is computed,
 i.e., areas below zero are treated as positive.}
 
 \item{subdivisions}{Integer; number of subdivisions for spline integration.}
@@ -49,7 +49,7 @@ The function supports three methods:
 \item \strong{spline}: Smooth interpolation using cubic splines.
 }
 
-If \code{absolute_area = TRUE}, the function accounts for sign changes by
+If \code{absoluteArea = TRUE}, the function accounts for sign changes by
 inserting zero-crossings and summing absolute areas.
 }
 \examples{
@@ -59,7 +59,7 @@ y <- c(0, 1, 1, 2)
 auc(x, y)
 auc(x, y, method = "step")
 auc(x, y, method = "spline")
-auc(x, y, absolute_area = TRUE)
+auc(x, y, absoluteArea = TRUE)
 
 }
 \seealso{

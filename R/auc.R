@@ -9,7 +9,7 @@
 #'   the range of \code{x}.
 #' @param method Character string specifying the integration method:
 #'   \code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}.
-#' @param absolute_area Logical; if \code{TRUE}, the absolute area is computed,
+#' @param absoluteArea Logical; if \code{TRUE}, the absolute area is computed,
 #'   i.e., areas below zero are treated as positive.
 #' @param subdivisions Integer; number of subdivisions for spline integration.
 #' @param na.rm Logical; if \code{TRUE}, missing values are removed before computation.
@@ -25,7 +25,7 @@
 #'   \item \strong{spline}: Smooth interpolation using cubic splines.
 #' }
 #'
-#' If \code{absolute_area = TRUE}, the function accounts for sign changes by
+#' If \code{absoluteArea = TRUE}, the function accounts for sign changes by
 #' inserting zero-crossings and summing absolute areas.
 #'
 #' @examples
@@ -35,7 +35,7 @@
 #' auc(x, y)
 #' auc(x, y, method = "step")
 #' auc(x, y, method = "spline")
-#' auc(x, y, absolute_area = TRUE)
+#' auc(x, y, absoluteArea = TRUE)
 #'
 #' @seealso \code{\link{approx}}, \code{\link{splinefun}}, \code{\link{integrate}}
 #'
@@ -49,7 +49,7 @@
 #'
 #' @export
 auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
-                method=c("trapezoid", "step", "spline"), absolute_area = FALSE,
+                method=c("trapezoid", "step", "spline"), absoluteArea = FALSE,
                 subdivisions = 100,  na.rm = FALSE, ...)  {
   
   
@@ -86,7 +86,7 @@ auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
     # , "trapezoid" = { a <- sum((apply( cbind(y[-length(y)], y[-1]), 1, mean))*(x[-1] - x[-length(x)])) }
     
     ## Default option
-    if (!absolute_area) {
+    if (!absoluteArea) {
       values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
       res <- 0.5 * sum(diff(values$x) * (values$y[-1] + values$y[-length(values$y)]))
       
@@ -107,7 +107,7 @@ auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
     # , "step" = { a <- sum( y[-length(y)] * (x[-1] - x[-length(x)])) }
     
     ## Default option
-    if (!absolute_area) {
+    if (!absoluteArea) {
       values <- approx(x, y, xout = sort(unique(c(from, to, x[x > from & x < to]))), ...)
       
       res <- sum(diff(values$x) * values$y[-length(values$y)])
@@ -126,7 +126,7 @@ auc <- function(x, y, from = min(x, na.rm=TRUE), to = max(x, na.rm=TRUE),
     
   } else if (method=="spline") {
     
-    if (absolute_area)
+    if (absoluteArea)
       myfunction <- function(z) { abs(splinefun(x, y, method="natural")(z)) }
     else
       myfunction <- splinefun(x, y, method="natural")

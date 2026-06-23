@@ -8,7 +8,7 @@
 #' @param y Numeric vector. Typically the control group.
 #' @param conf.level Optional numeric. Confidence level for the confidence interval.
 #'   If \code{NULL}, no confidence interval is computed.
-#' @param use_control_sd Logical. If \code{TRUE} (default), uses the standard
+#' @param useControlSd Logical. If \code{TRUE} (default), uses the standard
 #'   deviation of \code{y} (control group). Otherwise uses \code{x}.
 #' @param na.rm Logical. Should missing values be removed? Passed to \code{mean()} and \code{sd()}.
 #'
@@ -24,7 +24,7 @@
 #' If \code{conf.level = NULL}, returns a numeric value (Glass's delta).
 #'
 #' Otherwise returns a named numeric vector with elements:
-#' \item{delta}{Point estimate}
+#' \item{est}{Point estimate}
 #' \item{lci}{Lower confidence bound}
 #' \item{uci}{Upper confidence bound}
 #'
@@ -45,23 +45,23 @@
 #'
 #'
 #' @export
-glassDelta <- function(x, y, conf.level=NULL, use_control_sd=TRUE, na.rm=FALSE){
+glassDelta <- function(x, y, conf.level=NA, useControlSd=TRUE, na.rm=FALSE){
   
-  if(use_control_sd)
+  if(useControlSd)
     .sd <- sd(y, na.rm=na.rm)
   else
     .sd <- sd(x, na.rm=na.rm)
   
   delta <- (mean(x, na.rm=na.rm) - mean(y, na.rm=na.rm))/.sd
   
-  if(!is.null(conf.level)){
+  if(!is.na(conf.level)){
     nx <- length(x)
     ny <- length(y)
     
     ci <- .ci.smd.c(smd.c = delta, 
                     n.C = nx, n.E = ny, 
                     conf.level=.95)
-    res <- setNamesX(unlist(ci[c(2,1,3)]), names=c("delta", "lci", "uci"))
+    res <- setNamesX(unlist(ci[c(2,1,3)]), names=c("est", "lci", "uci"))
     
   } else {
     res <- delta
@@ -103,7 +103,7 @@ glassDelta <- function(x, y, conf.level=NULL, use_control_sd=TRUE, na.rm=FALSE){
 #            webclass$math[webclass$treated==1], conf.level=0.95) 
 # 
 # 
-# GlassDelta(webclass$math[webclass$treated==0], use_control_sd = F, 
+# GlassDelta(webclass$math[webclass$treated==0], useControlSd = F, 
 #            webclass$math[webclass$treated==1], conf.level=0.95) 
 # 
 

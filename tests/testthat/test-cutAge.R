@@ -51,8 +51,8 @@ test_that("cutAge full = FALSE drops empty edge levels", {
   expect_gte(nlevels(res_full), nlevels(res_trim))
 })
 
-test_that("cutAge ordered_result = FALSE returns an unordered factor", {
+test_that("cutAge orderedResult = FALSE returns an unordered factor", {
   x <- sample(0:80, 50, replace = TRUE)
-  res <- cutAge(x, ordered_result = FALSE)
+  res <- cutAge(x, orderedResult = FALSE)
   expect_false(is.ordered(res))
 })

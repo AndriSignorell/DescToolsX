@@ -15,7 +15,7 @@
 #' @param right logical, indicating if the intervals should be closed on the
 #' right (and open on the left) or vice versa.  Default is \code{FALSE} -
 #' unlike in \code{\link{cut}}!
-#' @param ordered_result logical: should the result be an ordered factor?
+#' @param orderedResult logical: should the result be an ordered factor?
 #' Default is \code{TRUE} - unlike in \code{\link{cut}}!
 #' @param full logical, setting to \code{FALSE} will remove empty levels at the
 #' edges of the distribution
@@ -44,7 +44,7 @@
 #'
 #' @export
 cutAge <- function(x, breaks=c(seq(from=0, to=90, by=10), Inf), 
-                   right=FALSE, ordered_result=TRUE, full=TRUE, 
+                   right=FALSE, orderedResult=TRUE, full=TRUE, 
                    labels=NULL, ...) {
   
   
@@ -54,7 +54,7 @@ cutAge <- function(x, breaks=c(seq(from=0, to=90, by=10), Inf),
   }
   
   res <- cut(x, breaks = breaks, 
-             right=right, ordered_result = ordered_result, 
+             right=right, orderedResult = orderedResult, 
              labels = labels, ...)
   
   if(!full)

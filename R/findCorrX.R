@@ -11,7 +11,7 @@
 #'   above this value are considered too highly correlated.
 #' @param method Character string specifying how variable importance is scored.
 #'   One of \code{"mean"}, \code{"max"}, or \code{"median"}. Default is \code{"mean"}.
-#' @param return Character string specifying the return format:
+#' @param output Character string specifying the return format:
 #'   \itemize{
 #'     \item \code{"index"}: indices of variables to remove (default)
 #'     \item \code{"names"}: column names of variables to remove
@@ -60,12 +60,12 @@
 findCorrX <- function(x,
                       cutoff = 0.9,
                       method = c("mean", "max", "median"),
-                      return = c("index", "names", "logical", "report"),
+                      output = c("index", "names", "logical", "report"),
                       verbose = FALSE) {
   
   # --- Argument handling ---
   method <- match.arg(method)
-  output <- match.arg(return)
+  output <- match.arg(output)
   
   if (!is.matrix(x))
     stop("x must be a matrix")

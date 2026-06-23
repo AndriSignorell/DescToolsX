@@ -33,11 +33,11 @@ test_that("auc handles unsorted x", {
   expect_true(is.numeric(res))
 })
 
-test_that("auc absolute_area works", {
+test_that("auc absoluteArea works", {
   x <- c(1, 2, 3)
   y <- c(-1, 1, -1)
   
-  res <- auc(x, y, absolute_area = TRUE)
+  res <- auc(x, y, absoluteArea = TRUE)
   expect_true(res > 0)
 })
 

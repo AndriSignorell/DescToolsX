@@ -69,10 +69,10 @@
 #' 
 #' kappaM(statement)
 #' 
-#' kappaM(statement, method="Conger")   # Exact Kappa
+#' kappaM(statement, method="conger")   # Exact Kappa
 #' kappaM(statement, conf.level=0.95)   # Fleiss' Kappa and confidence intervals
 #' 
-#' kappaM(statement, method="Light")   # Exact Kappa
+#' kappaM(statement, method="light")   # Exact Kappa
 #' 
 
 #' @family assoc.agreement
@@ -82,7 +82,7 @@
 #'
 #'
 #' @export
-kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) {
+kappaM <- function(x, method = c("fleiss", "conger", "light"), conf.level = NA) {
   
   # ratings <- as.matrix(na.omit(x))
   #
@@ -154,22 +154,23 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
   
   agreeP <- sum((rowSums(ttab^2)-nr)/(nr*(nr-1))/ns)
   
-  switch( match.arg(method, choices= c("Fleiss", "Conger", "Light"))
+  switch( match.arg(method, choices= c("fleiss", "conger", "light"))
           
-          , "Fleiss" = {
+          , "fleiss" = {
             chanceP <- sum(colSums(ttab)^2)/(ns*nr)^2
             value <- (agreeP - chanceP)/(1 - chanceP)
             
             pj <- colSums(ttab)/(ns*nr)
             qj <- 1-pj
             
-            varkappa <- (2/(sum(pj*qj)^2*(ns*nr*(nr-1))))*(sum(pj*qj)^2-sum(pj*qj*(qj-pj)))
+            varkappa <- (2/(sum(pj*qj)^2*(ns*nr*(nr-1)))) * 
+                              (sum(pj*qj)^2-sum(pj*qj*(qj-pj)))
             SEkappa <- sqrt(varkappa)
             
             ci <- value + c(1,-1) * qnorm((1-conf.level)/2) * SEkappa
           }
           
-          , "Conger" = {
+          , "conger" = {
             
             rtab <- apply(abind(lapply(as.data.frame(t(xx)), 
                                        function(z) dummy(z, method="full", 
@@ -179,7 +180,8 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
             
             rtab <- rtab/ns
             
-            chanceP <- sum(colSums(ttab)^2)/(ns*nr)^2 - sum(apply(rtab, 2, var)*(nr-1)/nr)/(nr-1)
+            chanceP <- sum(colSums(ttab)^2)/(ns*nr)^2 - 
+                            sum(apply(rtab, 2, var)*(nr-1)/nr)/(nr-1)
             value <- (agreeP - chanceP)/(1 - chanceP)
             
             
@@ -225,7 +227,7 @@ kappaM <- function(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA) 
             
           }
           
-          , "Light" = {
+          , "light" = {
             m <- pairApply(x, cohenKappa, symmetric=TRUE)
             value <- mean(m[upper.tri(m)])
             

@@ -3,13 +3,13 @@
 #' 
 #' \code{varX()} computes the variance of \code{x}, allowing the definition of
 #' weights (unlike base R's \code{\link{var}()} function). Using the estimator
-#' \code{ML} returns the uncorrected sample variance (which is a biased
+#' \code{ml} returns the uncorrected sample variance (which is a biased
 #' estimator for the sample variance). \cr\code{sdX} yields the standard
 #' deviation following the same logic.
 #' 
 #' Using estimator \code{"unbiased"} the denominator \eqn{n - 1} is used (known
 #' as "Bessel's correction") which gives an unbiased estimator of the
-#' (co)variance for i.i.d. observations.\cr \code{"ML"} yields the biased
+#' (co)variance for i.i.d. observations.\cr \code{"ml"} yields the biased
 #' version using the denominator \eqn{n}.
 #' 
 #' These functions return \code{\link{NA}} when there is only one observation,
@@ -24,7 +24,7 @@
 #' @param x a numeric vector, matrix or data frame.
 #' @param estimator determines the estimator type; if \code{"unbiased"} (the
 #' default) then the usual unbiased estimate (using \eqn{n - 1} as denominator)
-#' is returned, if \code{"ML"} then it is the maximum likelihood estimate for a
+#' is returned, if \code{"ml"} then it is the maximum likelihood estimate for a
 #' Gaussian distribution (denominator \eqn{n}). Internally \code{\link{cov.wt}}
 #' is used for both methods.
 #' @param weights non-negative numeric vector of weights the same length as
@@ -73,7 +73,7 @@
 #'
 #'
 #' @export
-sdX <- function (x, estimator = c("unbiased", "ML"),
+sdX <- function (x, estimator = c("unbiased", "ml"),
                  weights = NULL, na.rm = FALSE, ...)
   sqrt(varX(if (is.vector(x) || is.factor(x)) x else as.double(x),
            estimator = estimator, weights=weights, na.rm = na.rm, ...))
@@ -88,7 +88,7 @@ varX <- function (x, ...)
 
 #' @rdname varX
 #' @export
-varX.default <- function(x, estimator = c("unbiased", "ML"),
+varX.default <- function(x, estimator = c("unbiased", "ml"),
                         weights = NULL, na.rm = FALSE, ...) {
   
   estimator <- match.arg(estimator)
@@ -105,14 +105,14 @@ varX.default <- function(x, estimator = c("unbiased", "ML"),
   if (is.null(weights)) {
     res <- var(x=x, na.rm=na.rm)
     
-    if(estimator == "ML")
+    if(estimator == "ml")
       res <- res * ((n <- sum(ok)) - 1) / n
     
   } else {
     
     z <- .normWeights(x, weights, na.rm = FALSE)
     
-    if (estimator == "ML"){
+    if (estimator == "ml"){
       res <- as.numeric(stats::cov.wt(cbind(z$x), z$weights, method = "ML")$cov)
       
     } else {

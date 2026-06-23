@@ -4,7 +4,7 @@
 \alias{kappaM}
 \title{Kappa for m Raters}
 \usage{
-kappaM(x, method = c("Fleiss", "Conger", "Light"), conf.level = NA)
+kappaM(x, method = c("fleiss", "conger", "light"), conf.level = NA)
 }
 \arguments{
 \item{x}{\eqn{n \times m}{n x m} matrix or dataframe, n subjects m raters.}
@@ -65,10 +65,10 @@ statement <- data.frame(
 
 kappaM(statement)
 
-kappaM(statement, method="Conger")   # Exact Kappa
+kappaM(statement, method="conger")   # Exact Kappa
 kappaM(statement, conf.level=0.95)   # Fleiss' Kappa and confidence intervals
 
-kappaM(statement, method="Light")   # Exact Kappa
+kappaM(statement, method="light")   # Exact Kappa
 
 }
 \references{
