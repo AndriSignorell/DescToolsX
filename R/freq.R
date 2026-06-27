@@ -102,7 +102,7 @@ freq <- function(x, breaks = hist(x, plot = FALSE)$breaks,
     
     if(is.numeric(x) || isDate(x)){
       x <- cut(x, breaks = breaks, include.lowest = include.lowest,
-               orderedResult = TRUE, ...)
+               ordered_result = TRUE, ...)
     }
     
     tab <- table(x, useNA = useNA)

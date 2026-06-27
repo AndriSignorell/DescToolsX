@@ -7,7 +7,7 @@
 assocsXY(
   x,
   y = NULL,
-  which = c("all", "gamma", "tau_a", "tau_b", "tau_c", "somers", "cstat"),
+  which = c("all", "gamma", "tau-a", "tau-b", "tau-c", "somers", "cstat"),
   conf.level = NA,
   direction = c("row", "column")
 )
@@ -23,8 +23,8 @@ via a fast C++ routine.  If \code{NULL}, \code{x} is treated as a
 contingency table.}
 
 \item{which}{Character string selecting which measure(s) to return.
-One of \code{"all"} (default), \code{"gamma"}, \code{"tau_a"},
-\code{"tau_b"}, \code{"tau_c"}, \code{"somers"}, or \code{"cstat"}.}
+One of \code{"all"} (default), \code{"gamma"}, \code{"tau-a"},
+\code{"tau-b"}, \code{"tau-c"}, \code{"somers"}, or \code{"cstat"}.}
 
 \item{conf.level}{Numeric scalar in \eqn{(0, 1)}.  If supplied,
 confidence intervals are appended to each measure.  Default

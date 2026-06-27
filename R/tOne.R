@@ -76,7 +76,7 @@
 #' to MS-Word. Both font and alignment are freely selectable in the Word table.
 #'
 #' @usage tOne(
-#'   x, grp = NA, add.length = TRUE,
+#'   x, groups = NA, add.length = TRUE,
 #'   colnames = NULL, vnames = NULL, total = TRUE,
 #'   align = "\\\\l", FUN = NULL, TEST = NULL,
 #'   intref = "high",
@@ -88,7 +88,7 @@
 #' 
 #' @param x a data.frame containing all the variables to be included in the
 #' table. 
-#' @param grp the grouping variable. 
+#' @param groups the grouping variable. 
 #' @param add.length logical. If set to \code{TRUE} (default), a row with the
 #' group sizes will be inserted as first row of the table. 
 #' @param colnames a vector of column names for the result table. 
@@ -137,7 +137,7 @@
 #' num.sty <- style(digits = 1, big.mark = "'")   # numeric
 #' 
 #' tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
-#'   grp = Pizza$quality)
+#'   groups = Pizza$quality)
 #' 
 #' # the same but no groups now...
 #' tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")])
@@ -153,7 +153,7 @@
 #' 
 #' # replace kruskal.test by ANOVA and report the p.value
 #' # Change tests for all the types
-#' tOne(x = iris[, -5], grp = iris[, 5],
+#' tOne(x = iris[, -5], groups = iris[, 5],
 #'      FUN = function(x) gettextf("%s / %s",
 #'             fm(mean(x, na.rm = TRUE), digits = 1),
 #'             fm(sd(x, na.rm = TRUE), digits = 3)), 
@@ -170,7 +170,7 @@
 #' )
 #' 
 #' t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rabate")], 
-#'            grp   = Pizza$area, 
+#'            groups   = Pizza$area, 
 #'            align = " ", 
 #'            total = FALSE,
 #'             
@@ -218,7 +218,7 @@
 #' wrd <- GetNewWrd()
 #' ToWrd(
 #'   tOne(x   = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
-#'        grp = Pizza$quality,
+#'        groups = Pizza$quality,
 #'        fmt = list(num=Fmt("num", digits=1))
 #'        ),
 #'   font = list(name="Arial narrow", size=8),
@@ -237,7 +237,7 @@
 #'
 #'
 #' @export
-tOne <- function(x, grp = NA, add.length=TRUE,
+tOne <- function(x, groups = NA, add.length=TRUE,
                  colnames=NULL, vnames=NULL, total=TRUE,
                  align="\\l", FUN = NULL, TEST = NULL, intref="high",
                  fmt=list(abs  = "abs.sty",
@@ -278,9 +278,9 @@ tOne <- function(x, grp = NA, add.length=TRUE,
   }
   
   
-  if(identical(grp, NA)){
+  if(identical(groups, NA)){
     # no grouping factor, let's define something appropriate
-    grp <- rep(1, nrow(x))
+    groups <- rep(1, nrow(x))
     TEST <- NA
   }
   
@@ -434,15 +434,15 @@ tOne <- function(x, grp = NA, add.length=TRUE,
     lst <- list()
     for(i in 1:ncol(x)){
       if(ctype[i] == "num"){
-        lst[[i]] <- num_row(x[,i], grp, vname=vnames[i])
+        lst[[i]] <- num_row(x[,i], groups, vname=vnames[i])
         
       } else if(ctype[i] == "cat") {
-        lst[[i]] <- cat_mat(x[,i], grp, vname=vnames[i])
+        lst[[i]] <- cat_mat(x[,i], groups, vname=vnames[i])
         
       } else if(ctype[i] == "dich") {
         
         if(intref=="both"){
-          lst[[i]] <- cat_mat(factor(x[,i]), grp, vname=vnames[i])
+          lst[[i]] <- cat_mat(factor(x[,i]), groups, vname=vnames[i])
           
         } else {
           
@@ -458,18 +458,18 @@ tOne <- function(x, grp = NA, add.length=TRUE,
             xi <- relevel(xi, tail(levels(xi), 1))
           
           if (default_vnames) {
-            lst[[i]] <- dich_mat(xi, grp, vname = gettextf("%s (= %s)", vnames[i], head(levels(xi), 1)))
+            lst[[i]] <- dich_mat(xi, groups, vname = gettextf("%s (= %s)", vnames[i], head(levels(xi), 1)))
           } else {
-            lst[[i]] <- dich_mat(xi, grp, vname = gettextf("%s", vnames[i]))
+            lst[[i]] <- dich_mat(xi, groups, vname = gettextf("%s", vnames[i]))
           }
         }
         
       } else {
-        lst[[i]] <- rbind(c(colnames(x)[i], rep(NA, nlevels(grp) + 2)))
+        lst[[i]] <- rbind(c(colnames(x)[i], rep(NA, nlevels(groups) + 2)))
       }
     }
   } else {
-    m <- cat_mat(grp, grp, vnames)
+    m <- cat_mat(groups, groups, vnames)
     lst <- list(c(vnames, rep("", ncol(m)-1)))
   }
   
@@ -477,16 +477,16 @@ tOne <- function(x, grp = NA, add.length=TRUE,
   
   
   if(add.length)
-    res <- rbind(c("n", c(fm(sum(!is.na(grp)), fmt=fmt$abs),
-                          paste(fm(table(grp), fmt=fmt$abs), " (",
-                                fm(prop.table(table(grp)), fmt=fmt$per), ")", sep=""), ""))
+    res <- rbind(c("n", c(fm(sum(!is.na(groups)), fmt=fmt$abs),
+                          paste(fm(table(groups), fmt=fmt$abs), " (",
+                                fm(prop.table(table(groups)), fmt=fmt$per), ")", sep=""), ""))
                  , res)
   
   # align the table
   if(align != "\\l")
     res[,-c(1, ncol(res))] <- strAlign(res[,-c(1, ncol(res))], sep = align)
   
-  if(all(grp==1)){
+  if(all(groups==1)){
     res <- res[, -3]
     total <- TRUE
   }

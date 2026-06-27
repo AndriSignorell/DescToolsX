@@ -315,43 +315,10 @@ See also the core vocabulary.
 
 **(E) Boolean arguments**
 
-Boolean arguments begin with:
+Boolean arguments follow established R conventions (paired, ordered, verbose, 
+exact, ...). 
+Prefixes such as is*, has*, show* are permitted but not required.
 
-- is*
-- has*
-- show*
-- use*
-
-Examples:
-
-```text
-showLegend
-useWeights
-isSorted
-```
-
-Not allowed:
-
-```r
-legend = TRUE   # ambiguous
-weights = TRUE  # semantic overload
-```
-
-**Exception: established Base-R boolean argument names**
-
-If a boolean argument has a well-established, unambiguous counterpart in
-Base R or widely used R packages, that name takes precedence over the
-`show*` / `use*` / `is*` / `has*` convention.  The rationale is the
-core principle *Base-R compatibility > stylistic purity*.
-
-| Established name | Do not use |
-|---|---|
-| `warn` | `showWarnings` |
-| `verbose` | `showProgress` |
-| `recursive` | `isRecursive` |
-
-Rule: adopt the Base-R name only when it is unambiguous and directly
-inherited — not as a general escape hatch from the naming convention.
 
 **(F) Control terminology**
 

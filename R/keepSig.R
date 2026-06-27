@@ -15,8 +15,8 @@
 #'   tests on the columns of \code{data} (requires \code{data}).
 #' @param data an optional numeric data frame or matrix. Used to compute
 #'   \code{p} when \code{p = NULL}. Ignored if \code{p} is supplied.
-#' @param alpha numeric; significance threshold. Entries where
-#'   \code{p > alpha} are replaced by \code{NA}. Default \code{0.05}.
+#' @param sig.level numeric; significance threshold. Entries where
+#'   \code{p > sig.level} are replaced by \code{NA}. Default \code{0.05}.
 #' @param method character; the correlation test method passed to
 #'   \code{\link[stats]{cor.test}} when computing p-values from \code{data}.
 #'   One of \code{"pearson"} (default), \code{"spearman"}, or
@@ -26,14 +26,14 @@
 #'   diagonal is also set to \code{NA}.
 #'
 #' @return A matrix of the same dimension and dimnames as \code{m}, with
-#'   \code{NA} wherever \code{p > alpha}.
+#'   \code{NA} wherever \code{p > sig.level}.
 #'
 #' @examples
 #' # compute p-values on the fly from the raw data
 #' plotWeb(keepSig(cor(mtcars), data = mtcars))
 #'
 #' # stricter threshold
-#' plotCor(keepSig(cor(swiss), data = swiss, alpha = 0.01))
+#' plotCor(keepSig(cor(swiss), data = swiss, sig.level = 0.01))
 #'
 #' # supply a pre-computed p-value matrix
 #' m <- cor(mtcars)
@@ -56,7 +56,7 @@
 
 #' @export
 keepSig <- function(m, p = NULL, data = NULL,
-                    alpha  = 0.05,
+                    sig.level  = 0.05,
                     method = c("pearson", "spearman", "kendall"),
                     diag   = TRUE) {
   
@@ -85,7 +85,7 @@ keepSig <- function(m, p = NULL, data = NULL,
     stop("'m' and 'p' must have the same dimensions.")
   
   out          <- m
-  out[p > alpha] <- NA
+  out[p > sig.level] <- NA
   
   if (diag)
     diag(out) <- diag(m)

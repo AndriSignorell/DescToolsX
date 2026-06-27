@@ -30,6 +30,7 @@
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
 #' vector interface. 
+#' 
 #' @return a single numeric value if no confidence intervals are requested,\cr
 #' and otherwise a numeric vector with 3 elements for the estimate, the lower
 #' and the upper confidence interval
@@ -160,7 +161,7 @@ gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, 
   } else {
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
-    res <- c(tauA=est, lwr.ci=ci[1], upr.ci=ci[2])
+    res <- c(est=est, lci=ci[1], uci=ci[2])
   }
   
   return(res)

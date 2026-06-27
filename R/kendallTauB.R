@@ -36,7 +36,7 @@
 #' If \code{conf.level = NA}, a single numeric value is returned.
 #' Otherwise a named numeric vector with elements:
 #' \itemize{
-#'   \item \code{tau_b}: estimate
+#'   \item \code{est}: estimate
 #'   \item \code{lci}: lower confidence interval
 #'   \item \code{uci}: upper confidence interval
 #' }
@@ -84,11 +84,15 @@ kendallTauB <- function(x, y = NULL,
   res <- assocsXY(
     x = x,
     y = y,
-    which = "tau_b",
+    which = "tau-b",
     conf.level = conf.level
   )
   
   # unwrap single element list
-  res[[1]]
+  if(is.na(conf.level))
+    unname(res[[1]])
+  else
+    res[[1]]
+  
 }
 

@@ -147,8 +147,8 @@ print.AssocsTab <- function(x, digits=4, ...){
 #'   via a fast C++ routine.  If \code{NULL}, \code{x} is treated as a
 #'   contingency table.
 #' @param which Character string selecting which measure(s) to return.
-#'   One of \code{"all"} (default), \code{"gamma"}, \code{"tau_a"},
-#'   \code{"tau_b"}, \code{"tau_c"}, \code{"somers"}, or \code{"cstat"}.
+#'   One of \code{"all"} (default), \code{"gamma"}, \code{"tau-a"},
+#'   \code{"tau-b"}, \code{"tau-c"}, \code{"somers"}, or \code{"cstat"}.
 #' @param conf.level Numeric scalar in \eqn{(0, 1)}.  If supplied,
 #'   confidence intervals are appended to each measure.  Default
 #'   \code{NA} suppresses intervals.
@@ -195,12 +195,12 @@ print.AssocsTab <- function(x, digits=4, ...){
 
 #' @export
 assocsXY <- function(x, y = NULL,
-                       which = c("all","gamma","tau_a","tau_b","tau_c","somers","cstat"),
+                       which = c("all","gamma","tau-a","tau-b","tau-c","somers","cstat"),
                        conf.level = NA,
                        direction = c("row","column")) {
   
   direction <- match.arg(direction)
-  which <- match.arg(which)
+  which <- gsub("-", "_", match.arg(which), fixed = TRUE)
   
   # ============================
   # XY MODE (use C++)
@@ -218,6 +218,10 @@ assocsXY <- function(x, y = NULL,
       somers = if(is.na(conf.level)) z["somers"] else z[c("somers","somers_l","somers_u")],
       cstat  = if(is.na(conf.level)) z["cstat"] else z[c("cstat","cstat_l","cstat_u")]
     )
+    if(is.na(conf.level))
+      res_all <- lapply(res_all, unname)
+    else
+      res_all <- lapply(res_all, setNamesX, names=c("est", "lci", "uci"))
     
   } else {
     
@@ -276,6 +280,9 @@ assocsXY <- function(x, y = NULL,
         somers = ci_all$somers,
         cstat  = ci_all$cstat
       )
+      
+      res_all <- lapply(res_all, setNamesX, names=c("est", "lci", "uci"))
+      
     }
   }
   

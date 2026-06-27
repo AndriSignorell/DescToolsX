@@ -490,6 +490,47 @@ Funktionen,lowerCamelCase,“fitMod(), calcSummary(), plotResults()”</p>
 <pre class="r"><code>print.PercTable
 plot.Desc.numeric
 lines.Lc</code></pre>
+<div id="exporting-s3-methods-callable-from-other-packages" class="section level4">
+<h4>3.1.1.1 Exporting S3 Methods Callable From Other Packages</h4>
+<p><strong>Problem:</strong> roxygen2 detects functions named
+<code>generic.class</code> (e.g. <code>plot.Desc.table</code>) as S3
+methods via naming convention. For such a function, <code>@export</code>
+and <code>@exportS3Method</code> are <strong>not additive</strong> -
+roxygen2 picks one registration mode and writes only
+<code>S3method(generic, class)</code> to <code>NAMESPACE</code>, never
+an additional <code>export(generic.class)</code> entry, no matter which
+combination of the two tags is tried. This is true even when both tags
+are present on the same function.</p>
+<p><strong>Symptom:</strong> <code>plot(obj)</code> works fine within
+the defining package (and for anyone calling it via plain
+<code>UseMethod</code> dispatch, since R’s S3 dispatch searches the
+registered <code>S3method()</code> table regardless of export status).
+But another package that calls the method <strong>by name</strong>,
+unqualified (e.g. <code>plot.Desc.table(x, ...)</code> inside a wrapper
+like <code>plot.Desc.qq</code>), fails with
+<code>could not find function &quot;plot.Desc.table&quot;</code> - even after
+<code>@importFrom otherPkg plot.Desc.table</code> - because the symbol
+was never actually exported, only registered as an S3 method.</p>
+<p><strong>Fix:</strong> add an explicit <code>@rawNamespace</code> line
+to force the export, on top of <code>@exportS3Method</code> for the
+dispatch registration:</p>
+<pre class="r"><code>#&#39; @exportS3Method
+#&#39; @rawNamespace export(plot.Desc.table)
+plot.Desc.table &lt;- function(x, ...) { ... }</code></pre>
+<p>This produces both <code>NAMESPACE</code> lines:</p>
+<pre><code>S3method(plot, Desc.table)
+export(plot.Desc.table)</code></pre>
+<p><strong>When this applies:</strong> any
+<code>plot.Desc.*</code>/<code>print.Desc.*</code>/etc. method that (a)
+lives in <code>aurora</code> (or another helper package) rather than in
+<code>DescToolsX</code> where the class itself is defined,
+<strong>and</strong> (b) is called by unqualified name from
+<code>DescToolsX</code> code rather than purely through
+<code>UseMethod</code> dispatch. Methods only ever reached via
+<code>plot(obj)</code> dispatch do not need the
+<code>@rawNamespace</code> line - plain <code>@export</code> (or
+<code>@exportS3Method</code>) is sufficient there.</p>
+</div>
 </div>
 <div id="naming-across-r-and-c-rcpp-integration" class="section level3">
 <h3>3.1.2 Naming Across R and C++ (Rcpp Integration)</h3>
@@ -654,52 +695,9 @@ weights   not w or weightVec
 data      not mixed with df or dataset</code></pre>
 <p>See also the core vocabulary.</p>
 <p><strong>(E) Boolean arguments</strong></p>
-<p>Boolean arguments begin with:</p>
-<ul>
-<li>is*</li>
-<li>has*</li>
-<li>show*</li>
-<li>use*</li>
-</ul>
-<p>Examples:</p>
-<pre class="text"><code>showLegend
-useWeights
-isSorted</code></pre>
-<p>Not allowed:</p>
-<pre class="r"><code>legend = TRUE   # ambiguous
-weights = TRUE  # semantic overload</code></pre>
-<p><strong>Exception: established Base-R boolean argument
-names</strong></p>
-<p>If a boolean argument has a well-established, unambiguous counterpart
-in Base R or widely used R packages, that name takes precedence over the
-<code>show*</code> / <code>use*</code> / <code>is*</code> /
-<code>has*</code> convention. The rationale is the core principle
-<em>Base-R compatibility &gt; stylistic purity</em>.</p>
-<table>
-<thead>
-<tr class="header">
-<th>Established name</th>
-<th>Do not use</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>warn</code></td>
-<td><code>showWarnings</code></td>
-</tr>
-<tr class="even">
-<td><code>verbose</code></td>
-<td><code>showProgress</code></td>
-</tr>
-<tr class="odd">
-<td><code>recursive</code></td>
-<td><code>isRecursive</code></td>
-</tr>
-</tbody>
-</table>
-<p>Rule: adopt the Base-R name only when it is unambiguous and directly
-inherited — not as a general escape hatch from the naming
-convention.</p>
+<p>Boolean arguments follow established R conventions (paired, ordered,
+verbose, exact, …). Prefixes such as is<em>, has</em>, show* are
+permitted but not required.</p>
 <p><strong>(F) Control terminology</strong></p>
 <p>Do not use numeric terms such as <code>tol</code>, <code>eps</code>,
 or <code>precision</code> if the argument actually controls user-facing
@@ -1305,6 +1303,12 @@ pattern:</p>
 </table>
 <p>Implementation via <code>.callIf()</code>:</p>
 <pre class="r"><code>.callIf(graphics::grid, grid, defaults = th$grid)</code></pre>
+<p>For <code>grid</code> and <code>box</code> specifically, use the
+dedicated dispatchers <code>.drawGrid()</code>/<code>.drawBox()</code>
+(see 9.2) rather than calling <code>.callIf()</code> directly - they
+wrap the same pattern and additionally understand the
+<code>.useTheme</code> sentinel (9.3), which raw <code>.callIf()</code>
+does not.</p>
 <p>DescToolsX does <strong>not</strong> use legacy base-graphics string
 flags such as <code>xaxt = &quot;n&quot;</code>.</p>
 <p>Instead:</p>
@@ -1377,44 +1381,281 @@ reproducibility.</p></li>
 <h1>9. Plot Functions</h1>
 <div id="graphics-state-management" class="section level2">
 <h2>9.1 Graphics State Management</h2>
-<p>All plot functions are wrapped in
-<code>.withGraphicsState()</code>:</p>
+<p>All plot functions are wrapped in <code>.withGraphicsState()</code>,
+with <code>stamp</code> passed as an argument to the wrapper, not drawn
+manually inside it:</p>
 <pre class="r"><code>.withGraphicsState({
-  .applyParFromDots(...)
+
+  .applyParFromDots(
+    ...,
+    defaults = list(mar = c(bottom = 5, left = lmar, top = .marTop(main), right = 3.1))
+  )
+
   # plotting code
+
 }, stamp = stamp)</code></pre>
 <p>No direct <code>par()</code> calls outside
 <code>.applyParFromDots()</code>.</p>
+<p><code>.withGraphicsState()</code> only stamps if its body completes
+without error (it sets an internal <code>ok</code> flag to
+<code>TRUE</code> after <code>eval.parent()</code> returns, and the
+<code>on.exit()</code> stamp call checks that flag) - a plot that errors
+partway through is never stamped. This is by design, not a bug to work
+around: don’t add manual stamp suppression for the error case.</p>
+<p><strong><code>oma</code>/<code>omi</code> must never be added to a
+<code>par()</code> save/restore list.</strong>
+<code>.withGraphicsState()</code> saves a fixed set of graphical
+parameters before drawing and restores them afterward
+(<code>op &lt;- par(keep); ...; withr::defer(par(op))</code>).
+<code>&quot;oma&quot;</code>/<code>&quot;omi&quot;</code> must not appear in
+<code>keep</code> (or in any similar save/restore list elsewhere) -
+merely reading them via <code>par(c(...))</code> and writing the
+<em>same</em>, unchanged value back via <code>par(op)</code> breaks an
+active <code>par(mfrow = ...)</code>/<code>layout()</code> grid.
+Confirmed empirically:</p>
+<pre class="r"><code>par(mfrow = c(1, 2))
+op &lt;- par(c(&quot;oma&quot;, &quot;omi&quot;))
+barplot(1:3)
+par(op)          # writes back the unchanged oma/omi - no-op in theory
+barplot(4:6)     # ...but this opens a NEW page instead of filling panel 2</code></pre>
+<p><code>oma</code>/<code>omi</code> describe the page-wide outer margin
+around the <em>entire</em> <code>mfrow</code>/<code>layout</code> grid,
+not a per-panel setting; re-setting them via <code>par()</code>, even to
+a value identical to the current one, appears to invalidate R’s internal
+page/layout progress on at least some graphics devices. None of the
+current plot functions set <code>oma</code>/<code>omi</code> themselves
+(via <code>defaults</code> in <code>.applyParFromDots()</code> or
+otherwise), so there is nothing that legitimately needs saving/restoring
+here - if that ever changes, the interaction with an active
+<code>mfrow</code>/<code>layout</code> needs to be re-verified before
+adding <code>oma</code>/<code>omi</code> back to any such list.</p>
+<p><strong>Stamp is currently drawn on every panel, not only the
+last.</strong> With a <code>par(mfrow = c(1, 2))</code> call, the corner
+stamp from <code>.withGraphicsState()</code> is drawn after each panel -
+so it currently appears once per panel, not once per page. A
+<code>.isLastPanel()</code> helper exists (9.2) but is
+<strong>not</strong> wired into the stamp call as of this writing; do
+not assume it is in effect, and do not document or rely on once-per-page
+stamping until this is actually implemented.</p>
 </div>
 <div id="helper-functions" class="section level2">
 <h2>9.2 Helper Functions</h2>
-<p>Plot functions use these internal helpers:</p>
+<p>Plot functions use these internal helpers, as established in
+<code>plotXY.R</code>/<code>plotBox.R</code> (reference implementations)
+and ported to <code>plotAssoc.R</code>/<code>plotHeatmap.R</code>:</p>
 <pre class="text"><code>.withGraphicsState()
 .applyParFromDots()
-.resolveNames()
-.normalizeDotData()
-.adjustLeftMarginForLabels()
-.callIf()
-.drawAxis()</code></pre>
+.resolveTitle()
+.marTop()
+.marginLines()
+.drawGrid()
+.drawBox()
+.useTheme           (sentinel value, not a function - see 9.3)</code></pre>
+<p><code>.isLastPanel()</code> also exists in <code>utils-plot.R</code>
+(intended to detect the last panel of an
+<code>mfrow</code>/<code>layout</code> grid for once-per-page stamping)
+but is currently <strong>not</strong> called from anywhere, including
+<code>.withGraphicsState()</code> - see 9.1’s note on stamp-per-panel
+behavior. Treat it as available-but-unused until it is actually wired
+in; don’t assume it is already affecting stamp placement.</p>
+<p><code>bedrock::callIf()</code> is used for one-off graphical elements
+that follow the flexible TRUE/FALSE/NA/list pattern (see 6.3) but are
+not already covered by <code>.drawGrid()</code>/<code>.drawBox()</code>
+- e.g. a legend
+(<code>bedrock::callIf(graphics::legend, legend, defaults = ...)</code>).</p>
+<p><code>callIf()</code> does <strong>not</strong> understand the
+<code>.useTheme</code> sentinel - never pass a raw, unresolved
+<code>.useTheme</code>-valued argument into <code>callIf()</code>
+directly. Resolve it first (e.g. via <code>.resolveToggle()</code>, or
+by branching on <code>identical(x, .useTheme)</code> as in
+<code>resolveCol()</code>, 9.3) before handing the result to
+<code>callIf()</code>.</p>
+<div id="standard-set-of-frameworkfeatures-arguments" class="section level3">
+<h3>9.2.1 Standard Set of FRAMEWORK/FEATURES Arguments</h3>
+<p>Every plot function exposes <code>grid</code>, <code>box</code>, and
+<code>stamp</code> wherever the element is geometrically meaningful for
+that plot type - these are not optional extras added case-by-case, but
+the expected baseline API for any new plot function. Each follows the
+flexible
+<code>TRUE</code>/<code>FALSE</code>/<code>NA</code>/<code>list(...)</code>
+pattern (6.3), defaults to <code>.useTheme</code>, and is wired through
+<code>.drawGrid()</code>/<code>.drawBox()</code> or
+<code>.withGraphicsState(..., stamp = stamp)</code> rather than a
+bespoke implementation:</p>
+<pre class="r"><code>grid  = .useTheme,   # FEATURES
+box   = .useTheme,   # STYLE
+stamp = .useTheme,   # FRAMEWORK</code></pre>
+<p>“Wherever meaningful” excludes the element only when the underlying
+drawing function makes it structurally impossible or redundant to offer
+a toggle - not merely inconvenient to wire up:</p>
+<ul>
+<li>a panel that delegates to a base-R function with no native
+suppression path for its own frame (e.g. <code>spineplot()</code>’s
+unconditional <code>box()</code>) has no working <code>box</code>
+toggle, and the argument is documented as having no effect there rather
+than omitted from the function signature entirely (see
+<code>plot.Desc.table</code>’s <code>@param box</code> for the
+documented-no-op pattern in a dispatching method);</li>
+<li>a plot type with no rectangular coordinate frame at all (e.g.
+<code>plotAssoc()</code>, which draws cell rectangles directly with no
+<code>box()</code>/frame concept) legitimately has no <code>box</code>
+argument;</li>
+<li><code>stamp</code> is omitted only on the inner leg of a delegation
+chain pattern, never on a function callable directly by the end user
+(9.5).</li>
+</ul>
+<p>When in doubt, add the argument and document precisely what it does
+(or doesn’t) affect, rather than leaving it out silently.</p>
 </div>
-<div id="theme-system" class="section level2">
-<h2>9.3 Theme System</h2>
-<p>Plot functions use <code>.theme()</code> for centralized style
-defaults:</p>
-<pre class="r"><code>th &lt;- .theme(
-  grid = list(col = &quot;grey&quot;, lwd = 1, lty = &quot;dotted&quot;)
-)</code></pre>
+</div>
+<div id="theme-system-and-the-.usetheme-sentinel" class="section level2">
+<h2>9.3 Theme System and the <code>.useTheme</code> Sentinel</h2>
+<p>Plot functions resolve style defaults from the active theme via
+<code>getTheme()</code>, not via a function call per parameter. The
+default value of a STYLE argument is the sentinel
+<code>.useTheme</code>, never a literal color or a computed value, so
+the call site can tell “use the theme” apart from “the user explicitly
+chose this”:</p>
+<pre class="r"><code>plotHeatmap &lt;- function(x,
+                        col  = .useTheme,
+                        box  = .useTheme,
+                        stamp = .useTheme,
+                        ...)</code></pre>
+<p>Inside the function, resolve <code>.useTheme</code> against
+<code>getTheme()</code> (for a single, unambiguous default) or against
+multiple panel-specific defaults when one shared default would not be
+meaningful (e.g. a dispatching <code>plot.Desc.*</code> method covering
+several different panel types - a grey fill ramp and a diverging
+residual palette are not interchangeable defaults for the same
+<code>col</code> argument):</p>
+<pre class="r"><code>resolveCol &lt;- function(default) {
+  if (identical(col, .useTheme)) default else col
+}
+
+colSpineDefault &lt;- colorRampPalette(c(&quot;grey30&quot;, &quot;grey90&quot;))(ncolTab)
+# ...
+spineplot(tab, col = resolveCol(colSpineDefault), ...)</code></pre>
 <p>Theme subsetting: plot functions do not modify the theme globally,
 but select the relevant subset locally:</p>
 <pre class="r"><code>defaults = th$grid[!startsWith(names(th$grid), &quot;group.&quot;)]</code></pre>
 <p>Theme values may define STYLE only, never STRUCTURE.</p>
 </div>
+<div id="main-title-resolution" class="section level2">
+<h2>9.4 <code>main</code> / Title Resolution</h2>
+<p>The <code>main</code> argument follows a three-state contract,
+resolved via <code>.resolveTitle(main, default = ...)</code>:</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NULL</code> (default)</td>
+<td>derive a title from the call (see below)</td>
+</tr>
+<tr class="even">
+<td><code>&quot;&quot;</code> / <code>NA</code> / <code>FALSE</code></td>
+<td>suppress the title; the top margin is compacted accordingly
+(<code>.marTop(main)</code> returns a smaller value)</td>
+</tr>
+<tr class="odd">
+<td>any other string</td>
+<td>used as-is</td>
+</tr>
+</tbody>
+</table>
+<p>The derived default follows “substitute magic”:
+<code>match.call()</code> is captured early (before the data argument is
+reassigned/transformed), and the default title is built from the
+deparsed expression(s) the caller actually wrote, not from variable
+names inside the function:</p>
+<pre class="r"><code>mc &lt;- match.call()
+
+.withGraphicsState({
+  main &lt;- .resolveTitle(main, default = deparse(mc$x))   # single-argument functions
+  # or, for a y ~ x pair:
+  main &lt;- .resolveTitle(main, default = paste(deparse(mc$y), &quot;~&quot;, deparse(mc$x)))
+  ...
+})</code></pre>
+<p><code>mc &lt;- match.call()</code> is placed <em>before</em>
+<code>.withGraphicsState()</code>, at the same point in every function,
+for consistency and so it captures the original argument expressions
+before any internal reassignment (transpose, reorder, etc.).</p>
+<p>Dispatching <code>plot.Desc.*</code> methods that have no
+<code>y ~ x</code> formula pair at their level (e.g. a table built
+outside a formula) have no reliable source for separate “x” and “y”
+names; do not invent one. Use whatever single name is actually available
+(e.g. <code>x$meta$xname</code>), optionally with a panel-type suffix
+for context, rather than fabricating a placeholder like
+<code>&quot;y&quot;</code>.</p>
+</div>
 <div id="stamp" class="section level2">
-<h2>9.4 <code>stamp</code></h2>
-<p><code>stamp</code> is controlled via a global option and is exposed
-as an explicit argument only when the user must be able to override the
-global default:</p>
-<pre class="r"><code>.withGraphicsState(expr, stamp = .getOption(&quot;stamp&quot;, NULL))</code></pre>
+<h2>9.5 <code>stamp</code></h2>
+<p><code>stamp</code> is an explicit, documented argument on every plot
+function for which a corner stamp is meaningful, defaulting to
+<code>.useTheme</code>:</p>
+<pre class="r"><code>stamp = .useTheme</code></pre>
+<p>It is passed straight through to
+<code>.withGraphicsState(expr, stamp = stamp)</code> - never drawn
+manually inside the function body.</p>
+<p><strong>Nested calls:</strong> when a <code>plot.Desc.*</code>
+dispatch method delegates to another plot function that itself draws a
+stamp (e.g. <code>plot.Desc.table()</code> calling
+<code>plotMosaic()</code>/<code>plotAssoc()</code>/<code>plotHeatmap()</code>),
+the inner call passes <code>stamp = NA</code> to suppress its own stamp,
+so the stamp is drawn exactly once, by the outermost
+<code>.withGraphicsState()</code> after all selected panels have been
+drawn:</p>
+<pre class="r"><code>plotHeatmap(tab, ..., stamp = NA)   # inside plot.Desc.table()</code></pre>
+<p>Functions that are always called directly by the end user (never
+delegated to) do not need this - only the inner leg of a delegation
+chain does.</p>
+</div>
+<div id="left-margin-auto-sizing" class="section level2">
+<h2>9.6 Left-Margin Auto-Sizing</h2>
+<p>The left margin (<code>mar[2]</code>) is sized automatically from the
+longest of the labels actually drawn on that axis - the y-axis label
+and, where the panel draws categorical level names as axis tick labels
+(e.g. <code>spineplot()</code>, <code>cdplot()</code>), those level
+names too - via <code>.marginLines()</code>:</p>
+<pre class="r"><code>lmar &lt;- max(4.1, .marginLines(tickLabels, side = 2, las = 1, pad = 1))</code></pre>
+<p>Only the axis tick-label text itself sizes the margin this way; a
+y-axis <em>label</em> (<code>ylab</code>) is drawn rotated and needs
+roughly constant width regardless of its string length, so it must not
+be mixed into the same <code>strwidth()</code>-based comparison as the
+(horizontal) tick labels - doing so overestimates the needed margin for
+a long <code>ylab</code> and produces an inconsistent layout.</p>
+<p>Functions that delegate to a base-R plotting function with its own
+internal margin logic (e.g. <code>spineplot()</code>) are not exempt
+from this - <code>spineplot()</code> does respect
+<code>par(mar = ...)</code> set beforehand via
+<code>.applyParFromDots()</code>; if labels still appear clipped, the
+cause is almost always that the margin was not sized from the actual
+labels being drawn (e.g. a leftover fixed value), not that the
+underlying function ignores <code>par()</code>.</p>
+</div>
+<div id="dispatching-plot.desc.-methods" class="section level2">
+<h2>9.7 Dispatching <code>plot.Desc.*</code> Methods</h2>
+<p><code>plot.Desc.*</code> S3 methods (one per <code>Desc</code>
+subclass) typically live in <code>aurora</code>, not in
+<code>DescToolsX</code> where the <code>Desc</code> classes themselves
+are constructed, because they require <code>aurora</code>’s internal
+plotting helpers (9.2) which cannot be used from outside
+<code>aurora</code>’s namespace. See 3.1.1.1 for the resulting export
+requirements - this is the most common case where the
+<code>@rawNamespace export()</code> pattern is needed.</p>
+<p>Selecting multiple panels via <code>which = c(...)</code> never
+implies an internal layout decision (no <code>mfrow</code> is ever set
+by the function itself). Arranging multiple panels on one device
+(<code>par(mfrow = c(2, 1))</code> or similar) is left entirely to the
+caller.</p>
 <hr />
 </div>
 </div>

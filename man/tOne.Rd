@@ -7,7 +7,7 @@
 \title{Create Table One Describing Baseline Characteristics}
 \usage{
 tOne(
-  x, grp = NA, add.length = TRUE,
+  x, groups = NA, add.length = TRUE,
   colnames = NULL, vnames = NULL, total = TRUE,
   align = "\\\\l", FUN = NULL, TEST = NULL,
   intref = "high",
@@ -22,7 +22,7 @@ tOne(
 \arguments{
 \item{x}{a tOne object to subset}
 
-\item{grp}{the grouping variable.}
+\item{groups}{the grouping variable.}
 
 \item{add.length}{logical. If set to \code{TRUE} (default), a row with the
 group sizes will be inserted as first row of the table.}
@@ -159,7 +159,7 @@ per.sty <- style(digits = 1, fmt = "\%")        # percentages
 num.sty <- style(digits = 1, big.mark = "'")   # numeric
 
 tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
-  grp = Pizza$quality)
+  groups = Pizza$quality)
 
 # the same but no groups now...
 tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")])
@@ -175,7 +175,7 @@ tOne(iris[, -5], iris[, 5],
 
 # replace kruskal.test by ANOVA and report the p.value
 # Change tests for all the types
-tOne(x = iris[, -5], grp = iris[, 5],
+tOne(x = iris[, -5], groups = iris[, 5],
      FUN = function(x) gettextf("\%s / \%s",
             fm(mean(x, na.rm = TRUE), digits = 1),
             fm(sd(x, na.rm = TRUE), digits = 3)), 
@@ -192,7 +192,7 @@ tOne(x = iris[, -5], grp = iris[, 5],
 )
 
 t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rabate")], 
-           grp   = Pizza$area, 
+           groups   = Pizza$area, 
            align = " ", 
            total = FALSE,
             
@@ -240,7 +240,7 @@ options(opt)
 wrd <- GetNewWrd()
 ToWrd(
   tOne(x   = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
-       grp = Pizza$quality,
+       groups = Pizza$quality,
        fmt = list(num=Fmt("num", digits=1))
        ),
   font = list(name="Arial narrow", size=8),

@@ -89,18 +89,6 @@ fast_mode_cpp <- function(x, narm = FALSE) {
     .Call(`_DescToolsX_fast_mode_cpp`, x, narm)
 }
 
-lcm_cpp <- function(a, b) {
-    .Call(`_DescToolsX_lcm_cpp`, a, b)
-}
-
-gcd_cpp <- function(a, b) {
-    .Call(`_DescToolsX_gcd_cpp`, a, b)
-}
-
-divs <- function(x) {
-    .Call(`_DescToolsX_divs`, x)
-}
-
 hlqest <- function(x) {
     .Call(`_DescToolsX_hlqest`, x)
 }

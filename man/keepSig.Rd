@@ -8,7 +8,7 @@ keepSig(
   m,
   p = NULL,
   data = NULL,
-  alpha = 0.05,
+  sig.level = 0.05,
   method = c("pearson", "spearman", "kendall"),
   diag = TRUE
 )
@@ -25,8 +25,8 @@ tests on the columns of \code{data} (requires \code{data}).}
 \item{data}{an optional numeric data frame or matrix. Used to compute
 \code{p} when \code{p = NULL}. Ignored if \code{p} is supplied.}
 
-\item{alpha}{numeric; significance threshold. Entries where
-\code{p > alpha} are replaced by \code{NA}. Default \code{0.05}.}
+\item{sig.level}{numeric; significance threshold. Entries where
+\code{p > sig.level} are replaced by \code{NA}. Default \code{0.05}.}
 
 \item{method}{character; the correlation test method passed to
 \code{\link[stats]{cor.test}} when computing p-values from \code{data}.
@@ -39,7 +39,7 @@ diagonal is also set to \code{NA}.}
 }
 \value{
 A matrix of the same dimension and dimnames as \code{m}, with
-\code{NA} wherever \code{p > alpha}.
+\code{NA} wherever \code{p > sig.level}.
 }
 \description{
 Replaces entries in a symmetric matrix (typically a correlation matrix)
@@ -53,7 +53,7 @@ Designed as a pre-processing step for \code{\link[aurora]{plotWeb}} and
 plotWeb(keepSig(cor(mtcars), data = mtcars))
 
 # stricter threshold
-plotCor(keepSig(cor(swiss), data = swiss, alpha = 0.01))
+plotCor(keepSig(cor(swiss), data = swiss, sig.level = 0.01))
 
 # supply a pre-computed p-value matrix
 m <- cor(mtcars)

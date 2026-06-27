@@ -95,7 +95,7 @@ yearWeek(x, method = c("iso", "us"))
 
 yearDay(x)
 
-diffDays360(start_d, end_d, method = c("eu", "us"))
+diffDays360(startDate, endDate, method = c("eu", "us"))
 
 lastDayOfMonth(x)
 
@@ -138,7 +138,7 @@ US-Method calculation mode. Default is \code{"eu"}.}
 
 \item{value}{new value}
 
-\item{start_d, end_d}{the start, resp. end date for \code{diffDays360}.}
+\item{startDate, endDate}{the start, resp. end date for \code{diffDays360}.}
 }
 \value{
 an integer vector

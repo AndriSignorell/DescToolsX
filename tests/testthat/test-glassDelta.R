@@ -24,8 +24,8 @@ test_that("glassDelta is positive when mean(x) > mean(y)", {
 test_that("glassDelta uses sd of y (control) by default", {
   x <- c(8,9,10,11,12)
   y <- c(2,4,6,8,10)    # sd(y) much larger than sd(x)
-  d_ctrl <- glassDelta(x, y, use_control_sd = TRUE)
-  d_trt  <- glassDelta(x, y, use_control_sd = FALSE)
+  d_ctrl <- glassDelta(x, y, useControlSd = TRUE)
+  d_trt  <- glassDelta(x, y, useControlSd = FALSE)
   expect_false(isTRUE(all.equal(d_ctrl, d_trt)))
 })
 
@@ -36,20 +36,20 @@ test_that("glassDelta manual calculation: (mean(x)-mean(y)) / sd(y)", {
   expect_equal(glassDelta(x, y), expected, tolerance = 1e-10)
 })
 
-test_that("glassDelta conf.level returns named vector delta/lci/uci", {
+test_that("glassDelta conf.level returns named vector est/lci/uci", {
   x <- rnorm(40, mean = 8, sd = 2)
   y <- rnorm(40, mean = 5, sd = 2)
   res <- glassDelta(x, y, conf.level = 0.95)
   expect_length(res, 3)
-  expect_named(res, c("delta","lci","uci"))
+  expect_named(res, c("est","lci","uci"))
 })
 
-test_that("glassDelta CI: lci < delta < uci", {
+test_that("glassDelta CI: lci < est < uci", {
   x <- rnorm(60, mean = 8, sd = 2)
   y <- rnorm(60, mean = 5, sd = 2)
   res <- glassDelta(x, y, conf.level = 0.95)
-  expect_lt(res["lci"], res["delta"])
-  expect_gt(res["uci"], res["delta"])
+  expect_lt(res["lci"], res["est"])
+  expect_gt(res["uci"], res["est"])
 })
 
 test_that("glassDelta na.rm = TRUE strips NAs independently per vector", {

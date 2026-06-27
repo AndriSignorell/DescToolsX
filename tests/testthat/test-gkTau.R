@@ -34,13 +34,13 @@ test_that("gkTau reduces to phi^2 for a 2x2 table", {
 test_that("gkTau conf.level returns 3-element named vector", {
   res <- gkTau(.tab, conf.level = 0.95)
   expect_length(res, 3)
-  expect_named(res, c("tauA","lwr.ci","upr.ci"))
+  expect_named(res, c("est","lci","uci"))
 })
 
 test_that("gkTau CI: lwr.ci <= tauA <= upr.ci", {
   res <- gkTau(.tab, conf.level = 0.95)
-  expect_lte(res["lwr.ci"], res["tauA"])
-  expect_gte(res["upr.ci"], res["tauA"])
+  expect_lte(res["lci"], res["est"])
+  expect_gte(res["uci"], res["est"])
 })
 
 test_that("gkTau accepts two vectors", {

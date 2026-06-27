@@ -275,41 +275,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// lcm_cpp
-long long lcm_cpp(long long int a, long long int b);
-RcppExport SEXP _DescToolsX_lcm_cpp(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< long long int >::type a(aSEXP);
-    Rcpp::traits::input_parameter< long long int >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(lcm_cpp(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// gcd_cpp
-long long gcd_cpp(long long int a, long long int b);
-RcppExport SEXP _DescToolsX_gcd_cpp(SEXP aSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< long long int >::type a(aSEXP);
-    Rcpp::traits::input_parameter< long long int >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(gcd_cpp(a, b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// divs
-IntegerVector divs(int x);
-RcppExport SEXP _DescToolsX_divs(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(divs(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // hlqest
 double hlqest(NumericVector x);
 RcppExport SEXP _DescToolsX_hlqest(SEXP xSEXP) {
@@ -481,9 +446,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_bottom_i_cpp", (DL_FUNC) &_DescToolsX_bottom_i_cpp, 2},
     {"_DescToolsX_fastMode", (DL_FUNC) &_DescToolsX_fastMode, 2},
     {"_DescToolsX_fast_mode_cpp", (DL_FUNC) &_DescToolsX_fast_mode_cpp, 2},
-    {"_DescToolsX_lcm_cpp", (DL_FUNC) &_DescToolsX_lcm_cpp, 2},
-    {"_DescToolsX_gcd_cpp", (DL_FUNC) &_DescToolsX_gcd_cpp, 2},
-    {"_DescToolsX_divs", (DL_FUNC) &_DescToolsX_divs, 1},
     {"_DescToolsX_hlqest", (DL_FUNC) &_DescToolsX_hlqest, 1},
     {"_DescToolsX_hl2qest", (DL_FUNC) &_DescToolsX_hl2qest, 2},
     {"_DescToolsX_hoeffdingD_cpp", (DL_FUNC) &_DescToolsX_hoeffdingD_cpp, 1},

@@ -35,9 +35,9 @@ test_that("cut.integer labels = FALSE returns integer codes", {
   expect_type(res, "integer")
 })
 
-test_that("cut.integer orderedResult = TRUE returns an ordered factor", {
+test_that("cut.integer ordered_result = TRUE returns an ordered factor", {
   x  <- as.integer(c(1, 5, 15))
-  res <- cut(x, breaks = c(0L, 10L, 20L), orderedResult = TRUE)
+  res <- cut(x, breaks = c(0L, 10L, 20L), ordered_result = TRUE)
   expect_true(is.ordered(res))
 })
 

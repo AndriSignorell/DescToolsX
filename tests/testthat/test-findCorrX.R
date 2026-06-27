@@ -25,23 +25,23 @@ test_that("findCorrX returns integer indices by default", {
   expect_type(res, "integer")
 })
 
-test_that("findCorrX return = 'names' returns column names", {
+test_that("findCorrX output = 'names' returns column names", {
   cmat <- .high_cormat()
-  res  <- findCorrX(cmat, cutoff = 0.9, return = "names")
+  res  <- findCorrX(cmat, cutoff = 0.9, output = "names")
   expect_type(res, "character")
   expect_true(all(res %in% colnames(cmat)))
 })
 
-test_that("findCorrX return = 'logical' has length ncol(x)", {
+test_that("findCorrX output = 'logical' has length ncol(x)", {
   cmat <- .high_cormat()
-  res  <- findCorrX(cmat, cutoff = 0.9, return = "logical")
+  res  <- findCorrX(cmat, cutoff = 0.9, output = "logical")
   expect_type(res, "logical")
   expect_length(res, ncol(cmat))
 })
 
-test_that("findCorrX return = 'report' has removed, kept, and log", {
+test_that("findCorrX output = 'report' has removed, kept, and log", {
   cmat <- .high_cormat()
-  res  <- findCorrX(cmat, cutoff = 0.9, return = "report")
+  res  <- findCorrX(cmat, cutoff = 0.9, output = "report")
   expect_type(res, "list")
   expect_named(res, c("removed","kept","log"))
 })
@@ -83,7 +83,7 @@ test_that("findCorrX stops when cutoff is out of (0, 1)", {
 
 test_that("findCorrX removed + kept indices cover all original columns", {
   cmat <- .high_cormat()
-  res  <- findCorrX(cmat, cutoff = 0.9, return = "report")
+  res  <- findCorrX(cmat, cutoff = 0.9, output = "report")
   all_idx <- sort(c(res$removed, res$kept))
   expect_equal(all_idx, seq_len(ncol(cmat)))
 })

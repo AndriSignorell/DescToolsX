@@ -56,7 +56,7 @@
 #' @param stringsAsFactors logical. Defines if the result should be coerced to
 #' a factor, using the local definitions as levels.  The result would be an
 #' ordered factor. Default is TRUE.
-#' @param start_d,end_d the start, resp. end date for \code{diffDays360}. 
+#' @param startDate,endDate the start, resp. end date for \code{diffDays360}. 
 #' @param method one out of \code{"eu", "us"}, setting either European or
 #' US-Method calculation mode. Default is \code{"eu"}. 
 #' @return a vector of the same dimension as x, consisting of either numeric
@@ -379,30 +379,30 @@ yearDay <- function(x) {
 
 #' @rdname date_functions
 #' @export
-diffDays360 <- function(start_d, end_d, method=c("eu","us")){
+diffDays360 <- function(startDate, endDate, method=c("eu","us")){
   
   # source: http://en.wikipedia.org/wiki/360-day_calendar
-  start_d <- as.Date(start_d)
-  end_d <- as.Date(end_d)
+  startDate <- as.Date(startDate)
+  endDate <- as.Date(endDate)
   
-  d1 <- day(start_d)
-  m1 <- month(start_d)
-  y1 <- year(start_d)
-  d2 <- day(end_d)
-  m2 <- month(end_d)
-  y2 <- year(end_d)
+  d1 <- day(startDate)
+  m1 <- month(startDate)
+  y1 <- year(startDate)
+  d2 <- day(endDate)
+  m2 <- month(endDate)
+  y2 <- year(endDate)
   
   method = match.arg(method)
   switch(method,
          "eu" = {
-           if(day(start_d)==31L) start_d <- start_d-1L
-           if(day(end_d)==31L) end_d <- end_d-1L
+           if(day(startDate)==31L) startDate <- startDate-1L
+           if(day(endDate)==31L) endDate <- endDate-1L
          }
          , "us" ={
-           if( (day(start_d+1L)==1L & month(start_d+1L)==3L) &
-               (day(end_d+1L)==1L & month(end_d+1L)==3L)) d2 <- 30L
+           if( (day(startDate+1L)==1L & month(startDate+1L)==3L) &
+               (day(endDate+1L)==1L & month(endDate+1L)==3L)) d2 <- 30L
            if( d1==31L ||
-               (day(start_d+1L)==1L & month(start_d+1L)==3L)) {
+               (day(startDate+1L)==1L & month(startDate+1L)==3L)) {
              d1 <- 30L
              if(d2==31L) d2 <- 30L
            }

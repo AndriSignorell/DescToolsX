@@ -8,7 +8,7 @@ cutAge(
   x,
   breaks = c(seq(from = 0, to = 90, by = 10), Inf),
   right = FALSE,
-  orderedResult = TRUE,
+  ordered_result = TRUE,
   full = TRUE,
   labels = NULL,
   ...
@@ -25,7 +25,7 @@ into which x is to be cut. Default is 10-year intervals from 0 to 90.}
 right (and open on the left) or vice versa.  Default is \code{FALSE} -
 unlike in \code{\link{cut}}!}
 
-\item{orderedResult}{logical: should the result be an ordered factor?
+\item{ordered_result}{logical: should the result be an ordered factor?
 Default is \code{TRUE} - unlike in \code{\link{cut}}!}
 
 \item{full}{logical, setting to \code{FALSE} will remove empty levels at the

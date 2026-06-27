@@ -45,7 +45,7 @@
 #' cmat <- cor(m)
 #'
 #' findCorrX(cmat, cutoff = 0.8)
-#' findCorrX(cmat, cutoff = 0.8, method = "max", return = "names")
+#' findCorrX(cmat, cutoff = 0.8, method = "max", output = "names")
 #'
 
 

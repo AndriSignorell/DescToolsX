@@ -20,18 +20,18 @@ test_that("kappaM result is in [-1, 1]", {
 })
 
 test_that("kappaM method = 'Conger' returns a numeric", {
-  res <- kappaM(.kappa_dat, method = "Conger")
+  res <- kappaM(.kappa_dat, method = "conger")
   expect_true(is.numeric(res))
 })
 
 test_that("kappaM method = 'Light' returns a numeric", {
-  res <- kappaM(.kappa_dat, method = "Light")
+  res <- kappaM(.kappa_dat, method = "light")
   expect_true(is.numeric(res))
 })
 
 test_that("kappaM all three methods return different values for this data", {
-  f <- kappaM(.kappa_dat, method = "Fleiss")
-  c <- kappaM(.kappa_dat, method = "Conger")
+  f <- kappaM(.kappa_dat, method = "fleiss")
+  c <- kappaM(.kappa_dat, method = "conger")
   expect_false(isTRUE(all.equal(f, c)))
 })
 

@@ -145,6 +145,10 @@ somersDelta <- function(x, y = NULL,
     )
   }
   
-  res[[1]]
+  if(is.na(conf.level))
+    unname(res[[1]])
+  else
+    res[[1]]
+  
 }
 

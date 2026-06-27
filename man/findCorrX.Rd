@@ -8,7 +8,7 @@ findCorrX(
   x,
   cutoff = 0.9,
   method = c("mean", "max", "median"),
-  return = c("index", "names", "logical", "report"),
+  output = c("index", "names", "logical", "report"),
   verbose = FALSE
 )
 }
@@ -21,7 +21,7 @@ above this value are considered too highly correlated.}
 \item{method}{Character string specifying how variable importance is scored.
 One of \code{"mean"}, \code{"max"}, or \code{"median"}. Default is \code{"mean"}.}
 
-\item{return}{Character string specifying the return format:
+\item{output}{Character string specifying the return format:
 \itemize{
 \item \code{"index"}: indices of variables to remove (default)
 \item \code{"names"}: column names of variables to remove
@@ -63,7 +63,7 @@ colnames(m) <- paste0("V", 1:5)
 cmat <- cor(m)
 
 findCorrX(cmat, cutoff = 0.8)
-findCorrX(cmat, cutoff = 0.8, method = "max", return = "names")
+findCorrX(cmat, cutoff = 0.8, method = "max", output = "names")
 
 }
 \seealso{

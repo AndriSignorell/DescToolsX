@@ -37,7 +37,7 @@
 #' If \code{conf.level = NA}, a single numeric value is returned.
 #' Otherwise a named numeric vector with elements:
 #' \itemize{
-#'   \item \code{gamma}: estimate
+#'   \item \code{est}: estimate
 #'   \item \code{lci}: lower confidence interval
 #'   \item \code{uci}: upper confidence interval
 #' }
@@ -93,7 +93,11 @@ gkGamma <- function(x, y = NULL,
     conf.level = conf.level
   )
   
-  res[[1]]
+  if(is.na(conf.level))
+    unname(res[[1]])
+  else
+    res[[1]]
+  
 }
 
 

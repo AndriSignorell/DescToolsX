@@ -3,7 +3,7 @@
 
 #' @export
 cut.integer <- function(x, breaks, labels = NULL, include.lowest = FALSE, 
-                        right = TRUE, orderedResult = FALSE, ...) {
+                        right = TRUE, ordered_result = FALSE, ...) {
   
   # labels are constructed using "(a,b]" interval notation in cut.default,
   # which is perfectly fine for numeric variables, but not well suited for
@@ -28,14 +28,14 @@ cut.integer <- function(x, breaks, labels = NULL, include.lowest = FALSE,
   
   cut.default(x = x, breaks = breaks, labels = labels,
               include.lowest = include.lowest, right = right,
-              orderedResult = orderedResult, ...)
+              ordered_result = ordered_result, ...)
 }
 
 
 
 #' #' @export
 #' cut.integer <- function(x, breaks, labels = NULL, include.lowest = FALSE, right = TRUE, 
-#'                         orderedResult = FALSE, ...){
+#'                         ordered_result = FALSE, ...){
 #'   
 #'   # labels are constructed using "(a,b]" interval notation in cut.default, 
 #'   # which is perfectly fine for numeric variables, but not well suited for 
@@ -59,7 +59,7 @@ cut.integer <- function(x, breaks, labels = NULL, include.lowest = FALSE,
 #'   }
 #'   
 #'   res <- cut.default(x=x, breaks=breaks, labels=labels, include.lowest=include.lowest,
-#'                      right=right, orderedResult=orderedResult, ...)
+#'                      right=right, ordered_result=ordered_result, ...)
 #'   
 #'   return(res)  
 #'   
