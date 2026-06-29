@@ -35,9 +35,10 @@
 #' Theil, H. (1967). Economics and Information Theory.
 
 
-#' @family inequality
-#' @concept inequality-measures
-#' @concept descriptive-statistics
+
+#' @family assoc.nominal  
+#' @concept association-measure  
+#' @concept nominal  
 #' @concept information-theory
 #'
 #'

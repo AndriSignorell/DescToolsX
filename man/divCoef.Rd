@@ -43,15 +43,18 @@ divCoef(df, d, normalize = TRUE)
 
 }
 \seealso{
-Other inequality:
-\code{\link[=atkinson]{atkinson()}},
-\code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
-\code{\link[=lc]{lc()}},
-\code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
+Other assoc.nominal:
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=theil]{theil()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
+\code{\link{yule}}
 }
-\concept{descriptive-statistics}
-\concept{inequality}
-\concept{inequality-measures}
+\concept{assoc.nominal}
+\concept{association-measure}
+\concept{nominal}

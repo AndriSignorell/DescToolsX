@@ -16,7 +16,6 @@
 #' `ToWord` has an interface for the class `abstract`.
 #' 
 #' @name abstract
-#' @rdname abstract
 #' 
 #' @param x a `data.frame` to be described
 #' @param sep the separator for concatenating the levels of a factor
@@ -59,10 +58,9 @@
 #' 
 #' abstract(d.mydata)
 #' 
-
-
 #' @family descriptive  
 #' @concept summary
+#'
 #'
 
 
@@ -146,15 +144,14 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxlevels = 5,
 
 
 
-
-#' @rdname abstract
-#' @export
-#' 
 #' @param width Console width. If `NULL`, defaults to 
 #'        [options("width")][base::options()].
 #' @param print.gap (integer) Number of spaces between columns.
 #' @param ... Further arguments to `print` method.
 
+
+#' @rdname abstract
+#' @export
 print.Abstract <- function(x, sep = NULL, width = NULL,
                            trunc = NULL, print.gap = 2, ...) {
   # check if there are labels, if there aren't, we will hide the labels column
@@ -169,8 +166,7 @@ print.Abstract <- function(x, sep = NULL, width = NULL,
       c(width, rep((getOption("width") - (sum(width) + 6 * print.gap)) /
                      (1 + lbl_fg), (1 + lbl_fg)))
   }
-  
-  
+
   opt <- options(max.print = 1e4)
   on.exit(options(opt))
   

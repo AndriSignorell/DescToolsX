@@ -55,10 +55,9 @@
 #'                # due to duplicates
 
 
-#' @family quantiles
-#' @concept descriptive-statistics
-#' @concept data-manipulation
-#' @concept factor-handling
+
+#' @family cut  
+#' @concept binning
 #'
 #'
 #' @export

@@ -121,10 +121,13 @@ Rothman, K. J., Greenland, S., & Lash, T. L. (2008).
 \seealso{
 \code{\link{oddsRatio}}
 
-Other topic.contingencyTables:
+Other effect.size:
+\code{\link[=cohenD]{cohenD()}},
+\code{\link[=cohenH]{cohenH()}},
+\code{\link[=etaSq]{etaSq()}},
+\code{\link[=glassDelta]{glassDelta()}},
 \code{\link[=oddsRatio]{oddsRatio()}}
 }
-\concept{contingency-tables}
-\concept{epidemiology}
-\concept{relative-risk}
-\concept{topic.contingencyTables}
+\concept{binary-outcome}
+\concept{effect-size}
+\concept{effect.size}

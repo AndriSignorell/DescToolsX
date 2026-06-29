@@ -95,11 +95,15 @@ sapply(Pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
-\code{\link[=medianX]{medianX()}}
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr great Rcpp part by Joseph
 Wood and Ralf Stubner
 }
-\concept{descriptive-statistics}
 \concept{location}

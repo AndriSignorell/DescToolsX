@@ -43,13 +43,15 @@ Identifying density-based local outliers. \emph{In Proceedings of the ACM
 SIGMOD International Conference on Management of Data}
 }
 \seealso{
-Other outlier:
+Other impute:
+\code{\link[=impute]{impute()}},
+\code{\link[=imputeKnn]{imputeKnn()}},
 \code{\link[=outlier]{outlier()}}
 }
 \author{
 Caroline Rodriguez
 }
-\concept{descriptive-statistics}
-\concept{outlier}
+\concept{impute}
+\concept{machine-learning}
 \concept{outlier-detection}
 \keyword{methods}

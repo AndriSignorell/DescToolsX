@@ -128,13 +128,7 @@ m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 conf(m)
 
 }
-\seealso{
-Other confusion:
-\code{\link[=cStat]{cStat()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}}
-}
-\concept{classification-metrics}
-\concept{confusion}
-\concept{descriptive-statistics}
-\concept{table-manipulation}
+\concept{classification}
+\concept{confusion-matrix}
+\concept{model-evaluation}
+\concept{model.classification}

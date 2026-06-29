@@ -91,9 +91,9 @@
 
 
 #' @rdname medianX
-#' @family location
-#' @concept descriptive-statistics
-#' @concept robust-statistics
+
+#' @family location  
+#' @concept location
 #'
 #'
 #' @export

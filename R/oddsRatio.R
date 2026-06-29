@@ -87,17 +87,15 @@
 #'
 #' oddsRatio(fit)
 #'
-#' @family topic.contingencyTables
-#' @family topic.regressionModels
+
+
+
+
+#' @family effect.size  
+#' @concept effect-size  
+#' @concept binary-outcome
 #'
-#' @concept odds-ratio
-#' @concept contingency-tables
-#' @concept logistic-regression
-#' @concept epidemiology
 #'
-
-
-
 #' @export
 oddsRatio <- function(x, ...) {
   UseMethod("oddsRatio")

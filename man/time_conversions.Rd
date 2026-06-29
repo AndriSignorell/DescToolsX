@@ -41,9 +41,10 @@ secToHms(c(256, 3456, 56565))
 \seealso{
 \code{\link[chron]{times}}
 
-Other date.utils:
+Other date.time:
+\code{\link[=addMonths]{addMonths()}},
+\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=cutAge]{cutAge()}},
 \code{\link[=generation]{generation()}},
 \code{\link[=isDate]{isDate()}},
 \code{\link[=zodiac]{zodiac()}}
@@ -51,8 +52,6 @@ Other date.utils:
 \author{
 Tyler Rinker \href{mailto:tyler.rinker@gmail.com}{tyler.rinker@gmail.com}
 }
-\concept{data-manipulation}
-\concept{date-handling}
-\concept{date.utils}
-\concept{string-manipulation}
+\concept{date-time}
+\concept{date.time}
 \keyword{chron}

@@ -35,9 +35,10 @@
 #' 
 
 
-#' @family date.utils
-#' @concept date-handling
-#' @concept data-manipulation
+
+#' @family date.time  
+#' @concept date-time  
+#' @concept categorization
 #'
 #'
 #' @export

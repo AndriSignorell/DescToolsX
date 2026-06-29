@@ -117,8 +117,11 @@ New S Language}.  Wadsworth & Brooks/Cole.
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
-\code{\link[=modeX]{modeX()}}
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
-\concept{descriptive-statistics}
 \concept{location}
-\concept{robust-statistics}

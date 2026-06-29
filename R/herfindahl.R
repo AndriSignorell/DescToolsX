@@ -55,9 +55,10 @@
 #' 
 #' 
 
-#' @family inequality
-#' @concept inequality-measures
-#' @concept descriptive-statistics
+
+#' @family inequality  
+#' @concept inequality  
+#' @concept concentration-index
 #'
 #'
 #' @export

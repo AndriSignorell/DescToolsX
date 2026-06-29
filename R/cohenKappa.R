@@ -80,11 +80,6 @@
 #'
 #' @seealso \code{\link{kappaM}}, \code{\link[bedrock]{pairApply}}
 #'
-#' @family topic.agreement
-#' @concept agreement
-#' @concept inter-rater-reliability
-#' @concept association-measures
-#'
 #' @examples
 #' # from Bortz et al. (1990), p. 459
 #' m <- matrix(c(53,  5, 2,
@@ -120,6 +115,13 @@
 #'   rtr2 = c(4,2,3,5,2,1,3,1,1,5,4,2,2,4,2,3,1,1,2,3,5,4,2,1,4,2,1,2,3,5))
 #'
 #' pairApply(rating, FUN = cohenKappa, symmetric = TRUE)
+#'
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept categorical-agreement  
+#' @concept association-measure
+#'
 #'
 #' @export
 cohenKappa <- function(x,

@@ -81,10 +81,15 @@ tukeyBiweight(x, conf.level = 0.95, type = "bca", R = 499)
 
 }
 \seealso{
-Other topic.robustStatistics:
-\code{\link[=huberM]{huberM()}}
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}}
 }
-\concept{bootstrap}
 \concept{location}
 \concept{robust-statistics}
-\concept{topic.robustStatistics}

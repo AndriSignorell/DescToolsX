@@ -47,11 +47,6 @@
 #'   \item{lci}{Lower confidence bound.}
 #'   \item{uci}{Upper confidence bound.}
 #'
-#' @family topic.robustStatistics
-#' @concept robust-statistics
-#' @concept location
-#' @concept bootstrap
-#'
 #' @examples
 #' set.seed(1)
 #' x <- c(rnorm(50), 10)   # one outlier
@@ -65,6 +60,12 @@
 #'
 
 
+
+#' @family location  
+#' @concept location  
+#' @concept robust-statistics
+#'
+#'
 #' @export
 tukeyBiweight <- function(x,
                           conf.level = NA,

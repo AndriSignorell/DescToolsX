@@ -130,11 +130,20 @@ terms of sensitivity and specificity.
 \seealso{
 \code{\link{cohenKappa}}
 
-Other topic.agreement:
-\code{\link[=cohenKappa]{cohenKappa()}}
+Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \concept{agreement}
-\concept{association-measures}
-\concept{inter-rater-reliability}
-\concept{prevalence-adjustment}
-\concept{topic.agreement}
+\concept{assoc.agreement}
+\concept{categorical-agreement}

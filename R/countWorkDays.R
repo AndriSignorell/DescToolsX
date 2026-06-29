@@ -36,9 +36,9 @@
 
 
 #' @rdname date_functions
-#' @family date.utils
-#' @concept date-handling
-#' @concept mathematics
+
+#' @family date.time  
+#' @concept date-time
 #'
 #'
 #' @export

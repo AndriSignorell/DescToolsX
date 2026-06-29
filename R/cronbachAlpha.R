@@ -61,9 +61,10 @@
 #' }
 #' 
 
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept descriptive-statistics
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept internal-consistency  
 #' @concept reliability
 #'
 #'

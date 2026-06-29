@@ -102,10 +102,11 @@
 
 
 #' @rdname etaSq
-#' @family effect.size
-#' @concept effect-size
-#' @concept descriptive-statistics
-#' @concept hypothesis-testing
+
+#' @family effect.size  
+#' @concept effect-size  
+#' @concept variance-analysis  
+#' @concept anova-effect-size
 #'
 #'
 #' @export

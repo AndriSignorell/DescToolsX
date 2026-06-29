@@ -124,9 +124,12 @@ Psychological Methods 8(4), 434-447.
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},
-\code{\link[=glassDelta]{glassDelta()}}
+\code{\link[=cohenH]{cohenH()}},
+\code{\link[=glassDelta]{glassDelta()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=relRisk]{relRisk()}}
 }
-\concept{descriptive-statistics}
+\concept{anova-effect-size}
 \concept{effect-size}
 \concept{effect.size}
-\concept{hypothesis-testing}
+\concept{variance-analysis}

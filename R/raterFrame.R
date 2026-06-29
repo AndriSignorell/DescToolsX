@@ -48,10 +48,10 @@
 
 
 
-#' @family table.utils
-#' @concept table-manipulation
-#' @concept data-manipulation
-#' @concept agreement
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept rater-data
 #'
 #'
 #' @export

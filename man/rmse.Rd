@@ -49,7 +49,9 @@ rmse(fit)
 \seealso{
 \code{\link{mean}}, \code{\link{sqrt}}
 
-Other error.measures:
+Other model.metrics:
+\code{\link[=auc]{auc()}},
+\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=mse]{mse()}},
@@ -57,7 +59,6 @@ Other error.measures:
 \code{\link[=nmse]{nmse()}},
 \code{\link[=smape]{smape()}}
 }
-\concept{descriptive-statistics}
-\concept{error.measures}
-\concept{prediction-accuracy}
-\concept{regression}
+\concept{model-evaluation}
+\concept{model.metrics}
+\concept{prediction-error}

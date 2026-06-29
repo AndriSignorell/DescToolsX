@@ -80,12 +80,16 @@ Yule, G. U. (1912). On the methods of measuring association between two attribut
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
 \code{\link[=lambda]{lambda()}},
+\code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
+\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}}
 }
 \concept{assoc.nominal}
-\concept{association-measures}
-\concept{descriptive-statistics}
-\concept{table-manipulation}
+\concept{association-measure}
+\concept{binary-association}
+\concept{nominal}

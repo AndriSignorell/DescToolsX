@@ -40,6 +40,13 @@
 #'
 
 
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal  
+#' @concept concordance
+#'
+#'
 #' @export
 conDisPairs <- function(x, y = NULL){
   

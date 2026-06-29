@@ -143,9 +143,9 @@
 
 
 #' @rdname date_functions
-#' @family date.utils
-#' @concept date-handling
-#' @concept data-manipulation
+
+#' @family date.time  
+#' @concept date-time
 #'
 #'
 #' @export

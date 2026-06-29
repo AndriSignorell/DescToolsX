@@ -97,7 +97,11 @@ Newbury Park, CA: Sage, pp. 17--24
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
+\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
@@ -108,6 +112,5 @@ Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}, \cr Nanina
 symmetric lambda)
 }
 \concept{assoc.nominal}
-\concept{association-measures}
-\concept{descriptive-statistics}
-\concept{table-manipulation}
+\concept{association-measure}
+\concept{nominal}

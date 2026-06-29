@@ -38,14 +38,10 @@ iqrX(x=x, weights=w)
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=madX]{madX()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{descriptive-statistics}
 \concept{dispersion}
-\concept{robust-statistics}

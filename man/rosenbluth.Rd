@@ -37,13 +37,10 @@ Rosenbluth, G. (1955). Measures of concentration.
 \seealso{
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
+\code{\link[=simpson]{simpson()}}
 }
-\concept{descriptive-statistics}
+\concept{concentration-index}
 \concept{inequality}
-\concept{inequality-measures}

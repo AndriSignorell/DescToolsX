@@ -40,6 +40,12 @@
 #'   \item \code{uci}: upper confidence limit
 #' }
 #'
+
+#' @family location  
+#' @concept location  
+#' @concept robust-statistics
+#'
+#'
 #' @export
 hodgesLehmann <- function(x,
                           y = NULL,

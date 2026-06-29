@@ -108,20 +108,23 @@ Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the 
 \code{\link{cronbachAlpha}}, \code{\link{icc}},
 \code{\link[stats]{friedman.test}}
 
-Other assoc.agreement:
-\code{\link[=cronbachAlpha]{cronbachAlpha()}},
-\code{\link[=icc]{icc()}},
-\code{\link[=kappaM]{kappaM()}},
-\code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}}
+Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=cStat]{cStat()}},
+\code{\link[=conDisPairs]{conDisPairs()}},
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}\cr
 based on code by Matthias Gamer \href{mailto:m.gamer@uke.uni-hamburg.de}{m.gamer@uke.uni-hamburg.de}\cr
 and Markus Brueckl \href{mailto:markus.brueckl@tu-berlin.de}{markus.brueckl@tu-berlin.de}
 }
-\concept{agreement}
-\concept{assoc.agreement}
-\concept{association-measures}
-\concept{nonparametric}
+\concept{assoc.ordinal}
+\concept{association-measure}
+\concept{interrater-agreement}
+\concept{ordinal}

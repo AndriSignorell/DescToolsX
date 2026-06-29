@@ -20,9 +20,9 @@
 #' isDate(31002)
 #' 
 
-#' @family date.utils
-#' @concept date-handling
-#' @concept data-inspection
+
+#' @family date.time  
+#' @concept date-time
 #'
 #'
 #' @export

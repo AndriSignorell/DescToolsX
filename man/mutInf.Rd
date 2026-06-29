@@ -83,3 +83,20 @@ Cover TM, Thomas JA (2006).
 Elements of Information Theory (2nd ed.).
 Wiley.
 }
+\seealso{
+Other assoc.nominal:
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=theil]{theil()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
+\code{\link{yule}}
+}
+\concept{assoc.nominal}
+\concept{association-measure}
+\concept{information-theory}
+\concept{nominal}

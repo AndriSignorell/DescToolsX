@@ -86,12 +86,6 @@
 #'
 #' @seealso \code{\link{cohenKappa}}
 #'
-#' @family topic.agreement
-#' @concept agreement
-#' @concept inter-rater-reliability
-#' @concept association-measures
-#' @concept prevalence-adjustment
-#'
 #' @examples
 #' # 2x2 table: two raters classifying 100 patients as positive / negative
 #' m2 <- matrix(c(45, 15, 5, 35), nrow = 2, byrow = TRUE,
@@ -118,6 +112,12 @@
 #' pabak(x$rater1, x$rater2, conf.level = 0.95)
 #'
 
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept categorical-agreement
+#'
+#'
 #' @export
 pabak <- function(x,
                   y          = NULL,

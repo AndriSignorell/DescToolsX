@@ -104,14 +104,16 @@ Measures of association for cross classifications III.
 
 Other assoc.ordinal:
 \code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=cStat]{cStat()}},
+\code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
-\code{\link[=spearmanCor]{spearmanCor()}},
+\code{\link[=kendallW]{kendallW()}},
 \code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
-\concept{association-measures}
-\concept{descriptive-statistics}
-\concept{nonparametric}
+\concept{association-measure}
+\concept{asymmetric-association}
+\concept{ordinal}

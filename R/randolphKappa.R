@@ -65,10 +65,10 @@
 
 
 #' @rdname randolphKappa
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept association-measures
-#' @concept descriptive-statistics
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept categorical-agreement
 #'
 #'
 #' @export

@@ -44,9 +44,11 @@
 #' imputeKnn(dat, k = 2)
 #' 
 
-#' @family imputation
-#' @concept missing-data
-#' @concept data-manipulation
+
+#' @family impute  
+#' @concept imputation  
+#' @concept missing-value  
+#' @concept machine-learning
 #'
 #'
 #' @export

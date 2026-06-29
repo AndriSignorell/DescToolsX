@@ -41,10 +41,10 @@
 #'
 
 
-#' @family regression.utils
-#' @concept regression
-#' @concept classification-metrics
-#' @concept descriptive-statistics
+
+#' @family model.metrics  
+#' @concept model-evaluation  
+#' @concept roc
 #'
 #'
 #' @export

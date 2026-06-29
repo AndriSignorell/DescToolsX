@@ -107,7 +107,22 @@ reproducibility. \emph{Biometrics}, \emph{45}(1), 255-268.
 Lin, L. I.-K. (2000). A note on the concordance correlation coefficient.
 \emph{Biometrics}, \emph{56}(1), 324-325.
 }
+\seealso{
+Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
+}
 \concept{agreement}
-\concept{concordance}
+\concept{assoc.agreement}
 \concept{correlation}
-\concept{topic.association}
+\concept{reliability}

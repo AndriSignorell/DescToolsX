@@ -48,6 +48,12 @@
 #' ba <- blandAltmanData(x, y)
 #'
 #' @rdname blandAltmanData
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept method-comparison
+#'
+#'
 #' @export
 blandAltmanData <- function(
     x,

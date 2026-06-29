@@ -42,9 +42,9 @@
 
 
 #' @rdname concepts  
-#' @family pkg.introspection
-#' @concept package-utilities
-#' @concept data-inspection
+
+#' @family utils  
+#' @concept programming
 #'
 #'
 #' @export

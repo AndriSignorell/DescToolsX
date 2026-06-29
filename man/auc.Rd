@@ -64,8 +64,17 @@ auc(x, y, absoluteArea = TRUE)
 }
 \seealso{
 \code{\link{approx}}, \code{\link{splinefun}}, \code{\link{integrate}}
+
+Other model.metrics:
+\code{\link[=brierScore]{brierScore()}},
+\code{\link[=mae]{mae()}},
+\code{\link[=mape]{mape()}},
+\code{\link[=mse]{mse()}},
+\code{\link[=nmae]{nmae()}},
+\code{\link[=nmse]{nmse()}},
+\code{\link[=rmse]{rmse()}},
+\code{\link[=smape]{smape()}}
 }
-\concept{classification-metrics}
-\concept{descriptive-statistics}
-\concept{regression}
-\concept{regression.utils}
+\concept{model-evaluation}
+\concept{model.metrics}
+\concept{roc}

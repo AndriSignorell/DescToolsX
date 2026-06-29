@@ -92,14 +92,15 @@
 #' # Vector interface
 #' somersDelta(mtcars$wt, mtcars$mpg)
 #'
-#' @family assoc.ordinal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept nonparametric
-#' 
-#' 
 
 
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal  
+#' @concept asymmetric-association
+#'
+#'
 #' @export
 somersDelta <- function(x, y = NULL,
                         conf.level = NA,

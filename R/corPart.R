@@ -71,10 +71,10 @@
 #'
 
 
-#' @family correlation
-#' @concept correlation
-#' @concept association-measures
-#' @concept descriptive-statistics
+
+#' @family assoc.continuous  
+#' @concept correlation  
+#' @concept association-measure
 #'
 #'
 #' @export

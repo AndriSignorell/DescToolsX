@@ -31,9 +31,10 @@
 #'
 
 
-#' @family error.measures
-#' @concept prediction-accuracy
-#' @concept descriptive-statistics
+
+#' @family model.metrics  
+#' @concept model-evaluation  
+#' @concept prediction-error
 #'
 #'
 #' @export

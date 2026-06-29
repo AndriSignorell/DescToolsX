@@ -62,7 +62,12 @@ Thanks to Antonio:
 \code{\link{month}}, etc.
 
 Other date.time:
-\code{\link{as_ym}}
+\code{\link{as_ym}},
+\code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link[=generation]{generation()}},
+\code{\link[=isDate]{isDate()}},
+\code{\link{time_conversions}},
+\code{\link[=zodiac]{zodiac()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code by Roland

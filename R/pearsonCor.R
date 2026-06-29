@@ -38,10 +38,10 @@
 #' 
 
 
-#' @family correlation
-#' @concept correlation
-#' @concept descriptive-statistics
-#' @concept confidence-intervals
+
+#' @family assoc.continuous  
+#' @concept correlation  
+#' @concept association-measure
 #'
 #'
 #' @export

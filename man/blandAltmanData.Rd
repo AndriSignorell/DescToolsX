@@ -66,3 +66,21 @@ Statistical methods for assessing agreement between two methods of
 clinical measurement.
 \emph{Lancet}, 327, 307-310.
 }
+\seealso{
+Other assoc.agreement:
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
+}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{method-comparison}

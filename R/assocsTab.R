@@ -55,6 +55,7 @@
 #' assocsTab(pain)
 #' 
 
+
 #' @family assoc.ordinal  
 #' @concept association-measure  
 #' @concept ordinal

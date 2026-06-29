@@ -62,3 +62,16 @@ difference in medians (a common misconception) but rather
 the median of the difference between a sample from x and
 a sample from y.
 }
+\seealso{
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
+}
+\concept{location}
+\concept{robust-statistics}

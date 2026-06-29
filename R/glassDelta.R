@@ -38,10 +38,9 @@
 #' @seealso \code{\link{cohenD}}
 #'
 
-#' @family effect.size
+
+#' @family effect.size  
 #' @concept effect-size
-#' @concept descriptive-statistics
-#' @concept hypothesis-testing
 #'
 #'
 #' @export

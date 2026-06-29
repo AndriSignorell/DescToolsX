@@ -77,10 +77,11 @@
 #' res$rho
 #'
 
-#' @family correlation
-#' @concept correlation
-#' @concept association-measures
-#' @concept descriptive-statistics
+
+#' @family assoc.continuous  
+#' @concept correlation  
+#' @concept latent-variable  
+#' @concept ordinal
 #'
 #'
 #' @export

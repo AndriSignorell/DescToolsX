@@ -42,10 +42,10 @@
 # Written by Leanne Chhay
 
 
-#' @family transformations
-#' @concept transformation
-#' @concept descriptive-statistics
-#' @concept regression
+
+#' @family transform  
+#' @concept transformation  
+#' @concept variance-stabilization
 #'
 #'
 #' @export

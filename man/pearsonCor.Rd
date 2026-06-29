@@ -62,11 +62,13 @@ bedrock::pairApply(swiss,
 \seealso{
 \code{\link[lumen]{fisherZ}}, \code{\link[lumen]{fisherZInv}}
 
-Other correlation:
+Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
-\code{\link[=hoeffdingD]{hoeffdingD()}}
+\code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=keepSig]{keepSig()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
 \author{
 William Revelle
@@ -75,6 +77,6 @@ slight modifications Andri Signorell
 \href{mailto:andri@signorell.net}{andri@signorell.net} based on R-Core
 code
 }
-\concept{confidence-intervals}
+\concept{assoc.continuous}
+\concept{association-measure}
 \concept{correlation}
-\concept{descriptive-statistics}

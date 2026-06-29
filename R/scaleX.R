@@ -42,10 +42,10 @@
 
 
 
-#' @family transformations
-#' @concept transformation
-#' @concept descriptive-statistics
-#' @concept robust-statistics
+
+#' @family transform  
+#' @concept transformation  
+#' @concept standardization
 #'
 #'
 #' @export

@@ -46,10 +46,11 @@
 #' 
 
 
-#' @family assoc.nominal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept table-manipulation
+
+#' @family assoc.nominal  
+#' @concept association-measure  
+#' @concept nominal  
+#' @concept chi-square-based
 #'
 #'
 #' @export

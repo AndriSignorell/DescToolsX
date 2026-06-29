@@ -83,12 +83,14 @@ corPart(C, x = 1:2, y = 3:4)
 \code{\link[stats]{cor}}, \code{\link[stats]{cov}},
 \code{\link[MASS]{ginv}} for generalized inverse
 
-Other correlation:
+Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=pearsonCor]{pearsonCor()}}
+\code{\link[=keepSig]{keepSig()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
-\concept{association-measures}
+\concept{assoc.continuous}
+\concept{association-measure}
 \concept{correlation}
-\concept{descriptive-statistics}

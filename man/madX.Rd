@@ -84,11 +84,8 @@ stopifnot(identical(m1, m2))
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=iqrX]{iqrX()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}
 }
-\concept{descriptive-statistics}
 \concept{dispersion}
 \concept{robust-statistics}

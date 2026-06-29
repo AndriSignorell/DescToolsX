@@ -75,13 +75,15 @@
 #' # Vector interface
 #' gkGamma(mtcars$wt, mtcars$mpg)
 #'
-#' @family assoc.ordinal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept nonparametric
 
 
 
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal
+#'
+#'
 #' @export
 gkGamma <- function(x, y = NULL,
                     conf.level = NA, ...){

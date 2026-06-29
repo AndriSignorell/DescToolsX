@@ -53,11 +53,12 @@
 #' @rdname as_ym
 
 
-#' @family date.time
+
+
+#' @family date.time  
 #' @concept date-time
 #'
 #'
-
 #' @export
 as.ym <- function(x){
   

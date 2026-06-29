@@ -102,16 +102,15 @@ freq(as.table(c(2,4,12,8)))
 \code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
 \code{\link{freq2D}}
 
-Other freq.tables:
+Other frequency:
 \code{\link[=expFreq]{expFreq()}},
 \code{\link[=freq2D]{freq2D()}},
-\code{\link[=percTable]{percTable()}}
+\code{\link[=percTable]{percTable()}},
+\code{\link[=tOne]{tOne()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{descriptive-statistics}
-\concept{freq.tables}
-\concept{frequency-analysis}
-\concept{table-manipulation}
+\concept{frequency}
+\concept{frequency-table}
 \keyword{univar}

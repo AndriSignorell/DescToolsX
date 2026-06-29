@@ -77,10 +77,6 @@
 #'
 #' @seealso \code{\link[stats]{predict}}
 #'
-#' @family topic.modelEvaluation
-#' @concept predictive-accuracy
-#' @concept bootstrap
-#'
 #' @examples
 #' set.seed(1)
 #' resp <- rbinom(200, 1, 0.4)
@@ -92,6 +88,12 @@
 #' brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
 #'
 
+
+#' @family model.metrics  
+#' @concept model-evaluation  
+#' @concept calibration
+#'
+#'
 #' @export
 brierScore <- function(x,
                        pred       = NULL,

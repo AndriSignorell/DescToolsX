@@ -50,7 +50,9 @@ smape(fit)
 
 }
 \seealso{
-Other error.measures:
+Other model.metrics:
+\code{\link[=auc]{auc()}},
+\code{\link[=brierScore]{brierScore()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=mse]{mse()}},
@@ -58,6 +60,6 @@ Other error.measures:
 \code{\link[=nmse]{nmse()}},
 \code{\link[=rmse]{rmse()}}
 }
-\concept{descriptive-statistics}
-\concept{error.measures}
-\concept{prediction-accuracy}
+\concept{model-evaluation}
+\concept{model.metrics}
+\concept{prediction-error}

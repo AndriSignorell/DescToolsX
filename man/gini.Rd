@@ -85,13 +85,10 @@ gini(x, conf.level = 0.95, R = 499)
 \seealso{
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
+\code{\link[=simpson]{simpson()}}
 }
-\concept{descriptive-statistics}
+\concept{concentration-index}
 \concept{inequality}
-\concept{inequality-measures}

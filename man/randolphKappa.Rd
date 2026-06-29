@@ -71,14 +71,19 @@ An Alternative to Fleiss’ Fixed-Marginal Multirater Kappa. Online submission.
 }
 \seealso{
 Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
-\code{\link[=kendallW]{kendallW()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=percAgreement]{percAgreement()}}
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \concept{agreement}
 \concept{assoc.agreement}
-\concept{association-measures}
-\concept{descriptive-statistics}
+\concept{categorical-agreement}

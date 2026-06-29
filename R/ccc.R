@@ -84,10 +84,12 @@
 #'   R = 999
 #' )
 #'
-#' @family topic.association
-#' @concept agreement
-#' @concept concordance
-#' @concept correlation
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept correlation  
+#' @concept reliability
+#'
 #'
 #' @export
 ccc <- function(

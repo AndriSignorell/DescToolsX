@@ -87,9 +87,10 @@
 
 
 #' @rdname logSt
-#' @family transformations
-#' @concept transformation
-#' @concept descriptive-statistics
+
+#' @family transform  
+#' @concept transformation  
+#' @concept variance-stabilization
 #'
 #'
 #' @export

@@ -33,9 +33,10 @@
 #' (iris.lof <- lof(iris[,-5], 10))
 #' 
 
-#' @family outlier
-#' @concept outlier-detection
-#' @concept descriptive-statistics
+
+#' @family impute  
+#' @concept outlier-detection  
+#' @concept machine-learning
 #'
 #'
 #' @export

@@ -69,3 +69,18 @@ entropy(tab, normalize = TRUE)
 Shannon CE (1948). A Mathematical Theory of Communication.
 Bell System Technical Journal, 27, 379-423.
 }
+\seealso{
+Other assoc.nominal:
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=theil]{theil()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
+\code{\link{yule}}
+}
+\concept{assoc.nominal}
+\concept{information-theory}

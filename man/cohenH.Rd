@@ -93,3 +93,14 @@ cohenH(x, y)
 Cohen J (1988). Statistical Power Analysis for the Behavioral
 Sciences (2nd ed.). Lawrence Erlbaum Associates.
 }
+\seealso{
+Other effect.size:
+\code{\link[=cohenD]{cohenD()}},
+\code{\link[=etaSq]{etaSq()}},
+\code{\link[=glassDelta]{glassDelta()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=relRisk]{relRisk()}}
+}
+\concept{binary-outcome}
+\concept{effect-size}
+\concept{effect.size}

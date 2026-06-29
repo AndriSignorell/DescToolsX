@@ -101,12 +101,14 @@
 #'   method = "use-or"
 #' )
 #'
-#' @family topic.contingencyTables
-#' @concept relative-risk
-#' @concept contingency-tables
-#' @concept epidemiology
 
 
+
+#' @family effect.size  
+#' @concept effect-size  
+#' @concept binary-outcome
+#'
+#'
 #' @export
 relRisk <- function(
     x,

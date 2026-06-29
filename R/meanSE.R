@@ -26,9 +26,10 @@
 #' 
 
 
-#' @family dispersion
-#' @concept descriptive-statistics
-#' @concept confidence-intervals
+
+#' @family location  
+#' @concept location  
+#' @concept confidence-interval
 #'
 #'
 #' @export

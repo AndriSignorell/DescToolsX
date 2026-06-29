@@ -51,10 +51,9 @@
 #' 
 #' 
 
-#' @family outlier
+
+#' @family impute  
 #' @concept outlier-detection
-#' @concept descriptive-statistics
-#' @concept data-inspection
 #'
 #'
 #' @export

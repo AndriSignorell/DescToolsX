@@ -51,13 +51,11 @@ Journal of Economic Theory.
 }
 \seealso{
 Other inequality:
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
+\code{\link[=simpson]{simpson()}}
 }
 \concept{concentration-index}
 \concept{inequality}

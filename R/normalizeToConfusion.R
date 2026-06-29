@@ -116,13 +116,15 @@
 #'              subset = rater %in% c("rater1", "rater2"), dropSubj = TRUE)
 #' )
 #'
-#' @family confusion
-#' @concept classification-metrics
-#' @concept data-manipulation
-#' @concept table-manipulation
 
 
 
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept confusion-matrix
+#'
+#'
 #' @export
 normalizeToConfusion <- function(
     x,

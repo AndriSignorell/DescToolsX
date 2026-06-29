@@ -137,10 +137,21 @@ reliability of scoring EEG sleep recordings.
 \seealso{
 \code{\link{kappaM}}, \code{\link[bedrock]{pairApply}}
 
-Other topic.agreement:
-\code{\link[=pabak]{pabak()}}
+Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \concept{agreement}
-\concept{association-measures}
-\concept{inter-rater-reliability}
-\concept{topic.agreement}
+\concept{assoc.agreement}
+\concept{association-measure}
+\concept{categorical-agreement}

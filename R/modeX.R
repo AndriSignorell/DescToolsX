@@ -82,8 +82,9 @@
  
 
 
-#' @family location
-#' @concept descriptive-statistics
+
+#' @family location  
+#' @concept location
 #'
 #'
 #' @export

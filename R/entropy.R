@@ -59,6 +59,11 @@
 #'
 
 
+
+#' @family assoc.nominal  
+#' @concept information-theory
+#'
+#'
 #' @export
 entropy <- function(x,
                     y = NULL,

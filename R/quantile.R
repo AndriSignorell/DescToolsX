@@ -35,9 +35,10 @@
  
 # further weighted quantiles in Hmisc and modi, both on CRAN
 
-#' @family quantiles
-#' @concept descriptive-statistics
-#' @concept robust-statistics
+
+#' @family quantile  
+#' @concept quantile  
+#' @concept distribution-summary
 #'
 #'
 #' @export 

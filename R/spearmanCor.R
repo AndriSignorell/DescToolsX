@@ -41,10 +41,10 @@
 #'      spearmanCor(adverse, dose, conf.level=0.95))
 #' 
 
-#' @family assoc.ordinal
-#' @concept association-measures
-#' @concept correlation
-#' @concept nonparametric
+
+#' @family assoc.continuous  
+#' @concept correlation  
+#' @concept rank-correlation
 #'
 #'
 #' @export 

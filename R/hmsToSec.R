@@ -28,13 +28,12 @@
 
 
 #' @rdname time_conversions
-#' @family date.utils
-#' @concept date-handling
-#' @concept data-manipulation
-#' @concept string-manipulation
-#'
-#'
 
+
+#' @family date.time  
+#' @concept date-time
+#'
+#'
 #' @export
 hmsToMinute <- function(x){
   hour(x)*60 + minute(x) + second(x)/60

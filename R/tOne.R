@@ -230,10 +230,10 @@
 
 
 #' @rdname tOne
-#' @family table.utils
-#' @concept table-manipulation
-#' @concept descriptive-statistics
-#' @concept data-description
+
+#' @family frequency  
+#' @concept frequency-table  
+#' @concept table-summary
 #'
 #'
 #' @export

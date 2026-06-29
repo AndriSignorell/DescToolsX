@@ -50,10 +50,10 @@
 
 
 
-#' @family correlation
-#' @concept correlation
-#' @concept data-inspection
-#' @concept regression
+
+#' @family assoc.continuous  
+#' @concept correlation  
+#' @concept feature-selection
 #'
 #'
 #' @export

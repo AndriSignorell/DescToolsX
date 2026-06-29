@@ -68,7 +68,12 @@ addMonths(c(201511, 201302), c(5, -4))
 \code{\link{month}}, etc.
 
 Other date.time:
-\code{\link[=addMonths]{addMonths()}}
+\code{\link[=addMonths]{addMonths()}},
+\code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link[=generation]{generation()}},
+\code{\link[=isDate]{isDate()}},
+\code{\link{time_conversions}},
+\code{\link[=zodiac]{zodiac()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, originally based on code by

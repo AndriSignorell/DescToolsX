@@ -66,14 +66,15 @@
 #'
 #' kendallTauA(x, y, conf.level=0.95)
 #'
-#' @family assoc.ordinal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept nonparametric
-#' 
-#' 
 
 
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal  
+#' @concept rank-correlation
+#'
+#'
 #' @export
 kendallTauA <- function(x, y = NULL,
                         conf.level = NA,

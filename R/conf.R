@@ -76,10 +76,11 @@
 #' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 #' conf(m)
 #'
-#' @family confusion
-#' @concept classification-metrics
-#' @concept descriptive-statistics
-#' @concept table-manipulation
+
+#' @family model.classification  
+#' @concept model-evaluation  
+#' @concept confusion-matrix  
+#' @concept classification
 #'
 #'
 #' @export

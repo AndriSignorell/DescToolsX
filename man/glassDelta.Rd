@@ -52,9 +52,10 @@ glassDelta(x, y, conf.level = 0.95)
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},
-\code{\link[=etaSq]{etaSq()}}
+\code{\link[=cohenH]{cohenH()}},
+\code{\link[=etaSq]{etaSq()}},
+\code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=relRisk]{relRisk()}}
 }
-\concept{descriptive-statistics}
 \concept{effect-size}
 \concept{effect.size}
-\concept{hypothesis-testing}

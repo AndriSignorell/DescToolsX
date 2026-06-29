@@ -79,9 +79,9 @@
 #' @seealso \code{\link{summary}}, \code{\link{plot}}
 
 #' @rdname desc
-#' @family desc
-#' @concept data-description
-#' @concept descriptive-statistics
+
+#' @family descriptive  
+#' @concept summary
 #'
 #'
 #' @export

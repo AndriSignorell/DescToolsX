@@ -32,9 +32,10 @@ isDate(31002)
 \seealso{
 \code{\link{year}}, \code{\link{month}}, etc.
 
-Other date.utils:
+Other date.time:
+\code{\link[=addMonths]{addMonths()}},
+\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=cutAge]{cutAge()}},
 \code{\link[=generation]{generation()}},
 \code{\link{time_conversions}},
 \code{\link[=zodiac]{zodiac()}}
@@ -42,8 +43,7 @@ Other date.utils:
 \author{
 Frank E Harrell
 }
-\concept{data-inspection}
-\concept{date-handling}
-\concept{date.utils}
+\concept{date-time}
+\concept{date.time}
 \keyword{chron}
 \keyword{logic}

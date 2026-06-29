@@ -180,16 +180,15 @@ functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
 package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of
 the flexibility we needed here. \cr
 
-Other freq.tables:
+Other frequency:
 \code{\link[=expFreq]{expFreq()}},
 \code{\link[=freq]{freq()}},
-\code{\link[=freq2D]{freq2D()}}
+\code{\link[=freq2D]{freq2D()}},
+\code{\link[=tOne]{tOne()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{descriptive-statistics}
-\concept{freq.tables}
-\concept{frequency-analysis}
-\concept{table-manipulation}
+\concept{frequency}
+\concept{frequency-table}
 \keyword{multivariate}

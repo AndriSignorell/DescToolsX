@@ -98,7 +98,7 @@ transformations for gene-expression microarray data, \emph{Bioinformatics}.
 \seealso{
 \code{\link{log}}, \code{\link{log10}}
 
-Other transformations:
+Other transform:
 \code{\link[=boxCox]{boxCox()}},
 \code{\link[=boxCoxLambda]{boxCoxLambda()}},
 \code{\link[=scaleX]{scaleX()}},
@@ -108,7 +108,7 @@ Other transformations:
 Werner A. Stahel, ETH Zurich \cr slight modifications Andri
 Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{descriptive-statistics}
+\concept{transform}
 \concept{transformation}
-\concept{transformations}
+\concept{variance-stabilization}
 \keyword{math}

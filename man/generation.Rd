@@ -33,9 +33,10 @@ generation(c(1946, 1964, 1972, 2001, 2003, 2018, 2026))
 \seealso{
 \code{\link{cutAge}}, \code{\link{zodiac}}
 
-Other date.utils:
+Other date.time:
+\code{\link[=addMonths]{addMonths()}},
+\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=cutAge]{cutAge()}},
 \code{\link[=isDate]{isDate()}},
 \code{\link{time_conversions}},
 \code{\link[=zodiac]{zodiac()}}
@@ -43,7 +44,6 @@ Other date.utils:
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{data-manipulation}
-\concept{date-handling}
-\concept{date.utils}
-\concept{factor-handling}
+\concept{categorization}
+\concept{date-time}
+\concept{date.time}

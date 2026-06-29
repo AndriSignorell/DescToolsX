@@ -86,6 +86,9 @@ abstract(d.mydata)
 \seealso{
 \code{\link[utils:str]{utils::str()}}, \code{\link[base:summary]{base::summary()}}, \code{\link[bedrock:columnWrap]{columnWrap()}},
 \code{\link[=desc]{desc()}}
+
+Other descriptive:
+\code{\link[=desc]{desc()}}
 }
 \concept{descriptive}
 \concept{summary}

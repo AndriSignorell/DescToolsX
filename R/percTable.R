@@ -120,10 +120,9 @@
 #' 
  
 
-#' @family freq.tables
-#' @concept frequency-analysis
-#' @concept descriptive-statistics
-#' @concept table-manipulation
+
+#' @family frequency  
+#' @concept frequency-table
 #'
 #'
 #' @export

@@ -99,10 +99,11 @@
 #' 
 
 
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept association-measures
-#' @concept nonparametric
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal  
+#' @concept interrater-agreement
 #'
 #'
 #' @export

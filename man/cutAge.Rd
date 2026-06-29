@@ -58,17 +58,12 @@ desc(cutAge(sample(0:100, size=100, replace=TRUE)))
 \seealso{
 \code{\link{cut}}, \code{\link{seq}}
 
-Other date.utils:
-\code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=generation]{generation()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}},
-\code{\link[=zodiac]{zodiac()}}
+Other cut:
+\code{\link[=cutQ]{cutQ()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{data-manipulation}
-\concept{date-handling}
-\concept{date.utils}
-\concept{factor-handling}
+\concept{binning}
+\concept{cut}
+\concept{demographics}

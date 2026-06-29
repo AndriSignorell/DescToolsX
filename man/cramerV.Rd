@@ -112,8 +112,12 @@ Other topic.associationMeasures:
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
+\code{\link[=divCoef]{divCoef()}},
+\code{\link[=entropy]{entropy()}},
 \code{\link[=lambda]{lambda()}},
+\code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
+\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
@@ -124,10 +128,10 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Mich
 }
 \concept{assoc.nominal}
 \concept{association}
-\concept{association-measures}
+\concept{association-measure}
+\concept{chi-square-based}
 \concept{contingency-tables}
-\concept{descriptive-statistics}
 \concept{effect-size}
+\concept{nominal}
 \concept{nominal-data}
-\concept{table-manipulation}
 \concept{topic.associationMeasures}

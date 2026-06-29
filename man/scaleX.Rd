@@ -37,7 +37,7 @@ points(x=seq_along(x), y=scale(x), col="red" )
 \seealso{
 \link[base:scale]{base::scale}, \link[base:sweep]{base::sweep}
 
-Other transformations:
+Other transform:
 \code{\link[=boxCox]{boxCox()}},
 \code{\link[=boxCoxLambda]{boxCoxLambda()}},
 \code{\link[=logSt]{logSt()}},
@@ -47,8 +47,8 @@ Other transformations:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{data processing}
-\concept{descriptive-statistics}
 \concept{robust-statistics}
+\concept{standardization}
 \concept{topic.dataProcessing}
+\concept{transform}
 \concept{transformation}
-\concept{transformations}

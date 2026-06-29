@@ -38,18 +38,19 @@ sapply(Pizza[,1:4], meanSE, na.rm=TRUE)
 \seealso{
 \code{\link[lumen]{meanCI}}
 
-Other dispersion:
-\code{\link[=coefVar]{coefVar()}},
-\code{\link[=iqrX]{iqrX()}},
-\code{\link[=madX]{madX()}},
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
 \code{\link[=meanAD]{meanAD()}},
-\code{\link[=rangeX]{rangeX()}},
-\code{\link[=varX]{varX()}}
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{confidence-intervals}
-\concept{descriptive-statistics}
-\concept{dispersion}
+\concept{confidence-interval}
+\concept{location}
 \keyword{univar}

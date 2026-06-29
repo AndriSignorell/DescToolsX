@@ -46,3 +46,19 @@ tab <- table(x, y)
 conDisPairs(tab)
 
 }
+\seealso{
+Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=cStat]{cStat()}},
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
+}
+\concept{assoc.ordinal}
+\concept{association-measure}
+\concept{concordance}
+\concept{ordinal}

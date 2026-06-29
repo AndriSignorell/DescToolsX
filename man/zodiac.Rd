@@ -46,9 +46,10 @@ desc(z)
 \seealso{
 \code{\link{year}} and other date functions
 
-Other date.utils:
+Other date.time:
+\code{\link[=addMonths]{addMonths()}},
+\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=cutAge]{cutAge()}},
 \code{\link[=generation]{generation()}},
 \code{\link[=isDate]{isDate()}},
 \code{\link{time_conversions}}
@@ -57,7 +58,7 @@ Other date.utils:
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code from Markus
 Naepflin
 }
-\concept{data-manipulation}
-\concept{date-handling}
-\concept{date.utils}
+\concept{categorization}
+\concept{date-time}
+\concept{date.time}
 \keyword{chron}

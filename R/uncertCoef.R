@@ -48,10 +48,11 @@
 #' uncertCoef(m, direction="column")
 
 
-#' @family assoc.nominal
-#' @concept association-measures
+
+#' @family assoc.nominal  
+#' @concept association-measure  
+#' @concept nominal  
 #' @concept information-theory
-#' @concept descriptive-statistics
 #'
 #'
 #' @export

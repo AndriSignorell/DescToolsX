@@ -41,16 +41,16 @@ expFreq(UCBAdmissions, freq="r")
 \seealso{
 \code{\link{chisq.test}}
 
-Other freq.tables:
+Other frequency:
 \code{\link[=freq]{freq()}},
 \code{\link[=freq2D]{freq2D()}},
-\code{\link[=percTable]{percTable()}}
+\code{\link[=percTable]{percTable()}},
+\code{\link[=tOne]{tOne()}}
 }
 \author{
 David Meyer \href{mailto:David.Meyer@R-project.org}{David.Meyer@R-project.org}
 }
-\concept{freq.tables}
-\concept{frequency-analysis}
-\concept{hypothesis-testing}
-\concept{table-manipulation}
+\concept{chi-square-based}
+\concept{frequency}
+\concept{frequency-table}
 \keyword{multivariate}

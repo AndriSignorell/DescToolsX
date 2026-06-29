@@ -74,12 +74,18 @@ Cohen, J. (1960), A coefficient of agreement for nominal scales.
 \code{\link{cohenKappa}}, \code{\link{kappaM}}
 
 Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
-\code{\link[=kendallW]{kendallW()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
 \code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}}
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code of Harold C.
@@ -87,5 +93,5 @@ Doran
 }
 \concept{agreement}
 \concept{assoc.agreement}
-\concept{descriptive-statistics}
+\concept{internal-consistency}
 \concept{reliability}

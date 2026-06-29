@@ -67,17 +67,14 @@ See \code{\link{gini}}, \code{\link{atkinson}} and
 
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
+\code{\link[=simpson]{simpson()}}
 }
 \author{
 originally based on code of Achim Zeileis \href{mailto:achim.zeileis@r-project.org}{achim.zeileis@r-project.org},
 rewritten by Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{descriptive-statistics}
+\concept{concentration-index}
 \concept{inequality}
-\concept{inequality-measures}

@@ -48,9 +48,10 @@
 #' 
 
 
-#' @family imputation
-#' @concept missing-data
-#' @concept data-manipulation
+
+#' @family impute  
+#' @concept imputation  
+#' @concept missing-value
 #'
 #'
 #' @export

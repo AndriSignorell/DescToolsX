@@ -253,10 +253,12 @@ ToWrd(
 \seealso{
 \code{\link[bedrock]{appendX}()}
 
-Other table.utils:
-\code{\link[=raterFrame]{raterFrame()}}
+Other frequency:
+\code{\link[=expFreq]{expFreq()}},
+\code{\link[=freq]{freq()}},
+\code{\link[=freq2D]{freq2D()}},
+\code{\link[=percTable]{percTable()}}
 }
-\concept{data-description}
-\concept{descriptive-statistics}
-\concept{table-manipulation}
-\concept{table.utils}
+\concept{frequency}
+\concept{frequency-table}
+\concept{table-summary}

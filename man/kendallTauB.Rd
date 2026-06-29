@@ -81,14 +81,16 @@ Sampling behavior of tests for correlation in two-way contingency tables.
 
 Other assoc.ordinal:
 \code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=cStat]{cStat()}},
+\code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallW]{kendallW()}},
 \code{\link[=somersDelta]{somersDelta()}},
-\code{\link[=spearmanCor]{spearmanCor()}},
 \code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
-\concept{association-measures}
-\concept{descriptive-statistics}
-\concept{nonparametric}
+\concept{association-measure}
+\concept{ordinal}
+\concept{rank-correlation}

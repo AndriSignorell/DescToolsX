@@ -42,11 +42,6 @@
 #'
 #' @seealso \code{\link{boxCox}}, \code{\link{boxCoxInv}}
 #'
-#' @family transformations
-#' @concept transformation
-#' @concept descriptive-statistics
-#' @concept regression
-#'
 #' @examples
 #' set.seed(1)
 #' x <- rnorm(500)
@@ -62,6 +57,12 @@
 #'
 
 
+
+#' @family transform  
+#' @concept transformation  
+#' @concept variance-stabilization
+#'
+#'
 #' @export
 yeoJohnson <- function(x, lambda, tol = 1e-6) {
   

@@ -30,10 +30,10 @@
 #' 
 
 
-#' @family freq.tables
-#' @concept frequency-analysis
-#' @concept table-manipulation
-#' @concept hypothesis-testing
+
+#' @family frequency  
+#' @concept frequency-table  
+#' @concept chi-square-based
 #'
 #'
 #' @export

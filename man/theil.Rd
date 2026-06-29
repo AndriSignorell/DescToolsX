@@ -45,16 +45,19 @@ are present, \code{NA} is returned.
 Theil, H. (1967). Economics and Information Theory.
 }
 \seealso{
-Other inequality:
-\code{\link[=atkinson]{atkinson()}},
+Other assoc.nominal:
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
 \code{\link[=divCoef]{divCoef()}},
-\code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
-\code{\link[=lc]{lc()}},
-\code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}}
+\code{\link[=entropy]{entropy()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
+\code{\link{yule}}
 }
-\concept{descriptive-statistics}
-\concept{inequality}
-\concept{inequality-measures}
+\concept{assoc.nominal}
+\concept{association-measure}
 \concept{information-theory}
+\concept{nominal}

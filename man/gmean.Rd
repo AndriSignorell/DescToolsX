@@ -117,10 +117,14 @@ SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
 
 Other location:
 \code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}}
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
-\concept{descriptive-statistics}
 \concept{location}
-\concept{transformation}
+\concept{nonlinear-mean}
 \keyword{arith}

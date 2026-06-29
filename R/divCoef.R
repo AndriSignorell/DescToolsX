@@ -32,9 +32,10 @@
 #'
 
 
-#' @family inequality
-#' @concept inequality-measures
-#' @concept descriptive-statistics
+
+#' @family assoc.nominal  
+#' @concept association-measure  
+#' @concept nominal
 #'
 #'
 #' @export

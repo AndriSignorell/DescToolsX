@@ -75,12 +75,14 @@
 #' # Vector interface
 #' stuartTauC(mtcars$wt, mtcars$mpg)
 #'
-#' @family assoc.ordinal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept nonparametric
 
 
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal
+#'
+#'
 #' @export
 stuartTauC <- function(x, y = NULL,
                        conf.level = NA,

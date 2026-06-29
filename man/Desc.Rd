@@ -254,6 +254,9 @@ Forecasting: Principles and Practice.
 \code{\link[tseries]{adf.test}},
 \code{\link[tseries]{kpss.test}}
 
+Other descriptive:
+\code{\link[=abstract]{abstract()}}
+
 Other desc:
 \code{\link[=desc.Date]{desc.Date()}},
 \code{\link[=desc.factor]{desc.factor()}},
@@ -269,5 +272,7 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{data-description}
 \concept{desc}
+\concept{descriptive}
 \concept{descriptive-statistics}
+\concept{summary}
 \concept{time-series}

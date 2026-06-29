@@ -92,12 +92,18 @@ scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
 \code{\link{cohenKappa}}
 
 Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=kendallW]{kendallW()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
 \code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}}
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \author{
 Matthias Gamer, with some modifications by Andri Signorell
@@ -105,5 +111,4 @@ Matthias Gamer, with some modifications by Andri Signorell
 }
 \concept{agreement}
 \concept{assoc.agreement}
-\concept{association-measures}
-\concept{descriptive-statistics}
+\concept{categorical-agreement}

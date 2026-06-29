@@ -81,9 +81,10 @@
 
 
 #' @rdname krippAlpha
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept descriptive-statistics
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept categorical-agreement  
 #' @concept reliability
 #'
 #'

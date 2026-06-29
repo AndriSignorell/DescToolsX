@@ -61,13 +61,23 @@ raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
 \seealso{
 \code{\link{krippAlpha}}
 
-Other table.utils:
-\code{\link[=tOne]{tOne()}}
+Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{agreement}
-\concept{data-manipulation}
-\concept{table-manipulation}
-\concept{table.utils}
+\concept{assoc.agreement}
+\concept{rater-data}

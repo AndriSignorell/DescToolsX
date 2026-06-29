@@ -36,10 +36,10 @@
 
 
  
-#' @family date.utils
-#' @concept date-handling
-#' @concept data-manipulation
-#' @concept factor-handling
+
+#' @family cut  
+#' @concept binning  
+#' @concept demographics
 #'
 #'
 #' @export

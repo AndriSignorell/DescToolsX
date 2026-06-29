@@ -69,7 +69,15 @@ plotWeb(keepSig(m, p = p))
 \seealso{
 \code{\link[aurora]{plotWeb}}, \code{\link[aurora]{plotCor}},
 \code{\link[stats]{cor.test}}
+
+Other assoc.continuous:
+\code{\link[=corPart]{corPart()}},
+\code{\link[=corPolychor]{corPolychor()}},
+\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
+\concept{assoc.continuous}
 \concept{correlation}
-\concept{hypothesis-testing}
-\concept{matrix.utils}
+\concept{multiple-testing}

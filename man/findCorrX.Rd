@@ -67,12 +67,14 @@ findCorrX(cmat, cutoff = 0.8, method = "max", output = "names")
 
 }
 \seealso{
-Other correlation:
+Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=pearsonCor]{pearsonCor()}}
+\code{\link[=keepSig]{keepSig()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
+\concept{assoc.continuous}
 \concept{correlation}
-\concept{data-inspection}
-\concept{regression}
+\concept{feature-selection}

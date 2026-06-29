@@ -69,9 +69,10 @@
 
 
 #' @rdname extremes
-#' @family quantiles
-#' @concept descriptive-statistics
-#' @concept vector-manipulation
+
+#' @family quantile  
+#' @concept order-statistic  
+#' @concept distribution-summary
 #'
 #'
 #' @export

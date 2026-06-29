@@ -63,9 +63,12 @@ imputeKnn(dat, k = 2)
 \seealso{
 \code{\link{impute}}, \code{\link[bedrock]{locf}}
 
-Other imputation:
-\code{\link[=impute]{impute()}}
+Other impute:
+\code{\link[=impute]{impute()}},
+\code{\link[=lof]{lof()}},
+\code{\link[=outlier]{outlier()}}
 }
-\concept{data-manipulation}
 \concept{imputation}
-\concept{missing-data}
+\concept{impute}
+\concept{machine-learning}
+\concept{missing-value}

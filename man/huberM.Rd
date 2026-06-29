@@ -117,11 +117,15 @@ Huber, P. J. (1981). \emph{Robust Statistics}. Wiley.
 \code{\link[MASS]{huber}}, \code{\link{mad}},
 \code{\link{tukeyBiweight}}
 
-Other topic.robustStatistics:
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
-\concept{bootstrap}
-\concept{descriptive-statistics}
 \concept{location}
 \concept{robust-statistics}
-\concept{topic.robustStatistics}

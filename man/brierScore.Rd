@@ -108,7 +108,17 @@ brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
 }
 \seealso{
 \code{\link[stats]{predict}}
+
+Other model.metrics:
+\code{\link[=auc]{auc()}},
+\code{\link[=mae]{mae()}},
+\code{\link[=mape]{mape()}},
+\code{\link[=mse]{mse()}},
+\code{\link[=nmae]{nmae()}},
+\code{\link[=nmse]{nmse()}},
+\code{\link[=rmse]{rmse()}},
+\code{\link[=smape]{smape()}}
 }
-\concept{bootstrap}
-\concept{predictive-accuracy}
-\concept{topic.modelEvaluation}
+\concept{calibration}
+\concept{model-evaluation}
+\concept{model.metrics}

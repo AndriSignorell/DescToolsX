@@ -96,12 +96,15 @@ Fox, J. (2016). \emph{Applied Regression Analysis and Generalized Linear Models}
 \seealso{
 \code{\link[mvtnorm]{pmvnorm}}, \code{\link[stats]{optim}}
 
-Other correlation:
+Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=pearsonCor]{pearsonCor()}}
+\code{\link[=keepSig]{keepSig()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
-\concept{association-measures}
+\concept{assoc.continuous}
 \concept{correlation}
-\concept{descriptive-statistics}
+\concept{latent-variable}
+\concept{ordinal}

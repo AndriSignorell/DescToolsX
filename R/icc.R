@@ -109,11 +109,11 @@
 
 
 #' @rdname icc
-#' @family assoc.agreement
-#' @concept agreement
-#' @concept correlation
-#' @concept descriptive-statistics
-#' @concept reliability
+
+#' @family assoc.agreement  
+#' @concept agreement  
+#' @concept reliability  
+#' @concept variance-component
 #'
 #'
 #' @export

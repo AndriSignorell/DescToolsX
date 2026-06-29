@@ -134,15 +134,20 @@ Forming inferences about some intraclass correlation coefficients.
 }
 \seealso{
 Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
-\code{\link[=kendallW]{kendallW()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
+\code{\link[=pabak]{pabak()}},
 \code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}}
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
 \concept{agreement}
 \concept{assoc.agreement}
-\concept{correlation}
-\concept{descriptive-statistics}
 \concept{reliability}
+\concept{variance-component}

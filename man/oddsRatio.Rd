@@ -136,12 +136,13 @@ Gart, J. J. (1966). Alternative analyses of contingency tables.
 \seealso{
 \code{\link{relRisk}}, \code{\link{attachAliases}}
 
-Other topic.contingencyTables:
+Other effect.size:
+\code{\link[=cohenD]{cohenD()}},
+\code{\link[=cohenH]{cohenH()}},
+\code{\link[=etaSq]{etaSq()}},
+\code{\link[=glassDelta]{glassDelta()}},
 \code{\link[=relRisk]{relRisk()}}
 }
-\concept{contingency-tables}
-\concept{epidemiology}
-\concept{logistic-regression}
-\concept{odds-ratio}
-\concept{topic.contingencyTables}
-\concept{topic.regressionModels}
+\concept{binary-outcome}
+\concept{effect-size}
+\concept{effect.size}

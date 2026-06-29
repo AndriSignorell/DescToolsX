@@ -290,8 +290,9 @@ diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"), method = "us")
 \code{\link{strptime}}, \code{\link{DateTimeClasses}},
 \code{\link{as.POSIXlt}}, \code{\link{countWorkDays}}
 
-Other date.utils:
-\code{\link[=cutAge]{cutAge()}},
+Other date.time:
+\code{\link[=addMonths]{addMonths()}},
+\code{\link{as_ym}},
 \code{\link[=generation]{generation()}},
 \code{\link[=isDate]{isDate()}},
 \code{\link{time_conversions}},
@@ -302,8 +303,6 @@ Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 
 Andri Signorell \email{andri@signorell.net}
 }
-\concept{data-manipulation}
-\concept{date-handling}
-\concept{date.utils}
-\concept{mathematics}
+\concept{date-time}
+\concept{date.time}
 \keyword{chron}

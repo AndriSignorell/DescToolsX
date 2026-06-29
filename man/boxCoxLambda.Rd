@@ -50,7 +50,7 @@ transformations. \emph{Journal of Forecasting}, \bold{12}, 37--48.
 \seealso{
 \code{\link{boxCox}}
 
-Other transformations:
+Other transform:
 \code{\link[=boxCox]{boxCox()}},
 \code{\link[=logSt]{logSt()}},
 \code{\link[=scaleX]{scaleX()}},
@@ -59,8 +59,7 @@ Other transformations:
 \author{
 Leanne Chhay and Rob J Hyndman
 }
-\concept{descriptive-statistics}
-\concept{regression}
+\concept{transform}
 \concept{transformation}
-\concept{transformations}
+\concept{variance-stabilization}
 \keyword{ts}

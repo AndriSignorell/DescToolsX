@@ -58,9 +58,10 @@
 
 
 
-#' @family dispersion
-#' @concept descriptive-statistics
-#' @concept robust-statistics
+
+#' @family location  
+#' @concept location  
+#' @concept dispersion
 #'
 #'
 #' @export

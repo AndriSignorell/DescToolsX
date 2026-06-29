@@ -84,6 +84,12 @@
 #'
 
 
+
+#' @family effect.size  
+#' @concept effect-size  
+#' @concept binary-outcome
+#'
+#'
 #' @export
 cohenH <- function(x,
                     y = NULL,

@@ -78,18 +78,17 @@ freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 \code{\link{print.table}} are the basic underlying functions.\cr
 \code{\link{freq}}, \code{\link{percTable}}
 
-Other freq.tables:
+Other frequency:
 \code{\link[=expFreq]{expFreq()}},
 \code{\link[=freq]{freq()}},
-\code{\link[=percTable]{percTable()}}
+\code{\link[=percTable]{percTable()}},
+\code{\link[=tOne]{tOne()}}
 }
 \author{
 Arni Magnusson \href{mailto:thisisarni@gmail.com}{thisisarni@gmail.com}>
 }
-\concept{descriptive-statistics}
-\concept{freq.tables}
-\concept{frequency-analysis}
-\concept{table-manipulation}
+\concept{frequency}
+\concept{frequency-table}
 \keyword{distribution}
 \keyword{dplot}
 \keyword{manip}

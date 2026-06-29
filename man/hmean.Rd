@@ -80,10 +80,14 @@ ed. Ames, \emph{IA: Iowa State University Press }
 
 Other location:
 \code{\link[=gmean]{gmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}}
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
-\concept{confidence-intervals}
-\concept{descriptive-statistics}
 \concept{location}
+\concept{nonlinear-mean}
 \keyword{arith}

@@ -67,12 +67,14 @@ Hollander, M., Wolfe, D. A., & Chicken, E. (2013).
 Nonparametric Statistical Methods (3rd ed.).
 }
 \seealso{
-Other correlation:
+Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
-\code{\link[=pearsonCor]{pearsonCor()}}
+\code{\link[=keepSig]{keepSig()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
-\concept{association-measures}
-\concept{correlation}
-\concept{nonparametric}
+\concept{assoc.continuous}
+\concept{association-measure}
+\concept{nonlinear-association}

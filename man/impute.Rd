@@ -59,9 +59,11 @@ impute(x, 99)
 \seealso{
 For direct value replacement see \code{\link[bedrock:naReplace]{bedrock::naReplace()}}.
 
-Other imputation:
-\code{\link[=imputeKnn]{imputeKnn()}}
+Other impute:
+\code{\link[=imputeKnn]{imputeKnn()}},
+\code{\link[=lof]{lof()}},
+\code{\link[=outlier]{outlier()}}
 }
-\concept{data-manipulation}
 \concept{imputation}
-\concept{missing-data}
+\concept{impute}
+\concept{missing-value}

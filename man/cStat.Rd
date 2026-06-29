@@ -60,12 +60,18 @@ cStat(r.mod, conf.level=0.95)
 
 }
 \seealso{
-Other confusion:
-\code{\link[=conf]{conf()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}}
+Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
+\code{\link[=conDisPairs]{conDisPairs()}},
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=kendallW]{kendallW()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
-\concept{classification-metrics}
-\concept{confusion}
-\concept{descriptive-statistics}
-\concept{prediction-accuracy}
+\concept{assoc.ordinal}
+\concept{association-measure}
+\concept{ordinal}
+\concept{roc}

@@ -69,12 +69,14 @@ assocsTab(pain)
 \code{\link{Association}}
 
 Other assoc.ordinal:
+\code{\link[=cStat]{cStat()}},
+\code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=kendallW]{kendallW()}},
 \code{\link[=somersDelta]{somersDelta()}},
-\code{\link[=spearmanCor]{spearmanCor()}},
 \code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}

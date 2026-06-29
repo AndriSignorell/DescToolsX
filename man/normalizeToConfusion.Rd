@@ -135,12 +135,20 @@ normalizeToConfusion(
 \seealso{
 \code{\link{isConfusionTable}()}, \code{\link{raterFrame}()}, \code{\link[bedrock:pairApply]{pairApply()}}
 
-Other confusion:
-\code{\link[=cStat]{cStat()}},
-\code{\link[=conf]{conf()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}}
+Other assoc.agreement:
+\code{\link[=blandAltmanData]{blandAltmanData()}},
+\code{\link[=ccc]{ccc()}},
+\code{\link[=cohenKappa]{cohenKappa()}},
+\code{\link[=cronbachAlpha]{cronbachAlpha()}},
+\code{\link[=icc]{icc()}},
+\code{\link[=isConfusionTable]{isConfusionTable()}},
+\code{\link[=kappaM]{kappaM()}},
+\code{\link[=krippAlpha]{krippAlpha()}},
+\code{\link[=pabak]{pabak()}},
+\code{\link[=percAgreement]{percAgreement()}},
+\code{\link[=randolphKappa]{randolphKappa()}},
+\code{\link[=raterFrame]{raterFrame()}}
 }
-\concept{classification-metrics}
-\concept{confusion}
-\concept{data-manipulation}
-\concept{table-manipulation}
+\concept{agreement}
+\concept{assoc.agreement}
+\concept{confusion-matrix}

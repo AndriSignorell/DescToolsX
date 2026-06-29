@@ -149,8 +149,8 @@
 
 
 #' @rdname coefVar
-#' @family dispersion
-#' @concept descriptive-statistics
+
+#' @family dispersion  
 #' @concept dispersion
 #'
 #'

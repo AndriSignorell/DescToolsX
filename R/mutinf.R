@@ -73,6 +73,13 @@
 #'
 
 
+
+#' @family assoc.nominal  
+#' @concept association-measure  
+#' @concept nominal  
+#' @concept information-theory
+#'
+#'
 #' @export
 mutInf <- function(x,
                    y = NULL,

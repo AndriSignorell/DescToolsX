@@ -76,12 +76,6 @@
 #' @seealso \code{\link[MASS]{huber}}, \code{\link{mad}},
 #'   \code{\link{tukeyBiweight}}
 #'
-#' @family topic.robustStatistics
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#' @concept location
-#' @concept bootstrap
-#'
 #' @examples
 #' huberM(c(1:9, 1000))
 #' mad(c(1:9, 1000))
@@ -97,6 +91,12 @@
 #'
 
 
+
+#' @family location  
+#' @concept location  
+#' @concept robust-statistics
+#'
+#'
 #' @export
 huberM <- function(x,
                    conf.level = NA,

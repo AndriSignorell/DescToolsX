@@ -47,10 +47,11 @@
 
 
 
-#' @family confusion
-#' @concept classification-metrics
-#' @concept prediction-accuracy
-#' @concept descriptive-statistics
+
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal  
+#' @concept roc
 #'
 #'
 #' @export

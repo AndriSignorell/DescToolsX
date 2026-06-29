@@ -57,9 +57,14 @@
 #' # with confidence interval
 #' gini(x, conf.level = 0.95, R = 499)
 #'
-#' @family inequality
-#' @concept inequality-measures
-#' @concept descriptive-statistics
+
+#' @family inequality  
+#' @concept inequality  
+#' @concept concentration-index
+#'
+#'
+
+
 #' @export
 gini <- function(x, 
                  conf.level = NA,
@@ -171,3 +176,4 @@ gini <- function(x,
   
   res
 }
+

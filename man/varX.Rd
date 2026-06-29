@@ -96,9 +96,6 @@ Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}}
 }
-\concept{descriptive-statistics}
 \concept{dispersion}

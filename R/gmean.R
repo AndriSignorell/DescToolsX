@@ -91,9 +91,10 @@
 #' 
 
 #' @rdname gmean
-#' @family location
-#' @concept descriptive-statistics
-#' @concept transformation
+
+#' @family location  
+#' @concept location  
+#' @concept nonlinear-mean
 #'
 #'
 #' @export

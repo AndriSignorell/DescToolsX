@@ -57,9 +57,10 @@
 #' 
 
 #' @rdname hmean
-#' @family location
-#' @concept descriptive-statistics
-#' @concept confidence-intervals
+
+#' @family location  
+#' @concept location  
+#' @concept nonlinear-mean
 #'
 #'
 #' @export

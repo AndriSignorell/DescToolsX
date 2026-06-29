@@ -120,8 +120,9 @@
 #' 
 
 
-#' @family pkg.introspection
-#' @concept package-utilities
+
+#' @family utils  
+#' @concept programming
 #'
 #'
 #' @export

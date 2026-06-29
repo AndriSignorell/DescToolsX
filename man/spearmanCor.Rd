@@ -71,19 +71,17 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 \seealso{
 \code{\link{Association}}
 
-Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
-\code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=gkTau]{gkTau()}},
-\code{\link[=kendallTauA]{kendallTauA()}},
-\code{\link[=kendallTauB]{kendallTauB()}},
-\code{\link[=somersDelta]{somersDelta()}},
-\code{\link[=stuartTauC]{stuartTauC()}}
+Other assoc.continuous:
+\code{\link[=corPart]{corPart()}},
+\code{\link[=corPolychor]{corPolychor()}},
+\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=keepSig]{keepSig()}},
+\code{\link[=pearsonCor]{pearsonCor()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
-\concept{assoc.ordinal}
-\concept{association-measures}
+\concept{assoc.continuous}
 \concept{correlation}
-\concept{nonparametric}
+\concept{rank-correlation}

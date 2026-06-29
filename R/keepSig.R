@@ -48,12 +48,14 @@
 #' @seealso \code{\link[aurora]{plotWeb}}, \code{\link[aurora]{plotCor}},
 #'   \code{\link[stats]{cor.test}}
 #'
-#' @family matrix.utils
-#' @concept correlation
-#' @concept hypothesis-testing
+
+
+
+#' @family assoc.continuous  
+#' @concept correlation  
+#' @concept multiple-testing
 #'
-
-
+#'
 #' @export
 keepSig <- function(m, p = NULL, data = NULL,
                     sig.level  = 0.05,

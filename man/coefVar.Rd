@@ -184,10 +184,7 @@ Statistics Theory and Methods}, Volume 36, No. 12, pp 2187-2206.
 Other dispersion:
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}
 }
-\concept{descriptive-statistics}
 \concept{dispersion}
