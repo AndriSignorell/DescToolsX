@@ -97,9 +97,9 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
   out <- strTrim(capture.output(x$res$vtest)[c(2,5)])
   cat(gettextf("%s:\n  %s\n\n", out[1], out[2]))
   
-  if(x$pair$missing_groups > 0){
+  if(x$pair$missingGroups > 0){
     warning(gettextf("  Grouping variable contains %s NAs (%s).", 
-            x$pair$missing_groups, fm(x$pair$missing_groups_p, fmt="per.sty")), 
+            x$pair$missingGroups, fm(x$pair$pctMissingGroups, fmt="per.sty")), 
             call. = FALSE)
   }
   

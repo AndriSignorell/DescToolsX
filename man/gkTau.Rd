@@ -117,6 +117,7 @@ There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},

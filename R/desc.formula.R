@@ -105,57 +105,48 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
 
 .calcPairSummary <- function(x, y) {
   
-  # Länge (Paare)
-  n_total <- length(x)
+  nTotal   <- length(x)
+  ok       <- complete.cases(x, y)
+  nValid   <- sum(ok)
+  nMissing <- nTotal - nValid
   
-  # Complete cases
-  ok <- complete.cases(x, y)
-  n_valid <- sum(ok)
-  n_missing <- n_total - n_valid
+  pctValid   <- 100 * nValid   / nTotal
+  pctMissing <- 100 * nMissing / nTotal
   
-  pct_valid <- 100 * n_valid / n_total
-  pct_missing <- 100 * n_missing / n_total
+  isCat <- function(v) is.factor(v) || is.character(v) || is.logical(v)
   
-  # Gruppen bestimmen (falls kategorial)
-  is_cat <- function(v) is.factor(v) || is.character(v) || is.logical(v)
+  nGroups <- NA_integer_
   
-  n_groups <- NA_integer_
-  
-  if (is_cat(x) && !is_cat(y)) {
-    n_groups <- length(unique(x[ok]))
-  } else if (!is_cat(x) && is_cat(y)) {
-    n_groups <- length(unique(y[ok]))
-  } else if (is_cat(x) && is_cat(y)) {
-    # beide kategorial → Kombinationen
-    n_groups <- nrow(unique(cbind(x[ok], y[ok])))
+  if (isCat(x) && !isCat(y)) {
+    nGroups <- length(unique(x[ok]))
+  } else if (!isCat(x) && isCat(y)) {
+    nGroups <- length(unique(y[ok]))
+  } else if (isCat(x) && isCat(y)) {
+    nGroups <- nrow(unique(cbind(x[ok], y[ok])))
   }
   
-  
-  out <- gettextf("Summary:\npairs: %s, valid: %s (%s), missings: %s (%s)%s\n\n",
-    fm(n_total,   fmt = "abs.sty"),
-    fm(n_valid,   fmt = "abs.sty"),
-    fm(pct_valid / 100,   fmt = "per.sty"),
-    fm(n_missing, fmt = "abs.sty"),
-    fm(pct_missing / 100, fmt = "per.sty"),
-    if(xor(is_cat(x), is_cat(y))) gettextf(", groups: %s", fm(n_groups, fmt = "abs.sty")) else ""
-  )
-
-  # Output
-  res <- list(
-    pairs_n   = n_total,
-    valid_n   = n_valid,
-    missing_n = n_missing,
-    valid_p = pct_valid,
-    missing_p = pct_missing,
-    groups    = n_groups,
-    missing_groups = sum(is.na(x)),
-    missing_groups_p = sum(is.na(x)) / n_total,
-    strOut    = out
+  strOut <- gettextf("Summary:\npairs: %s, valid: %s (%s), missings: %s (%s)%s\n\n",
+                     fm(nTotal,            fmt = "abs.sty"),
+                     fm(nValid,            fmt = "abs.sty"),
+                     fm(pctValid / 100,    fmt = "per.sty"),
+                     fm(nMissing,          fmt = "abs.sty"),
+                     fm(pctMissing / 100,  fmt = "per.sty"),
+                     if(xor(isCat(x), isCat(y))) gettextf(", groups: %s", fm(nGroups, fmt = "abs.sty")) else ""
   )
   
-  return(res)
-  
+  list(
+    nTotal          = nTotal,
+    nValid          = nValid,
+    nMissing        = nMissing,
+    pctValid        = pctValid,
+    pctMissing      = pctMissing,
+    nGroups         = nGroups,
+    nMissingGroups  = sum(is.na(x)),
+    pctMissingGroups = sum(is.na(x)) / nTotal,
+    strOut          = strOut
+  )
 }
+
 
 
 # only used in this context...

@@ -80,6 +80,7 @@ Sampling behavior of tests for correlation in two-way contingency tables.
 \code{\link{cor}} for the standard Kendall correlation without confidence intervals.
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},

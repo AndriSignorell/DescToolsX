@@ -86,6 +86,7 @@ Measures of association for cross classifications III.
 \code{\link{kendallTauB}} for Kendall's \eqn{\tau_b},
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},

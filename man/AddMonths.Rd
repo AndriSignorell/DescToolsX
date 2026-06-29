@@ -61,20 +61,13 @@ Thanks to Antonio:
 \code{\link{as.ym}}; Date functions: \code{\link{year}},
 \code{\link{month}}, etc.
 
-Other date.utils:
-\code{\link{as_ym}},
-\code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=cutAge]{cutAge()}},
-\code{\link[=generation]{generation()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}},
-\code{\link[=zodiac]{zodiac()}}
+Other date.time:
+\code{\link{as_ym}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code by Roland
 Rapold and Antonio
 }
-\concept{data-manipulation}
-\concept{date-handling}
-\concept{date.utils}
+\concept{date-time}
+\concept{date.time}
 \keyword{chron}

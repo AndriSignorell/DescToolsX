@@ -82,7 +82,7 @@
 #'
 #'
 #' @export
-kappaM <- function(x, method = c("fleiss", "conger", "light"), conf.level = NA) {
+kappaM <- function(x, conf.level = NA, method = c("fleiss", "conger", "light")) {
   
   # ratings <- as.matrix(na.omit(x))
   #

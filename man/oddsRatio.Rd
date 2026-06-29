@@ -3,7 +3,6 @@
 \name{oddsRatio}
 \alias{oddsRatio}
 \alias{oddsRatio.default}
-\alias{OR}
 \alias{oddsRatio.glm}
 \alias{print.OddsRatio}
 \title{Compute Odds Ratios}
@@ -19,8 +18,6 @@ oddsRatio(x, ...)
   interval = c(0, 1000),
   ...
 )
-
-OR(x, ...)
 
 \method{oddsRatio}{glm}(
   x,
@@ -92,6 +89,12 @@ The following confidence interval methods are available:
 For generalized linear models, exponentiated regression coefficients are
 reported together with Wald or profile likelihood confidence intervals.
 }
+\note{
+No short alias is exported by default to avoid conflicts with
+\pkg{rlang} and base R naming conventions.  Call
+\code{\link{attachAliases}()} once per session (or script) to make
+\code{or()} available as a convenient shorthand.
+}
 \examples{
 # 2x2 contingency table
 tab <- matrix(
@@ -131,7 +134,7 @@ Gart, J. J. (1966). Alternative analyses of contingency tables.
 \emph{28}(1), 164--179.
 }
 \seealso{
-\code{\link{relRisk}}
+\code{\link{relRisk}}, \code{\link{attachAliases}}
 
 Other topic.contingencyTables:
 \code{\link[=relRisk]{relRisk()}}

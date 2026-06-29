@@ -111,7 +111,6 @@ Other topic.associationMeasures:
 \code{\link{Association}}
 
 Other assoc.nominal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=phi]{phi()}},

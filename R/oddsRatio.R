@@ -53,8 +53,14 @@
 #' \emph{Journal of the Royal Statistical Society Series B},
 #' \emph{28}(1), 164--179.
 #'
-#' @seealso
-#' \code{\link{relRisk}}
+#' @note
+#' No short alias is exported by default to avoid conflicts with
+#' \pkg{rlang} and base R naming conventions.  Call
+#' \code{\link{attachAliases}()} once per session (or script) to make
+#' \code{or()} available as a convenient shorthand.
+#' 
+#'@seealso
+#' \code{\link{relRisk}}, \code{\link{attachAliases}}
 #'
 #' @examples
 #' # 2x2 contingency table
@@ -176,15 +182,6 @@ oddsRatio.default <- function(
   res
   
 }
-
-
-#' Alias for \code{\link{oddsRatio}}.
-#'
-#' @rdname oddsRatio
-#' @export
-OR <- oddsRatio
-
-
 
 
 

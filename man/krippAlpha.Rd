@@ -50,7 +50,7 @@ A list with elements:
 \item{Do}{Observed disagreement.}
 \item{De}{Expected disagreement under chance.}
 \item{O}{Coincidence matrix.}
-\item{n_v}{Category totals in coincidence space.}
+\item{nV}{Category totals in coincidence space.}
 \item{delta2}{Pairwise distance matrix according to the method.}
 \item{ci}{Bootstrap confidence interval, or \code{NA} if not computed.}
 }

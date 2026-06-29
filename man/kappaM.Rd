@@ -4,17 +4,17 @@
 \alias{kappaM}
 \title{Kappa for m Raters}
 \usage{
-kappaM(x, method = c("fleiss", "conger", "light"), conf.level = NA)
+kappaM(x, conf.level = NA, method = c("fleiss", "conger", "light"))
 }
 \arguments{
 \item{x}{\eqn{n \times m}{n x m} matrix or dataframe, n subjects m raters.}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(which is the default) no confidence intervals will be calculated.}
+
 \item{method}{a logical indicating whether the exact Kappa (Conger, 1980),
 the Kappa described by Fleiss (1971) or Light's Kappa (1971) should be
 computed.}
-
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence intervals will be calculated.}
 }
 \value{
 a single numeric value if no confidence intervals are requested,\cr

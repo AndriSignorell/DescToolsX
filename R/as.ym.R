@@ -51,12 +51,13 @@
 
 # define a new class ym ("yearmonth")
 #' @rdname as_ym
-#' @family date.utils
-#' @concept date-handling
-#' @concept data-manipulation
-#' @concept data-structures
+
+
+#' @family date.time
+#' @concept date-time
 #'
 #'
+
 #' @export
 as.ym <- function(x){
   

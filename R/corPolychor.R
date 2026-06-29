@@ -42,8 +42,8 @@
 #' If \code{se = TRUE}, a list with components:
 #' \describe{
 #'   \item{\code{rho}}{Estimated polychoric correlation.}
-#'   \item{\code{row.cuts}}{Estimated row thresholds.}
-#'   \item{\code{col.cuts}}{Estimated column thresholds.}
+#'   \item{\code{rowCuts}}{Estimated row thresholds.}
+#'   \item{\code{colCuts}}{Estimated column thresholds.}
 #'   \item{\code{var}}{Variance-covariance matrix of the estimates.}
 #'   \item{\code{n}}{Total sample size.}
 #'   \item{\code{chisq}}{Likelihood ratio test statistic.}
@@ -129,18 +129,18 @@ corPolychor <- function(x, y = NULL,
     rho <- max(min(rho, maxcor), -maxcor)
     
     if (length(pars) == 1) {
-      row.cuts <- rc
-      col.cuts <- cc
+      rowCuts <- rc
+      colCuts <- cc
     } else {
-      row.cuts <- sort(pars[2:r])
-      col.cuts <- sort(pars[(r + 1):(r + c - 1)])
+      rowCuts <- sort(pars[2:r])
+      colCuts <- sort(pars[(r + 1):(r + c - 1)])
       
-      if (any(diff(row.cuts) <= 0) || any(diff(col.cuts) <= 0)) {
+      if (any(diff(rowCuts) <= 0) || any(diff(colCuts) <= 0)) {
         return(1e10)
       }
     }
     
-    P <- .binBvn(rho, row.cuts, col.cuts)
+    P <- .binBvn(rho, rowCuts, colCuts)
     
     # numerical stability
     P <- pmax(P, 1e-12)
@@ -177,8 +177,8 @@ corPolychor <- function(x, y = NULL,
   res <- list(
     type = "polychoric",
     rho = rho,
-    row.cuts = fit$par[2:r],
-    col.cuts = fit$par[(r + 1):(r + c - 1)],
+    rowCuts = fit$par[2:r],
+    colCuts = fit$par[(r + 1):(r + c - 1)],
     var = solve(fit$hessian),
     n = n,
     chisq = chisq,
@@ -196,12 +196,12 @@ corPolychor <- function(x, y = NULL,
 
 
 # --- probability matrix ------------------------------------------------
-.binBvn <- function(rho, row.cuts, col.cuts) {
+.binBvn <- function(rho, rowCuts, colCuts) {
   
-  row.cuts <- c(-Inf, row.cuts, Inf)
-  col.cuts <- c(-Inf, col.cuts, Inf)
+  rowCuts <- c(-Inf, rowCuts, Inf)
+  colCuts <- c(-Inf, colCuts, Inf)
   
-  P <- matrix(0, length(row.cuts) - 1, length(col.cuts) - 1)
+  P <- matrix(0, length(rowCuts) - 1, length(colCuts) - 1)
   
   R <- matrix(c(1, rho, rho, 1), 2, 2)
   
@@ -209,8 +209,8 @@ corPolychor <- function(x, y = NULL,
     for (j in seq_len(ncol(P))) {
       P[i, j] <- as.numeric(
         mvtnorm::pmvnorm(
-          lower = c(row.cuts[i], col.cuts[j]),
-          upper = c(row.cuts[i + 1], col.cuts[j + 1]),
+          lower = c(rowCuts[i], colCuts[j]),
+          upper = c(rowCuts[i + 1], colCuts[j + 1]),
           corr  = R
         )
       )

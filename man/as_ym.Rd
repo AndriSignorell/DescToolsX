@@ -67,21 +67,13 @@ addMonths(c(201511, 201302), c(5, -4))
 \code{\link{addMonths}}; Date functions, like \code{\link{year}},
 \code{\link{month}}, etc.
 
-Other date.utils:
-\code{\link[=addMonths]{addMonths()}},
-\code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=cutAge]{cutAge()}},
-\code{\link[=generation]{generation()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}},
-\code{\link[=zodiac]{zodiac()}}
+Other date.time:
+\code{\link[=addMonths]{addMonths()}}
 }
 \author{
 Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, originally based on code by
 Roland Rapold
 }
-\concept{data-manipulation}
-\concept{data-structures}
-\concept{date-handling}
-\concept{date.utils}
+\concept{date-time}
+\concept{date.time}
 \keyword{chron}

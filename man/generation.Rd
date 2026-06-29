@@ -34,8 +34,6 @@ generation(c(1946, 1964, 1972, 2001, 2003, 2018, 2026))
 \code{\link{cutAge}}, \code{\link{zodiac}}
 
 Other date.utils:
-\code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link[=cutAge]{cutAge()}},
 \code{\link[=isDate]{isDate()}},

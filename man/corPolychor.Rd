@@ -39,8 +39,8 @@ If \code{se = FALSE}, a numeric value giving the estimated correlation.
 If \code{se = TRUE}, a list with components:
 \describe{
 \item{\code{rho}}{Estimated polychoric correlation.}
-\item{\code{row.cuts}}{Estimated row thresholds.}
-\item{\code{col.cuts}}{Estimated column thresholds.}
+\item{\code{rowCuts}}{Estimated row thresholds.}
+\item{\code{colCuts}}{Estimated column thresholds.}
 \item{\code{var}}{Variance-covariance matrix of the estimates.}
 \item{\code{n}}{Total sample size.}
 \item{\code{chisq}}{Likelihood ratio test statistic.}

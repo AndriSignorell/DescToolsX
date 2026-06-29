@@ -56,7 +56,6 @@ phi(tab)
 \code{\link{chisq.test}}, \code{\link{cramerV}}
 
 Other assoc.nominal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
 \code{\link[=lambda]{lambda()}},

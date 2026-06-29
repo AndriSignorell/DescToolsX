@@ -1,7 +1,8 @@
 
-# DescToolsX — Design Rules & Architecture
+# Package Suite — Design Rules & Architecture
 
-Version: 0.4  
+Scope: DescToolsX · lumen · aurora · bedrock · alloy  
+Version: 0.5  
 Maintainer: Andri Signorell
 
 ---
@@ -195,7 +196,7 @@ The X suffix applies exclusively to **statistical summary measures** whose names
 ```text
 meanX       medianX     sdX         varX
 madX        iqrwX       rangeX      coefvarX
-gmeanX      hmeanX      skewX       kurtX
+gmeanX      hmeanX      skew       kurt
 maeX        mseX        rmseX       mapeX
 smapeX      quantileX   percentRankX
 ```
@@ -501,6 +502,72 @@ Run tests with `options(warnPartialMatchArgs = TRUE)` to surface any
 partial matches the API still permits.
 
 
+## 3.4 Inherited Argument Names — Exemption List
+
+Argument names inherited from base-R functions or established third-party
+packages are exempt from the lowerCamelCase rule and are kept exactly as
+they appear in the source package. Do not rename them.
+
+### Base R / stats
+
+These names are passed through via `...` or explicitly forwarded and must
+not be renamed:
+
+```text
+na.rm           # almost all stats functions
+na.action       # lm, glm, model.frame
+na.last         # sort, order
+conf.level      # t.test, prop.test, binom.test
+sig.level       # power.*
+lower.tail      # p* / q* distribution functions
+log.p           # p* / q* distribution functions
+var.equal       # t.test
+paired          # t.test
+ties.method     # rank
+decreasing      # sort
+use.names       # sapply, setNames
+fixed           # grep, sub, gsub
+perl            # grep, sub, gsub
+ignore.case     # grep, grepl, sub, gsub
+strict.width    # format
+dig.lab         # cut, formatC
+right           # cut
+include.lowest  # cut
+ordered_result  # cut
+list.len        # str
+all.x           # merge
+all.y           # merge
+by.x            # merge
+by.y            # merge
+ncp             # d/p/q/r distribution functions
+df              # d/p/q/r distribution functions (degrees of freedom)
+```
+
+### abind package
+
+Arguments forwarded to `abind::abind()` retain their original names:
+
+```text
+rev.along
+new.names
+force.array
+make.names
+use.anon.names
+use.first.dimnames
+hier.names
+use.dnns
+```
+
+### Rule
+
+If an argument is forwarded — either via `...` or explicitly — to a
+base-R or established third-party function, its original name is always
+preserved, regardless of naming style.
+
+New arguments introduced by DescToolsX itself always follow lowerCamelCase
+(Section 3.3).
+
+
 ## 3.4 Return Values
 
 Output is part of the API and must be strictly consistent:
@@ -576,6 +643,19 @@ if (anyNA(x))
 
 This rule prioritises predictable R-like behaviour over defensive failure for ordinary missing-data situations.
 
+
+### Grouping argument by function family
+
+The grouping argument name follows the base-R function being extended:
+
+| Context | Argument name |
+|---------|--------------|
+| Extensions of `kruskal.test`, `oneway.test` | `g` |
+| Extensions of `t.test`, `wilcox.test` | `x`, `y` |
+| All other contexts (desc, plot, reshape, utility) | `groups` |
+
+Examples: `jonckheereTerpstraTest`, `siegelTukeyTest`, `mosesTest` → `g`;
+`toWide`, `plotDot`, `resolveGroups` → `groups`.
 
 
 
@@ -658,10 +738,10 @@ Exported statistical functions follow this order:
 
 Core principle: CI construction depends on the estimator, never the other way around.
 
-Example `skewX`:
+Example `skew`:
 
 ```r
-skewX(
+skew(
   x,
   # Estimator
   estimator = 3,
@@ -678,7 +758,7 @@ skewX(
 
 **`conf.level` default:**
 
-- Functions that return a CI together with the result, e.g. `skewX`, `ICC`: `conf.level = NA`, no CI by default
+- Functions that return a CI together with the result, e.g. `skew`, `ICC`: `conf.level = NA`, no CI by default
 - Dedicated CI functions, e.g. `meanCI`, `binomCI`: `conf.level = 0.95`
 
 ## 4.2 Plot Functions
@@ -707,6 +787,65 @@ FRAMEWORK
 | FRAMEWORK | `stamp` |
 
 STRUCTURE arguments must never contain graphical style parameters. Colors always belong to STYLE.
+
+
+## 4.3 General Utility Functions
+
+General utility functions (vector operations, string functions, data
+manipulation) follow this order:
+
+1. **Primary input** — `x`, `y`, `data`, `formula`, `fit`
+2. **Secondary input** — `breaks`, `groups`, `weights`, `subset`
+3. **Method control** — `method`, `type`, `output`
+4. **Numeric tuning** — `R`, `maxIter`, `threshold`
+5. **Data handling** — `na.rm`
+6. **`...`**
+
+Core principle: input before control, control before tuning.
+
+Example `closest`:
+
+```r
+closest(
+  x,
+  val,
+  # Method
+  output = c("value", "index"),
+  # Data handling
+  na.rm = FALSE,
+  ...
+)
+```
+
+## 4.4 Toggle Arguments (`callIf`-Pattern)
+
+Toggle arguments are always placed **after `...`**, since they are
+secondary to the core function and require exact name matching:
+
+```r
+plotProbDist(
+  breaks, FUN,
+  # Labels
+  main  = "",
+  xlab  = NULL,
+  ylab  = "density",
+  # Axes
+  xlim  = NULL,
+  # Style
+  col     = NULL,
+  density = 7,
+  # Features (callIf)
+  ...,
+  areaLabels  = NULL,
+  breakLabels = NULL,
+  grid        = FALSE,
+  box         = .useTheme
+)
+```
+
+Toggle arguments after `...` are intentional API design: they require
+exact name matching and are documented as such. This prevents accidental
+partial matching against graphical parameters passed via `...`.
 
 ---
 
@@ -1354,6 +1493,87 @@ This creates a single unified help page.
 | Style | kebab-case |
 | Scope | conceptual grouping, not function naming |
 
+## 11.1b Function Titles (`@title`)
+
+The title is the first thing a user sees in `?functionName`, in pkgdown reference pages, and in search results. It must be:
+
+- **concise** — one line, no trailing period
+- **informative** — says what the function does, not just what it is named
+- **consistent** — follows the verb/noun rule below
+
+### Verb vs. noun rule
+
+The choice between a verb phrase and a noun phrase depends on what the function primarily does:
+
+| Function type | Title form | Example |
+|---|---|---|
+| Computes / returns a statistical measure | **Noun phrase** — name the measure | `Gini Coefficient` |
+| Transforms input into output | **Verb phrase** — starts with verb | `Convert CMY to CMYK` |
+| Tests a hypothesis | **Noun phrase** — name of the test | `Jarque-Bera Test for Normality` |
+| Extracts something from an object | **Verb phrase** | `Extract the Response Variable from a Fitted Model` |
+| Plots something | **Noun phrase** — name of the chart type | `Correlation Matrix Plot` |
+| Utility / helper | **Verb phrase** | `Find Highly Correlated Variables` |
+
+The verb/noun distinction is not arbitrary — noun phrases signal "this *is* something", verb phrases signal "this *does* something". Statistical measures, tests, and plot types are things; transformations and utilities are actions.
+
+### Approved opening verbs for verb-phrase titles
+
+Use these consistently rather than inventing synonyms:
+
+```text
+Add         Append      Check       Coerce
+Compare     Compute     Convert     Count
+Create      Detect      Extract     Find
+Format      Generate    Get         List
+Load        Merge       Parse       Plot
+Recode      Remove      Rename      Replace
+Reshape     Resolve     Set         Split
+Test        Transform
+```
+
+Do not use: `Calculate` (use `Compute`), `Make` (use `Create`), `Give` (use `Return`).
+
+### Proper nouns and eponyms
+
+- Retain the author's name exactly as in the literature: `Cramér's V`, `Hodges-Lehmann Estimator`, `Yeo-Johnson Transformation`
+- Use the possessive (`'s`) when the measure is named after a person and the possessive is standard in the literature
+- Accents are mandatory where they are part of the name: `Cramér`, `Fréchet`, `Spéarman` → note: Spearman has no accent
+- Hyphenated eponyms: `Breslow-Day Test`, `Cochran-Armitage Trend Test`
+
+### Parenthetical clarifications
+
+A parenthetical is appropriate when the function name is an abbreviation or the title alone would be ambiguous:
+
+```text
+C-Statistic (ROC AUC)
+Variance Inflation Factors (VIF / GVIF)
+Confidence Interval for Coefficient of Variation (CV)
+```
+
+Do not use parentheticals to add synonyms that are not needed for disambiguation.
+
+### Scope: singular functions that return multiple results
+
+When a function computes a collection of related measures, make the plural explicit:
+
+```text
+# too narrow — implies one measure
+"Ordinal Association Measure"
+
+# correct — signals the function returns several
+"Suite of Ordinal Association Measures"
+```
+
+### What to avoid
+
+| Anti-pattern | Example | Better |
+|---|---|---|
+| Repeats only the function name | `gkGamma` → "Gamma" | "Goodman-Kruskal Gamma" |
+| Too vague | "Summary Statistics" | "Univariate Descriptive Statistics Summary" |
+| Verb where noun fits | "Compute the Gini Coefficient" | "Gini Coefficient" |
+| Noun where verb fits | "Box-Cox Lambda Optimizer" | "Estimate Optimal Box-Cox Lambda" |
+| Trailing period | "Pearson Correlation." | "Pearson Correlation" |
+
 ## 11.2 Required Sections
 
 All exported functions must contain:
@@ -1480,101 +1700,293 @@ Examples:
 
 ## 12.1 Overview
 
-The package uses `@family` and `@concept` for function organization with strict separation of roles:
+The package suite uses `@family` and `@concept` for function organization across all packages (DescToolsX, lumen, aurora, bedrock, alloy). The two tags serve strictly separated roles:
 
-- `@family` defines the primary classification, used for navigation
-- `@concept` provides additional semantic tags, used for search, context, and cross-linking
+- `@family` = **functional navigation** — where does a user look for this function?
+- `@concept` = **subject-matter tagging** — what is this function about?
+
+This separation is authoritative. Do not use `@concept` for navigation, and do not use `@family` for subject-matter cross-linking.
 
 ## 12.2 `@family`
 
-**Exactly one family per function:**
+**Exactly one family per function.** No function may carry two `@family` tags.
+
+### Naming convention
+
+```text
+<domain>.<category>
+```
+
+- `<domain>` — lowercase, identifies the functional area
+- `<category>` — lowercase, identifies the sub-area within that domain
+- Separator: dot (`.`)
+- Both parts: lowercase, no camelCase, no hyphens
 
 ```r
-@family topic.<categoryName>
+# correct
+@family assoc.ordinal
+@family test.normality
+@family plot.univariate
+@family ci.proportion
+
+# incorrect
+@family topic.hypothesisTests   ← old style, do not use
+@family assocOrdinal            ← no separator
+@family assoc-ordinal           ← hyphen, not dot
 ```
 
-Naming convention:
+### Decision rule
 
-```text
-topic. prefix + camelCase suffix
-```
+> Where would a user look for this function first?
 
-Examples:
+If a function could plausibly belong to two families, assign it to the one that reflects its **primary use**, and add the secondary area as a `@concept` tag.
 
-```text
-topic.hypothesisTests
-topic.nonparametricTests
-topic.distributions
-topic.timeSeriesTests
-topic.goodnessOfFit
-topic.contingencyTests
-```
+### Established families by package
 
-**Decision rule:**  
-Where would a user look for this function first?
+**DescToolsX**
+
+| Family | Contents |
+|---|---|
+| `assoc.agreement` | Kappa, ICC, CCC, Cronbach, rater agreement |
+| `assoc.ordinal` | Gamma, Tau-a/b/c, Somers, Stuart, C-statistic |
+| `assoc.nominal` | Cramér V, Phi, Lambda, Yule, mutual information |
+| `assoc.continuous` | Pearson/Spearman/Polychor, Hoeffding D, partial correlation |
+| `effect.size` | Cohen D/H, Glass Delta, Eta², OR, RR |
+| `location` | Mean, median, mode, geometric/harmonic mean, robust location |
+| `dispersion` | SD, variance, IQR, range, MAD, CV |
+| `shape` | Skewness, kurtosis |
+| `quantile` | Quantiles, order statistics |
+| `inequality` | Gini, Atkinson, Herfindahl, Lorenz |
+| `frequency` | freq, percTable, tOne, expFreq |
+| `model.metrics` | MAE, RMSE, MAPE, Brier score, prediction error |
+| `model.classification` | Sensitivity, specificity, confusion matrix |
+| `transform` | Box-Cox, Yeo-Johnson, logSt, scaleX |
+| `impute` | Imputation, outlier detection |
+| `cut` | cutQ, cutAge — binning functions |
+| `date.time` | Date/time extraction and arithmetic |
+| `number.theory` | GCD, LCM, divisors |
+| `anova` | Eta², sphericity, error terms |
+| `descriptive` | desc(), abstract() |
+| `utils` | Package options, conceptMap, getConcepts |
+
+**lumen**
+
+| Family | Contents |
+|---|---|
+| `test.normality` | Anderson-Darling, Lilliefors, Jarque-Bera, Shapiro-Francia |
+| `test.gof` | Benford, runs test, KPSS, Bartels, von Neumann |
+| `test.variance` | Levene, Siegel-Tukey, Moses, varTest |
+| `test.location` | t-test, z-test, Hotelling T², Yuen, sign test |
+| `test.ksample` | Cochran Q |
+| `test.posthoc` | Dunn, Dunnett, Conover, Nemenyi, Scheffé, Steel, van der Waerden |
+| `test.trend` | Cochran-Armitage, Jonckheere-Terpstra, Mantel, Page |
+| `test.categorical` | Barnard, Breslow-Day, Woolf, Stuart-Maxwell, Lehmacher |
+| `test.regression` | Breusch-Godfrey, Hosmer-Lemeshow, Le Cessie |
+| `test.correlation` | corTest, corCI, Fisher Z |
+| `ci.proportion` | Proportion CIs (binomCI, multinomCI, …) |
+| `ci.general` | General CIs (bootstrap, MAD, mean difference, …) |
+| `power` | Power and sample size |
+| `distributions` | All d/p/q/r/m functions for non-standard distributions |
+| `scores` | Normal scores |
+
+**aurora**
+
+| Family | Contents |
+|---|---|
+| `plot.univariate` | plotBar, plotBox, plotDens, plotViolin, plotDot, plotECDF, plotQQ, … |
+| `plot.bivariate` | plotXY, plotCor, plotAssoc, plotMosaic, plotHeatmap, plotBubble, … |
+| `plot.distribution` | plotProbDist, plotFun |
+| `plot.special` | plotTimeSeries, plotMiss, plotPropCI, plotTreemap, plotWeb, … |
+| `plot.s3` | plot.BlandAltman, plot.Desc.qn, plot.Desc.table, plot.Lc |
+| `theme` | getTheme, setTheme, resetTheme, style |
+| `format` | fm, fmCI, notation |
+| `color` | All color conversion, mixing, palette functions |
+| `geometry` | arc, band, circle, ellipse, polygon, ring, … |
+| `graphics.utils` | axisBreak, barText, errBars, stamp, textLegend, lines.lm, … |
+| `string` | strAbbr, strExtract, strPad, strVal, mgsub, … |
+| `html` | as.html, as.img, toHtmlTable, preview.html |
+| `ci.objects` | as.CI |
+| `tables` | ftable.list |
+
+**bedrock**
+
+| Family | Contents |
+|---|---|
+| `data.manipulation` | appendX, collapseTable, dummy, nf, recodeX, sortX, … |
+| `data.inspection` | allDuplicated, completeColumns, flags, isDichotomous, isNA, … |
+| `vector.ops` | closest, coalesceX, locf, moveAvg, naIf, winsorize, … |
+| `math.utils` | crossProd, linScale, percentRank, roundTo, unirootAll, … |
+| `number.theory` | digitSum, factorize, fibonacci, isPrime, primes |
+| `combinatorics` | combN, combPairs, permn, randGroupSplit, sampleX |
+| `string.utilities` | mGsub, mReplace, strSplitToCol, strSplitToDummy |
+| `table.utils` | collapseTable, multMerge, printCharMatrix |
+| `pkg.introspection` | funArgs, funCalls, funKeywords, funList, getRdLabels |
+| `label.utils` | label, dataDescription, openDataObject |
+| `file.utils` | buildPath, fileExistURL, findDownload, pdfManual, readDownload |
+| `data.utils` | resolveFormula, resolveGroups, resolveContingency |
+| `utilities` | callIf, isNA |
+
+**alloy**
+
+| Family | Contents |
+|---|---|
+| `modelling` | fitMod, predict.FitMod, print.FitMod |
+| `model.comparison` | tMod, tmodSummary |
+| `regression.utils` | coefCI, pseudoR2, rSqCI, vif, refLevel, varImp, … |
+| `roc` | roc, bestCut, confint.roc |
+| `tree` | bestTree, cParam, leafRates, node, rules, splits, plot.rpart |
+| `data.split` | splitTrainTest |
+
 
 ## 12.3 `@concept`
 
-Each function should typically have 2–4 `@concept` tags.
+Each function should have **2–4** `@concept` tags.
 
-Rules:
+### Naming convention
 
-- Concepts are not mutually exclusive
-- Concepts are descriptive, not hierarchical
-- No redundancy with the family
-- lowercase kebab-case: `goodness-of-fit`, `heavy-tailed`
+- **Singular** — concepts describe a subject area, not a set of instances
+- **kebab-case** — lowercase, hyphen-separated
+- **No redundancy** with the family name — if `@family assoc.ordinal` already says it, do not add `@concept ordinal-association`
 
 ```r
-@concept goodness-of-fit
-@concept normality
-@concept rank-based
-@concept extreme value theory
+# correct
+@concept rank-correlation
+@concept confidence-interval
+@concept robust-statistic
+@concept extreme-value
+
+# incorrect
+@concept ordinal_association    ← underscore
+@concept Robust Statistics      ← uppercase
+@concept descriptive-statistics ← too generic, banned
+@concept data-manipulation      ← too generic, banned
+@concept graphics               ← too generic, banned
+@concept plot                   ← redundant with family
 ```
 
-## 12.4 Families vs. Concepts
+### Banned concepts (too generic)
+
+These concepts were rejected because they appear in 50+ functions and provide no navigational value:
+
+```text
+descriptive-statistics
+data-manipulation
+graphics
+plot
+association-measures   (outside assoc.* families)
+package-utilities
+```
+
+### Three orthogonal axes
+
+Concepts should be drawn from three complementary axes. A well-tagged function typically has one concept from each relevant axis:
+
+**A — Subject area / domain**
+```text
+agreement          correlation        regression
+classification     reliability        inequality
+information-theory number-theory      geometry
+```
+
+**B — Data type / scale**
+```text
+ordinal            nominal            binary
+continuous         multivariate       time-series
+```
+
+**C — Method / technique**
+```text
+bootstrap          confidence-interval  effect-size
+goodness-of-fit    transformation       imputation
+nonparametric      robust-statistic     variance-stabilization
+feature-selection  prediction-error     calibration
+```
+
+### Authoritative concept vocabulary
+
+The following concepts are approved and in use across the suite. Use these exact spellings:
+
+```text
+agreement               annotation              anova-effect-size
+association-measure     asymmetric-association  attribute
+autocorrelation         bar-chart               binary
+binary-association      binary-outcome          binning
+bivariate               bootstrap               boxplot
+calibration             categorical-agreement   categorical-test
+categorization          chi-square-based        classification
+color                   color-conversion        combinatorics
+concentration-index     concordance             confidence-interval
+confusion-matrix        correlation             dataset
+date-time               demographics            density
+dispersion              distribution-function   distribution-summary
+distribution-visualization  dotchart            dummy-coding
+effect-size             exact-test              extreme-value
+factor-handling         feature-selection       finance
+formatting              formula                 frequency-table
+geometry                goodness-of-fit         homogeneity
+html                    hypothesis-test         imputation
+inequality              information-theory      internal-consistency
+interrater-agreement    introspection           k-sample
+label                   latent-variable         line-chart
+location                location-test           machine-learning
+merge                   method-comparison       missing-value
+model-evaluation        modelling               multicollinearity
+multiple-testing        multivariate            nominal
+nonlinear-association   nonlinear-mean          nonparametric
+normality-test          number-formatting       number-theory
+numeric-conversion      numerical-methods       order-statistic
+ordering                ordinal                 outlier-detection
+palette                 parametric              post-hoc
+power                   prediction              prediction-error
+programming             proportion              quantile
+randomness              range                   rank-correlation
+rater-data              regression              regression-diagnostics
+reliability             reshape                 robust-statistic
+roc                     sample-size             sampling
+scatterplot             shape                   standardization
+string-manipulation     summary                 table
+table-summary           theme                   time-series
+transformation          tree                    trend-test
+type-test               variance-analysis       variance-component
+variance-stabilization  variance-test
+```
+
+### Special cases
+
+**`distribution-function` vs. `distribution-summary`**
+
+- `distribution-function` — d/p/q/r/m functions in lumen (computational)
+- `distribution-summary` — plot functions and quantile summaries (descriptive)
+
+**`programming` vs. `introspection`**
+
+- `introspection` — `funArgs`, `funCalls`, `funKeywords`, `funList`, `getRdLabels`, `rdTitle`  
+  (functions that inspect other functions or the R session)
+- `programming` — `callIf`, `mergeArgs`, `extractArgs`, `buildPath` and similar  
+  (functions that assist in writing packages or calling functions programmatically)
+
+**`modelling` vs. `model-evaluation`**
+
+- `modelling` — model fitting: `fitMod`, `predict.FitMod`, tree functions, `splitTrainTest`
+- `model-evaluation` — assessing model quality: ROC, Brier, pseudo-R², VIF, tMod, RMSE, calibration
+
+**`association-measure`**
+
+Retained as a cross-cutting concept tag **only within `assoc.*` families**. Do not use it outside these families.
+
+## 12.4 Families vs. Concepts — summary
 
 | Feature | `@family` | `@concept` |
 |---|---|---|
-| Cardinality | exactly one | several |
-| Purpose | navigation | semantic tagging |
-| Structure | hierarchical (`topic.*`) | flat |
-| Stability | high | flexible |
-| Example | `topic.nonparametricTests` | `rank-based`, `paired` |
+| Cardinality | exactly one | 2–4 |
+| Purpose | functional navigation | subject-matter tagging |
+| Structure | `domain.category` | flat, singular, kebab-case |
+| Stability | high — changes require suite-wide update | flexible — can be extended |
+| Redundancy | never redundant with `@concept` | never redundant with `@family` |
 
-## 12.5 Special Case: Distributions
+## 12.5 `@seealso`
 
-All distribution functions (`d` / `p` / `q` / `r`) are grouped under one single family:
-
-```r
-@family topic.distributions
-```
-
-Specific properties are expressed via `@concept`:
-
-```r
-@concept continuous distribution
-@concept extreme value theory
-@concept GEV
-@concept dpqr
-```
-
-**Rationale:**  
-Distributions follow a uniform API structure (`dpqr`), and users search by distribution name, not by category.
-
-## 12.6 Hypothesis Tests
-
-Tests are heterogeneous and therefore use several families, according to the natural way users search for them:
-
-```text
-topic.goodnessOfFit
-topic.nonparametricTests
-topic.contingencyTests
-topic.timeSeriesTests
-```
-
-## 12.7 `@seealso`
-
-`@seealso` is reserved for close functional relationships: functions that are direct alternatives, or helper functions typically used together.
+`@seealso` is reserved for close functional relationships: direct alternatives, or helper functions typically used together. It is not a substitute for `@concept` cross-linking.
 
 ---
 
@@ -1588,12 +2000,14 @@ topic.timeSeriesTests
 | Second vector | `y` | Standard |
 | Data frame / matrix | `data` | as in `lm`, `ggplot` |
 | Formula | `formula` | Base-R compatible |
+| File path / connection | `file` | as in `readLines`, `saveRDS` |
 
 ## 13.2 Grouping and Structure
 
 | Meaning | Name |
 |---|---|
 | Grouping variable | `groups` |
+| Number of groups | `nGroups` |
 | Strata | `strata` |
 | Cluster | `cluster` |
 

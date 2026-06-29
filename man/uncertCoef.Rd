@@ -79,7 +79,6 @@ Amsterdam: North-Holland Publishing Company.
 \code{\link{Association}}
 
 Other assoc.nominal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
 \code{\link[=lambda]{lambda()}},

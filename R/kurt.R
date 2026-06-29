@@ -1,8 +1,8 @@
 
 #' Kurtosis
 #' 
-#' \code{kurtX()} returns the excess kurtosis, therefore the kurtosis calculates
-#' as \code{kurtX(x) + 3} if required.
+#' \code{kurt()} returns the excess kurtosis, therefore the kurtosis calculates
+#' as \code{kurt(x) + 3} if required.
 #' 
 #' If \code{na.rm} is \code{TRUE} then missing values are removed before
 #' computation proceeds. \cr
@@ -28,8 +28,8 @@
 #' 
 #' This implementation is comparably fast, as the expensive sums are coded in C.
 #' 
-#' @name kurtX
-#' @aliases kurtX
+#' @name kurt
+#' @aliases kurt
 #' 
 #' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector. An object which is not a vector is coerced (if
@@ -55,7 +55,7 @@
 #'   \item \code{uci}: upper confidence limit
 #' }
 #' 
-#' @seealso \code{\link{skewX}}, \code{\link{meanX}}, \code{\link{sdX}}, similar code in
+#' @seealso \code{\link{skew}}, \code{\link{meanX}}, \code{\link{sdX}}, similar code in
 #' \code{library(e1071)}
 #' @references Cramer, D. (1997): \emph{Basic Statistics for Social Research}
 #' Routledge.
@@ -65,14 +65,14 @@
 #' 
 #' @examples
 #' 
-#' kurtX(Pizza$price, na.rm=TRUE)
+#' kurt(Pizza$price, na.rm=TRUE)
 #' 
 #' # use sapply to calculate skewness for a data.frame
-#' sapply(Pizza[,c("temperature","price","delivery_min")], kurtX, na.rm=TRUE)
+#' sapply(Pizza[,c("temperature","price","delivery_min")], kurt, na.rm=TRUE)
 #' 
 #' # or apply to do that columnwise with a matrix
 #' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
-#'       kurtX, na.rm=TRUE)
+#'       kurt, na.rm=TRUE)
 #' 
 
 
@@ -82,7 +82,7 @@
 #'
 #'
 #' @export
-kurtX <- function(x,
+kurt <- function(x,
                   conf.level = NA,
                   sides = c("two.sided", "left", "right"),
                   method = c("boot", "classic"),
@@ -127,7 +127,7 @@ kurtX <- function(x,
       
       method,
       
-      classic = .kurtX.classic(
+      classic = .kurt.classic(
         x,
         conf.level = conf.level,
         estimator = estimator,
@@ -135,7 +135,7 @@ kurtX <- function(x,
         na.rm = na.rm
       ),
       
-      boot = .kurtX.boot(
+      boot = .kurt.boot(
         x,
         conf.level = conf.level,
         estimator = estimator,
@@ -243,7 +243,7 @@ kurtX <- function(x,
 }
 
 
-.kurtX.classic <- function(x,
+.kurt.classic <- function(x,
                            conf.level,
                            estimator = 3,
                            weights = NULL,
@@ -264,7 +264,7 @@ kurtX <- function(x,
 }
 
 
-.kurtX.boot <- function(x,
+.kurt.boot <- function(x,
                         conf.level,
                         estimator = 3,
                         weights = NULL,

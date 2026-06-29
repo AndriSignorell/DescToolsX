@@ -38,7 +38,7 @@ deviation marker using "+" and "-" symbols. These markers reflect
 the magnitude and direction of deviation from expectation but do not
 represent separate hypothesis tests.
 
-weekday and month distributions are compared to their expected
+Weekday and month distributions are compared to their expected
 probabilities as defined in \code{\link{desc}}.
 
 Standardized residuals are computed as

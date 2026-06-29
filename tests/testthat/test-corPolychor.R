@@ -48,7 +48,7 @@ test_that("corPolychor se = TRUE returns a list with expected components", {
   y <- factor(sample(1:3, 80, replace = TRUE), ordered = TRUE)
   res <- corPolychor(x, y, method = "ML", se = TRUE)
   expect_type(res, "list")
-  expect_true(all(c("rho", "row.cuts", "col.cuts", "var", "n") %in% names(res)))
+  expect_true(all(c("rho", "rowCuts", "colCuts", "var", "n") %in% names(res)))
 })
 
 test_that("corPolychor accepts a contingency table directly", {

@@ -59,7 +59,7 @@ with \code{X}. This explicitly signals an extended or modified implementation.
 
 Examples:
 \code{meanX()}, \code{medianX()}, \code{sdX()}, \code{madX()}, \code{iqrX()},
-\code{varX()}, \code{quantileX()}, \code{skewX()}, \code{kurtX()}
+\code{varX()}, \code{quantileX()}, \code{skew()}, \code{kurt()}
 }
 
 \section{Confidence interval functions}{

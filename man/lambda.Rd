@@ -95,7 +95,6 @@ Newbury Park, CA: Sage, pp. 17--24
 \code{\link{Association}}
 
 Other assoc.nominal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
 \code{\link[=phi]{phi()}},

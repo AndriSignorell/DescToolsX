@@ -42,8 +42,6 @@ secToHms(c(256, 3456, 56565))
 \code{\link[chron]{times}}
 
 Other date.utils:
-\code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link[=cutAge]{cutAge()}},
 \code{\link[=generation]{generation()}},

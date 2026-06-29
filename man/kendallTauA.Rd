@@ -77,6 +77,7 @@ Liebetrau, A. M. (1983)
 \code{\link{kendallTauB}} (recommended when ties are present),
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauB]{kendallTauB()}},

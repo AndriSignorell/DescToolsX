@@ -114,8 +114,8 @@ Core descriptive statistics utilities:
 -   `medianX()`
 -   `modeX()`
 -   `varX()`
--   `skewX()`
--   `kurtX()`
+-   `skew()`
+-   `kurt()`
 
 Example:
 

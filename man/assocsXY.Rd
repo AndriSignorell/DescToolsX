@@ -36,10 +36,17 @@ Somers' \eqn{D} when \code{y = NULL} (table mode): \code{"row"}
 \code{"column"} treats column totals as dependent.}
 }
 \value{
-A named list with one element per requested measure.  Each
-element is a named numeric scalar (point estimate only) or a named
-numeric vector of length 3 (estimate, lower CI, upper CI) when
-\code{conf.level} is supplied.
+A named list with one element per requested measure:
+\describe{
+\item{\code{gamma}}{Goodman-Kruskal Gamma}
+\item{\code{tauA}}{Kendall's Tau-a}
+\item{\code{tauB}}{Kendall's Tau-b}
+\item{\code{tauC}}{Stuart's Tau-c}
+\item{\code{somers}}{Somers' D}
+\item{\code{cstat}}{C-statistic (area under ROC curve)}
+}
+Each element is a named numeric scalar (point estimate only) or a named
+numeric vector \code{c(est, lci, uci)} when \code{conf.level} is supplied.
 }
 \description{
 Computes concordance-based association measures (Goodman-Kruskal

@@ -79,7 +79,6 @@ Statistical Association} (Part III), 777-780.
 \code{\link[bedrock]{pairApply}}
 
 Other assoc.nominal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=cramerV]{cramerV()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=phi]{phi()}},

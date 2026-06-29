@@ -49,7 +49,7 @@
 #'   \item{Do}{Observed disagreement.}
 #'   \item{De}{Expected disagreement under chance.}
 #'   \item{O}{Coincidence matrix.}
-#'   \item{n_v}{Category totals in coincidence space.}
+#'   \item{nV}{Category totals in coincidence space.}
 #'   \item{delta2}{Pairwise distance matrix according to the method.}
 #'   \item{ci}{Bootstrap confidence interval, or \code{NA} if not computed.}
 #' }
@@ -105,9 +105,9 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
   
   O <- .CoincidenceFromWide(x, raters = raters, levels = levels)
   
-  n_v  <- rowSums(O)           # category totals in coincidence space
-  n_pairs <- sum(n_v)          # total pairable values
-  if (n_pairs <= 1) stop("Too few valid pairs (n < 2).")
+  nV  <- rowSums(O)           # category totals in coincidence space
+  nPairs <- sum(nV)          # total pairable values
+  if (nPairs <= 1) stop("Too few valid pairs (n < 2).")
   
   K <- nrow(O)
   delta2 <- matrix(0, K, K, dimnames = dimnames(O))
@@ -117,8 +117,8 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
     diag(delta2) <- 0
     
   } else if (method == "ordinal") {
-    # mid-cumulative proportions (mu_k) based on n_v:
-    p  <- n_v / sum(n_v)
+    # mid-cumulative proportions (mu_k) based on nV:
+    p  <- nV / sum(nV)
     mu <- cumsum(p) - 0.5 * p
     delta2 <- (outer(mu, mu, `-`))^2
     diag(delta2) <- 0
@@ -142,7 +142,7 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
   }
   
   Do <- sum(O * delta2)
-  De <- sum(outer(n_v, n_v, `*`) * delta2) / (n_pairs - 1)
+  De <- sum(outer(nV, nV, `*`) * delta2) / (nPairs - 1)
   
   alpha <- if (De <= 0) NA_real_ else 1 - Do / De
   
@@ -171,7 +171,7 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
     }
   } else {
     res <- list(alpha = alpha, Do = Do, De = De, 
-                O = O, n_v = n_v, delta2 = delta2, ci=ci)
+                O = O, nV = nV, delta2 = delta2, ci=ci)
   }
   
   return(res)

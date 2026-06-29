@@ -59,6 +59,5 @@ Other inequality:
 \code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}
 }
-\concept{descriptive-statistics}
+\concept{concentration-index}
 \concept{inequality}
-\concept{inequality-measures}

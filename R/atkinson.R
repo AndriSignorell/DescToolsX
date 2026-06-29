@@ -38,11 +38,12 @@
 #' Journal of Economic Theory.
 #'
 
-#' @family inequality
-#' @concept inequality-measures
-#' @concept descriptive-statistics
+#' @family inequality  
+#' @concept inequality  
+#' @concept concentration-index
 #'
 #'
+
 #' @export
 atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5, na.rm = FALSE) {
   

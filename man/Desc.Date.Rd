@@ -80,7 +80,7 @@ number of calendar days within the observed range
 \item Interquartile range (IQR) in days
 }
 
-weekday and month distributions are compared to their expected
+Weekday and month distributions are compared to their expected
 probabilities using chi-square goodness-of-fit tests.
 
 Standardized residuals are defined as

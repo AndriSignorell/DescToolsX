@@ -73,7 +73,7 @@ test_that("handles rows with insufficient ratings", {
   
   res <- percAgreement(x, verbose = TRUE)
   
-  expect_true(res$n_pairable < res$n)
+  expect_true(res$nPairable < res$n)
 })
 
 # --------------------------------------------------
@@ -101,7 +101,7 @@ test_that("verbose output returns full list", {
   res <- percAgreement(x, verbose = TRUE)
   
   expect_true(is.list(res))
-  expect_named(res, c("estimate", "se", "conf.int", "n", "n_pairable", "method"))
+  expect_named(res, c("estimate", "se", "conf.int", "n", "nPairable", "method"))
 })
 
 # --------------------------------------------------

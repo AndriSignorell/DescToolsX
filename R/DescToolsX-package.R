@@ -43,7 +43,7 @@
 #'
 #' Examples:
 #' \code{meanX()}, \code{medianX()}, \code{sdX()}, \code{madX()}, \code{iqrX()},
-#' \code{varX()}, \code{quantileX()}, \code{skewX()}, \code{kurtX()}
+#' \code{varX()}, \code{quantileX()}, \code{skew()}, \code{kurt()}
 #'
 #' @section Confidence interval functions:
 #' Functions computing confidence intervals use the suffix \code{CI}, following

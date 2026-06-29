@@ -47,8 +47,6 @@ desc(z)
 \code{\link{year}} and other date functions
 
 Other date.utils:
-\code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link[=cutAge]{cutAge()}},
 \code{\link[=generation]{generation()}},

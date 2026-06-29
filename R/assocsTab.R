@@ -55,13 +55,9 @@
 #' assocsTab(pain)
 #' 
 
-
-
-
-#' @family assoc.nominal
-#' @concept association-measures
-#' @concept descriptive-statistics
-#' @concept table-manipulation
+#' @family assoc.ordinal  
+#' @concept association-measure  
+#' @concept ordinal
 #'
 #'
 #' @export
@@ -70,36 +66,33 @@ assocsTab <- function(x, conf.level = 0.95, verbose = 2){
   verbose <- .checkVerbose(verbose)
   
   # all association measures combined for table description
-  # get generic hard assocs for tables
   ords <- assocsXY(x, conf.level = conf.level)
-
+  
   if(is.na(conf.level)){
     res <- rbind("Contingency Coeff." = c(contCoef(x), NA, NA))
-    res <- rbind(res, "Cramer V" = c(cramerV(x), NA, NA))
-    res <- rbind(res, "Kendall Tau-b" = ords$tau_b)
+    res <- rbind(res, "Cramer V"      = c(cramerV(x), NA, NA))
+    res <- rbind(res, "Kendall Tau-b" = ords$tauB)
     
   } else {
-    res <- rbind("Contingency Coeff." = contCoef(x, conf.level=conf.level))
-    res <- rbind(res, "Cramer V" = cramerV(x, conf.level=conf.level))
-    res <- rbind(res, "Kendall Tau-b" = ords$tau_b)
+    res <- rbind("Contingency Coeff." = contCoef(x, conf.level = conf.level))
+    res <- rbind(res, "Cramer V"      = cramerV(x, conf.level = conf.level))
+    res <- rbind(res, "Kendall Tau-b" = ords$tauB)
   }
   
   if(verbose == 3) {
-
     res <- rbind(res
                  , "Goodman Kruskal Gamma" = ords$gamma
-                 , "Stuart Tau-c" = ords$tau_c
-                 , "Somers D R|C" = ords$somers
-                 , "Pearson Correlation" = pearsonCor(x, conf.level = conf.level)
-                 , "Spearman Correlation" = spearmanCor(x, conf.level=conf.level)
-#                 , "Lambda C|R" = lambda(x, direction="column", conf.level=conf.level)
-                 , "Lambda R|C" = lambda(x, direction="row", conf.level=conf.level)
-                 , "Lambda sym" = lambda(x, direction="sym", conf.level=conf.level)
-#                 , "Uncertainty Coeff. C|R" = uncertCoef(x, direction="column", conf.level=conf.level)
-                 , "Uncertainty Coeff. R|C" = uncertCoef(x, direction="row", conf.level=conf.level)
-                 , "Uncertainty Coeff. sym" = uncertCoef(x, direction="sym", conf.level=conf.level)
-                 , "Mutual Information" = c(mutInf(x),NA,NA)
-    ) }
+                 , "Stuart Tau-c"          = ords$tauC
+                 , "Somers D R|C"          = ords$somers
+                 , "Pearson Correlation"   = pearsonCor(x, conf.level = conf.level)
+                 , "Spearman Correlation"  = spearmanCor(x, conf.level = conf.level)
+                 , "Lambda R|C"            = lambda(x, direction = "row", conf.level = conf.level)
+                 , "Lambda sym"            = lambda(x, direction = "sym", conf.level = conf.level)
+                 , "Uncertainty Coeff. R|C"  = uncertCoef(x, direction = "row", conf.level = conf.level)
+                 , "Uncertainty Coeff. sym"  = uncertCoef(x, direction = "sym", conf.level = conf.level)
+                 , "Mutual Information"    = c(mutInf(x), NA, NA)
+    )
+  }
   
   if(verbose == 3)
     dimnames(res)[[2]][1] <- "est"
@@ -108,27 +101,15 @@ assocsTab <- function(x, conf.level = 0.95, verbose = 2){
   
   class(res) <- c("AssocsTab", "matrix")
   return(res)
-  
 }
-
-
 
 #' @export
-print.AssocsTab <- function(x, digits=4, ...){
+print.AssocsTab <- function(x, digits = 4, ...){
   
-  out <- fm(unclass(x), digits=digits)
-  
-  if(nrow(x) == 3){
-    
-  } else {
-    # only for mutinf, which has been removed ... 
-    # out[c(1,16), 2:3] <- "      -"
-  }
+  out <- fm(unclass(x), digits = digits)
   dimnames(out) <- dimnames(x)
-  
-  print(data.frame(out), quote=FALSE)
+  print(data.frame(out), quote = FALSE)
 }
-
 
 
 #' Ordinal association measures for two variables or a contingency table
@@ -157,10 +138,17 @@ print.AssocsTab <- function(x, digits=4, ...){
 #'   (default) treats row totals as the dependent variable;
 #'   \code{"column"} treats column totals as dependent.
 #'
-#' @return A named list with one element per requested measure.  Each
-#'   element is a named numeric scalar (point estimate only) or a named
-#'   numeric vector of length 3 (estimate, lower CI, upper CI) when
-#'   \code{conf.level} is supplied.
+#' @return A named list with one element per requested measure:
+#' \describe{
+#'   \item{\code{gamma}}{Goodman-Kruskal Gamma}
+#'   \item{\code{tauA}}{Kendall's Tau-a}
+#'   \item{\code{tauB}}{Kendall's Tau-b}
+#'   \item{\code{tauC}}{Stuart's Tau-c}
+#'   \item{\code{somers}}{Somers' D}
+#'   \item{\code{cstat}}{C-statistic (area under ROC curve)}
+#' }
+#' Each element is a named numeric scalar (point estimate only) or a named
+#' numeric vector \code{c(est, lci, uci)} when \code{conf.level} is supplied.
 #'
 #' @details
 #' Two computational paths are used:
@@ -192,15 +180,15 @@ print.AssocsTab <- function(x, digits=4, ...){
 #' assocsXY(tab, which = "gamma", conf.level = 0.95)
 #'
 #' @seealso \code{\link{conDisPairs}}
-
 #' @export
 assocsXY <- function(x, y = NULL,
-                       which = c("all","gamma","tau-a","tau-b","tau-c","somers","cstat"),
-                       conf.level = NA,
-                       direction = c("row","column")) {
+                     which = c("all", "gamma", "tau-a", "tau-b", "tau-c", "somers", "cstat"),
+                     conf.level = NA,
+                     direction = c("row", "column")) {
   
   direction <- match.arg(direction)
-  which <- gsub("-", "_", match.arg(which), fixed = TRUE)
+  which     <- gsub("-", "_", match.arg(which), fixed = TRUE)
+  # internal mapping: tau_a -> tauA etc. handled at output stage
   
   # ============================
   # XY MODE (use C++)
@@ -208,20 +196,21 @@ assocsXY <- function(x, y = NULL,
   if(!is.null(y)){
     
     cl <- if(is.na(conf.level)) NA_real_ else conf.level
-    z <- assoc_cpp(x, y, cl)
+    z  <- assoc_cpp(x, y, cl)
     
-    res_all <- list(
-      gamma  = if(is.na(conf.level)) z["gamma"] else z[c("gamma","gamma_l","gamma_u")],
-      tau_a  = if(is.na(conf.level)) z["tau_a"] else z[c("tau_a","tau_a_l","tau_a_u")],
-      tau_b  = if(is.na(conf.level)) z["tau_b"] else z[c("tau_b","tau_b_l","tau_b_u")],
-      tau_c  = if(is.na(conf.level)) z["tau_c"] else z[c("tau_c","tau_c_l","tau_c_u")],
-      somers = if(is.na(conf.level)) z["somers"] else z[c("somers","somers_l","somers_u")],
-      cstat  = if(is.na(conf.level)) z["cstat"] else z[c("cstat","cstat_l","cstat_u")]
+    resAll <- list(
+      gamma  = if(is.na(conf.level)) z["gamma"]  else z[c("gamma",  "gamma_l",  "gamma_u")],
+      tauA   = if(is.na(conf.level)) z["tau_a"]  else z[c("tau_a",  "tau_a_l",  "tau_a_u")],
+      tauB   = if(is.na(conf.level)) z["tau_b"]  else z[c("tau_b",  "tau_b_l",  "tau_b_u")],
+      tauC   = if(is.na(conf.level)) z["tau_c"]  else z[c("tau_c",  "tau_c_l",  "tau_c_u")],
+      somers = if(is.na(conf.level)) z["somers"] else z[c("somers", "somers_l", "somers_u")],
+      cstat  = if(is.na(conf.level)) z["cstat"]  else z[c("cstat",  "cstat_l",  "cstat_u")]
     )
+    
     if(is.na(conf.level))
-      res_all <- lapply(res_all, unname)
+      resAll <- lapply(resAll, unname)
     else
-      res_all <- lapply(res_all, setNamesX, names=c("est", "lci", "uci"))
+      resAll <- lapply(resAll, setNamesX, names = c("est", "lci", "uci"))
     
   } else {
     
@@ -229,9 +218,7 @@ assocsXY <- function(x, y = NULL,
     # TABLE MODE
     # ============================
     tab <- as.table(x)
-    
-    # base counts
-    cd <- conDisPairs(tab)
+    cd  <- conDisPairs(tab)
     
     C  <- unname(cd[["C"]])
     D  <- unname(cd[["D"]])
@@ -239,147 +226,128 @@ assocsXY <- function(x, y = NULL,
     Ty <- unname(cd[["Ties_Y"]])
     
     n  <- sum(tab)
-    n0 <- n*(n-1)/2
+    n0 <- n * (n - 1) / 2
     S  <- C - D
     
-    # measures
     gamma <- S / (C + D)
-    tau_a <- S / n0
-    tau_b <- S / sqrt((n0 - Tx)*(n0 - Ty))
+    tauA  <- S / n0
+    tauB  <- S / sqrt((n0 - Tx) * (n0 - Ty))
     
-    m <- min(dim(tab))
-    tau_c <- 2*S*m/(n^2*(m-1))
+    m    <- min(dim(tab))
+    tauC <- 2 * S * m / (n^2 * (m - 1))
     
-    ni <- if(direction=="row") colSums(tab) else rowSums(tab)
-    denom <- n0 - sum(ni*(ni-1)/2)
-    
+    ni     <- if(direction == "row") colSums(tab) else rowSums(tab)
+    denom  <- n0 - sum(ni * (ni - 1) / 2)
     somers <- S / denom
-    cstat  <- (somers + 1)/2
+    cstat  <- (somers + 1) / 2
     
-    # no CI case
     if(is.na(conf.level)){
-      res_all <- list(
+      resAll <- list(
         gamma  = gamma,
-        tau_a  = tau_a,
-        tau_b  = tau_b,
-        tau_c  = tau_c,
+        tauA   = tauA,
+        tauB   = tauB,
+        tauC   = tauC,
         somers = somers,
         cstat  = cstat
       )
       
     } else {
       
-      # exact table CI
-      ci_all <- .tableAssocCI(tab, conf.level, direction)
+      ciAll <- .tableAssocCI(tab, conf.level, direction)
       
-      res_all <- list(
-        gamma  = ci_all$gamma,
-        tau_a  = ci_all$tau_a,
-        tau_b  = ci_all$tau_b,
-        tau_c  = ci_all$tau_c,
-        somers = ci_all$somers,
-        cstat  = ci_all$cstat
+      resAll <- list(
+        gamma  = ciAll$gamma,
+        tauA   = ciAll$tauA,
+        tauB   = ciAll$tauB,
+        tauC   = ciAll$tauC,
+        somers = ciAll$somers,
+        cstat  = ciAll$cstat
       )
-      
-      res_all <- lapply(res_all, setNamesX, names=c("est", "lci", "uci"))
-      
+      resAll <- lapply(resAll, setNamesX, names = c("est", "lci", "uci"))
     }
   }
   
   # ============================
   # SELECT WHICH
   # ============================
+  # map user-facing "tau_a" -> internal "tauA" etc.
+  whichMap <- c(tau_a = "tauA", tau_b = "tauB", tau_c = "tauC")
   if(which != "all"){
-    res_all <- res_all[which]
+    which <- if(which %in% names(whichMap)) whichMap[[which]] else which
+    resAll <- resAll[which]
   }
   
-  return(res_all)
+  return(resAll)
 }
 
 
-# == internal helper functions ================================================
+# == internal helper ==========================================================
 
-
-.tableAssocCI <- function(tab, conf.level=0.95, direction="row"){
+#' @noRd
+.tableAssocCI <- function(tab, conf.level = 0.95, direction = "row"){
   
   cd <- condis_pairs_tab_cpp(tab)
   
-  pi.c <- cd$pi.c
-  pi.d <- cd$pi.d
+  piC <- cd$pi.c
+  piD <- cd$pi.d
   
-  n <- sum(tab)
-  S <- cd$C - cd$D
+  n  <- sum(tab)
+  S  <- cd$C - cd$D
+  n0 <- n * (n - 1) / 2
   
-  n0 <- n*(n-1)/2
-  
-  # ties
   rowSum <- rowSums(tab)
   colSum <- colSums(tab)
-  
-  Tx <- cd$Ties_X
-  Ty <- cd$Ties_Y
+  Tx     <- cd$Ties_X
+  Ty     <- cd$Ties_Y
   
   # ============================
   # SOMERS
   # ============================
-  ni <- if(direction=="row") colSum else rowSum
-  T  <- n0 - sum(ni*(ni-1)/2)
-  
-  psi_s <- (T*(pi.c - pi.d) - S*(n - ni)) / T^2
-  var_s <- sum(tab * psi_s^2)
-  
+  ni    <- if(direction == "row") colSum else rowSum
+  T     <- n0 - sum(ni * (ni - 1) / 2)
+  psiS  <- (T * (piC - piD) - S * (n - ni)) / T^2
+  varS  <- sum(tab * psiS^2)
   somers <- S / T
-  
   
   # ============================
   # GAMMA
   # ============================
-  denom <- cd$C + cd$D
-  
-  psi_g <- ((pi.c - pi.d)*denom - S*(pi.c + pi.d)) / denom^2
-  var_g <- sum(tab * psi_g^2)
-  
-  gamma <- S / denom
+  denomG <- cd$C + cd$D
+  psiG   <- ((piC - piD) * denomG - S * (piC + piD)) / denomG^2
+  varG   <- sum(tab * psiG^2)
+  gamma  <- S / denomG
   
   # ============================
   # TAU-A
   # ============================
-  psi_a <- (pi.c - pi.d) / n0
-  var_a <- sum(tab * psi_a^2)
-  
-  tau_a <- S / n0
+  psiA <- (piC - piD) / n0
+  varA <- sum(tab * psiA^2)
+  tauA <- S / n0
   
   # ============================
   # TAU-C
   # ============================
-  m <- min(dim(tab))
-  k <- 2*m/(n^2*(m-1))
-  
-  psi_c <- k * (pi.c - pi.d)
-  var_c <- sum(tab * psi_c^2)
-  
-  tau_c <- k * S
+  m    <- min(dim(tab))
+  k    <- 2 * m / (n^2 * (m - 1))
+  psiC <- k * (piC - piD)
+  varC <- sum(tab * psiC^2)
+  tauC <- k * S
   
   # ============================
-  # TAU-B 
+  # TAU-B
   # ============================
   ti <- rowSum
   uj <- colSum
+  n1 <- sum(ti * (ti - 1) / 2)
+  n2 <- sum(uj * (uj - 1) / 2)
+  tauB <- S / sqrt((n0 - n1) * (n0 - n2))
   
-  n1 <- sum(ti * (ti-1) / 2)
-  n2 <- sum(uj * (uj-1) / 2)
-  
-  tau_b <- S / sqrt((n0-n1)*(n0-n2))
-  
-  # probabilities
-  pi <- tab / n
-  
-  pdiff <- (pi.c - pi.d) / n
-  Pdiff <- 2 * S / n^2
+  pi     <- tab / n
+  pdiff  <- (piC - piD) / n
+  Pdiff  <- 2 * S / n^2
   
   rowsum <- rowSums(pi)
   colsum <- colSums(pi)
-  
   rowmat <- matrix(rep(rowsum, ncol(tab)), ncol = ncol(tab))
   colmat <- matrix(rep(colsum, nrow(tab)), nrow = nrow(tab), byrow = TRUE)
   
@@ -389,34 +357,29 @@ assocsXY <- function(x, y = NULL,
   tauphi <- (2 * pdiff + Pdiff * colmat) * delta2 * delta1 +
     (Pdiff * rowmat * delta2) / delta1
   
-  sigma2_b <- ((sum(pi * tauphi^2) - sum(pi * tauphi)^2) /
-                 (delta1 * delta2)^4) / n
+  sigma2B <- ((sum(pi * tauphi^2) - sum(pi * tauphi)^2) /
+                (delta1 * delta2)^4) / n
   
-  if(sigma2_b < .Machine$double.eps * 10) sigma2_b <- 0
+  if(sigma2B < .Machine$double.eps * 10) sigma2B <- 0
   
   # ============================
   # CI helper
   # ============================
-  z <- qnorm(1-(1-conf.level)/2)
+  z <- qnorm(1 - (1 - conf.level) / 2)
   
   mk <- function(est, var){
     se <- sqrt(var)
-    c(est=est,
-      lci=max(est - z*se, -1),
-      uci=min(est + z*se, 1))
+    c(est = est,
+      lci = max(est - z * se, -1),
+      uci = min(est + z * se,  1))
   }
   
   list(
-    somers = mk(somers,  var_s),
-    gamma  = mk(gamma,  var_g),
-    tau_a  = mk(tau_a,  var_a),
-    tau_b  = mk(tau_b,  sigma2_b),
-    tau_c  = mk(tau_c,  var_c),
-    cstat  = mk((somers+1)/2, var_s/4)
+    somers = mk(somers, varS),
+    gamma  = mk(gamma,  varG),
+    tauA   = mk(tauA,   varA),
+    tauB   = mk(tauB,   sigma2B),
+    tauC   = mk(tauC,   varC),
+    cstat  = mk((somers + 1) / 2, varS / 4)
   )
 }
-
-
-
-
-

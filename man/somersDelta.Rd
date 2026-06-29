@@ -103,6 +103,7 @@ Measures of association for cross classifications III.
 \code{\link[Hmisc]{somers2}} (restricted to binary response),
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},

@@ -61,12 +61,11 @@
 #' 
 
 
+#' @family descriptive  
+#' @concept summary
+#'
 
-#' @family data.description
-#' @concept data-description
-#' @concept data-inspection
-#'
-#'
+
 #' @export
 abstract <- function(x, sep = ", ", zeroForm = ".", maxlevels = 5,
                      trunc = TRUE, list.len = 999) {

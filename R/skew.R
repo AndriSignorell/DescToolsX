@@ -1,7 +1,7 @@
 
 #' Skewness
 #' 
-#' \code{skewX} computes the skewness, \code{kurtX} the excess kurtosis of the
+#' \code{skew} computes the skewness, \code{kurt} the excess kurtosis of the
 #' values in x.
 #' 
 #' If \code{na.rm} is \code{TRUE} then missing values are removed before
@@ -27,7 +27,7 @@
 #' This implementation of the two functions is comparably fast, as the
 #' expensive sums are coded in C++.
 #' 
-#' @name skewX
+#' @name skew
 #' 
 #' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector. An object which is not a vector is coerced (if
@@ -53,7 +53,7 @@
 #'   \item \code{uci}: upper confidence limit
 #' }
 #' 
-#' @seealso \code{\link{kurtX}}, \code{\link{meanX}}, \code{\link{sdX}}, 
+#' @seealso \code{\link{kurt}}, \code{\link{meanX}}, \code{\link{sdX}}, 
 #' similar code in \code{library(e1071)}
 #' 
 #' @references 
@@ -71,18 +71,18 @@
 #' 
 #' @examples
 #' 
-#' skewX(Pizza$price, na.rm=TRUE)
+#' skew(Pizza$price, na.rm=TRUE)
 #' 
 #' # use sapply to calculate skewness for a data.frame
-#' sapply(Pizza[,c("temperature","price","delivery_min")], skewX, na.rm=TRUE)
+#' sapply(Pizza[,c("temperature","price","delivery_min")], skew, na.rm=TRUE)
 #' 
 #' # or apply to do that columnwise with a matrix
 #' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
-#'       skewX, na.rm=TRUE)
+#'       skew, na.rm=TRUE)
 #' 
 
 
-# skewX(
+# skew(
 #   x,                               # 1) Data
 #   conf.level = NA,                 # 2) CI-control
 #   sides = c("two.sided", "left", "right"),
@@ -100,7 +100,7 @@
 #'
 
 #' @export
-skewX <- function(x,
+skew <- function(x,
                   conf.level = NA,
                   sides = c("two.sided", "left", "right"),
                   method = c("boot", "classic"),
@@ -145,7 +145,7 @@ skewX <- function(x,
       
       method,
       
-      classic = .skewX.classic(
+      classic = .skew.classic(
         x,
         conf.level = conf.level,
         estimator = estimator,
@@ -153,7 +153,7 @@ skewX <- function(x,
         na.rm = na.rm
       ),
       
-      boot = .skewX.boot(
+      boot = .skew.boot(
         x,
         conf.level = conf.level,
         estimator = estimator,
@@ -260,7 +260,7 @@ skewX <- function(x,
 }
 
 
-.skewX.classic <- function(x,
+.skew.classic <- function(x,
                            conf.level,
                            estimator = 3,
                            weights = NULL,
@@ -283,7 +283,7 @@ skewX <- function(x,
 }
 
 
-.skewX.boot <- function(x,
+.skew.boot <- function(x,
                         conf.level,
                         estimator = 3,
                         weights = NULL,

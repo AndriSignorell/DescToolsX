@@ -104,7 +104,7 @@ percAgreement <- function(x, y = NULL,
     se = se,
     conf.int = ci,
     n = n,
-    n_pairable = n0,
+    nPairable = n0,
     method = "Percent agreement (design-based; Klein/Gwet)"
   )
 }

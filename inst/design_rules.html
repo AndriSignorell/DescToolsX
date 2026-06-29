@@ -611,7 +611,7 @@ measures</strong> whose names collide with a function in
 X:</strong></p>
 <pre class="text"><code>meanX       medianX     sdX         varX
 madX        iqrwX       rangeX      coefvarX
-gmeanX      hmeanX      skewX       kurtX
+gmeanX      hmeanX      skew       kurt
 maeX        mseX        rmseX       mapeX
 smapeX      quantileX   percentRankX</code></pre>
 <p>Rules:</p>
@@ -1043,8 +1043,8 @@ conDisPairsTab_cpp</code></pre>
 </ol>
 <p>Core principle: CI construction depends on the estimator, never the
 other way around.</p>
-<p>Example <code>skewX</code>:</p>
-<pre class="r"><code>skewX(
+<p>Example <code>skew</code>:</p>
+<pre class="r"><code>skew(
   x,
   # Estimator
   estimator = 3,
@@ -1060,7 +1060,7 @@ other way around.</p>
 <p><strong><code>conf.level</code> default:</strong></p>
 <ul>
 <li>Functions that return a CI together with the result,
-e.g. <code>skewX</code>, <code>ICC</code>: <code>conf.level = NA</code>,
+e.g. <code>skew</code>, <code>ICC</code>: <code>conf.level = NA</code>,
 no CI by default</li>
 <li>Dedicated CI functions, e.g. <code>meanCI</code>,
 <code>binomCI</code>: <code>conf.level = 0.95</code></li>

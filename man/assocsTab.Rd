@@ -68,17 +68,16 @@ assocsTab(pain)
 \seealso{
 \code{\link{Association}}
 
-Other assoc.nominal:
-\code{\link[=contCoef]{contCoef()}},
-\code{\link[=cramerV]{cramerV()}},
-\code{\link[=lambda]{lambda()}},
-\code{\link[=phi]{phi()}},
-\code{\link[=tschuprowT]{tschuprowT()}},
-\code{\link[=uncertCoef]{uncertCoef()}},
-\code{\link{yule}}
+Other assoc.ordinal:
+\code{\link[=gkGamma]{gkGamma()}},
+\code{\link[=gkTau]{gkTau()}},
+\code{\link[=kendallTauA]{kendallTauA()}},
+\code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=somersDelta]{somersDelta()}},
+\code{\link[=spearmanCor]{spearmanCor()}},
+\code{\link[=stuartTauC]{stuartTauC()}}
 }
-\concept{assoc.nominal}
-\concept{association-measures}
-\concept{descriptive-statistics}
-\concept{table-manipulation}
+\concept{assoc.ordinal}
+\concept{association-measure}
+\concept{ordinal}
 \keyword{multivariate}

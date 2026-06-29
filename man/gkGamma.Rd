@@ -86,6 +86,7 @@ Measures of association for cross classifications III.
 \code{\link{yuleQ}} for \eqn{2 \times 2} tables,
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},

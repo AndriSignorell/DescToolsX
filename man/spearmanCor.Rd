@@ -72,6 +72,7 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 \code{\link{Association}}
 
 Other assoc.ordinal:
+\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
