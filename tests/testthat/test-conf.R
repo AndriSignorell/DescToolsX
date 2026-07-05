@@ -65,14 +65,14 @@ test_that("conf na.rm = TRUE handles missing values", {
   expect_s3_class(conf(pred, ref, na.rm = TRUE), "Conf")
 })
 
-test_that("sens() extracts sensitivity from conf object", {
-  res <- sens(.pred2, .ref2, pos = "A")
+test_that("sensX() extracts sensitivity from conf object", {
+  res <- sensX(.pred2, .ref2, pos = "A")
   expect_gte(res, 0)
   expect_lte(res, 1)
 })
 
-test_that("spec() extracts specificity from conf object", {
-  res <- spec(.pred2, .ref2, pos = "A")
+test_that("specX() extracts specificity from conf object", {
+  res <- specX(.pred2, .ref2, pos = "A")
   expect_gte(res, 0)
   expect_lte(res, 1)
 })

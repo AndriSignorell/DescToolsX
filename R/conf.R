@@ -357,19 +357,20 @@ plot.Conf <- function(x, main = "Confusion Matrix", ...) {
 #'
 #' @inheritParams conf
 #' @return named numeric vector of sensitivities.
-#' @seealso \code{\link{conf}}, \code{\link{spec}}
+#' @seealso \code{\link{conf}}, \code{\link{specX}}
 #' @family classification
 #' @export
-sens <- function(x, ...) conf(x, ...)[["byclass"]]["sens", ]
+sensX <- function(x, ...) conf(x, ...)[["byclass"]]["sens", ]
+
 
 #' Extract Specificity from a Confusion Matrix
 #'
 #' @inheritParams conf
 #' @return named numeric vector of specificities.
-#' @seealso \code{\link{conf}}, \code{\link{sens}}
+#' @seealso \code{\link{conf}}, \code{\link{sensX}}
 #' @family classification
 #' @export
-spec <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
+specX <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
 
 
 # == internal helper functions==================================================

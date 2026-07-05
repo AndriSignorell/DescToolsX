@@ -20,21 +20,29 @@
 #' constant vector, equal-length intervals are created that cover the single
 #' value.) See \code{\link{cut}}.
 #' 
+#' With \code{breaks = FALSE} no classing takes place and the distinct values
+#' of a numeric \code{x} are tabulated directly (in ascending order of the
+#' values). In this case the \code{ord} argument applies as for categorical
+#' variables.
+#' 
 #' @name freq
 #' @aliases freq print.Freq
 #' 
 #' @param x the variable to be described, can be any atomic type.
 #' @param breaks either a numeric vector of two or more cut points or a single
 #' number (greater than or equal to 2) giving the number of intervals into
-#' which x is to be cut. Default taken from the function \code{hist()}.  This
+#' which x is to be cut. Default taken from the function \code{hist()}.
+#' If set to \code{FALSE}, a numeric \code{x} will not be classed at all, but
+#' tabulated directly by its distinct values. This is useful for discrete
+#' numeric variables such as counts or scores. The argument
 #' is ignored if x is not of numeric type.
 #' @param include.lowest logical, indicating if an \verb{x[i]} equal to the lowest (or
 #' highest, for \code{right = FALSE}) \code{"breaks"} value should be included.
-#' Ignored if x is not of numeric type.
+#' Ignored if x is not of numeric type or if \code{breaks = FALSE}.
 #' @param ord how should the result be ordered? Default is \code{"level"},
 #' other choices are 'by frequency' (\code{"descending"} or \code{"ascending"})
 #' or 'by name of the levels' (\code{"name"}). The argument can be abbreviated.
-#' This is ignored if x is numeric.
+#' This is ignored if x is numeric and classed (\code{breaks} not \code{FALSE}).
 #' @param useNA one out of \code{"no"}, \code{"ifany"}, \code{"always"}.
 #' Defines whether to include extra \code{NA} levels in the table.  Defaults to
 #' \code{"no"} which is the \code{\link{table}()} default too.
@@ -76,6 +84,12 @@
 #' # percentages and cumulative frequencies for a vector of count data
 #' freq(as.table(c(2,4,12,8)))
 #' 
+#' # tabulate a discrete numeric variable directly, without classing
+#' freq(Pizza$count, breaks = FALSE)
+#' 
+#' # ... which also allows ordering by frequency
+#' freq(Pizza$count, breaks = FALSE, ord = "desc")
+#' 
 
 
 
@@ -99,7 +113,7 @@ freq <- function(x, breaks = hist(x, plot = FALSE)$breaks,
     
   } else {
     
-    if(is.numeric(x) || isDate(x)){
+    if((is.numeric(x) || isDate(x)) && !isFALSE(breaks)){
       x <- cut(x, breaks = breaks, include.lowest = include.lowest,
                ordered_result = TRUE, ...)
     }
@@ -170,4 +184,6 @@ print.Freq <- function(x, digits = NULL, ...) {
       print.gap = print.gap
     )
   }
+
+  invisible(x)
 }

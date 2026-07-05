@@ -176,8 +176,8 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
   cat("\n")
   cat(txt.freq, sep = "\n")
   
-  if (x$maxrows < x$levels) {
-    cat("... etc.\n [list output truncated]\n\n")
+  if (x$maxrows < x$unique) {
+    cat(cli::col_grey("... etc.\n [list output truncated]\n\n"))
   } else {
     cat("\n")
   }
@@ -193,6 +193,7 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 #' @rdname desc
 #' @export
 plot.Desc.factor <- function(x, ...){
-  aurora::plotCatDist(setNamesX(x$freq[,2], x$freq[,1]), na.rm=TRUE, ...)
+  aurora::plotCatDist(setNamesX(x$freq[,2], x$freq[,1]), 
+                      na.rm=TRUE, maxcats = x$maxrows, ...)
 }
 
