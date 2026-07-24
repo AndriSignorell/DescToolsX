@@ -2,49 +2,69 @@
 % Please edit documentation in R/scaleX.R
 \name{scaleX}
 \alias{scaleX}
-\title{Robust Scaling With Median and MAD}
+\title{(Robust) Scaling and Centering}
 \usage{
-scaleX(x, center = TRUE, scale = TRUE, na.rm = TRUE)
+scaleX(x, center = TRUE, scale = TRUE, robust = FALSE, na.rm = TRUE)
 }
 \arguments{
 \item{x}{a numeric matrix-like object}
 
 \item{center}{logical scalar or numeric vector. If \code{TRUE}, the column
-medians are subtracted; if \code{FALSE}, no centering is performed.
-Alternatively, a numeric vector of length \code{ncol(x)} supplies the
-values to subtract directly.}
+means (or medians, for \code{robust = TRUE}) are subtracted; if
+\code{FALSE}, no centering is performed. Alternatively, a numeric vector
+of length \code{ncol(x)} supplies the values to subtract directly.}
 
 \item{scale}{logical scalar or numeric vector. If \code{TRUE}, the
-(centered) columns are divided by their MAD; if \code{FALSE}, no scaling
-is performed. Alternatively, a numeric vector of length \code{ncol(x)}
-supplies the divisors directly.}
+columns are divided by their standard deviation (or MAD, for
+\code{robust = TRUE}); if \code{FALSE}, no scaling is performed.
+Alternatively, a numeric vector of length \code{ncol(x)} supplies the
+divisors directly.}
+
+\item{robust}{logical; whether to standardize by median and MAD rather
+than by mean and standard deviation}
 
 \item{na.rm}{logical; if \code{TRUE} (default), missing values are omitted
-when the column medians and MADs are computed. Ignored for whichever of
+when the column centers and scales are computed. Ignored for whichever of
 \code{center} and \code{scale} is given as a numeric vector. Missing
 entries of \code{x} itself always remain missing in the result.}
 }
 \value{
-the centered and scaled matrix. The numeric centerings and scalings used (if
-any) are returned as attributes \code{"scaled:center"} and
-\code{"scaled:scale"}.
+the centered and scaled matrix. The numeric centerings and
+scalings used (if any) are returned as attributes
+\code{"scaled:center"} and \code{"scaled:scale"}.
 }
 \description{
-\code{scaleX} performs robust standardization, using
-\code{\link[stats]{median}} and \code{\link[stats]{mad}} instead of
-\code{\link[base]{mean}} and \code{\link[stats]{sd}}.
+Centers and scales the columns of a numeric matrix. The conventional
+version uses mean and standard deviation, the robust one median and MAD
+(see Details).
 }
 \details{
-The function mirrors the interface of \code{\link[base]{scale}}: both
-\code{center} and \code{scale} accept either a logical flag or a numeric
-vector of values to use directly, in which case that vector must have one
-entry per column of \code{x}.
+The R base function \code{\link[base]{scale}} centers each column by its
+mean and divides by the root mean square of the centered column, which
+for centered data is the standard deviation. Both are sensitive to
+outliers: a single extreme value moves the mean and inflates the standard
+deviation, so the remaining observations are compressed towards zero.
 
-Because the median absolute deviation is invariant to location shifts, it
-has the same value whether computed before or after centering. The scale
-factors are therefore computed from the original columns, so that the
-returned \code{"scaled:scale"} remains interpretable independently of
-\code{center}.
+If \code{robust} is set to \code{TRUE} the column median takes the place
+of the mean and the median absolute deviation
+(\code{\link[stats]{mad}}) that of the standard deviation. Both have a
+breakdown point of 50 percent, so the standardization reflects the bulk
+of the data rather than its extremes, and genuine outliers keep large
+scores instead of being pulled in.
+
+Whichever is chosen, \code{center} and \code{scale} accept either a
+logical flag or a numeric vector of values to use directly, in which case
+that vector must have one entry per column of \code{x}, as in
+\code{\link[base]{scale}}.
+
+The two versions differ in one further respect. The MAD is invariant to
+location shifts, so for \code{robust = TRUE} the returned
+\code{"scaled:scale"} is the same whether or not the columns were
+centered first, and does not depend on \code{center}. The root mean
+square is not invariant; for \code{robust = FALSE} it is computed after
+centering, matching \code{\link[base]{scale}}, which is what makes it
+equal the standard deviation when \code{center} is \code{TRUE} and not
+otherwise.
 
 A zero or non-finite scaling factor can produce undefined or non-finite
 results. \code{scaleX} emits a warning naming the affected columns rather
@@ -55,10 +75,10 @@ subsequently dropped.
 x <- bedrock::Pizza$temperature
 
 # robust standardization is far less affected by the extreme values
-plot(scaleX(x), col = "black", pch = 16, cex = 0.4,
+plot(scaleX(x, robust = TRUE), col = "black", pch = 16, cex = 0.4,
      ylab = "standardized temperature")
-points(scale(x), col = "red", pch = 16, cex = 0.4)
-legend("topright", legend = c("scaleX (median/MAD)", "scale (mean/SD)"),
+points(scaleX(x), col = "red", pch = 16, cex = 0.4)
+legend("topright", legend = c("robust (median/MAD)", "conventional"),
        col = c("black", "red"), pch = 16, bty = "n")
 
 # the centerings and scalings used are recoverable
@@ -66,13 +86,16 @@ z <- scaleX(cbind(a = c(1, 2, 3, 4, 100), b = c(10, 20, 30, 40, 50)))
 attr(z, "scaled:center")
 attr(z, "scaled:scale")
 
+# compared to the robust version, which the extreme value barely moves
+attr(scaleX(cbind(a = c(1, 2, 3, 4, 100)), robust = TRUE), "scaled:scale")
+
 # supplying the values directly, as base::scale allows
 scaleX(matrix(1:6, ncol = 2), center = c(0, 0), scale = c(1, 2))
 
 }
 \seealso{
 \code{\link[base]{scale}}, \code{\link[base]{sweep}},
-\code{\link[stats]{mad}}
+\code{\link[stats]{mad}}, \code{\link{rangeX}}
 
 Other transform:
 \code{\link[=boxCox]{boxCox()}},
