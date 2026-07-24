@@ -7,22 +7,22 @@
 hoeffdingD(x, y, jitter = FALSE, eps = NULL, seed = NULL)
 }
 \arguments{
-\item{x}{Numeric vector.}
+\item{x}{numeric vector}
 
-\item{y}{Numeric vector of the same length as \code{x}.}
+\item{y}{numeric vector with the same length as \code{x}}
 
-\item{jitter}{Logical. If \code{TRUE}, small random noise is added to \code{y}
+\item{jitter}{logical. If \code{TRUE}, small random noise is added to \code{y}
 to break ties. This is useful when the data contain ties, since the fast
 algorithm assumes continuous data.}
 
-\item{eps}{Optional numeric. Magnitude of the jitter noise. Defaults to
-\code{1e-10 * sd(y)} if not specified.}
+\item{eps}{optional numeric magnitude of the jitter noise; defaults to
+\code{1e-10 * sd(y)} if not specified}
 
-\item{seed}{Optional integer. Random seed for reproducibility when
-\code{jitter = TRUE}.}
+\item{seed}{optional integer random seed for reproducibility when
+\code{jitter = TRUE}}
 }
 \value{
-A numeric value representing Hoeffding's D statistic. The statistic lies approximately in
+numeric scalar containing Hoeffding's D statistic. The statistic lies approximately in
 the interval \eqn{[-1/60, 1/30]}, where values near 0 indicate independence.
 }
 \description{
@@ -71,7 +71,6 @@ Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
-\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }

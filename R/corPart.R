@@ -9,17 +9,17 @@
 #' (observations in rows, variables in columns), and a correlation matrix
 #' is computed internally using \code{cor(..., use = "pairwise.complete.obs")}.
 #'
-#' @param m A numeric matrix. Either:
+#' @param m a numeric matrix, either:
 #'   \itemize{
 #'     \item a square correlation matrix, or
 #'     \item a data matrix (observations × variables)
 #'   }
-#' @param x Integer vector of indices specifying the variables of interest
-#'   for which partial correlations are computed.
-#' @param y Integer vector of indices specifying the control variables
-#'   (conditioning set).
+#' @param x integer vector of indices specifying the variables of interest
+#'   for which partial correlations are computed
+#' @param y integer vector of indices specifying the control variables
+#'   (conditioning set)
 #'
-#' @return A symmetric numeric matrix containing the partial correlations
+#' @return a symmetric numeric matrix containing the partial correlations
 #'   among variables in \code{x}, adjusted for variables in \code{y}.
 #'   Row and column names correspond to \code{colnames(m)[x]}.
 #'

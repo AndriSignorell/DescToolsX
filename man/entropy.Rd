@@ -7,23 +7,22 @@
 entropy(x, y = NULL, base = 2, normalize = FALSE, ...)
 }
 \arguments{
-\item{x}{A vector, table, matrix, or array of counts.}
+\item{x}{a vector, table, matrix, or array of counts}
 
-\item{y}{An optional second variable used together with
+\item{y}{an optional second variable used together with
 \code{x} to create a contingency table via
-\code{table(x, y, ...)}.}
+\code{table(x, y, ...)}}
 
-\item{base}{Logarithm base.
-Defaults to \code{2} (bits).}
+\item{base}{logarithm base; defaults to \code{2} (bits)}
 
-\item{normalize}{Logical.
+\item{normalize}{logical.
 If \code{TRUE}, entropy is normalized to the interval
 \eqn{[0,1]}.}
 
-\item{...}{Additional arguments passed to \code{table()}.}
+\item{...}{additional arguments passed to \code{table()}}
 }
 \value{
-A numeric scalar containing the entropy.
+a numeric scalar containing the entropy
 }
 \description{
 Computes the Shannon entropy of a vector, contingency table,
@@ -54,15 +53,12 @@ x <- c("A", "A", "B", "B", "C")
 
 entropy(x)
 
-tab <- matrix(
-  c(10, 20,
-    30, 40),
-  nrow = 2
-)
-
+tab <- matrix( c(10, 20,
+                 30, 40), nrow = 2 )
+                 
 entropy(tab)
-
 entropy(tab, normalize = TRUE)
+
 
 }
 \references{
@@ -77,7 +73,6 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

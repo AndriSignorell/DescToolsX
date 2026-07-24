@@ -7,14 +7,14 @@
 attachAliases(envir = .GlobalEnv)
 }
 \arguments{
-\item{envir}{The environment into which the aliases are assigned.
+\item{envir}{the environment into which the aliases are assigned.
 Defaults to \code{.GlobalEnv}.  Supply a different environment
 (e.g. the calling frame via \code{environment()}) if you want
 script-local aliases.}
 }
 \value{
-Invisibly returns a named character vector of the aliases that
-were created.
+invisibly, a named character vector of the aliases that were
+created
 }
 \description{
 Assigns a set of convenient short-name aliases into an environment

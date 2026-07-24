@@ -14,43 +14,48 @@ cramerV(
 )
 }
 \arguments{
-\item{x}{Either a contingency table, a two-column object
+\item{x}{either a contingency table, a two-column object
 (matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+(together with \code{y})}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
+\item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{Confidence level for confidence intervals.
+\item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{method}{string defining the method to calculate confidence intervals
-, one out of \code{"ncchisq"} (default, using noncentral chisquare),
+\item{method}{character string specifying the confidence interval method:
+\code{"ncchisq"} (default, using the noncentral chi-squared distribution),
 \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
-\code{"fisheradj"} (using fisher z transformation and bias correction), \code{"boot"}
-bootstrap intervals.}
+or \code{"fisheradj"} (using the Fisher z transformation and bias correction)}
 
-\item{correct}{logical (default \code{FALSE}). Should a bias
-correction (see Bergsma, 2013) be applied or not.}
+\item{correct}{logical; whether to apply the bias correction of Bergsma
+(2013); defaults to \code{FALSE}}
 
-\item{...}{Additional arguments passed to internal helper functions,
+\item{...}{additional arguments passed to internal helper functions,
 such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R}).}
+table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+if \code{conf.level = NA}, a numeric scalar containing Cramer's V;
+otherwise a named numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Cramer's V.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
 }
 \description{
 Measures the strength of association between two categorical variables. These
-can either be provided by two data vectors \code{x}, \code{y} or by
+can be provided as two data vectors \code{x} and \code{y}, or as
 a contingency table (see \link{Association}).
 }
 \details{
-Cramer's V range goes from 0 to 1. A Cramer's V in the range of \verb{[0, 0.3]}
-is considered as weak, \verb{[0.3,0.7]} as medium and > 0.7 as strong.
-The minimum value for all is 0 under statistical independence.
+Cramer's V ranges from 0 to 1, with 0 indicating statistical independence.
+}
+\note{
+Based on code by  Michael Smithson (confidence intervals),
+adapted to conform to package standards.
 }
 \examples{
 
@@ -102,13 +107,8 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 10.1016/j.jkss.2012.10.002
 }
 \seealso{
-\code{\link{table}}, \code{\link[aurora]{plotCor}},
-\code{\link[bedrock]{pairApply}}, \code{\link{Association}}
-\%\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
-outdated...
-
-Other topic.associationMeasures:
-\code{\link{Association}}
+\link[base:table]{base::table}, \link[pharos:plotCor]{pharos::plotCor},
+\link[bedrock:pairApply]{bedrock::pairApply}, \link{Association}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
@@ -117,21 +117,11 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, \cr Michael Smithson
-\href{mailto:michael.smithson@anu.edu.au}{michael.smithson@anu.edu.au} (confidence intervals for Cramer V)
-}
 \concept{assoc.nominal}
-\concept{association}
 \concept{association-measure}
 \concept{chi-square-based}
-\concept{contingency-tables}
-\concept{effect-size}
 \concept{nominal}
-\concept{nominal-data}
-\concept{topic.associationMeasures}

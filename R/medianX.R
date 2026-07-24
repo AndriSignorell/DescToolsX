@@ -28,15 +28,15 @@
 #' @name medianX
 #' @aliases medianX medianX.Freq medianX.factor medianX.default
 #' @param x an object for which a method has been defined, or a numeric vector
-#' containing the values whose median is to be computed.
+#' containing the values whose median is to be computed
 #' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}.
+#' giving the weights to use for elements of \code{x}
 #' @param breaks breaks for calculating the mean for classified data as
-#' composed by \code{\link{freq}}.
+#' composed by \code{\link{freq}}
 #' @param na.rm a logical value indicating whether \code{NA} values should be
-#' stripped before the computation proceeds.
-#' @param \dots further arguments passed to or from other methods.
-#' @return The default method returns a length-one object of the same type as
+#' stripped before the computation proceeds
+#' @param \dots further arguments passed to or from other methods
+#' @return the default method returns a length-one object of the same type as
 #' \code{x}, except when \code{x} is integer of even length, when the result
 #' will be double.
 #' 
@@ -88,10 +88,9 @@
 #' (m2 <- medianX(x))
 #' stopifnot(identical(m1, m2))
 #' 
-
-
+#'
 #' @rdname medianX
-
+#'
 #' @family location  
 #' @concept location
 #'
@@ -147,4 +146,3 @@ medianX.Freq <- function(x, breaks, ...)  {
     x[mi, "freq"] * diff(breaks[c(mi, mi+1)])
   
 }
-

@@ -1,110 +1,298 @@
 
-
 #' Cronbach's Coefficient Alpha
-#' 
+#'
 #' Cronbach's alpha is a measure of internal consistency and often used for
-#' validating psychometric tests. It determines the internal consistency or
-#' average correlation of items in a survey instrument to gauge its
-#' reliability. This reduces to Kuder-Richardson formula 20 (KR-20) when the
-#' columns of the data matrix are dichotomous.
-#' 
-#' 
-#' @param x \eqn{n \times m}{k x m} matrix or dataframe with item responses, k
-#' subjects (in rows) m items (in columns).
-#' @param conf.level confidence level of the interval. If set to \code{NA}
-#' (which is the default) no confidence interval will be calculated.
-#' @param cond logical. If set to \code{TRUE}, alpha is additionally calculated
-#' for the dataset with each item left out.
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. If set to \code{TRUE} only the complete
-#' cases of the ratings will be used. Defaults to \code{FALSE}.
-#' @return Either a numeric value or \cr a named vector of 3 columns if
-#' confidence levels are required (estimate, lower and upper ci) or \cr
-#' 
-#' a list containing the following components, if the argument \code{cond} is
-#' set to \code{TRUE}: \item{unconditional}{Cronbach's Alpha, either the single
-#' value only or with confidence intervals} \item{condcronbachAlpha}{The alpha
-#' that would be realized if the item were excluded}
-#' @author Andri Signorell <andri@@signorell.net>, based on code of Harold C.
-#' Doran
-#' @seealso \code{\link{cohenKappa}}, \code{\link{kappaM}}
-#' @references Cohen, J. (1960), A coefficient of agreement for nominal scales.
-#' \emph{Educational and Psychological Measurement}, 20, 37-46.
-#' 
+#' validating psychometric tests. The unstandardized form implemented here
+#' is computed from the item variances and the variance of the total score,
+#' expressing the proportion of total-score variance not attributable to
+#' item-specific variance. This reduces to Kuder-Richardson formula 20
+#' (KR-20) when the columns of the data matrix are dichotomous.
+#'
+#' The confidence interval follows Feldt (1965) and is based on the
+#' \eqn{F} distribution with \eqn{n - 1} and \eqn{(m - 1)(n - 1)} degrees of
+#' freedom, where \eqn{n} is the number of subjects (rows) and \eqn{m} the
+#' number of items (columns). It inherits the assumptions of the underlying
+#' ANOVA derivation - in particular normally distributed scores and
+#' essentially parallel items with homogeneous variances and covariances -
+#' and should be read with more caution than the point estimate when these
+#' are doubtful, for instance with markedly skewed or heterogeneous items.
+#'
+#' \code{sides} names the side on which the finite bound lies:
+#' \code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
+#' \eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
+#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+#' \code{\link[stats]{t.test}}.
+#'
+#' Missing values are handled according to package conventions: if
+#' \code{na.rm = FALSE} and \code{x} contains missing values, a single
+#' \code{NA_real_} is returned, irrespective of \code{returnConditional} and
+#' \code{conf.level}. If \code{na.rm = TRUE}, complete cases are used.
+#' Infinite values leave the variances undefined and are rejected with an
+#' error.
+#'
+#' @param x a \eqn{n \times m} matrix or data frame with item responses,
+#' \eqn{n} subjects (in rows) and \eqn{m} items (in columns)
+#' @param returnConditional logical; if \code{TRUE}, alpha is additionally
+#' calculated for the dataset with each item left out
+#' @param conf.level a single confidence level for the returned confidence
+#' interval. Set to \code{NA} (default) to suppress confidence interval
+#' calculation.
+#' @param sides a character string specifying a two-sided or one-sided
+#' confidence interval
+#' @param na.rm logical; if \code{TRUE}, incomplete cases are removed before
+#' the computation proceeds
+#'
+#' @return a named numeric vector, or a list when
+#' \code{returnConditional = TRUE}.
+#'
+#' If \code{na.rm = FALSE} and \code{x} contains missing values, a single
+#' \code{NA_real_} is returned instead of either structure.
+#'
+#' If \code{conf.level = NA}, the numeric vector contains only \code{est};
+#' otherwise it has elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
+#'
+#' If \code{returnConditional = TRUE}, a list with the components:
+#'
+#' \describe{
+#'   \item{\code{unconditional}}{alpha for the full set of items, as above}
+#'   \item{\code{conditional}}{a data frame with one row per item, giving the
+#'     alpha that would be realized if that item were excluded. \code{NULL}
+#'     when \code{x} has fewer than 3 items, since dropping one would leave
+#'     too few to compute alpha.}
+#' }
+#'
+#' @note Based on code of Harold C. Doran, adapted to conform to package
+#' standards.
+#'
+#' @references
+#' Cronbach, L. J. (1951). Coefficient alpha and the internal structure of
+#'   tests. \emph{Psychometrika}, \emph{16}(3), 297-334.
+#'   \doi{10.1007/BF02310555}
+#'
+#' Feldt, L. S. (1965). The approximate sampling distribution of
+#'   Kuder-Richardson reliability coefficient twenty.
+#'   \emph{Psychometrika}, \emph{30}(3), 357-370.
+#'   \doi{10.1007/BF02289499}
+#'
 #' @examples
-#' 
 #' set.seed(1234)
 #' tmp <- data.frame(
-#'   item1=sample(c(0,1), 20, replace=TRUE),
-#'   item2=sample(c(0,1), 20, replace=TRUE),
-#'   item3=sample(c(0,1), 20, replace=TRUE),
-#'   item4=sample(c(0,1), 20, replace=TRUE),
-#'   item5=sample(c(0,1), 20, replace=TRUE)
-#'   )
-#' 
-#' cronbachAlpha(tmp[,1:4], cond=FALSE, conf.level=0.95)
-#' cronbachAlpha(tmp[,1:4], cond=TRUE, conf.level=0.95)
-#' 
-#' cronbachAlpha(tmp[,1:4], cond=FALSE)
-#' cronbachAlpha(tmp[,1:2], cond=TRUE, conf.level=0.95)
-#' 
-#' \dontrun{
-#' # Calculate bootstrap confidence intervals for cronbachAlpha
-#' library(boot)
-#' cronbach.boot <- function(data,x) {cronbachAlpha(data[x,])[[3]]}
-#' res <- boot::boot(datafile, cronbach.boot, 1000)
-#' 
-#' # two-sided bootstrapped confidence interval of Cronbach's alpha
-#' quantile(res$t, c(0.025,0.975))   
-#' # adjusted bootstrap percentile (BCa) confidence interval (better)
-#' boot::boot.ci(res, type="bca")    
-#' }
-#' 
-
-
-#' @family assoc.agreement  
-#' @concept agreement  
-#' @concept internal-consistency  
-#' @concept reliability
+#'   item1 = sample(c(0, 1), 20, replace = TRUE),
+#'   item2 = sample(c(0, 1), 20, replace = TRUE),
+#'   item3 = sample(c(0, 1), 20, replace = TRUE),
+#'   item4 = sample(c(0, 1), 20, replace = TRUE),
+#'   item5 = sample(c(0, 1), 20, replace = TRUE)
+#' )
 #'
+#' cronbachAlpha(tmp[, 1:4])
+#'
+#' cronbachAlpha(tmp[, 1:4], conf.level = 0.95)
+#'
+#' # the conditional table is labelled with the column names of x
+#' cronbachAlpha(tmp[, 1:4], returnConditional = TRUE, conf.level = 0.95)
+#'
+#' # fewer than 3 items: the conditional component is NULL
+#' cronbachAlpha(tmp[, 1:2], returnConditional = TRUE, conf.level = 0.95)
+#'
+#' @family assoc.agreement
+#' @concept internal-consistency
+#' @concept reliability
+#' @concept confidence-interval
 #'
 #' @export
-cronbachAlpha <- function(x, conf.level = NA, cond = FALSE, na.rm = FALSE){
-  
-  i.cronbachAlpha <- function(x, conf.level = NA){
-    nc <- ncol(x)
-    colVars <- apply(x, 2, var)
-    total   <- var(rowSums(x))
-    res <- (total - sum(colVars)) / total * (nc/(nc-1))
-    
-    if (!is.na(conf.level)) {
-      N <- length(x)
-      ci <- 1 - (1-res) * qf( c(1-(1-conf.level)/2, (1-conf.level)/2), N-1, (nc-1)*(N-1))
-      res <- c("Cronbach Alpha"=res, lci=ci[1], uci=ci[2])
-    }
-    return(res)
-  }
-  
-  
+cronbachAlpha <- function(x,
+                          returnConditional = FALSE,
+                          conf.level = NA,
+                          sides = c("two.sided", "left", "right"),
+                          na.rm = FALSE){
+
+  if(!is.matrix(x) && !is.data.frame(x))
+    stop("Argument 'x' must be a matrix or a data frame.")
+
   x <- as.matrix(x)
-  if(na.rm) x <- na.omit(x)
-  
-  res <- i.cronbachAlpha(x = x, conf.level = conf.level)
-  
-  if(cond) {
-    condcronbachAlpha <- list()
-    n <- ncol(x)
-    if(n > 2) {     # can't calculate conditional with only 2 items
-      for(i in 1:n){
-        condcronbachAlpha[[i]] <- i.cronbachAlpha(x[,-i], conf.level = conf.level)
-      }
-      condcronbachAlpha <- data.frame(Item = 1:n, do.call("rbind", condcronbachAlpha))
-      colnames(condcronbachAlpha)[2] <- "Cronbach Alpha"
+
+  if(!is.numeric(x))
+    stop("Argument 'x' must contain numeric values only.")
+
+  if(!is.logical(returnConditional) || length(returnConditional) != 1L ||
+     is.na(returnConditional))
+    stop("Argument 'returnConditional' must be a single non-missing logical value.")
+
+  if(!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("Argument 'na.rm' must be a single non-missing logical value.")
+
+  sides <- match.arg(sides)
+
+  # Checked for type and length before is.na(), which would otherwise be
+  # passed a zero-length or multi-element value and make the if() below
+  # fail with an internal condition-length error rather than a clear
+  # message.
+  if(!is.numeric(conf.level) && !is.logical(conf.level))
+    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+
+  if(length(conf.level) != 1L)
+    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+
+  # NaN is numeric and NA-like, but suppressing the interval on a NaN
+  # confidence level would hide a caller error rather than express an
+  # intent to omit it, so only a true NA does that.
+  if(is.nan(conf.level))
+    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+
+  if(!is.na(conf.level)) {
+
+    if(!is.numeric(conf.level) ||
+       !is.finite(conf.level) ||
+       conf.level <= 0 ||
+       conf.level >= 1) {
+
+      stop("Argument 'conf.level' must be a single number between 0 and 1.")
+
     }
-    res <- list(unconditional=res, condcronbachAlpha = condcronbachAlpha)
+
   }
-  
-  return(res)
+
+  if(na.rm)
+    x <- x[complete.cases(x), , drop = FALSE]
+
+  if(ncol(x) < 2L)
+    stop("Argument 'x' must have at least 2 items (columns).")
+
+  if(nrow(x) < 2L)
+    stop("Argument 'x' must have at least 2 subjects (rows).")
+
+  if(anyNA(x))
+    return(NA_real_)
+
+  # Checked only after the NA policy has been applied: is.finite() is
+  # FALSE for NA too, so an earlier check would turn the documented
+  # NA-return into an error.
+  if(!all(is.finite(x)))
+    stop("Argument 'x' must not contain infinite values.")
+
+  res <- .cronbachAlpha(
+    x = x,
+    conf.level = conf.level,
+    sides = sides
+  )
+
+  if(!returnConditional)
+    return(res)
+
+  nItems <- ncol(x)
+
+  # Dropping one item from a 2-item instrument would leave a single item,
+  # for which alpha is undefined. NULL rather than an empty frame keeps
+  # the "nothing to report" case distinguishable from a computed result.
+  conditional <- NULL
+
+  if(nItems > 2L) {
+
+    # Column names are far more useful than positions in an
+    # "alpha if item deleted" table; fall back to indices only when x
+    # carries no names.
+    itemNames <- colnames(x)
+
+    if(is.null(itemNames))
+      itemNames <- seq_len(nItems)
+
+    condList <- vector("list", nItems)
+
+    for(i in seq_len(nItems)) {
+
+      condList[[i]] <- .cronbachAlpha(
+        x = x[, -i, drop = FALSE],
+        conf.level = conf.level,
+        sides = sides
+      )
+
+    }
+
+    conditional <- data.frame(
+      item = itemNames,
+      do.call(rbind, condList),
+      stringsAsFactors = FALSE,
+      check.names = FALSE
+    )
+
+    rownames(conditional) <- NULL
+
+  }
+
+  list(
+    unconditional = res,
+    conditional = conditional
+  )
+
 }
 
 
+# == internal helper functions ================================================
+
+.cronbachAlpha <- function(x, conf.level = NA, sides = "two.sided"){
+
+  nItems <- ncol(x)
+  nSubj <- nrow(x)
+
+  colVars <- apply(x, 2, var)
+  total <- var(rowSums(x))
+
+  # All subjects sharing the same total score leaves no variance to
+  # decompose; alpha is undefined rather than zero.
+  if(total == 0)
+    return(
+      .makeEstimateResult(
+        est = NA_real_,
+        lci = if(is.na(conf.level)) NULL else NA_real_,
+        uci = if(is.na(conf.level)) NULL else NA_real_
+      )
+    )
+
+  est <- (total - sum(colVars)) / total * (nItems / (nItems - 1))
+
+  if(is.na(conf.level))
+    return(.makeEstimateResult(est = est))
+
+  alpha <- 1 - conf.level
+
+  # Feldt (1965): the pivot is F with n-1 and (m-1)(n-1) degrees of
+  # freedom, where n counts subjects and m items. Using length(x) here -
+  # the number of cells rather than the number of subjects - inflates
+  # both df by a factor of m and yields intervals that are far too
+  # narrow.
+  df1 <- nSubj - 1L
+  df2 <- (nItems - 1L) * (nSubj - 1L)
+
+  # The larger F quantile produces the lower bound, since the mapping
+  # 1 - (1 - est) * F is decreasing in F. sides names the side on which
+  # the finite bound lies, so "left" keeps the lower bound and "right"
+  # the upper one.
+  if(sides == "two.sided") {
+
+    lci <- 1 - (1 - est) * qf(1 - alpha / 2, df1, df2)
+    uci <- 1 - (1 - est) * qf(alpha / 2, df1, df2)
+
+  } else if(sides == "left") {
+
+    lci <- 1 - (1 - est) * qf(1 - alpha, df1, df2)
+    uci <- Inf
+
+  } else {
+
+    lci <- -Inf
+    uci <- 1 - (1 - est) * qf(alpha, df1, df2)
+
+  }
+
+  .makeEstimateResult(
+    est = est,
+    lci = lci,
+    uci = uci
+  )
+
+}

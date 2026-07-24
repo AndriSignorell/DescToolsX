@@ -1,11 +1,10 @@
 
-
 #' Create a Data.frame for Interrater Agreement
-#' 
+#'
 #' Creates a \code{data.frame} for a formula \code{rating ~ subjects | raters}
 #' with the subjects in rows and the raters in columns as base structure for
 #' interrater agreement (IRA) functions.
-#' 
+#'
 #' Assessments made by raters are typically - and appropriately - stored and
 #' organized in databases. Data originating from databases are usually in long
 #' format. Converting this long format into a wide format suitable for analysis
@@ -15,146 +14,102 @@
 #' requires a sequential join.\cr The present function supports this process by
 #' converting long-format data into a wide format that can be used by
 #' subsequent inter-rater agreement functions. Missing values are marked as
-#' \code{NAs}.
-#' 
+#' \code{NA}s.
+#'
+#' \code{na.action} is applied to the \emph{wide} frame, i.e. per subject:
+#' \code{na.omit} removes subjects with at least one missing rating. The
+#' \code{"na.action"} attribute of the result carries a \code{"values"}
+#' attribute with the identifiers of the omitted subjects.
+#'
 #' @param formula something like \code{rating ~ subjects | raters}
 #' @param data the data
-#' @param subset potential subset
-#' @param na.action what should happen with missings
-#' @param dropSubj logical, should the subject column be included (default
-#' \code{FALSE})
-#' @return a data.frame containing structured data
-#' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link{krippAlpha}}
-#' @examples
+#' @param subset potential subset, evaluated in the long-format data
+#' @param na.action what should happen with missings, applied per subject
+#'   (i.e. to the rows of the wide result)
+#' @param dropSubj logical; whether to drop the subject column (default
+#'   \code{FALSE})
+#' @return a \code{data.frame} of class \code{"raterFrame"} with subjects in rows and
+#'   raters in columns
+#'   
+#' @seealso [bedrock::resolveFormula]
 #' 
+#' @examples
+#'
 #' d.long <- data.frame(
 #'      expand.grid(subj=as.character(1:5), rater=LETTERS[1:3]),
 #'      rating = c(1, 4, 5, 7, 2, 2, 5, 6, 7, 1, 1, 4, 6, 6, 2))
-#'            
+#'
 #' # default rater frame
 #' raterFrame(rating ~ subj | rater, data=d.long)
-#' 
+#'
 #' # introduce some NAs
 #' raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ])
-#' 
+#'
 #' # omit cases containing NAs
-#' raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ], 
+#' raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ],
 #'            na.action=na.omit)
-#'            
+#'
 #' # omit the subject column
 #' raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
-#' 
-
-
-
-
-#' @family assoc.agreement  
-#' @concept agreement  
+#'
+#' @family assoc.agreement
+#' @concept agreement
 #' @concept rater-data
 #'
 #'
 #' @export
-raterFrame <- function(formula, data, subset, na.action, dropSubj=FALSE){
-  
+raterFrame <- function(formula, data, subset, na.action, dropSubj = FALSE) {
 
-  # *** Attention !!! ***: 
-  # Following code 
-  #  
-  #   m <- .LongToSquare(formula, data, subset, na.action, ...)
-  # 
-  # does not work as subset is evaluated here, leading to:
-  #    Error in `[.default`(xj, i) : invalid subscript type 'closure'
-  # thus we simply pass the call unevaluated to the next function
-  cl <- match.call(expand.dots = FALSE)
-  cl$dropSubj <- NULL
-  
-  # this would work, but ::: are not allowed for CRAN check!
-  # cl[[1L]] <- quote(DescToolsX:::.LongToSquare) 
-  cl[[1L]] <- getFromNamespace(".LongToSquare", "DescToolsX")
-  
-  m <- eval.parent(cl)
-  
-  # remove the first column if subject information not required
-  if(dropSubj) m <- m[, -1]
-  
-  class(m) <- c("raterFrame", class(m))
-  
-  return(m)
-  
-}
+  # capture subset unevaluated, following the resolveFormula() contract
+  # (avoids the collision with base::subset)
+  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
 
+  # na.pass here on purpose: na.action must act per *subject*, i.e. on the
+  # wide frame after reshaping -- missing combinations do not even exist as
+  # rows in the long format
+  r <- resolveFormula(formula, data,
+                      subset    = subset_expr,
+                      na.action = na.pass,
+                      allowed   = "n-sample-dependent")
 
-# == internal helper functions =======================================
+  mf <- r$mf   # columns: rating, subject, rater (order guaranteed)
 
-.LongToSquare <- function(formula, data, subset, na.action){
-  
-  # we do not need ... arguments here...
-  
-  # returns a 2-dim matrix of a subject-rater-rating formula
-  
-  # originally based on:   stats:::friedman.test.formula
-  
-  if (missing(formula)) 
-    stop("formula missing")
-  
-  if ((length(formula) != 3L) || 
-      (length(formula[[3L]]) != 3L) || 
-      (formula[[3L]][[1L]] != as.name("|")) || 
-      (length(formula[[3L]][[2L]]) != 1L) || 
-      (length(formula[[3L]][[3L]]) != 1L)) 
-    stop("incorrect specification for 'formula'")
-  
-  formula[[3L]][[1L]] <- as.name("+")
-  
-  m <- match.call(expand.dots = FALSE)
-  m$formula <- formula
-  if (is.matrix(eval(m$data, parent.frame()))) 
-    m$data <- as.data.frame(data)
-  
-  m[[1L]] <- quote(stats::model.frame)
-  # in order to delete potentially provided tolerance or 
-  # na.rm arguments to be passed later on 
-  # m$... <- NULL  
-  
-  
-  ## >>> IMPORTANT: Treat subset correctly due to collision with 
-  ##                the subset function.
-  if (!missing(subset)) {
-    m$subset <- substitute(subset)  # capture the argument
-  } else {
-    m$subset <- NULL                # remove completely
-  }
-  ## (Optional) na.action pass through unchanged:
-  # if (missing(na.action)) m$na.action <- NULL
-  
-  
-  mf <- eval(m, parent.frame())
-  
-  DNAME <- gettextf("%s by %s (rows) and %s (columns)", 
-                    names(mf)[1], names(mf)[2], names(mf)[3])
-  
-  # now reshaping to matrix form
-  m <- reshape(mf, idvar=colnames(mf)[2], timevar=colnames(mf)[3],
-               direction="wide")
-  
-  # get better order for rows and columns
-  m <- m[order(m[,1]), ]
-  m <- cbind(m[, 1, drop=FALSE], m[, -1][, order(colnames(m)[-1])])
-  # remove response variable part from columnnames
-  colnames(m) <- gsub(gettextf("%s\\.", names(mf)[1]), "", colnames(m))
+  dname <- gettextf("%s by %s (rows) and %s (columns)",
+                    names(mf)[1L], names(mf)[2L], names(mf)[3L])
+
+  # --- long -> wide -------------------------------------------------------
+  m <- reshape(mf, idvar = names(mf)[2L], timevar = names(mf)[3L],
+               direction = "wide")
+
+  # order rows by subject, columns by rater
+  m <- m[order(m[[1L]]), ]
+  m <- cbind(m[, 1L, drop = FALSE], m[, -1L][, order(colnames(m)[-1L])])
+
+  # strip the "<rating>." prefix from the rater columns
+  # (fixed-prefix removal, robust against regex metacharacters in the name)
+  pfx <- paste0(names(mf)[1L], ".")
+  hit <- startsWith(colnames(m), pfx)
+  colnames(m)[hit] <- substring(colnames(m)[hit], nchar(pfx) + 1L)
   rownames(m) <- NULL
-  
-  if(!missing(na.action)){
-    subj <- m[, names(mf)[2]]
+
+  # --- na.action on the wide frame ---------------------------------------
+  if (!missing(na.action)) {
+    subj <- m[[names(mf)[2L]]]
     m <- na.action(m)
-    # provide the names of omitted subjects
-    attr(attr(m, "na.action"), "values") <- subj[as.numeric(attr(m, "na.action"))]
+    # provide the identifiers of omitted subjects
+    attr(attr(m, "na.action"), "values") <-
+      subj[as.integer(attr(m, "na.action"))]
   }
-  
-  attr(m, "data.name") <- DNAME
-  attr(m, "")
-  return(m)
-  
+
+  attr(m, "data.name") <- dname
+
+  # remove the subject column if not required
+  if (dropSubj)
+    m <- m[, -1L, drop = FALSE]
+
+  class(m) <- c("raterFrame", class(m))
+
+  m
 }
+
 

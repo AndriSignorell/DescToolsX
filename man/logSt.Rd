@@ -10,20 +10,20 @@ logSt(x, base = 10, calib = x, threshold = NULL, mult = 1)
 logStInv(x, base = NULL, threshold = NULL)
 }
 \arguments{
-\item{x}{a vector or matrix of data, which is to be transformed}
+\item{x}{a vector or matrix of data to transform}
 
 \item{base}{a positive or complex number: the base with respect to which
 logarithms are computed. Defaults to 10. Use \code{base = exp(1)} for natural log.}
 
 \item{calib}{a vector or matrix of data used to calibrate the
-transformation(s), i.e., to determine the constant \eqn{c} needed}
+transformation and determine the required constant \eqn{c}}
 
 \item{threshold}{constant \eqn{c} that determines the transformation. The
 inverse function \code{logStInv} will look for an attribute named
 \code{"threshold"} if the argument is set to \code{NULL}.}
 
 \item{mult}{a tuning constant affecting the transformation of small values,
-see \code{Details}.}
+as described in Details}
 }
 \value{
 the transformed data. The value \eqn{c} used for the transformation
@@ -76,6 +76,8 @@ relatively easily in mind.
 A further idea in this context can be found in (Rocke 2003).
 A generalized log in order to stabilize the variance is presented as:
 \eqn{f(x, a)=log(0.5 * (x + \sqrt(x^2 + a^2))}
+
+Based on code by Werner A. Stahel, adapted to conform to package standards.
 }
 \examples{
 
@@ -88,6 +90,7 @@ abline(v=attr(r.dl, "threshold"), lty=2)
 x <- rchisq(df=3, n=100)
 # should give 0 (or at least something small):
 logStInv(logSt(x)) - x
+
 
 }
 \references{
@@ -104,11 +107,6 @@ Other transform:
 \code{\link[=scaleX]{scaleX()}},
 \code{\link[=yeoJohnson]{yeoJohnson()}}
 }
-\author{
-Werner A. Stahel, ETH Zurich \cr slight modifications Andri
-Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
 \concept{transform}
 \concept{transformation}
 \concept{variance-stabilization}
-\keyword{math}

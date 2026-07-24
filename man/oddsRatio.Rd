@@ -30,37 +30,39 @@ oddsRatio(x, ...)
 \method{print}{OddsRatio}(x, digits = 3, ...)
 }
 \arguments{
-\item{x}{An object for which odds ratios should be computed.}
+\item{x}{an object for which odds ratios should be computed}
 
-\item{...}{Further arguments passed to methods.}
+\item{...}{further arguments passed to methods}
 
-\item{y}{Optional second variable. If supplied,
+\item{y}{optional second variable. If supplied,
 \code{table(x, y, ...)} is computed.}
 
-\item{conf.level}{Confidence level for interval estimation.
+\item{conf.level}{confidence level for interval estimation.
 If \code{NA}, only the point estimate is returned.}
 
-\item{sides}{Type of confidence interval. One of
+\item{sides}{type of confidence interval. One of
 \code{"two.sided"}, \code{"left"}, or \code{"right"}.}
 
-\item{method}{Character string specifying the interval method.
+\item{method}{character string specifying the interval method.
 One of \code{"wald"} or \code{"profile"}.}
 
-\item{interval}{Numeric vector of length two specifying the search interval
-used by the mid-p method.}
+\item{interval}{numeric vector of length two specifying the search interval
+used by the mid-p method}
 
-\item{digits}{Number of digits used for printing.}
+\item{digits}{number of digits used for printing}
 }
 \value{
-The returned value depends on the input:
-
-\itemize{
-\item For contingency tables, a numeric scalar containing the odds ratio
-if \code{conf.level = NA}, otherwise a named numeric vector with
-elements \code{estimate}, \code{lci}, and \code{uci}.
-\item For binomial generalized linear models, an object of class
-\code{"OddsRatio"}.
+the returned value depends on the input. For contingency tables,
+\code{conf.level = NA} yields a numeric scalar; otherwise the result is a
+named numeric vector with elements:
+\describe{
+\item{\code{est}}{odds ratio estimate}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
+
+For binomial generalized linear models, an object of class
+\code{"OddsRatio"} is returned.
 }
 \description{
 Computes odds ratios for 2x2 contingency tables or binomial
@@ -120,6 +122,7 @@ fit <- glm(
 
 oddsRatio(fit)
 
+
 }
 \references{
 Agresti, A. (2013). \emph{Categorical Data Analysis} (3rd ed.).
@@ -134,7 +137,7 @@ Gart, J. J. (1966). Alternative analyses of contingency tables.
 \emph{28}(1), 164--179.
 }
 \seealso{
-\code{\link{relRisk}}, \code{\link{attachAliases}}
+\link{attachAliases}
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},

@@ -17,7 +17,7 @@ freq(
 \method{print}{Freq}(x, digits = NULL, ...)
 }
 \arguments{
-\item{x}{the variable to be described, can be any atomic type.}
+\item{x}{variable to be described; may be any atomic type}
 
 \item{breaks}{either a numeric vector of two or more cut points or a single
 number (greater than or equal to 2) giving the number of intervals into
@@ -36,7 +36,7 @@ other choices are 'by frequency' (\code{"descending"} or \code{"ascending"})
 or 'by name of the levels' (\code{"name"}). The argument can be abbreviated.
 This is ignored if x is numeric and classed (\code{breaks} not \code{FALSE}).}
 
-\item{useNA}{one out of \code{"no"}, \code{"ifany"}, \code{"always"}.
+\item{useNA}{one of \code{"no"}, \code{"ifany"}, or \code{"always"}.
 Defines whether to include extra \code{NA} levels in the table.  Defaults to
 \code{"no"} which is the \code{\link{table}()} default too.}
 
@@ -46,16 +46,18 @@ group names. Use the argument \code{right} to define if the intervals should
 be closed on the right (and open on the left) or vice versa. \cr In
 \code{print.Freq} the dots are not used.}
 
-\item{digits}{digits for displaying relative frequencies to be changed if required}
+\item{digits}{number of digits used to display relative frequencies}
 }
 \value{
-an object of type \code{"Freq"}, which is basically a data.frame
-with 5 columns (earning a specific print routine), containing the following
-components: \item{level}{ factor. The levels of the grouping variable.}
-\item{freq}{ integer. The absolute frequencies. } \item{perc}{ numeric. The
-relative frequencies (percent).} \item{cumfreq}{integer. The cumulative sum
-of the absolute frequencies.} \item{cumperc}{numeric. The cumulative sum of
-the relative frequencies.}
+an object of class \code{"Freq"} inheriting from \code{data.frame},
+with columns:
+\describe{
+\item{\code{level}}{levels or intervals of the tabulated variable}
+\item{\code{freq}}{absolute frequencies}
+\item{\code{perc}}{relative frequencies}
+\item{\code{cumfreq}}{cumulative absolute frequencies}
+\item{\code{cumperc}}{cumulative relative frequencies}
+}
 }
 \description{
 Calculates absolute and relative frequencies of a vector \code{x}.
@@ -122,9 +124,5 @@ Other frequency:
 \code{\link[=percTable]{percTable()}},
 \code{\link[=tOne]{tOne()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
 \concept{frequency}
 \concept{frequency-table}
-\keyword{univar}

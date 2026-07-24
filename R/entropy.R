@@ -13,19 +13,17 @@
 #' where \eqn{p_i} are empirical probabilities and
 #' \eqn{b} is the logarithm base.
 #'
-#' @param x A vector, table, matrix, or array of counts.
-#' @param y An optional second variable used together with
+#' @param x a vector, table, matrix, or array of counts
+#' @param y an optional second variable used together with
 #'   \code{x} to create a contingency table via
-#'   \code{table(x, y, ...)}.
-#' @param base Logarithm base.
-#'   Defaults to \code{2} (bits).
-#' @param normalize Logical.
+#'   \code{table(x, y, ...)}
+#' @param base logarithm base; defaults to \code{2} (bits)
+#' @param normalize logical.
 #'   If \code{TRUE}, entropy is normalized to the interval
 #'   \eqn{[0,1]}.
-#' @param ... Additional arguments passed to \code{table()}.
+#' @param ... additional arguments passed to \code{table()}
 #'
-#' @return
-#' A numeric scalar containing the entropy.
+#' @return a numeric scalar containing the entropy
 #'
 #' @details
 #' Common logarithm bases:
@@ -43,23 +41,18 @@
 #'
 #' entropy(x)
 #'
-#' tab <- matrix(
-#'   c(10, 20,
-#'     30, 40),
-#'   nrow = 2
-#' )
-#'
+#' tab <- matrix( c(10, 20,
+#'                  30, 40), nrow = 2 )
+#'                  
 #' entropy(tab)
-#'
 #' entropy(tab, normalize = TRUE)
+#'
 #'
 #' @references
 #' Shannon CE (1948). A Mathematical Theory of Communication.
 #' Bell System Technical Journal, 27, 379-423.
 #'
-
-
-
+#'
 #' @family assoc.nominal  
 #' @concept information-theory
 #'
@@ -96,4 +89,3 @@ entropy <- function(x,
   
   return(H)
 }
-

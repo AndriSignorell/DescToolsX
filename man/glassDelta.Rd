@@ -2,54 +2,125 @@
 % Please edit documentation in R/glassDelta.R
 \name{glassDelta}
 \alias{glassDelta}
-\title{Glass's Delta Effect Size}
+\title{Glass' Delta Effect Size}
 \usage{
-glassDelta(x, y, conf.level = NA, useControlSd = TRUE, na.rm = FALSE)
+glassDelta(
+  x,
+  y,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  useControlSd = TRUE,
+  correct = FALSE,
+  na.rm = FALSE
+)
 }
 \arguments{
-\item{x}{Numeric vector. Typically the treatment group.}
+\item{x}{numeric vector containing the treatment group}
 
-\item{y}{Numeric vector. Typically the control group.}
+\item{y}{numeric vector containing the control group}
 
-\item{conf.level}{Optional numeric. Confidence level for the confidence interval.
-If \code{NULL}, no confidence interval is computed.}
+\item{conf.level}{confidence level of the interval. If \code{NA}
+(default), only the point estimate is returned.}
 
-\item{useControlSd}{Logical. If \code{TRUE} (default), uses the standard
-deviation of \code{y} (control group). Otherwise uses \code{x}.}
+\item{sides}{a character string specifying the side of the confidence
+interval, must be one of \code{"two.sided"} (default), \code{"left"}
+or \code{"right"}. \code{sides} names the side on which the finite
+bound lies: \code{"left"} yields \eqn{[lci, \infty)} and
+\code{"right"} \eqn{(-\infty, uci]}. Note that this is the reverse of
+the convention in \pkg{DescTools}, where \code{sides} follows the
+alternative hypothesis of \code{\link[stats]{t.test}}. You can specify
+just the initial letter.}
 
-\item{na.rm}{Logical. Should missing values be removed? Passed to \code{mean()} and \code{sd()}.}
+\item{useControlSd}{logical, if \code{TRUE} (default) the standard
+deviation of the control group \code{y} is used for standardization,
+otherwise the one of \code{x}}
+
+\item{correct}{logical, if \code{TRUE} the exact small-sample bias
+correction (Hedges' correction with \eqn{df = n_C - 1}) is applied.
+Requires at least 3 observations in the standardizing group.
+Default is \code{FALSE}.}
+
+\item{na.rm}{logical, should missing values be removed? Default is
+\code{FALSE}. If \code{FALSE} and any of the groups contains missing
+values, \code{NA} is returned.}
 }
 \value{
-If \code{conf.level = NULL}, returns a numeric value (Glass's delta).
+a named numeric vector. If \code{conf.level = NA}, only
+\code{est} is returned; otherwise the vector has elements:
+\describe{
+\item{\code{est}}{point estimate of Glass' delta}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 
-Otherwise returns a named numeric vector with elements:
-\item{est}{Point estimate}
-\item{lci}{Lower confidence bound}
-\item{uci}{Upper confidence bound}
+In both cases the result carries the attribute \code{"magnitude"} with
+the conventional interpretation of the estimate's absolute size
+(\code{"negligible"} < 0.2 \eqn{\le} \code{"small"} < 0.5 \eqn{\le}
+\code{"medium"} < 0.8 \eqn{\le} \code{"large"}), analogous to
+\code{cohenD()}.
 }
 \description{
-Computes Glass's delta, a standardized mean difference using the standard
-deviation of the control group (or optionally the treatment group).
+Computes Glass' delta, a standardized mean difference that uses the
+standard deviation of the control group only, along with a noncentral-t
+based confidence interval and an optional small-sample bias correction.
 }
 \details{
-Glass's delta is defined as:
+Glass' delta is defined as:
 \deqn{ \Delta = \frac{\bar{x} - \bar{y}}{s_y} }
-where \eqn{s_y} is the standard deviation of the control group.
+where \eqn{s_y} is the standard deviation of the control group. It is
+preferred over Cohen's d when the treatment is expected to affect the
+variance, so that the control group's variability is the natural
+reference scale.
 
-If \code{conf.level} is provided, a confidence interval for the standardized
-mean difference is computed using an internal helper function.
+The confidence interval is obtained by inverting the noncentral
+t-distribution with \eqn{df = n_C - 1} degrees of freedom, where
+\eqn{n_C} is the size of the group supplying the standard deviation
+(Kelley, 2007). Note that this interval assumes equal population
+variances in both groups. Since Glass' delta is typically chosen
+precisely when the variances are expected to differ, the interval
+should be regarded as approximate under heteroscedasticity.
+
+With \code{correct = TRUE} the exact correction factor
+\deqn{ J(df) = \frac{\Gamma(df/2)}{\sqrt{df/2}\,\Gamma((df-1)/2)} }
+is applied to the estimate and both confidence limits.
+}
+\note{
+The confidence interval method follows Ken Kelley's approach
+previously published in the \pkg{MBESS} package, reimplemented to
+conform to package standards.
 }
 \examples{
+set.seed(5)
 x <- rnorm(30, mean = 1)
 y <- rnorm(30, mean = 0)
 
 glassDelta(x, y)
+
 glassDelta(x, y, conf.level = 0.95)
 
+# one-sided lower bound
+glassDelta(x, y, conf.level = 0.95, sides = "right")
+
+# small-sample bias correction
+glassDelta(x, y, conf.level = 0.95, correct = TRUE)
+
+# standardize by the treatment group instead
+glassDelta(x, y, useControlSd = FALSE)
+
+
+}
+\references{
+Glass, G. V. (1976) Primary, secondary, and meta-analysis of research.
+\emph{Educational Researcher}, 5(10), 3-8.
+
+Hedges, L. V., Olkin, I. (1985) \emph{Statistical Methods for
+Meta-Analysis}. Orlando: Academic Press.
+
+Kelley, K. (2007) Confidence intervals for standardized effect sizes:
+Theory, application, and implementation. \emph{Journal of Statistical
+Software}, 20(8), 1-24.
 }
 \seealso{
-\code{\link{cohenD}}
-
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},
 \code{\link[=cohenH]{cohenH()}},

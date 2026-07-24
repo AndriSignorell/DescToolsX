@@ -7,12 +7,12 @@
 gkTau(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 }
 \arguments{
-\item{x}{a numeric vector or a table. A matrix will be treated as table.}
+\item{x}{numeric vector or contingency table. A matrix is treated as a table.}
 
-\item{y}{NULL (default) or a vector with compatible dimensions to \code{x}.
-If y is provided, \code{table(x, y, \dots)} is calculated.}
+\item{y}{\code{NULL} (default) or a vector with compatible dimensions to
+\code{x}. If supplied, \code{table(x, y, \dots)} is calculated.}
 
-\item{direction}{direction of the calculation. Can be \code{"row"} (default)
+\item{direction}{direction of the calculation. Must be \code{"row"} (default)
 or \code{"column"}, where \code{"row"} calculates Goodman Kruskal's tau-a
 (R|C) ("column dependent").}
 
@@ -24,14 +24,18 @@ or \code{"column"}, where \code{"row"} calculates Goodman Kruskal's tau-a
 vector interface.}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Goodman-Kruskal's tau}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
-Calculate Goodman Kruskal's tau statistic, a measure of association for
-ordinal factors in a two-way table.\cr The function has interfaces for a
-table (matrix) and for single vectors.
+Calculate Goodman-Kruskal's tau, a measure of association for nominal
+variables in a two-way table. The function accepts either a contingency
+table or two vectors.
 }
 \details{
 Goodman-Kruskal tau measures association for cross tabulations of nominal
@@ -48,7 +52,7 @@ Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{phi}}) in the
 2x2-table case.\cr
 }
 \note{
-Based on code by Antti Arppe.
+Based on code by Antti Arppe, adapted to conform to package standards.
 }
 \examples{
 # example in:
@@ -117,7 +121,6 @@ There's another implementation of gamma in \pkg{vcdExtra}
 \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
 
 Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},

@@ -5,7 +5,7 @@
 \title{K-Nearest Neighbors Imputation}
 \usage{
 imputeKnn(
-  data,
+  x,
   k = 10,
   scale = TRUE,
   method = c("weighted", "median"),
@@ -13,62 +13,89 @@ imputeKnn(
 )
 }
 \arguments{
-\item{data}{A data frame with missing values.}
+\item{x}{a data frame with missing values.}
 
-\item{k}{Positive integer specifying the number of nearest neighbors.}
+\item{k}{positive integer, the number of nearest neighbours to draw on.}
 
-\item{scale}{Logical; should numeric variables be scaled before distance computation?
-Scaling is only used for distance calculation and does not affect imputed values.}
+\item{scale}{logical; if \code{TRUE} (default), numeric variables are
+standardized before distances are computed. This affects the distances
+only, not the imputed values.}
 
-\item{method}{Character string specifying the aggregation method:
-\itemize{
-\item \code{"weighted"}: weighted mean (numeric) / weighted mode (factor)
-\item \code{"median"}: median (numeric) / mode (factor)
-}}
+\item{method}{the aggregation applied to the neighbours' values, either
+\code{"weighted"} for a distance-weighted mean (numeric) or weighted
+mode (factor), or \code{"median"} for a median (numeric) or mode
+(factor).}
 
-\item{distData}{Optional data frame used only for distance computation.
-If provided, nearest neighbors are searched in \code{rbind(data, distData)},
-but only \code{data} is imputed.}
+\item{distData}{optional data frame supplying the pool of potential
+neighbours. If given, neighbours are drawn from \code{distData} only,
+while \code{x} alone is imputed. It must have the same variables as
+\code{x}.}
 }
 \value{
-A data frame with imputed values.
+a data frame of the same shape as \code{x}, with missing values
+replaced.
 }
 \description{
-Imputes missing values using a k-nearest neighbors (KNN) approach.
-Supports both numeric and categorical (factor) variables.
+Imputes missing values from the \code{k} nearest complete observations.
+Numeric and factor variables are both supported.
 }
 \details{
-Numeric variables are scaled (if \code{scale = TRUE}) before computing distances.
-Imputed values are always taken from the original (unscaled) data.
+Distance is Gower-style: numeric variables contribute their squared
+differences and factor variables a 0/1 mismatch penalty, summed and
+square-rooted. Numeric variables are standardized beforehand when
+\code{scale = TRUE}, so that no variable dominates through its unit
+alone. The standardization affects distances only; imputed values are
+always taken from the original data.
 
-Distances are computed as Euclidean distances for numeric variables.
-For categorical variables, a simple mismatch penalty (Hamming distance)
-is added. Note that continuous and categorical distances are combined
-additively without further weighting, which may affect their relative influence.
+Continuous and categorical contributions are combined without further
+weighting, so a factor mismatch counts as much as a one-standard-deviation
+numeric gap. Whether that balance suits the data is for the caller to
+judge.
+
+Each incomplete observation is compared with the complete ones on the
+variables it does observe, so rows missing different variables use
+different distances. Observations are therefore grouped by their pattern
+of missingness and each pattern is solved in one pass.
+
+With \code{method = "weighted"} the neighbours are weighted by
+\eqn{\exp(-d)}. Because that decays on the scale of the distances
+themselves, it is meaningful only when those are of moderate size, which
+is another reason to keep \code{scale = TRUE}. Weights are normalized
+against their maximum before exponentiation, so that widely separated
+neighbours cannot all underflow to zero.
+
+When \pkg{dbscan} is installed it is used to find the neighbours via a
+kd-tree, which is markedly faster on large data. The result is the same
+either way, apart from the resolution of exact ties.
 }
 \examples{
 set.seed(123)
 dat <- data.frame(
- x = c(1, 2, 3, 4, 5, 6),
- y = c(1, 2, 3, 4, 5, 6),
- z = factor(c("a", "b", "a", "b", "a", "b"))
+  x = c(1, 2, 3, 4, 5, 6),
+  y = c(1, 2, 3, 4, 5, 6),
+  z = factor(c("a", "b", "a", "b", "a", "b"))
 )
 
-dat[c(1,3), "x"] <- NA
-dat[c(2,5), "y"] <- NA
+dat[c(1, 3), "x"] <- NA
+dat[c(2, 5), "y"] <- NA
 
 imputeKnn(dat, k = 2)
 
+# neighbours drawn from a separate reference set
+ref <- data.frame(
+  x = c(1.5, 2.5, 3.5, 4.5),
+  y = c(1.5, 2.5, 3.5, 4.5),
+  z = factor(c("a", "b", "a", "b"), levels = c("a", "b"))
+)
+
+imputeKnn(dat, k = 2, distData = ref)
+
 }
 \seealso{
-\code{\link{impute}}, \code{\link[bedrock]{locf}}
-
 Other impute:
 \code{\link[=impute]{impute()}},
-\code{\link[=lof]{lof()}},
 \code{\link[=outlier]{outlier()}}
 }
 \concept{imputation}
 \concept{impute}
-\concept{machine-learning}
 \concept{missing-value}

@@ -8,14 +8,14 @@
 .descQQ(x, y, ...)
 }
 \arguments{
-\item{x}{A categorical variable.}
+\item{x}{a categorical variable}
 
-\item{y}{A categorical variable.}
+\item{y}{a categorical variable}
 
-\item{...}{Further arguments (currently not used).}
+\item{...}{further arguments, currently unused}
 }
 \value{
-An object of class \code{"Desc.qq"} inheriting from \code{"Desc"}.
+an object of class \code{c("Desc.qq", "Desc")}
 }
 \description{
 Computes descriptive statistics for the relationship between two
@@ -43,8 +43,8 @@ desc(table(x, y))
 }
 }
 \seealso{
-\code{\link{desc}}, \code{\link{desc.table}},
-\code{\link{desc.qn}}, \code{\link{desc.nn}}
+\link{desc}, \link{desc.table},
+\link{desc.qn}, \link{desc.nn}, \link[pharos:plot.Desc.table]{pharos::plot.Desc.table}
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -54,6 +54,7 @@ Other desc:
 \code{\link{desc.nq}},
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{association-measures}

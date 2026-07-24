@@ -4,11 +4,11 @@
 #' Computes the root mean squared error (RMSE) between predicted
 #' and reference values.
 #'
-#' @param x An object. Methods are available for numeric vectors and
+#' @param x an object. Methods are available for numeric vectors and
 #'   model objects (e.g. \code{lm}).
-#' @param ... Additional arguments passed to methods.
+#' @param ... additional arguments passed to methods
 #'
-#' @return A numeric value representing the RMSE.
+#' @return a numeric scalar containing the RMSE
 #'
 #' @details
 #' The RMSE is defined as:
@@ -28,8 +28,7 @@
 #'
 #' @seealso \code{\link{mean}}, \code{\link{sqrt}}
 #'
-
-
+#'
 #' @family model.metrics  
 #' @concept model-evaluation  
 #' @concept prediction-error
@@ -53,8 +52,8 @@ rmse.lm <- function(x, ...) {
 
 
 #' @rdname rmse
-#' @param ref Numeric vector of reference (true) values.
-#' @param na.rm Logical; should missing values be removed?
+#' @param ref numeric vector of reference (true) values
+#' @param na.rm logical; whether to remove missing values
 #' @export
 rmse.default <- function(x, ref, na.rm = FALSE, ...) {
   
@@ -63,5 +62,4 @@ rmse.default <- function(x, ref, na.rm = FALSE, ...) {
   
   sqrt(mse(x, ref, na.rm = na.rm, ...))
 }
-
 

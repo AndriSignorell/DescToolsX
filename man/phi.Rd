@@ -7,16 +7,16 @@
 phi(x, y = NULL, ...)
 }
 \arguments{
-\item{x}{A vector of categorical data or a contingency table
-(matrix or \code{table}).}
+\item{x}{a vector of categorical data or a contingency table
+(matrix or \code{table})}
 
-\item{y}{Optional second categorical vector. If provided, a contingency
+\item{y}{optional second categorical vector. If provided, a contingency
 table is constructed from \code{x} and \code{y}.}
 
-\item{...}{Additional arguments passed to \code{\link[base]{table}}.}
+\item{...}{additional arguments passed to \code{\link[base]{table}}}
 }
 \value{
-A numeric value representing the Phi coefficient.
+a numeric scalar containing the Phi coefficient
 }
 \description{
 Computes the Phi coefficient as a measure of association between two
@@ -51,9 +51,10 @@ phi(x, y)
 tab <- matrix(c(10, 20, 30, 40), nrow = 2)
 phi(tab)
 
+
 }
 \seealso{
-\code{\link{chisq.test}}, \code{\link{cramerV}}
+\code{\link{chisq.test}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
@@ -62,7 +63,6 @@ Other assoc.nominal:
 \code{\link[=entropy]{entropy()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

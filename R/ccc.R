@@ -10,55 +10,66 @@
 #'
 #' Confidence intervals can be computed using a Fisher z-transformation,
 #' a nonparametric bootstrap, or the asymptotic approximation of
-#' Lin (2000).
+#' Lin (2000). The asymptotic variance implemented here is the corrected
+#' form given by Lin (2000), superseding the expression in Lin (1989).
+#' Internally it is held on the scale of \eqn{\rho_c} itself; the
+#' \code{"z-transform"} method rescales it to the z scale via the delta
+#' method, where \eqn{d\,\mathrm{atanh}(\rho)/d\rho = 1/(1 - \rho^2)}.
+#'
+#' \code{sides} names the side on which the finite bound lies:
+#' \code{"left"} yields an interval bounded below, with the upper limit
+#' fixed at 1, and \code{"right"} one bounded above, with the lower limit
+#' fixed at -1. Note that this is the reverse of the convention in
+#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+#' \code{\link[stats]{t.test}}.
 #'
 #' Missing values are handled according to package conventions:
 #' if \code{na.rm = FALSE} and either \code{x} or \code{y} contains missing
 #' values, \code{NA} is returned. If \code{na.rm = TRUE}, complete cases are
-#' used.
+#' used. Infinite values carry no comparable convention - they leave the
+#' moments undefined and are rejected with an error.
 #'
-#' @param x Numeric vector.
-#' @param y Numeric vector of equal length to \code{x}.
-#' @param conf.level Confidence level for the returned confidence interval.
-#' Set to \code{NA} (default) to suppress confidence interval calculation.
-#' @param sides Character string specifying a two-sided or one-sided
-#' confidence interval.
-#' @param method Character string specifying the confidence interval method.
-#' One of \code{"z-transform"}, \code{"boot"}, or \code{"asymptotic"}.
-#' @param na.rm Logical; if \code{TRUE}, incomplete observation pairs are
-#' removed before computation.
-#' @param ... Additional arguments passed to bootstrap procedures. For
-#' \code{method = "boot"} these may include \code{R},
-#' \code{parallel}, and related bootstrap controls.
+#' @param x a numeric vector
+#' @param y a numeric vector of equal length to \code{x}
+#' @param conf.level a single confidence level for the returned confidence
+#' interval. Set to \code{NA} (default) to suppress confidence interval
+#' calculation.
+#' @param sides a character string specifying a two-sided or one-sided
+#' confidence interval
+#' @param method a character string specifying the confidence interval
+#' method. One of \code{"z-transform"}, \code{"boot"}, or
+#' \code{"asymptotic"}.
+#' @param na.rm logical; if \code{TRUE}, incomplete observation pairs are
+#' removed before computation
+#' @param ... additional arguments controlling the bootstrap procedure.
+#' Currently \code{R} and \code{parallel} are supported.
 #'
-#' @return
-#' A named numeric vector.
-#'
-#' If \code{conf.level = NA}:
-#'
-#' \preformatted{
-#'       est
-#' 0.9123457
-#' }
-#'
-#' Otherwise:
-#'
-#' \preformatted{
-#'       est       lci       uci
-#' 0.9123457 0.8734211 0.9412837
+#' @return a named numeric vector containing only \code{est} when
+#' \code{conf.level = NA}; otherwise a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
 #' }
 #'
 #' Additional diagnostics are stored as attributes:
 #'
 #' \describe{
-#'   \item{nObs}{Number of observations used.}
-#'   \item{scaleShift}{Scale shift parameter.}
-#'   \item{locationShift}{Location shift parameter.}
-#'   \item{biasCorrection}{Bias correction factor.}
-#'   \item{method}{Confidence interval method (if applicable).}
-#'   \item{conf.level}{Confidence level (if applicable).}
-#'   \item{sides}{Confidence interval type (if applicable).}
+#'   \item{\code{nObs}}{number of observations used}
+#'   \item{\code{scaleShift}}{scale shift parameter}
+#'   \item{\code{locationShift}}{location shift parameter}
+#'   \item{\code{biasCorrection}}{bias correction factor}
+#'   \item{\code{method}}{confidence interval method, if applicable}
+#'   \item{\code{confLevel}}{confidence level, if applicable}
+#'   \item{\code{sides}}{confidence interval type, if applicable}
 #' }
+#'
+#' @section Random number generation:
+#' \code{method = "boot"} draws bootstrap resamples and therefore depends on
+#' the state of R's global random number generator. No seed is set
+#' internally; the global RNG state advances normally as resamples are
+#' drawn. Call \code{\link[base]{set.seed}} beforehand for reproducible
+#' results.
 #'
 #' @references
 #' Lin, L. I.-K. (1989). A concordance correlation coefficient to evaluate
@@ -84,12 +95,10 @@
 #'   R = 999
 #' )
 #'
-
-#' @family assoc.agreement  
-#' @concept agreement  
-#' @concept correlation  
+#' @family assoc.agreement
+#' @concept method-comparison
+#' @concept correlation
 #' @concept reliability
-#'
 #'
 #' @export
 ccc <- function(
@@ -101,54 +110,90 @@ ccc <- function(
     na.rm = FALSE,
     ...
 ){
-  
-  if(!is.numeric(x))
-    stop("Argument 'x' must be numeric.")
-  
-  if(!is.numeric(y))
-    stop("Argument 'y' must be numeric.")
-  
+
+  if(!is.numeric(x) || !is.null(dim(x)))
+    stop("Argument 'x' must be a numeric vector.")
+
+  if(!is.numeric(y) || !is.null(dim(y)))
+    stop("Argument 'y' must be a numeric vector.")
+
   if(length(x) != length(y))
     stop("Arguments 'x' and 'y' must have equal length.")
-  
+
+  if(!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("Argument 'na.rm' must be a single non-missing logical value.")
+
   sides <- match.arg(sides)
   method <- match.arg(method)
-  
+
+  # Checked for length before is.na(), which would otherwise be passed a
+  # zero-length or multi-element value and make the if() below fail with
+  # an internal condition-length error rather than a clear message.
+  if(!is.numeric(conf.level) && !is.logical(conf.level))
+    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+
+  if(length(conf.level) != 1L)
+    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+
+  # NaN is numeric and NA-like, but suppressing the interval on a NaN
+  # confidence level would hide a caller error rather than express an
+  # intent to omit it, so only a true NA does that.
+  if(is.nan(conf.level))
+    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+
   if(!is.na(conf.level)) {
-    
+
     if(!is.numeric(conf.level) ||
-       length(conf.level) != 1L ||
+       !is.finite(conf.level) ||
        conf.level <= 0 ||
        conf.level >= 1) {
-      
+
       stop(
         "Argument 'conf.level' must be a single number between 0 and 1."
       )
-      
+
     }
-    
+
   }
-  
+
   if(na.rm) {
-    
+
     keep <- complete.cases(x, y)
-    
+
     x <- x[keep]
     y <- y[keep]
-    
+
     if(length(x) < 3L) {
-      
+
       stop(
-        "After removing missing values, fewer than 3 observations remain."
+        "Arguments 'x' and 'y' retain fewer than 3 complete observation pairs after removing missing values."
       )
-      
+
     }
-    
+
   }
-  
+
+  # The length requirement is structural and applies whether or not the
+  # data are complete, so it is checked before the NA short-circuit below.
+  # Otherwise ccc(c(1, NA), c(2, NA)) would return NA while the equally
+  # short ccc(c(1, 2), c(2, 3)) errors - an inconsistency in what is
+  # nominally the same failure.
+  if(length(x) < 3L)
+    stop("Arguments 'x' and 'y' must have at least 3 observations.")
+
   if(anyNA(x) || anyNA(y))
     return(NA_real_)
-  
+
+  # Checked only after the NA policy has been applied: is.finite() is
+  # FALSE for NA too, so an earlier check would turn the documented
+  # NA-return into an error. Inf carries no such convention - it makes
+  # the moments undefined and is rejected outright.
+  if(!all(is.finite(x)))
+    stop("Argument 'x' must not contain infinite values.")
+
+  if(!all(is.finite(y)))
+    stop("Argument 'y' must not contain infinite values.")
+
   .cccEngine(
     x = x,
     y = y,
@@ -157,7 +202,7 @@ ccc <- function(
     method = method,
     ...
   )
-  
+
 }
 
 
@@ -169,248 +214,278 @@ ccc <- function(
     method,
     ...
 ){
-  
+
   nObs <- length(x)
-  
+
   if(nObs < 3L)
-    stop("At least 3 complete observations are required.")
-  
+    stop("Arguments 'x' and 'y' must have at least 3 complete observations.")
+
   sx2 <- var(x) * (nObs - 1) / nObs
   sy2 <- var(y) * (nObs - 1) / nObs
-  
+
   if(sx2 <= 0)
     stop("Argument 'x' must have positive variance.")
-  
+
   if(sy2 <= 0)
     stop("Argument 'y' must have positive variance.")
-  
+
   xb <- mean(x)
   yb <- mean(y)
-  
+
   sdx <- sqrt(sx2)
   sdy <- sqrt(sy2)
-  
+
   r <- cor(x, y)
-  
+
   rhoC <- .cccPoint(x, y)
-  
+
   geomMeanSd <- (sx2 * sy2)^0.25
-  
+
   scaleShift <- sdy / sdx
-  
+
   locationShift <-
     (yb - xb) / geomMeanSd
-  
-  if(abs(r) < sqrt(.Machine$double.eps)) {
-    
-    biasCorrection <- NA_real_
-    
-  } else {
-    
-    biasCorrection <- rhoC / r
-    
-  }
-  
+
+  # Lin's bias correction factor C_b. The equivalent closed form
+  # 2 / (v + 1/v + u^2) is used in preference to rhoC / r: it is
+  # algebraically identical but has no division by r, so it stays finite
+  # when x and y are near-uncorrelated instead of producing NA.
+  biasCorrection <-
+    2 / (scaleShift + 1 / scaleShift + locationShift^2)
+
   attrs <- list(
     nObs = nObs,
     scaleShift = scaleShift,
     locationShift = locationShift,
     biasCorrection = biasCorrection
   )
-  
+
   if(is.na(conf.level)) {
-    
+
     return(
       .makeEstimateResult(
         est = rhoC,
         attrs = attrs
       )
     )
-    
+
   }
-  
+
   alpha <- 1 - conf.level
-  
+
   if(method == "boot") {
-    
+
     dots <- list(...)
     bootArgs <- .extractBootArgs(dots)
-    
+
     statFun <- function(data, idx) {
-      
+
       .cccPoint(
         data[idx, 1],
         data[idx, 2]
       )
-      
+
     }
-    
+
     bootObj <- boot::boot(
       data = cbind(x, y),
       statistic = statFun,
-      R = bootArgs$R
+      R = bootArgs$R,
+      parallel = bootArgs$parallel
     )
-    
+
+    # Only the informative bound is taken from the resampling
+    # distribution; the other is fixed at the parameter boundary, so no
+    # degenerate 0 %/100 % quantile is requested. sides names the side on
+    # which the finite bound lies.
     probs <- switch(
       sides,
       "two.sided" = c(alpha / 2, 1 - alpha / 2),
-      "left"      = c(0, conf.level),
-      "right"     = c(1 - conf.level, 1)
+      "left"      = alpha,
+      "right"     = conf.level
     )
-    
-    ci <- quantile(
-      bootObj$t,
-      probs = probs,
-      na.rm = TRUE
+
+    ci <- unname(
+      quantile(
+        bootObj$t,
+        probs = probs,
+        na.rm = TRUE
+      )
     )
-    
+
     if(sides == "two.sided") {
-      
+
       lci <- ci[1]
       uci <- ci[2]
-      
+
     } else if(sides == "left") {
-      
-      lci <- -1
-      uci <- ci[2]
-      
-    } else {
-      
+
       lci <- ci[1]
       uci <- 1
-      
+
+    } else {
+
+      lci <- -1
+      uci <- ci[1]
+
     }
-    
+
   } else {
-    
+
     zCrit <- if(sides == "two.sided")
       qnorm(1 - alpha / 2)
     else
       qnorm(conf.level)
-    
-    se <- sqrt(
-      (
-        (1 - r^2) * rhoC^2 * (1 - rhoC^2) / r^2 +
-          2 * rhoC^3 * (1 - rhoC) * locationShift^2 / r -
-          0.5 * rhoC^4 * locationShift^4 / r^2
-      ) / (nObs - 2)
-    )
-    
+
+    # Lin's (2000) asymptotic variance, expressed on the scale of rhoC
+    # rather than on the z scale: the bracketed term equals the z-scale
+    # variance multiplied through by (1 - rhoC^2)^2. The "asymptotic"
+    # method uses it directly; the "z-transform" method divides it back
+    # out below to recover the z-scale standard error.
+    #
+    # Written via the identity rhoC = r * biasCorrection so that no
+    # division by r or r^2 remains. The textbook form is algebraically
+    # identical but evaluates to 0/0 for uncorrelated (yet non-constant)
+    # data, where r = rhoC = 0 is a perfectly regular case; this form
+    # returns the correct limit biasCorrection^2 / (nObs - 2) instead.
+    varRho <- (
+      (1 - r^2) * biasCorrection^2 * (1 - rhoC^2) +
+        2 * rhoC^2 * biasCorrection * (1 - rhoC) *
+          locationShift^2 -
+        0.5 * rhoC^2 * biasCorrection^2 * locationShift^4
+    ) / (nObs - 2)
+
+    se <- sqrt(max(varRho, 0))
+
     if(method == "asymptotic") {
-      
+
       if(sides == "two.sided") {
-        
+
         lci <- rhoC - zCrit * se
         uci <- rhoC + zCrit * se
-        
+
       } else if(sides == "left") {
-        
-        lci <- -1
-        uci <- rhoC + zCrit * se
-        
-      } else {
-        
+
         lci <- rhoC - zCrit * se
         uci <- 1
-        
+
+      } else {
+
+        lci <- -1
+        uci <- rhoC + zCrit * se
+
       }
-      
+
       lci <- max(lci, -1)
       uci <- min(uci,  1)
-      
+
     } else {
-      
-      # Avoid infinities in Fisher's z-transformation.
-      rhoAdj <- pmin(
-        pmax(rhoC, -1 + sqrt(.Machine$double.eps)),
-        1 - sqrt(.Machine$double.eps)
-      )
-      
-      z <- fisherZ(rhoAdj)
-      
-      # Delta-method variance transformation:
-      # d atanh(rho) / d rho = 1 / (1 - rho^2)
-      seZ <- se / (1 - rhoAdj^2)
-      
-      if(sides == "two.sided") {
-        
-        lci <- fisherZInv(
-          z - zCrit * seZ
-        )
-        
-        uci <- fisherZInv(
-          z + zCrit * seZ
-        )
-        
-      } else if(sides == "left") {
-        
-        lci <- -1
-        
-        uci <- fisherZInv(
-          z + zCrit * seZ
-        )
-        
+
+      # A zero standard error means the estimate is degenerate (e.g.
+      # x == y, giving rhoC == 1). The clamping applied to rhoAdj below
+      # would otherwise return a limit just short of the true value,
+      # so the interval collapses onto the estimate directly.
+      if(se == 0) {
+
+        if(sides == "two.sided") {
+
+          lci <- rhoC
+          uci <- rhoC
+
+        } else if(sides == "left") {
+
+          lci <- rhoC
+          uci <- 1
+
+        } else {
+
+          lci <- -1
+          uci <- rhoC
+
+        }
+
       } else {
-        
-        lci <- fisherZInv(
-          z - zCrit * seZ
+
+        # Avoid infinities in Fisher's z-transformation.
+        rhoAdj <- pmin(
+          pmax(rhoC, -1 + sqrt(.Machine$double.eps)),
+          1 - sqrt(.Machine$double.eps)
         )
-        
-        uci <- 1
-        
+
+        # Delta-method variance transformation:
+        # d atanh(rho) / d rho = 1 / (1 - rho^2)
+        z <- fisherZ(rhoAdj)
+
+        seZ <- se / (1 - rhoAdj^2)
+
+        if(sides == "two.sided") {
+
+          lci <- fisherZInv(
+            z - zCrit * seZ
+          )
+
+          uci <- fisherZInv(
+            z + zCrit * seZ
+          )
+
+        } else if(sides == "left") {
+
+          lci <- fisherZInv(
+            z - zCrit * seZ
+          )
+
+          uci <- 1
+
+        } else {
+
+          lci <- -1
+
+          uci <- fisherZInv(
+            z + zCrit * seZ
+          )
+
+        }
+
       }
-      
+
     }
-    
+
   }
-  
+
   attrs$method <- method
-  attrs$conf.level <- conf.level
+  attrs$confLevel <- conf.level
   attrs$sides <- sides
-  
+
   .makeEstimateResult(
     est = rhoC,
     lci = lci,
     uci = uci,
     attrs = attrs
   )
-  
+
 }
 
-
-
-.makeEstimateResult <- function(
-    est,
-    lci = NULL,
-    uci = NULL,
-    attrs = NULL
-){
-  
-  res <- c(est = est)
-  
-  if(!is.null(lci))
-    res <- c(res, lci = lci)
-  
-  if(!is.null(uci))
-    res <- c(res, uci = uci)
-  
-  if(!is.null(attrs) && length(attrs))
-    attributes(res) <- c(attributes(res), attrs)
-  
-  res
-  
-}
 
 
 .cccPoint <- function(x, y){
-  
+
   nObs <- length(x)
+
+  # cov() rather than cor(): a constant bootstrap resample makes cor()
+  # return NA with a warning, discarding an otherwise usable replicate
+  # for which the CCC is regularly 0. Rescaled from the (n-1) to the (n)
+  # denominator to match the moments used in the CCC definition.
   sx2 <- var(x) * (nObs - 1) / nObs
   sy2 <- var(y) * (nObs - 1) / nObs
-  r <- cor(x, y)
-  sxy <- r * sqrt(sx2 * sy2)
-  
-  2 * sxy / (sx2 + sy2 + (mean(y) - mean(x))^2)
-  
-}
+  sxy <- cov(x, y) * (nObs - 1) / nObs
 
+  denom <- sx2 + sy2 + (mean(y) - mean(x))^2
+
+  # Only reachable when x and y are constant and identical, in which case
+  # concordance is undefined rather than perfect.
+  if(denom == 0)
+    return(NA_real_)
+
+  2 * sxy / denom
+
+}

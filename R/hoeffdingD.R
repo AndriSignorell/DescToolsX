@@ -9,18 +9,17 @@
 #' and yields results numerically identical to those from \code{Hmisc::hoeffd()}
 #' for continuous data without ties.
 #'
-#' @param x Numeric vector.
-#' @param y Numeric vector of the same length as \code{x}.
-#' @param jitter Logical. If \code{TRUE}, small random noise is added to \code{y}
+#' @param x numeric vector
+#' @param y numeric vector with the same length as \code{x}
+#' @param jitter logical. If \code{TRUE}, small random noise is added to \code{y}
 #'   to break ties. This is useful when the data contain ties, since the fast
 #'   algorithm assumes continuous data.
-#' @param eps Optional numeric. Magnitude of the jitter noise. Defaults to
-#'   \code{1e-10 * sd(y)} if not specified.
-#' @param seed Optional integer. Random seed for reproducibility when
-#'   \code{jitter = TRUE}.
+#' @param eps optional numeric magnitude of the jitter noise; defaults to
+#'   \code{1e-10 * sd(y)} if not specified
+#' @param seed optional integer random seed for reproducibility when
+#'   \code{jitter = TRUE}
 #'
-#' @return
-#' A numeric value representing Hoeffding's D statistic. The statistic lies approximately in
+#' @return numeric scalar containing Hoeffding's D statistic. The statistic lies approximately in
 #' the interval \eqn{[-1/60, 1/30]}, where values near 0 indicate independence.
 #'
 #' @details
@@ -61,8 +60,6 @@
 #'
 #'
 #' @export
-
-#' @export
 hoeffdingD <- function(x, y, jitter = FALSE, eps = NULL, seed = NULL) {
   
   if (length(x) != length(y))
@@ -98,6 +95,4 @@ hoeffdingD <- function(x, y, jitter = FALSE, eps = NULL, seed = NULL) {
   hoeffdingD_cpp(perm)
   
 }
-
-
 

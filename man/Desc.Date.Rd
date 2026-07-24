@@ -15,10 +15,11 @@
 )
 }
 \arguments{
-\item{x}{A univariate object of class \code{"ts"}.}
+\item{x}{a dichotomous numeric, integer, factor, character, or logical
+vector}
 
-\item{main}{Character string (character|\code{NULL}|\code{NA})
-defining the main title. By default (\code{main = NULL}) the title will
+\item{main}{character string, \code{NULL}, or \code{NA}, defining the main
+title. By default (\code{main = NULL}) the title will
 be composed as: \if{html}{\out{<variable name>}} (<class(es)>).
 If \code{NA}, no title is printed.}
 
@@ -26,32 +27,31 @@ If \code{NA}, no title is printed.}
 on the classes of the variables. Default can be defined by
 the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
-\item{verbose}{Integer controlling verbosity of table output.
+\item{verbose}{integer controlling verbosity of table output.
 One of \code{1} (minimal), \code{2} (default), \code{3} (extensive).
 Applies to tables only.}
 
-\item{wprobs}{Numeric vector of length 7 specifying expected
+\item{wprobs}{numeric vector of length 7 specifying expected
 probabilities for weekdays (Monday to Sunday). The default is a
 uniform distribution \code{rep(1/7, 7)}.}
 
-\item{mprobs}{Numeric vector of length 12 specifying expected
+\item{mprobs}{numeric vector of length 12 specifying expected
 probabilities for months (January to December). If \code{NULL}
 (default), probabilities proportional to the number of days per month
 in a non-leap year are used.}
 
-\item{...}{Further graphical parameters passed to the underlying
-base R plotting functions.}
+\item{...}{further arguments passed to methods}
 }
 \value{
-An object of class \code{"Desc.Date"} and \code{"Desc"} containing:
-\itemize{
-\item \code{core}: time-axis statistics
-\item \code{weekday}: observed counts, expected counts,
-standardized residuals and p-value
-\item \code{month}: observed counts, expected counts,
-standardized residuals and p-value
-\item \code{sentinel}: heuristic data-quality diagnostics
-\item \code{meta}: metadata information
+an object of class \code{c("Desc.Date", "Desc")} with components:
+\describe{
+\item{\code{core}}{time-axis statistics}
+\item{\code{weekday}}{observed and expected weekday counts, standardized
+residuals, and p-value}
+\item{\code{month}}{observed and expected month counts, standardized
+residuals, and p-value}
+\item{\code{sentinel}}{heuristic data-quality diagnostics}
+\item{\code{meta}}{metadata}
 }
 }
 \description{
@@ -103,6 +103,7 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{data-description}

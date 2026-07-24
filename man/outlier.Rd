@@ -7,7 +7,7 @@
 outlier(x, method = c("boxplot", "hampel"), value = TRUE, na.rm = FALSE)
 }
 \arguments{
-\item{x}{a (non-empty) numeric vector of data values.}
+\item{x}{a non-empty numeric vector of data values}
 
 \item{method}{the method to be used. So far Tukey's boxplot and Hampel's
 rule are implemented.}
@@ -20,8 +20,7 @@ containing the matching elements themselves is returned.}
 \code{FALSE}.}
 }
 \value{
-the values of x lying outside the whiskers in a boxplot \cr or the
-indices of them
+the outlying values if \code{value = TRUE}; otherwise their indices
 }
 \description{
 Return outliers following Tukey's boxplot and Hampel's median/mad
@@ -34,8 +33,10 @@ implement Tukey's boxplot rule as a rough idea of spotting extreme values.
 Hampel considers values outside of median +/- 3 * (median absolute
 deviation) to be outliers.
 }
+\note{
+Performance improvement by Luis Gustavo Schuck.
+}
 \examples{
-
 outlier(Pizza$temperature, na.rm=TRUE)
 
 # it's the same as the result from boxplot
@@ -68,13 +69,7 @@ estimation, \emph{Journal of the American Statistical Association}, 69,
 
 Other impute:
 \code{\link[=impute]{impute()}},
-\code{\link[=imputeKnn]{imputeKnn()}},
-\code{\link[=lof]{lof()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, performance improvement by
-Luis Gustavo Schuck
+\code{\link[=imputeKnn]{imputeKnn()}}
 }
 \concept{impute}
 \concept{outlier-detection}
-\keyword{univar}

@@ -33,7 +33,7 @@ test_that("relRisk returns named confidence interval output", {
   
   expect_named(
     rr,
-    c("estimate", "lci", "uci")
+    c("est", "lci", "uci")
   )
   
   expect_true(is.numeric(rr))

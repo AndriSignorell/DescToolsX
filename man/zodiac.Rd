@@ -7,16 +7,16 @@
 zodiac(x, lang = c("en", "de"), stringsAsFactors = TRUE)
 }
 \arguments{
-\item{x}{the date to be transformed.}
+\item{x}{the date to transform}
 
-\item{lang}{the language of the zodiac names, can be english (default) or
-german (\code{"deu"}).}
+\item{lang}{language of the zodiac names, either English (\code{"en"}) or
+German (\code{"de"})}
 
 \item{stringsAsFactors}{logical. If set to \code{TRUE} (default) the result
 will consist of a factor with zodiac signs as levels.}
 }
 \value{
-character vector or factor with the zodiac.
+a character vector or factor containing the zodiac signs
 }
 \description{
 Calculate the sign of zodiac of a date.
@@ -33,6 +33,9 @@ Taurus | May 20 - June 20 : Gemini | June 21 - July 21 : Cancer | July 22 - Aug.
 22 : Leo | Aug 23 - Sept. 21 : Virgo | Sept. 22 - Oct. 22 : Libran | Oct. 23 -
 Nov. 21 : Scorpio | Nov. 22 - Dec. 21 : Sagittarius }
 }
+\note{
+Based on code from Markus Naepflin, adapted to conform to package standards.
+}
 \examples{
 
 zodiac(as.Date(c("1937-07-28", "1936-06-01", "1966-02-25",
@@ -44,21 +47,15 @@ desc(z)
 
 }
 \seealso{
-\code{\link{year}} and other date functions
-
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},
 \code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link{date-time-predicates}},
+\code{\link{date_functions}},
 \code{\link[=generation]{generation()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code from Markus
-Naepflin
+\code{\link{time-conversions}}
 }
 \concept{categorization}
 \concept{date-time}
 \concept{date.time}
-\keyword{chron}

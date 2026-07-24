@@ -4,54 +4,81 @@
 \alias{lof}
 \title{Local Outlier Factor}
 \usage{
-lof(data, k)
+lof(x, k)
 }
 \arguments{
-\item{data}{The data set to be explored}
+\item{x}{a numeric matrix or data frame, observations in rows.}
 
-\item{k}{The kth-distance to be used to calculate the LOF's.}
+\item{k}{the number of neighbours defining the local neighbourhood, not
+counting the observation itself.}
 }
 \value{
-\item{lof}{ A vector with the local outlier factor of each
-observation}
+a numeric vector with the local outlier factor of each
+observation, in the order of the rows of \code{x}.
 }
 \description{
-A function that finds the local outlier factor (LOF) (Breunig et al.,2000) of the
-matrix "data" using k neighbours. The LOF is a
-measure of outlyingness that is calculated for each observation. The user
-decides whether or not an observation will be considered an outlier based on
-this measure. The LOF takes into consideration the density of the
-neighborhood around the observation to determine its outlyingness.
+Computes the local outlier factor (LOF) of Breunig et al. (2000) for each
+observation. The LOF compares the local density around an observation with
+the densities around its \code{k} nearest neighbours, so that an
+observation in a sparse region surrounded by dense ones scores high even
+when it is not globally extreme.
 }
 \details{
-The LOFs are calculated over a range of values, and the max local outlier
-factor is determined over this range.
-}
-\note{
-This function was originally published in the package dprep.
+Scores near 1 indicate that the density around the observation matches
+that of its neighbours. Substantially larger values indicate a locally
+sparse neighbourhood and thus an outlier; the user decides on the
+threshold, as its scale depends on the data. Values below 1 arise in
+unusually dense regions and are not normally of interest.
+
+The computation uses \code{\link[dbscan]{lof}} from the \pkg{dbscan}
+package, which builds a kd-tree and therefore scales to large data.
+Note that its \code{minPts} counts the observation itself, whereas
+\code{k} here counts neighbours only, following Breunig et al.; the
+translation \code{minPts = k + 1} is applied internally.
+
+Duplicated observations need care. Where an observation has more than
+\code{k} exact duplicates, every neighbour distance is zero, the local
+reachability density is infinite and the LOF is formally \eqn{0/0}.
+\pkg{dbscan} reports 1 in that case, on the grounds that the coincident
+points already supply enough density for the observation not to be an
+outlier. Breunig et al. instead assume genuine duplicates have been
+removed beforehand; do that if you need results matching the paper
+exactly.
+
+Note that the infinite density is not confined to the duplicates
+themselves. Any observation that has one of them among its own \code{k}
+neighbours inherits an infinite score, so a block of duplicates lying
+inside the data can render its whole surroundings \code{Inf}. This
+follows from the definition rather than from the implementation, and is a
+further reason to remove exact duplicates first.
+
+Only complete observations can be scored, since the distances are
+otherwise undefined.
 }
 \examples{
+\donttest{
+if(requireNamespace("dbscan", quietly = TRUE)) {
 
-# Detecting the top 10 outliers using the lof algorithm
+  res <- lof(iris[, -5], k = 10)
 
-(iris.lof <- lof(iris[,-5], 10))
+  # the ten most outlying observations
+  head(order(res, decreasing = TRUE), 10)
+
+  # scores near 1 are unremarkable, large ones are not
+  summary(res)
+}
+}
 
 }
 \references{
-Breuning, M., Kriegel, H., Ng, R.T, and Sander. J. (2000).  lof:
-Identifying density-based local outliers. \emph{In Proceedings of the ACM
-SIGMOD International Conference on Management of Data}
+Breunig, M. M., Kriegel, H.-P., Ng, R. T., & Sander, J. (2000). LOF:
+Identifying density-based local outliers. \emph{Proceedings of the ACM
+SIGMOD International Conference on Management of Data}, 93-104.
+\doi{10.1145/335191.335388}
 }
 \seealso{
-Other impute:
-\code{\link[=impute]{impute()}},
-\code{\link[=imputeKnn]{imputeKnn()}},
-\code{\link[=outlier]{outlier()}}
+\code{\link[dbscan]{lof}}
 }
-\author{
-Caroline Rodriguez
-}
-\concept{impute}
-\concept{machine-learning}
+\concept{density-based}
+\concept{outlier}
 \concept{outlier-detection}
-\keyword{methods}

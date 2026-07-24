@@ -7,18 +7,11 @@
 #'
 #' @name randolphKappa
 #'
-#' @param x (Default method) A matrix of size \eqn{N \times m} with subjects in
-#'   rows and raters in columns; cells contain the assigned categories.
-#' @param conf.level Numeric confidence level (e.g., \code{0.95}) for bootstrap
-#'   confidence intervals. Currently no interval is computed; passing
-#'   \code{NA} (the default) skips any CI.
-#' @param ... further arguments are passed to the \code{\link[boot]{boot}} function.
-#' Supported arguments are \code{type} (\code{"norm"}, \code{"basic"},
-#' \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
-#' of bootstrap replicates \code{R}. If not defined those will be set to their
-#' defaults, being \code{"basic"} for \code{type}, option
-#' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
-#' \code{parallel} and \code{999} for \code{R}.
+#' @param x a matrix of size \eqn{N \times m} with subjects in rows and raters
+#'   in columns; cells contain the assigned categories
+#' @param conf.level reserved for future confidence intervals and currently
+#'   ignored
+#' @param ... reserved for future bootstrap options and currently ignored
 #'
 #' @details
 #' Let \eqn{k} be the number of distinct categories across all ratings,
@@ -31,12 +24,9 @@
 #' to category \eqn{j}; \eqn{\max_j n_{ij}} is the modal (most frequent)
 #' category count per subject.
 #'
-#' The \code{formula} method reshapes long-format data to a subjects\eqn{\times}raters
-#' matrix internally (via \code{DescTools::.LongToSquare}) and then calls the
-#' \code{default} method.
+#' Long-format ratings can first be reshaped with \code{\link{raterFrame}}.
 #'
-#' @return
-#' A numeric scalar: the value of Randolph's kappa.
+#' @return a numeric scalar containing Randolph's kappa
 #'
 #' @references
 #' Randolph, J. J. (2005). Free-Marginal Multirater Kappa (multirater \eqn{\kappa_{\mathrm{free}}}):
@@ -61,11 +51,9 @@
 #' )
 #' randolphKappa(raterFrame(rating ~ subject | rater, 
 #'                          data = df, dropSubj=TRUE))
-
-
-
+#'
 #' @rdname randolphKappa
-
+#'
 #' @family assoc.agreement  
 #' @concept agreement  
 #' @concept categorical-agreement
@@ -93,8 +81,6 @@ randolphKappa <- function(x, conf.level = NA, ...) {
     return(kappa)
 
 }
-
-
 
 
 

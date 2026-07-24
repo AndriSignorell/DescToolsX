@@ -1,9 +1,9 @@
 
 #' Goodman Kruskal's Tau
 #' 
-#' Calculate Goodman Kruskal's tau statistic, a measure of association for
-#' ordinal factors in a two-way table.\cr The function has interfaces for a
-#' table (matrix) and for single vectors. 
+#' Calculate Goodman-Kruskal's tau, a measure of association for nominal
+#' variables in a two-way table. The function accepts either a contingency
+#' table or two vectors.
 #' 
 #' Goodman-Kruskal tau measures association for cross tabulations of nominal
 #' level variables. Goodman-Kruskal tau is based on random category assignment.
@@ -19,10 +19,10 @@
 #' 2x2-table case.\cr
 #' 
 #' @name gkTau
-#' @param x a numeric vector or a table. A matrix will be treated as table. 
-#' @param y NULL (default) or a vector with compatible dimensions to \code{x}.
-#' If y is provided, \code{table(x, y, \dots)} is calculated. 
-#' @param direction direction of the calculation. Can be \code{"row"} (default)
+#' @param x numeric vector or contingency table. A matrix is treated as a table.
+#' @param y \code{NULL} (default) or a vector with compatible dimensions to
+#' \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.
+#' @param direction direction of the calculation. Must be \code{"row"} (default)
 #' or \code{"column"}, where \code{"row"} calculates Goodman Kruskal's tau-a
 #' (R|C) ("column dependent"). 
 #' @param conf.level confidence level of the interval. If set to \code{NA}
@@ -31,12 +31,15 @@
 #' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
 #' vector interface. 
 #' 
-#' @return a single numeric value if no confidence intervals are requested,\cr
-#' and otherwise a numeric vector with 3 elements for the estimate, the lower
-#' and the upper confidence interval
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Goodman-Kruskal's tau}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #' 
-#' @note
-#' Based on code by Antti Arppe.
+#' @note Based on code by Antti Arppe, adapted to conform to package standards.
 #' 
 #' @references Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
 #' & Sons, pp. 57-59.

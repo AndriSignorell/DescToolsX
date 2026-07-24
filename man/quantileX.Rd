@@ -15,14 +15,14 @@ quantileX(
 )
 }
 \arguments{
-\item{x}{a numeric vector.}
+\item{x}{a numeric vector}
 
-\item{weights}{an optional numeric vector giving the sample weights.}
+\item{weights}{an optional numeric vector giving the sample weights}
 
-\item{probs}{numeric vector of probabilities with values in \eqn{[0,1]}.}
+\item{probs}{numeric vector of probabilities with values in \eqn{[0,1]}}
 
 \item{na.rm}{a logical indicating whether missing values in \code{x} should
-be omitted.}
+be omitted}
 
 \item{names}{logical; if true, the result has a \code{\link{names}}
 attribute.  Set to \code{FALSE} for speedup with many \code{probs}.}
@@ -36,8 +36,8 @@ formatting the percentages. In \code{R} versions up to 4.0.x, this had been
 set to \code{max(2, getOption("digits"))}, internally.}
 }
 \value{
-A named numeric vector containing the weighted quantiles of values
-in \code{x} at probabilities \code{probs} is returned.
+a numeric vector containing the weighted quantiles of \code{x} at
+probabilities \code{probs}, named when \code{names = TRUE}
 }
 \description{
 Compute weighted quantiles (Eurostat definition).
@@ -45,9 +45,14 @@ Compute weighted quantiles (Eurostat definition).
 \details{
 The implementation strictly follows the Eurostat definition.
 }
+\note{
+Based on code by Andreas Alfons, Matthias Templ,
+adapted to conform to package standards.
+}
 \examples{
-
 quantileX(Pizza$temperature, rep(c(1:3), length.out=nrow(Pizza)))
+
+
 }
 \references{
 Working group on Statistics on Income and Living Conditions
@@ -61,10 +66,5 @@ gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
 Other quantile:
 \code{\link{extremes}}
 }
-\author{
-Andreas Alfons, Matthias Templ, some tweaks Andri Signorell
-\href{mailto:andri@signorell.net}{andri@signorell.net}
-}
 \concept{distribution-summary}
 \concept{quantile}
-\keyword{univar}

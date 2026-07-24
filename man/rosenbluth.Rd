@@ -7,23 +7,23 @@
 rosenbluth(x, n = rep(1, length(x)), na.rm = FALSE)
 }
 \arguments{
-\item{x}{Numeric vector of non-negative values (e.g. market shares
-or frequencies).}
+\item{x}{numeric vector of non-negative values, such as market shares or
+frequencies}
 
-\item{n}{Optional frequency weights. Each element of \code{x}
+\item{n}{optional frequency weights. Each element of \code{x}
 is replicated \code{n} times.}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.}
+\item{na.rm}{logical. If \code{TRUE}, missing values are removed.}
 }
 \value{
-Numeric value of the Rosenbluth index.
+a numeric scalar containing the Rosenbluth index
 }
 \description{
 Computes the Rosenbluth index as a measure of concentration.
 }
 \details{
 The Rosenbluth index is based on the ranked shares and is
-inversely related to market concentration. Smaller values
+directly related to market concentration. Larger values
 indicate stronger concentration.
 
 The measure is computed from the ordered values of \code{x}
@@ -40,7 +40,8 @@ Other inequality:
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=simpson]{simpson()}}
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}
 \concept{inequality}

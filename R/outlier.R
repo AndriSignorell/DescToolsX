@@ -10,7 +10,7 @@
 #' Hampel considers values outside of median +/- 3 * (median absolute
 #' deviation) to be outliers.
 #' 
-#' @param x a (non-empty) numeric vector of data values.
+#' @param x a non-empty numeric vector of data values
 #' @param method the method to be used. So far Tukey's boxplot and Hampel's
 #' rule are implemented.
 #' @param value logical. If \code{FALSE}, a vector containing the (integer)
@@ -18,17 +18,16 @@
 #' containing the matching elements themselves is returned.
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' \code{FALSE}.
-#' @return the values of x lying outside the whiskers in a boxplot \cr or the
-#' indices of them
-#' @author Andri Signorell <andri@@signorell.net>, performance improvement by
-#' Luis Gustavo Schuck
-#' @seealso \code{\link{boxplot}}
+#' 
+#' @return the outlying values if \code{value = TRUE}; otherwise their indices
+#' 
+#' @note Performance improvement by Luis Gustavo Schuck.
+#' 
 #' @references Hampel F. R. (1974) The influence curve and its role in robust
 #' estimation, \emph{Journal of the American Statistical Association}, 69,
 #' 382-393
-#' @keywords univar
-#' @examples
 #' 
+#' @examples
 #' outlier(Pizza$temperature, na.rm=TRUE)
 #' 
 #' # it's the same as the result from boxplot
@@ -50,8 +49,8 @@
 #' boxplot(temperature ~ driver, Pizza)$out
 #' 
 #' 
-
-
+#' @seealso \code{\link{boxplot}}
+#' 
 #' @family impute  
 #' @concept outlier-detection
 #'
@@ -86,7 +85,6 @@ outlier <- function(x, method=c("boxplot", "hampel"), value=TRUE, na.rm=FALSE){
   return(res)
   
 }
-
 
 
 

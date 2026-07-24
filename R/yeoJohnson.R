@@ -20,12 +20,12 @@
 #' @name yeoJohnson
 #' @aliases yeoJohnson yeoJohnsonInv
 #'
-#' @param x A numeric vector.
-#' @param lambda A single numeric transformation parameter.
-#' @param tol Numeric tolerance for detecting special cases
-#'   (\eqn{\lambda \approx 0} and \eqn{\lambda \approx 2}).
+#' @param x a numeric vector
+#' @param lambda a single numeric transformation parameter
+#' @param tol numeric tolerance for detecting the special cases
+#'   \eqn{\lambda \approx 0} and \eqn{\lambda \approx 2}
 #'
-#' @return A numeric vector of the same length as \code{x}.
+#' @return a numeric vector of the same length as \code{x}
 #'
 #' @details
 #' The transformation is defined for all real-valued inputs and is continuous
@@ -40,8 +40,6 @@
 #' A new family of power transformations to improve normality or symmetry.
 #' \emph{Biometrika}, \bold{87}(4), 954--959.
 #'
-#' @seealso \code{\link{boxCox}}, \code{\link{boxCoxInv}}
-#'
 #' @examples
 #' set.seed(1)
 #' x <- rnorm(500)
@@ -55,9 +53,7 @@
 #' # Compare with log-like transformation
 #' y0 <- yeoJohnson(x, lambda = 0)
 #'
-
-
-
+#'
 #' @family transform  
 #' @concept transformation  
 #' @concept variance-stabilization
@@ -150,5 +146,4 @@ yeoJohnsonInv <- function(x, lambda, tol = 1e-6) {
   
   out
 }
-
 

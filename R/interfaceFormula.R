@@ -5,19 +5,19 @@
 #'
 #' @name Formulas
 #' 
-#' @param formula A formula of the form \code{lhs ~ rhs}, where \code{lhs}
+#' @param formula formula of the form \code{lhs ~ rhs}, where \code{lhs}
 #'   gives the response values and \code{rhs} the corresponding groups
-#'   or explanatory variables.
+#'   or explanatory variables
 #'
-#' @param data An optional matrix or data frame (or similar; see
+#' @param data optional matrix or data frame (or similar; see
 #'   \code{\link[stats]{model.frame}}) containing the variables in the
 #'   formula. By default the variables are taken from
 #'   \code{environment(formula)}.
 #'
-#' @param subset An optional vector specifying a subset of observations
-#'   to be used in the analysis.
+#' @param subset optional vector specifying a subset of observations
+#'   to be used in the analysis
 #'
-#' @param na.action A function which indicates what should happen when
+#' @param na.action function indicating what should happen when
 #'   the data contain \code{NA}s. Defaults to
 #'   \code{getOption("na.action")}.
 #'
@@ -36,5 +36,4 @@
 #'   \item \code{\link[stats]{terms}}
 #' }
 #'
-#' @keywords internal
 NULL

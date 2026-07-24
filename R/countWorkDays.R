@@ -1,23 +1,21 @@
 
-
 #' Count Work Days Between Two Dates
 #' 
 #' Returns the number of work days between two dates taking into account the
 #' provided holiday dates. 
 #' 
 #' The function is vectorised so that multiple initial and final dates can be
-#' supplied. The dates are recycled, if their number are different.
+#' supplied. The date vectors are recycled if their lengths differ.
 #' 
-#' @param from the initial dates 
-#' @param to the final dates 
-#' @param holiday a vector with dates to be excluded. 
+#' @param from initial dates
+#' @param to final dates
+#' @param holiday a vector of dates to exclude
 #' @param nonworkdays a character vector containing the abbreviations of the
-#' weekdays (as in \code{day.abb}) to be considered non work days. Default is
-#' \code{c("Sat","Sun")}. 
-#' @return an integer vector 
-#' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{weekdays}}, \code{Date Functions}
-#' @keywords chron
+#' weekdays (as in \code{day.abb}) to be treated as non-work days. Default is
+#' \code{c("Sat", "Sun")}.
+#' 
+#' @return an integer vector
+#' 
 #' @examples
 #' 
 #' from <- as.Date("2019-01-01") + rep(0, 10)
@@ -33,10 +31,7 @@
 #' 
 #' countWorkDays(from = min(x), to = max(x), holiday = c("2019-01-06", "2019-01-07"))
 #' 
-
-
-#' @rdname date_functions
-
+#' 
 #' @family date.time  
 #' @concept date-time
 #'
@@ -44,32 +39,35 @@
 #' @export
 countWorkDays <- function(from, to, 
                           holiday=NULL, nonworkdays=c("Sat","Sun")) {
-  
-  
-  .workDays <- function(from, to, 
-                        holiday=NULL, nonworkdays=c("Sat","Sun")) {
-    d <- as.integer(to - from)
-    w <- (d %/% 7)
-    
-    res <- w * (7-length(nonworkdays)) + 
-      sum(weekday(seq(from + w*7,  to, 1), fmt="dd", lang="en") %notin% nonworkdays)
-    
-    if(!is.null(holiday)){
-      # count holidays in period
-      h <- holiday[holiday %[]% c(from, to)]
-      res <- res - sum(weekday(h, fmt="dd", lang="en") %notin% nonworkdays)
-    }
-    
-    return(res)
-    
-  }
-  
+
   
   ll <- recycle(from=from, to=to)  
   
   res <- integer(attr(ll, "maxdim"))
   for(i in 1:attr(ll, "maxdim"))
     res[i] <- .workDays(ll$from[i], ll$to[i], holiday=holiday, nonworkdays=nonworkdays) 
+  
+  return(res)
+  
+}
+
+
+
+# == internal helper functions =================================================
+
+.workDays <- function(from, to, 
+                      holiday=NULL, nonworkdays=c("Sat","Sun")) {
+  d <- as.integer(to - from)
+  w <- (d %/% 7)
+  
+  res <- w * (7-length(nonworkdays)) + 
+    sum(weekday(seq(from + w*7,  to, 1), fmt="dd", lang="en") %notin% nonworkdays)
+  
+  if(!is.null(holiday)){
+    # count holidays in period
+    h <- holiday[holiday %[]% c(from, to)]
+    res <- res - sum(weekday(h, fmt="dd", lang="en") %notin% nonworkdays)
+  }
   
   return(res)
   

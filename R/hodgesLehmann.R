@@ -19,25 +19,23 @@
 #' the median of the difference between a sample from x and
 #' a sample from y.
 #'
-#' @param x Numeric vector.
-#' @param y Optional numeric vector.
-#' @param conf.level Confidence level.
-#' @param sides Character string specifying the side of the interval:
-#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}.
-#' @param method Confidence interval method.
-#' @param na.rm Logical; should missing values be removed?
-#' @param ... Additional arguments passed to bootstrap procedures.
+#' @param x numeric vector
+#' @param y optional numeric vector
+#' @param conf.level confidence level; use \code{NA} to return only the point
+#' estimate. Confidence intervals are currently available only for the
+#' one-sample case.
+#' @param sides character string specifying the side of the interval:
+#' \code{"two.sided"}, \code{"left"}, or \code{"right"}
+#' @param method confidence interval method
+#' @param na.rm logical; whether to remove missing values
+#' @param ... additional arguments passed to bootstrap procedures
 #'
-#' @return
-#' If \code{conf.level = NA}:
-#' a single numeric estimate.
-#'
-#' Otherwise:
-#' named numeric vector with:
-#' \itemize{
-#'   \item \code{est}: Hodges-Lehmann estimate
-#'   \item \code{lci}: lower confidence limit
-#'   \item \code{uci}: upper confidence limit
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the Hodges-Lehmann location}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
 
@@ -68,12 +66,12 @@ hodgesLehmann <- function(x,
   
   if (anyNA(x) || (!is.null(y) && anyNA(y))) {
     if (is.na(conf.level)) {
-      return(NA)
+      return(NA_real_)
     } else {
       return(c(
-        est = NA,
-        lci = NA,
-        uci = NA
+        est = NA_real_,
+        lci = NA_real_,
+        uci = NA_real_
       ))
     }
   }
@@ -83,6 +81,9 @@ hodgesLehmann <- function(x,
   
   if (!is.null(y) && !is.numeric(y))
     stop("'y' must be numeric")
+
+  if (!is.null(y) && !is.na(conf.level))
+    stop("confidence intervals are currently implemented only for the one-sample case")
   
   if (length(x) < 1)
     stop("'x' must contain at least one observation")
@@ -210,4 +211,3 @@ hodgesLehmann <- function(x,
   
   res
 }
-

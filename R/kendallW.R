@@ -31,31 +31,27 @@
 #' correction explicitly specified for W.
 #' 
 #' @param x \eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m
-#' raters (in columns).
+#' raters (in columns)
 #' @param correct a logical indicating whether the coefficient should be
-#' corrected for ties within raters. (Default \code{FALSE})
+#' corrected for ties within raters (default \code{FALSE})
 #' @param test a logical indicating whether the test statistic and p-value
-#' should be reported. (Default \code{FALSE})
-#' @param na.rm is not longer supported and will be ignored.
-
-#' @return Either a single value if \code{test = FALSE} or else \cr
+#' should be reported (default \code{FALSE})
+#' @param na.rm deprecated and ignored
+#'
+#' @return if \code{test = FALSE}, a numeric scalar containing Kendall's W.
+#' Otherwise an object of class \code{"htest"} with components:
+#' \describe{
+#'   \item{\code{statistic}}{chi-squared test statistic}
+#'   \item{\code{p.value}}{p-value for the test}
+#'   \item{\code{method}}{description of the test and coefficient variant}
+#'   \item{\code{data.name}}{name of the data}
+#'   \item{\code{estimate}}{coefficient of concordance W}
+#'   \item{\code{parameter}}{degrees of freedom and numbers of subjects and raters}
+#' }
 #' 
-#' a list with class \dQuote{\code{htest}} containing the following components:
-#' \item{statistic}{the value of the chi-square statistic.} \item{p.value }{the
-#' p-value for the test.} \item{method}{the character string \dQuote{Kendall's
-#' coefficient of concordance W}.} \item{data.name}{a character string giving
-#' the name(s) of the data.} \item{estimate}{the coefficient of concordance.}
-#' \item{parameter}{the degrees of freedom df, the number of subjects examined
-#' and the number of raters.}
-
-#' @author Andri Signorell <andri@signorell.net>\cr
-#' based on code by Matthias Gamer <m.gamer@@uke.uni-hamburg.de>\cr
-#' and Markus Brueckl <markus.brueckl@tu-berlin.de>
-
-#' @seealso \code{\link[stats]{cor}}, \code{\link{kappaM}},
-#' \code{\link{cronbachAlpha}}, \code{\link{icc}},
-#' \code{\link[stats]{friedman.test}}
-# 
+#' @note Based on code by Matthias Gamer and Markus Brueckl, 
+#' adapted to conform to package standards.
+#' 
 #' @references Kendall, M.G. (1948) \emph{Rank correlation methods}. London:
 #' Griffin.
 #' 
@@ -97,9 +93,8 @@
 #' friedman.test(y=as.matrix(d.att[,-1]), groups = d.att$id)
 #' 
 #' 
-
-
-
+#' @seealso [stats::cor], [stats::friedman.test]
+#'
 #' @family assoc.ordinal  
 #' @concept association-measure  
 #' @concept ordinal  

@@ -36,15 +36,15 @@ test_that("abstract NAs column shows count when NAs are present", {
   expect_match(res$NAs[1], "1")
 })
 
-test_that("abstract maxlevels limits the number of displayed factor levels", {
+test_that("abstract maxLevels limits the number of displayed factor levels", {
   df <- data.frame(f = factor(letters[1:8]))
-  res5 <- abstract(df, maxlevels = 5)
+  res5 <- abstract(df, maxLevels = 5)
   # Should contain '...' because 8 > 5
   expect_match(res5$Levels[1], "\\.\\.\\.")
 })
 
-test_that("abstract list.len limits the number of rows returned", {
-  res <- abstract(iris, list.len = 3)
+test_that("abstract maxVars limits the number of rows returned", {
+  res <- abstract(iris, maxVars = 3)
   expect_equal(nrow(res), 3)
 })
 

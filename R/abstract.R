@@ -19,30 +19,30 @@
 #'
 #' @param x a `data.frame` to be described
 #' @param sep the separator for concatenating the levels of a factor
-#' @param zeroForm a symbol to be used, when a variable has zero NAs.
-#' @param maxLevels (integer, `Inf`) Max. number of factor levels to display.
-#'        Default is 5. Set this to `Inf`, if all levels are needed.
-#' @param maxVars (integer, `Inf`) Max. number of variables (rows) to
-#'        display. Default is `Inf`, meaning all variables.
-#' @param truncate logical, defining if level names exceeding the column
+#' @param zeroForm a symbol to be used when a variable has zero NAs
+#' @param maxLevels integer; maximum number of factor levels to display.
+#'        Default is 5. Set this to `Inf` if all levels are needed.
+#' @param maxVars integer; maximum number of variables (rows) to display.
+#'        Default is `Inf`, meaning all variables.
+#' @param truncate logical; whether level names exceeding the column
 #'        width should be truncated. Default is `TRUE`.
 #'
-#' @return an object of class `Abstract`, essentially a character matrix
-#' with 6 columns containing:
+#' @return a data frame of class `Abstract` with columns:
 #'
-#' 1. a column number (`Nr`),
-#' 2. the name of the column (`ColName`),
-#' 3. the column class (`Class`),
-#' 4. the number of NAs (`NAs`),
-#' 5. the levels if the variable is a factor (`Levels`),
-#' 6. descriptive labels for the column (`Labels`).
+#' \describe{
+#'   \item{\code{Nr}}{column number}
+#'   \item{\code{Class}}{column class}
+#'   \item{\code{ColName}}{column name}
+#'   \item{\code{NAs}}{number of missing values}
+#'   \item{\code{Levels}}{factor levels, if applicable}
+#'   \item{\code{Label}}{descriptive column label}
+#' }
 #'
-#' When printing, the `Labels` column is hidden if no labels are set.
+#' When printing, the `Label` column is hidden if no labels are set.
 #'
 #' @seealso [utils::str()], [base::summary()], [columnWrap()],
 #' [DescToolsX::desc()]
 #'
-#' @keywords print
 #' @examples
 #'
 #' d.mydata <- CO2
@@ -141,10 +141,10 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
 
 
 
-#' @param width Console width. If `NULL`, defaults to
+#' @param width console width. If `NULL`, defaults to
 #'        [options("width")][base::options()].
-#' @param print.gap (integer) Number of spaces between columns.
-#' @param ... Further arguments to `print` method.
+#' @param print.gap integer; number of spaces between columns
+#' @param ... further arguments passed to the `print` method
 #' @rdname abstract
 #' @export
 print.Abstract <- function(x, sep = NULL, width = NULL,

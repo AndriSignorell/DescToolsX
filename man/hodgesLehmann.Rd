@@ -15,31 +15,30 @@ hodgesLehmann(
 )
 }
 \arguments{
-\item{x}{Numeric vector.}
+\item{x}{numeric vector}
 
-\item{y}{Optional numeric vector.}
+\item{y}{optional numeric vector}
 
-\item{conf.level}{Confidence level.}
+\item{conf.level}{confidence level; use \code{NA} to return only the point
+estimate. Confidence intervals are currently available only for the
+one-sample case.}
 
-\item{sides}{Character string specifying the side of the interval:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{character string specifying the side of the interval:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{method}{Confidence interval method.}
+\item{method}{confidence interval method}
 
-\item{na.rm}{Logical; should missing values be removed?}
+\item{na.rm}{logical; whether to remove missing values}
 
-\item{...}{Additional arguments passed to bootstrap procedures.}
+\item{...}{additional arguments passed to bootstrap procedures}
 }
 \value{
-If \code{conf.level = NA}:
-a single numeric estimate.
-
-Otherwise:
-named numeric vector with:
-\itemize{
-\item \code{est}: Hodges-Lehmann estimate
-\item \code{lci}: lower confidence limit
-\item \code{uci}: upper confidence limit
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the Hodges-Lehmann location}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -67,8 +66,7 @@ Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
 \code{\link[=huberM]{huberM()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
+\code{\link[=meanX]{meanX()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}},
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}

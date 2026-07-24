@@ -7,12 +7,12 @@
 #' It belongs to the class of Generalized Entropy measures
 #' with parameter \eqn{\alpha = 1}.
 #'
-#' @param x Numeric vector of non-negative values (e.g. incomes).
-#' @param n Optional frequency weights. Each element of \code{x}
+#' @param x numeric vector of non-negative values, such as incomes
+#' @param n optional frequency weights. Each element of \code{x}
 #'   is replicated \code{n} times.
-#' @param na.rm Logical. If \code{TRUE}, missing values are removed.
+#' @param na.rm logical. If \code{TRUE}, missing values are removed.
 #'
-#' @return Numeric value of the Theil index. The value is 0 under
+#' @return a numeric scalar containing the Theil index. The value is 0 under
 #'   perfect equality and increases with inequality.
 #'
 #' @details
@@ -33,13 +33,10 @@
 #'
 #' @references
 #' Theil, H. (1967). Economics and Information Theory.
-
-
-
-#' @family assoc.nominal  
-#' @concept association-measure  
-#' @concept nominal  
-#' @concept information-theory
+#'
+#' @family inequality
+#' @concept inequality
+#' @concept concentration-index
 #'
 #'
 #' @export

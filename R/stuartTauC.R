@@ -27,23 +27,19 @@
 #' Stuart's \eqn{\tau_c} is symmetric:
 #' \code{stuartTauC(x, y)} = \code{stuartTauC(y, x)}.
 #'
-#' @param x A numeric vector or a contingency table (matrix or table).
-#' @param y Optional numeric vector. If supplied, must have the same length as \code{x}.
-#' @param conf.level Confidence level for confidence intervals. If \code{NA},
+#' @param x a numeric vector or a contingency table (matrix or table)
+#' @param y optional numeric vector. If supplied, must have the same length as \code{x}.
+#' @param conf.level confidence level for confidence intervals. If \code{NA},
 #'   no confidence interval is returned.
-#' @param \dots Further arguments passed to \code{\link{table}} in the vector interface.
+#' @param \dots further arguments passed to \code{\link{table}} in the vector interface
 #'
-#' @return
-#' If \code{conf.level = NA}, a single numeric value is returned.
-#' Otherwise a named numeric vector with elements:
-#' \itemize{
-#'   \item \code{est}: estimate
-#'   \item \code{lci}: lower confidence interval
-#'   \item \code{uci}: upper confidence interval
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Stuart's tau-c}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
-#'
-#' @seealso
-#' \code{\link{kendallTauB}} for Kendall's \eqn{\tau_b},
 #'
 #' @references
 #' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
@@ -75,9 +71,7 @@
 #' # Vector interface
 #' stuartTauC(mtcars$wt, mtcars$mpg)
 #'
-
-
-
+#'
 #' @family assoc.ordinal  
 #' @concept association-measure  
 #' @concept ordinal
@@ -88,18 +82,17 @@ stuartTauC <- function(x, y = NULL,
                        conf.level = NA,
                        ...){
   
-  res <- assocsXY(
+  res <- .assocs(
     x = x,
     y = y,
-    which = "tau-c",
+    which = "tauC",
     conf.level = conf.level
   )
   
   if(is.na(conf.level))
     unname(res[[1]])
   else
-    res[[1]]
+    setNamesX(unname(res[[1]]), c("est", "lci", "uci"))
 
 }
-
 

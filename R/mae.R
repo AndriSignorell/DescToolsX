@@ -4,11 +4,11 @@
 #' Computes the mean absolute error (MAE) between predicted
 #' and reference values.
 #'
-#' @param x An object. Methods are available for numeric vectors and
+#' @param x an object. Methods are available for numeric vectors and
 #'   model objects (e.g. \code{lm}).
-#' @param ... Additional arguments passed to methods.
+#' @param ... additional arguments passed to methods
 #'
-#' @return A numeric value representing the MAE.
+#' @return a numeric scalar containing the MAE
 #'
 #' @details
 #' The mean absolute error is defined as:
@@ -28,10 +28,7 @@
 #'
 #' @seealso \code{\link{mean}}, \code{\link{abs}}
 #'
-
-
-
-
+#'
 #' @family model.metrics  
 #' @concept model-evaluation  
 #' @concept prediction-error
@@ -55,8 +52,8 @@ mae.lm <- function(x, ...) {
 
 
 #' @rdname mae
-#' @param ref Numeric vector of reference (true) values.
-#' @param na.rm Logical; should missing values be removed?
+#' @param ref numeric vector of reference (true) values
+#' @param na.rm logical; whether to remove missing values
 #' @export
 mae.default <- function(x, ref, na.rm = FALSE, ...) {
   
@@ -65,4 +62,3 @@ mae.default <- function(x, ref, na.rm = FALSE, ...) {
   
   mean(abs(ref - x), na.rm = na.rm, ...)
 }
-

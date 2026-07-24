@@ -33,7 +33,7 @@ test_that("oddsRatio returns named confidence interval vector", {
   
   expect_named(
     res,
-    c("estimate", "lci", "uci")
+    c("est", "lci", "uci")
   )
   
   expect_equal(length(res), 3L)
@@ -220,8 +220,8 @@ test_that("oddsRatio.glm returns coefficient table", {
     res$coefficients,
     c(
       "term",
-      "estimate",
-      "logEstimate",
+      "est",
+      "logEst",
       "stdError",
       "pValue",
       "lci",

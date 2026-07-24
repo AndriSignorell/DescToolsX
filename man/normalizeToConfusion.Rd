@@ -13,34 +13,33 @@ normalizeToConfusion(
 )
 }
 \arguments{
-\item{x}{Input object. Accepted formats: a \code{\link{table}} representing
+\item{x}{input object. Accepted formats: a \code{\link{table}} representing
 a pre-computed contingency table; a square numeric \code{matrix}
 representing a pre-computed contingency table; a numeric \code{matrix}
 with exactly 2 columns (one per rater); a \code{list} or
 \code{data.frame} with exactly 2 elements; or a vector if \code{y} is
 also supplied.}
 
-\item{y}{Optional second rating vector. If supplied, \code{x} and \code{y}
+\item{y}{optional second rating vector. If supplied, \code{x} and \code{y}
 are tabulated together.}
 
-\item{levels}{Optional category levels.\cr
-For \code{mode = "agreement"}: an atomic vector of common levels shared
-by both raters.\cr
-For \code{mode = "association"}: a list of length 2,
+\item{levels}{optional category levels. For \code{mode = "agreement"}, use
+an atomic vector of common levels shared by both raters; for
+\code{mode = "association"}, use a list of length 2,
 \code{list(x_levels, y_levels)}.}
 
-\item{useNA}{Passed to \code{\link{table}}. Controls whether \code{NA}
+\item{useNA}{passed to \code{\link{table}}. Controls whether \code{NA}
 values appear as a level. One of \code{"no"} (default), \code{"ifany"},
 or \code{"always"}.}
 
-\item{mode}{Character string, either \code{"agreement"} (default) or
+\item{mode}{character string, either \code{"agreement"} (default) or
 \code{"association"}. Agreement mode enforces a square table with
 identical row and column names. Association mode allows rectangular
 tables with independent row and column levels.}
 }
 \value{
-A numeric matrix representing the contingency table, with dimnames
-set according to \code{levels} (if supplied) or derived from the input.
+a numeric contingency matrix with dimnames set according to
+\code{levels}, if supplied, or derived from the input
 }
 \description{
 Converts diverse input formats into a numeric contingency matrix suitable
@@ -131,6 +130,7 @@ normalizeToConfusion(
              subset = rater \%in\% c("rater1", "rater2"), dropSubj = TRUE)
 )
 
+
 }
 \seealso{
 \code{\link{isConfusionTable}()}, \code{\link{raterFrame}()}, \code{\link[bedrock:pairApply]{pairApply()}}
@@ -141,7 +141,6 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=pabak]{pabak()}},

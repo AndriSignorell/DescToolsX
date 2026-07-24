@@ -7,15 +7,14 @@
 expFreq(x, freq = c("abs", "rel"))
 }
 \arguments{
-\item{x}{a table.}
+\item{x}{a table}
 
-\item{freq}{indicates, whether absolute or relative frenquencies should be
-computed. Can either be \code{"abs"} or \code{"rel"}. Partial matching is
-supported.}
+\item{freq}{whether absolute or relative frequencies are computed. Must be
+\code{"abs"} or \code{"rel"}; partial matching is supported.}
 }
 \value{
-A table with either the absolute or the relative expected
-frequencies.
+a table with either the absolute or the relative expected
+frequencies
 }
 \description{
 Calculate the expected frequencies of an n-way table assuming independence.
@@ -28,7 +27,8 @@ This approach fails for higher dimensional tables, for which there is no support
 tables.
 }
 \note{
-This is a copy of the function \code{independence_table} in \pkg{vcd}.
+Based on code by David Meyer previously published as
+\code{independence_table} in \pkg{vcd}, adapted to conform to package standards.
 }
 \examples{
 
@@ -47,10 +47,6 @@ Other frequency:
 \code{\link[=percTable]{percTable()}},
 \code{\link[=tOne]{tOne()}}
 }
-\author{
-David Meyer \href{mailto:David.Meyer@R-project.org}{David.Meyer@R-project.org}
-}
 \concept{chi-square-based}
 \concept{frequency}
 \concept{frequency-table}
-\keyword{multivariate}

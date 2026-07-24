@@ -7,14 +7,17 @@
 iqrX(x, weights = NULL, na.rm = FALSE, type = 7)
 }
 \arguments{
-\item{x}{a numeric vector.}
+\item{x}{numeric vector}
 
-\item{weights}{an optional numeric vector giving the sample weights.}
+\item{weights}{optional numeric vector giving the sample weights}
 
-\item{na.rm}{logical. Should missing values be removed?}
+\item{na.rm}{logical; whether to remove missing values}
 
 \item{type}{an integer selecting one of the many quantile algorithms, see
-\code{\link{quantileX}()}.}
+\code{\link{quantileX}()}}
+}
+\value{
+numeric scalar containing the interquartile range
 }
 \description{
 computes interquartile range of the x values. Weights are supported.
@@ -32,16 +35,14 @@ iqrX(x=x, weights=w)
 
 }
 \seealso{
-\code{\link{medianX}()}, \code{\link{quantileX}()},
-\code{\link{IQR}()}, \code{\link{quantile}()}
+\link{medianX}, \link{quantileX}, \link{IQR}, \link{quantile}
 
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{dispersion}

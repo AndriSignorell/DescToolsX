@@ -7,7 +7,6 @@
 #'
 #' @name constants
 #' @format A character vector of length 7.
-#' @keywords internal
 
 
 #' @rdname constants

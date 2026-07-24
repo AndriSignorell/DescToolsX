@@ -16,13 +16,15 @@
 #' \code{highLow()} combines the two upper functions and reports the k extreme values on
 #' both sides together with their frequencies in parentheses. It is used for
 #' describing univariate variables and is interesting for checking the ends of
-#' the vector, where in real data often wrong values accumulate. This is in
-#' essence a printing routine for the highest and the lowest values of x.
+#' the vector, where in real data often wrong values accumulate. In
+#' essence this is nothing more than a combine printing routine for \code{large()}
+#' and \code{small()}.
 #' 
 #' @name extremes
 #' @aliases large small highLow
-#' @param x a \code{numeric} vector 
-#' @param k an integer >0 defining how many extreme values should be returned.
+#' 
+#' @param x a numeric vector
+#' @param k a positive integer defining how many extreme values are returned.
 #' Default is \code{k = 5}. If \code{k > length(x)}, all values will be
 #' returned. 
 #' @param unique logical, defining if unique values should be considered or
@@ -32,17 +34,23 @@
 #' @param na.last for controlling the treatment of \code{NA}s.  If \code{TRUE},
 #' missing values in the data are put last; if \code{FALSE}, they are put
 #' first; if \code{NA}, they are removed.
-#' @param nlow a single integer. The number of the smallest elements of a
-#' vector to be printed. Defaults to 5.
-#' @param nhigh a single integer. The number of the greatest elements of a
-#' vector to be printed. Defaults to the number of \code{nlow}.
+#' @param nlow number of smallest values included in the formatted output;
+#' defaults to 5
+#' @param nhigh number of largest values included in the formatted output;
+#' defaults to \code{nlow}
 #' 
-#' @return if \code{unique} is set to \code{FALSE}: a vector with the k most
-#' extreme values, \cr else: a list, containing the k most extreme values and
-#' their frequencies.
+#' @return for \code{large()} and \code{small()}, a vector of extreme values
+#' when \code{unique = FALSE}, otherwise a list with components:
+#' \describe{
+#'   \item{\code{value}}{extreme values}
+#'   \item{\code{frequency}}{corresponding frequencies}
+#' }
+#' \code{highLow()} returns a character scalar containing formatted lowest and
+#' highest values with frequencies.
 #' 
-#' @author Andri Signorell <andri@@signorell.net>\cr C++ parts by Nathan
-#' Russell and Romain Francois
+#' @note Based on C++ code by Nathan Russell and Romain Francois, 
+#' adapted to conform to package standards.  
+#' 
 #' @seealso \code{\link{max}}, \code{\link{min}}, \code{\link{sort}},
 #' \code{\link{rank}}
 #' 
@@ -51,7 +59,6 @@
 #' 
 #' \href{https://gallery.rcpp.org/articles/top-elements-from-vectors-using-priority-queue/}{Rcpp Gallery article}
 #' 
-#' @keywords arith
 #' @examples
 #' 
 #' x <- sample(1:10, 1000, rep=TRUE)
@@ -66,15 +73,12 @@
 #' # Both ends
 #' cat(highLow(Pizza$temperature, na.last=NA))
 #' 
-
-
-#' @rdname extremes
-
+#'  
 #' @family quantile  
 #' @concept order-statistic  
 #' @concept distribution-summary
 #'
-#'
+#' @rdname extremes
 #' @export
 large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
   
@@ -196,6 +200,7 @@ highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
   
   # updated 1.2.2014 / Andri
   # using table() was unbearable slow and inefficient for big vectors!!
+  
   # sort(partial) is the way to go..
   # http://r.789695.n4.nabble.com/Fast-way-of-finding-top-n-values-of-a-long-vector-td892565.html
   
@@ -230,4 +235,3 @@ highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
   return(paste("lowest : ", lowtxt, "\n",
                "highest: ", hightxt, "\n", sep = ""))
 }
-

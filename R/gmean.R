@@ -37,8 +37,9 @@
 #' results you are trying to report."
 #' 
 #' @aliases gmean gsd
+#' 
 #' @param x a positive numeric vector. An object which is not a vector is
-#' coerced (if possible) by as.vector. 
+#' coerced, if possible, by \code{as.vector()}.
 #' @param conf.level confidence level of the interval. Default is \code{NA}. 
 #' @param sides a character string specifying the side of the confidence
 #' interval, must be one of \code{"two.sided"} (default), \code{"left"} or
@@ -58,19 +59,23 @@
 #' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
 #' \code{parallel} and \code{999} for \code{R}.
 #' 
-#' @return a numeric value.
+#' @return for \code{gsd()}, a numeric scalar. For \code{gmean()}, a numeric
+#' scalar if \code{conf.level = NA}; otherwise a named numeric vector with
+#' elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the geometric mean}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #' 
-#' @seealso \code{\link{meanX}}, \code{\link{hmean}}
 #' @references Snedecor, G. W., Cochran, W. G. Cochran (1989) Statistical
 #' Methods, 8th ed. Ames, \emph{IA: Iowa State University Press }
 #' 
 #' Roenfeldt K. (2018) Better than Average: Calculating Geometric Means Using
 #' SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
-#' \url{https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf} %%
-#' ~~objects to See Also as \code{\link{help}}, ~~~
-#' @keywords arith
-#' @examples
+#' \cr\url{https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf}
 #' 
+#' @examples
 #' x <- runif(5)
 #' gmean(x)
 #' 
@@ -79,7 +84,7 @@
 #' 
 #' sapply(as.data.frame(m), gmean)
 #' 
-#' # ......................................................
+#' 
 #' # example in https://www.stata.com/manuals13/rameans.pdf
 #' x <- c(5,4,-4,-5,0,0,NA,7)
 #' 
@@ -89,14 +94,12 @@
 #' # add 5 to original values and remove zeros
 #' gmean(naReplace(x+5, 0), na.rm=TRUE, conf.level = 0.95)
 #' 
-
-#' @rdname gmean
-
 #' @family location  
 #' @concept location  
 #' @concept nonlinear-mean
 #'
 #'
+#' @rdname gmean
 #' @export
 gmean <- function (x, conf.level = NA, sides = c("two.sided","left","right"),
                    method = c("classic", "boot"),
@@ -112,16 +115,16 @@ gmean <- function (x, conf.level = NA, sides = c("two.sided","left","right"),
       warning("x contains negative values")
     
     if(is.na(conf.level))
-      NA
+      NA_real_
     else
-      c(NA, NA, NA)
+      c(est = NA_real_, lci = NA_real_, uci = NA_real_)
     
   } else if(any(x==0)) {
     
     if(is.na(conf.level))
       0
     else
-      c(0, NA, NA)
+      c(est = 0, lci = NA, uci = NA)
     
   } else {
     
@@ -147,5 +150,3 @@ gsd <- function (x, na.rm = FALSE) {
   
   exp(sd(log(x)))
 }
-
-

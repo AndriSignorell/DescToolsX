@@ -13,12 +13,15 @@
 #' 
 #' @inheritParams Association
 #' 
-#' @param na.rm logical, should NAs be removed?
-#' @return Either a single numeric value, if no confidence interval is
-#' required, \cr or a vector with 3 elements for estimate, lower and upper
-#' confidence intervall.  
-#' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{Association}} 
+#' @param na.rm logical; whether to remove missing values
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Spearman's rank correlation}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
+#' 
 #' @references Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 #' (3rd edition)}. Wiley 
 #' 
@@ -40,8 +43,8 @@
 #'        ordered), 
 #'      spearmanCor(adverse, dose, conf.level=0.95))
 #' 
-
-
+#' @seealso \code{\link{Association}} 
+#' 
 #' @family assoc.continuous  
 #' @concept correlation  
 #' @concept rank-correlation
@@ -128,15 +131,14 @@ spearmanCor <- function(x, y = NULL,
   } else {
     
     if(identical(rho, 1)){     # will blast the fisher z transformation
-      result <- c(rho=1, lci=1, uci=1)
+      result <- c(est = 1, lci = 1, uci = 1)
       
     } else {
       pr2 <- 1 - (1 - conf.level) / 2
-      result <- c(rho = rho, lci = max(ci[1], -1), uci = min(ci[2], 1))
+      result <- c(est = rho, lci = max(ci[1], -1), uci = min(ci[2], 1))
     }
   }
   
   return(result)
   
 }
-

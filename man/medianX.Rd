@@ -17,21 +17,21 @@ medianX(x, ...)
 }
 \arguments{
 \item{x}{an object for which a method has been defined, or a numeric vector
-containing the values whose median is to be computed.}
+containing the values whose median is to be computed}
 
-\item{\dots}{further arguments passed to or from other methods.}
+\item{\dots}{further arguments passed to or from other methods}
 
 \item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}.}
+giving the weights to use for elements of \code{x}}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be
-stripped before the computation proceeds.}
+stripped before the computation proceeds}
 
 \item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link{freq}}.}
+composed by \code{\link{freq}}}
 }
 \value{
-The default method returns a length-one object of the same type as
+the default method returns a length-one object of the same type as
 \code{x}, except when \code{x} is integer of even length, when the result
 will be double.
 
@@ -103,6 +103,7 @@ z <- as.numeric(names(w <- table(x)))
 (m2 <- medianX(x))
 stopifnot(identical(m1, m2))
 
+
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
@@ -119,8 +120,7 @@ Other location:
 \code{\link[=hmean]{hmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=huberM]{huberM()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
+\code{\link[=meanX]{meanX()}},
 \code{\link[=modeX]{modeX()}},
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }

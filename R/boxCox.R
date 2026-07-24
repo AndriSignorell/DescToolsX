@@ -18,13 +18,13 @@
 #' @name boxCox
 #' @aliases boxCox boxCoxInv
 #'
-#' @param x A numeric vector. Must contain strictly positive values
+#' @param x a numeric vector. Must contain strictly positive values
 #'   (except \code{NA}s).
-#' @param lambda A single numeric transformation parameter.
-#' @param tol Numeric tolerance for detecting the special case
-#'   \eqn{\lambda \approx 0}.
+#' @param lambda a single numeric transformation parameter
+#' @param tol numeric tolerance for detecting the special case
+#'   \eqn{\lambda \approx 0}
 #'
-#' @return A numeric vector of the same length as \code{x}.
+#' @return a numeric vector of the same length as \code{x}
 #'
 #' @details
 #' The transformation requires strictly positive input values. If
@@ -40,8 +40,6 @@
 #' \emph{Journal of the Royal Statistical Society, Series B},
 #' \bold{26}(2), 211--252.
 #'
-#' @seealso \code{\link{yeoJohnson}}, \code{\link{yeoJohnsonInv}}
-#'
 #' @examples
 #' set.seed(1)
 #' x <- rlnorm(500, 1, 0.5)
@@ -55,9 +53,7 @@
 #' # Log-transform (lambda ~ 0)
 #' y0 <- boxCox(x, lambda = 0)
 #'
-
-
-
+#'
 #' @family transform  
 #' @concept transformation  
 #' @concept variance-stabilization

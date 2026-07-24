@@ -13,29 +13,28 @@ meanX(x, ...)
 \method{meanX}{default}(x, weights = NULL, trim = 0, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{An object.  Currently there are methods for numeric/logical vectors
+\item{x}{an object. Currently there are methods for numeric/logical vectors
 and \link[=Dates]{date}, \link{date-time} and \link{time interval} objects.
 Complex vectors are allowed for \code{trim = 0} only.}
 
-\item{\dots}{further arguments passed to or from other methods.}
+\item{\dots}{further arguments passed to or from other methods}
 
 \item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link{freq}}.}
+composed by \code{\link{freq}}}
 
-\item{weights}{non-negative numeric vector of weights of the same length as \code{x}
-interpreted as frequency (replication) weights.
-Observations with larger weights contribute
-more strongly to the empirical distribution.}
+\item{weights}{non-negative numeric vector of weights of the same length as
+\code{x}, interpreted as frequency (replication) weights. Observations with
+larger weights contribute more strongly to the empirical distribution.}
 
 \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each
-end of \code{x} before the mean is computed.  Values of trim outside that
+end of \code{x} before the mean is computed. Values of trim outside that
 range are taken as the nearest endpoint.}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be
-stripped before the computation proceeds.}
+stripped before the computation proceeds}
 }
 \value{
-If \code{trim} is zero (the default), the arithmetic mean of the
+if \code{trim} is zero (the default), the arithmetic mean of the
 values in \code{x} is computed, as a numeric or complex vector of length
 one.  If \code{x} is not logical (coerced to numeric), numeric (including
 integer) or complex, \code{NA_real_} is returned, with a warning.
@@ -70,6 +69,7 @@ xm <- meanX(x)
 c(xm, meanX(x, trim = 0.10))
 
  
+
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
@@ -78,6 +78,14 @@ New S Language}.  Wadsworth & Brooks/Cole.
 \seealso{
 \code{\link{weighted.mean}}, \code{\link{mean.POSIXct}},
 \code{\link{colMeans}} for row and column means.
+
+Other location:
+\code{\link[=gmean]{gmean()}},
+\code{\link[=hmean]{hmean()}},
+\code{\link[=hodgesLehmann]{hodgesLehmann()}},
+\code{\link[=huberM]{huberM()}},
+\code{\link[=medianX]{medianX()}},
+\code{\link[=modeX]{modeX()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
-\concept{descriptive-statistics}
-\concept{topic.centralTendency}
+\concept{location}

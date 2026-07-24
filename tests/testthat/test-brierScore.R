@@ -80,20 +80,20 @@ test_that("normal CI: returns named numeric vector of length 3", {
   
   expect_true(is.numeric(res))
   expect_length(res, 3L)
-  expect_named(res, c("brier", "lci", "uci"))
+  expect_named(res, c("est", "lci", "uci"))
 })
 
 
 test_that("normal CI: brier matches point estimate", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "normal")
-  expect_equal(unname(res["brier"]), brierScore(resp, pred))
+  expect_equal(unname(res["est"]), brierScore(resp, pred))
 })
 
 
 test_that("normal CI: lci < brier < uci", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "normal")
-  expect_lt(res["lci"], res["brier"])
-  expect_lt(res["brier"], res["uci"])
+  expect_lt(res["lci"], res["est"])
+  expect_lt(res["est"], res["uci"])
 })
 
 
@@ -122,8 +122,8 @@ test_that("normal CI: narrower with more data", {
 
 test_that("normal CI: symmetric around brier", {
   res        <- brierScore(resp, pred, conf.level = 0.95, method = "normal")
-  half_lower <- res["brier"] - res["lci"]
-  half_upper <- res["uci"]   - res["brier"]
+  half_lower <- res["est"] - res["lci"]
+  half_upper <- res["uci"]   - res["est"]
   expect_equal(unname(half_lower), unname(half_upper), tolerance = 1e-10)
 })
 
@@ -137,36 +137,36 @@ test_that("boot CI: returns named numeric vector of length 3", {
   
   expect_true(is.numeric(res))
   expect_length(res, 3L)
-  expect_named(res, c("brier", "lci", "uci"))
+  expect_named(res, c("est", "lci", "uci"))
 })
 
 
 test_that("boot CI: brier matches point estimate", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "boot", R = 299)
-  expect_equal(unname(res["brier"]), brierScore(resp, pred))
+  expect_equal(unname(res["est"]), brierScore(resp, pred))
 })
 
 
 test_that("boot CI: lci < brier < uci", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "boot", R = 499)
-  expect_lt(res["lci"], res["brier"])
-  expect_lt(res["brier"], res["uci"])
+  expect_lt(res["lci"], res["est"])
+  expect_lt(res["est"], res["uci"])
 })
 
 
 test_that("boot CI: perc type works", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "boot",
                     type = "perc", R = 299)
-  expect_named(res, c("brier", "lci", "uci"))
-  expect_lt(res["lci"], res["brier"])
+  expect_named(res, c("est", "lci", "uci"))
+  expect_lt(res["lci"], res["est"])
 })
 
 
 test_that("boot CI: norm type works", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "boot",
                     type = "norm", R = 299)
-  expect_named(res, c("brier", "lci", "uci"))
-  expect_lt(res["lci"], res["brier"])
+  expect_named(res, c("est", "lci", "uci"))
+  expect_lt(res["lci"], res["est"])
 })
 
 

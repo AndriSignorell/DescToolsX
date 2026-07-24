@@ -4,11 +4,11 @@
 #' Computes the symmetric mean absolute percentage error (SMAPE) between
 #' predicted and reference values.
 #'
-#' @param x An object. Methods are available for numeric vectors and
+#' @param x an object. Methods are available for numeric vectors and
 #'   model objects (e.g. \code{lm}).
-#' @param ... Additional arguments passed to methods.
+#' @param ... additional arguments passed to methods
 #'
-#' @return A numeric value representing the SMAPE.
+#' @return a numeric scalar containing the SMAPE
 #'
 #' @details
 #' The SMAPE is defined as:
@@ -29,10 +29,7 @@
 #' fit <- lm(mpg ~ hp, data = mtcars)
 #' smape(fit)
 #'
-
-
-
-
+#'
 #' @family model.metrics  
 #' @concept model-evaluation  
 #' @concept prediction-error
@@ -56,8 +53,8 @@ smape.lm <- function(x, ...) {
 
 
 #' @rdname smape
-#' @param ref Numeric vector of reference (true) values.
-#' @param na.rm Logical; should missing values be removed?
+#' @param ref numeric vector of reference (true) values
+#' @param na.rm logical; whether to remove missing values
 #' @export
 smape.default <- function(x, ref, na.rm = FALSE, ...) {
   
@@ -84,5 +81,4 @@ smape.default <- function(x, ref, na.rm = FALSE, ...) {
 # Armstrong intended all along, although neither has ever managed to include it correctly
 # in one of their papers or books.
 # source: http://robjhyndman.com/hyndsight/smape/
-
 

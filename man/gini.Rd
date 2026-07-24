@@ -16,33 +16,42 @@ gini(
 )
 }
 \arguments{
-\item{x}{Numeric vector of non-negative values.}
+\item{x}{numeric vector of non-negative values}
 
-\item{conf.level}{Confidence level in (0, 1). If \code{NA} (default),
+\item{conf.level}{confidence level in (0, 1). If \code{NA} (default),
 no confidence interval is computed.}
 
-\item{sides}{Character string specifying the interval type: \code{"two.sided"}
-(default), \code{"left"}, or \code{"right"}.}
+\item{sides}{character string specifying the interval type:
+\code{"two.sided"} (default), \code{"left"}, or \code{"right"}}
 
-\item{method}{Currently only \code{"boot"} is supported.}
+\item{method}{confidence interval method; currently only \code{"boot"} is
+supported}
 
-\item{unbiased}{Logical. Apply bias correction factor \eqn{1/(1 - \sum w_i^2)}.}
+\item{unbiased}{logical; whether to apply the bias correction factor
+\eqn{1/(1 - \sum w_i^2)}}
 
-\item{weights}{Optional non-negative numeric vector of the same length as \code{x}.}
+\item{weights}{optional non-negative numeric vector with the same length as
+\code{x}}
 
-\item{na.rm}{Logical. Remove missing values before computation.}
+\item{na.rm}{logical; whether to remove missing values before computation}
 
-\item{\dots}{Additional arguments passed to the bootstrap procedure:
+\item{\dots}{additional arguments passed to the bootstrap procedure:
 \describe{
-\item{type}{Confidence interval type (default \code{"bca"})}
-\item{R}{Number of bootstrap replications (default 999)}
-\item{parallel}{Parallelization mode (\code{"no"}, \code{"multicore"}, \code{"snow"})}
-\item{ncpus}{Number of CPUs}
+\item{\code{type}}{confidence interval type (default \code{"bca"})}
+\item{\code{R}}{number of bootstrap replications (default 999)}
+\item{\code{parallel}}{parallelization mode (\code{"no"},
+\code{"multicore"}, or \code{"snow"})}
+\item{\code{ncpus}}{number of CPUs}
 }}
 }
 \value{
-If \code{conf.level = NA}, a single numeric value. Otherwise a named
-vector with elements \code{est}, \code{lci}, and \code{uci}.
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the Gini coefficient}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Computes the Gini coefficient, a widely used measure of inequality,
@@ -88,7 +97,8 @@ Other inequality:
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}}
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}
 \concept{inequality}

@@ -5,11 +5,11 @@
 #' 
 #' The implementation strictly follows the Eurostat definition.
 #' 
-#' @param x a numeric vector.
-#' @param weights an optional numeric vector giving the sample weights.
-#' @param probs numeric vector of probabilities with values in \eqn{[0,1]}.
+#' @param x a numeric vector
+#' @param weights an optional numeric vector giving the sample weights
+#' @param probs numeric vector of probabilities with values in \eqn{[0,1]}
 #' @param na.rm a logical indicating whether missing values in \code{x} should
-#' be omitted.
+#' be omitted
 #' @param names logical; if true, the result has a \code{\link{names}}
 #' attribute.  Set to \code{FALSE} for speedup with many \code{probs}.
 #' @param type an integer between 1 and 9 selecting one of the nine quantile
@@ -18,24 +18,23 @@
 #' @param digits used only when \code{names} is true: the precision to use when
 #' formatting the percentages. In \code{R} versions up to 4.0.x, this had been
 #' set to \code{max(2, getOption("digits"))}, internally.
-#' @return A named numeric vector containing the weighted quantiles of values
-#' in \code{x} at probabilities \code{probs} is returned.
-#' @author Andreas Alfons, Matthias Templ, some tweaks Andri Signorell
-#' <andri@@signorell.net>
-#' @seealso \code{\link{medianX}}, \code{\link[stats]{quantile}},
-#' \code{\link[lumen]{quantileCI}}
+#' @return a numeric vector containing the weighted quantiles of \code{x} at
+#' probabilities \code{probs}, named when \code{names = TRUE}
+#' 
+#' @note Based on code by Andreas Alfons, Matthias Templ, 
+#' adapted to conform to package standards.
+#' 
 #' @references Working group on Statistics on Income and Living Conditions
 #' (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
 #' gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
-#' @keywords univar
-#' @examples
 #' 
+#' @examples
 #' quantileX(Pizza$temperature, rep(c(1:3), length.out=nrow(Pizza)))
-
- 
-# further weighted quantiles in Hmisc and modi, both on CRAN
-
-
+#' 
+#' 
+#' @seealso \code{\link{medianX}}, \code{\link[stats]{quantile}},
+#' \code{\link[lumen]{quantileCI}}
+#' 
 #' @family quantile  
 #' @concept quantile  
 #' @concept distribution-summary
@@ -45,6 +44,7 @@
 quantileX <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
                      na.rm = FALSE, names=TRUE, type = 7, digits=7) {
   
+  # further weighted quantiles in Hmisc and modi, both on CRAN
   
   if(is.null(weights)){
     quantile(x=x, probs=probs, na.rm=na.rm, names=names, type=type, digits=digits)
@@ -65,9 +65,7 @@ quantileX <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
       }
       else character(0)
     }
-    
-    
-    
+
     sorted <- FALSE
     
     # initializations
@@ -173,7 +171,6 @@ quantileX <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
     
   }
 }
-
 
 
 

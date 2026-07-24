@@ -18,7 +18,7 @@ gsd(x, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a positive numeric vector. An object which is not a vector is
-coerced (if possible) by as.vector.}
+coerced, if possible, by \code{as.vector()}.}
 
 \item{conf.level}{confidence level of the interval. Default is \code{NA}.}
 
@@ -43,7 +43,14 @@ be set to their defaults, being \code{"basic"} for \code{type}, option
 \code{parallel} and \code{999} for \code{R}.}
 }
 \value{
-a numeric value.
+for \code{gsd()}, a numeric scalar. For \code{gmean()}, a numeric
+scalar if \code{conf.level = NA}; otherwise a named numeric vector with
+elements:
+\describe{
+\item{\code{est}}{point estimate of the geometric mean}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Calculates the geometric mean, its confidence interval and the geometric
@@ -83,7 +90,6 @@ types of averages and decide what makes the most sense for you and the
 results you are trying to report."
 }
 \examples{
-
 x <- runif(5)
 gmean(x)
 
@@ -92,7 +98,7 @@ apply(m, 2, gmean)
 
 sapply(as.data.frame(m), gmean)
 
-# ......................................................
+
 # example in https://www.stata.com/manuals13/rameans.pdf
 x <- c(5,4,-4,-5,0,0,NA,7)
 
@@ -109,22 +115,17 @@ Methods, 8th ed. Ames, \emph{IA: Iowa State University Press }
 
 Roenfeldt K. (2018) Better than Average: Calculating Geometric Means Using
 SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
-\url{https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf} \%\%
-~~objects to See Also as \code{\link{help}}, ~~~
+\cr\url{https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf}
 }
 \seealso{
-\code{\link{meanX}}, \code{\link{hmean}}
-
 Other location:
 \code{\link[=hmean]{hmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=huberM]{huberM()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
+\code{\link[=meanX]{meanX()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}},
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \concept{location}
 \concept{nonlinear-mean}
-\keyword{arith}

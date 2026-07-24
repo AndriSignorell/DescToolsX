@@ -7,15 +7,15 @@
 \method{print}{BlandAltman}(x, digits = getOption("digits"), ...)
 }
 \arguments{
-\item{x}{An object of class \code{"blandAltman"} as returned by
-\code{\link{blandAltmanData}}.}
+\item{x}{an object of class \code{"BlandAltman"} as returned by
+\code{\link{blandAltmanData}}}
 
-\item{digits}{Number of digits to display.}
+\item{digits}{number of digits to display}
 
-\item{...}{Further arguments passed to or from other methods.}
+\item{...}{further arguments passed to or from other methods}
 }
 \value{
-Invisibly returns \code{x}.
+invisibly, \code{x}
 }
 \description{
 Prints a compact summary of a Bland-Altman agreement analysis including

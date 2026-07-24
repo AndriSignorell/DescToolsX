@@ -4,8 +4,8 @@
 #' Replaces entries in a symmetric matrix (typically a correlation matrix)
 #' with \code{NA} wherever the corresponding p-value exceeds a significance
 #' threshold – retaining only the statistically supported associations.
-#' Designed as a pre-processing step for \code{\link[aurora]{plotWeb}} and
-#' \code{\link[aurora]{plotCor}}.
+#' Designed as a pre-processing step for \code{\link[pharos]{plotWeb}} and
+#' \code{\link[pharos]{plotCor}}.
 #'
 #' @param m a symmetric numeric matrix. Typically the output of
 #'   \code{\link[stats]{cor}}, but any symmetric matrix of effect sizes or
@@ -25,8 +25,8 @@
 #'   as-is (typically 1 for correlation matrices). If \code{FALSE}, the
 #'   diagonal is also set to \code{NA}.
 #'
-#' @return A matrix of the same dimension and dimnames as \code{m}, with
-#'   \code{NA} wherever \code{p > sig.level}.
+#' @return matrix with the same dimensions and dimnames as \code{m}, with
+#' \code{NA} wherever \code{p > sig.level}
 #'
 #' @examples
 #' # compute p-values on the fly from the raw data
@@ -45,13 +45,9 @@
 #' dimnames(p) <- list(vars, vars)
 #' plotWeb(keepSig(m, p = p))
 #'
-#' @seealso \code{\link[aurora]{plotWeb}}, \code{\link[aurora]{plotCor}},
-#'   \code{\link[stats]{cor.test}}
+#' @seealso [pharos::plotWeb], [pharos::plotCor], [lumen::corTest], [stats::cor.test]
+#'   
 #'
-
-
-
-#' @family assoc.continuous  
 #' @concept correlation  
 #' @concept multiple-testing
 #'

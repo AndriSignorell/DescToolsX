@@ -17,44 +17,46 @@ huberM(
 )
 }
 \arguments{
-\item{x}{A numeric vector of data values.}
+\item{x}{numeric vector of data values}
 
-\item{conf.level}{Confidence level of the interval.  A single numeric
+\item{conf.level}{confidence level of the interval. A single numeric
 value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
 point estimate.}
 
-\item{sides}{A character string specifying the side of the interval:
+\item{sides}{character string specifying the side of the interval:
 \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}.  Ignored when
+Partial matching is supported. \code{"left"} sets \code{uci = Inf};
+\code{"right"} sets \code{lci = -Inf}. Ignored when
 \code{conf.level = NA}.}
 
-\item{method}{CI method: \code{"wald"} (default) or \code{"boot"}.}
+\item{method}{confidence interval method: \code{"wald"} (default) or
+\code{"boot"}}
 
-\item{k}{Positive tuning constant; the algorithm winsorizes at
-\code{k} standard deviations.  Default \code{1.345}.}
+\item{k}{positive tuning constant; the algorithm winsorizes at \code{k}
+standard deviations. Default is \code{1.345}.}
 
-\item{mu}{Initial location estimate.  \code{NULL} (default)
+\item{mu}{initial location estimate. \code{NULL} (default)
 uses \code{median(x)}, computed after \code{na.rm} is applied.}
 
-\item{s}{Scale estimate, held constant through the iterations.
+\item{s}{scale estimate held constant through the iterations.
 \code{NULL} (default) uses \code{mad(x, center = mu)}, computed
 after \code{na.rm} is applied.}
 
-\item{na.rm}{Logical.  Should missing values be removed before
-computation?  Default \code{FALSE}.}
+\item{na.rm}{logical; whether to remove missing values before computation;
+default is \code{FALSE}}
 
-\item{...}{Further arguments passed to the bootstrap engine when
+\item{...}{further arguments passed to the bootstrap engine when
 \code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
-\code{ncpus}.  See Details.}
+and \code{ncpus}; see Details}
 }
 \value{
-If \code{conf.level = NA}: a single numeric value (the location estimate).
-
-If \code{conf.level} is specified: a named numeric vector with elements
-\item{est}{Huber M-estimate of location.}
-\item{lci}{Lower confidence bound.}
-\item{uci}{Upper confidence bound.}
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{location estimate from Huber's M-estimator}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 A (generalized) Huber M-estimator of location with MAD scale that handles
@@ -82,12 +84,13 @@ re-estimated robust estimator.  Bootstrap
 arguments are passed through \code{...} and extracted via
 \code{.extractBootArgs()}:
 \describe{
-\item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
-\item{\code{type}}{CI type: \code{"perc"} or \code{"bca"} (default).}
-\item{\code{parallel}}{Parallelisation: \code{"no"}, \code{"multicore"},
-or \code{"snow"} (default \code{"no"}).}
-\item{\code{ncpus}}{Number of CPUs for parallel bootstrap
-(default \code{getOption("boot.ncpus", 1L)}).}
+\item{\code{R}}{number of bootstrap replicates (default \code{999})}
+\item{\code{type}}{confidence interval type: \code{"perc"} or
+\code{"bca"} (default)}
+\item{\code{parallel}}{parallelization mode: \code{"no"},
+\code{"multicore"}, or \code{"snow"} (default \code{"no"})}
+\item{\code{ncpus}}{number of CPUs for parallel bootstrap (default
+\code{getOption("boot.ncpus", 1L)})}
 }
 
 The original internal estimator is accessible as
@@ -121,8 +124,7 @@ Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
+\code{\link[=meanX]{meanX()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}},
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}

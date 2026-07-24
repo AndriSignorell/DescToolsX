@@ -48,20 +48,6 @@ test_that("Normalization scales values <= 1", {
 })
 
 
-# test_that("divCoef matches DescTools implementation", {
-#   set.seed(42)
-#   
-#   df <- matrix(runif(50), ncol = 5)
-#   d <- dist(matrix(rnorm(20), ncol = 2))
-#   
-#   res1 <- divCoef(df, d)
-#   res2 <- DescTools::divCoef(df, d)
-#   
-#   expect_equal(res1, res2, tolerance = 1e-6)
-# })
-
-
-
 test_that("Scaling df does not change result", {
   set.seed(1)
   df <- matrix(runif(20), ncol = 4)

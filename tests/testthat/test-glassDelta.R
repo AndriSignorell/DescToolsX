@@ -33,7 +33,8 @@ test_that("glassDelta manual calculation: (mean(x)-mean(y)) / sd(y)", {
   x <- c(5, 6, 7, 8, 9)
   y <- c(1, 2, 3, 4, 5)
   expected <- (mean(x) - mean(y)) / sd(y)
-  expect_equal(glassDelta(x, y), expected, tolerance = 1e-10)
+  # as.vector() strips both the "est" name and the "magnitude" attribute
+  expect_equal(as.vector(glassDelta(x, y)), expected, tolerance = 1e-10)
 })
 
 test_that("glassDelta conf.level returns named vector est/lci/uci", {

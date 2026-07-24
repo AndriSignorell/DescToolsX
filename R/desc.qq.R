@@ -8,9 +8,9 @@
 #' Computes descriptive statistics for the relationship between two
 #' categorical variables \code{x} and \code{y}.
 #'
-#' @param x A categorical variable.
-#' @param y A categorical variable.
-#' @param ... Further arguments (currently not used).
+#' @param x a categorical variable
+#' @param y a categorical variable
+#' @param ... further arguments, currently unused
 #'
 #' @details
 #' This function is a wrapper around \code{\link{desc.table}} applied to
@@ -33,12 +33,11 @@
 #' desc(table(x, y))
 #' }
 #'
-#' @return
-#' An object of class \code{"Desc.qq"} inheriting from \code{"Desc"}.
+#' @return an object of class \code{c("Desc.qq", "Desc")}
 #'
 #' @seealso
-#' \code{\link{desc}}, \code{\link{desc.table}},
-#' \code{\link{desc.qn}}, \code{\link{desc.nn}}
+#' [desc], [desc.table],
+#' [desc.qn], [desc.nn], [pharos::plot.Desc.table]
 #'
 #' @family desc
 #' @concept data-description
@@ -50,7 +49,6 @@
 NULL
 
 
-#' @keywords internal
 .descQQ <- function(x, y, ...) {
   desc(table(x, y), ...)
 }
@@ -69,8 +67,8 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
 }
 
 
-#' @param main a main title for the plot. Defaults to the title stored in
-#'   \code{x$meta$main}.
+#' @param main main title for the plot; defaults to the title stored in
+#' \code{x$meta$main}
 #' @exportS3Method
 #' @rdname desc.table
 plot.Desc.qq <- function(x, main = x$meta$main, which = 1, ...) {

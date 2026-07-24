@@ -44,13 +44,13 @@ package, so the user does not need to do anything further.
 - 🪨 **[bedrock](https://github.com/AndriSignorell/bedrock/)**  
   → Core utility functions used across all packages
 
-- 🌌 **[aurora](https://github.com/AndriSignorell/aurora/)**  
+- 🌌 **[pharos](https://github.com/AndriSignorell/pharos/)**  
   → Plotting, colour handling, and formatting tools
 
 - 💡 **[lumen](https://github.com/AndriSignorell/lumen/)**  
   → Inferential statistics (tests, confidence intervals, distributions)
 
-- 📨 **[hermes](https://github.com/AndriSignorell/hermes/)**  
+- 📨 **[pons](https://github.com/AndriSignorell/pons/)**  
   → MS Office interface and reporting tools
 
 
@@ -79,10 +79,10 @@ The package emphasizes:
 
 It depends on the companion ecosystem packages:
 
--   `aurora`
+-   `pharos`
 -   `lumen`
 -   `bedrock`
--   `hermes`
+-   `pons`
 
 fileciteturn4file0
 
@@ -182,7 +182,7 @@ Nominal and ordinal association metrics:
 Wrapper function:
 
 ``` r
-assocsTab(table_data)
+assocs(table_data)
 ```
 
 ------------------------------------------------------------------------
@@ -326,10 +326,10 @@ Core dependencies include:
 
 Companion ecosystem:
 
--   `aurora`
+-   `pharos`
 -   `bedrock`
 -   `lumen`
--   `hermes`
+-   `pons`
 
 ------------------------------------------------------------------------
 

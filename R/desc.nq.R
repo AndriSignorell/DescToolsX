@@ -8,14 +8,12 @@
 #' Computes descriptive statistics for a numeric variable \code{x}
 #' grouped by a categorical variable \code{g}.
 #'
-#' @param x A numeric variable.
-#' @param g A categorical grouping variable (factor or coercible to factor).
-#' @param ... Further arguments (currently not used).
+#' @param x a numeric variable
+#' @param g a categorical grouping variable (factor or coercible to factor)
+#' @param ... further arguments, currently unused
 #' @param which integer vector selecting which plots to draw. See Details.
 #'   \code{NULL} (default) selects plots automatically based on \code{verbose}.
-#' @param digits integer. With how many digits should the relative frequencies
-#' be formatted? Default can be set by
-#' \code{\link{setDescToolsXOption}(digits=x)}.
+#' @param digits number of digits used to format relative frequencies
 #'
 #' @details
 #' The function summarizes the distribution of \code{x} across levels of
@@ -34,20 +32,17 @@
 #' differs between groups defined by \code{g}. The effect size \eqn{\eta^2}
 #' provides a standardized measure of group differences.
 #'
-#' @return
-#' An object of class \code{"Desc.nq"} inheriting from \code{"Desc"}.
-#'
-#' @section Output components:
-#' \itemize{
-#'   \item \code{tab}: group-wise summary table
-#'   \item \code{test}: Kruskal-Wallis test
-#'   \item \code{vtest}: Levene test
-#'   \item \code{eta}: effect size
+#' @return an object of class \code{c("Desc.nq", "Desc")} with components:
+#' \describe{
+#'   \item{\code{tab}}{group-wise summary table}
+#'   \item{\code{test}}{result of the Kruskal-Wallis test}
+#'   \item{\code{vtest}}{result of Levene's test}
+#'   \item{\code{eta}}{effect size}
 #' }
 #'
 #' @seealso
-#' \code{\link{desc}}, \code{\link{desc.qn}}, \code{\link{desc.nn}},
-#' \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
+#' [desc], [desc.qn], [desc.nn], [pharos::plot.Desc.qn]
+#' [kruskal.test], [lumen::leveneTest]
 #'
 #' @family desc
 #' @concept data-description
@@ -59,7 +54,6 @@
 NULL
 
 
-#' @keywords internal
 .descNQ <- function(x, g, ... ) {
 
   g <- droplevels(factor(g))
@@ -107,8 +101,8 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 
 
 
-#' @param main a main title for the plot. Defaults to the title stored in
-#'   \code{x$meta$main}.
+#' @param main main title for the plot; defaults to the title stored in
+#' \code{x$meta$main}
 #' @rdname desc.nq
 #' @export
 plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
@@ -192,4 +186,3 @@ plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
   
   structure(eta2, label = as.character(label))
 }
-

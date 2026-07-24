@@ -30,21 +30,20 @@
 #'
 #' Somers' D is appropriate only when both variables are ordinal.
 #'
-#' @param x A numeric vector or a contingency table (matrix or table).
-#' @param y Optional numeric vector. If supplied, must have the same length as \code{x}.
-#' @param conf.level Confidence level for confidence intervals. If \code{NA},
+#' @param x a numeric vector or a contingency table (matrix or table)
+#' @param y optional numeric vector. If supplied, must have the same length as \code{x}.
+#' @param conf.level confidence level for confidence intervals. If \code{NA},
 #'   no confidence interval is returned.
-#' @param direction Direction for contingency tables:
+#' @param direction direction for contingency tables:
 #'   \code{"row"} (default) computes \eqn{D(Y|X)},
-#'   \code{"column"} computes \eqn{D(X|Y)}.
+#'   while \code{"column"} computes \eqn{D(X|Y)}
 #'
-#' @return
-#' If \code{conf.level = NA}, a single numeric value is returned.
-#' Otherwise a named numeric vector with elements:
-#' \itemize{
-#'   \item \code{somers}: estimate
-#'   \item \code{lci}: lower confidence interval
-#'   \item \code{uci}: upper confidence interval
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Somers' D}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
 #' @seealso
@@ -92,9 +91,7 @@
 #' # Vector interface
 #' somersDelta(mtcars$wt, mtcars$mpg)
 #'
-
-
-
+#'
 #' @family assoc.ordinal  
 #' @concept association-measure  
 #' @concept ordinal  
@@ -108,21 +105,19 @@ somersDelta <- function(x, y = NULL,
   
   direction <- match.arg(direction)
   
-  # ============================
-  # TABLE MODE
-  # ============================
   if(is.null(y)){
     
-    tab <- as.table(x)
-    
-    if(direction == "column"){
-      tab <- t(tab)
-    }
-    
-    res <- assocsXY(
-      x = tab,
+    # ============================
+    # TABLE MODE
+    # ============================
+    # .assocs() handles 'direction' itself in the table path (it picks
+    # colSums vs rowSums for the denominator), so pass it through rather
+    # than transposing here.
+    res <- .assocs(
+      x = x,
       which = "somers",
-      conf.level = conf.level
+      conf.level = conf.level,
+      direction = direction
     )
     
   } else {
@@ -130,15 +125,16 @@ somersDelta <- function(x, y = NULL,
     # ============================
     # XY MODE
     # ============================
-    
+    # assoc_cpp() always treats its SECOND argument as the dependent
+    # variable, so 'direction' has no effect on the vector path of
+    # .assocs() - swapping the vectors is the only way to flip it.
     if(direction == "column"){
-      # swap variables → flip direction
       tmp <- x
       x <- y
       y <- tmp
     }
     
-    res <- assocsXY(
+    res <- .assocs(
       x = x,
       y = y,
       which = "somers",
@@ -149,7 +145,6 @@ somersDelta <- function(x, y = NULL,
   if(is.na(conf.level))
     unname(res[[1]])
   else
-    res[[1]]
+    setNamesX(unname(res[[1]]), c("est", "lci", "uci"))
   
 }
-

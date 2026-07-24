@@ -24,26 +24,34 @@ to which a number of months has to be added. YYYY must lie in the range of
 \item{d}{the day to be used for converting a yearmonth to a date. Default is
 1.}
 
-\item{\dots}{further arguments (not used here).}
+\item{\dots}{further arguments; currently unused}
 
 \item{n}{the number of months to be added. If n is negative the months will
 be subtracted.}
 }
 \value{
-a vector of class \code{integer} with the same dimension as x,
-containing the transformed dates.
+\describe{
+\item{\code{as.ym()}}{an integer vector of class \code{"ym"}}
+\item{\code{as.Date.ym()}}{a vector of class \code{"Date"}}
+\item{\code{addMonths.ym()}}{a numeric vector containing the transformed
+YYYYMM or YYYYMMDD values}
+\item{\code{print.ym()}}{invisibly, the printed unclassed vector}
+}
 }
 \description{
-The representation of year and month information in YYYYYMM format as an
-integer is often handy and a useful and efficient data structure. Adding a
-number of months to such a date is not quite catchy, however, since the date
-structure is to be retained. For example, 201201 - 2 \verb{[months]} is expected to
-result in 201111 instead of 201199. \code{addMonthsYM()} does this job.
+Representing year and month information as an integer in YYYYMM format is
+compact and efficient. Calendar arithmetic must nevertheless preserve the
+date structure: for example, subtracting two months from 201201 should
+return 201111 rather than 201199. \code{addMonths()} provides this
+arithmetic for objects of class \code{"ym"}.
 }
 \details{
-All parameters will be recyled if necessary. The therefore used function
-\code{\link{mapply}} will display a warning, if the longer argument is not a
-multiple of the length of the shorter one.
+All parameters are recycled if necessary. The underlying
+\code{\link{mapply}} call warns if the longer argument is not a multiple
+of the length of the shorter one.
+}
+\note{
+Based on code by Roland Rapold, adapted to conform to package standards.
 }
 \examples{
 
@@ -70,15 +78,11 @@ addMonths(c(201511, 201302), c(5, -4))
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},
 \code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link{date-time-predicates}},
+\code{\link{date_functions}},
 \code{\link[=generation]{generation()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}},
+\code{\link{time-conversions}},
 \code{\link[=zodiac]{zodiac()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, originally based on code by
-Roland Rapold
 }
 \concept{date-time}
 \concept{date.time}
-\keyword{chron}

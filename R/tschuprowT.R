@@ -8,15 +8,15 @@
 #' \code{table(x, y, ...)}. Otherwise, \code{x} is assumed to already be
 #' a contingency table.
 #'
-#' @param x A vector of categorical data or a contingency table
-#'   (matrix or \code{table}).
-#' @param y Optional second categorical vector. If provided, a contingency
+#' @param x a vector of categorical data or a contingency table
+#'   (matrix or \code{table})
+#' @param y optional second categorical vector. If provided, a contingency
 #'   table is constructed from \code{x} and \code{y}.
-#' @param correct Logical; if \code{TRUE}, applies a bias correction
+#' @param correct logical; if \code{TRUE}, applies a bias correction
 #'   according to Bergsma (2013).
-#' @param ... Additional arguments passed to \code{\link[base]{table}}.
+#' @param ... additional arguments passed to \code{\link[base]{table}}
 #'
-#' @return A numeric value representing Tschuprow's T.
+#' @return a numeric scalar containing Tschuprow's T
 #'
 #' @details
 #' Tschuprow's T is defined as:
@@ -54,10 +54,7 @@
 #' # Bias-corrected version
 #' tschuprowT(tab, correct = TRUE)
 #'
-
-
-
-
+#'
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal  
@@ -94,5 +91,4 @@ tschuprowT <- function(x, y = NULL, correct = FALSE, ...){
   }
   
 }
-
 

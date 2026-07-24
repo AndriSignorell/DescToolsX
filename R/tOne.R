@@ -56,7 +56,7 @@
 #' are used. Deviations from this can be freely passed as arguments to the
 #' function. fms can be defined for integers, floating point numbers,
 #' percentages and for the p-values of statistical tests. All options of the
-#' function \code{\link[aurora]{fm}()} are available and can be provided as a list.
+#' function \code{\link[pharos]{fm}()} are available and can be provided as a list.
 #' See examples which show several different implementations. 
 #' \preformatted{
 #'   fmt = list(abs  = "abs.sty", 
@@ -87,15 +87,15 @@
 #' @name tOne
 #' 
 #' @param x a data.frame containing all the variables to be included in the
-#' table. 
-#' @param groups the grouping variable. 
+#' table
+#' @param groups the grouping variable
 #' @param add.length logical. If set to \code{TRUE} (default), a row with the
 #' group sizes will be inserted as first row of the table. 
-#' @param colnames a vector of column names for the result table. 
+#' @param colnames a vector of column names for the result table
 #' @param vnames a vector of variable names to be placed in the first column
-#' instead of the real names. 
+#' instead of the real names
 #' @param total logical (default \code{TRUE}), defines whether the results
-#' should also be displayed for the whole, ungrouped variable.
+#' should also be displayed for the whole, ungrouped variable
 #' @param align the character on whose position the strings will be aligned.
 #' Left alignment can be requested by setting \code{sep = "\\l"}, right
 #' alignment by \code{"\\r"} and center alignment by \code{"\\c"}. Mind the
@@ -118,9 +118,9 @@
 #' will report the lower value \code{0} or \code{FALSE}.
 #' 
 #' @param fmt fm codes for absolute, numeric and percentage values, and for
-#' the p-values of the tests.
+#' the p-values of the tests
 #' 
-#' @return a character matrix 
+#' @return a character matrix
 #' 
 #' @seealso \code{\link[bedrock]{appendX}()}
 #' 
@@ -169,7 +169,7 @@
 #'                 pval = style(fmt = "*", naForm = "   ")) 
 #' )
 #' 
-#' t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rabate")], 
+#' t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")], 
 #'            groups   = Pizza$area, 
 #'            align = " ", 
 #'            total = FALSE,
@@ -227,10 +227,9 @@
 #' }
 #' 
 #' 
-
-
+#'
 #' @rdname tOne
-
+#'
 #' @family frequency  
 #' @concept frequency-table  
 #' @concept table-summary

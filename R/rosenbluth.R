@@ -4,16 +4,16 @@
 #' Computes the Rosenbluth index as a measure of concentration.
 #'
 #' The Rosenbluth index is based on the ranked shares and is
-#' inversely related to market concentration. Smaller values
+#' directly related to market concentration. Larger values
 #' indicate stronger concentration.
 #'
-#' @param x Numeric vector of non-negative values (e.g. market shares
-#'   or frequencies).
-#' @param n Optional frequency weights. Each element of \code{x}
+#' @param x numeric vector of non-negative values, such as market shares or
+#' frequencies
+#' @param n optional frequency weights. Each element of \code{x}
 #'   is replicated \code{n} times.
-#' @param na.rm Logical. If \code{TRUE}, missing values are removed.
+#' @param na.rm logical. If \code{TRUE}, missing values are removed.
 #'
-#' @return Numeric value of the Rosenbluth index.
+#' @return a numeric scalar containing the Rosenbluth index
 #'
 #' @details
 #' The measure is computed from the ordered values of \code{x}
@@ -24,9 +24,7 @@
 #' @references
 #' Rosenbluth, G. (1955). Measures of concentration.
 #'
-
-
-
+#'
 #' @family inequality  
 #' @concept inequality  
 #' @concept concentration-index
@@ -46,5 +44,4 @@ rosenbluth <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
   HT <- 1/(HT-1)
   HT
 }
-
 

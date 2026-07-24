@@ -12,15 +12,15 @@
 #' Alternatively, `FUN` can be a single scalar value, which will
 #' directly replace all missing values.
 #'
-#' @param x An atomic vector.
-#' @param FUN A function used to compute the imputation value,
-#'   or a single scalar value. Default is \code{median}.
-#' @param na.rm Logical. Should missing values be removed before
-#'   computing the summary statistic? Default is \code{TRUE}.
-#' @param ... Additional arguments passed to \code{FUN}.
+#' @param x atomic vector
+#' @param FUN function used to compute the imputation value, or a scalar value;
+#' default is \code{median}
+#' @param na.rm logical; whether to remove missing values before computing the
+#' summary statistic
+#' @param ... additional arguments passed to \code{FUN}
 #'
-#' @return A vector of the same length and type as \code{x},
-#'   with missing values replaced.
+#' @return vector with the same length and type as \code{x}, with missing
+#' values replaced
 #'
 #' @details
 #' If \code{FUN} is a function, it must return a single value.

@@ -6,15 +6,14 @@
 #' This implementation is based on \code{\link{quantileX}()} function, which
 #' allows to define weights. 
 #' 
-#' @param x a numeric vector. 
-#' @param weights an optional numeric vector giving the sample weights. 
-#' @param na.rm logical. Should missing values be removed? 
+#' @param x numeric vector
+#' @param weights optional numeric vector giving the sample weights
+#' @param na.rm logical; whether to remove missing values
 #' @param type an integer selecting one of the many quantile algorithms, see
-#' \code{\link{quantileX}()}.
+#' \code{\link{quantileX}()}
+#'
+#' @return numeric scalar containing the interquartile range
 #' 
-#' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{medianX}()}, \code{\link{quantileX}()},
-#' \code{\link{IQR}()}, \code{\link{quantile}()} 
 #' 
 #' @examples
 #' 
@@ -23,9 +22,8 @@
 #' 
 #' iqrX(x=x, weights=w)
 #' 
-
-
-
+#' @seealso [medianX], [quantileX], [IQR], [quantile] 
+#' 
 #' @family dispersion  
 #' @concept dispersion
 #'
@@ -40,4 +38,3 @@ iqrX <- function (x, weights = NULL, na.rm = FALSE, type = 7) {
     diff(quantileX(x, weights=weights, probs=c(0.25, 0.75), na.rm=na.rm, type=type))
   
 }
-

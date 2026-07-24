@@ -16,25 +16,34 @@
 #' \pkg{boot} package. The default interval type is bias-corrected and
 #' accelerated ("bca").
 #'
-#' @param x Numeric vector of non-negative values.
-#' @param conf.level Confidence level in (0, 1). If \code{NA} (default),
+#' @param x numeric vector of non-negative values
+#' @param conf.level confidence level in (0, 1). If \code{NA} (default),
 #'   no confidence interval is computed.
-#' @param sides Character string specifying the interval type: \code{"two.sided"}
-#'   (default), \code{"left"}, or \code{"right"}.
-#' @param method Currently only \code{"boot"} is supported.
-#' @param unbiased Logical. Apply bias correction factor \eqn{1/(1 - \sum w_i^2)}.
-#' @param weights Optional non-negative numeric vector of the same length as \code{x}.
-#' @param na.rm Logical. Remove missing values before computation.
-#' @param \dots Additional arguments passed to the bootstrap procedure:
+#' @param sides character string specifying the interval type:
+#' \code{"two.sided"} (default), \code{"left"}, or \code{"right"}
+#' @param method confidence interval method; currently only \code{"boot"} is
+#' supported
+#' @param unbiased logical; whether to apply the bias correction factor
+#' \eqn{1/(1 - \sum w_i^2)}
+#' @param weights optional non-negative numeric vector with the same length as
+#' \code{x}
+#' @param na.rm logical; whether to remove missing values before computation
+#' @param \dots additional arguments passed to the bootstrap procedure:
 #'   \describe{
-#'     \item{type}{Confidence interval type (default \code{"bca"})}
-#'     \item{R}{Number of bootstrap replications (default 999)}
-#'     \item{parallel}{Parallelization mode (\code{"no"}, \code{"multicore"}, \code{"snow"})}
-#'     \item{ncpus}{Number of CPUs}
+#'     \item{\code{type}}{confidence interval type (default \code{"bca"})}
+#'     \item{\code{R}}{number of bootstrap replications (default 999)}
+#'     \item{\code{parallel}}{parallelization mode (\code{"no"},
+#'       \code{"multicore"}, or \code{"snow"})}
+#'     \item{\code{ncpus}}{number of CPUs}
 #'   }
 #'
-#' @return If \code{conf.level = NA}, a single numeric value. Otherwise a named
-#'   vector with elements \code{est}, \code{lci}, and \code{uci}.
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the Gini coefficient}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #'
 #' @details
 #' The implementation uses a numerically stable formulation based on the Lorenz
@@ -101,8 +110,11 @@ gini <- function(x,
     stop("weights must be non-negative")
   
   # sum of weights must be > 0
-  if (sum(weights) == 0)
-    return(NA_real_)
+  if (sum(weights) == 0) {
+    if (is.na(conf.level))
+      return(NA_real_)
+    return(c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+  }
   
   
   # --- core gini ---
@@ -176,4 +188,3 @@ gini <- function(x,
   
   res
 }
-

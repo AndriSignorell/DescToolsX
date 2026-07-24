@@ -1,6 +1,6 @@
 
 #' Krippendorff's Alpha for Wide Data
-
+#'
 #' @description
 #' Computes Krippendorff's alpha coefficient of interrater reliability 
 #' from data in wide format (with \eqn{m} raters). The function 
@@ -9,28 +9,28 @@
 #' @name krippAlpha
 #' @aliases krippAlpha 
 #' 
-#' @param x A data frame, matrix, or similar wide-format object containing 
-#'   ratings (columns = raters, rows = subjects/items).
-#' @param method Character string specifying the measurement level. 
+#' @param x a data frame, matrix, or similar wide-format object containing
+#'   ratings (columns = raters, rows = subjects/items)
+#' @param method character string specifying the measurement level.
 #'   One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"}, 
 #'   or \code{"ratio"}.
-#' @param levels Optional vector specifying the set of possible categories, resp. 
-#'  scale values corresponding to the rating categories (required for \code{"interval"} and 
+#' @param levels optional vector specifying the possible categories or scale
+#'   values (required for \code{"interval"} and
 #'   \code{"ratio"} methods).
 #'   If \code{NULL}, levels are inferred from the data.
-#' @param raters Optional vector specifying which columns of \code{x} 
+#' @param raters optional vector specifying which columns of \code{x}
 #'   are the raters. If \code{NULL}, all columns are assumed to be raters.
-#' @param conf.level Confidence level for bootstrap confidence intervals 
+#' @param conf.level confidence level for bootstrap confidence intervals
 #'   of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.
-#' @param out One out of \code{c("def", "ext")} for extended results, \code{"def"} is default.
+#' @param out output format, either \code{"def"} (default) or \code{"ext"} for
+#'   extended results
 #' 
-#' @param ... further arguments are passed to the \code{\link[boot]{boot}} function.
-#' Supported arguments are \code{type} (\code{"norm"}, \code{"basic"},
+#' @param ... further arguments passed to \code{\link[boot]{boot}}. Supported
+#' arguments are \code{type} (\code{"norm"}, \code{"basic"},
 #' \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
-#' of bootstrap replicates \code{R}. If not defined those will be set to their
-#' defaults, being \code{"basic"} for \code{type}, option
-#' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
-#' \code{parallel} and \code{999} for \code{R}.
+#' of bootstrap replicates \code{R}. Defaults are \code{"basic"} for
+#' \code{type}, option \code{"boot.parallel"} (or \code{"no"} if unset) for
+#' \code{parallel}, and \code{999} for \code{R}.
 #'
 #' @details
 #' The function constructs the coincidence matrix from the wide-format data 
@@ -43,15 +43,25 @@
 #'   \item \code{"ratio"}: Squared relative differences of scale values.
 #' }
 #'
-#' @return A list with elements:
+#' @return if \code{out = "def"} and \code{conf.level = NA}, a numeric scalar.
+#' If \code{out = "def"} and a confidence interval is requested, a named
+#' numeric vector with elements:
 #' \describe{
-#'   \item{alpha}{Krippendorff's alpha coefficient.}
-#'   \item{Do}{Observed disagreement.}
-#'   \item{De}{Expected disagreement under chance.}
-#'   \item{O}{Coincidence matrix.}
-#'   \item{nV}{Category totals in coincidence space.}
-#'   \item{delta2}{Pairwise distance matrix according to the method.}
-#'   \item{ci}{Bootstrap confidence interval, or \code{NA} if not computed.}
+#'   \item{\code{est}}{point estimate of Krippendorff's alpha}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
+#'
+#' If \code{out = "ext"}, a list with elements:
+#' \describe{
+#'   \item{\code{alpha}}{point estimate of Krippendorff's alpha}
+#'   \item{\code{Do}}{observed disagreement}
+#'   \item{\code{De}}{expected disagreement under chance}
+#'   \item{\code{O}}{coincidence matrix}
+#'   \item{\code{nV}}{category totals in coincidence space}
+#'   \item{\code{delta2}}{pairwise distance matrix for the selected method}
+#'   \item{\code{ci}}{named numeric vector with \code{est}, \code{lci}, and
+#'     \code{uci}, or \code{NA} if no interval is requested}
 #' }
 #'
 #' @references
@@ -77,11 +87,9 @@
 #' )
 #' krippAlpha(dat2, method = "interval", levels = 1:7)
 #'
-
-
-
+#'
 #' @rdname krippAlpha
-
+#'
 #' @family assoc.agreement  
 #' @concept agreement  
 #' @concept categorical-agreement  
@@ -157,7 +165,7 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
                  conf.level = NA)
     
     ci <- bootCI(x = x, FUN = calc_alpha, ...)
-    names(ci) <- c("alpha", "lci","uci")
+    names(ci) <- c("est", "lci", "uci")
     
   } else {
     ci <- NA
@@ -246,7 +254,5 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
 #           levels = 0:3, raters = paste0("obs",1:5))
 # 
 # testthat::expect_equal(out$alpha, 0.7598, tolerance = 1e-4)
-
-
 
 

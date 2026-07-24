@@ -7,20 +7,20 @@
 meanAD(x, weights = NULL, center = meanX, na.rm = FALSE)
 }
 \arguments{
-\item{x}{a vector containing the observations.}
+\item{x}{a vector containing the observations}
 
 \item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}.}
+giving the weights to use for elements of \code{x}}
 
-\item{center}{a single numerical value or the name of a function applied to \code{x} to be used
-as center. Can as well be a self defined function.  Default is
-\code{\link{meanX}()}.}
+\item{center}{a numeric center or a function applied to \code{x}.
+User-defined functions must accept \code{weights} when weights are supplied.
+Defaults to \code{\link{meanX}()}.}
 
-\item{na.rm}{a logical value indicating whether or not missing values should
-be removed. Defaults to \code{FALSE}.}
+\item{na.rm}{logical; whether to remove missing values. Defaults to
+\code{FALSE}.}
 }
 \value{
-Numeric value.
+a numeric scalar containing the mean absolute deviation
 }
 \description{
 Calculates the mean absolute deviation from a center point, typically the
@@ -35,6 +35,9 @@ c=med(x)}{1/n sum(|x_i - c|) where c=mean(x) or c=med(x)} \cr The function
 supports the use of weights. The default function for the center value
 \code{\link{meanX}()} has a weights arguments, too. If a user defined
 function is used it must be assured that it has a weights argument.
+}
+\note{
+Rewritten following an idea of Danielle Navarro (\code{aad} in the \pkg{lsr} package).
 }
 \examples{
 
@@ -62,19 +65,12 @@ meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 \seealso{
 \code{\link{mad}}
 
-Other location:
-\code{\link[=gmean]{gmean()}},
-\code{\link[=hmean]{hmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=huberM]{huberM()}},
+Other dispersion:
+\code{\link[=coefVar]{coefVar()}},
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=madX]{madX()}},
 \code{\link[=meanSE]{meanSE()}},
-\code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}},
-\code{\link[=tukeyBiweight]{tukeyBiweight()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} following an idea of Danielle
-Navarro (\code{aad} in the \pkg{lsr} package)
+\code{\link[=rangeX]{rangeX()}},
+\code{\link[=varX]{varX()}}
 }
 \concept{dispersion}
-\concept{location}

@@ -28,52 +28,53 @@
 #' type is controlled by the \code{type} argument (passed through
 #' \code{...}):
 #' \describe{
-#'   \item{\code{"bca"}}{Bias-corrected and accelerated (default).
+#'   \item{\code{"bca"}}{bias-corrected and accelerated (default).
 #'     Most accurate; requires \eqn{R \geq 200}.}
-#'   \item{\code{"perc"}}{Percentile interval.}
-#'   \item{\code{"norm"}}{Normal approximation using bootstrap standard
-#'     error.}
+#'   \item{\code{"perc"}}{percentile interval}
+#'   \item{\code{"norm"}}{normal approximation using the bootstrap standard
+#'     error}
 #' }
 #' Further bootstrap arguments passed through \code{...} via
 #' \code{.extractBootArgs()}:
 #' \describe{
-#'   \item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
-#'   \item{\code{parallel}}{Parallelisation: \code{"no"},
-#'     \code{"multicore"}, or \code{"snow"} (default \code{"no"}).}
-#'   \item{\code{ncpus}}{Number of CPUs (default
-#'     \code{getOption("boot.ncpus", 1L)}).}
+#'   \item{\code{R}}{number of bootstrap replicates (default \code{999})}
+#'   \item{\code{parallel}}{parallelisation: \code{"no"},
+#'     \code{"multicore"}, or \code{"snow"} (default \code{"no"})}
+#'   \item{\code{ncpus}}{number of CPUs (default
+#'     \code{getOption("boot.ncpus", 1L)})}
 #' }
 #'
-#' @param x       Either a numeric vector of observed binary outcomes
+#' @param x       either a numeric vector of observed binary outcomes
 #'   (\eqn{0}/\eqn{1}) when \code{pred} is supplied, or a fitted model
 #'   object (\code{glm} or similar) from which both response and
-#'   predictions are extracted.
-#' @param pred    A numeric vector of predicted probabilities in
-#'   \eqn{[0,1]}.  Required when \code{x} is a numeric vector; ignored
+#'   predictions are extracted
+#' @param pred    a numeric vector of predicted probabilities in
+#'   \eqn{[0,1]}. Required when \code{x} is a numeric vector; ignored
 #'   when \code{x} is a model object.
-#' @param scaled  Logical.  Should the scaled Brier score be returned?
+#' @param scaled  logical. Should the scaled Brier score be returned?
 #'   Default \code{FALSE}.
-#' @param conf.level Confidence level of the interval.  A single numeric
+#' @param conf.level confidence level of the interval. A single numeric
 #'   value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
 #'   point estimate.
-#' @param sides   A character string specifying the side of the interval:
+#' @param sides   a character string specifying the side of the interval:
 #'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-#'   Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-#'   \code{"right"} sets \code{lci = -Inf}.  Ignored when
+#'   Partial matching is supported. \code{"left"} sets \code{uci = Inf};
+#'   \code{"right"} sets \code{lci = -Inf}. Ignored when
 #'   \code{conf.level = NA}.
-#' @param method  CI method: \code{"normal"} (delta-method approximation,
-#'   default) or \code{"boot"} (bootstrap via \code{brier_boot_cpp()}).
-#' @param ...     Further arguments passed to the bootstrap engine when
+#' @param method  confidence interval method: \code{"normal"} (delta-method
+#'   approximation, default) or \code{"boot"} (bootstrap via
+#'   \code{brier_boot_cpp()})
+#' @param ...     further arguments passed to the bootstrap engine when
 #'   \code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
-#'   \code{ncpus}.  See Details.
+#'   \code{ncpus}. See Details.
 #'
-#' @return
-#' If \code{conf.level = NA}: a single numeric value (the Brier score).
-#'
-#' If \code{conf.level} is specified: a named numeric vector with elements
-#'   \item{brier}{Brier score estimate.}
-#'   \item{lci}{Lower confidence bound.}
-#'   \item{uci}{Upper confidence bound.}
+#' @return if \code{conf.level = NA}, a numeric scalar containing the Brier
+#' score; otherwise a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the Brier score.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
 #'
 #' @seealso \code{\link[stats]{predict}}
 #'
@@ -200,7 +201,7 @@ brierScore <- function(x,
     if (sides == "right") ci[1L] <- -Inf
   }
   
-  c(brier = bs_hat, lci = ci[1L], uci = ci[2L])
+  c(est = bs_hat, lci = ci[1L], uci = ci[2L])
 }
 
 
@@ -229,5 +230,4 @@ brierScore <- function(x,
   if (is.factor(res)) res <- as.numeric(res) - 1L
   res
 }
-
 

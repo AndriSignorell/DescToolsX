@@ -19,18 +19,20 @@
 #' @param direction type of lambda. Can be one out of \code{"symmetric"}
 #' (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
 #' direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
-#' reported. See details. 
-#' @param method a character string, defining the type of intervals required.
-#' The value should be one out of \code{"classic"}, \code{"boot"} (default).
+#' reported. See Details.
+#' @param method character string selecting the interval method; currently
+#' only \code{"classic"} is implemented
 #' 
-#' @return if no confidence intervals are requested: the estimate as numeric
-#' value\cr\cr else a named numeric vector with 3 elements
-#' \item{est}{estimate} \item{lci}{lower confidence interval}
-#' \item{uci}{upper confidence interval}
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Goodman--Kruskal lambda}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #' 
-#' @author Andri Signorell <andri@@signorell.net> based on code from Antti
-#' Arppe <antti.arppe@@helsinki.fi>, \cr Nanina Anderegg (confidence interval
-#' symmetric lambda)
+#' @note Based on code by Antti Arppe and Nanina Anderegg (confidence 
+#' interval symmetric lambda), adapted to conform to package standards.
 #' 
 #' @seealso 
 #' \code{\link{Association}}
@@ -61,9 +63,7 @@
 #' lambda(m, direction="row")
 #' lambda(m, direction="column")
 #' 
-
-
-
+#'
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal
@@ -190,4 +190,3 @@ lambda <- function(x, y = NULL,
   
   return(res)
 }
-

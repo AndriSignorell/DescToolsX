@@ -14,25 +14,25 @@ madX(
 )
 }
 \arguments{
-\item{x}{a numeric vector.}
+\item{x}{a numeric vector}
 
 \item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}.}
+giving the weights to use for elements of \code{x}}
 
-\item{center}{the centre given either as numeric value or as a function to
-be applied to \code{x} (defaults to the \code{medianX(x)}). Note
-in cases when weights are defined to provide a function that also support
-weights. If this is not possible fall back to a numeric value.}
+\item{center}{a numeric center or a function applied to \code{x}. When
+weights are supplied, the function must support a \code{weights} argument.
+Defaults to \code{medianX}.}
 
 \item{constant}{scale factor (default is \code{1.4826})}
 
-\item{medianType}{if \code{TRUE}, compute the \sQuote{lo-median}, i.e., for
-even sample size, do not average the two middle values, but take the smaller
-one, if \code{TRUE}, compute the \sQuote{hi-median}, i.e., take the larger
-of the two middle values for even sample size.}
+\item{medianType}{character string selecting the \code{"standard"},
+\code{"low"}, or \code{"high"} median for even sample sizes}
 
 \item{na.rm}{if \code{TRUE} then \code{NA} values are stripped from \code{x}
-before computation takes place.}
+before computation takes place}
+}
+\value{
+a numeric scalar containing the scaled median absolute deviation
 }
 \description{
 Compute the median absolute deviation, i.e., the (lo-/hi-) median of the
@@ -74,6 +74,7 @@ z <- as.numeric(names(w <- table(x)))
 (m2 <- madX(x))
 stopifnot(identical(m1, m2))
 
+
 }
 \seealso{
 \code{\link{IQR}} which is simpler but less robust,
@@ -84,6 +85,8 @@ stopifnot(identical(m1, m2))
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=iqrX]{iqrX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}
 }

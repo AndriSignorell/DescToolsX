@@ -2,34 +2,34 @@
 % Please edit documentation in R/addMonths.R
 \name{addMonths}
 \alias{addMonths}
-\title{Add a month to a Date}
+\title{Add Months to a Date}
 \usage{
 addMonths(x, n, ...)
 }
 \arguments{
-\item{x}{a Date object (or something which can be coerced by
-\code{\link{as.Date}}(x, ...) to such an object) to which a number of months
-has to be added.}
+\item{x}{a Date object, or an object coercible to one by
+\code{\link{as.Date}}(x, ...), to which months are added}
 
-\item{n}{the number of months to be added. If n is negative the months will
-be subtracted.}
+\item{n}{number of months to add. Negative values subtract months.}
 
-\item{\dots}{the dots are passed to \code{\link{as.Date}}, e.g. for
-supplying \code{origin}.}
+\item{\dots}{further arguments passed to \code{\link{as.Date}}, for example
+to supply \code{origin}}
 }
 \value{
 a vector of class \code{Date} with the same dimension as \code{x},
-containing the transformed dates.
+containing the transformed dates
 }
 \description{
-Clueless adding numbers of months to a date will in some cases lead to
-invalid dates, think of e.g. 2012-01-30 + 1 month. \cr addMonths ensures
-that the result is always a valid date, e.g. \code{as.Date("2013-01-31") + 1
-month} will be \code{"2013-02-28"}. If number \code{n} is negative, the
-months will be subtracted.
+Naively adding months to a date can produce invalid dates, for example
+when adding one month to 2012-01-30. \code{addMonths()} always returns a
+valid date: adding one month to \code{as.Date("2013-01-31")} returns
+\code{"2013-02-28"}. Negative values of \code{n} subtract months.
 }
 \details{
-All parameters will be recyled if necessary.
+All parameters are recycled if necessary.
+}
+\note{
+Based on code by Roland Rapold and Antonio, adapted to conform to package standards.
 }
 \examples{
 
@@ -54,7 +54,6 @@ addMonths(x, n, origin=as.Date("1970-01-01"))
 
 }
 \references{
-Thanks to Antonio:
 \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 }
 \seealso{
@@ -64,15 +63,11 @@ Thanks to Antonio:
 Other date.time:
 \code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
+\code{\link{date-time-predicates}},
+\code{\link{date_functions}},
 \code{\link[=generation]{generation()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}},
+\code{\link{time-conversions}},
 \code{\link[=zodiac]{zodiac()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code by Roland
-Rapold and Antonio
 }
 \concept{date-time}
 \concept{date.time}
-\keyword{chron}

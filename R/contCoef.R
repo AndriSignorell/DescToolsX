@@ -1,8 +1,8 @@
 
 #' Pearson's Contingency Coefficient
 #' 
-#' Calculate Pearson's contingency coefficient for a table \code{x}. If 
-#' \code{x} and \code{y} are given, then the according table will be built
+#' Calculates Pearson's contingency coefficient for a table \code{x}. If
+#' \code{x} and \code{y} are given, the corresponding table is built
 #' first (more details in \link{Association}).
 #' The contingency coefficient goes from 0 to 
 #' \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. Sakoda (1977) proposed the 
@@ -10,15 +10,19 @@
 #' 
 #' @aliases ContCoef
 #' @inheritParams Association
-#' @param method string defining the method to calculate confidence intervals
-#' for the contingency coefficient. Only \code{"boot"} implemented.
+#' @param method character string specifying the confidence interval method
+#' for the contingency coefficient; currently only \code{"boot"} is implemented
 #' 
-#' @param correct logical (default \code{FALSE}), indicates, whether
-#' Sakoda's adjusted Pearson's C should be returned. 
+#' @param correct logical; whether Sakoda's adjusted Pearson's C should be
+#' returned; defaults to \code{FALSE}
 #' 
-#' @return a single numeric value if no confidence intervals are requested,\cr
-#' and otherwise a numeric vector with 3 elements for the estimate, the lower
-#' and the upper confidence interval. 
+#' @return if \code{conf.level = NA}, a numeric scalar containing Pearson's
+#' contingency coefficient; otherwise a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the contingency coefficient.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
 #' 
 #' @details
 #' For Pearson's contingency coefficient 
@@ -41,17 +45,11 @@
 #' 
 #' # just x and y
 #' with(bedrock::untable(tab), contCoef(Hair, Eye))
-#'   
 #' 
-#' 
-
-
-
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal  
 #' @concept chi-square-based
-#'
 #'
 #' @export
 contCoef <- function(x, y = NULL, 

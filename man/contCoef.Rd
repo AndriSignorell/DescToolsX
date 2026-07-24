@@ -16,37 +16,41 @@ contCoef(
 )
 }
 \arguments{
-\item{x}{Either a contingency table, a two-column object
+\item{x}{either a contingency table, a two-column object
 (matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+(together with \code{y})}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
+\item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{correct}{logical (default \code{FALSE}), indicates, whether
-Sakoda's adjusted Pearson's C should be returned.}
+\item{correct}{logical; whether Sakoda's adjusted Pearson's C should be
+returned; defaults to \code{FALSE}}
 
-\item{conf.level}{Confidence level for confidence intervals.
+\item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{Alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{method}{string defining the method to calculate confidence intervals
-for the contingency coefficient. Only \code{"boot"} implemented.}
+\item{method}{character string specifying the confidence interval method
+for the contingency coefficient; currently only \code{"boot"} is implemented}
 
-\item{...}{Additional arguments passed to internal helper functions,
+\item{...}{additional arguments passed to internal helper functions,
 such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R}).}
+table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval.
+if \code{conf.level = NA}, a numeric scalar containing Pearson's
+contingency coefficient; otherwise a named numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the contingency coefficient.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
 }
 \description{
-Calculate Pearson's contingency coefficient for a table \code{x}. If
-\code{x} and \code{y} are given, then the according table will be built
+Calculates Pearson's contingency coefficient for a table \code{x}. If
+\code{x} and \code{y} are given, the corresponding table is built
 first (more details in \link{Association}).
 The contingency coefficient goes from 0 to
 \eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. Sakoda (1977) proposed the
@@ -66,8 +70,6 @@ contCoef(tab)
 
 # just x and y
 with(bedrock::untable(tab), contCoef(Hair, Eye))
-  
-
 
 }
 \references{
@@ -85,7 +87,6 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

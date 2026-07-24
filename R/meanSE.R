@@ -3,33 +3,30 @@
 #' 
 #' Calculates the standard error of mean. 
 #' 
-#' MeanSE calculates the standard error of the mean defined as:
+#' \code{meanSE()} calculates the standard error of the mean defined as:
 #' \deqn{\frac{\sigma}{\sqrt{n}}} \eqn{\sigma} being standard deviation of
 #' \code{x} and n the length of \code{x}.
 #' 
-#' @param x a (non-empty) numeric vector of data values. 
-#' @param sd the standard deviation of \code{x}. If provided it's interpreted
-#' as sd of the population. If left to \code{NULL} (default) the sample
-#' \code{sd(x)} will be used.
+#' @param x a non-empty numeric vector of data values
+#' @param sd the standard deviation of \code{x}. If supplied, it is interpreted
+#' as the population standard deviation. If \code{NULL} (default), the sample
+#' standard deviation \code{sd(x)} is used.
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' \code{FALSE}. 
-#' @return the standard error as numeric value.
-#' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link[lumen]{meanCI}} 
-#' @keywords univar
+#' 
+#' @return the standard error as a numeric scalar
+#' 
 #' @examples
 #' 
 #' meanSE(Pizza$price, na.rm=TRUE)
 #' 
 #' # evaluate data.frame
-#' sapply(Pizza[,1:4], meanSE, na.rm=TRUE)
+#' sapply(Pizza[, 1:4], meanSE, na.rm=TRUE)
 #' 
-
-
-
-#' @family location  
-#' @concept location  
-#' @concept confidence-interval
+#' 
+#' @seealso [lumen::meanCI]
+#' 
+#' @family dispersion  
 #'
 #'
 #' @export
@@ -39,3 +36,4 @@ meanSE <- function(x, sd = NULL, na.rm = FALSE) {
   s <- if(is.null(sd)) sd(x) else sd
   s/sqrt(length(x))
 }
+

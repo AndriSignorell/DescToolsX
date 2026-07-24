@@ -12,8 +12,9 @@ test_that("pabak works correctly", {
   # po = (45 + 35) / 100 = 0.8
   # PABAK = 2 * 0.8 - 1 = 0.6
   
+  # as.vector() strips the "est" name and the diagnostic attributes
   expect_equal(
-    pabak(x),
+    as.vector(pabak(x)),
     0.6,
     tolerance = 1e-12
   )
@@ -27,7 +28,7 @@ test_that("pabak works correctly", {
   
   expect_named(
     res,
-    c("est", "lci", "uci", "pi", "bi")
+    c("est", "lci", "uci")
   )
   
   expect_equal(
@@ -37,16 +38,34 @@ test_that("pabak works correctly", {
   )
   
   expect_equal(
-    unname(res["pi"]),
+    attr(res, "prevalenceIndex"),
     abs(45/100 - 35/100),
     tolerance = 1e-12
   )
   
   expect_equal(
-    unname(res["bi"]),
+    attr(res, "biasIndex"),
     abs((45 + 15)/100 - (45 + 5)/100),
     tolerance = 1e-12
   )
+
+  # the diagnostics describe the table, not the interval, so they are
+  # attached whether or not a confidence interval was requested
+  expect_equal(
+    attr(pabak(x), "prevalenceIndex"),
+    attr(res, "prevalenceIndex")
+  )
+
+  expect_equal(
+    attr(pabak(x), "biasIndex"),
+    attr(res, "biasIndex")
+  )
+
+  expect_equal(attr(res, "nObs"), 100)
+
+  # the result stays a plain 1- or 3-element vector
+  expect_length(pabak(x), 1L)
+  expect_length(res, 3L)
   
   
   # ------------------------------------------------------------------
@@ -57,8 +76,8 @@ test_that("pabak works correctly", {
   
   res3 <- pabak(x3, conf.level = 0.95)
   
-  expect_true(is.na(res3["pi"]))
-  expect_true(is.na(res3["bi"]))
+  expect_true(is.na(attr(res3, "prevalenceIndex")))
+  expect_true(is.na(attr(res3, "biasIndex")))
   
   
   # ------------------------------------------------------------------
@@ -108,8 +127,17 @@ test_that("pabak works correctly", {
     sides = "right"
   )
   
-  expect_true(is.infinite(resLeft["uci"]))
-  expect_true(is.infinite(resRight["lci"]))
+  # sides names the side on which the finite bound lies: "left" gives
+  # [lci, Inf), "right" gives (-Inf, uci]
+  expect_true(is.finite(resLeft["lci"]))
+  expect_equal(unname(resLeft["uci"]), Inf)
+
+  expect_equal(unname(resRight["lci"]), -Inf)
+  expect_true(is.finite(resRight["uci"]))
+
+  # one-sided limits are tighter than the two-sided ones
+  expect_gt(resLeft["lci"], res["lci"])
+  expect_lt(resRight["uci"], res["uci"])
   
   
   # ------------------------------------------------------------------

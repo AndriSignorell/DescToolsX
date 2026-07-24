@@ -15,23 +15,22 @@
 #' \code{\link{meanX}()} has a weights arguments, too. If a user defined
 #' function is used it must be assured that it has a weights argument. 
 #' 
-#' @param x a vector containing the observations.
+#' @param x a vector containing the observations
 #' 
 #' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}.
+#' giving the weights to use for elements of \code{x}
 #' 
-#' @param center a single numerical value or the name of a function applied to \code{x} to be used
-#' as center. Can as well be a self defined function.  Default is
-#' \code{\link{meanX}()}.
+#' @param center a numeric center or a function applied to \code{x}.
+#' User-defined functions must accept \code{weights} when weights are supplied.
+#' Defaults to \code{\link{meanX}()}.
 #' 
-#' @param na.rm a logical value indicating whether or not missing values should
-#' be removed. Defaults to \code{FALSE}.
+#' @param na.rm logical; whether to remove missing values. Defaults to
+#' \code{FALSE}.
 #' 
-#' @return Numeric value.
-#' @author Andri Signorell <andri@@signorell.net> following an idea of Danielle
-#' Navarro (\code{aad} in the \pkg{lsr} package)
+#' @return a numeric scalar containing the mean absolute deviation
 #' 
-#' @seealso \code{\link{mad}}
+#' @note Rewritten following an idea of Danielle Navarro (\code{aad} in the \pkg{lsr} package).
+#' 
 #' 
 #' @examples
 #' 
@@ -55,14 +54,10 @@
 #' # use of weights
 #' meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 #' 
-
-
-
-
-#' @family location  
-#' @concept location  
-#' @concept dispersion
-#'
+#' @seealso \code{\link{mad}}
+#' 
+#' @family dispersion  
+#' 
 #'
 #' @export
 meanAD <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
@@ -92,5 +87,4 @@ meanAD <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
   return(res)
   
 }  
-
 

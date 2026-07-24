@@ -7,18 +7,18 @@
 simpson(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE)
 }
 \arguments{
-\item{x}{A vector of observations (factor, character, numeric), or a
-named vector of non-negative integer counts.}
+\item{x}{a vector of observations (factor, character, numeric), or a named
+vector of non-negative integer counts}
 
-\item{method}{Character string specifying the index to compute:
-\code{"gini"}, \code{"hunter"}, or \code{"deltas"}.}
+\item{method}{character string specifying the index to compute:
+\code{"gini"}, \code{"hunter"}, or \code{"deltas"}}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed before
+\item{na.rm}{logical. If \code{TRUE}, missing values are removed before
 computation. If \code{FALSE} and \code{x} contains \code{NA}, the result
 will be \code{NA_real_}.}
 }
 \value{
-A numeric value between 0 and 1. Returns \code{NA_real_} if input
+a numeric scalar between 0 and 1. Returns \code{NA_real_} if input
 is invalid or empty.
 }
 \description{
@@ -85,7 +85,8 @@ Other inequality:
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=rosenbluth]{rosenbluth()}}
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}
 \concept{inequality}

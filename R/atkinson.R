@@ -7,15 +7,15 @@
 #' parameter \eqn{\varepsilon >= 0}. Larger values of
 #' \code{epsilon} imply greater sensitivity to lower incomes.
 #'
-#' @param x Numeric vector of non-negative values (e.g. incomes).
-#' @param n Optional frequency weights. Each element of \code{x}
+#' @param x numeric vector of non-negative values, such as incomes
+#' @param n optional frequency weights. Each element of \code{x}
 #'   is replicated \code{n} times.
-#' @param epsilon Inequality aversion parameter \eqn{\varepsilon}.
+#' @param epsilon inequality aversion parameter \eqn{\varepsilon}.
 #'   Must be non-negative. The case \code{epsilon = 1} is handled
 #'   separately.
-#' @param na.rm Logical. If \code{TRUE}, missing values are removed.
+#' @param na.rm logical. If \code{TRUE}, missing values are removed.
 #'
-#' @return Numeric value of the Atkinson index in the interval \verb{[0, 1]}.
+#' @return numeric value of the Atkinson index in the interval \verb{[0, 1]}
 #'
 #' @details
 #' The index is defined as

@@ -16,17 +16,18 @@ skew(
 )
 }
 \arguments{
-\item{x}{a numeric vector. An object which is not a vector is coerced (if
-possible) by \code{as.vector}.}
+\item{x}{a numeric vector. An object that is not a vector is coerced by
+\code{as.vector} if possible.}
 
-\item{conf.level}{Confidence level of the interval. If set to \code{NA}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
 
-\item{sides}{A character string specifying the side of the confidence
+\item{sides}{character string specifying the side of the confidence
 interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter.}
+\code{"right"}. The value names the side on which the finite bound
+lies. You can specify just the initial letter.}
 
-\item{method}{A character string defining the type of interval required.
+\item{method}{character string defining the type of interval required.
 The value should be one of \code{"classic"} or \code{"boot"} (default).
 Further arguments for the bootstrap procedure (such as \code{R},
 \code{type}, etc.) can be supplied via the \code{...} argument if needed.}
@@ -35,24 +36,21 @@ Further arguments for the bootstrap procedure (such as \code{R},
 used for calculation. See Details.}
 
 \item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}.}
+giving the weights to use for elements of \code{x}}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{\dots}{the dots are passed to the function \code{\link[boot]{boot}},
-when confidence intervalls are calculated.}
+\item{\dots}{further arguments passed to \code{\link[boot]{boot}} when
+confidence intervals are calculated}
 }
 \value{
-If \code{conf.level = NA}:
-numeric skewness estimate.
-
-Otherwise:
-named numeric vector with:
-\itemize{
-\item \code{est}: skewness estimate
-\item \code{lci}: lower confidence limit
-\item \code{uci}: upper confidence limit
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{skewness estimate}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -94,6 +92,7 @@ sapply(Pizza[,c("temperature","price","delivery_min")], skew, na.rm=TRUE)
 apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
       skew, na.rm=TRUE)
 
+
 }
 \references{
 Cramer, D. (1997): \emph{Basic Statistics for Social Research}
@@ -103,8 +102,7 @@ Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 kurtosis. \emph{The Statistician}, 47, 183-189.
 }
 \seealso{
-\code{\link{kurt}}, \code{\link{meanX}}, \code{\link{sdX}},
-similar code in \code{library(e1071)}
+\link{meanX}, \link{sdX}, similar code in \pkg{e1071}
 
 Other shape:
 \code{\link[=kurt]{kurt()}}

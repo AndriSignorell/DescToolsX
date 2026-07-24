@@ -14,16 +14,16 @@
 #' 22 : Leo | Aug 23 - Sept. 21 : Virgo | Sept. 22 - Oct. 22 : Libran | Oct. 23 -
 #' Nov. 21 : Scorpio | Nov. 22 - Dec. 21 : Sagittarius }
 #' 
-#' @param x the date to be transformed.
-#' @param lang the language of the zodiac names, can be english (default) or
-#' german (\code{"deu"}).
+#' @param x the date to transform
+#' @param lang language of the zodiac names, either English (\code{"en"}) or
+#' German (\code{"de"})
 #' @param stringsAsFactors logical. If set to \code{TRUE} (default) the result
 #' will consist of a factor with zodiac signs as levels.
-#' @return character vector or factor with the zodiac.
-#' @author Andri Signorell <andri@@signorell.net>, based on code from Markus
-#' Naepflin
-#' @seealso \code{\link{year}} and other date functions
-#' @keywords chron
+#' 
+#' @return a character vector or factor containing the zodiac signs
+#' 
+#' @note Based on code from Markus Naepflin, adapted to conform to package standards.
+#' 
 #' @examples
 #' 
 #' zodiac(as.Date(c("1937-07-28", "1936-06-01", "1966-02-25",
@@ -33,9 +33,6 @@
 #' z <- zodiac(d)
 #' desc(z)
 #' 
-
-
-
 #' @family date.time  
 #' @concept date-time  
 #' @concept categorization
@@ -64,4 +61,3 @@ zodiac <- function(x, lang = c("en","de"), stringsAsFactors = TRUE) {
   }
   return(res)
 }
-

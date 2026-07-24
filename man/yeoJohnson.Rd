@@ -10,15 +10,15 @@ yeoJohnson(x, lambda, tol = 0.000001)
 yeoJohnsonInv(x, lambda, tol = 0.000001)
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{a numeric vector}
 
-\item{lambda}{A single numeric transformation parameter.}
+\item{lambda}{a single numeric transformation parameter}
 
-\item{tol}{Numeric tolerance for detecting special cases
-(\eqn{\lambda \approx 0} and \eqn{\lambda \approx 2}).}
+\item{tol}{numeric tolerance for detecting the special cases
+\eqn{\lambda \approx 0} and \eqn{\lambda \approx 2}}
 }
 \value{
-A numeric vector of the same length as \code{x}.
+a numeric vector of the same length as \code{x}
 }
 \description{
 \code{yeoJohnson()} applies the Yeo-Johnson transformation to a numeric
@@ -58,6 +58,7 @@ max(abs(x - x_back))
 # Compare with log-like transformation
 y0 <- yeoJohnson(x, lambda = 0)
 
+
 }
 \references{
 Yeo, I.-K. and Johnson, R. A. (2000).
@@ -65,8 +66,6 @@ A new family of power transformations to improve normality or symmetry.
 \emph{Biometrika}, \bold{87}(4), 954--959.
 }
 \seealso{
-\code{\link{boxCox}}, \code{\link{boxCoxInv}}
-
 Other transform:
 \code{\link[=boxCox]{boxCox()}},
 \code{\link[=boxCoxLambda]{boxCoxLambda()}},

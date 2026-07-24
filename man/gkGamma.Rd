@@ -7,22 +7,24 @@
 gkGamma(x, y = NULL, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{A numeric vector or a contingency table (matrix or table).}
+\item{x}{numeric vector or a contingency table (matrix or table)}
 
-\item{y}{Optional numeric vector. If supplied, must have the same length as \code{x}.}
+\item{y}{optional numeric vector. If supplied, it must have the same length
+as \code{x}.}
 
-\item{conf.level}{Confidence level for confidence intervals. If \code{NA},
+\item{conf.level}{confidence level for the interval. If \code{NA},
 no confidence interval is returned.}
 
-\item{\dots}{Further arguments passed to \code{\link{table}} in the vector interface.}
+\item{\dots}{further arguments passed to \code{\link{table}} in the vector
+interface}
 }
 \value{
-If \code{conf.level = NA}, a single numeric value is returned.
-Otherwise a named numeric vector with elements:
-\itemize{
-\item \code{est}: estimate
-\item \code{lci}: lower confidence interval
-\item \code{uci}: upper confidence interval
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Goodman-Kruskal's gamma}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -83,10 +85,9 @@ Measures of association for cross classifications III.
 \emph{Journal of the American Statistical Association}, 58, 310–364.
 }
 \seealso{
-\code{\link{yuleQ}} for \eqn{2 \times 2} tables,
+\code{\link{yuleQ}} for \eqn{2 \times 2} tables
 
 Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkTau]{gkTau()}},

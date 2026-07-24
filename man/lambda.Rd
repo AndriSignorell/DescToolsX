@@ -15,36 +15,39 @@ lambda(
 )
 }
 \arguments{
-\item{x}{Either a contingency table, a two-column object
+\item{x}{either a contingency table, a two-column object
 (matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+(together with \code{y})}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
+\item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{Confidence level for confidence intervals.
+\item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{Alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{method}{a character string, defining the type of intervals required.
-The value should be one out of \code{"classic"}, \code{"boot"} (default).}
+\item{method}{character string selecting the interval method; currently
+only \code{"classic"} is implemented}
 
 \item{direction}{type of lambda. Can be one out of \code{"symmetric"}
 (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
 direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
-reported. See details.}
+reported. See Details.}
 
-\item{...}{Additional arguments passed to internal helper functions,
+\item{...}{additional arguments passed to internal helper functions,
 such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R}).}
+table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
 }
 \value{
-if no confidence intervals are requested: the estimate as numeric
-value\cr\cr else a named numeric vector with 3 elements
-\item{est}{estimate} \item{lci}{lower confidence interval}
-\item{uci}{upper confidence interval}
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Goodman--Kruskal lambda}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Calculate symmetric and asymmetric Goodman Kruskal lambda and their
@@ -62,6 +65,10 @@ nondirectional lambda is the average of the two asymmetric lambdas,
 lambda(C|R) and lambda(R|C). lambda (asymmetric and symmetric) has a scale
 ranging from 0 to 1.
 }
+\note{
+Based on code by Antti Arppe and Nanina Anderegg (confidence
+interval symmetric lambda), adapted to conform to package standards.
+}
 \examples{
 
 # example from Goodman Kruskal (1954)
@@ -75,6 +82,7 @@ lambda(m, conf.level=0.95)
 
 lambda(m, direction="row")
 lambda(m, direction="column")
+
 
 }
 \references{
@@ -101,15 +109,9 @@ Other assoc.nominal:
 \code{\link[=entropy]{entropy()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net} based on code from Antti
-Arppe \href{mailto:antti.arppe@helsinki.fi}{antti.arppe@helsinki.fi}, \cr Nanina Anderegg (confidence interval
-symmetric lambda)
 }
 \concept{assoc.nominal}
 \concept{association-measure}

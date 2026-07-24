@@ -22,18 +22,18 @@ tOne(
 \arguments{
 \item{x}{a tOne object to subset}
 
-\item{groups}{the grouping variable.}
+\item{groups}{the grouping variable}
 
 \item{add.length}{logical. If set to \code{TRUE} (default), a row with the
 group sizes will be inserted as first row of the table.}
 
-\item{colnames}{a vector of column names for the result table.}
+\item{colnames}{a vector of column names for the result table}
 
 \item{vnames}{a vector of variable names to be placed in the first column
-instead of the real names.}
+instead of the real names}
 
 \item{total}{logical (default \code{TRUE}), defines whether the results
-should also be displayed for the whole, ungrouped variable.}
+should also be displayed for the whole, ungrouped variable}
 
 \item{align}{the character on whose position the strings will be aligned.
 Left alignment can be requested by setting \code{sep = "\\l"}, right
@@ -58,7 +58,7 @@ Usually this will be \code{1} or \code{TRUE}. Setting it to \code{"low"}
 will report the lower value \code{0} or \code{FALSE}.}
 
 \item{fmt}{fm codes for absolute, numeric and percentage values, and for
-the p-values of the tests.}
+the p-values of the tests}
 
 \item{...}{further parameters (not used here)}
 
@@ -128,7 +128,7 @@ By default, the optionally definable fm templates of \bold{DescTools}
 are used. Deviations from this can be freely passed as arguments to the
 function. fms can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of the
-function \code{\link[aurora]{fm}()} are available and can be provided as a list.
+function \code{\link[pharos]{fm}()} are available and can be provided as a list.
 See examples which show several different implementations.
 \preformatted{
   fmt = list(abs  = "abs.sty", 
@@ -191,7 +191,7 @@ tOne(x = iris[, -5], groups = iris[, 5],
                 pval = style(fmt = "*", naForm = "   ")) 
 )
 
-t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rabate")], 
+t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")], 
            groups   = Pizza$area, 
            align = " ", 
            total = FALSE,
@@ -247,6 +247,7 @@ ToWrd(
   align = c("l","r")      # this will be recycled: left-right-left-right ...
 )
 }
+
 
 
 }

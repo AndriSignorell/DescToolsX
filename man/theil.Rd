@@ -7,15 +7,15 @@
 theil(x, n = rep(1, length(x)), na.rm = FALSE)
 }
 \arguments{
-\item{x}{Numeric vector of non-negative values (e.g. incomes).}
+\item{x}{numeric vector of non-negative values, such as incomes}
 
-\item{n}{Optional frequency weights. Each element of \code{x}
+\item{n}{optional frequency weights. Each element of \code{x}
 is replicated \code{n} times.}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.}
+\item{na.rm}{logical. If \code{TRUE}, missing values are removed.}
 }
 \value{
-Numeric value of the Theil index. The value is 0 under
+a numeric scalar containing the Theil index. The value is 0 under
 perfect equality and increases with inequality.
 }
 \description{
@@ -45,19 +45,13 @@ are present, \code{NA} is returned.
 Theil, H. (1967). Economics and Information Theory.
 }
 \seealso{
-Other assoc.nominal:
-\code{\link[=contCoef]{contCoef()}},
-\code{\link[=cramerV]{cramerV()}},
-\code{\link[=divCoef]{divCoef()}},
-\code{\link[=entropy]{entropy()}},
-\code{\link[=lambda]{lambda()}},
-\code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
-\code{\link[=tschuprowT]{tschuprowT()}},
-\code{\link[=uncertCoef]{uncertCoef()}},
-\code{\link{yule}}
+Other inequality:
+\code{\link[=atkinson]{atkinson()}},
+\code{\link[=gini]{gini()}},
+\code{\link[=herfindahl]{herfindahl()}},
+\code{\link[=lc]{lc()}},
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=simpson]{simpson()}}
 }
-\concept{assoc.nominal}
-\concept{association-measure}
-\concept{information-theory}
-\concept{nominal}
+\concept{concentration-index}
+\concept{inequality}

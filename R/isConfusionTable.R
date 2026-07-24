@@ -6,20 +6,22 @@
 #' square 2D numeric (integer-like) counts (or, optionally, proportions), non-negative,
 #' finite, and (optionally) with matching row/column names.
 #'
-#' @param x Object to check (typically a \code{table}, \code{matrix}, or
-#'   numeric \code{data.frame}).
-#' @param requireDimnames Logical; if \code{TRUE}, both row and column names
+#' @param x object to check, typically a \code{table}, \code{matrix}, or
+#' numeric \code{data.frame}
+#' @param requireDimnames logical; if \code{TRUE}, both row and column names
 #'   must be present. Defaults to \code{TRUE}.
-#' @param requireSameLevels Logical; if \code{TRUE} and dimnames are present,
+#' @param requireSameLevels logical; if \code{TRUE} and dimnames are present,
 #'   row and column names must be the same set (order ignored). Defaults to \code{TRUE}.
-#' @param integerTol Numeric tolerance for "integer-like" counts. Defaults to
-#'   \code{sqrt(.Machine$double.eps)}.
-#' @param acceptProportions Logical; if \code{TRUE}, also accepts proportion
-#'   tables (all entries in \[0,1\] and total sum approx. 1). Defaults to \code{TRUE}.
-#' @param requireSquare Logical; require a square table. Defaults to \code{TRUE}.
+#' @param integerTol numeric tolerance for integer-like counts; defaults to
+#'   \code{sqrt(.Machine$double.eps)}
+#' @param acceptProportions logical; if \code{TRUE}, proportion tables are
+#' accepted when all entries are in \eqn{[0, 1]} and their sum is approximately
+#' 1. Defaults to \code{TRUE}.
+#' @param requireSquare logical; whether to require a square table; defaults to
+#' \code{TRUE}
 #'
-#' @return \code{TRUE} if \code{x} looks like a confusion/coincidence matrix,
-#'   otherwise \code{FALSE}.
+#' @return \code{TRUE} if \code{x} looks like a confusion or coincidence
+#' matrix, otherwise \code{FALSE}
 #'
 #' @examples
 #' tab <- table(sample(letters[1:3], 100, TRUE),
@@ -28,7 +30,7 @@
 #'
 #' M <- as.matrix(tab)
 #' isConfusionTable(M)                 # TRUE (dimnames present)
-#' isConfusionTable(M, requireDimnames = FALSE)  # TRUE even without names
+#' isConfusionTable(unname(M), requireDimnames = FALSE)  # TRUE without names
 #'
 #' df <- as.data.frame.matrix(tab)
 #' isConfusionTable(df)                # TRUE (numeric data.frame)
@@ -37,11 +39,7 @@
 #' ratings <- cbind(r1 = sample(0:1, 50, TRUE), r2 = sample(0:1, 50, TRUE))
 #' isConfusionTable(ratings)           # FALSE (not square)
 #'
-
-
-
-
-#' @family assoc.agreement  
+#'
 #' @concept agreement  
 #' @concept confusion-matrix
 #'
@@ -142,10 +140,6 @@ isConfusionTable <- function(
   return(TRUE)
   
 }
-
-
-
-
 
 
 

@@ -7,13 +7,12 @@
 detachAliases(envir = .GlobalEnv)
 }
 \arguments{
-\item{envir}{The environment from which the aliases are removed.
+\item{envir}{the environment from which the aliases are removed.
 Must match the \code{envir} argument used in \code{attachAliases()}.
 Defaults to \code{.GlobalEnv}.}
 }
 \value{
-Invisibly returns a character vector of the alias names that
-were removed.
+invisibly, a character vector of the alias names that were removed
 }
 \description{
 Removes the short-name aliases that were previously created by

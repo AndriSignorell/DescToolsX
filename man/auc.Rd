@@ -17,25 +17,25 @@ auc(
 )
 }
 \arguments{
-\item{x, y}{Numeric vectors of equal length defining the coordinates of the curve.}
+\item{x, y}{numeric vectors of equal length defining the curve coordinates}
 
-\item{from, to}{Numeric values specifying the integration interval. Defaults to
+\item{from, to}{numeric values specifying the integration interval. Defaults to
 the range of \code{x}.}
 
-\item{method}{Character string specifying the integration method:
-\code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}.}
+\item{method}{character string specifying the integration method:
+\code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}}
 
-\item{absoluteArea}{Logical; if \code{TRUE}, the absolute area is computed,
-i.e., areas below zero are treated as positive.}
+\item{absoluteArea}{logical; if \code{TRUE}, areas below zero are treated
+as positive}
 
-\item{subdivisions}{Integer; number of subdivisions for spline integration.}
+\item{subdivisions}{integer; number of subdivisions for spline integration}
 
-\item{na.rm}{Logical; if \code{TRUE}, missing values are removed before computation.}
+\item{na.rm}{logical; if \code{TRUE}, missing values are removed before computation}
 
-\item{...}{Additional arguments passed to \code{\link{approx}}.}
+\item{...}{additional arguments passed to \code{\link{approx}}}
 }
 \value{
-A numeric value representing the computed area under the curve.
+a numeric value representing the computed area under the curve
 }
 \description{
 Calculates the area under a curve defined by points \code{(x, y)} using

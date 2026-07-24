@@ -4,7 +4,7 @@
 #' weights and grouped via formula interface.  Returns an object of class
 #' \code{"Lc"} (or \code{"LcList"} for grouped data) that can be visualized
 #' with \code{plot()}, \code{lines()}, and \code{points()} from the
-#' \pkg{aurora} package.
+#' \pkg{pharos} package.
 #'
 #' @details
 #' The Lorenz curve is defined as
@@ -21,62 +21,62 @@
 #'
 #' For formula input of the form \code{y ~ group}, the data are split by
 #' group and a separate Lorenz curve is computed for each level.  A single
-#' \code{"lc"} object is returned when there is only one group; otherwise
+#' \code{"Lc"} object is returned when there is only one group; otherwise
 #' an \code{"LcList"}.
 #'
-#' Bootstrap confidence intervals in \code{predict.lc()} are based on
+#' Bootstrap confidence intervals in \code{predict.Lc()} are based on
 #' resampling with replacement from the (weighted) empirical distribution,
 #' followed by pointwise quantiles across bootstrap replicates.  The number
 #' of replications is controlled by \code{R} passed via \code{...} and
 #' extracted by \code{.extractBootArgs()} (default \code{R = 999}).
 #'
-#' @param x Numeric vector of non-negative values.
-#' @param n Numeric vector of non-negative weights of the same length as
-#'   \code{x}.  Defaults to equal weights (\code{rep(1, length(x))}).
-#' @param na.rm Logical.  If \code{TRUE}, observations with \code{NA} in
+#' @param x numeric vector of non-negative values
+#' @param n numeric vector of non-negative weights of the same length as
+#'   \code{x}. Defaults to equal weights (\code{rep(1, length(x))}).
+#' @param na.rm logical. If \code{TRUE}, observations with \code{NA} in
 #'   \code{x} or \code{n} are removed before computation.  Default is
 #'   \code{FALSE}.
-#' @param formula A formula of the form \code{y ~ group} specifying the
-#'   response and grouping variable.
-#' @param data Optional data frame in which to evaluate \code{formula}.
-#' @param subset Optional expression indicating which rows of \code{data}
-#'   to use.
-#' @param na.action Function for handling missing values in the model frame.
+#' @param formula a formula of the form \code{y ~ group} specifying the
+#'   response and grouping variable
+#' @param data optional data frame in which to evaluate \code{formula}
+#' @param subset optional expression indicating which rows of \code{data}
+#'   to use
+#' @param na.action function for handling missing values in the model frame.
 #'   Default is \code{\link[stats]{na.pass}}.
-#' @param object Object of class \code{"lc"} as returned by \code{lc()}.
-#' @param newdata Optional numeric vector of values in \eqn{[0, 1]} at
+#' @param object object of class \code{"Lc"} as returned by \code{lc()}
+#' @param newdata optional numeric vector of values in \eqn{[0, 1]} at
 #'   which to evaluate the Lorenz curve via linear interpolation.  If
 #'   omitted, the original grid points are returned.
-#' @param conf.level Numeric scalar in \eqn{(0, 1)}.  If supplied,
+#' @param conf.level numeric scalar in \eqn{(0, 1)}. If supplied,
 #'   bootstrap confidence intervals at level \code{conf.level} are added
 #'   as columns \code{lci} and \code{uci}.  Set to \code{NA} (default)
 #'   to suppress intervals.
-#' @param general Logical.  If \code{TRUE}, the generalized Lorenz curve
+#' @param general logical. If \code{TRUE}, the generalized Lorenz curve
 #'   is used.  Default is \code{FALSE}.
-#' @param ... Further arguments passed to \code{lc.default()} (from
-#'   \code{lc.formula()}).  In \code{predict.lc()}, the argument \code{R}
+#' @param ... further arguments passed to \code{lc.default()} from
+#'   \code{lc.formula()}. In \code{predict.Lc()}, the argument \code{R}
 #'   (positive integer, default \code{999}) controls the number of bootstrap
 #'   replications when \code{conf.level} is supplied; it is extracted via
 #'   \code{.extractBootArgs()} and ignored otherwise.
 #'
 #' @return
 #' \describe{
-#'   \item{\code{lc.default()}}{An object of class \code{"lc"}, a list
+#'   \item{\code{lc.default()}}{an object of class \code{"Lc"}, a list
 #'     with components:
 #'     \describe{
-#'       \item{\code{p}}{Numeric vector of cumulative population shares
-#'         (starting at 0).}
-#'       \item{\code{L}}{Numeric vector of Lorenz curve values at \code{p}.}
-#'       \item{\code{L.general}}{Generalized Lorenz curve values.}
-#'       \item{\code{Gini}}{Gini coefficient (scalar).}
-#'       \item{\code{x}}{Original (unsorted) data vector.}
-#'       \item{\code{n}}{Original weight vector.}
+#'       \item{\code{p}}{numeric vector of cumulative population shares
+#'         starting at 0}
+#'       \item{\code{L}}{numeric vector of Lorenz curve values at \code{p}}
+#'       \item{\code{L.general}}{generalized Lorenz curve values}
+#'       \item{\code{Gini}}{estimated Gini coefficient}
+#'       \item{\code{x}}{original unsorted data vector}
+#'       \item{\code{n}}{original weight vector}
 #'     }
 #'   }
-#'   \item{\code{lc.formula()}}{A single \code{"lc"} object if the formula
+#'   \item{\code{lc.formula()}}{a single \code{"Lc"} object if the formula
 #'     specifies one group, otherwise an object of class \code{"LcList"}
-#'     (a named list of \code{"lc"} objects, one per group level).}
-#'   \item{\code{predict.lc()}}{A data frame with columns \code{p} and
+#'     (a named list of \code{"Lc"} objects, one per group level)}
+#'   \item{\code{predict.Lc()}}{a data frame with columns \code{p} and
 #'     \code{L} (interpolated curve values at \code{newdata}).  If
 #'     \code{conf.level} is supplied, columns \code{lci} and \code{uci}
 #'     are appended.}
@@ -107,7 +107,7 @@
 #'         conf.level = 0.95, R = 200)
 #'         
 #'         
-#' # plotting routines from package aurora         
+#' # plotting routines from package pharos         
 #' set.seed(1)
 #' x <- rlnorm(100)
 #' lc_obj <- lc(x)
@@ -137,9 +137,7 @@
 #' \emph{Publications of the American Statistical Association}, \bold{9},
 #' 209--219.
 #'
-#' @seealso
-#'   \code{\link{gini}} for the Gini coefficient,
-#'   \code{aurora{plot.Lc}} for visualization.
+#' @seealso  [pharos::plot.Lc] for visualization.
 #'
 #' @name lc
 #' @family inequality
@@ -335,4 +333,3 @@ predict.Lc <- function(object, newdata, conf.level = NA, general = FALSE, ...) {
   
   res
 }
-

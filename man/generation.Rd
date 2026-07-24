@@ -2,7 +2,7 @@
 % Please edit documentation in R/generation.R
 \name{generation}
 \alias{generation}
-\title{Generation by Birthyear}
+\title{Generation by Birth Year}
 \usage{
 generation(year)
 }
@@ -10,8 +10,9 @@ generation(year)
 \item{year}{year of birth}
 }
 \value{
-Ordered factor with levels \code{c("Babyboomer", "Gen X",
-"Millennials", "Gen Z", "Gen Alpha")}\cr Values which fall outside the range
+ordered factor with levels \code{c("Babyboomer", "Gen X",
+"Millennial", "Gen Z", "Gen Alpha")}\cr
+Values which fall outside the range
 of breaks are coded as \code{NA}, as are \code{NaN} and \code{NA} values.
 }
 \description{
@@ -37,12 +38,10 @@ Other date.time:
 \code{\link[=addMonths]{addMonths()}},
 \code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link[=isDate]{isDate()}},
-\code{\link{time_conversions}},
+\code{\link{date-time-predicates}},
+\code{\link{date_functions}},
+\code{\link{time-conversions}},
 \code{\link[=zodiac]{zodiac()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{categorization}
 \concept{date-time}

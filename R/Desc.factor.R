@@ -1,10 +1,8 @@
 
-#' Desc.factor 
+#' Describe a Factor
 #'
-#' Displays a set of statistical measures describing a factor.
-#' Visualizes the distribution of a numeric \code{Desc} object.
-#' The plot consists of a pair of horizontally organized barplots
-#' displaying the absolute and relative frequencies.
+#' Compute descriptive statistics for a factor or character vector. The plot
+#' method displays absolute and relative frequencies in horizontal bar plots.
 #' 
 #' @details
 #' This function produces a rich description of a \strong{factor}, containing
@@ -12,19 +10,16 @@
 #' levels. The order of the frequency table can be chosen between
 #' descending/ascending frequency, labels or levels. For ordered factors the
 #' order default is \code{"level"}. Character vectors are treated as unordered
-#' factors Desc.char converts x to a factor an processes x as factor.\cr
-#' Desc.ordered does nothing more than changing the standard order for the
-#' frequencies to it's intrinsic order, which means order \code{"level"}
-#' instead of \code{"desc"} in the factor case.
+#' factors. \code{desc.character()} converts \code{x} to a factor and then uses
+#' the factor method. Ordered factors use their intrinsic level order rather
+#' than descending frequency order.
 #' 
 #' @name desc.factor
-#' @aliases desc.factor Desc.ordered Desc.character
+#' @aliases desc.character
 #' 
 #' @inheritParams desc 
 #' 
-#' @param x the object to be described. This can be a data.frame, a list, a
-#' table or a vector of the classes: numeric, integer, factor, ordered factor,
-#' logical.
+#' @param x factor, ordered factor, or character vector to describe
 #' 
 #' @param maxrows numeric; defines the maximum number of rows in a frequency
 #' table to be reported. For factors with many levels it is often not
@@ -47,9 +42,8 @@
 #' Setting \code{maxrows} to \code{Inf} will unconditionally report all values
 #' and also produce a plot with type "h" instead of a histogram.
 #' 
-#' @param digits integer. With how many digits should the relative frequencies
-#' be formatted? Default can be set by
-#' \code{\link{setDescToolsXOption}(digits=x)}.
+#' @param digits number of digits used to format relative frequencies; the
+#' default can be set with \code{setDescToolsXOption(digits = x)}
 #' 
 #' @param ord character out of \code{"name"} (alphabetical order),
 #' \code{"level"}, \code{"asc"} (by frequencies ascending), \code{"desc"} (by
@@ -58,7 +52,10 @@
 #' character vectors) are by default ordered by their descending frequencies,
 #' ordered factors by their natural order.
 #' 
-#' @seealso \code{\link[aurora]{plotCatDist}} for graphical display
+#' @return an object of class \code{c("Desc.factor", "Desc")} containing
+#' counts, frequency information, and metadata
+#'
+#' @seealso \code{\link[pharos]{plotCatDist}} for graphical display
 #' 
 
 
@@ -193,7 +190,6 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 #' @rdname desc
 #' @export
 plot.Desc.factor <- function(x, ...){
-  aurora::plotCatDist(setNamesX(x$freq[,2], x$freq[,1]), 
+  pharos::plotCatDist(setNamesX(x$freq[,2], x$freq[,1]), 
                       na.rm=TRUE, maxcats = x$maxrows, ...)
 }
-

@@ -17,7 +17,7 @@ varX(x, ...)
 \method{varX}{Freq}(x, breaks, ...)
 }
 \arguments{
-\item{x}{a numeric vector, matrix or data frame.}
+\item{x}{a numeric vector, matrix, or data frame}
 
 \item{estimator}{determines the estimator type; if \code{"unbiased"} (the
 default) then the usual unbiased estimate (using \eqn{n - 1} as denominator)
@@ -26,18 +26,22 @@ Gaussian distribution (denominator \eqn{n}). Internally \code{\link{cov.wt}}
 is used for both methods.}
 
 \item{weights}{non-negative numeric vector of weights the same length as
-\code{x} nterpreted as frequency (replication) weights. Observations with
+\code{x}, interpreted as frequency (replication) weights. Observations with
 larger weights contribute more strongly to the empirical distribution.}
 
 \item{na.rm}{logical. Should missing values be removed?}
 
-\item{\dots}{further arguments passed to or from other methods.}
+\item{\dots}{further arguments passed to or from other methods}
 
 \item{breaks}{breaks for calculating the variance for classified data as
-composed by \code{\link{freq}}.}
+composed by \code{\link{freq}}}
 }
 \value{
-single numeric value
+\describe{
+\item{\code{varX()}}{a numeric scalar for vector input or a covariance
+matrix for an unweighted matrix or data frame}
+\item{\code{sdX()}}{a numeric scalar containing the standard deviation}
+}
 }
 \description{
 \code{varX()} computes the variance of \code{x}, allowing the definition of
@@ -82,6 +86,7 @@ all.equal(varX(x), varX(z, weights=w))
 varX(freq(as.table(c(6,16,24,25,17))),
           breaks=c(0, 10, 20, 30, 40, 50))
      
+
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
@@ -96,6 +101,8 @@ Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}}
 }
 \concept{dispersion}

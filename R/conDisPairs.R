@@ -15,17 +15,17 @@
 #'
 #' Missing values in vector mode are removed pairwise.
 #'
-#' @param x A numeric/ordinal vector or a contingency table.
-#' @param y Optional second numeric/ordinal vector. If provided, vector mode is used.
+#' @param x a numeric or ordinal vector, or a contingency table
+#' @param y optional second numeric or ordinal vector. If provided, vector mode
+#'   is used.
 #'
-#' @return
-#' A named numeric vector with elements:
-#' \itemize{
-#'   \item \code{C} Concordant pairs
-#'   \item \code{D} Discordant pairs
-#'   \item \code{Ties_X} Ties in \code{x}
-#'   \item \code{Ties_Y} Ties in \code{y}
-#'   \item \code{Ties_XY} Joint ties
+#' @return a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{C}}{number of concordant pairs}
+#'   \item{\code{D}}{number of discordant pairs}
+#'   \item{\code{Ties_X}}{number of ties in \code{x}}
+#'   \item{\code{Ties_Y}}{number of ties in \code{y}}
+#'   \item{\code{Ties_XY}}{number of joint ties}
 #' }
 #'
 #' @examples

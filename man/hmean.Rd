@@ -15,7 +15,7 @@ hmean(
 }
 \arguments{
 \item{x}{a positive numeric vector. An object which is not a vector is
-coerced (if possible) by as.vector.}
+coerced, if possible, by \code{as.vector()}.}
 
 \item{conf.level}{confidence level of the interval. Default is \code{NA}.}
 
@@ -40,7 +40,13 @@ be set to their defaults, being \code{"basic"} for \code{type}, option
 \code{parallel} and \code{999} for \code{R}.}
 }
 \value{
-a numeric value.
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the harmonic mean}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Calculates the harmonic mean and its confidence interval of a vector x.
@@ -82,12 +88,10 @@ Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=huberM]{huberM()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
+\code{\link[=meanX]{meanX()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}},
 \code{\link[=tukeyBiweight]{tukeyBiweight()}}
 }
 \concept{location}
 \concept{nonlinear-mean}
-\keyword{arith}

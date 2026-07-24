@@ -4,11 +4,11 @@
 #' Computes the mean squared error (MSE) between predicted
 #' and reference values.
 #'
-#' @param x An object. Methods are available for numeric vectors and
+#' @param x an object. Methods are available for numeric vectors and
 #'   model objects (e.g. \code{lm}).
-#' @param ... Additional arguments passed to methods.
+#' @param ... additional arguments passed to methods
 #'
-#' @return A numeric value representing the MSE.
+#' @return a numeric scalar containing the MSE
 #'
 #' @details
 #' The mean squared error is defined as:
@@ -28,8 +28,7 @@
 #'
 #' @seealso \code{\link{mean}}
 #'
-
-
+#'
 #' @family model.metrics  
 #' @concept model-evaluation  
 #' @concept prediction-error
@@ -53,8 +52,8 @@ mse.lm <- function(x, ...) {
 
 
 #' @rdname mse
-#' @param ref Numeric vector of reference (true) values.
-#' @param na.rm Logical; should missing values be removed?
+#' @param ref numeric vector of reference (true) values
+#' @param na.rm logical; whether to remove missing values
 #' @export
 mse.default <- function(x, ref, na.rm = FALSE, ...) {
   

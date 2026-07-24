@@ -13,37 +13,41 @@ pabak(
 )
 }
 \arguments{
-\item{x}{A square confusion matrix (or data frame), or a
-categorical vector when \code{y} is provided.}
+\item{x}{a square confusion matrix (or data frame), or a categorical vector
+when \code{y} is provided.}
 
-\item{y}{\code{NULL} (default) or a categorical vector of the same
-length as \code{x}.  When supplied, \code{table(x, y, \dots)} is
-computed internally.}
+\item{y}{\code{NULL} (default) or a categorical vector of the same length
+as \code{x}. When supplied, \code{table(x, y, \dots)} is computed
+internally.}
 
-\item{conf.level}{Confidence level of the interval.  A single numeric
-value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
-point estimate.}
+\item{conf.level}{confidence level of the interval. A single numeric value
+in \eqn{(0, 1)}, or \code{NA} (default) to return only the point
+estimate.}
 
-\item{sides}{A character string specifying the side of the interval:
-\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}.  Ignored when
-\code{conf.level = NA}.}
+\item{sides}{a character string specifying a two-sided or one-sided
+confidence interval. Ignored when \code{conf.level = NA}.}
 
-\item{...}{Further arguments passed to \code{\link{table}} (vector
-interface only), e.g. \code{useNA}.}
+\item{...}{further arguments passed to \code{\link{table}} for the vector
+interface, for example \code{useNA}.}
 }
 \value{
-If \code{conf.level = NA}, only the PABAK estimate is returned as a single
-numeric value.
+a named numeric vector.
 
-Otherwise, a named numeric vector is returned containing:
+If \code{conf.level = NA}, a single element \code{est}; otherwise the
+elements:
+
 \describe{
-\item{\code{est}}{PABAK estimate.}
-\item{\code{lci}}{Lower confidence bound.}
-\item{\code{uci}}{Upper confidence bound.}
-\item{\code{pi}}{Prevalence index (\code{NA} for \eqn{k > 2}).}
-\item{\code{bi}}{Bias index (\code{NA} for \eqn{k > 2}).}
+\item{\code{est}}{point estimate of PABAK.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
+
+In both cases the diagnostics are attached as attributes:
+
+\describe{
+\item{nObs}{number of observations in the table.}
+\item{prevalenceIndex}{prevalence index, or \code{NA} for \eqn{k > 2}.}
+\item{biasIndex}{bias index, or \code{NA} for \eqn{k > 2}.}
 }
 }
 \description{
@@ -55,8 +59,8 @@ interval and the auxiliary prevalence and bias indices.
 Cohen's kappa can be paradoxically low when the prevalence of one category
 differs markedly from 0.5 (prevalence effect) or when the two raters
 systematically disagree on the marginal frequency of a category (bias
-effect).  PABAK corrects for both distortions by replacing the chance
-agreement term with the fixed value \eqn{p_e = 0.5}.  The statistic
+effect). PABAK corrects for both distortions by replacing the chance
+agreement term with the fixed value \eqn{p_e = 0.5}. The statistic
 simplifies to
 \deqn{\mathrm{PABAK} = 2 p_o - 1}
 where \eqn{p_o} is the observed proportion of agreement (diagonal sum of
@@ -67,29 +71,37 @@ the above identity:
 \deqn{\mathrm{SE} = 2 \sqrt{p_o (1 - p_o) / n}}
 
 Two diagnostic indices quantify the prevalence and bias effects that can
-cause Cohen's kappa to differ from PABAK.  They are defined only for
+cause Cohen's kappa to differ from PABAK. They are defined only for
 \eqn{2 \times 2} tables following Byrt et al. (1993); for larger tables
-\code{pi} and \code{bi} are \code{NA}:
+they are \code{NA}:
 \describe{
-\item{Prevalence index (PI)}{
-\eqn{|p_{11} - p_{22}|}.  A high PI indicates that one outcome
+\item{Prevalence index}{
+\eqn{|p_{11} - p_{22}|}. A high value indicates that one outcome
 dominates, which deflates Cohen's kappa relative to PABAK.}
-\item{Bias index (BI)}{
-\eqn{|p_{1\cdot} - p_{\cdot 1}|}.  A high BI signals that the two
+\item{Bias index}{
+\eqn{|p_{1\cdot} - p_{\cdot 1}|}. A high value signals that the two
 raters assign the positive label at systematically different rates.}
 }
-When both PI and BI are near zero, PABAK and Cohen's kappa will be nearly
-identical.
+When both indices are near zero, PABAK and Cohen's kappa will be nearly
+identical. Both are returned as attributes rather than as elements of the
+result, since they are separate diagnostics rather than further views of
+the estimate, and they do not depend on \code{conf.level}.
 
 The Wald confidence interval is truncated to the admissible range
 \eqn{[-1, 1]}.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
+\eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+\code{\link[stats]{t.test}}.
 
 Data can be passed either as a square confusion matrix (or data frame) in
 \code{x}, or as two vectors \code{x} and \code{y}, in which case
 \code{table(x, y, \dots)} is computed internally.
 
-Missing values are handled as \code{\link{table}} does — excluded by
-default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
+Missing values are handled as \code{\link{table}} does - excluded by
+default. Pass \code{useNA = "ifany"} via \code{...} to include them.
 }
 \examples{
 # 2x2 table: two raters classifying 100 patients as positive / negative
@@ -100,10 +112,14 @@ m2 <- matrix(c(45, 15, 5, 35), nrow = 2, byrow = TRUE,
 pabak(m2)
 pabak(m2, conf.level = 0.95)
 
-# Compare with cohenKappa: PI/BI illustrate where the gap comes from
+# the diagnostics are available either way
+attr(pabak(m2), "prevalenceIndex")
+attr(pabak(m2), "biasIndex")
+
+# Compare with cohenKappa: the indices show where the gap comes from
 cohenKappa(m2)
 
-# 4x4 table (from LehmacherTest example): pi and bi are NA for k > 2
+# 4x4 table: the indices are NA for k > 2
 m4 <- matrix(c(400, 40, 20, 10,
                 50,300, 60, 20,
                 10, 40,120,  5,
@@ -119,24 +135,21 @@ pabak(x$rater1, x$rater2, conf.level = 0.95)
 }
 \references{
 Byrt, T., Bishop, J., & Carlin, J. B. (1993). Bias, prevalence and kappa.
-\emph{Journal of Clinical Epidemiology}, \emph{46}(5), 423--429.
+\emph{Journal of Clinical Epidemiology}, \emph{46}(5), 423-429.
 \doi{10.1016/0895-4356(93)90018-V}
 
 Hoehler, F. K. (2000). Bias and prevalence effects on kappa viewed in
 terms of sensitivity and specificity.
-\emph{Journal of Clinical Epidemiology}, \emph{53}(5), 499--503.
+\emph{Journal of Clinical Epidemiology}, \emph{53}(5), 499-503.
 \doi{10.1016/S0895-4356(99)00174-2}
 }
 \seealso{
-\code{\link{cohenKappa}}
-
 Other assoc.agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
@@ -144,6 +157,6 @@ Other assoc.agreement:
 \code{\link[=randolphKappa]{randolphKappa()}},
 \code{\link[=raterFrame]{raterFrame()}}
 }
-\concept{agreement}
 \concept{assoc.agreement}
 \concept{categorical-agreement}
+\concept{interrater-agreement}

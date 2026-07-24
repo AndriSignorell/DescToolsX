@@ -4,25 +4,25 @@
 \alias{Association}
 \title{Association Measures - Common Interface}
 \arguments{
-\item{x}{Either a contingency table, a two-column object
+\item{x}{either a contingency table, a two-column object
 (matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+(together with \code{y})}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
+\item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{Confidence level for confidence intervals.
+\item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{Alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{method}{Method used for inference. Available options depend
+\item{method}{method used for inference. Available options depend
 on the selected association measure.}
 
-\item{...}{Additional arguments passed to internal helper functions,
+\item{...}{additional arguments passed to internal helper functions,
 such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R}).}
+table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
 }
 \description{
 All association measures in this package share a common interface.
@@ -77,9 +77,4 @@ University Press
 Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
 John Wiley and Sons
 }
-\seealso{
-Other topic.associationMeasures:
-\code{\link[=cramerV]{cramerV()}}
-}
 \concept{topic.associationMeasures}
-\keyword{internal}

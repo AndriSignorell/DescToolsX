@@ -15,44 +15,54 @@ krippAlpha(
 )
 }
 \arguments{
-\item{x}{A data frame, matrix, or similar wide-format object containing
-ratings (columns = raters, rows = subjects/items).}
+\item{x}{a data frame, matrix, or similar wide-format object containing
+ratings (columns = raters, rows = subjects/items)}
 
-\item{method}{Character string specifying the measurement level.
+\item{method}{character string specifying the measurement level.
 One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"},
 or \code{"ratio"}.}
 
-\item{levels}{Optional vector specifying the set of possible categories, resp.
-scale values corresponding to the rating categories (required for \code{"interval"} and
+\item{levels}{optional vector specifying the possible categories or scale
+values (required for \code{"interval"} and
 \code{"ratio"} methods).
 If \code{NULL}, levels are inferred from the data.}
 
-\item{raters}{Optional vector specifying which columns of \code{x}
+\item{raters}{optional vector specifying which columns of \code{x}
 are the raters. If \code{NULL}, all columns are assumed to be raters.}
 
-\item{conf.level}{Confidence level for bootstrap confidence intervals
+\item{conf.level}{confidence level for bootstrap confidence intervals
 of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.}
 
-\item{out}{One out of \code{c("def", "ext")} for extended results, \code{"def"} is default.}
+\item{out}{output format, either \code{"def"} (default) or \code{"ext"} for
+extended results}
 
-\item{...}{further arguments are passed to the \code{\link[boot]{boot}} function.
-Supported arguments are \code{type} (\code{"norm"}, \code{"basic"},
+\item{...}{further arguments passed to \code{\link[boot]{boot}}. Supported
+arguments are \code{type} (\code{"norm"}, \code{"basic"},
 \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
-of bootstrap replicates \code{R}. If not defined those will be set to their
-defaults, being \code{"basic"} for \code{type}, option
-\code{"boot.parallel"} (and if that is not set, \code{"no"}) for
-\code{parallel} and \code{999} for \code{R}.}
+of bootstrap replicates \code{R}. Defaults are \code{"basic"} for
+\code{type}, option \code{"boot.parallel"} (or \code{"no"} if unset) for
+\code{parallel}, and \code{999} for \code{R}.}
 }
 \value{
-A list with elements:
+if \code{out = "def"} and \code{conf.level = NA}, a numeric scalar.
+If \code{out = "def"} and a confidence interval is requested, a named
+numeric vector with elements:
 \describe{
-\item{alpha}{Krippendorff's alpha coefficient.}
-\item{Do}{Observed disagreement.}
-\item{De}{Expected disagreement under chance.}
-\item{O}{Coincidence matrix.}
-\item{nV}{Category totals in coincidence space.}
-\item{delta2}{Pairwise distance matrix according to the method.}
-\item{ci}{Bootstrap confidence interval, or \code{NA} if not computed.}
+\item{\code{est}}{point estimate of Krippendorff's alpha}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
+
+If \code{out = "ext"}, a list with elements:
+\describe{
+\item{\code{alpha}}{point estimate of Krippendorff's alpha}
+\item{\code{Do}}{observed disagreement}
+\item{\code{De}}{expected disagreement under chance}
+\item{\code{O}}{coincidence matrix}
+\item{\code{nV}}{category totals in coincidence space}
+\item{\code{delta2}}{pairwise distance matrix for the selected method}
+\item{\code{ci}}{named numeric vector with \code{est}, \code{lci}, and
+\code{uci}, or \code{NA} if no interval is requested}
 }
 }
 \description{
@@ -88,6 +98,7 @@ dat2 <- data.frame(
 )
 krippAlpha(dat2, method = "interval", levels = 1:7)
 
+
 }
 \references{
 Krippendorff, K. (2018). \emph{Content Analysis: An Introduction to Its Methodology}.
@@ -102,7 +113,6 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
 \code{\link[=pabak]{pabak()}},

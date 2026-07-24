@@ -11,15 +11,17 @@ raterFrame(formula, data, subset, na.action, dropSubj = FALSE)
 
 \item{data}{the data}
 
-\item{subset}{potential subset}
+\item{subset}{potential subset, evaluated in the long-format data}
 
-\item{na.action}{what should happen with missings}
+\item{na.action}{what should happen with missings, applied per subject
+(i.e. to the rows of the wide result)}
 
-\item{dropSubj}{logical, should the subject column be included (default
+\item{dropSubj}{logical; whether to drop the subject column (default
 \code{FALSE})}
 }
 \value{
-a data.frame containing structured data
+a \code{data.frame} of class \code{"raterFrame"} with subjects in rows and
+raters in columns
 }
 \description{
 Creates a \code{data.frame} for a formula \code{rating ~ subjects | raters}
@@ -36,14 +38,19 @@ operations), but of assigning the values to the correct subjects, which
 requires a sequential join.\cr The present function supports this process by
 converting long-format data into a wide format that can be used by
 subsequent inter-rater agreement functions. Missing values are marked as
-\code{NAs}.
+\code{NA}s.
+
+\code{na.action} is applied to the \emph{wide} frame, i.e. per subject:
+\code{na.omit} removes subjects with at least one missing rating. The
+\code{"na.action"} attribute of the result carries a \code{"values"}
+attribute with the identifiers of the omitted subjects.
 }
 \examples{
 
 d.long <- data.frame(
      expand.grid(subj=as.character(1:5), rater=LETTERS[1:3]),
      rating = c(1, 4, 5, 7, 2, 2, 5, 6, 7, 1, 1, 4, 6, 6, 2))
-           
+
 # default rater frame
 raterFrame(rating ~ subj | rater, data=d.long)
 
@@ -51,15 +58,15 @@ raterFrame(rating ~ subj | rater, data=d.long)
 raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ])
 
 # omit cases containing NAs
-raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ], 
+raterFrame(rating ~ subj | rater, data=d.long[-c(3, 6), ],
            na.action=na.omit)
-           
+
 # omit the subject column
 raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
 
 }
 \seealso{
-\code{\link{krippAlpha}}
+\link[bedrock:resolveFormula]{bedrock::resolveFormula}
 
 Other assoc.agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},
@@ -67,16 +74,12 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
 \code{\link[=pabak]{pabak()}},
 \code{\link[=percAgreement]{percAgreement()}},
 \code{\link[=randolphKappa]{randolphKappa()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{agreement}
 \concept{assoc.agreement}

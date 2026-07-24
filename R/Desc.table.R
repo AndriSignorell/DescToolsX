@@ -6,7 +6,7 @@
 #' is also dispatched for \code{matrix} and cross-classified factor pairs via
 #' \code{Desc.qq} and \code{Desc.matrix}.
 #'
-#' @param x a \code{table} or \code{matrix} object. For the formula interface
+#' @param x a \code{table} or \code{matrix} object. For the formula interface,
 #'   use \code{desc(y ~ x, data)} which dispatches to this function
 #'   automatically.
 #' @param prop character string controlling which proportions are shown in the
@@ -20,17 +20,12 @@
 #'   See Details for what each level produces.
 #' @param conf.level numeric, confidence level for all confidence intervals.
 #'   Default is \code{0.95}.
-#' @param \dots further arguments passed to or from other methods.
-#' 
-#' @param verbose controls printed output.
-#' @param which selects plots.
+#' @param \dots further arguments passed to or from other methods
+#' @param which plots to produce
 #' @param main main title for the plot
-#' @param plotit should a plot be automatically be produced?
-#' @param digits number of digits for numerical output.
-#' @param print_header shoul header be printed?
-#' @param prop How proportions are computed in contingency tables.
-#'   One of \code{"rows"} (default), \code{"cols"}, or \code{"all"}.
-#'   Passed to \code{percTable()}.
+#' @param plotit whether a plot is produced automatically
+#' @param digits number of digits for numerical output
+#' @param print_header whether the header is printed
 #'   
 #' @name desc.table
 #' @details
@@ -94,16 +89,17 @@
 #' (tau-b and above) are activated automatically when both variables are
 #' \code{ordered} factors.
 #'
-#' @return An object of class \code{c("Desc.table", "Desc")}, invisibly.
+#' @return an object of class \code{c("Desc.table", "Desc")}.
 #'   The object is a list containing all computed statistics and is intended
 #'   to be used via its \code{print} and \code{plot} methods.
 #'
 #' @seealso
-#'   \code{\link{desc}} for the generic function and formula interface,
-#'   \code{\link{desc.numeric}} for univariate numeric descriptions,
-#'   \code{\link{desc.factor}} for univariate factor descriptions,
-#'   \code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
-#'   \code{\link{cramerV}}, \code{\link{oddsRatio}}
+#'   [desc] for the generic function and formula interface,
+#'   [desc.numeric] for univariate numeric descriptions,
+#'   [desc.factor] for univariate factor descriptions,
+#'   [pharos::plot.Desc.table] for different plotting options,
+#'   [stats::chisq.test], [stats::fisher.test],
+#'   [cramerV], [oddsRatio]
 #'
 #' @examples
 #' # from an existing table
@@ -201,7 +197,7 @@ desc.table <- function(x, conf.level = 0.95, prop = NULL,
       cohenH(x, conf.level = conf.level)
     },
     assocs = if (ttype %in% c("t2x2", "trxc")) {
-      assocsTab(x, conf.level = conf.level, verbose=verbose) 
+      .assocsTab(x, conf.level = conf.level, verbose=verbose) 
     } else {
       NULL
     },
@@ -486,4 +482,3 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
     class = "htest"
   )
 }
-

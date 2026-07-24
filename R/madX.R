@@ -20,20 +20,18 @@
 #' \code{x} before computation takes place.  If this is not done then an
 #' \code{NA} value in \code{x} will cause \code{madX} to return \code{NA}.
 #' 
-#' @param x a numeric vector.
+#' @param x a numeric vector
 #' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}.
-#' @param center the centre given either as numeric value or as a function to
-#' be applied to \code{x} (defaults to the \code{medianX(x)}). Note
-#' in cases when weights are defined to provide a function that also support
-#' weights. If this is not possible fall back to a numeric value.
+#' giving the weights to use for elements of \code{x}
+#' @param center a numeric center or a function applied to \code{x}. When
+#' weights are supplied, the function must support a \code{weights} argument.
+#' Defaults to \code{medianX}.
 #' @param constant scale factor (default is \code{1.4826})
-#' @param medianType if \code{TRUE}, compute the \sQuote{lo-median}, i.e., for
-#' even sample size, do not average the two middle values, but take the smaller
-#' one, if \code{TRUE}, compute the \sQuote{hi-median}, i.e., take the larger
-#' of the two middle values for even sample size.
+#' @param medianType character string selecting the \code{"standard"},
+#' \code{"low"}, or \code{"high"} median for even sample sizes
 #' @param na.rm if \code{TRUE} then \code{NA} values are stripped from \code{x}
-#' before computation takes place.
+#' before computation takes place
+#' @return a numeric scalar containing the scaled median absolute deviation
 #' @seealso \code{\link{IQR}} which is simpler but less robust,
 #' \code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
 #' \code{\link{median}}, \code{\link{var}} the base R equivalents
@@ -58,9 +56,7 @@
 #' (m2 <- madX(x))
 #' stopifnot(identical(m1, m2))
 #' 
-
-
-
+#'
 #' @family dispersion  
 #' @concept dispersion  
 #' @concept robust-statistics

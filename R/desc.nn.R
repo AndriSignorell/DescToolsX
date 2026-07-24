@@ -13,7 +13,8 @@
 #' quantitative variables. The function is dispatched automatically by
 #' \code{desc(y ~ x, data)} when both \code{y} and \code{x} are numeric.
 #'
-#' @param x an object of class \code{"Desc.nn"} as returned by \code{desc()}.
+#' @param x numeric predictor for \code{.descNN()}, or an object of class
+#' \code{"Desc.nn"} for the print and plot methods
 #' @param verbose integer controlling the amount of output (1, 2, or 3).
 #'   \code{NULL} (default) falls back to
 #'   \code{x$meta$verbose \%||\% getOption("DescTools.verbose", 2)}.
@@ -23,10 +24,10 @@
 #'   \code{getOption("DescTools.abs.sty")}.
 #' @param per.sty format style for proportions. \code{NULL} falls back to
 #'   \code{getOption("DescTools.per.sty")}.
-#' @param \dots further arguments passed to the underlying plot functions.
+#' @param \dots further arguments passed to the underlying plot functions
 #' 
-#' @param y A categorical variable (factor or coercible to factor).
-#' @param conf.level Confidence level for interval estimates (default 0.95).
+#' @param y numeric response variable
+#' @param conf.level confidence level for interval estimates (default 0.95)
 #'
 #' @name desc.nn
 #' @aliases .descNN
@@ -76,7 +77,16 @@
 #'   \item \code{verbose = 3}: \code{which = 1:4}
 #' }
 #'
-#' @return Both functions return \code{x} invisibly.
+#' @return \code{.descNN()} returns an object of class
+#' \code{c("Desc.nn", "Desc")}. Its \code{lm$intercept} and \code{lm$slope}
+#' components contain:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the coefficient}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{\code{p}}{p-value}
+#' }
+#' The print and plot methods return \code{x} invisibly.
 #'
 #' @references
 #'   Cohen, J. (1988). \emph{Statistical Power Analysis for the Behavioral
@@ -143,7 +153,6 @@ NULL
 
 # ── Calc ──────────────────────────────────────────────────────────────────────
 
-#' @keywords internal
 .descNN <- function(x, y, conf.level = 0.95) {
   
   # ── 1. Basic counts ──────────────────────────────────────────────────────────
@@ -324,7 +333,7 @@ print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
 
 
 #' @exportS3Method
-#' @param main a main title for the plot. Defaults to the title stored in
+#' @param main main title for the plot. Defaults to the title stored in
 #'   \code{x$meta$main}.
 #' @rdname desc.nn
 plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) {
@@ -354,5 +363,3 @@ plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) 
     )
   }
 }
-
-

@@ -14,38 +14,39 @@ corPolychor(
 )
 }
 \arguments{
-\item{x}{A contingency table or an ordinal vector.}
+\item{x}{a contingency table or an ordinal vector}
 
-\item{y}{Optional second ordinal vector. If supplied, a contingency table
+\item{y}{optional second ordinal vector. If supplied, a contingency table
 is constructed via \code{table(x, y)}.}
 
-\item{method}{Character string specifying the estimation method:
+\item{method}{character string specifying the estimation method:
 \describe{
-\item{\code{"two-step"}}{Two-step estimator (default, fast).}
-\item{\code{"ML"}}{Full maximum likelihood estimation.}
+\item{\code{"two-step"}}{two-step estimator (default, fast)}
+\item{\code{"ML"}}{full maximum likelihood estimation}
 }}
 
-\item{se}{Logical; if \code{TRUE}, standard errors are computed via the
-Hessian matrix (ML estimation only).}
+\item{se}{logical; if \code{TRUE}, standard errors are computed via the
+Hessian matrix (ML estimation only)}
 
-\item{control}{A list of control parameters passed to \code{\link[stats]{optim}}.}
+\item{control}{a list of control parameters passed to \code{\link[stats]{optim}}}
 
-\item{maxcor}{Numeric; maximum absolute correlation allowed (default
-\code{0.9999}) to avoid numerical issues near the boundary.}
+\item{maxcor}{numeric; maximum absolute correlation allowed (default
+\code{0.9999}) to avoid numerical issues near the boundary}
 }
 \value{
-If \code{se = FALSE}, a numeric value giving the estimated correlation.
+if \code{se = FALSE}, a numeric value giving the estimated correlation.
 
 If \code{se = TRUE}, a list with components:
 \describe{
-\item{\code{rho}}{Estimated polychoric correlation.}
-\item{\code{rowCuts}}{Estimated row thresholds.}
-\item{\code{colCuts}}{Estimated column thresholds.}
-\item{\code{var}}{Variance-covariance matrix of the estimates.}
-\item{\code{n}}{Total sample size.}
-\item{\code{chisq}}{Likelihood ratio test statistic.}
-\item{\code{df}}{Degrees of freedom.}
-\item{\code{method}}{Estimation method used.}
+\item{\code{type}}{type of correlation}
+\item{\code{rho}}{estimated polychoric correlation}
+\item{\code{rowCuts}}{estimated row thresholds}
+\item{\code{colCuts}}{estimated column thresholds}
+\item{\code{var}}{variance-covariance matrix of the estimates}
+\item{\code{n}}{total sample size}
+\item{\code{chisq}}{likelihood-ratio test statistic}
+\item{\code{df}}{degrees of freedom}
+\item{\code{method}}{estimation method used}
 }
 The returned object has class \code{"polychor"}.
 }
@@ -100,7 +101,6 @@ Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }

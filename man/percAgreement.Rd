@@ -15,24 +15,32 @@ percAgreement(
 )
 }
 \arguments{
-\item{x}{A confusion matrix or a matrix/data.frame of ratings
-(subjects x raters).}
+\item{x}{a confusion matrix or a matrix or data frame of ratings with
+subjects in rows and raters in columns}
 
-\item{y}{Optional second rating vector to construct a confusion matrix.}
+\item{y}{optional second rating vector used to construct a confusion matrix}
 
-\item{input}{Character string specifying the input format:
-\code{"auto"}, \code{"confusion"}, or \code{"ratings"}.}
+\item{input}{character string specifying the input format:
+\code{"auto"}, \code{"confusion"}, or \code{"ratings"}}
 
-\item{conf.level}{Confidence level for the interval.}
+\item{conf.level}{confidence level for the interval}
 
-\item{fpc}{Finite population correction (default = 0).}
+\item{fpc}{finite population correction (default \code{0})}
 
-\item{verbose}{Logical; if TRUE, return detailed output.}
+\item{verbose}{logical; whether to return detailed output}
 
-\item{...}{Reserved for future extensions.}
+\item{...}{reserved for future extensions}
 }
 \value{
-Either a numeric vector (estimate and CI) or a list.
+if \code{verbose = FALSE}, a named numeric vector with elements:
+\describe{
+\item{\code{est}}{proportion of agreement}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
+
+if \code{verbose = TRUE}, a list with the estimate, standard error,
+confidence interval, sample sizes, and method description.
 }
 \description{
 Computes the proportion of agreement (percent agreement) along with
@@ -46,7 +54,6 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},

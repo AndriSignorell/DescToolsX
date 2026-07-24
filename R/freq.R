@@ -28,7 +28,7 @@
 #' @name freq
 #' @aliases freq print.Freq
 #' 
-#' @param x the variable to be described, can be any atomic type.
+#' @param x variable to be described; may be any atomic type
 #' @param breaks either a numeric vector of two or more cut points or a single
 #' number (greater than or equal to 2) giving the number of intervals into
 #' which x is to be cut. Default taken from the function \code{hist()}.
@@ -43,7 +43,7 @@
 #' other choices are 'by frequency' (\code{"descending"} or \code{"ascending"})
 #' or 'by name of the levels' (\code{"name"}). The argument can be abbreviated.
 #' This is ignored if x is numeric and classed (\code{breaks} not \code{FALSE}).
-#' @param useNA one out of \code{"no"}, \code{"ifany"}, \code{"always"}.
+#' @param useNA one of \code{"no"}, \code{"ifany"}, or \code{"always"}.
 #' Defines whether to include extra \code{NA} levels in the table.  Defaults to
 #' \code{"no"} which is the \code{\link{table}()} default too.
 #' @param \dots further arguments are passed to the function
@@ -51,18 +51,16 @@
 #' group names. Use the argument \code{right} to define if the intervals should
 #' be closed on the right (and open on the left) or vice versa. \cr In
 #' \code{print.Freq} the dots are not used.
-#' @return an object of type \code{"Freq"}, which is basically a data.frame
-#' with 5 columns (earning a specific print routine), containing the following
-#' components: \item{level}{ factor. The levels of the grouping variable.}
-#' \item{freq}{ integer. The absolute frequencies. } \item{perc}{ numeric. The
-#' relative frequencies (percent).} \item{cumfreq}{integer. The cumulative sum
-#' of the absolute frequencies.} \item{cumperc}{numeric. The cumulative sum of
-#' the relative frequencies.}
-#' @author Andri Signorell <andri@@signorell.net>
-#' @seealso \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
-#' \code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
-#' \code{\link{freq2D}}
-#' @keywords univar
+#' @return an object of class \code{"Freq"} inheriting from \code{data.frame},
+#' with columns:
+#' \describe{
+#'   \item{\code{level}}{levels or intervals of the tabulated variable}
+#'   \item{\code{freq}}{absolute frequencies}
+#'   \item{\code{perc}}{relative frequencies}
+#'   \item{\code{cumfreq}}{cumulative absolute frequencies}
+#'   \item{\code{cumperc}}{cumulative relative frequencies}
+#' }
+#' 
 #' @examples
 #' 
 #' data(Pizza)
@@ -90,15 +88,14 @@
 #' # ... which also allows ordering by frequency
 #' freq(Pizza$count, breaks = FALSE, ord = "desc")
 #' 
-
-
-
-#' @rdname freq
-
+#' @seealso \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
+#' \code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
+#' \code{\link{freq2D}}
+#' 
 #' @family frequency  
 #' @concept frequency-table
 #'
-#'
+#' @rdname freq
 #' @export
 freq <- function(x, breaks = hist(x, plot = FALSE)$breaks, 
                  include.lowest = TRUE,
@@ -151,7 +148,7 @@ freq <- function(x, breaks = hist(x, plot = FALSE)$breaks,
 
 #' @rdname freq
 #' @method print Freq
-#' @param digits digits for displaying relative frequencies to be changed if required
+#' @param digits number of digits used to display relative frequencies
 #' @export
 print.Freq <- function(x, digits = NULL, ...) {
   

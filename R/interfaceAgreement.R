@@ -63,21 +63,22 @@
 #'   \verb{  }\link{ccc}           \tab Lin's Concordance Correlation \cr
 #' }
 #'
-#' @param x A matrix or data.frame of ratings (subjects x raters),
-#'   or a single vector if \code{y} is provided.
-#' @param y Optional second vector (only for two raters).
-#' @param conf.level Confidence level for confidence intervals.
+#' @param x matrix or data frame of ratings (subjects x raters),
+#'   or a single vector if \code{y} is provided
+#' @param y optional second vector for two raters
+#' @param conf.level confidence level for confidence intervals.
 #'   If \code{NA}, no confidence interval is computed.
-#' @param sides Alternative hypothesis:
-#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}.
-#' @param method Method used for inference (depends on measure).
-#' @param weights Optional weighting scheme for ordinal data
-#'   (e.g. "linear", "quadratic").
-#' @param model ICC model ("oneway", "twoway").
-#' @param type ICC type ("consistency", "agreement").
-#' @param unit ICC unit ("single", "average").
-#' @param ... Additional arguments passed to helper functions
-#'   (e.g. bootstrap routines).
+#' @param sides alternative hypothesis:
+#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}
+#' @param method method used for inference; available methods depend on the
+#' measure
+#' @param weights optional weighting scheme for ordinal data
+#'   (e.g. "linear", "quadratic")
+#' @param model model for the ICC, \code{"oneway"} or \code{"twoway"}
+#' @param type type of ICC, \code{"consistency"} or \code{"agreement"}
+#' @param unit unit of the ICC, \code{"single"} or \code{"average"}
+#' @param ... additional arguments passed to helper functions
+#'   (e.g. bootstrap routines)
 #'
 #' @references
 #' Cohen, J. (1960) A coefficient of agreement for nominal scales.
@@ -92,5 +93,4 @@
 #'
 #' Lin, L. I.-K. (1989) A concordance correlation coefficient.
 #'
-#' @keywords internal
 NULL

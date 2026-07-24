@@ -9,58 +9,42 @@
 #' Padding the margins with zeros can be helpful for subsequent analysis, such
 #' as smoothing.
 #' 
-#' The \code{print} logical flag only has an effect when \code{layout=1}.
-#' 
 #' @name freq2D
 #' @aliases freq2D freq2D.default freq2D.formula
+#' 
 #' @param x a vector of x values, or a data frame whose first two columns
-#' contain the x and y values.
-#' @param y a vector of y values.
-#' @param formula a \code{\link{formula}}, such as \code{y~x}.
+#' contain the x and y values
+#' @param y a vector of y values
+#' @param formula a \code{\link{formula}}, such as \code{y ~ x}
 #' @param data a \code{data.frame}, \code{matrix}, or \code{list} from which
-#' the variables in \code{formula} should be taken.
+#' the variables in \code{formula} should be taken
 #' @param subset an optional vector specifying a subset of observations to be
-#' used.
+#' used
 #' @param na.action a function which indicates what should happen when the data
-#' contain NAs. Defaults to \code{getOption("na.action")}.
+#' contain missing values. Defaults to \code{getOption("na.action")}.
 #' @param n the desired number of bins for the output, a scalar or a vector of
-#' length 2.
+#' length 2
 #' @param pad number of rows and columns to add to each margin, containing only
-#' zeros.
-#' @param dnn the names to be given to the dimensions in the result.
-#' @param \dots named arguments to be passed to the default method.
+#' zeros
+#' @param dnn names for the dimensions in the result
+#' @param \dots named arguments passed to the default method
 #' 
-#' @return The \code{layout} argument specifies one of the following formats
-#' for the binned frequency output:
+#' @return a frequency matrix whose rows represent the y bins in descending
+#' order and whose columns represent the x bins
 #' 
-#' \enumerate{ \item\code{matrix} that is easy to read, aligned like a
-#' scatterplot.  \item\code{list} with three elements (x, y, matrix) that can
-#' be passed to various plotting functions.  \item\code{data.frame} with three
-#' columns (x, y, frequency) that can be analyzed further.  }
-#' @author Arni Magnusson <thisisarni@@gmail.com>>
+#' @note Based on code by Arni Magnusson, adapted to conform to package standards.
+#' 
 #' @seealso \code{\link{cut}}, \code{\link{table}}, and
 #' \code{\link{print.table}} are the basic underlying functions.\cr
 #' \code{\link{freq}}, \code{\link{percTable}}
-#' @keywords dplot manip distribution multivariate
 #' @examples
 #' 
 #' freq2D(quakes$long, quakes$lat, dnn="")
 #' freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 #' 
-#' # range(freq2D(saithe, print=FALSE))
-#' 
-#' # Layout, plot
-#' # freq2D(saithe, layout=2)
-#' # freq2D(saithe, layout=3)
-#' # contour(freq2D(saithe, layout=2))
-#' # lattice::contourplot(Freq ~ Bio + HR, freq2D(saithe,layout=3))
-
-
 #' @rdname freq2D
-
 #' @family frequency  
 #' @concept frequency-table
-#'
 #'
 #' @export
 freq2D <- function(x, ...)
@@ -87,10 +71,16 @@ freq2D.formula <- function(formula, data, subset, na.action,
     data      = data,
     subset    = subset_expr,
     na.action = na_expr,
-    allowed   = "n-sample-independent"
+    allowed   = "numeric-numeric"
   )
   
-  y <- do.call(freq2D, c(list(pf$mf[2:1]), ...))
+  y <- do.call(
+    freq2D,
+    c(
+      list(x = pf$mf[2:1], n = n, pad = pad, dnn = dnn),
+      list(...)
+    )
+  )
   attr(y, "data.name") <- pf$data.name
 
   y
@@ -147,7 +137,7 @@ freq2D.default <- function(x, y, n=20, pad=0, dnn=NULL, ...) {
   {
     tmp <- cbind(0, rbind(0, z, 0), 0)
     rownames(tmp)[c(1,nrow(tmp))] <- as.numeric(rownames(z)[c(1,nrow(z))]) + c(-xstep,xstep)
-    colnames(tmp)[c(1,ncol(tmp))] <- as.numeric(colnames(z)[c(1,ncol(z))]) + c(-xstep,xstep)
+    colnames(tmp)[c(1,ncol(tmp))] <- as.numeric(colnames(z)[c(1,ncol(z))]) + c(-ystep,ystep)
     names(dimnames(tmp)) <- names(dimnames(z))
     z <- tmp
   }
@@ -184,4 +174,3 @@ freq2D.default <- function(x, y, n=20, pad=0, dnn=NULL, ...) {
   # }
   
 }
-

@@ -4,11 +4,11 @@
 #' Computes the normalized mean squared error (NMSE) between predictions
 #' and reference values.
 #'
-#' @param x Numeric vector of predicted values.
-#' @param ref Numeric vector of reference (true) values.
-#' @param trainY Numeric vector used as baseline to compute normalization.
+#' @param x numeric vector of predicted values
+#' @param ref numeric vector of reference (true) values
+#' @param trainY numeric vector used as the normalization baseline
 #'
-#' @return A numeric value representing the normalized mean squared error.
+#' @return a numeric scalar containing the normalized mean squared error
 #'
 #' @details
 #' The normalized mean squared error is defined as:
@@ -30,8 +30,7 @@
 #'
 #' @seealso \code{\link{mean}}, \code{\link{sum}}
 #'
-
-
+#'
 #' @family model.metrics  
 #' @concept model-evaluation  
 #' @concept prediction-error

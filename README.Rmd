@@ -42,13 +42,13 @@ which can be maintained very nicely and directly using Rcpp. Further performance
 - 🪨 **[bedrock](https://github.com/AndriSignorell/bedrock/)**  
   → Core utility functions used across all packages  
 
-- 🌌 **[aurora](https://github.com/AndriSignorell/aurora/)**    
+- 🌌 **[pharos](https://github.com/AndriSignorell/pharos/)**    
   → Plotting, colour handling, and formatting tools  
 
 - 💡 **[lumen](https://github.com/AndriSignorell/lumen/)**  
   → Inferential statistics (tests, confidence intervals, distributions)  
 
-- 📨 **[hermes](https://github.com/AndriSignorell/hermes/)**    
+- 📨 **[pons](https://github.com/AndriSignorell/pons/)**    
   → MS Office interface and reporting tools  
   
 

@@ -4,30 +4,31 @@
 \alias{Agreement}
 \title{Agreement Measures - Common Interface}
 \arguments{
-\item{x}{A matrix or data.frame of ratings (subjects x raters),
-or a single vector if \code{y} is provided.}
+\item{x}{matrix or data frame of ratings (subjects x raters),
+or a single vector if \code{y} is provided}
 
-\item{y}{Optional second vector (only for two raters).}
+\item{y}{optional second vector for two raters}
 
-\item{conf.level}{Confidence level for confidence intervals.
+\item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{Alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{method}{Method used for inference (depends on measure).}
+\item{method}{method used for inference; available methods depend on the
+measure}
 
-\item{weights}{Optional weighting scheme for ordinal data
-(e.g. "linear", "quadratic").}
+\item{weights}{optional weighting scheme for ordinal data
+(e.g. "linear", "quadratic")}
 
-\item{model}{ICC model ("oneway", "twoway").}
+\item{model}{model for the ICC, \code{"oneway"} or \code{"twoway"}}
 
-\item{type}{ICC type ("consistency", "agreement").}
+\item{type}{type of ICC, \code{"consistency"} or \code{"agreement"}}
 
-\item{unit}{ICC unit ("single", "average").}
+\item{unit}{unit of the ICC, \code{"single"} or \code{"average"}}
 
-\item{...}{Additional arguments passed to helper functions
-(e.g. bootstrap routines).}
+\item{...}{additional arguments passed to helper functions
+(e.g. bootstrap routines)}
 }
 \description{
 All agreement measures in this package share a common interface.
@@ -104,4 +105,3 @@ Shrout, P. E., & Fleiss, J. L. (1979) Intraclass correlations.
 
 Lin, L. I.-K. (1989) A concordance correlation coefficient.
 }
-\keyword{internal}

@@ -15,53 +15,46 @@ ccc(
 )
 }
 \arguments{
-\item{x}{Numeric vector.}
+\item{x}{a numeric vector}
 
-\item{y}{Numeric vector of equal length to \code{x}.}
+\item{y}{a numeric vector of equal length to \code{x}}
 
-\item{conf.level}{Confidence level for the returned confidence interval.
-Set to \code{NA} (default) to suppress confidence interval calculation.}
+\item{conf.level}{a single confidence level for the returned confidence
+interval. Set to \code{NA} (default) to suppress confidence interval
+calculation.}
 
-\item{sides}{Character string specifying a two-sided or one-sided
-confidence interval.}
+\item{sides}{a character string specifying a two-sided or one-sided
+confidence interval}
 
-\item{method}{Character string specifying the confidence interval method.
-One of \code{"z-transform"}, \code{"boot"}, or \code{"asymptotic"}.}
+\item{method}{a character string specifying the confidence interval
+method. One of \code{"z-transform"}, \code{"boot"}, or
+\code{"asymptotic"}.}
 
-\item{na.rm}{Logical; if \code{TRUE}, incomplete observation pairs are
-removed before computation.}
+\item{na.rm}{logical; if \code{TRUE}, incomplete observation pairs are
+removed before computation}
 
-\item{...}{Additional arguments passed to bootstrap procedures. For
-\code{method = "boot"} these may include \code{R},
-\code{parallel}, and related bootstrap controls.}
+\item{...}{additional arguments controlling the bootstrap procedure.
+Currently \code{R} and \code{parallel} are supported.}
 }
 \value{
-A named numeric vector.
-
-If \code{conf.level = NA}:
-
-\preformatted{
-      est
-0.9123457
-}
-
-Otherwise:
-
-\preformatted{
-      est       lci       uci
-0.9123457 0.8734211 0.9412837
+a named numeric vector containing only \code{est} when
+\code{conf.level = NA}; otherwise a named numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
 }
 
 Additional diagnostics are stored as attributes:
 
 \describe{
-\item{nObs}{Number of observations used.}
-\item{scaleShift}{Scale shift parameter.}
-\item{locationShift}{Location shift parameter.}
-\item{biasCorrection}{Bias correction factor.}
-\item{method}{Confidence interval method (if applicable).}
-\item{conf.level}{Confidence level (if applicable).}
-\item{sides}{Confidence interval type (if applicable).}
+\item{\code{nObs}}{number of observations used}
+\item{\code{scaleShift}}{scale shift parameter}
+\item{\code{locationShift}}{location shift parameter}
+\item{\code{biasCorrection}}{bias correction factor}
+\item{\code{method}}{confidence interval method, if applicable}
+\item{\code{confLevel}}{confidence level, if applicable}
+\item{\code{sides}}{confidence interval type, if applicable}
 }
 }
 \description{
@@ -75,13 +68,34 @@ Values range from -1 to 1, where 1 indicates perfect agreement.
 
 Confidence intervals can be computed using a Fisher z-transformation,
 a nonparametric bootstrap, or the asymptotic approximation of
-Lin (2000).
+Lin (2000). The asymptotic variance implemented here is the corrected
+form given by Lin (2000), superseding the expression in Lin (1989).
+Internally it is held on the scale of \eqn{\rho_c} itself; the
+\code{"z-transform"} method rescales it to the z scale via the delta
+method, where \eqn{d\,\mathrm{atanh}(\rho)/d\rho = 1/(1 - \rho^2)}.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields an interval bounded below, with the upper limit
+fixed at 1, and \code{"right"} one bounded above, with the lower limit
+fixed at -1. Note that this is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+\code{\link[stats]{t.test}}.
 
 Missing values are handled according to package conventions:
 if \code{na.rm = FALSE} and either \code{x} or \code{y} contains missing
 values, \code{NA} is returned. If \code{na.rm = TRUE}, complete cases are
-used.
+used. Infinite values carry no comparable convention - they leave the
+moments undefined and are rejected with an error.
 }
+\section{Random number generation}{
+
+\code{method = "boot"} draws bootstrap resamples and therefore depends on
+the state of R's global random number generator. No seed is set
+internally; the global RNG state advances normally as resamples are
+drawn. Call \code{\link[base]{set.seed}} beforehand for reproducible
+results.
+}
+
 \examples{
 set.seed(123)
 
@@ -113,7 +127,6 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
@@ -122,7 +135,7 @@ Other assoc.agreement:
 \code{\link[=randolphKappa]{randolphKappa()}},
 \code{\link[=raterFrame]{raterFrame()}}
 }
-\concept{agreement}
 \concept{assoc.agreement}
 \concept{correlation}
+\concept{method-comparison}
 \concept{reliability}

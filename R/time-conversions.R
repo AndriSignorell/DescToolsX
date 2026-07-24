@@ -6,41 +6,44 @@
 #' \code{secToHms} - Converts a vector of seconds to h:m:s.
 #' 
 #' 
-#' @name time_conversions
-#' @aliases hmsToSec secToHms
-#' @param x A vector of times in h:m:s (for \code{hmsToSec}) or seconds (for
-#' \code{secToHms}).
-#' @param digits the number of digits to use for potential fractions of
-#' seconds.
-#' @return \code{hmsToSec} - Returns a vector of times in seconds.
+#' @name time-conversions
+#' @aliases hmsToMinute hmsToSec secToHms
 #' 
-#' \code{secToHms} - Returns a vector of times in h:m:s format.
-#' @author Tyler Rinker <tyler.rinker@@gmail.com>
-#' @seealso \code{\link[chron]{times}}
-#' @keywords chron
+#' @param x date-time object for \code{hmsToMinute()}, vector of times in
+#' h:m:s format for \code{hmsToSec()}, or numeric vector of seconds for
+#' \code{secToHms()}
+#' @param digits the number of digits to use for potential fractions of
+#' seconds
+#' @return depending on the function:
+#' \describe{
+#'   \item{\code{hmsToMinute()}}{numeric vector of times in minutes}
+#'   \item{\code{hmsToSec()}}{numeric vector of times in seconds}
+#'   \item{\code{secToHms()}}{character vector of times in h:m:s format}
+#' }
+#' #' 
+#' @note Based on code by Tyler Rinker, adapted to conform to package standards. 
+#' 
 #' @examples
 #' 
 #' hmsToSec(c("02:00:03", "04:03:01"))
 #' hmsToSec(secToHms(c(222, 1234, 55)))
 #' secToHms(c(256, 3456, 56565))
 #' 
-
-
-
-#' @rdname time_conversions
-
-
+#' 
+#' @seealso \code{\link[chron]{times}}
+#' 
 #' @family date.time  
 #' @concept date-time
 #'
 #'
+#' @rdname time-conversions
 #' @export
 hmsToMinute <- function(x){
   hour(x)*60 + minute(x) + second(x)/60
 }
 
 
-#' @rdname time_conversions
+#' @rdname time-conversions
 #' @export
 hmsToSec <- function(x) {
   
@@ -53,7 +56,7 @@ hmsToSec <- function(x) {
 }
 
 
-#' @rdname time_conversions
+#' @rdname time-conversions
 #' @export
 secToHms <- function(x, digits=NULL) {
   
@@ -70,5 +73,3 @@ secToHms <- function(x, digits=NULL) {
   gettextf("%02d:%02d:%02d%s", h, m, s, f)
   
 }
-
-

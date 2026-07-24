@@ -157,8 +157,8 @@ try(
 res <- cohenH(tab)
 
 stopifnot(
-  res["lci"] <= res["estimate"],
-  res["uci"] >= res["estimate"]
+  res["lci"] <= res["est"],
+  res["uci"] >= res["est"]
 )
 
 
@@ -169,4 +169,4 @@ stopifnot(
 names(cohenH(tab))
 
 # should be:
-# estimate lci uci
+# est lci uci

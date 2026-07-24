@@ -14,28 +14,34 @@ cohenD(
 )
 }
 \arguments{
-\item{x}{a (non-empty) numeric vector of data values.}
+\item{x}{a non-empty numeric vector of data values}
 
-\item{y}{a (non-empty) numeric vector of data values.}
+\item{y}{an optional non-empty numeric vector of data values}
 
-\item{conf.level}{confidence level of the interval.  Set this to \code{NA},
-if no confidence intervals should be calculated. (This is the default)}
+\item{conf.level}{confidence level of the interval. Set this to \code{NA}
+if no confidence interval should be calculated. This is the default.}
 
 \item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}.  You can specify just the initial letter. \code{"left"}
-would be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
+\code{"right"}. Partial matching is supported. \code{"left"} is analogous
+to a hypothesis of \code{"greater"} in a \code{t.test}.}
 
-\item{correct}{logical, indicating whether to apply the Hedges correction.
-(Default: \code{FALSE})}
+\item{correct}{logical; whether to apply the Hedges correction. Defaults to
+\code{FALSE}.}
 
-\item{na.rm}{logical. Should missing values be removed?  Defaults to
+\item{na.rm}{logical. Should missing values be removed? Defaults to
 \code{FALSE}.}
 }
 \value{
-a numeric vector with 3 elements: \item{est}{the effect size d}
-\item{lci}{lower bound of the confidence interval} \item{uci}{upper bound of
-the confidence interval}
+if \code{conf.level = NA}, a numeric scalar containing the effect
+size; otherwise a named numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Cohen's \eqn{d} or Hedges' \eqn{g}.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
+The magnitude category and pooled standard deviation are stored in the
+attributes \code{magnitude} and \code{sd_pooled}, respectively.
 }
 \description{
 Computes the Cohen's d and Hedges' g effect size statistics.

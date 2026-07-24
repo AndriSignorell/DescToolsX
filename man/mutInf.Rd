@@ -7,24 +7,24 @@
 mutInf(x, y = NULL, base = 2, normalize = FALSE, ...)
 }
 \arguments{
-\item{x}{A contingency table, matrix, or a vector that can
-be coerced into a contingency table.}
+\item{x}{a contingency table, matrix, or vector that can be coerced into a
+contingency table}
 
-\item{y}{An optional second variable used together with
+\item{y}{an optional second variable used together with
 \code{x} to create a contingency table via
-\code{table(x, y, ...)}.}
+\code{table(x, y, ...)}}
 
-\item{base}{Logarithm base.
+\item{base}{logarithm base.
 Defaults to \code{2} (bits).}
 
-\item{normalize}{Logical.
+\item{normalize}{logical.
 If \code{TRUE}, returns normalized mutual information
 (NMI).}
 
-\item{...}{Additional arguments passed to \code{table()}.}
+\item{...}{additional arguments passed to \code{table()}}
 }
 \value{
-A numeric scalar containing the mutual information.
+a numeric scalar containing the mutual information
 }
 \description{
 Computes the mutual information (MI) between two variables
@@ -91,7 +91,6 @@ Other assoc.nominal:
 \code{\link[=entropy]{entropy()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

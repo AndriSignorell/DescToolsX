@@ -1,110 +1,88 @@
 
-#' Association Measures 
-#' 
-#' Collects a number of association measures for nominal and ordinal data. 
-#' 
-#' This function wraps the association measures phi, contingency coefficient,
-#' Cramer's V, Goodman Kruskal's Gamma, Kendall's Tau-b, Stuart's Tau-c,
-#' Somers' Delta, Pearson and Spearman correlation, Guttman's Lambda, Theil's
-#' Uncertainty Coefficient and the mutual information.
-#' 
-#' @aliases Assocs print.Assocs
-#' @param x a 2 dimensional contingency table or a matrix. 
-#' @param conf.level confidence level of the interval. If set to \code{NA} no
-#' confidence interval will be calculated. Default is 0.95.
-#' 
-#' @param verbose Integer (1–3) controlling verbosity.
-#'   Defaults to \code{getOption("DescTools.verbose", 2)} if \code{NULL}.
-#'   Higher values produce more detailed output.
-#'    
-#' @return numeric matrix, dimension \verb{[1:17, 1:3]}\cr the first column contains
-#' the estimate, the second the lower confidence interval, the third the upper
-#' one.
-#' @seealso \code{\link{Association}}
-#' @keywords multivariate
-#' @examples
-#' 
-#' options(scipen=8)
-#' 
-#' # Example taken from: SAS/STAT(R) 9.2 User's Guide, Second Edition, The FREQ Procedure
-#' # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf
-#' # Hair-Eye-Color pp. 1816
-#' 
-#' tob <- as.table(matrix(c(
-#'   69, 28, 68, 51,  6,
-#'   69, 38, 55, 37,  0,
-#'   90, 47, 94, 94, 16
-#' ), nrow=3, byrow=TRUE,
-#'    dimnames=list(eye=c("blue","green","brown"),
-#'                  hair=c("fair","red","medium","dark","black")) ))
-#' desc(tob)
-#' assocsTab(tob)
-#' 
-#' # Example taken from: http://www.math.wpi.edu/saspdf/stat/chap28.pdf
-#' # pp. 1349
-#' 
-#' pain <- as.table(matrix(c(
-#'    26,  6,
-#'    26,  7,
-#'    23,  9,
-#'    18, 14,
-#'     9, 23
-#'    ), ncol=2, byrow=TRUE))
-#' 
-#' desc(pain)
-#' assocsTab(pain)
-#' 
-
-
-#' @family assoc.ordinal  
-#' @concept association-measure  
-#' @concept ordinal
+#' Association measures for a contingency table (internal)
 #'
+#' Report layer for \code{desc.table()}: collects the association measures
+#' phi, contingency coefficient, Cramer's V, Goodman Kruskal's Gamma,
+#' Kendall's Tau-b, Stuart's Tau-c, Somers' Delta, Pearson and Spearman
+#' correlation, Guttman's Lambda, Theil's Uncertainty Coefficient and the
+#' mutual information into a single matrix.
 #'
-#' @export
-assocsTab <- function(x, conf.level = 0.95, verbose = 2){
+#' Performs no computation of its own: the concordance-based ordinal
+#' measures come from \code{.assocs()}, the remaining ones from their
+#' respective exported functions. Its job is to collect them, stage the
+#' level of detail via \code{verbose}, and format the result.
+#'
+#' Not exported - the measures are individually available through
+#' \code{gkGamma()}, \code{kendallTauA()}, \code{kendallTauB()},
+#' \code{stuartTauC()}, \code{somersDelta()} and \code{cStat()}. This
+#' function exists only to assemble the block \code{desc.table()} prints,
+#' and its shape (row selection via \code{verbose}, column names varying
+#' with it) is tied to that output rather than to a stable public contract.
+#'
+#' @param x a two-dimensional contingency table or matrix
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   no confidence interval will be calculated. Default is 0.95.
+#' @param verbose integer from 1 to 3 controlling how many measures are included.
+#'   Levels 1 and 2 return the contingency coefficient, Cramer's V and
+#'   Kendall's Tau-b; level 3 adds the remaining measures.
+#'
+#' @return numeric matrix of class \code{AssocsTab}, one row per measure and
+#'   the columns \code{est}, \code{lci}, and \code{uci}
+#'
+#' @noRd
+.assocsTab <- function(x, conf.level = 0.95, verbose = 2){
   
   verbose <- .checkVerbose(verbose)
   
   # all association measures combined for table description
-  ords <- assocsXY(x, conf.level = conf.level)
+  ords <- .assocs(x, conf.level = conf.level)
+  
+  # .assocs() returns bare scalars when conf.level is NA and c(est, lci,
+  # uci) otherwise; rbind() would recycle a scalar across all three
+  # columns, so pad explicitly. Keeps every row 3 wide and the column
+  # names fixed, independent of conf.level and verbose.
+  .row <- function(z) if(length(z) == 3L) unname(z) else c(unname(z[1L]), NA, NA)
   
   if(is.na(conf.level)){
-    res <- rbind("Contingency Coeff." = c(contCoef(x), NA, NA))
-    res <- rbind(res, "Cramer V"      = c(cramerV(x), NA, NA))
-    res <- rbind(res, "Kendall Tau-b" = ords$tauB)
+    res <- rbind("Contingency Coeff." = .row(contCoef(x)))
+    res <- rbind(res, "Cramer V"      = .row(cramerV(x)))
+    res <- rbind(res, "Kendall Tau-b" = .row(ords$tauB))
     
   } else {
-    res <- rbind("Contingency Coeff." = contCoef(x, conf.level = conf.level))
-    res <- rbind(res, "Cramer V"      = cramerV(x, conf.level = conf.level))
-    res <- rbind(res, "Kendall Tau-b" = ords$tauB)
+    res <- rbind("Contingency Coeff." = .row(contCoef(x, conf.level = conf.level)))
+    res <- rbind(res, "Cramer V"      = .row(cramerV(x, conf.level = conf.level)))
+    res <- rbind(res, "Kendall Tau-b" = .row(ords$tauB))
   }
   
   if(verbose == 3) {
     res <- rbind(res
-                 , "Goodman Kruskal Gamma" = ords$gamma
-                 , "Stuart Tau-c"          = ords$tauC
-                 , "Somers D R|C"          = ords$somers
-                 , "Pearson Correlation"   = pearsonCor(x, conf.level = conf.level)
-                 , "Spearman Correlation"  = spearmanCor(x, conf.level = conf.level)
-                 , "Lambda R|C"            = lambda(x, direction = "row", conf.level = conf.level)
-                 , "Lambda sym"            = lambda(x, direction = "sym", conf.level = conf.level)
-                 , "Uncertainty Coeff. R|C"  = uncertCoef(x, direction = "row", conf.level = conf.level)
-                 , "Uncertainty Coeff. sym"  = uncertCoef(x, direction = "sym", conf.level = conf.level)
-                 , "Mutual Information"    = c(mutInf(x), NA, NA)
+                 , "Goodman Kruskal Gamma" = .row(ords$gamma)
+                 , "Stuart Tau-c"          = .row(ords$tauC)
+                 , "Somers D R|C"          = .row(ords$somers)
+                 , "Pearson Correlation"   = .row(pearsonCor(x, conf.level = conf.level))
+                 , "Spearman Correlation"  = .row(spearmanCor(x, conf.level = conf.level))
+                 , "Lambda R|C"            = .row(lambda(x, direction = "row", conf.level = conf.level))
+                 , "Lambda sym"            = .row(lambda(x, direction = "sym", conf.level = conf.level))
+                 , "Uncertainty Coeff. R|C"  = .row(uncertCoef(x, direction = "row", conf.level = conf.level))
+                 , "Uncertainty Coeff. sym"  = .row(uncertCoef(x, direction = "sym", conf.level = conf.level))
+                 , "Mutual Information"    = .row(mutInf(x))
     )
   }
   
-  if(verbose == 3)
-    dimnames(res)[[2]][1] <- "est"
-  else
-    dimnames(res)[[2]] <- c("est", "lci", "uci")
+  colnames(res) <- c("est", "lci", "uci")
   
   class(res) <- c("AssocsTab", "matrix")
   return(res)
 }
 
-#' @export
+#' Print method for the internal AssocsTab class
+#'
+#' Registered (not user-facing): the class is produced only by
+#' \code{.assocsTab()}, but S3 dispatch requires the method to be in the
+#' namespace's method table, so it keeps \code{@exportS3Method}.
+#'
+#' @noRd
+#' @exportS3Method print AssocsTab
 print.AssocsTab <- function(x, digits = 4, ...){
   
   out <- fm(unclass(x), digits = digits)
@@ -113,83 +91,79 @@ print.AssocsTab <- function(x, digits = 4, ...){
 }
 
 
-#' Ordinal association measures for two variables or a contingency table
+#' Concordance-based ordinal association measures (internal calculation engine)
 #'
-#' Computes concordance-based association measures (Goodman-Kruskal
-#' \eqn{\gamma}, Kendall's \eqn{\tau_a}, \eqn{\tau_b}, \eqn{\tau_c},
-#' Somers' \eqn{D}, and the c-statistic) for a pair of ordinal vectors or
-#' a pre-computed contingency table.  Optionally returns confidence
-#' intervals.
+#' Computes Goodman-Kruskal \eqn{\gamma}, Kendall's \eqn{\tau_a},
+#' \eqn{\tau_b}, \eqn{\tau_c}, Somers' \eqn{D} and the c-statistic for a
+#' pair of ordinal vectors or a contingency table, optionally with
+#' confidence intervals.
 #'
-#' @param x Either a numeric vector (when \code{y} is supplied) or a
-#'   matrix / table representing a contingency table (when \code{y} is
-#'   \code{NULL}).
-#' @param y Optional numeric vector of the same length as \code{x}.  If
-#'   supplied, the measures are computed from the raw paired observations
-#'   via a fast C++ routine.  If \code{NULL}, \code{x} is treated as a
-#'   contingency table.
-#' @param which Character string selecting which measure(s) to return.
-#'   One of \code{"all"} (default), \code{"gamma"}, \code{"tau-a"},
-#'   \code{"tau-b"}, \code{"tau-c"}, \code{"somers"}, or \code{"cstat"}.
-#' @param conf.level Numeric scalar in \eqn{(0, 1)}.  If supplied,
-#'   confidence intervals are appended to each measure.  Default
-#'   \code{NA} suppresses intervals.
-#' @param direction Character string controlling the direction for
-#'   Somers' \eqn{D} when \code{y = NULL} (table mode): \code{"row"}
-#'   (default) treats row totals as the dependent variable;
-#'   \code{"column"} treats column totals as dependent.
+#' Not exported: this is the shared calculation core behind the exported
+#' one-measure functions \code{gkGamma()}, \code{kendallTauA()},
+#' \code{kendallTauB()}, \code{stuartTauC()} and \code{somersDelta()},
+#' plus the report layer \code{.assocsTab()}. Every measure it produces is
+#' publicly reachable through one of those, so exporting it as well would
+#' only add a second, clumsier route to the same numbers - and one whose
+#' return shape varies with \code{conf.level}. \code{cStat()} is
+#' deliberately NOT a client: it computes the AUC for a score against a
+#' binary outcome with half-weighted ties and bootstrap intervals, a
+#' different estimator from the \code{(somers + 1) / 2} returned here.
 #'
-#' @return A named list with one element per requested measure:
-#' \describe{
-#'   \item{\code{gamma}}{Goodman-Kruskal Gamma}
-#'   \item{\code{tauA}}{Kendall's Tau-a}
-#'   \item{\code{tauB}}{Kendall's Tau-b}
-#'   \item{\code{tauC}}{Stuart's Tau-c}
-#'   \item{\code{somers}}{Somers' D}
-#'   \item{\code{cstat}}{C-statistic (area under ROC curve)}
-#' }
-#' Each element is a named numeric scalar (point estimate only) or a named
-#' numeric vector \code{c(est, lci, uci)} when \code{conf.level} is supplied.
-#'
-#' @details
 #' Two computational paths are used:
 #'
 #' \describe{
-#'   \item{XY mode (\code{y} supplied)}{A compiled C++ routine
-#'     (\code{assoc_cpp}) processes the raw paired observations directly.
-#'     This is substantially faster than the table path for large
-#'     vectors.}
-#'   \item{Table mode (\code{y = NULL})}{Concordant and discordant pairs
-#'     are counted via \code{\link{conDisPairs}}.  Confidence intervals
-#'     are obtained from \code{.tableAssocCI}.}
+#'   \item{\code{y} supplied}{A compiled C++ routine (\code{assoc_cpp})
+#'     processes the raw paired observations directly.  This is
+#'     substantially faster than the table path for large vectors.}
+#'   \item{\code{y = NULL}}{\code{x} is treated as a contingency table;
+#'     concordant and discordant pairs are counted via
+#'     \code{conDisPairs()}.  Confidence intervals are obtained from
+#'     \code{.tableAssocCI()}.}
 #' }
 #'
-#' The c-statistic (area under the ROC curve for a binary outcome) equals
-#' \eqn{(\text{Somers' } D + 1) / 2}.
+#' Both paths return the same measures - the choice is one of input
+#' format and speed, not of method.
 #'
-#' @examples
-#' # From raw vectors
-#' x <- c(1, 2, 3, 2, 1, 3)
-#' y <- c(2, 3, 3, 1, 1, 2)
-#' assocsXY(x, y)
-#' assocsXY(x, y, which = "cstat")
-#' assocsXY(x, y, conf.level = 0.95)
+#' @param x either a numeric vector when \code{y} is supplied or a
+#'   matrix or table representing a contingency table when \code{y} is
+#'   \code{NULL}
+#' @param y optional numeric vector of the same length as \code{x}
+#' @param which character string selecting which measure to return. One of
+#'   \code{"all"} (default), \code{"gamma"}, \code{"tauA"},
+#'   \code{"tauB"}, \code{"tauC"}, \code{"somers"} or \code{"cstat"} -
+#'   the same spellings as the names of the returned list.
+#' @param conf.level numeric scalar in \eqn{(0, 1)}. If supplied,
+#'   confidence intervals are appended to each measure. Default \code{NA}
+#'   suppresses intervals.
+#' @param direction character string controlling the direction for Somers'
+#'   \eqn{D}: \code{"row"} (default) treats row totals as the dependent
+#'   variable, \code{"column"} the column totals. Ignored by the symmetric
+#'   measures.
 #'
-#' # From a contingency table
-#' tab <- table(cut(swiss$Fertility, 3), cut(swiss$Education, 3))
-#' assocsXY(tab)
-#' assocsXY(tab, which = "gamma", conf.level = 0.95)
+#' @return a named list with one element per requested measure
+#'   (\code{gamma}, \code{tauA}, \code{tauB}, \code{tauC},
+#'   \code{somers}, \code{cstat}). Each element is a named numeric scalar
+#'   containing only the point estimate, or, when \code{conf.level} is
+#'   supplied, a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
 #'
-#' @seealso \code{\link{conDisPairs}}
-#' @export
-assocsXY <- function(x, y = NULL,
-                     which = c("all", "gamma", "tau-a", "tau-b", "tau-c", "somers", "cstat"),
-                     conf.level = NA,
-                     direction = c("row", "column")) {
+#' @noRd
+.assocs <- function(x, y = NULL,
+                   which = c("all", "gamma", "tauA", "tauB", "tauC", "somers", "cstat"),
+                   conf.level = NA,
+                   direction = c("row", "column")) {
   
   direction <- match.arg(direction)
-  which     <- gsub("-", "_", match.arg(which), fixed = TRUE)
-  # internal mapping: tau_a -> tauA etc. handled at output stage
+  # 'which' uses the same spelling as the names of the returned list, so
+  # no mapping between user-facing and internal names is needed. This is
+  # a deliberate exception to the kebab-case rule for match.arg() enums
+  # (design_rules.md 3.1.1): the strings here are selectors *for* the
+  # result elements, and two spellings for one measure invite drift.
+  which     <- match.arg(which)
   
   # ============================
   # XY MODE (use C++)
@@ -271,12 +245,8 @@ assocsXY <- function(x, y = NULL,
   # ============================
   # SELECT WHICH
   # ============================
-  # map user-facing "tau_a" -> internal "tauA" etc.
-  whichMap <- c(tau_a = "tauA", tau_b = "tauB", tau_c = "tauC")
-  if(which != "all"){
-    which <- if(which %in% names(whichMap)) whichMap[[which]] else which
+  if(which != "all")
     resAll <- resAll[which]
-  }
   
   return(resAll)
 }

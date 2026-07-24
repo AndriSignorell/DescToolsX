@@ -1,16 +1,23 @@
 
-#' Concordance statistic (C-statistic / AUC)
+#' Concordance Statistic (C-Statistic / AUC)
 #'
 #' Computes the concordance statistic (C-statistic), equivalent to the
 #' area under the ROC curve (AUC), for predicted values and a binary outcome.
 #'
-#' @param x An object for which the C-statistic should be computed, 
-#' numeric vector of predicted values in vector interface.
-#' @param resp the response of a model.
-#' @param conf.level confidence level for CI, \code{NA} will return none.
-#' @param ... Additional arguments passed to methods.
+#' @param x an object for which the C-statistic should be computed; for the
+#' default method, a numeric vector of predicted values
+#' @param resp binary response vector
+#' @param conf.level confidence level for the interval; \code{NA} suppresses
+#' interval calculation
+#' @param ... additional arguments passed to methods
 #'
-#' @return A numeric value between 0 and 1 representing the C-statistic.
+#' @return if \code{conf.level = NA}, a numeric scalar between 0 and 1;
+#' otherwise a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the C-statistic.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
 #'
 #' @name cStat
 #' 
@@ -19,7 +26,7 @@
 #' pair of observations with different outcomes, the observation with the
 #' higher predicted value has the higher observed outcome.
 #'
-#' Ties in the outcome are handled by assigning a weight of 0.5.
+#' Ties in predicted values are handled by assigning a weight of 0.5.
 #' 
 #' This implementation uses:
 #' \itemize{
@@ -28,8 +35,8 @@
 #'   \item Efficient memory handling
 #' }
 #' 
-#' Number of bootstrap samples for the boostrap CIs can be given
-#' in the dots as \code{R = 5,000} (default is 1,000). 
+#' The number of bootstrap samples can be supplied through \code{...} as
+#' \code{R}; the default is 1000.
 #' 
 #' 
 #' @examples
@@ -75,7 +82,7 @@ cStat.glm <- function(x, ...) {
 
 #' @method cStat default
 #' @rdname cStat
-#' @param resp A binary response vector (numeric, logical, or factor).
+#' @param resp a binary response vector (numeric, logical, or factor)
 #' @export
 cStat.default <- function(x, resp, conf.level=NA, ...) {
   
@@ -116,25 +123,3 @@ cStat.default <- function(x, resp, conf.level=NA, ...) {
   return(res)
   
 }
-
-
-
-# == internal helper functions ==========================================
-
-.cStatCI <- function(x, resp, R = 1000, conf.level = 0.95) {
-
-  if (length(x) != length(resp)) {
-    stop("`x` and `resp` must have same length.", call. = FALSE)
-  }
-  
-  y <- as.numeric(factor(resp)) - 1
-  
-  if (!all(y %in% c(0, 1))) {
-    stop("`resp` must be binary.", call. = FALSE)
-  }
-  
-  cstat_boot_cpp(x, y, R, alpha = 1-conf.level)
-  
-}
-
-

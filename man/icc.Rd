@@ -17,36 +17,37 @@ icc(
 )
 }
 \arguments{
-\item{x}{A numeric matrix or data frame with subjects in rows and
-raters in columns.}
+\item{x}{numeric matrix or data frame with subjects in rows and raters in
+columns}
 
-\item{model}{Character string, either \code{"oneway"} or \code{"twoway"}.}
+\item{model}{character string, either \code{"oneway"} or \code{"twoway"}}
 
-\item{type}{Character string, either \code{"agreement"} or \code{"consistency"}.}
+\item{type}{character string, either \code{"agreement"} or
+\code{"consistency"}}
 
-\item{unit}{Character string, either \code{"single"} or \code{"average"}.}
+\item{unit}{character string, either \code{"single"} or \code{"average"}}
 
-\item{conf.level}{Confidence level of the interval. If \code{NA}
+\item{conf.level}{confidence level of the interval. If \code{NA}
 (default), no confidence interval is computed.}
 
-\item{sides}{Currently only two-sided intervals are implemented.}
+\item{sides}{character string specifying the side of the interval; currently
+only \code{"two.sided"} is implemented}
 
-\item{method}{Character string specifying the estimation and CI method.
-Defaults to \code{"anova"}.}
+\item{method}{character string specifying the estimation and confidence
+interval method; defaults to \code{"anova"}}
 
-\item{na.rm}{Logical. If \code{TRUE}, complete cases are used.}
+\item{na.rm}{logical; if \code{TRUE}, complete cases are used}
 
-\item{\dots}{Additional arguments. For \code{method = "boot"},
+\item{\dots}{additional arguments. For \code{method = "boot"},
 the number of bootstrap resamples can be specified via \code{R}.}
 }
 \value{
-If \code{conf.level = NA}, a numeric scalar with the ICC estimate.
-
-If confidence intervals are requested, a named numeric vector with:
-\itemize{
-\item \code{est} — the ICC estimate
-\item \code{lci} — lower confidence limit
-\item \code{uci} — upper confidence limit
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the intraclass correlation}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -138,7 +139,6 @@ Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},

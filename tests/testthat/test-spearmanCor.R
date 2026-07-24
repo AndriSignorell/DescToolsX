@@ -21,19 +21,19 @@ test_that("spearmanCor matches cor(method='spearman') for vectors", {
                tolerance = 1e-10)
 })
 
-test_that("spearmanCor with conf.level returns named vector rho/lci/uci", {
+test_that("spearmanCor with conf.level returns named vector est/lci/uci", {
   x <- 1:20; y <- rank(rnorm(20))
   res <- spearmanCor(x, y, conf.level = 0.95)
   expect_length(res, 3)
-  expect_named(res, c("rho","lci","uci"))
+  expect_named(res, c("est","lci","uci"))
 })
 
-test_that("spearmanCor CI: lci <= rho <= uci", {
+test_that("spearmanCor CI: lci <= est <= uci", {
   set.seed(5)
   x <- rnorm(80); y <- x + rnorm(80)
   res <- spearmanCor(x, y, conf.level = 0.95)
-  expect_lte(res["lci"], res["rho"])
-  expect_gte(res["uci"], res["rho"])
+  expect_lte(res["lci"], res["est"])
+  expect_gte(res["uci"], res["est"])
 })
 
 test_that("spearmanCor na.rm = TRUE handles NA pairs", {

@@ -36,28 +36,28 @@
 #'   \item \code{"boot"}: nonparametric percentile bootstrap
 #' }
 #'
-#' @param x A numeric matrix or data frame with subjects in rows and
-#' raters in columns.
-#' @param model Character string, either \code{"oneway"} or \code{"twoway"}.
-#' @param type Character string, either \code{"agreement"} or \code{"consistency"}.
-#' @param unit Character string, either \code{"single"} or \code{"average"}.
-#' @param method Character string specifying the estimation and CI method.
-#' Defaults to \code{"anova"}.
-#' @param conf.level Confidence level of the interval. If \code{NA}
+#' @param x numeric matrix or data frame with subjects in rows and raters in
+#' columns
+#' @param model character string, either \code{"oneway"} or \code{"twoway"}
+#' @param type character string, either \code{"agreement"} or
+#' \code{"consistency"}
+#' @param unit character string, either \code{"single"} or \code{"average"}
+#' @param method character string specifying the estimation and confidence
+#' interval method; defaults to \code{"anova"}
+#' @param conf.level confidence level of the interval. If \code{NA}
 #' (default), no confidence interval is computed.
-#' @param sides Currently only two-sided intervals are implemented.
-#' @param na.rm Logical. If \code{TRUE}, complete cases are used.
-#' @param \dots Additional arguments. For \code{method = "boot"},
+#' @param sides character string specifying the side of the interval; currently
+#' only \code{"two.sided"} is implemented
+#' @param na.rm logical; if \code{TRUE}, complete cases are used
+#' @param \dots additional arguments. For \code{method = "boot"},
 #' the number of bootstrap resamples can be specified via \code{R}.
 #'
-#' @return
-#' If \code{conf.level = NA}, a numeric scalar with the ICC estimate.
-#'
-#' If confidence intervals are requested, a named numeric vector with:
-#' \itemize{
-#'   \item \code{est} — the ICC estimate
-#'   \item \code{lci} — lower confidence limit
-#'   \item \code{uci} — upper confidence limit
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the intraclass correlation}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
 #' @details
@@ -141,6 +141,10 @@ icc <- function(x,
   type   <- match.arg(type)
   unit   <- match.arg(unit)
   method <- match.arg(method)
+  sides  <- match.arg(sides)
+
+  if(!is.na(conf.level) && sides != "two.sided")
+    stop("only two-sided confidence intervals are currently implemented")
   
   dots <- list(...)
   
@@ -381,5 +385,3 @@ icc <- function(x,
   
   unname(quantile(vals, c(alpha/2, 1-alpha/2)))
 }
-
-

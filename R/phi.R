@@ -12,13 +12,13 @@
 #' Note: Yates' continuity correction is **not applied** when computing
 #' the chi-squared statistic.
 #'
-#' @param x A vector of categorical data or a contingency table
-#'   (matrix or \code{table}).
-#' @param y Optional second categorical vector. If provided, a contingency
+#' @param x a vector of categorical data or a contingency table
+#'   (matrix or \code{table})
+#' @param y optional second categorical vector. If provided, a contingency
 #'   table is constructed from \code{x} and \code{y}.
-#' @param ... Additional arguments passed to \code{\link[base]{table}}.
+#' @param ... additional arguments passed to \code{\link[base]{table}}
 #'
-#' @return A numeric value representing the Phi coefficient.
+#' @return a numeric scalar containing the Phi coefficient
 #'
 #' @details
 #' The Phi coefficient is defined as:
@@ -31,7 +31,6 @@
 #' For contingency tables larger than 2x2, Phi is not bounded by 1 and
 #' may exceed 1. In such cases, \code{\link{cramerV}} is usually preferred.
 #'
-#' @seealso \code{\link{chisq.test}}, \code{\link{cramerV}}
 #'
 #' @examples
 #' # Example with vectors
@@ -43,9 +42,9 @@
 #' tab <- matrix(c(10, 20, 30, 40), nrow = 2)
 #' phi(tab)
 #'
-
-
-
+#'
+#' @seealso \code{\link{chisq.test}}
+#'
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal  
@@ -65,4 +64,3 @@ phi  <- function (x, y = NULL, ...) {
   # (prod(diag(x)) - prod(diag(Rev(x, 2)))) / sqrt(prod(colSums(x), rowSums(x)))
   
 }
-

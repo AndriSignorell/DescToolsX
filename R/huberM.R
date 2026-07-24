@@ -26,47 +26,49 @@
 #' arguments are passed through \code{...} and extracted via
 #' \code{.extractBootArgs()}:
 #' \describe{
-#'   \item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
-#'   \item{\code{type}}{CI type: \code{"perc"} or \code{"bca"} (default).}
-#'   \item{\code{parallel}}{Parallelisation: \code{"no"}, \code{"multicore"},
-#'     or \code{"snow"} (default \code{"no"}).}
-#'   \item{\code{ncpus}}{Number of CPUs for parallel bootstrap
-#'     (default \code{getOption("boot.ncpus", 1L)}).}
+#'   \item{\code{R}}{number of bootstrap replicates (default \code{999})}
+#'   \item{\code{type}}{confidence interval type: \code{"perc"} or
+#'     \code{"bca"} (default)}
+#'   \item{\code{parallel}}{parallelization mode: \code{"no"},
+#'     \code{"multicore"}, or \code{"snow"} (default \code{"no"})}
+#'   \item{\code{ncpus}}{number of CPUs for parallel bootstrap (default
+#'     \code{getOption("boot.ncpus", 1L)})}
 #' }
 #'
 #' The original internal estimator is accessible as
 #' \code{DescToolsX:::.huberM}.
 #'
-#' @param x         A numeric vector of data values.
-#' @param conf.level Confidence level of the interval.  A single numeric
+#' @param x numeric vector of data values
+#' @param conf.level confidence level of the interval. A single numeric
 #'   value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
 #'   point estimate.
-#' @param sides     A character string specifying the side of the interval:
+#' @param sides character string specifying the side of the interval:
 #'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-#'   Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-#'   \code{"right"} sets \code{lci = -Inf}.  Ignored when
+#'   Partial matching is supported. \code{"left"} sets \code{uci = Inf};
+#'   \code{"right"} sets \code{lci = -Inf}. Ignored when
 #'   \code{conf.level = NA}.
-#' @param method    CI method: \code{"wald"} (default) or \code{"boot"}.
-#' @param k         Positive tuning constant; the algorithm winsorizes at
-#'   \code{k} standard deviations.  Default \code{1.345}.
-#' @param mu        Initial location estimate.  \code{NULL} (default)
+#' @param method confidence interval method: \code{"wald"} (default) or
+#' \code{"boot"}
+#' @param k positive tuning constant; the algorithm winsorizes at \code{k}
+#' standard deviations. Default is \code{1.345}.
+#' @param mu initial location estimate. \code{NULL} (default)
 #'   uses \code{median(x)}, computed after \code{na.rm} is applied.
-#' @param s         Scale estimate, held constant through the iterations.
+#' @param s scale estimate held constant through the iterations.
 #'   \code{NULL} (default) uses \code{mad(x, center = mu)}, computed
 #'   after \code{na.rm} is applied.
-#' @param na.rm     Logical.  Should missing values be removed before
-#'   computation?  Default \code{FALSE}.
-#' @param ...       Further arguments passed to the bootstrap engine when
+#' @param na.rm logical; whether to remove missing values before computation;
+#' default is \code{FALSE}
+#' @param ... further arguments passed to the bootstrap engine when
 #'   \code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
-#'   \code{ncpus}.  See Details.
+#'   and \code{ncpus}; see Details
 #'
-#' @return
-#' If \code{conf.level = NA}: a single numeric value (the location estimate).
-#'
-#' If \code{conf.level} is specified: a named numeric vector with elements
-#'   \item{est}{Huber M-estimate of location.}
-#'   \item{lci}{Lower confidence bound.}
-#'   \item{uci}{Upper confidence bound.}
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{location estimate from Huber's M-estimator}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #'
 #' @note Adapted from code by Martin Maechler to conform to package standards
 #'
@@ -118,8 +120,11 @@ huberM <- function(x,
   if (na.rm)
     x <- x[!is.na(x)]
   
-  if (anyNA(x))
-    return(NA_real_)
+  if (anyNA(x)) {
+    if (length(conf.level) == 1L && is.na(conf.level))
+      return(NA_real_)
+    return(c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+  }
   
   # --- defaults for mu / s after NA removal --------------------------
   if (is.null(mu)) {
@@ -303,5 +308,3 @@ huberM <- function(x,
   else
     himed_weighted_cpp(x, weights)
 }
-
-

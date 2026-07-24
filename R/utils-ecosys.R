@@ -20,14 +20,13 @@
 # @return Integer in {1,2,3}.
 
 
-#' @keywords internal
 .checkVerbose <- function(verbose = NULL){
   
   # resolve: arg > option > default
   verbose <- if(!is.null(verbose)) {
     verbose
   } else {
-    getOption("DescTools.verbose", 2L)
+    getOption("DescToolsX.verbose", 2L)
   }
   
   # validation

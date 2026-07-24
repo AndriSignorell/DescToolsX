@@ -42,17 +42,17 @@ percTable(...)
 )
 }
 \arguments{
-\item{\dots}{the dots are passed to \code{print.PercTable()}}
+\item{\dots}{further arguments passed to \code{print.PercTable()}}
 
-\item{x}{Either a contingency table, a two-column object
+\item{x}{either a contingency table, a two-column object
 (matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+(together with \code{y})}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
+\item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will
-be tabled versus rhs (\code{table(lhs, rhs)}).}
+be tabled versus rhs (\code{table(lhs, rhs)})}
 
 \item{data}{an optional matrix or data frame (or similar: see
 \code{\link{model.frame}}) containing the variables in the formula
@@ -60,33 +60,30 @@ be tabled versus rhs (\code{table(lhs, rhs)}).}
 \code{environment(formula)}.}
 
 \item{subset}{an optional vector specifying a subset of observations to be
-used.}
+used}
 
 \item{na.action}{a function which indicates what should happen when the data
 contain NAs. Defaults to \code{getOption("na.action")}.}
 
-\item{freq}{boolean. Should absolute frequencies be included? Defaults to
-TRUE.}
+\item{freq}{logical. Should absolute frequencies be included? Defaults to
+\code{TRUE}.}
 
-\item{prop}{a string defining the conditional propotions to be displayed.
-Can be \code{"rows"} for rowwise percentages \code{"cols"} for columnwise
-or both of them.
-produces a table output with row and column
-percentages.}
+\item{prop}{character vector specifying the proportions to display, using
+\code{"rows"}, \code{"cols"}, \code{"total"}, or \code{"none"}}
 
-\item{expected}{the expected counts under the null hypothesis.}
+\item{expected}{logical; whether to include expected counts under independence}
 
-\item{margins}{a vector, consisting out of 1 and/or 2. Defines the margin
-sums to be included.  1 stands for row margins, 2 for column margins, c(1,2)
-for both. Default is \code{NULL} (none).}
+\item{margins}{vector specifying the margins to include. Use \code{1} or
+\code{"rows"} for row margins, \code{2} or \code{"cols"} for column
+margins, or both; \code{NULL} includes none.}
 
 \item{col.vars}{a vector of column variables (see Details). If this is left
 to \code{NULL} the table structure will be preserved.}
 
-\item{row.vars}{a vector of row variables (see Details).}
+\item{row.vars}{a vector of row variables (see Details)}
 
 \item{justify}{either \code{"left"} or \code{"right"} for defining the
-alignment of the table cells.}
+alignment of the table cells}
 
 \item{blockSep}{logical, defining if an empty row should be introduced between
 the table rows. Default is FALSE, if only a table with one single
@@ -94,10 +91,11 @@ description (either frequencies or percents) should be returned and
 \code{TRUE} in any other case.}
 }
 \value{
-Returns an object of class \code{"ftable"}.
+an object of class \code{"PercTable"} containing the requested
+frequency and percentage tables
 }
 \description{
-Prints a 2-way contingency table along with percentages, marginal, and
+Creates a 2-way contingency table along with percentages, marginal, and
 conditional distributions. All the frequencies are nested into one single
 table.
 }
@@ -109,11 +107,11 @@ of the table. \code{row.vars} can either be the names of the dimensions
 (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is
 the first dimension of the table, 2 the second and 3 the percentages). \cr
 Use \code{sortX()} if you want to have your table sorted by rows.\cr\cr The
-style in which numbers are formatted is selected by \code{\link[aurora]{style}()} from
+style in which numbers are formatted is selected by \code{\link[pharos]{style}()} from
 the DescToolsX options. Absolute frequencies will use \code{style("abs.sty")} and
 \code{style("per.sty")} will do it for the percentages. The options can be changed
 with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
-containing any format information used in \code{\link[aurora]{fm}}.
+containing any format information used in \code{\link[pharos]{fm}}.
 
 \code{Margins()} returns a list containing all the one dimensional margin
 tables of a n-dimensional table along the given dimensions. It uses
@@ -131,23 +129,23 @@ percTable(tab, col.vars=2, margins=2)
 percTable(tab, col.vars=2, margins=1)
 percTable(tab, col.vars=2, margins=NULL)
 
-percTable(tab, col.vars=2, prob=NULL)
+percTable(tab, col.vars=2, prop="none")
 
 # just the percentages without absolute values
-percTable(tab, col.vars=2, prob=c("total","rows"), freq=FALSE)
+percTable(tab, col.vars=2, prop=c("total","rows"), freq=FALSE)
 
 # just the row percentages
-percTable(tab, freq= FALSE, prob="rows")
+percTable(tab, freq= FALSE, prop="rows")
 
 # just the expected frequencies and the standard residuals
-percTable(tab, prob=NULL, expected = TRUE)
+percTable(tab, prop="none", expected = TRUE)
 
 
 # rearrange output such that freq are inserted as columns instead of rows
 percTable(tab, col.vars=c(3,2))
 
 # putting the areas in rows
-percTable(tab, col.vars=c(3,1), prob="total", margins=c(1,2))
+percTable(tab, col.vars=c(3,1), prop="total", margins=c(1,2))
 
 # formula interface with subset
 percTable(driver ~ area, data=Pizza, subset=wine_delivered==0)
@@ -173,12 +171,11 @@ Agresti, Alan (2007) \emph{Introduction to categorical data
 analysis}. NY: John Wiley and Sons, Section 2.4.5\cr
 }
 \seealso{
-\code{\link{freq}}, \code{\link{table}}, \code{\link{ftable}},
-\code{\link{proportions}}, \code{\link{addmargins}},
-\code{\link{setDescToolsXOption}}, \code{\link[aurora]{style}}\cr There are similar
-functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
-package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of
-the flexibility we needed here. \cr
+\link{table}, \link{ftable}, \link{proportions}, \link{addmargins},
+\link{setDescToolsXOption}, \link[pharos:style]{pharos::style}\cr
+There are similar functions in \link[sfsmisc:printTable2]{sfsmisc::printTable2} and
+package \pkg{vcd} \link[vcd:table2d_summary]{vcd::table2d_summary}, both lacking some of
+the flexibility we needed here.
 
 Other frequency:
 \code{\link[=expFreq]{expFreq()}},
@@ -186,9 +183,5 @@ Other frequency:
 \code{\link[=freq2D]{freq2D()}},
 \code{\link[=tOne]{tOne()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
 \concept{frequency}
 \concept{frequency-table}
-\keyword{multivariate}

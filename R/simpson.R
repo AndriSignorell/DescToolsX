@@ -16,15 +16,15 @@
 #' \eqn{(1 - \sum p_i^2) * k / (k - 1)}, where \eqn{k} is the number of
 #' observed (non-empty) categories.
 #'
-#' @param x A vector of observations (factor, character, numeric), or a
-#'   named vector of non-negative integer counts.
-#' @param method Character string specifying the index to compute:
-#'   \code{"gini"}, \code{"hunter"}, or \code{"deltas"}.
-#' @param na.rm Logical. If \code{TRUE}, missing values are removed before
+#' @param x a vector of observations (factor, character, numeric), or a named
+#'   vector of non-negative integer counts
+#' @param method character string specifying the index to compute:
+#'   \code{"gini"}, \code{"hunter"}, or \code{"deltas"}
+#' @param na.rm logical. If \code{TRUE}, missing values are removed before
 #'   computation. If \code{FALSE} and \code{x} contains \code{NA}, the result
 #'   will be \code{NA_real_}.
 #'
-#' @return A numeric value between 0 and 1. Returns \code{NA_real_} if input
+#' @return a numeric scalar between 0 and 1. Returns \code{NA_real_} if input
 #'   is invalid or empty.
 #'
 #' @details
@@ -68,7 +68,7 @@
 #' \emph{Review of Economics and Statistics}, 85(1), 226-234.
 #' https://doi.org/10.1162/rest.2003.85.1.226
 #'
-
+#'
 #' @family inequality  
 #' @concept inequality  
 #' @concept concentration-index
@@ -142,4 +142,3 @@ simpson <- function(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE) {
     return((1 - sum(p^2)) * k / (k - 1))
   }
 }
-

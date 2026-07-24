@@ -1,7 +1,7 @@
 
 # Package Suite — Design Rules & Architecture
 
-Scope: DescToolsX · lumen · aurora · bedrock · alloy  
+Scope: DescToolsX · lumen · pharos · bedrock · alloy  
 Version: 0.5  
 Maintainer: Andri Signorell
 
@@ -94,13 +94,19 @@ Allowed:
 | Internal functions | `.lowerCamelCase` | `.computeWeights()` |
 | Helper functions | `.prefix` | `.checkInput()` |
 | Engines | `.familyEngine` | `.binomCI_engine()` |
-| Classes | UpperCamelCase | `LinearModel` |
+| Classes | PascalCase | `LinearModel` |
+| Datasets | PascalCase | `Kunden`, `Messdaten`, `RawData` |
+| Model objects | lowerCamelCase | `fit`, `modKunden`, `regOut` |
 | User-visible strings | kebab-case | `"log-scale"` |
 
-Kategorie,Stil,Beispiele
-Datensätze,PascalCase,"Kunden, Messdaten, RawData"
-Modell-Objekte,lowerCamelCase,"fit, modKunden, regOut"
-Funktionen,lowerCamelCase,"fitMod(), calcSummary(), plotResults()"
+**Abgrenzung Datensätze vs. `match.arg`-Enums:** Die "Datensätze → PascalCase"-Regel
+gilt für eigenständige Objekte, die per Namen referenziert werden (`data(RawData)`,
+`Kunden`). Sobald ein String stattdessen als Wert eines Parameters über
+`match.arg()` aus einer geschlossenen Liste ausgewählt wird (z. B. Palettennamen
+in `pal(name = ...)`, Methodennamen wie `method = c("rgb", "hsv")`), zählt er als
+User-visible string im Sinne von §3.1.1 und folgt **kebab-case**, nicht PascalCase
+— unabhängig davon, ob die zugrunde liegenden Werte selbst wie ein kleiner
+Datensatz aussehen (z. B. ein benannter Farbvektor).
 
 
 S3 methods never receive an X suffix and remain base-compliant:
@@ -147,7 +153,7 @@ export(plot.Desc.table)
 ```
 
 **When this applies:** any `plot.Desc.*`/`print.Desc.*`/etc. method that
-(a) lives in `aurora` (or another helper package) rather than in
+(a) lives in `pharos` (or another helper package) rather than in
 `DescToolsX` where the class itself is defined, **and** (b) is called by
 unqualified name from `DescToolsX` code rather than purely through
 `UseMethod` dispatch. Methods only ever reached via `plot(obj)` dispatch
@@ -392,6 +398,14 @@ Conceptual distinction:
 | `output` | select one output representation | `output = "index"` |
 | `return*` | optionally add information | `returnNames = TRUE` |
 | `keep*` / `drop*` | modify retained structure | `dropNA = TRUE` |
+
+**Exception — `log`:** The `log` argument on density functions
+(`d`-prefixed distribution functions, e.g. `dnorm`, `dtri`, `dextreme`)
+stays a plain Boolean (`log = FALSE`), never an `output` enum. This
+matches base R's own `d`/`p`/`q`/`r` convention throughout (`dnorm`,
+`dbinom`, `dpois`, ...) and every distribution-function page in the
+suite; introducing an enum here would break with an extremely
+well-established, universally expected R idiom for no real gain.
 
 
 
@@ -702,6 +716,24 @@ stats::density(...)
 
 Explicit qualification (`pkg::fun`) is used only for functions from non-base packages or in case of name conflicts.
 
+### 3.6a Base-Distributed but Non-Attached Packages (`tools`, `parallel`, `compiler`, ...)
+
+Packages like `tools` ship with R but are **not** on the default search path — unlike `base`/`stats`/`utils`/etc., calling one of their functions unprefixed requires an explicit `@importFrom` somewhere in the package, or it fails at runtime with "could not find function".
+
+Because a single `@importFrom` makes the symbol available **package-wide** (not just in the file that declares it), it is easy to add a second unprefixed call site elsewhere without noticing the dependency already exists — or without adding it if it doesn't. This has caused real runtime bugs (e.g. `tools::Rd_db` called unprefixed with no `@importFrom` anywhere in the package).
+
+**Rule:** before calling such a function unprefixed, `grep` the package for an existing `@importFrom pkg fun`. If none exists, add one at your own call site. A redundant `@importFrom` for the same symbol in two files is harmless; a missing one is a shipped bug.
+
+```r
+# correct
+#' @importFrom tools Rd_db
+...
+rd_db <- Rd_db(package)
+
+# incorrect — no @importFrom anywhere in the package
+rd_db <- Rd_db(package)
+```
+
 ## 3.7 C++ Functions
 
 C++ functions use snake_case with a `_cpp` suffix and are registered via:
@@ -720,6 +752,20 @@ Examples:
 kurt_cpp
 kurt_weighted_cpp
 conDisPairsTab_cpp
+```
+
+### 3.7a Precision Boundary for Wide-Integer C++ Functions
+
+R has no native integer type wider than 32-bit; values are passed to `.Call()` as `double`. A C++ function operating on `uint64_t`/`int64_t` can validate its input up to that type's own range (e.g. `x < 2^63`), but this is **not** the effective input boundary as seen from R: a `double` can only represent integers **exactly** up to `2^53` (`.Machine$double.xmax` is not the relevant limit here — mantissa precision is). Above `2^53`, the value may already have been silently rounded by R *before* it reaches the C++ function, so a technically-successful C++ computation can silently factor, hash, or index the wrong number.
+
+**Rule:** the R-level wrapper around such a function must validate against `2^53`, not against the C++ type's nominal range, and the C++-side range check exists only as defense in depth. Document the `2^53` boundary in `@details`/`@param`, and where a genuine need for larger values exists, point to a package offering arbitrary-precision integers (e.g. `gmp`) rather than widening the C++ type further.
+
+```r
+# the R wrapper must enforce this, even though the C++ signature
+# and its internal check nominally allow up to 2^63
+if (any(n > 2^53))
+  stop("'n' must not exceed 2^53; R doubles cannot represent larger ",
+       "integers exactly.")
 ```
 
 ---
@@ -760,6 +806,27 @@ skew(
 
 - Functions that return a CI together with the result, e.g. `skew`, `ICC`: `conf.level = NA`, no CI by default
 - Dedicated CI functions, e.g. `meanCI`, `binomCI`: `conf.level = 0.95`
+
+**`sides` semantics:**
+
+`sides` names the side on which the **finite** bound lies:
+
+| Value | Interval | Finite bound |
+|---|---|---|
+| `"two.sided"` | `[lci, uci]` | both |
+| `"left"` | `[lci, Inf)` | `lci` |
+| `"right"` | `(-Inf, uci]` | `uci` |
+
+Where the parameter is bounded, report the unbounded side at that boundary
+instead of as infinite — `ccc` uses 1 and -1 rather than `Inf` and `-Inf`.
+
+This is the **reverse** of DescTools, where `sides` names the direction of the
+alternative hypothesis, as `alternative` does in `t.test`. The rationale: the
+argument is called `sides`, not `alternative`, and describes the shape of an
+interval rather than a test, so naming the side that is actually bounded is
+read off directly instead of derived. The change is silent for code carried
+over — both packages accept the same values — so every function documents it
+in `@details`, and it belongs in NEWS.md under breaking changes.
 
 ## 4.2 Plot Functions
 
@@ -913,15 +980,38 @@ Example:
 
 All CI functions use the following column names:
 
-- `estimate`
+- `est` (point estimate)
 - `lci` (lower confidence interval bound)
 - `uci` (upper confidence interval bound)
 
 This convention is binding and must not be changed without a major version bump.
 
+## 5.7 Pipe Operator Usage
+
+The native pipe (`|>`) is reserved for `@examples` and vignettes, where
+readability of a step-by-step chain matters more than anything else —
+it should read in the same left-to-right direction as the chain is
+described in prose (see `color-conversion-overview.R` for the pattern).
+
+Function bodies (internal implementation) do not use `|>`. Nested calls
+or intermediate variables remain the standard there, for consistency
+with the existing codebase and to keep stack traces/debugging
+straightforward.
+
+```r
+# @examples — use the pipe
+c(0.2, 0.6, 0.9) |> cmyToCmyk() |> cmykToRgb()
+
+# function body — no pipe
+cmykToRgb <- function(col, maxColorValue = 1) {
+  cmyk <- cmyToCmyk(col)
+  cbind(...)
+}
+```
+
 ---
 
-# 6. Handling `...`
+
 
 ## 6.1 Graphical Parameters in Plot Functions
 
@@ -1363,9 +1453,9 @@ ignores `par()`.
 ## 9.7 Dispatching `plot.Desc.*` Methods
 
 `plot.Desc.*` S3 methods (one per `Desc` subclass) typically live in
-`aurora`, not in `DescToolsX` where the `Desc` classes themselves are
-constructed, because they require `aurora`'s internal plotting helpers
-(9.2) which cannot be used from outside `aurora`'s namespace. See
+`pharos`, not in `DescToolsX` where the `Desc` classes themselves are
+constructed, because they require `pharos`'s internal plotting helpers
+(9.2) which cannot be used from outside `pharos`'s namespace. See
 3.1.1.1 for the resulting export requirements - this is the most common
 case where the `@rawNamespace export()` pattern is needed.
 
@@ -1395,6 +1485,21 @@ similar) is left entirely to the caller.
 Description remains concise and self-contained.
 
 Comparisons between methods always belong in Details. If a comparison seems short enough for Description, that is a signal that it should be moved to Details.
+
+**For non-statistical utility functions** (the bulk of `bedrock`, for example), "statistical purpose" and "conceptual foundation" rarely apply literally. The equivalent obligation is: Description states **why and when** someone would reach for this function, not only what it mechanically does. A one-line "converts X to Y" is not sufficient if the function's value lies in a specific, non-obvious use case — name that use case in Description, and leave mechanical/edge-case detail (exact wrapped call, caveats, boundary behavior) to Details.
+
+```r
+# too thin — only says what, not why
+#' Converts an object to numeric by first coercing it to a factor and
+#' then to numeric.
+
+# correct — names concrete use cases
+#' Converts an object to numeric by first coercing it to a factor and
+#' then to numeric. This is useful whenever a categorical or character
+#' variable needs a purely numeric stand-in -- for example, as input to
+#' functions that require numeric data, or to obtain a compact,
+#' deterministic small-integer code for an ordinal variable.
+```
 
 ## 11.1a Roxygen Topic Naming (`@name`, `@rdname`)
 
@@ -1574,17 +1679,196 @@ When a function computes a collection of related measures, make the plural expli
 | Noun where verb fits | "Box-Cox Lambda Optimizer" | "Estimate Optimal Box-Cox Lambda" |
 | Trailing period | "Pearson Correlation." | "Pearson Correlation" |
 
+## 11.1c `@param` and `@return` Component Description Style
+
+Parameter names and named return components are already displayed as labels in
+`?functionName` and in pkgdown reference pages. Their description text is
+therefore a **continuation of the label**, not an independent sentence — it
+must not repeat the subject.
+
+**Rule: lowercase start, no leading "is a" / "are", and a final period.** This
+matches base R's convention throughout `src/library/*/man/`, e.g.
+`serialize.Rd`:
+
+```text
+\item{object}{\R object to serialize.}
+\item{file}{a \link{connection} or the name of the file where the \R object
+  is saved to or read from.}
+\item{ascii}{a logical.  If \code{TRUE} or \code{NA}, an ASCII
+  representation is written; otherwise (default), a binary one is used.}
+\item{refhook}{a hook function for handling reference objects.}
+```
+
+```r
+# correct
+#' @param x a numeric vector.
+#' @param rng a vector of two values or a matrix with 2 columns, defining
+#'   the minimum and maximum of the range for x.
+
+# incorrect
+#' @param x Is a numeric vector.
+#' @param rng A vector of two values or a matrix with 2 columns, defining...
+```
+
+**Capitalize only where grammar requires it:**
+
+- a proper noun, acronym, or macro output at the very start (`\code{TRUE}`,
+  `NULL`, a package name)
+- the first word of a new sentence after a period, when the description
+  spans more than one sentence (see `ascii` example above: *"a logical.
+  If `TRUE` or `NA`, ..."*)
+
+**Always end the description with a period.** This also applies when the
+description is a short sentence fragment. When it contains two or more
+sentences, capitalize the first word of each new sentence as usual.
+
+**No redundant restatement of the argument name:**
+
+```r
+# incorrect — restates "warn"
+#' @param warn warn if x contains non-finite values.
+
+# correct
+#' @param warn logical; if `TRUE`, a warning is issued when `x` contains
+#'   non-finite values.
+```
+
+The same convention applies to named components documented under `@return`:
+
+```r
+#' @return A named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
+```
+
+## 11.1d Family Overview Pages
+
+When a single `@family` (§12.2) grows large (as a rule of thumb: **more than
+5-6 functions**), the roxygen-generated "Other `<family>`:" cross-link block on
+every member function's page becomes long and low-signal — it lists every
+sibling function flat, with no grouping and no explanation of how they
+relate. In that situation, add a dedicated **overview page**: a standalone
+documentation topic, not attached to any function, that gives a curated,
+narrative index of the family.
+
+*(Revised 2026-07 from the original ~15+ figure, which turned out to already
+produce unreadably long auto-generated `@seealso` blocks well before reaching
+15 members — see `graphics.layout`, 9 members, flagged during a `@seealso`
+audit.)*
+
+### When to use
+
+- The family has enough members that a flat alphabetical list stops being
+  useful for orientation (new users, teaching contexts, pkgdown reference
+  index).
+- The family has natural sub-groups (e.g. "manipulation" vs. "information"
+  functions) that aren't captured by `@family`/`@concept` alone.
+
+Do not create an overview page for small or flat families — the
+auto-generated `@family` cross-links are sufficient there.
+
+### Naming convention
+
+Same pattern as topic grouping in §11.1a: kebab-case,
+`<domain>-overview`.
+
+```text
+string-overview
+data-recode-overview
+```
+
+### Structure
+
+The overview page is a `NULL`-documented roxygen block: it carries
+`@name`, a description with a short grouped table of member functions
+(one table per sub-group, if sub-groups exist), and the same `@family` tag
+as its members, but no `@export` and no function body.
+
+```r
+#' String Functions in pharos
+#'
+#' @description
+#' pharos provides a family of functions for manipulating and inspecting
+#' character strings. They fall into two groups:
+#'
+#' **Manipulation** — transform, extract, or reshape string content:
+#'
+#' | Function | Purpose |
+#' |---|---|
+#' | [strAbbr()] | Abbreviate strings |
+#' | [strPad()] | Pad strings |
+#' | ... | ... |
+#'
+#' **Information** — inspect properties of strings without changing them:
+#'
+#' | Function | Purpose |
+#' |---|---|
+#' | [strLen()] | String length |
+#' | ... | ... |
+#'
+#' @family string
+#' @name string-overview
+NULL
+```
+
+### Linking member functions to the overview page
+
+Each member function adds a single `@seealso` line pointing at the hub.
+This is a narrow, well-defined exception to the §12.5 rule that `@seealso`
+is not a substitute for `@concept` cross-linking — a single link to the
+family's own hub page is not a collection of loosely related functions.
+
+```r
+#' @seealso
+#' [string-overview] for an overview of all string utilities in pharos.
+```
+
+### Relationship to `@family` and `@concept`
+
+- The overview page **replaces** `@family` for its member functions —
+  once an overview page exists, member functions drop their `@family` tag
+  entirely rather than keep it alongside the hub link. Carrying both
+  produces a redundant, low-signal auto-generated "Other `<family>`:"
+  block on every member page in addition to the curated table on the hub
+  page; the hub page alone is the intended navigation surface. See the
+  exemption note in §12.2.
+- The overview page does not replace `@concept` — subject-matter tagging
+  is unchanged and, in the absence of `@family`, carries the full
+  navigational weight (CRAN's concept index, pkgdown search) on its own.
+  Give it the usual care: 2–4 tags per function, drawn from the
+  authoritative vocabulary in §12.3.
+- The overview page's own roxygen block carries no `@family` tag either
+  — there are no sibling pages left to cross-link to once the member
+  functions have dropped theirs.
+
 ## 11.2 Required Sections
 
 All exported functions must contain:
 
-**`@param`** — for every argument: type, meaning, constraints, and default behavior. Precise enough to prevent misuse.
+**`@param`** — for every argument: type, meaning, constraints, and default behavior. Precise enough to prevent misuse. See §11.1c for description style (capitalization and punctuation).
 
-**`@return`** — structure and type of the returned object. For complex outputs such as lists, the most important components are described.
+**`@return`** — structure and type of the returned object. For complex outputs such as lists, the most important components are described. Named component descriptions follow §11.1c.
 
 **`@examples`** — minimal, reproducible, no external data, primary use case. Where useful: a second example for a non-default or edge case.
 
 **`@examples`** should be deterministic → use `set.seed()` where needed.
+
+**Result comments in `@examples`:** Showing the expected output as a
+comment is optional but encouraged, especially for functions whose
+return value isn't obvious from the call alone. When shown, always use
+the `## [1] ...`-style format (double `#`, one space before the
+bracket), matching R's own console echo — never a bare `#[1] ...`
+without the space, and never a single `#`. This keeps generated-output
+comments visually distinct from ordinary explanatory comments (which
+use a single `#`) throughout the suite's `@examples` blocks.
+
+```r
+#' dtri(12:14, 10, 15, 12)
+#' ## [1] 0.4000000 0.2666667 0.1333333
+```
 
 ## 11.3 Error Handling in Documentation
 
@@ -1700,7 +1984,7 @@ Examples:
 
 ## 12.1 Overview
 
-The package suite uses `@family` and `@concept` for function organization across all packages (DescToolsX, lumen, aurora, bedrock, alloy). The two tags serve strictly separated roles:
+The package suite uses `@family` and `@concept` for function organization across all packages (DescToolsX, lumen, pharos, bedrock, alloy). The two tags serve strictly separated roles:
 
 - `@family` = **functional navigation** — where does a user look for this function?
 - `@concept` = **subject-matter tagging** — what is this function about?
@@ -1710,6 +1994,12 @@ This separation is authoritative. Do not use `@concept` for navigation, and do n
 ## 12.2 `@family`
 
 **Exactly one family per function.** No function may carry two `@family` tags.
+
+**Exemption:** functions documented under a §11.1d overview page carry
+**no** `@family` tag at all — the overview page's curated table replaces
+the auto-generated cross-link list. This is the only case where a
+function may have zero `@family` tags; every other exported function
+still requires exactly one.
 
 ### Naming convention
 
@@ -1789,42 +2079,92 @@ If a function could plausibly belong to two families, assign it to the one that 
 | `distributions` | All d/p/q/r/m functions for non-standard distributions |
 | `scores` | Normal scores |
 
-**aurora**
+**pharos**
 
 | Family | Contents |
 |---|---|
-| `plot.univariate` | plotBar, plotBox, plotDens, plotViolin, plotDot, plotECDF, plotQQ, … |
-| `plot.bivariate` | plotXY, plotCor, plotAssoc, plotMosaic, plotHeatmap, plotBubble, … |
-| `plot.distribution` | plotProbDist, plotFun |
-| `plot.special` | plotTimeSeries, plotMiss, plotPropCI, plotTreemap, plotWeb, … |
-| `plot.s3` | plot.BlandAltman, plot.Desc.qn, plot.Desc.table, plot.Lc |
-| `theme` | getTheme, setTheme, resetTheme, style |
-| `format` | fm, fmCI, notation |
-| `color` | All color conversion, mixing, palette functions |
-| `geometry` | arc, band, circle, ellipse, polygon, ring, … |
-| `graphics.utils` | axisBreak, barText, errBars, stamp, textLegend, lines.lm, … |
-| `string` | strAbbr, strExtract, strPad, strVal, mgsub, … |
-| `html` | as.html, as.img, toHtmlTable, preview.html |
-| `ci.objects` | as.CI |
+| `color.conversion` | colToHex, colToHSV, colToRGB, colToOpaque, grayscale, hexToCol, hexToRGB, longToRGB, rgbToCol, rgbToHex, rgbToLong |
+| `color.space` | cmyToCmyk, cmykToCmy, cmykToRgb, rgbToCmy |
+| `color.handling` | addOpacity |
+| `color.lookup` | contrastColor, findColor |
+| `color.manipulation` | darken, fade, lighten, mixColors |
+| `color.palettes` | hcol, pal, palNames |
+| `format` | fm, fmCI, style, styles, unit, unit<-, print.Unit, convUnit |
 | `tables` | ftable.list |
+| `geometry.conversion` | cartToPol, polToCart, cartToSph, sphToCart, degToRad, radToDeg |
+| `geometry.structures` | arc, band, bezier, circle, ellipse, polygon, regPolygon, ring |
+| `geometry.transformation` | transformXY, rotate |
+| `graphics.annotation` | barText, boxedText, colLegend, errBars, lines.lm, splineX, textLegend, titleRect |
+| `graphics.layout` | abcCoords, axisBreak, axTicks, canvas, lineToUser, mar, polarGrid, setBackCol, spreadOut |
+| `graphics.framework` | stamp |
+| `graphics.utils` | preview — sole remaining member; no established family fits a generic, non-graphics-specific S3 dispatch function. Open decision, see note below. |
+| *(none — see `string-overview`)* | strAbbr, strAlign, strCap, strChop, strCountW, strDist, strExtract, strExtractBetween, strIsNumeric, strLeft/strRight, strLen, strPad, strPos, strRev, strSpell, strSplit, strTrim, strTrunc, strVal, lineSep — documented under the §11.1d overview page `string-overview` instead of an `@family` tag; still `@concept string-manipulation` / `string-inspection` |
+| `html` | htmlHat, htmlBar, `%_%`, as.html, as.img, toHtmlTable |
+| `plot.bivariate` | plotAssoc, plotBag, plotBubble, plotCor, plotDens2D, plotHeatmap, plotHexbin, plotMosaic, plotXY |
+| `plot.distribution` | plotFun, plotProbDist, shade |
+| `plot.s3` | plot.BlandAltman, plot.Desc.qn, plot.Desc.table, plot.Lc |
+| `plot.special` | plotBinaryTree, plotCirc, plotMiss, plotPolar, plotPropCI, plotTernary, plotTimeSeries, plotTreemap, plotWeb |
+| `plot.univariate` | plotArea, plotBar, plotBox, plotCatDist, plotDens, plotDensBox, plotDot, plotECDF, plotFdist, plotLines, plotQQ, plotRidge, plotViolin |
+| `theme` | getTheme, resetTheme, setTheme |
+
+**Verified against source, 2026-07 pass** (this table now reflects `@family` tags actually present in the `.R` files, not intent):
+
+- `graphics.utils` was split into three by actual function purpose: `graphics.annotation` (draws a labeled/informative element onto an existing plot), `graphics.layout` (positioning/coordinate/margin infrastructure, including `canvas` and `polarGrid`, which source still tagged bare `geometry` despite this doc previously claiming they'd been merged), and `graphics.framework` (`stamp`, the one function wired into virtually every plot via `.withGraphicsState()`). Two former members were reclassified out of the graphics domain entirely: `degToRad`/`radToDeg` → `geometry.conversion`, `unit` → `format` (both already listed correctly elsewhere in this table — the source tags just hadn't been updated to match). `lineSep` (console separator string, no plot involvement) moved to the string-overview group.
+- `color.changing` renamed to `color.manipulation` (verb-gerund broke the noun pattern of sibling `color.*` families; `color-manipulation` was already the `@concept` in use, and matches the established `string-manipulation`/`string-inspection` precedent).
+- `color.space` (`cmyToCmyk, cmykToCmy, cmykToRgb, rgbToCmy`) existed correctly tagged in source but was never added to this table — added now.
+- `tables` (`ftable.list`) — this table previously listed it under a `frequency` family that doesn't exist in source; the actual tag is `tables`.
+- `plot.distribution` previously listed only `shade`; `plotFun` and `plotProbDist` were incorrectly listed under `plot.univariate` in this table but are actually tagged `plot.distribution` in source — moved.
+- `html` previously listed `notation` (not a real function — a descriptive label, removed) and `preview.html` (an S3 method of `preview()`, which is tagged `graphics.utils`, not `html` — removed pending the `preview` decision below).
+- Four `topic.graphics` (`plotBubble`, `plotDens`, `plotDens2d`, `plotRidge`) and one `inequality` (`plot.Lc`) leftover pre-redesign tags were found and removed — each had a second, already-correct tag in the same roxygen-grouped doc topic, so no reassignment was needed, just deletion of the stale duplicate.
+- `hexToRGB` carried a stray bare `@family color` (typo from before the initial family redesign) — corrected to `color.conversion`.
+- **Open gap, not resolved:** `as.CI`/`is.CI` (`as.ci.R`) carry no `@family` tag at all in source, despite this table historically listing a `ci.general` family for them. Either the tag needs adding or the row should be dropped — flagging rather than deciding.
+- **Open gap, not resolved:** `preview` has no family that fits — it's a generic S3 dispatch mechanism (also used for the unrelated `html` class), not graphics-specific. Left in `graphics.utils` as a placeholder of one.
+
+`color.lookup` (findColor) and the `geometry` bare family (canvas, polarGrid — now correctly in `graphics.layout`, not merged into the old `graphics.utils` as this doc previously and inaccurately claimed) were resolved during the initial family pass: `color` and `geometry` had been used both bare and with `.`-subcategories for the same domain, which no other package in the suite does — a domain is either fully bare (`theme`, `format`, `tables`) or fully `.`-categorized (`color.*`, `geometry.*`), never mixed.
+
+With the threshold now at 5-6 (revised 2026-07, see §11.1d), considerably more families qualify for an overview page than before: `plot.univariate` (13), `color.conversion` (11), `graphics.layout` (9), `plot.bivariate` (9), `plot.special` (9), `graphics.annotation` (8), `geometry.structures` (8) all now exceed it — previously only `graphics.utils` (25) was flagged. None of these have overview pages yet; all deferred pending prioritization.
+
+
 
 **bedrock**
 
 | Family | Contents |
 |---|---|
-| `data.manipulation` | appendX, collapseTable, dummy, nf, recodeX, sortX, … |
-| `data.inspection` | allDuplicated, completeColumns, flags, isDichotomous, isNA, … |
-| `vector.ops` | closest, coalesceX, locf, moveAvg, naIf, winsorize, … |
-| `math.utils` | crossProd, linScale, percentRank, roundTo, unirootAll, … |
-| `number.theory` | digitSum, factorize, fibonacci, isPrime, primes |
-| `combinatorics` | combN, combPairs, permn, randGroupSplit, sampleX |
-| `string.utilities` | mGsub, mReplace, strSplitToCol, strSplitToDummy |
-| `table.utils` | collapseTable, multMerge, printCharMatrix |
-| `pkg.introspection` | funArgs, funCalls, funKeywords, funList, getRdLabels |
-| `label.utils` | label, dataDescription, openDataObject |
-| `file.utils` | buildPath, fileExistURL, findDownload, pdfManual, readDownload |
-| `data.utils` | resolveFormula, resolveGroups, resolveContingency |
-| `utilities` | callIf, isNA |
+| `combinatorics` | combN, combPairs, combSet, pairApply, permn, … |
+| `data.append` | appendEnum, appendRowNames, appendX, multMerge |
+| `data.coerce` | bin, chr, int, nchr, num, … |
+| `data.equal` | allDuplicated, allIdentical, compareDataFrames |
+| `data.inspect` | strX |
+| `data.interval` | between, the 8 range operators, intervals, overlap(s), distance, %:%, %::% |
+| `data.missing` | completeColumns, countCompCases |
+| `data.order` | binaryTree, revX, sortX |
+| `data.predicate` | flags, isDichotomous, isEuclid, isLowCardinality, isNumeric, … |
+| `data.print` | columnWrap, printCharMatrix |
+| `data.recode` | asBinary, combLevels, dummy, mReplace, nf, … |
+| `data.reshape` | collapseTable, long-wide-reshape, splitAt, splitX, toLong, … |
+| `data.resolve` | resolveContingency, resolveFormula, resolveGroups |
+| `datasets` | Cards, Pizza, Roulette, Tarot, courseData |
+| `date.format` | asCDateFmt |
+| `file.io` | parseSASDatalines, pdfManual, peekFile |
+| `file.path` | buildPath, fileExistURL, findDownload, isFilePath, isURL, … |
+| `label.attrs` | keepAttr, label, label<-, removeAttr, renameX, … |
+| `label.import` | dataDescription, openDataObject |
+| `math.basic` | closest, crossProd, crossProdN, dotProd, roundTo, … |
+| `math.geometry` | ptInPoly |
+| `math.precision` | frac, maxDigits, nDec, prec, precision |
+| `math.transform` | linScale, logit, logitInv, percentRank, rankX, … |
+| `number.baseconv` | baseToBase, binToDec, decToBin, decToHex, decToOct, … |
+| `number.theory` | digitSum, divisors, factorize, fibonacci, gcd_lcm, … |
+| `pkg.args` | callIf, extractArgs, getDotsArg, mergeArgs, recycle |
+| `pkg.funinfo` | funArgs, funCalls, funKeywords, funList, rdLabels, … |
+| `string.encoding` | asciiToChar, charToAscii |
+| `string.transform` | mGsub, strSplitToCol, strSplitToDummy |
+| `vector.na` | coalesceX, isNA, locf, naIf, naReplace |
+| `vector.reshape` | setLength, trim, vRot, vShift |
+| `vector.utils` | nz, unwhich |
+| `vector.window` | midx, moveAvg, quot |
+
+Superseded a flat, pre-redesign taxonomy (`data.manipulation`, `data.inspection`, `vector.ops`, `math.utils`, `file.utils`, `label.utils`, `data.utils`, `utilities`, `string.utilities`, `table.utils`) that grouped 15–30+ unrelated functions per family, producing unusable "Other X:" cross-link blocks. See §12.6 for the process used to split it and for the verification step that must accompany any future family rename or merge.
 
 **alloy**
 
@@ -1936,20 +2276,35 @@ nonlinear-association   nonlinear-mean          nonparametric
 normality-test          number-formatting       number-theory
 numeric-conversion      numerical-methods       order-statistic
 ordering                ordinal                 outlier-detection
-palette                 parametric              post-hoc
-power                   prediction              prediction-error
+palette                 parametric              pattern-matching
+phonetic-encoding       post-hoc                power
+prediction              prediction-error
 programming             proportion              quantile
 randomness              range                   rank-correlation
 rater-data              regression              regression-diagnostics
 reliability             reshape                 robust-statistic
 roc                     sample-size             sampling
 scatterplot             shape                   standardization
-string-manipulation     summary                 table
+string-inspection       string-manipulation     summary
+table
 table-summary           theme                   time-series
 transformation          tree                    trend-test
 type-test               variance-analysis       variance-component
 variance-stabilization  variance-test
 ```
+
+### Recently added concepts
+
+- `string-inspection` — added for pharos's `string` family to separate functions
+  that measure or test a string (`strCountW`, `strDist`, `strIsNumeric`,
+  `strLen`, `strPos`) from those in `string-manipulation` that change one
+  (`strAbbr`, `strPad`, `strSplit`, ...). Same relationship as
+  `distribution-function` vs. `distribution-summary` below.
+- `pattern-matching` — regex-driven search/extract/split functions
+  (`strExtract`, `strExtractBetween`, `strPos`, `strSplit`, `strVal`).
+- `phonetic-encoding` — added specifically for `strSpell` (NATO/Morse
+  encoding); narrow on purpose, not intended for reuse outside that function
+  unless a genuinely similar case arises.
 
 ### Special cases
 
@@ -1987,6 +2342,37 @@ Retained as a cross-cutting concept tag **only within `assoc.*` families**. Do n
 ## 12.5 `@seealso`
 
 `@seealso` is reserved for close functional relationships: direct alternatives, or helper functions typically used together. It is not a substitute for `@concept` cross-linking.
+
+### External packages not in `Imports`/`Suggests`
+
+It is legitimate to point to a function in another CRAN package as an alternative or complement (e.g. a faster or more general implementation), even when that package is not a dependency. In that case, reference it as **plain code text**, not as a validated `\link[pkg]{fun}`:
+
+```r
+# correct — plain code text, nothing to validate at check time
+#' @seealso \code{zoo::rollmean()}, \code{forecast::ma()}
+
+# incorrect — creates a checked cross-reference to a package that
+# might not be installed, and that R CMD check will flag if the
+# topic can't be resolved
+#' @seealso \code{\link[zoo]{rollmean}}
+```
+
+Reserve real `\link[pkg]{fun}` markup for packages that are actually declared in `Imports`, `Suggests`, or `Depends` (where the topic is guaranteed to be resolvable), or for base-distributed packages (`base`, `stats`, `utils`, ...). A package mentioned only in prose carries no such guarantee — and CRAN packages do get orphaned or archived (check for "email to maintainer is undeliverable" on the package's CRAN page before naming it at all).
+
+## 12.6 Family/Concept Rollout Verification
+
+When renaming, splitting, or merging `@family` values across a package (as opposed to fixing a single function), the rename is not complete until it has been verified mechanically — memory of "which functions I already touched" is not reliable at package scale. Two concrete gaps that shipped silently in exactly this way:
+
+- Three functions still carried a pre-redesign `@family` value (`data.manipulation`, `data.inspection`, `data.utils` as old-taxonomy names) after the bedrock family redesign was believed complete.
+- 94 of ~150 documented functions carried only 1 `@concept` tag, violating the 2–4 minimum from §12.3, discovered only by a package-wide script pass, not by review.
+
+**Checklist for any family/concept rollout:**
+
+1. `grep -rn "@family <old-name>"` across all `.R` files — zero hits required before considering the rename done.
+2. Script-count `@concept` tags per roxygen block (not per file — files with multiple `@rdname`-grouped functions need per-block counting); flag any block outside the 2–4 range.
+3. Re-run both checks after any manual correction pass, since fixing one violation can silently reintroduce another (e.g. a duplicate concept skipped during insertion).
+
+These checks are cheap to script and expensive to skip — do them as a matter of course, not only when something looks off.
 
 ---
 

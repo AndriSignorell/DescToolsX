@@ -43,14 +43,14 @@ conf(x, ...)
 \method{plot}{Conf}(x, main = "Confusion Matrix", ...)
 }
 \arguments{
-\item{x}{object containing predictions. Can be:
+\item{x}{object containing predictions; one of:
 \itemize{
 \item a factor or character vector of predicted classes
 \item a confusion matrix (\code{table} or \code{matrix})
 \item a fitted model object (e.g., \code{glm}, \code{rpart})
 }}
 
-\item{\dots}{further arguments passed to specific methods.}
+\item{\dots}{further arguments passed to specific methods}
 
 \item{pos}{optional character specifying the positive class (binary
 classification only). If \code{NULL}, the second level is used and
@@ -65,9 +65,9 @@ Default \code{TRUE}.}
 \item{cutoff}{numeric cutoff for probabilistic models (e.g., \code{glm}).
 Default \code{0.5}.}
 
-\item{digits}{integer, number of decimal places for printing.}
+\item{digits}{integer; number of decimal places for printing}
 
-\item{main}{character, plot title.}
+\item{main}{character string specifying the plot title}
 }
 \value{
 an object of class \code{"Conf"} containing:
@@ -77,9 +77,10 @@ an object of class \code{"Conf"} containing:
 \item{\code{diag}}{number of correct predictions}
 \item{\code{n}}{total number of observations}
 \item{\code{acc}, \code{acc.lci}, \code{acc.uci}}{accuracy and CI}
-\item{\code{nir}}{No Information Rate}
-\item{\code{acc.pval}}{p-value for Accuracy > NIR}
-\item{\code{kappa}}{Cohen's Kappa}
+\item{\code{nir}}{no-information rate}
+\item{\code{acc.pval}}{p-value for accuracy greater than the
+no-information rate}
+\item{\code{kappa}}{Cohen's kappa}
 \item{\code{mcnemar.pval}}{McNemar test p-value}
 \item{\code{byclass}}{matrix of class-wise metrics}
 }

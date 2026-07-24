@@ -14,9 +14,9 @@ small(x, k = 5L, unique = FALSE, na.last = NA)
 highLow(x, nlow = 5L, nhigh = nlow, na.last = NA)
 }
 \arguments{
-\item{x}{a \code{numeric} vector}
+\item{x}{a numeric vector}
 
-\item{k}{an integer >0 defining how many extreme values should be returned.
+\item{k}{a positive integer defining how many extreme values are returned.
 Default is \code{k = 5}. If \code{k > length(x)}, all values will be
 returned.}
 
@@ -29,16 +29,21 @@ rather expensive function).}
 missing values in the data are put last; if \code{FALSE}, they are put
 first; if \code{NA}, they are removed.}
 
-\item{nlow}{a single integer. The number of the smallest elements of a
-vector to be printed. Defaults to 5.}
+\item{nlow}{number of smallest values included in the formatted output;
+defaults to 5}
 
-\item{nhigh}{a single integer. The number of the greatest elements of a
-vector to be printed. Defaults to the number of \code{nlow}.}
+\item{nhigh}{number of largest values included in the formatted output;
+defaults to \code{nlow}}
 }
 \value{
-if \code{unique} is set to \code{FALSE}: a vector with the k most
-extreme values, \cr else: a list, containing the k most extreme values and
-their frequencies.
+for \code{large()} and \code{small()}, a vector of extreme values
+when \code{unique = FALSE}, otherwise a list with components:
+\describe{
+\item{\code{value}}{extreme values}
+\item{\code{frequency}}{corresponding frequencies}
+}
+\code{highLow()} returns a character scalar containing formatted lowest and
+highest values with frequencies.
 }
 \description{
 Find the kth smallest, resp. largest values from a vector \code{x} and
@@ -57,8 +62,13 @@ based on highly efficient C++ code and proved to be very fast.
 \code{highLow()} combines the two upper functions and reports the k extreme values on
 both sides together with their frequencies in parentheses. It is used for
 describing univariate variables and is interesting for checking the ends of
-the vector, where in real data often wrong values accumulate. This is in
-essence a printing routine for the highest and the lowest values of x.
+the vector, where in real data often wrong values accumulate. In
+essence this is nothing more than a combine printing routine for \code{large()}
+and \code{small()}.
+}
+\note{
+Based on C++ code by Nathan Russell and Romain Francois,
+adapted to conform to package standards.
 }
 \examples{
 
@@ -74,6 +84,7 @@ small(x, 3, unique=FALSE)
 # Both ends
 cat(highLow(Pizza$temperature, na.last=NA))
 
+ 
 }
 \references{
 \href{https://stackoverflow.com/questions/36993935}{StackOverflow: Largest n unique values}
@@ -87,11 +98,6 @@ cat(highLow(Pizza$temperature, na.last=NA))
 Other quantile:
 \code{\link[=quantileX]{quantileX()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}\cr C++ parts by Nathan
-Russell and Romain Francois
-}
 \concept{distribution-summary}
 \concept{order-statistic}
 \concept{quantile}
-\keyword{arith}

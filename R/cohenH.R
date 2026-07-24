@@ -19,23 +19,20 @@
 #' Optionally, an approximate asymptotic confidence interval
 #' is computed.
 #'
-#' @param x A 2x2 contingency table, matrix, or a vector that can
-#'   be coerced into a table.
-#' @param y An optional second variable used together with \code{x}
-#'   to create a contingency table via \code{table(x, y, ...)}.
-#' @param conf.level Confidence level for the interval.
+#' @param x a 2x2 contingency table, matrix, or vector that can
+#'   be coerced into a table
+#' @param y an optional second variable used together with \code{x}
+#'   to create a contingency table via \code{table(x, y, ...)}
+#' @param conf.level confidence level for the interval.
 #'   If \code{NA}, only the point estimate is returned.
-#' @param ... Additional arguments passed to \code{table()}.
+#' @param ... additional arguments passed to \code{table()}
 #'
-#' @return
-#' If \code{conf.level = NA}, a numeric scalar containing
-#' Cohen's \eqn{h}.
-#'
-#' Otherwise, a named numeric vector with:
+#' @return if \code{conf.level = NA}, a numeric scalar containing Cohen's
+#' \eqn{h}; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{estimate}{Cohen's h estimate}
-#'   \item{lci}{Lower confidence interval bound}
-#'   \item{uci}{Upper confidence interval bound}
+#'   \item{\code{est}}{point estimate of Cohen's \eqn{h}.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
 #' }
 #'
 #' @details
@@ -128,7 +125,7 @@ cohenH <- function(x,
   uci <- h + z * se
   
   out <- c(
-    estimate = h,
+    est = h,
     lci = lci,
     uci = uci
   )

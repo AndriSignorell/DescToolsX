@@ -15,7 +15,7 @@
 #'   \item \code{conceptAudit()} - Returns a summary table of concept usage.
 #' }
 #'
-#' @param pkg Character string. Name of the installed package.
+#' @param pkg character string. Name of the installed package.
 #'
 #' @name concepts  
 #' @details
@@ -27,9 +27,9 @@
 #'
 #' @return
 #' \describe{
-#'   \item{\code{getConcepts}}{Character vector of unique concept names.}
-#'   \item{\code{conceptMap}}{Named list mapping concepts to functions.}
-#'   \item{\code{conceptAudit}}{Data frame with concept frequencies.}
+#'   \item{\code{getConcepts}}{character vector of unique concept names}
+#'   \item{\code{conceptMap}}{named list mapping concepts to functions}
+#'   \item{\code{conceptAudit}}{data frame with concept frequencies}
 #' }
 #'
 #' @examples 

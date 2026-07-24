@@ -2,11 +2,9 @@
 % Please edit documentation in R/desc.factor.R
 \name{desc.factor}
 \alias{desc.factor}
-\alias{Desc.ordered}
-\alias{Desc.character}
 \alias{desc.character}
 \alias{print.Desc.factor}
-\title{Desc.factor}
+\title{Describe a Factor}
 \usage{
 \method{desc}{factor}(
   x,
@@ -35,9 +33,7 @@
 \method{print}{Desc.factor}(x, digits = NULL, ...)
 }
 \arguments{
-\item{x}{the object to be described. This can be a data.frame, a list, a
-table or a vector of the classes: numeric, integer, factor, ordered factor,
-logical.}
+\item{x}{factor, ordered factor, or character vector to describe}
 
 \item{maxrows}{numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
@@ -67,16 +63,15 @@ factors, numerics with few unique values and logicals. Factors (and
 character vectors) are by default ordered by their descending frequencies,
 ordered factors by their natural order.}
 
-\item{conf.level}{Confidence level of the interval (default 0.95).
-If set to \code{NA} (which is the default) no confidence interval
-will be calculated.}
+\item{conf.level}{confidence level of the interval (default 0.95).
+If set to \code{NA}, no confidence interval is calculated.}
 
-\item{main}{Character string (character|\code{NULL}|\code{NA})
-defining the main title. By default (\code{main = NULL}) the title will
+\item{main}{character string, \code{NULL}, or \code{NA}, defining the main
+title. By default (\code{main = NULL}) the title will
 be composed as: \if{html}{\out{<variable name>}} (<class(es)>).
 If \code{NA}, no title is printed.}
 
-\item{verbose}{Integer controlling verbosity of table output.
+\item{verbose}{integer controlling verbosity of table output.
 One of \code{1} (minimal), \code{2} (default), \code{3} (extensive).
 Applies to tables only.}
 
@@ -84,18 +79,18 @@ Applies to tables only.}
 on the classes of the variables. Default can be defined by
 the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
-\item{digits}{integer. With how many digits should the relative frequencies
-be formatted? Default can be set by
-\code{\link{setDescToolsXOption}(digits=x)}.}
+\item{digits}{number of digits used to format relative frequencies; the
+default can be set with \code{setDescToolsXOption(digits = x)}}
 
-\item{...}{Further graphical parameters passed to the underlying
-base R plotting functions.}
+\item{...}{further arguments passed to methods}
+}
+\value{
+an object of class \code{c("Desc.factor", "Desc")} containing
+counts, frequency information, and metadata
 }
 \description{
-Displays a set of statistical measures describing a factor.
-Visualizes the distribution of a numeric \code{Desc} object.
-The plot consists of a pair of horizontally organized barplots
-displaying the absolute and relative frequencies.
+Compute descriptive statistics for a factor or character vector. The plot
+method displays absolute and relative frequencies in horizontal bar plots.
 }
 \details{
 This function produces a rich description of a \strong{factor}, containing
@@ -103,13 +98,12 @@ length, number of NAs, number of levels and detailed frequencies of all
 levels. The order of the frequency table can be chosen between
 descending/ascending frequency, labels or levels. For ordered factors the
 order default is \code{"level"}. Character vectors are treated as unordered
-factors Desc.char converts x to a factor an processes x as factor.\cr
-Desc.ordered does nothing more than changing the standard order for the
-frequencies to it's intrinsic order, which means order \code{"level"}
-instead of \code{"desc"} in the factor case.
+factors. \code{desc.character()} converts \code{x} to a factor and then uses
+the factor method. Ordered factors use their intrinsic level order rather
+than descending frequency order.
 }
 \seealso{
-\code{\link[aurora]{plotCatDist}} for graphical display
+\code{\link[pharos]{plotCatDist}} for graphical display
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -119,6 +113,7 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{data-description}

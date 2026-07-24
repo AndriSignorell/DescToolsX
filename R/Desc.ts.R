@@ -17,10 +17,12 @@
 #' The goal is to provide quick diagnostic guidance before model fitting
 #' (e.g., ARIMA specification).
 #'
-#' @name Timeseries
-#' @param x A univariate object of class \code{"ts"}.
-#' @param maxLag Integer. Number of lags used in the Ljung-Box test.
-#'   Default is 12.
+#' @name desc.ts
+#' 
+#' @inheritParams desc
+#' @param x a univariate object of class \code{"ts"}
+#' @param maxLag number of lags used in the Ljung-Box test; defaults to 12
+#' @param digits number of digits used to format numeric values
 #'
 #' @details
 #' Stationarity is evaluated using both the Augmented Dickey-Fuller (ADF)
@@ -32,12 +34,8 @@
 #' The Box-Cox transformation parameter is estimated using
 #' \code{\link{boxCoxLambda}()}.
 #'
-#' @return
-#' The function prints a structured diagnostic summary to the console.
-#' Invisibly returns a named list containing all computed statistics.
-#'
-#' @author
-#' Andri Signorell <andri@@signorell.net>
+#' @return an object of class \code{c("Desc.ts", "Desc")} containing the
+#' computed statistics
 #'
 #' @references
 #' Box, G. E. P., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015).
@@ -50,25 +48,18 @@
 #' desc(AirPassengers)
 #' desc(Nile, maxLag = 10)
 #'
-#' @importFrom stats acf Box.test lm coef time
-#' @importFrom utils head
-#' @seealso \code{\link[stats]{acf}},
-#'   \code{\link[stats]{Box.test}},
-#'   \code{\link[forecast]{BoxCox.lambda}},
-#'   \code{\link[tseries]{adf.test}},
-#'   \code{\link[tseries]{kpss.test}}
+#' @seealso [stats::acf], [stats::Box.test], [boxCoxLambda],
+#'   [lumen::adfTest],
+#'   [lumen::kpssTest], 
+#'   [pharos::plotTimeSeries]
 #'
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
 #' @concept time-series
+#' 
 #'
-#'
-#' @export
-
-
-
-#' @rdname desc
+#' @rdname desc.ts
 #' @method desc ts
 #' @export
 desc.ts <- function(x, 
@@ -114,7 +105,7 @@ desc.ts <- function(x,
 
 
 
-#' @rdname desc
+#' @rdname desc.ts
 #' @method print Desc.ts
 #' @export
 print.Desc.ts <- function(x, digits = NULL, ...) {
@@ -140,8 +131,7 @@ print.Desc.ts <- function(x, digits = NULL, ...) {
   }
   
   m <- rbind(lst$l1, lst$l2, "", names(lst$l3), lst$l3, "")
-  .print.charmatrix(m)
-  
+  printCharMatrix(m, showRownames = FALSE)  
   
   if(x$meta$plotit)
     plot(x, main=x$meta$main)
@@ -150,11 +140,9 @@ print.Desc.ts <- function(x, digits = NULL, ...) {
 }
 
 
-
-#'@export
+#' @rdname desc.ts
+#' @export
 plot.Desc.ts <- function(x, ...){
   plotTimeSeries(x$x, ...)
 }
-
-
 

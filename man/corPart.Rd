@@ -7,20 +7,20 @@
 corPart(m, x, y)
 }
 \arguments{
-\item{m}{A numeric matrix. Either:
+\item{m}{a numeric matrix, either:
 \itemize{
 \item a square correlation matrix, or
 \item a data matrix (observations × variables)
 }}
 
-\item{x}{Integer vector of indices specifying the variables of interest
-for which partial correlations are computed.}
+\item{x}{integer vector of indices specifying the variables of interest
+for which partial correlations are computed}
 
-\item{y}{Integer vector of indices specifying the control variables
-(conditioning set).}
+\item{y}{integer vector of indices specifying the control variables
+(conditioning set)}
 }
 \value{
-A symmetric numeric matrix containing the partial correlations
+a symmetric numeric matrix containing the partial correlations
 among variables in \code{x}, adjusted for variables in \code{y}.
 Row and column names correspond to \code{colnames(m)[x]}.
 }
@@ -87,7 +87,6 @@ Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }

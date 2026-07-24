@@ -7,23 +7,16 @@
 randolphKappa(x, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{(Default method) A matrix of size \eqn{N \times m} with subjects in
-rows and raters in columns; cells contain the assigned categories.}
+\item{x}{a matrix of size \eqn{N \times m} with subjects in rows and raters
+in columns; cells contain the assigned categories}
 
-\item{conf.level}{Numeric confidence level (e.g., \code{0.95}) for bootstrap
-confidence intervals. Currently no interval is computed; passing
-\code{NA} (the default) skips any CI.}
+\item{conf.level}{reserved for future confidence intervals and currently
+ignored}
 
-\item{...}{further arguments are passed to the \code{\link[boot]{boot}} function.
-Supported arguments are \code{type} (\code{"norm"}, \code{"basic"},
-\code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
-of bootstrap replicates \code{R}. If not defined those will be set to their
-defaults, being \code{"basic"} for \code{type}, option
-\code{"boot.parallel"} (and if that is not set, \code{"no"}) for
-\code{parallel} and \code{999} for \code{R}.}
+\item{...}{reserved for future bootstrap options and currently ignored}
 }
 \value{
-A numeric scalar: the value of Randolph's kappa.
+a numeric scalar containing Randolph's kappa
 }
 \description{
 Computes Randolph's free-marginal multirater kappa for \eqn{m} raters over
@@ -41,9 +34,7 @@ Here, \eqn{n_{ij}} denotes the number of raters who assigned subject \eqn{i}
 to category \eqn{j}; \eqn{\max_j n_{ij}} is the modal (most frequent)
 category count per subject.
 
-The \code{formula} method reshapes long-format data to a subjects\eqn{\times}raters
-matrix internally (via \code{DescTools::.LongToSquare}) and then calls the
-\code{default} method.
+Long-format ratings can first be reshaped with \code{\link{raterFrame}}.
 }
 \examples{
 ## Matrix (subjects x raters), 5 subjects, 3 raters
@@ -64,6 +55,7 @@ df <- data.frame(
 )
 randolphKappa(raterFrame(rating ~ subject | rater, 
                          data = df, dropSubj=TRUE))
+
 }
 \references{
 Randolph, J. J. (2005). Free-Marginal Multirater Kappa (multirater \eqn{\kappa_{\mathrm{free}}}):
@@ -76,7 +68,6 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},

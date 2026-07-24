@@ -4,14 +4,15 @@
 \alias{ConfidenceIntervals}
 \title{Confidence Interval Interface - Common Arguments}
 \arguments{
-\item{conf.level}{Confidence level of the interval. If set to \code{NA}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
 
-\item{sides}{A character string specifying the side of the confidence
+\item{sides}{character string specifying the side of the confidence
 interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter.}
+\code{"right"}. The value names the side on which the finite bound
+lies. You can specify just the initial letter.}
 
-\item{method}{A character string defining the type of interval required.
+\item{method}{character string defining the type of interval required.
 The value should be one of \code{"classic"} or \code{"boot"} (default).
 Further arguments for the bootstrap procedure (such as \code{R},
 \code{type}, etc.) can be supplied via the \code{...} argument if needed.}
@@ -24,11 +25,29 @@ If \code{conf.level = NA}, no confidence interval is computed and only
 the point estimate is returned.
 
 The \code{sides} argument controls whether a two-sided or one-sided
-confidence interval is calculated. A \code{"left"} interval corresponds
-to a lower one-sided interval (analogous to a hypothesis of
-\code{"greater"} in \code{\link[stats]{t.test}}), whereas \code{"right"}
-corresponds to an upper one-sided interval (analogous to
-\code{"less"}). Partial matching of the initial letter is supported.
+confidence interval is calculated. It names the side on which the
+\emph{finite} bound lies:
+
+\describe{
+\item{\code{"left"}}{\eqn{[lci, \infty)} - the left bound is finite,
+the interval is unbounded to the right.}
+\item{\code{"right"}}{\eqn{(-\infty, uci]} - the right bound is finite,
+the interval is unbounded to the left.}
+}
+
+Where the parameter is itself bounded, the unbounded side is reported at
+that boundary rather than as infinite: \code{ccc}, for instance, reports
+1 and -1 in place of \eqn{\infty} and \eqn{-\infty}.
+
+Read this way, \code{"left"} corresponds to a hypothesis of
+\code{"greater"} in \code{\link[stats]{t.test}} and \code{"right"} to one
+of \code{"less"}. Note that this is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} names the direction of the
+alternative hypothesis instead. Code carrying one-sided intervals over
+from \pkg{DescTools} therefore needs its \code{sides} argument swapped;
+the change is silent, since both packages accept the same values.
+
+Partial matching of the initial letter is supported.
 
 The available \code{method} options may vary between functions, depending
 on the underlying statistic and its theoretical properties.
@@ -50,4 +69,3 @@ See also:
 \item \code{\link[stats]{confint}}
 }
 }
-\keyword{internal}

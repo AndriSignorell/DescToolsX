@@ -15,39 +15,46 @@ uncertCoef(
 )
 }
 \arguments{
-\item{x}{a numeric vector, a factor, matrix or data frame.}
+\item{x}{a numeric vector, factor, matrix, or data frame}
 
 \item{y}{\code{NULL} (default) or a vector, an ordered factor, matrix or
-data frame with compatible dimensions to x.}
+data frame with compatible dimensions to \code{x}}
 
-\item{conf.level}{Confidence level of the interval. If set to \code{NA}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
 
-\item{sides}{A character string specifying the side of the confidence
+\item{sides}{character string specifying the side of the confidence
 interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter.}
+\code{"right"}. The value names the side on which the finite bound
+lies. You can specify just the initial letter.}
 
-\item{direction}{direction of the calculation. Can be \code{"row"} (default)
-or \code{"column"}, where \code{"row"} calculates uncertCoef (R|C) ("column
-dependent").}
+\item{direction}{direction of calculation, one of \code{"symmetric"}
+(default), \code{"row"}, or \code{"column"}. The row direction calculates
+U(R|C), and the column direction calculates U(C|R).}
 
-\item{pZeroCorrection}{slightly nudge zero values so that their logarithm
-can be calculated}
+\item{pZeroCorrection}{small positive value used to replace zero cells
+before taking logarithms}
 
 \item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set useNA. This refers only to the
+\code{\link{table}}, allowing, for example, \code{useNA} to be set. This
+refers only to the
 vector interface.}
 }
 \value{
-Either a single numeric value, if no confidence interval is
-required, \cr or a vector with 3 elements for estimate, lower and upper
-confidence intervall.
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{uncertainty coefficient estimate}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
-The uncertainty coefficient U(C|R) measures the proportion of uncertainty
+Computes directional or symmetric uncertainty coefficients. The
+directional coefficient U(C|R) measures the proportion of uncertainty
 (entropy) in the column variable Y that is explained by the row variable X.
-The function has interfaces for a table, a matrix, a data.frame and for
-single vectors.
+The function has interfaces for a table, a matrix, a data frame, and single
+vectors.
 }
 \details{
 The uncertainty coefficient is computed as \deqn{U(C|R) = \frac{H(X) + H(Y)
@@ -70,6 +77,7 @@ uncertCoef(m, conf.level=0.95)
 
 uncertCoef(m, direction="row")
 uncertCoef(m, direction="column")
+
 }
 \references{
 Theil, H. (1972), \emph{Statistical Decomposition Analysis},
@@ -86,7 +94,6 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link{yule}}
 }

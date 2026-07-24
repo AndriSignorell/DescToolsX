@@ -9,21 +9,24 @@
 #' calculation of normal distributed confidence intervals.
 #' 
 #' @inheritParams ConfidenceIntervals
-#' @param x a numeric vector or a 2x2 numeric matrix, resp. table.
+#' @param x a numeric vector, matrix, or table
 #' @param y \code{NULL} (default) or a vector with compatible dimensions to
-#' \code{x}. If y is provided, \code{table(x, y, ...)} will be calculated.
-#' @param method method to calculate confidence intervals, implemented is 
-#'         only "fisher". 
-#' @param scoresType type of calculating scores for the table.
+#' \code{x}. If \code{y} is supplied, \code{table(x, y, ...)} is calculated.
+#' @param method confidence interval method; currently only \code{"fisher"} is
+#' implemented
+#' @param scoresType score calculation method for table input
 #' @param na.rm logical, default \code{FALSE} determining if complete cases
 #' should be respected
-#' @return est, lower and upper confidence intervals
-#' @author William Revelle
-#' \href{mailto:revelle@@northwestern.edu}{revelle@@northwestern.edu}, \cr
-#' slight modifications Andri Signorell
-#' \href{mailto:andri@@signorell.net}{andri@@signorell.net} based on R-Core
-#' code
-#' @seealso \code{\link[lumen]{fisherZ}}, \code{\link[lumen]{fisherZInv}}
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Pearson's correlation coefficient}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
+#' 
+#' @note Based on code by William Revelle, adapted to conform to package standards.
+#' 
 #' 
 #' @examples
 #' 
@@ -36,9 +39,8 @@
 #'            function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
 #'                                digits=3, ldigits=0))
 #' 
-
-
-
+#' @seealso [lumen::fisherZ], [lumen::fisherZInv]
+#' 
 #' @family assoc.continuous  
 #' @concept correlation  
 #' @concept association-measure
@@ -128,10 +130,10 @@ pearsonCor <- function(x, y = NULL,
     return(NULL)
   
   if (n < 4)
-    return(c(lci = NA_real_, uci = NA_real_))
+    return(c(est = r, lci = NA_real_, uci = NA_real_))
   
   if ( isZero(abs(r) - 1) )
-    return( c(est=1, lci=1, uci=1) )
+    return(c(est = r, lci = r, uci = r))
   
   alpha <- 1 - conf.level
   z  <- atanh(r)
@@ -170,8 +172,6 @@ pearsonCor <- function(x, y = NULL,
 #     sqrt((sum(d[, 1L]^2 * w)/s - m1^2) *
 #            (sum(d[, 2L]^2 * w)/s - m2^2))
 # }
-
-
 
 
 

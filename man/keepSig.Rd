@@ -38,15 +38,15 @@ as-is (typically 1 for correlation matrices). If \code{FALSE}, the
 diagonal is also set to \code{NA}.}
 }
 \value{
-A matrix of the same dimension and dimnames as \code{m}, with
-\code{NA} wherever \code{p > sig.level}.
+matrix with the same dimensions and dimnames as \code{m}, with
+\code{NA} wherever \code{p > sig.level}
 }
 \description{
 Replaces entries in a symmetric matrix (typically a correlation matrix)
 with \code{NA} wherever the corresponding p-value exceeds a significance
 threshold – retaining only the statistically supported associations.
-Designed as a pre-processing step for \code{\link[aurora]{plotWeb}} and
-\code{\link[aurora]{plotCor}}.
+Designed as a pre-processing step for \code{\link[pharos]{plotWeb}} and
+\code{\link[pharos]{plotCor}}.
 }
 \examples{
 # compute p-values on the fly from the raw data
@@ -67,17 +67,7 @@ plotWeb(keepSig(m, p = p))
 
 }
 \seealso{
-\code{\link[aurora]{plotWeb}}, \code{\link[aurora]{plotCor}},
-\code{\link[stats]{cor.test}}
-
-Other assoc.continuous:
-\code{\link[=corPart]{corPart()}},
-\code{\link[=corPolychor]{corPolychor()}},
-\code{\link[=findCorrX]{findCorrX()}},
-\code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=pearsonCor]{pearsonCor()}},
-\code{\link[=spearmanCor]{spearmanCor()}}
+\link[pharos:plotWeb]{pharos::plotWeb}, \link[pharos:plotCor]{pharos::plotCor}, \link[lumen:corTest]{lumen::corTest}, \link[stats:cor.test]{stats::cor.test}
 }
-\concept{assoc.continuous}
 \concept{correlation}
 \concept{multiple-testing}

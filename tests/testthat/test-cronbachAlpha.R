@@ -38,24 +38,24 @@ test_that("cronbachAlpha result is <= 1", {
 test_that("cronbachAlpha conf.level returns a 3-element named vector", {
   a <- cronbachAlpha(.items_good, conf.level = 0.95)
   expect_length(a, 3)
-  expect_named(a, c("Cronbach Alpha","lci","uci"))
+  expect_named(a, c("est","lci","uci"))
 })
 
 test_that("cronbachAlpha CI: lci < estimate < uci", {
   a <- cronbachAlpha(.items_good, conf.level = 0.95)
-  expect_lt(a["lci"], a["Cronbach Alpha"])
-  expect_gt(a["uci"], a["Cronbach Alpha"])
+  expect_lt(a["lci"], a["est"])
+  expect_gt(a["uci"], a["est"])
 })
 
-test_that("cronbachAlpha cond = TRUE returns a list", {
-  res <- cronbachAlpha(.items_good, cond = TRUE)
+test_that("cronbachAlpha returnConditional = TRUE returns a list", {
+  res <- cronbachAlpha(.items_good, returnConditional = TRUE)
   expect_type(res, "list")
-  expect_named(res, c("unconditional","condcronbachAlpha"))
+  expect_named(res, c("unconditional","conditional"))
 })
 
-test_that("cronbachAlpha cond = TRUE condcronbachAlpha has ncol(x) rows", {
-  res <- cronbachAlpha(.items_good, cond = TRUE)
-  expect_equal(nrow(res$condcronbachAlpha), ncol(.items_good))
+test_that("cronbachAlpha returnConditional = TRUE conditional has ncol(x) rows", {
+  res <- cronbachAlpha(.items_good, returnConditional = TRUE)
+  expect_equal(nrow(res$conditional), ncol(.items_good))
 })
 
 test_that("cronbachAlpha na.rm = TRUE handles missing values", {

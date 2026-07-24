@@ -14,31 +14,29 @@ relRisk(
 )
 }
 \arguments{
-\item{x}{A numeric 2x2 matrix or table containing non-negative counts.}
+\item{x}{a numeric 2x2 matrix or table containing non-negative counts}
 
-\item{y}{An optional vector. If supplied, \code{table(x, y, ...)} is
+\item{y}{an optional vector. If supplied, \code{table(x, y, ...)} is
 computed.}
 
-\item{method}{Character string specifying the confidence interval method.
+\item{method}{character string specifying the confidence interval method.
 One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
 
-\item{delta}{Small continuity correction added to the event counts for the
+\item{delta}{small continuity correction added to the event counts for the
 Wald interval. Only used if \code{method = "wald"}.}
 
-\item{conf.level}{Confidence level for the interval estimate. If
+\item{conf.level}{confidence level for the interval estimate. If
 \code{NA} (default), only the point estimate is returned.}
 
-\item{\dots}{Further arguments passed to \code{\link{table}}.}
+\item{\dots}{further arguments passed to \code{\link{table}}}
 }
 \value{
-If \code{conf.level = NA}, a numeric scalar containing the relative risk.
-
-Otherwise a named numeric vector with elements:
-
-\itemize{
-\item \code{estimate} Relative risk estimate.
-\item \code{lci} Lower confidence interval bound.
-\item \code{uci} Upper confidence interval bound.
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{relative risk estimate}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -107,6 +105,7 @@ relRisk(
   method = "use-or"
 )
 
+
 }
 \references{
 Koopman, P. A. R. (1984). Confidence intervals for the ratio of two
@@ -119,8 +118,6 @@ Rothman, K. J., Greenland, S., & Lash, T. L. (2008).
 \emph{Modern Epidemiology} (3rd ed.). Lippincott Williams & Wilkins.
 }
 \seealso{
-\code{\link{oddsRatio}}
-
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},
 \code{\link[=cohenH]{cohenH()}},

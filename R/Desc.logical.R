@@ -1,10 +1,8 @@
 
-#' Desc.logical 
+#' Describe a Dichotomous Variable
 #'
-#' Displays a set of statistical measures describing a dichotomous variable.
-#' Visualizes the distribution of a numeric \code{Desc} object.
-#' The plot consists of a pair of horizontally organized barplots
-#' displaying the absolute and relative frequencies.
+#' Compute descriptive statistics for a dichotomous variable. The plot method
+#' displays absolute and relative frequencies in horizontal bar plots.
 #' 
 #' @aliases desc.logical
 #' @details
@@ -14,33 +12,34 @@
 #' \code{\link[lumen]{binomCI}()}, method \code{"Wilson"} on a confidence
 #' level defined by \code{conf.level}. 
 #' 
-#' Dichotomous variables can easily be
-#' condensed in one graphical representation. Desc for a set of flags
-#' (=dichotomous variables) calculates the frequencies, a binomial confidence
-#' interval and produces a kind of dotplot with error bars. Motivation for this
-#' function is, that dichotomous variable in general do not contain intense
-#' infmion. Therefore it makes sense to condense the description of sets of
-#' dichotomous variables.
+#' Dichotomous variables can be condensed into a compact graphical
+#' representation. The method calculates frequencies and binomial confidence
+#' intervals and can display them as a dot plot with error bars.
 #' 
-#' @param x a dichotomous vector of variable class, can be a \code{"numeric"}
-#' \code{"integer"},  \code{"factor"},  \code{"character"} or  \code{"boolean"}, 
-#' the only condition is, that there are only two unique values.
+#' @param x a dichotomous numeric, integer, factor, character, or logical
+#' vector
 #' 
-#' @param ... Further graphical parameters passed to the underlying
-#'   base R plotting functions.
+#' @param ... further arguments passed to methods
 #'   
-#' @param digits integer. With how many digits should the relative frequencies
-#' be formatted? Default can be set by
-#' \code{\link{setDescToolsXOption}(digits=x)}.
-#' @param ord  order of the levels
-#' @param include_x (logical) if \code{TRUE} (default) the original vector 
-#' will be returned
-#' in the result object. This is necessary for producing specific plot 
-#' (e.g. the density, ecdf, etc.). However if no plots are required the result
-#' object can be kept small and handy without the original data.
+#' @param digits number of digits used to format relative frequencies; the
+#' default can be set with \code{setDescToolsXOption(digits = x)}
+#' @param ord order of the levels
+#' @param include_x logical; if \code{TRUE}, the original vector is retained
+#' in the result
+#'
+#' @return an object of class \code{c("Desc.logical", "Desc")} with components:
+#' \describe{
+#'   \item{\code{afrq}}{absolute frequencies}
+#'   \item{\code{rfrq}}{matrix of binomial estimates with columns:
+#'     \describe{
+#'       \item{\code{est}}{point estimate of the binomial proportion}
+#'       \item{\code{lci}}{lower confidence interval bound}
+#'       \item{\code{uci}}{upper confidence interval bound}
+#'     }}
+#' }
 #' 
 #' 
-#' @seealso \code{\link[aurora]{plotPropCI}} for graphical display
+#' @seealso \code{\link[pharos]{plotPropCI}} for graphical display
 
 
 #' @family desc
@@ -222,6 +221,5 @@ plot.Desc.logical <- function(x, ...) {
   if (length(lbs) == 1L)
     lbs <- c("FALSE", "TRUE")
   
-  aurora::plotPropCI(as.matrix(t(ff)), labels = lbs, ...)
+  pharos::plotPropCI(as.matrix(t(ff)), labels = lbs, ...)
 }
-

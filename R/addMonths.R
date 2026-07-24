@@ -1,31 +1,28 @@
 
 
-#' Add a month to a Date
+#' Add Months to a Date
 #' 
-#' Clueless adding numbers of months to a date will in some cases lead to
-#' invalid dates, think of e.g. 2012-01-30 + 1 month. \cr addMonths ensures
-#' that the result is always a valid date, e.g. \code{as.Date("2013-01-31") + 1
-#' month} will be \code{"2013-02-28"}. If number \code{n} is negative, the
-#' months will be subtracted.
+#' Naively adding months to a date can produce invalid dates, for example
+#' when adding one month to 2012-01-30. \code{addMonths()} always returns a
+#' valid date: adding one month to \code{as.Date("2013-01-31")} returns
+#' \code{"2013-02-28"}. Negative values of \code{n} subtract months.
 #' 
-#' All parameters will be recyled if necessary.
+#' All parameters are recycled if necessary.
 #' 
-#' @param x a Date object (or something which can be coerced by
-#' \code{\link{as.Date}}(x, ...) to such an object) to which a number of months
-#' has to be added. 
-#' @param n the number of months to be added. If n is negative the months will
-#' be subtracted. 
-#' @param \dots the dots are passed to \code{\link{as.Date}}, e.g. for
-#' supplying \code{origin}. 
+#' @param x a Date object, or an object coercible to one by
+#' \code{\link{as.Date}}(x, ...), to which months are added
+#' @param n number of months to add. Negative values subtract months.
+#' @param \dots further arguments passed to \code{\link{as.Date}}, for example
+#' to supply \code{origin}
 #' @return a vector of class \code{Date} with the same dimension as \code{x},
-#' containing the transformed dates.
-#' @author Andri Signorell <andri@@signorell.net>, based on code by Roland
-#' Rapold and Antonio
+#' containing the transformed dates
+#' @note Based on code by Roland Rapold and Antonio, adapted to conform to package standards. 
+#' 
 #' @seealso \code{\link{as.ym}}; Date functions: \code{\link{year}},
 #' \code{\link{month}}, etc. 
-#' @references Thanks to Antonio:
+#' @references 
 #' \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
-#' @keywords chron
+#' 
 #' @examples
 #' 
 #' # characters will be coerced to Date
@@ -95,5 +92,4 @@ addMonths.default <- function (x, n, ...) {
   return(res)
   
 }
-
 

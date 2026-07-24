@@ -56,39 +56,36 @@
 #'
 #' @aliases year quarter month week day day<- weekday yearDay yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone yearDays monthDays month.ym year.ym
 #' 
-#' @param x A \code{Date}, \code{POSIXct}, \code{POSIXlt}, or \code{ym} object
-#'   to be evaluated.
-#' @param fmt Format code controlling the output of \code{month()} and
+#' @param x a \code{Date}, \code{POSIXct}, \code{POSIXlt}, or \code{ym} object
+#' to evaluate
+#' @param fmt format code controlling the output of \code{month()} and
 #'   \code{weekday()}.\cr
 #'   For \code{month()}: \code{"m"} = integer (default), \code{"mm"} =
 #'   abbreviated name, \code{"mmm"} = full name.\cr
 #'   For \code{weekday()}: \code{"d"} = integer (default), \code{"dd"} =
 #'   abbreviated name, \code{"ddd"} = full name.
-#' @param lang Language for names returned by \code{month()} and
+#' @param lang language for names returned by \code{month()} and
 #'   \code{weekday()}.  Either \code{"local"} (current system locale, the
 #'   default) or \code{"en"} (English).  Falls back to the \code{"lang"}
 #'   option if set; otherwise \code{"local"} is used.
-#' @param stringsAsFactors Logical; if \code{TRUE} (default), character results
+#' @param stringsAsFactors logical; if \code{TRUE} (default), character results
 #'   from \code{month()} and \code{weekday()} are returned as ordered factors
-#'   whose levels follow calendar order.
-#' @param value Replacement value for the \code{day<-} assignment function.
-#' @param startDate,endDate Start and end dates for \code{diffDays360()}.
-#' @param method Calculation convention: \code{"eu"} (European, default) or
+#'   whose levels follow calendar order
+#' @param value replacement value for the \code{day<-} assignment function
+#' @param startDate,endDate start and end dates for \code{diffDays360()}
+#' @param method calculation convention: \code{"eu"} (European, default) or
 #'   \code{"us"} (US) for \code{diffDays360()} and \code{week()}/
-#'   \code{yearWeek()}.
+#'   \code{yearWeek()}
 #'
-#' @return
-#' All extractor functions return a vector of the same length as \code{x}:
-#' numeric for integer-valued components, ordered factor or character when
-#' \code{fmt} requests names.  \code{isWeekend()} and \code{isLeapYear()}
-#' return a logical vector.
-#'
-#' @author Andri Signorell \email{andri@@signorell.net}
+#' @return a vector whose type depends on the function: numeric for
+#' integer-valued components, an ordered factor or character vector when
+#' \code{fmt} requests names, logical for \code{isWeekend()} and
+#' \code{isLeapYear()}, \code{Date} for \code{today()} and
+#' \code{lastDayOfMonth()}, and \code{POSIXct} for \code{now()}
 #'
 #' @seealso \code{\link{strptime}}, \code{\link{DateTimeClasses}},
 #'   \code{\link{as.POSIXlt}}, \code{\link{countWorkDays}}
 #'
-#' @keywords chron
 #'
 #' @examples
 #' x <- today()   # equivalent to Sys.Date()
@@ -504,6 +501,5 @@ isLeapYear <- function(x){
     .Call("_DescToolsX_isLeapYearInt", x, PACKAGE="DescToolsX")
   
 }
-
 
 

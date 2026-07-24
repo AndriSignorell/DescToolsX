@@ -1,33 +1,34 @@
 
 #' Cramer's V
 #' 
-#' Measures the strength of association between two categorical variables. These 
-#' can either be provided by two data vectors \code{x}, \code{y} or by 
+#' Measures the strength of association between two categorical variables. These
+#' can be provided as two data vectors \code{x} and \code{y}, or as
 #' a contingency table (see \link{Association}).
 #' 
-#' Cramer's V range goes from 0 to 1. A Cramer's V in the range of \verb{[0, 0.3]} 
-#' is considered as weak, \verb{[0.3,0.7]} as medium and > 0.7 as strong. 
-#' The minimum value for all is 0 under statistical independence.
+#' Cramer's V ranges from 0 to 1, with 0 indicating statistical independence.
 #' 
 #' @aliases cramerV
 #' @inheritParams Association
-#' @param method string defining the method to calculate confidence intervals
-#' , one out of \code{"ncchisq"} (default, using noncentral chisquare),
+#' @param method character string specifying the confidence interval method:
+#' \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
 #' \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
-#' \code{"fisheradj"} (using fisher z transformation and bias correction), \code{"boot"} 
-#' bootstrap intervals.
-#' @param correct logical (default \code{FALSE}). Should a bias 
-#' correction (see Bergsma, 2013) be applied or not. 
+#' or \code{"fisheradj"} (using the Fisher z transformation and bias correction)
+#' @param correct logical; whether to apply the bias correction of Bergsma
+#' (2013); defaults to \code{FALSE}
 #' 
-#' @return a single numeric value if no confidence intervals are requested,\cr
-#' and otherwise a numeric vector with 3 elements for the estimate, the lower
-#' and the upper confidence interval
-#' @author Andri Signorell <andri@@signorell.net>, \cr Michael Smithson
-#' <michael.smithson@@anu.edu.au> (confidence intervals for Cramer V)
-#' @seealso \code{\link{table}}, \code{\link[aurora]{plotCor}},
-#' \code{\link[bedrock]{pairApply}}, \code{\link{Association}}
-#' %\url{http://faculty.chass.ncsu.edu/garson/PA765/assocnominal.htm} this is
-#' outdated...
+#' @return if \code{conf.level = NA}, a numeric scalar containing Cramer's V;
+#' otherwise a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Cramer's V.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
+#' }
+#' @note Based on code by  Michael Smithson (confidence intervals), 
+#' adapted to conform to package standards.
+#' 
+#' @seealso [base::table], [pharos::plotCor],
+#' [bedrock::pairApply], [Association]
+#' 
 #' @references 
 #' Cramer, H. (1946) \emph{Mathematical Methods of Statistics}. Princeton
 #' University Press
@@ -38,12 +39,6 @@
 #' Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 #' \emph{Journal of the Korean Statistical Society} 42(3) DOI:
 #' 10.1016/j.jkss.2012.10.002
-#' 
-#' @family topic.associationMeasures
-#' @concept association
-#' @concept contingency-tables
-#' @concept nominal-data
-#' @concept effect-size
 # 
 #' @examples
 #' 
@@ -82,9 +77,6 @@
 #' cramerV(tab, conf.level=0.95)
 #' 
 #' 
-
-
-
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal  
@@ -169,4 +161,3 @@ cramerV <- function(x, y = NULL, conf.level = NA,
   
   return(res)
 }
-

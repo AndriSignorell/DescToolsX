@@ -11,23 +11,44 @@
 \method{print}{Desc.qn}(x, verbose = NULL, ...)
 }
 \arguments{
-\item{x}{A numeric variable.}
+\item{x}{a numeric variable}
 
-\item{verbose}{controls printed output.}
+\item{verbose}{amount of printed output}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{further arguments passed to methods}
 
-\item{y}{A categorical variable (factor or coercible to factor).}
+\item{y}{a categorical variable (factor or coercible to factor)}
 
-\item{conf.level}{Confidence level for interval estimates (default 0.95).}
+\item{conf.level}{confidence level for interval estimates (default 0.95)}
 
-\item{breaks}{Numeric vector defining cut points for \code{x}.
+\item{breaks}{numeric vector defining cut points for \code{x}.
 If not supplied, quartiles of \code{x} are used.}
 
-\item{right}{Logical; passed to \code{cut()}, defining interval closure.}
+\item{right}{logical; passed to \code{cut()}, defining interval closure}
 }
 \value{
-An object of class \code{"Desc.qn"} inheriting from \code{"Desc"}.
+an object of class \code{c("Desc.qn", "Desc")} with components:
+\describe{
+\item{\code{grpTable}}{group-wise summary table}
+\item{\code{kw}}{result of the Kruskal-Wallis test}
+\item{\code{eta2}}{effect size}
+\item{\code{levene}}{result of Levene's test}
+\item{\code{tauB}}{estimate, confidence interval, and p-value for
+Kendall's tau-b}
+\item{\code{spearman}}{estimate, confidence interval, and p-value for
+Spearman's correlation}
+\item{\code{auc}}{area under the curve for a binary outcome}
+\item{\code{prevTable}}{prevalence table for a binary outcome with columns:
+\describe{
+\item{\code{quantile}}{quantile group}
+\item{\code{n}}{number of complete cases in the group}
+\item{\code{est}}{point estimate of the prevalence}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}}
+\item{\code{caTest}}{result of the Cochran-Armitage test for a binary
+outcome}
+}
 }
 \description{
 Computes descriptive statistics for the relationship between a categorical
@@ -58,21 +79,6 @@ If \code{y} has two levels:
 The numeric variable \code{x} is optionally discretized using
 \code{breaks}. By default, quartiles are used.
 }
-\section{Output components}{
-
-\itemize{
-\item \code{grpTable}: group-wise summary table
-\item \code{kw}: Kruskal-Wallis test result
-\item \code{eta2}: effect size
-\item \code{levene}: Levene test result
-\item \code{tauB}: Kendall Tau-b (estimate, CI, p-value)
-\item \code{spearman}: Spearman correlation
-\item \code{auc}: AUC (if binary)
-\item \code{prevTable}: prevalence table (if binary)
-\item \code{caTest}: Cochran-Armitage test (if binary)
-}
-}
-
 \seealso{
 \code{\link{desc}}, \code{\link{desc.nn}}, \code{\link{desc.nq}},
 \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
@@ -85,6 +91,7 @@ Other desc:
 \code{\link{desc.nq}},
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{association-measures}

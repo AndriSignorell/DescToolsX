@@ -32,16 +32,16 @@ test_that("uncertCoef symmetric is the harmonic mean of row and column", {
   expect_true(sym >= 0 && sym <= 1)
 })
 
-test_that("uncertCoef conf.level returns named vector uc/lci/uci", {
+test_that("uncertCoef conf.level returns named vector est/lci/uci", {
   res <- uncertCoef(.m, conf.level=0.95)
   expect_length(res, 3)
-  expect_named(res, c("uc","lci","uci"))
+  expect_named(res, c("est","lci","uci"))
 })
 
-test_that("uncertCoef CI: lci < uc < uci", {
+test_that("uncertCoef CI: lci < est < uci", {
   res <- uncertCoef(.m, conf.level=0.95)
-  expect_lt(res["lci"], res["uc"])
-  expect_gt(res["uci"], res["uc"])
+  expect_lt(res["lci"], res["est"])
+  expect_gt(res["uci"], res["est"])
 })
 
 test_that("uncertCoef accepts two vectors", {

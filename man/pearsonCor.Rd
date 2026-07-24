@@ -15,28 +15,35 @@ pearsonCor(
 )
 }
 \arguments{
-\item{x}{a numeric vector or a 2x2 numeric matrix, resp. table.}
+\item{x}{a numeric vector, matrix, or table}
 
 \item{y}{\code{NULL} (default) or a vector with compatible dimensions to
-\code{x}. If y is provided, \code{table(x, y, ...)} will be calculated.}
+\code{x}. If \code{y} is supplied, \code{table(x, y, ...)} is calculated.}
 
-\item{conf.level}{Confidence level of the interval. If set to \code{NA}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
 
-\item{sides}{A character string specifying the side of the confidence
+\item{sides}{character string specifying the side of the confidence
 interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter.}
+\code{"right"}. The value names the side on which the finite bound
+lies. You can specify just the initial letter.}
 
-\item{method}{method to calculate confidence intervals, implemented is
-only "fisher".}
+\item{method}{confidence interval method; currently only \code{"fisher"} is
+implemented}
 
-\item{scoresType}{type of calculating scores for the table.}
+\item{scoresType}{score calculation method for table input}
 
 \item{na.rm}{logical, default \code{FALSE} determining if complete cases
 should be respected}
 }
 \value{
-est, lower and upper confidence intervals
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Pearson's correlation coefficient}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Find the confidence intervals for a specified correlation based on Fisher's
@@ -46,6 +53,9 @@ z-transformation.
 The sampling distribution of Pearson's r is not normal. Fisher developed a
 transformation now called "Fisher's z-transformation" used for the
 calculation of normal distributed confidence intervals.
+}
+\note{
+Based on code by William Revelle, adapted to conform to package standards.
 }
 \examples{
 
@@ -60,22 +70,14 @@ bedrock::pairApply(swiss,
 
 }
 \seealso{
-\code{\link[lumen]{fisherZ}}, \code{\link[lumen]{fisherZInv}}
+\link[lumen:fisherZ]{lumen::fisherZ}, \link[lumen:fisherZInv]{lumen::fisherZInv}
 
 Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=keepSig]{keepSig()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
-}
-\author{
-William Revelle
-\href{mailto:revelle@northwestern.edu}{revelle@northwestern.edu}, \cr
-slight modifications Andri Signorell
-\href{mailto:andri@signorell.net}{andri@signorell.net} based on R-Core
-code
 }
 \concept{assoc.continuous}
 \concept{association-measure}

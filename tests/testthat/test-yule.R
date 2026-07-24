@@ -3,14 +3,19 @@
 test_that("yuleQ and yuleY work correctly", {
   
   ## --- Basis-Matrix ---
+  # byrow = TRUE so the literal layout matches the a/b/c/d labelling below;
+  # OR is invariant to swapping b and c, but the default column-major fill
+  # would put 5 in cell c and 3 in cell b.
   m <- matrix(c(12, 5,
-                3, 20), nrow = 2)
+                3, 20), nrow = 2, byrow = TRUE)
   
   a <- 12; b <- 5; c <- 3; d <- 20
   OR <- (a*d)/(b*c)
   
   Q_expected <- (OR - 1)/(OR + 1)
-  Y_expected <- tanh(log(OR)/2)
+  # Yule's Y is tanh(log(OR)/4); tanh(log(OR)/2) is algebraically
+  # identical to Q, so using it here compared Y against Q.
+  Y_expected <- (sqrt(OR) - 1)/(sqrt(OR) + 1)
   
   ## --- yuleQ estimate ---
   resQ <- yuleQ(m)

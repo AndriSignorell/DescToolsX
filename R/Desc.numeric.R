@@ -1,20 +1,18 @@
 
-#' Desc.numeric 
+#' Describe a Numeric Variable
 #'
-#' Displays a set of statistical measures describing a numeric data vector.
-#' Visualizes the distribution of a numeric \code{Desc} object.
-#' The plot may include a histogram, density curve, boxplot 
-#' and empirical distribution.
+#' Compute descriptive statistics for a numeric vector. The plot method may
+#' display a histogram, density curve, box plot, and empirical distribution.
 #'
 #' 
 #' 
 #' @name desc.numeric
 #' @inheritParams desc 
 #' 
-#' @param x An object of class \code{"Desc.numeric"}.
+#' @param x numeric vector to describe, or an object of class
+#' \code{"Desc.numeric"} for the print and plot methods
 #' 
-#' @param ... Further graphical parameters passed to the underlying
-#'   base R plotting functions.
+#' @param ... further arguments passed to methods
 #'   
 #' @param maxrows numeric; defines the maximum number of rows in a frequency
 #' table to be reported. For factors with many levels it is often not
@@ -22,15 +20,11 @@
 #' (resp. the first ones if \code{ord} is set to \code{"levels"} or
 #' \code{"names"}).
 #' 
-#' @param digits integer. With how many digits should the real numbers
-#' be formatted? Default is taken from \code{\link{setDescToolsXOption}(digits=x)}.
+#' @param digits number of digits used to format numeric values
 #' 
-#' @param include_x (logical) if \code{TRUE} (default) the original vector 
-#' will be returned
-#' in the result object. This is necessary for producing specific plot 
-#' (e.g. the density, ecdf, etc.). However if no plots are required the result
-#' object can be kept small and handy without the original data.
-#' @param conf.level Confidence level for interval estimates (default 0.95).
+#' @param include_x logical; if \code{TRUE}, the original vector is retained
+#' in the result
+#' @param conf.level confidence level for interval estimates (default 0.95)
 #' 
 #' @details
 #' This function is an S3 method for \code{\link[graphics]{plot}}.
@@ -55,14 +49,13 @@
 #' Named colors defined by \code{DescToolsX} (e.g. \code{"hred"},
 #' \code{"hblue"}) can be used directly.
 #'
-#' @return
-#' Invisibly returns \code{NULL}.
+#' @return an object of class \code{c("Desc.numeric", "Desc")} containing
+#' descriptive statistics, frequency information, and metadata
 #'
 #' @seealso \code{\link[base:summary]{base::summary()}},
 #' \code{\link[base:plot]{base::plot()}}
 #' 
 #' Other Statistical summary functions: \code{\link{abstract}()}
-#' @keywords multivariate print univar
 #' @examples
 #' 
 #' desc(Pizza$delivery_min)             # numeric
@@ -204,8 +197,6 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   nlow <- 5
   nhigh <- 5
   
-  # digits <- coalesceX(digits, x$digits, .getOption("digits"))
-  
   if (is.null(digits) && !is.null(x$digits)) digits <- x$digits
   defdigits <- is.null(digits)
   
@@ -273,7 +264,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     names(lst$l3), lst$l3, "",
     names(lst$l4), lst$l4, ""
   )
-  out <- capture.output(.print.charmatrix(m))
+  out <- capture.output(printCharMatrix(m, showRownames = FALSE))
   out[1] <- paste0(out[1], .getOption("footnote")[1])
   cat(out, sep = "\n")
   
@@ -348,7 +339,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
   if (x$n <= 1L)
     return(plot.Desc.AllNA(x, ...))
-  aurora::plotFdist(x$x, na.rm = TRUE, main = main, ...)
+  pharos::plotFdist(x$x, main = main, ...)
 }
 
 
@@ -434,5 +425,3 @@ plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
   return(res)
   
 }
-
-

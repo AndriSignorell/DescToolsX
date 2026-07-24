@@ -15,7 +15,7 @@ cutAge(
 )
 }
 \arguments{
-\item{x}{continuous variable.}
+\item{x}{continuous variable}
 
 \item{breaks}{either a numeric vector of two or more unique cut points or a
 single number (greater than or equal to 2) giving the number of intervals
@@ -28,18 +28,18 @@ unlike in \code{\link{cut}}!}
 \item{ordered_result}{logical: should the result be an ordered factor?
 Default is \code{TRUE} - unlike in \code{\link{cut}}!}
 
-\item{full}{logical, setting to \code{FALSE} will remove empty levels at the
+\item{full}{logical; whether to retain empty levels at the
 edges of the distribution}
 
 \item{labels}{labels for the levels. When set to \code{TRUE} the age ranges
 will be 00-09, 10-19, 20-29, etc.}
 
-\item{\dots}{the dots are passed on to the underlying function
-\code{\link{cut}()}. Use these for e.g. change the labels.}
+\item{\dots}{further arguments passed to \code{\link{cut}()}, for example
+to change the labels}
 }
 \value{
-A factor is returned, unless labels = FALSE which results in an
-integer vector of level codes.
+a factor, or an integer vector of level codes when
+\code{labels = FALSE}
 
 Values which fall outside the range of breaks are coded as \code{NA}, as are
 \code{NaN} and \code{NA} values.
@@ -54,15 +54,13 @@ suitable defaults.
 \examples{
 
 desc(cutAge(sample(0:100, size=100, replace=TRUE)))
+
 }
 \seealso{
 \code{\link{cut}}, \code{\link{seq}}
 
 Other cut:
 \code{\link[=cutQ]{cutQ()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{binning}
 \concept{cut}

@@ -14,13 +14,13 @@ conceptMap(pkg)
 conceptAudit(pkg)
 }
 \arguments{
-\item{pkg}{Character string. Name of the installed package.}
+\item{pkg}{character string. Name of the installed package.}
 }
 \value{
 \describe{
-\item{\code{getConcepts}}{Character vector of unique concept names.}
-\item{\code{conceptMap}}{Named list mapping concepts to functions.}
-\item{\code{conceptAudit}}{Data frame with concept frequencies.}
+\item{\code{getConcepts}}{character vector of unique concept names}
+\item{\code{conceptMap}}{named list mapping concepts to functions}
+\item{\code{conceptAudit}}{data frame with concept frequencies}
 }
 }
 \description{

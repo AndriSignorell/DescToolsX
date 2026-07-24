@@ -8,7 +8,7 @@
 #' model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
 #' \code{svm}).
 #'
-#' @param x object containing predictions. Can be:
+#' @param x object containing predictions; one of:
 #'   \itemize{
 #'     \item a factor or character vector of predicted classes
 #'     \item a confusion matrix (\code{table} or \code{matrix})
@@ -23,9 +23,9 @@
 #'   Default \code{0.5}.
 #' @param na.rm logical; remove missing values before computation.
 #'   Default \code{TRUE}.
-#' @param digits integer, number of decimal places for printing.
-#' @param main character, plot title.
-#' @param \dots further arguments passed to specific methods.
+#' @param digits integer; number of decimal places for printing
+#' @param main character string specifying the plot title
+#' @param \dots further arguments passed to specific methods
 #'
 #' @details
 #' \strong{Overall statistics:}
@@ -56,9 +56,10 @@
 #'   \item{\code{diag}}{number of correct predictions}
 #'   \item{\code{n}}{total number of observations}
 #'   \item{\code{acc}, \code{acc.lci}, \code{acc.uci}}{accuracy and CI}
-#'   \item{\code{nir}}{No Information Rate}
-#'   \item{\code{acc.pval}}{p-value for Accuracy > NIR}
-#'   \item{\code{kappa}}{Cohen's Kappa}
+#'   \item{\code{nir}}{no-information rate}
+#'   \item{\code{acc.pval}}{p-value for accuracy greater than the
+#'     no-information rate}
+#'   \item{\code{kappa}}{Cohen's kappa}
 #'   \item{\code{mcnemar.pval}}{McNemar test p-value}
 #'   \item{\code{byclass}}{matrix of class-wise metrics}
 #' }
@@ -356,7 +357,7 @@ plot.Conf <- function(x, main = "Confusion Matrix", ...) {
 #' Extract Sensitivity from a Confusion Matrix
 #'
 #' @inheritParams conf
-#' @return named numeric vector of sensitivities.
+#' @return named numeric vector of sensitivities
 #' @seealso \code{\link{conf}}, \code{\link{specX}}
 #' @family classification
 #' @export
@@ -366,7 +367,7 @@ sensX <- function(x, ...) conf(x, ...)[["byclass"]]["sens", ]
 #' Extract Specificity from a Confusion Matrix
 #'
 #' @inheritParams conf
-#' @return named numeric vector of specificities.
+#' @return named numeric vector of specificities
 #' @seealso \code{\link{conf}}, \code{\link{sensX}}
 #' @family classification
 #' @export
@@ -381,7 +382,6 @@ specX <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
 
 
 
-#' @keywords internal
 .collapseConfTab <- function(x, pos = NULL, ...) {
   if (nrow(x) > 2L) {
     names(attr(x, "dimnames")) <- c("pred", "obs")
@@ -392,4 +392,3 @@ specX <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
   ord <- c(pos, rownames(x)[-grep(pos, rownames(x), fixed = TRUE)])
   as.table(x[ord, ord])
 }
-

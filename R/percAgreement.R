@@ -5,21 +5,29 @@
 #' design-based standard errors and confidence intervals following
 #' Klein and Gwet.
 #'
-#' @param x A confusion matrix or a matrix/data.frame of ratings 
-#'   (subjects x raters).
-#' @param y Optional second rating vector to construct a confusion matrix.
+#' @param x a confusion matrix or a matrix or data frame of ratings with
+#'   subjects in rows and raters in columns
+#' @param y optional second rating vector used to construct a confusion matrix
 #'
-#' @param input Character string specifying the input format:
-#'   \code{"auto"}, \code{"confusion"}, or \code{"ratings"}.
+#' @param input character string specifying the input format:
+#'   \code{"auto"}, \code{"confusion"}, or \code{"ratings"}
 #'
-#' @param conf.level Confidence level for the interval.
-#' @param fpc Finite population correction (default = 0).
-#' @param verbose Logical; if TRUE, return detailed output.
-#' @param ... Reserved for future extensions.
+#' @param conf.level confidence level for the interval
+#' @param fpc finite population correction (default \code{0})
+#' @param verbose logical; whether to return detailed output
+#' @param ... reserved for future extensions
 #'
-#' @return Either a numeric vector (estimate and CI) or a list.
+#' @return if \code{verbose = FALSE}, a named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{proportion of agreement}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #'
-
+#' if \code{verbose = TRUE}, a list with the estimate, standard error,
+#' confidence interval, sample sizes, and method description.
+#'
+#'
 #' @family assoc.agreement  
 #' @concept agreement  
 #' @concept categorical-agreement
@@ -140,4 +148,3 @@ percAgreement <- function(x, y = NULL,
   
   return(list(x = x, input = input))
 }
-

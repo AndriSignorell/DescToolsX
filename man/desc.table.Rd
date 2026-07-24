@@ -46,33 +46,38 @@
 \method{print}{Desc.table}(x, print_header = TRUE, ...)
 }
 \arguments{
-\item{x}{a \code{table} or \code{matrix} object. For the formula interface
+\item{x}{a \code{table} or \code{matrix} object. For the formula interface,
 use \code{desc(y ~ x, data)} which dispatches to this function
 automatically.}
 
-\item{digits}{number of digits for numerical output.}
+\item{digits}{number of digits for numerical output}
 
-\item{\dots}{further arguments passed to or from other methods.}
+\item{\dots}{further arguments passed to or from other methods}
 
 \item{main}{main title for the plot}
 
-\item{which}{selects plots.}
+\item{which}{plots to produce}
 
 \item{conf.level}{numeric, confidence level for all confidence intervals.
 Default is \code{0.95}.}
 
-\item{prop}{How proportions are computed in contingency tables.
-One of \code{"rows"} (default), \code{"cols"}, or \code{"all"}.
-Passed to \code{percTable()}.}
+\item{prop}{character string controlling which proportions are shown in the
+cross-tabulation. One of \code{"rows"} (default), \code{"cols"},
+\code{"total"}, or \code{"no"} (frequencies only). At \code{verbose = 3}
+all three proportions are shown regardless of this argument.}
 
-\item{verbose}{controls printed output.}
+\item{verbose}{integer controlling the amount of output (1, 2, or 3).
+\code{NULL} (default) falls back to
+\code{getOption("DescTools.verbose", 2)}. If set explicitly in the
+function call, that value takes priority over the global option.
+See Details for what each level produces.}
 
-\item{plotit}{should a plot be automatically be produced?}
+\item{plotit}{whether a plot is produced automatically}
 
-\item{print_header}{shoul header be printed?}
+\item{print_header}{whether the header is printed}
 }
 \value{
-An object of class \code{c("Desc.table", "Desc")}, invisibly.
+an object of class \code{c("Desc.table", "Desc")}.
 The object is a list containing all computed statistics and is intended
 to be used via its \code{print} and \code{plot} methods.
 }
@@ -166,11 +171,12 @@ desc(m, verbose = 2)
 
 }
 \seealso{
-\code{\link{desc}} for the generic function and formula interface,
-\code{\link{desc.numeric}} for univariate numeric descriptions,
-\code{\link{desc.factor}} for univariate factor descriptions,
-\code{\link[stats]{chisq.test}}, \code{\link[stats]{fisher.test}},
-\code{\link{cramerV}}, \code{\link{oddsRatio}}
+\link{desc} for the generic function and formula interface,
+\link{desc.numeric} for univariate numeric descriptions,
+\link{desc.factor} for univariate factor descriptions,
+\link[pharos:plot.Desc.table]{pharos::plot.Desc.table} for different plotting options,
+\link[stats:chisq.test]{stats::chisq.test}, \link[stats:fisher.test]{stats::fisher.test},
+\link{cramerV}, \link{oddsRatio}
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -180,7 +186,8 @@ Other desc:
 \code{\link{desc.nq}},
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
-\code{\link{desc.qq}}
+\code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
 \concept{data-description}
 \concept{desc}

@@ -2,43 +2,82 @@
 % Please edit documentation in R/boxCoxLambda.R
 \name{boxCoxLambda}
 \alias{boxCoxLambda}
-\title{Automatic Selection of Box Cox Transformation Parameter}
+\title{Automatic Selection of Box-Cox Transformation Parameter}
 \usage{
-boxCoxLambda(x, method = c("guerrero", "loglik"), lower = -1, upper = 2)
+boxCoxLambda(
+  x,
+  method = c("guerrero", "loglik"),
+  lower = -1,
+  upper = 2,
+  nonseasonalLength = 2
+)
 }
 \arguments{
-\item{x}{a numeric vector or time series}
+\item{x}{a numeric vector or univariate time series. All values must be
+strictly positive and finite, as the Box-Cox transformation is undefined
+otherwise; missing values are not removed but rejected, since subsetting
+would strip a \code{ts} of its frequency and cycle positions.}
 
 \item{method}{method to be used in calculating lambda. Can be either
-"guerrero" (default) or "loglik".}
+\code{"guerrero"} (default) or \code{"loglik"}.}
 
-\item{lower}{lower limit for possible lambda values, default is -1.}
+\item{lower}{lower limit for possible lambda values; defaults to -1}
 
-\item{upper}{upper limit for possible lambda values, default is 2.}
+\item{upper}{upper limit for possible lambda values; defaults to 2}
+
+\item{nonseasonalLength}{number of observations per subseries used by the
+\code{"guerrero"} method for non-seasonal data, default is 2. Must be a
+whole number \eqn{\ge 2}. For seasonal time series the series' own
+frequency is used instead, whenever it is larger.}
 }
 \value{
-a number indicating the Box-Cox transformation parameter.
+a numeric scalar containing the estimated Box-Cox transformation
+parameter
 }
 \description{
-An automatic selection of the Box Cox transformation parameter is estimated
-with two methods.\cr Guerrero's (1993) method yields a lambda which
+Selects the Box-Cox transformation parameter automatically, using either
+Guerrero's method or the profile log likelihood.\cr Guerrero's (1993)
+method yields a lambda which
 minimizes the coefficient of variation for subseries of \code{x}.  For
 method \code{"loglik"}, the value of lambda is chosen to maximize the
 profile log likelihood of a linear model fitted to \code{x}.  For
 non-seasonal data, a linear time trend is fitted while for seasonal data, a
 linear time trend with seasonal dummy variables is used.
 }
+\details{
+Seasonality is taken from \code{x} itself: a \code{\link[stats]{ts}} object
+with \code{frequency(x) > 1} is treated as seasonal, anything else
+(including a plain numeric vector) as non-seasonal. For method
+\code{"loglik"} the profile log likelihood is therefore computed from
+\code{lm(x ~ trend)} for non-seasonal data and from
+\code{lm(x ~ trend + factor(cycle(x)))} for seasonal data. Both methods
+optimise lambda continuously over \code{[lower, upper]} via
+\code{\link[stats]{optimize}}.
+
+Both methods need enough data to identify their criterion, and signal an
+error rather than falling back silently when they do not have it:
+\code{"loglik"} requires at least three observations, and more than
+\code{frequency(x) + 1} for a seasonal series, that being the number of
+parameters in the seasonal model (intercept, trend and
+\code{frequency(x) - 1} dummies); \code{"guerrero"} requires at least two
+complete subseries. Constant series are rejected by both, since the
+coefficient of variation degenerates to \eqn{0/0} and the profile log
+likelihood is singular.
+}
 \note{
-This function was previously published as \code{BoxCox.lambda()} in
-the \pkg{forecast} package and has been integrated here without logical
-changes.
+Based on code by Leanne Chhay and Rob J Hyndman previously
+published as \code{BoxCox.lambda()} in the \pkg{forecast} package, adapted
+to conform to package standards.
 }
 \examples{
+lambda <- boxCoxLambda(AirPassengers)
 
+# profile log likelihood, seasonal trend model
+boxCoxLambda(AirPassengers, method = "loglik")
 
-lambda <- boxCoxLambda(AirPassengers, lower=0)
+# plain numeric vector, treated as non-seasonal
+boxCoxLambda(rlnorm(100), method = "loglik")
 
-# This R script contains code for extracting the Box-Cox
 }
 \references{
 Box, G. E. P. and Cox, D. R. (1964) An analysis of
@@ -48,18 +87,12 @@ Guerrero, V.M. (1993) Time-series analysis supported by power
 transformations. \emph{Journal of Forecasting}, \bold{12}, 37--48.
 }
 \seealso{
-\code{\link{boxCox}}
-
 Other transform:
 \code{\link[=boxCox]{boxCox()}},
 \code{\link[=logSt]{logSt()}},
 \code{\link[=scaleX]{scaleX()}},
 \code{\link[=yeoJohnson]{yeoJohnson()}}
 }
-\author{
-Leanne Chhay and Rob J Hyndman
-}
 \concept{transform}
 \concept{transformation}
 \concept{variance-stabilization}
-\keyword{ts}

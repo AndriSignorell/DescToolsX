@@ -14,39 +14,34 @@ freq2D(x, ...)
 }
 \arguments{
 \item{x}{a vector of x values, or a data frame whose first two columns
-contain the x and y values.}
+contain the x and y values}
 
-\item{\dots}{named arguments to be passed to the default method.}
+\item{\dots}{named arguments passed to the default method}
 
-\item{formula}{a \code{\link{formula}}, such as \code{y~x}.}
+\item{formula}{a \code{\link{formula}}, such as \code{y ~ x}}
 
 \item{data}{a \code{data.frame}, \code{matrix}, or \code{list} from which
-the variables in \code{formula} should be taken.}
+the variables in \code{formula} should be taken}
 
 \item{subset}{an optional vector specifying a subset of observations to be
-used.}
+used}
 
 \item{na.action}{a function which indicates what should happen when the data
-contain NAs. Defaults to \code{getOption("na.action")}.}
+contain missing values. Defaults to \code{getOption("na.action")}.}
 
 \item{n}{the desired number of bins for the output, a scalar or a vector of
-length 2.}
+length 2}
 
 \item{pad}{number of rows and columns to add to each margin, containing only
-zeros.}
+zeros}
 
-\item{dnn}{the names to be given to the dimensions in the result.}
+\item{dnn}{names for the dimensions in the result}
 
-\item{y}{a vector of y values.}
+\item{y}{a vector of y values}
 }
 \value{
-The \code{layout} argument specifies one of the following formats
-for the binned frequency output:
-
-\enumerate{ \item\code{matrix} that is easy to read, aligned like a
-scatterplot.  \item\code{list} with three elements (x, y, matrix) that can
-be passed to various plotting functions.  \item\code{data.frame} with three
-columns (x, y, frequency) that can be analyzed further.  }
+a frequency matrix whose rows represent the y bins in descending
+order and whose columns represent the x bins
 }
 \description{
 Calculate a frequency distribution for two continuous variables.
@@ -57,21 +52,15 @@ based on the value of \code{n}.
 
 Padding the margins with zeros can be helpful for subsequent analysis, such
 as smoothing.
-
-The \code{print} logical flag only has an effect when \code{layout=1}.
+}
+\note{
+Based on code by Arni Magnusson, adapted to conform to package standards.
 }
 \examples{
 
 freq2D(quakes$long, quakes$lat, dnn="")
 freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 
-# range(freq2D(saithe, print=FALSE))
-
-# Layout, plot
-# freq2D(saithe, layout=2)
-# freq2D(saithe, layout=3)
-# contour(freq2D(saithe, layout=2))
-# lattice::contourplot(Freq ~ Bio + HR, freq2D(saithe,layout=3))
 }
 \seealso{
 \code{\link{cut}}, \code{\link{table}}, and
@@ -84,12 +73,5 @@ Other frequency:
 \code{\link[=percTable]{percTable()}},
 \code{\link[=tOne]{tOne()}}
 }
-\author{
-Arni Magnusson \href{mailto:thisisarni@gmail.com}{thisisarni@gmail.com}>
-}
 \concept{frequency}
 \concept{frequency-table}
-\keyword{distribution}
-\keyword{dplot}
-\keyword{manip}
-\keyword{multivariate}

@@ -9,19 +9,20 @@
 #' exponentiated regression coefficients together with confidence intervals
 #' are returned.
 #'
-#' @param x An object for which odds ratios should be computed.
-#' @param ... Further arguments passed to methods.
+#' @param x an object for which odds ratios should be computed
+#' @param ... further arguments passed to methods
 #'
-#' @return
-#' The returned value depends on the input:
-#'
-#' \itemize{
-#'   \item For contingency tables, a numeric scalar containing the odds ratio
-#'     if \code{conf.level = NA}, otherwise a named numeric vector with
-#'     elements \code{estimate}, \code{lci}, and \code{uci}.
-#'   \item For binomial generalized linear models, an object of class
-#'     \code{"OddsRatio"}.
+#' @return the returned value depends on the input. For contingency tables,
+#' \code{conf.level = NA} yields a numeric scalar; otherwise the result is a
+#' named numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{odds ratio estimate}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
+#'
+#' For binomial generalized linear models, an object of class
+#' \code{"OddsRatio"} is returned.
 #'
 #' @details
 #' For 2x2 contingency tables, the odds ratio is defined as:
@@ -59,8 +60,7 @@
 #' \code{\link{attachAliases}()} once per session (or script) to make
 #' \code{or()} available as a convenient shorthand.
 #' 
-#'@seealso
-#' \code{\link{relRisk}}, \code{\link{attachAliases}}
+#' @seealso [attachAliases]
 #'
 #' @examples
 #' # 2x2 contingency table
@@ -87,10 +87,7 @@
 #'
 #' oddsRatio(fit)
 #'
-
-
-
-
+#'
 #' @family effect.size  
 #' @concept effect-size  
 #' @concept binary-outcome
@@ -103,17 +100,17 @@ oddsRatio <- function(x, ...) {
 
 
 
-#' @param y Optional second variable. If supplied,
+#' @param y optional second variable. If supplied,
 #'   \code{table(x, y, ...)} is computed.
-#' @param conf.level Confidence level for interval estimation.
+#' @param conf.level confidence level for interval estimation.
 #'   If \code{NA}, only the point estimate is returned.
-#' @param sides Type of confidence interval. One of
+#' @param sides type of confidence interval. One of
 #'   \code{"two.sided"}, \code{"left"}, or \code{"right"}.
-#' @param method Character string specifying the estimation method.
+#' @param method character string specifying the estimation method.
 #'   One of \code{"wald"}, \code{"exact"}, or \code{"midp"}.
-#' @param interval Numeric vector of length two specifying the search interval
-#'   used by the mid-p method.
-
+#' @param interval numeric vector of length two specifying the search interval
+#'   used by the mid-p method
+#'
 #' @rdname oddsRatio
 #' @method oddsRatio default
 #' @export
@@ -184,9 +181,9 @@ oddsRatio.default <- function(
 
 
 #' @rdname oddsRatio
-#' @param method Character string specifying the interval method.
+#' @param method character string specifying the interval method.
 #'   One of \code{"wald"} or \code{"profile"}.
-
+#'
 #' @method oddsRatio glm
 #' @export
 oddsRatio.glm <- function(
@@ -212,7 +209,7 @@ oddsRatio.glm <- function(
   se   <- coefTable[, "Std. Error"]
   pval <- coefTable[, "Pr(>|z|)"]
   
-  estimate <- exp(beta)
+  est <- exp(beta)
   
   alpha <- 1 - conf.level
   
@@ -265,8 +262,8 @@ oddsRatio.glm <- function(
   
   coefficients <- data.frame(
     term = rownames(coefTable),
-    estimate = estimate,
-    logEstimate = beta,
+    est = est,
+    logEst = beta,
     stdError = se,
     pValue = pval,
     lci = lci,
@@ -292,7 +289,7 @@ oddsRatio.glm <- function(
 
 
 #' @rdname oddsRatio
-#' @param digits Number of digits used for printing.
+#' @param digits number of digits used for printing
 #' @export
 print.OddsRatio <- function(x, digits = 3, ...) {
   
@@ -313,7 +310,7 @@ print.OddsRatio <- function(x, digits = 3, ...) {
   tab <- x$coefficients
   
   tabPrint <- data.frame(
-    estimate = round(tab$estimate, digits),
+    est = round(tab$est, digits),
     lci = round(tab$lci, digits),
     uci = round(tab$uci, digits),
     pValue = signif(tab$pValue, digits)
@@ -342,17 +339,17 @@ print.OddsRatio <- function(x, digits = 3, ...) {
   if (any(x == 0))
     x <- x + 0.5
   
-  logEstimate <- (
+  logEst <- (
     log(x[1, 1]) +
       log(x[2, 2]) -
       log(x[1, 2]) -
       log(x[2, 1])
   )
   
-  estimate <- exp(logEstimate)
+  est <- exp(logEst)
   
   if (is.na(conf.level))
-    return(estimate)
+    return(est)
   
   se <- sqrt(sum(1 / x))
   
@@ -362,14 +359,14 @@ print.OddsRatio <- function(x, digits = 3, ...) {
     
     z <- qnorm(1 - alpha / 2)
     
-    lci <- exp(logEstimate - z * se)
-    uci <- exp(logEstimate + z * se)
+    lci <- exp(logEst - z * se)
+    uci <- exp(logEst + z * se)
     
   } else if (sides == "left") {
     
     z <- qnorm(1 - alpha)
     
-    lci <- exp(logEstimate - z * se)
+    lci <- exp(logEst - z * se)
     uci <- Inf
     
   } else {
@@ -377,12 +374,12 @@ print.OddsRatio <- function(x, digits = 3, ...) {
     z <- qnorm(1 - alpha)
     
     lci <- 0
-    uci <- exp(logEstimate + z * se)
+    uci <- exp(logEst + z * se)
     
   }
   
   c(
-    estimate = estimate,
+    est = est,
     lci = lci,
     uci = uci
   )
@@ -411,13 +408,13 @@ print.OddsRatio <- function(x, digits = 3, ...) {
     alternative = alternative
   )
   
-  estimate <- unname(fit$estimate)
+  est <- unname(fit$estimate)
   
   if (is.na(conf.level))
-    return(estimate)
+    return(est)
   
   c(
-    estimate = estimate,
+    est = est,
     lci = fit$conf.int[1],
     uci = fit$conf.int[2]
   )
@@ -483,13 +480,13 @@ print.OddsRatio <- function(x, digits = 3, ...) {
     
   }
   
-  estimate <- uniroot(
+  est <- uniroot(
     .mue,
     interval = interval
   )$root
   
   if (is.na(conf.level))
-    return(estimate)
+    return(est)
   
   alpha <- 1 - conf.level
   
@@ -508,11 +505,9 @@ print.OddsRatio <- function(x, digits = 3, ...) {
   )$root
   
   c(
-    estimate = estimate,
+    est = est,
     lci = lci,
     uci = uci
   )
   
 }
-
-

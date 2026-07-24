@@ -14,40 +14,39 @@ cohenKappa(
 )
 }
 \arguments{
-\item{x}{A square confusion matrix (or data frame), or a
-categorical vector when \code{y} is provided.}
+\item{x}{a square confusion matrix (or data frame), or a
+categorical vector when \code{y} is provided}
 
 \item{y}{\code{NULL} (default) or a categorical vector with
-compatible dimensions to \code{x}.  When supplied,
-\code{table(x, y, \dots)} is computed.  The vector interface is
+compatible dimensions to \code{x}. When supplied,
+\code{table(x, y, \dots)} is computed. The vector interface is
 available for unweighted kappa only (see Details).}
 
-\item{weights}{Either a character string selecting a built-in weight
+\item{weights}{either a character string selecting a built-in weight
 scheme — \code{"unweighted"} (default), \code{"equal-spacing"}, or
 \code{"fleiss-cohen"} — or a numeric matrix with the same dimensions
-as \code{x} supplying user-defined weights for each cell.}
+as \code{x} supplying user-defined weights for each cell}
 
-\item{conf.level}{Confidence level of the interval.  A single numeric
+\item{conf.level}{confidence level of the interval. A single numeric
 value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
 point estimate.}
 
-\item{sides}{A character string specifying the side of the interval:
+\item{sides}{a character string specifying the side of the interval:
 \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}.  Ignored when
+Partial matching is supported. \code{"left"} sets \code{uci = Inf};
+\code{"right"} sets \code{lci = -Inf}. Ignored when
 \code{conf.level = NA}.}
 
-\item{...}{Further arguments passed to \code{\link{table}} (vector
-interface only), e.g. \code{useNA}.}
+\item{...}{further arguments passed to \code{\link{table}} for the
+vector interface, for example \code{useNA}}
 }
 \value{
-If \code{conf.level = NA}: a single numeric value (kappa).
-
-If \code{conf.level} is specified: a named numeric vector with elements
+if \code{conf.level = NA}, a numeric scalar containing kappa;
+otherwise a named numeric vector with elements:
 \describe{
-\item{\code{est}}{Kappa estimate.}
-\item{\code{lci}}{Lower confidence bound.}
-\item{\code{uci}}{Upper confidence bound.}
+\item{\code{est}}{point estimate of kappa.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
 }
 }
 \description{
@@ -135,14 +134,13 @@ reliability of scoring EEG sleep recordings.
 \emph{American Journal of EEG Technology}, \emph{11}(3), 101–109.
 }
 \seealso{
-\code{\link{kappaM}}, \code{\link[bedrock]{pairApply}}
+\code{\link[bedrock]{pairApply}}
 
 Other assoc.agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},

@@ -7,19 +7,19 @@
 atkinson(x, n = rep(1, length(x)), epsilon = 0.5, na.rm = FALSE)
 }
 \arguments{
-\item{x}{Numeric vector of non-negative values (e.g. incomes).}
+\item{x}{numeric vector of non-negative values, such as incomes}
 
-\item{n}{Optional frequency weights. Each element of \code{x}
+\item{n}{optional frequency weights. Each element of \code{x}
 is replicated \code{n} times.}
 
-\item{epsilon}{Inequality aversion parameter \eqn{\varepsilon}.
+\item{epsilon}{inequality aversion parameter \eqn{\varepsilon}.
 Must be non-negative. The case \code{epsilon = 1} is handled
 separately.}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.}
+\item{na.rm}{logical. If \code{TRUE}, missing values are removed.}
 }
 \value{
-Numeric value of the Atkinson index in the interval \verb{[0, 1]}.
+numeric value of the Atkinson index in the interval \verb{[0, 1]}
 }
 \description{
 Computes the Atkinson inequality index.
@@ -55,7 +55,8 @@ Other inequality:
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}}
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}
 \concept{inequality}

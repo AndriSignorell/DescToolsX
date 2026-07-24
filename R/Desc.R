@@ -16,10 +16,10 @@
 #' @name desc
 #' @aliases desc desc.data.frame desc.list
 #' 
-#' @param x object to be described. 
+#' @param x object to be described
 #' 
-#' @param main Character string (character|\code{NULL}|\code{NA}) 
-#' defining the main title. By default (\code{main = NULL}) the title will 
+#' @param main character string, \code{NULL}, or \code{NA}, defining the main
+#' title. By default (\code{main = NULL}) the title will
 #' be composed as: <variable name> (<class(es)>). 
 #' If \code{NA}, no title is printed.
 #'
@@ -28,13 +28,12 @@
 #' the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.
 #' 
 #' @param verbose
-#' Integer controlling verbosity of table output.
+#' integer controlling verbosity of table output.
 #' One of \code{1} (minimal), \code{2} (default), \code{3} (extensive).
 #' Applies to tables only.
 #' 
-#' @param conf.level Confidence level of the interval (default 0.95). 
-#' If set to \code{NA} (which is the default) no confidence interval 
-#' will be calculated.
+#' @param conf.level confidence level of the interval (default 0.95).
+#' If set to \code{NA}, no confidence interval is calculated.
 #'
 #' @details
 #' \code{desc} is a \strong{generic function}. It dispatches to the
@@ -69,12 +68,10 @@
 #'   \item computation (internal \code{.desc_*} functions)
 #'   \item printing (\code{print.Desc.*})
 #'   \item visualization (\code{plot.Desc.*})
-#' }' 
+#' }
 #'  
-#' @return An object of class \code{"Desc"} with a subclass depending on
-#'   the input type.
-#'   @return An object of class \code{"Desc"} with a subtype depending on
-#'   the input (e.g. \code{"Desc.numeric"}, \code{"Desc.qn"}).
+#' @return an object of class \code{"Desc"} with a subclass determined by the
+#' input, such as \code{"Desc.numeric"} or \code{"Desc.qn"}
 #'
 #' @seealso \code{\link{summary}}, \code{\link{plot}}
 
@@ -227,8 +224,6 @@ plot.Desc <- function(x, ...) {
 .ChisqWarning <- function(){
   cat(cli::col_red("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n\n"))
 }
-
-
 
 
 

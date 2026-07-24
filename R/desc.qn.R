@@ -8,15 +8,15 @@
 #' Computes descriptive statistics for the relationship between a categorical
 #' variable \code{y} and a numeric variable \code{x}.
 #'
-#' @param y A categorical variable (factor or coercible to factor).
-#' @param x A numeric variable.
-#' @param conf.level Confidence level for interval estimates (default 0.95).
-#' @param breaks Numeric vector defining cut points for \code{x}.
+#' @param y a categorical variable (factor or coercible to factor)
+#' @param x a numeric variable
+#' @param conf.level confidence level for interval estimates (default 0.95)
+#' @param breaks numeric vector defining cut points for \code{x}.
 #'   If not supplied, quartiles of \code{x} are used.
-#' @param right Logical; passed to \code{cut()}, defining interval closure.
+#' @param right logical; passed to \code{cut()}, defining interval closure
 #' 
-#' @param ... further arguments passed to methods.
-#' @param verbose controls printed output.
+#' @param ... further arguments passed to methods
+#' @param verbose amount of printed output
 #'
 #' @details
 #' The function summarizes how a numeric variable \code{x} differs across
@@ -43,20 +43,27 @@
 #' The numeric variable \code{x} is optionally discretized using
 #' \code{breaks}. By default, quartiles are used.
 #'
-#' @return
-#' An object of class \code{"Desc.qn"} inheriting from \code{"Desc"}.
-#'
-#' @section Output components:
-#' \itemize{
-#'   \item \code{grpTable}: group-wise summary table
-#'   \item \code{kw}: Kruskal-Wallis test result
-#'   \item \code{eta2}: effect size
-#'   \item \code{levene}: Levene test result
-#'   \item \code{tauB}: Kendall Tau-b (estimate, CI, p-value)
-#'   \item \code{spearman}: Spearman correlation
-#'   \item \code{auc}: AUC (if binary)
-#'   \item \code{prevTable}: prevalence table (if binary)
-#'   \item \code{caTest}: Cochran-Armitage test (if binary)
+#' @return an object of class \code{c("Desc.qn", "Desc")} with components:
+#' \describe{
+#'   \item{\code{grpTable}}{group-wise summary table}
+#'   \item{\code{kw}}{result of the Kruskal-Wallis test}
+#'   \item{\code{eta2}}{effect size}
+#'   \item{\code{levene}}{result of Levene's test}
+#'   \item{\code{tauB}}{estimate, confidence interval, and p-value for
+#'     Kendall's tau-b}
+#'   \item{\code{spearman}}{estimate, confidence interval, and p-value for
+#'     Spearman's correlation}
+#'   \item{\code{auc}}{area under the curve for a binary outcome}
+#'   \item{\code{prevTable}}{prevalence table for a binary outcome with columns:
+#'     \describe{
+#'       \item{\code{quantile}}{quantile group}
+#'       \item{\code{n}}{number of complete cases in the group}
+#'       \item{\code{est}}{point estimate of the prevalence}
+#'       \item{\code{lci}}{lower confidence interval bound}
+#'       \item{\code{uci}}{upper confidence interval bound}
+#'     }}
+#'   \item{\code{caTest}}{result of the Cochran-Armitage test for a binary
+#'     outcome}
 #' }
 #'
 #' @seealso
@@ -73,7 +80,6 @@
 NULL
 
 
-#' @keywords internal
 .descQN <- function(y, x, conf.level = 0.95,
                      breaks = quantile(x, probs = c(0.25, 0.5, 0.75),
                                          na.rm = TRUE),
@@ -141,7 +147,7 @@ NULL
       data.frame(
         quantile = ql,
         n        = ni,
-        prev     = ci[1L],
+        est      = ci[1L],
         lci      = ci[2L],
         uci      = ci[3L]
       )
@@ -259,14 +265,14 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
     cat(sprintf("\nPrevalence of \"%s\" by groups (Wilson CI):\n",
                 x$res$lvls[2L]))
     cat(sprintf("  %-18s  %6s  %7s  %7s  %7s\n",
-                "", "n", "prev", "lci", "uci"))
+                "", "n", "est", "lci", "uci"))
     cat(strrep("-", 52L), "\n")
     for (i in seq_len(nrow(x$res$prevTable))) {
       r <- x$res$prevTable[i, ]
       cat(sprintf("  %-18s  %6s  %7s  %7s  %7s\n",
                   r$quantile,
                   fm(r$n,    fmt = "abs.sty"),
-                  fm(r$prev, fmt = "per.sty"),
+                  fm(r$est,  fmt = "per.sty"),
                   fm(r$lci,  fmt = "per.sty"),
                   fm(r$uci,  fmt = "per.sty")))
     }
@@ -312,144 +318,8 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
 # governed by DescToolsX design rules once defined.
 
 
-# plot.Desc.qn is defined in aurora
+# plot.Desc.qn is defined in pharos
 
-
-# plot.Desc.qn <- function(x, main = NULL, which = NULL, verbose = NULL, ...) {
-#   
-#   verbose <- verbose %||% x$meta$verbose %||%
-#     getOption("DescTools.verbose", default = 2L)
-#   
-#   isBinary <- x$res$k == 2L
-#   
-#   # ── helper: title mit fallback auf plot-spezifischen default ─────────────
-#   .main <- function(default) main %||% default
-#   
-#   # ── default which by verbose ──────────────────────────────────────────────
-#   if (is.null(which))
-#     which <- 2
-#   
-#   # ── layout ────────────────────────────────────────────────────────────────
-#   nPlots <- length(which)
-#   if (nPlots > 1L) {
-#     op <- par(mfrow = c(nPlots, 1L), mar = c(4, 4, 2, 1))
-#     on.exit(par(op))
-#   }
-#   
-#   # ── shorthand ─────────────────────────────────────────────────────────────
-#   xOk  <- x$res$xOk
-#   yOk  <- x$res$yOk
-#   lvls <- x$res$lvls
-#   xLab <- x$meta$xname %||% "x"
-#   yLab <- x$meta$yname %||% "y"
-#   
-#   # ── plot loop ─────────────────────────────────────────────────────────────
-#   for (w in which) {
-#     
-#     switch(as.character(w),
-#            
-#            # ── 1: Conditional density plot ───────────────────────────────────────
-#            "1" = {
-#              cdplot(yOk ~ xOk,
-#                     xlab = xLab,
-#                     ylab = sprintf("P(%s)", yLab),
-#                     main = .main("Conditional density"),
-#                     ...)
-#            },
-#            
-#            # ── 2: Spineplot ──────────────────────────────────────────────────────
-#            "2" = {
-#              spineplot(yOk ~ xOk,
-#                        xlab = xLab,
-#                        ylab = yLab,
-#                        main = .main("Spineplot"),
-#                        ...)
-#            },
-#            
-#            # ── 3: Overlapping density per group ──────────────────────────────────
-#            "3" = {
-#              dens <- lapply(lvls, function(lv)
-#                density(xOk[yOk == lv], na.rm = TRUE))
-#              names(dens) <- lvls
-#              
-#              yMax <- max(sapply(dens, function(d) max(d$y)))
-#              
-#              plot(dens[[1L]],
-#                   ylim = c(0, yMax * 1.05),
-#                   xlab = xLab,
-#                   ylab = "Density",
-#                   main = .main("Density by group"),
-#                   col  = 1L, ...)
-#              
-#              for (i in seq_along(lvls)[-1L])
-#                lines(dens[[i]], col = i)
-#              
-#              legend("topright",
-#                     legend = lvls,
-#                     col    = seq_along(lvls),
-#                     lty    = 1L,
-#                     bty    = "n")
-#            },
-#            
-#            # ── 4: Boxplot ────────────────────────────────────────────────────────
-#            "4" = {
-#              boxplot(xOk ~ yOk,
-#                      xlab = xLab,
-#                      ylab = xLab,
-#                      main = .main("Boxplot"),
-#                      ...)
-#            },
-#            
-#            # ── 5: Prevalence + Wilson-CI along x (binary only) ───────────────────
-#            "5" = {
-#              if (!isBinary) {
-#                message("which=5 (prevalence plot) is only available for binary y")
-#                next
-#              }
-#              
-#              pt <- x$res$prevTable
-#              
-#              xCut <- cut(xOk,
-#                          breaks         = c(-Inf, x$res$breaks, Inf),
-#                          include.lowest = TRUE)
-#              xPos <- as.numeric(tapply(xOk, xCut, median))
-#              
-#              prevTotal <- sum(yOk == lvls[2L]) / length(yOk)
-#              
-#              plot(xPos, pt$prev,
-#                   ylim = c(0, 1),
-#                   pch  = 19,
-#                   xlab = xLab,
-#                   ylab = sprintf("P(\"%s\")", lvls[2L]),
-#                   main = .main("Prevalence by x-quantile"),
-#                   ...)
-#              
-#              arrows(xPos, pt$lci, xPos, pt$uci,
-#                     angle  = 90,
-#                     code   = 3,
-#                     length = 0.05)
-#              
-#              abline(h   = prevTotal,
-#                     lty = 2,
-#                     col = "gray50")
-#              
-#              text(x      = min(xPos),
-#                   y      = prevTotal,
-#                   labels = sprintf("overall: %s",
-#                                    fm(prevTotal, fmt = "per.sty")),
-#                   adj    = c(0, -0.5),
-#                   col    = "gray50",
-#                   cex    = 0.8)
-#            },
-#            
-#            # ── unknown which ─────────────────────────────────────────────────────
-#            message(sprintf("which=%d not defined for Desc.qn", w))
-#     )
-#   }
-#   
-#   invisible(x)
-# }
-# 
 
 
 # == internal helper functions =================================================

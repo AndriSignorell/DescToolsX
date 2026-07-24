@@ -1,213 +1,109 @@
 
 #' Local Outlier Factor
-#' 
-#' A function that finds the local outlier factor (LOF) (Breunig et al.,2000) of the
-#' matrix "data" using k neighbours. The LOF is a
-#' measure of outlyingness that is calculated for each observation. The user
-#' decides whether or not an observation will be considered an outlier based on
-#' this measure. The LOF takes into consideration the density of the
-#' neighborhood around the observation to determine its outlyingness.
-#' 
-#' The LOFs are calculated over a range of values, and the max local outlier
-#' factor is determined over this range.
-#' 
-#' @param data The data set to be explored
-#' @param k The kth-distance to be used to calculate the LOF's.
-#' @return \item{lof}{ A vector with the local outlier factor of each
-#' observation}
-#' 
-#' @note This function was originally published in the package dprep.
-#' 
-#' @author Caroline Rodriguez
-#' 
-#' @references Breuning, M., Kriegel, H., Ng, R.T, and Sander. J. (2000).  lof:
-#' Identifying density-based local outliers. \emph{In Proceedings of the ACM
-#' SIGMOD International Conference on Management of Data}
-#' 
-#' @keywords methods
-#' 
-#' @examples
-#' 
-#' # Detecting the top 10 outliers using the lof algorithm
-#' 
-#' (iris.lof <- lof(iris[,-5], 10))
-#' 
-
-
-#' @family impute  
-#' @concept outlier-detection  
-#' @concept machine-learning
 #'
+#' Computes the local outlier factor (LOF) of Breunig et al. (2000) for each
+#' observation. The LOF compares the local density around an observation with
+#' the densities around its \code{k} nearest neighbours, so that an
+#' observation in a sparse region surrounded by dense ones scores high even
+#' when it is not globally extreme.
+#'
+#' @details
+#' Scores near 1 indicate that the density around the observation matches
+#' that of its neighbours. Substantially larger values indicate a locally
+#' sparse neighbourhood and thus an outlier; the user decides on the
+#' threshold, as its scale depends on the data. Values below 1 arise in
+#' unusually dense regions and are not normally of interest.
+#'
+#' The computation uses \code{\link[dbscan]{lof}} from the \pkg{dbscan}
+#' package, which builds a kd-tree and therefore scales to large data.
+#' Note that its \code{minPts} counts the observation itself, whereas
+#' \code{k} here counts neighbours only, following Breunig et al.; the
+#' translation \code{minPts = k + 1} is applied internally.
+#'
+#' Duplicated observations need care. Where an observation has more than
+#' \code{k} exact duplicates, every neighbour distance is zero, the local
+#' reachability density is infinite and the LOF is formally \eqn{0/0}.
+#' \pkg{dbscan} reports 1 in that case, on the grounds that the coincident
+#' points already supply enough density for the observation not to be an
+#' outlier. Breunig et al. instead assume genuine duplicates have been
+#' removed beforehand; do that if you need results matching the paper
+#' exactly.
+#'
+#' Note that the infinite density is not confined to the duplicates
+#' themselves. Any observation that has one of them among its own \code{k}
+#' neighbours inherits an infinite score, so a block of duplicates lying
+#' inside the data can render its whole surroundings \code{Inf}. This
+#' follows from the definition rather than from the implementation, and is a
+#' further reason to remove exact duplicates first.
+#'
+#' Only complete observations can be scored, since the distances are
+#' otherwise undefined.
+#'
+#' @param x a numeric matrix or data frame, observations in rows.
+#' @param k the number of neighbours defining the local neighbourhood, not
+#'   counting the observation itself.
+#'
+#' @return a numeric vector with the local outlier factor of each
+#'   observation, in the order of the rows of \code{x}.
+#'
+#' @references
+#' Breunig, M. M., Kriegel, H.-P., Ng, R. T., & Sander, J. (2000). LOF:
+#'   Identifying density-based local outliers. \emph{Proceedings of the ACM
+#'   SIGMOD International Conference on Management of Data}, 93-104.
+#'   \doi{10.1145/335191.335388}
+#'
+#' @seealso \code{\link[dbscan]{lof}}
+#'
+#' @examples
+#' \donttest{
+#' if(requireNamespace("dbscan", quietly = TRUE)) {
+#'
+#'   res <- lof(iris[, -5], k = 10)
+#'
+#'   # the ten most outlying observations
+#'   head(order(res, decreasing = TRUE), 10)
+#'
+#'   # scores near 1 are unremarkable, large ones are not
+#'   summary(res)
+#' }
+#' }
+#'
+#' @family outlier
+#' @concept outlier-detection
+#' @concept density-based
 #'
 #' @export
-lof <- function(data, k) {
-  
-  # source: library(dprep)
-  
-  # A function that finds the local outlier factor (Breunig,2000) of
-  # the matrix "data" with k neighbors
-  # Adapted by Caroline Rodriguez and Edgar Acuna, may 2004
-  
-  knneigh.vect <-
-    function(x,data,k)
-    {
-      #Function that returns the distance from a vector "x" to
-      #its k-nearest-neighbors in the matrix "data"
-      
-      temp=as.matrix(data)
-      numrow=dim(data)[1]
-      dimnames(temp)=NULL
-      
-      #subtract rowvector x from each row of data
-      difference<- scale(temp, x, FALSE)
-      
-      #square and add all differences and then take the square root
-      dtemp <- drop(difference^2 %*% rep(1, ncol(data)))
-      dtemp=sqrt(dtemp)
-      
-      #order the distances
-      order.dist <- order(dtemp)
-      nndist=dtemp[order.dist]
-      
-      #find distance to k-nearest neighbor
-      #uses k+1 since first distance in vector is a 0
-      knndist=nndist[k+1]
-      
-      #find neighborhood
-      #eliminate first row of zeros from neighborhood
-      neighborhood=drop(nndist[nndist<=knndist])
-      neighborhood=neighborhood[-1]
-      numneigh=length(neighborhood)
-      
-      #find indexes of each neighbor in the neighborhood
-      index.neigh=order.dist[1:numneigh+1]
-      
-      # this will become the index of the distance to first neighbor
-      num1=length(index.neigh)+3
-      
-      # this will become the index of the distance to last neighbor
-      num2=length(index.neigh)+numneigh+2
-      
-      #form a vector
-      neigh.dist=c(num1,num2,index.neigh,neighborhood)
-      
-      return(neigh.dist)
-    }
-  
-  
-  
-  dist.to.knn <-
-    function(dataset,neighbors)
-    {
-      
-      #function returns an object in which each column contains
-      #the indices of the first k neighbors followed by the
-      #distances to each of these neighbors
-      
-      numrow=dim(dataset)[1]
-      
-      #applies a function to find distance to k nearest neighbors
-      #within "dataset" for each row of the matrix "dataset"
-      
-      knndist=rep(0,0)
-      
-      
-      for (i in 1:numrow)
-      {
-        #find obervations that make up the k-distance neighborhood for dataset[i,]
-        neighdist=knneigh.vect(dataset[i,],dataset,neighbors)
-        
-        #adjust the length of neighdist or knndist as needed to form matrix of neighbors
-        #and their distances
-        if (i==2)
-        {
-          if (length(knndist)<length(neighdist))
-          {
-            z=length(neighdist)-length(knndist)
-            zeros=rep(0,z)
-            knndist=c(knndist,zeros)
-          }
-          else if (length(knndist)>length(neighdist))
-          {
-            z=length(knndist)-length(neighdist)
-            zeros=rep(0,z)
-            neighdist=c(neighdist,zeros)
-          }
-        }
-        else
-        {
-          if (i!=1)
-          {
-            if (dim(knndist)[1]<length(neighdist))
-            {
-              z=(length(neighdist)-dim(knndist)[1])
-              zeros=rep(0,z*dim(knndist)[2])
-              zeros=matrix(zeros,z,dim(knndist)[2])
-              knndist=rbind(knndist,zeros)
-            }
-            else if (dim(knndist)[1]>length(neighdist))
-            {
-              z=(dim(knndist)[1]-length(neighdist))
-              zeros=rep(0,z)
-              neighdist=c(neighdist,zeros)
-            }
-          }
-        }
-        knndist=cbind(knndist,neighdist)
-      }
-      
-      return(knndist)
-    }
-  
-  
-  reachability <-
-    function(distdata,k)
-    {
-      # function that calculates the local reachability density
-      # of Breuing(2000) for each observation in a matrix, using
-      # a matrix (distdata) of k nearest neighbors computed by the function dist.to.knn2
-      
-      p=dim(distdata)[2]
-      lrd=rep(0,p)
-      
-      for (i in 1:p)
-      {
-        j=seq(3,3+(distdata[2,i]-distdata[1,i]))
-        # compare the k-distance from each observation to its kth neighbor
-        # to the actual distance between each observation and its neighbors
-        numneigh=distdata[2,i]-distdata[1,i]+1
-        temp=rbind(diag(distdata[distdata[2,distdata[j,i]],distdata[j,i]]),distdata[j+numneigh,i])
-        
-        # calculate reachability
-        reach=1/(sum(apply(temp,2,max))/numneigh)
-        lrd[i]=reach
-      }
-      lrd
-    }
-  
-  
-  data=as.matrix(data)
-  
-  # find k nearest neighbors and their distance from each observation
-  # in data
-  distdata=dist.to.knn(data,k)
-  p=dim(distdata)[2]
-  
-  # calculate the local reachability density for each observation in data
-  lrddata=reachability(distdata,k)
-  
-  lof=rep(0,p)
-  
-  # computer the local outlier factor of each observation in data
-  for ( i in 1:p)
-  {
-    nneigh=distdata[2,i]-distdata[1,i]+1
-    j=seq(0,(nneigh-1))
-    local.factor=sum(lrddata[distdata[3+j,i]]/lrddata[i])/nneigh
-    lof[i]=local.factor
-  }
-  
-  # return lof, a vector with the local outlier factor of each observation
-  lof
-}
+lof <- function(x, k) {
 
+  if(!requireNamespace("dbscan", quietly = TRUE))
+    stop("Package 'dbscan' is needed for lof(). Please install it.")
+
+  if(!is.matrix(x) && !is.data.frame(x))
+    stop("Argument 'x' must be a matrix or a data frame.")
+
+  x <- as.matrix(x)
+
+  if(!is.numeric(x))
+    stop("Argument 'x' must be numeric.")
+
+  if(anyNA(x))
+    stop("Argument 'x' must not contain missing values.")
+
+  if(!all(is.finite(x)))
+    stop("Argument 'x' must not contain infinite values.")
+
+  if(!is.numeric(k) || length(k) != 1L || !is.finite(k) ||
+     k < 1 || k != round(k))
+    stop("Argument 'k' must be a single positive whole number.")
+
+  # The neighbourhood must fit inside the data: with k neighbours plus the
+  # observation itself, k + 1 observations are required.
+  if(k >= nrow(x))
+    stop(gettextf(
+      "Argument 'k' must be smaller than the number of observations (%d).",
+      nrow(x)), domain = NA)
+
+  # dbscan's minPts includes the point itself, k does not.
+  dbscan::lof(x, minPts = k + 1L)
+
+}

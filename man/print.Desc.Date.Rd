@@ -7,21 +7,21 @@
 \method{print}{Desc.Date}(x, verbose = NULL, ...)
 }
 \arguments{
-\item{x}{An object of class \code{"Desc.Date"}.}
+\item{x}{an object of class \code{"Desc.Date"}}
 
-\item{verbose}{Integer controlling the amount of printed detail.
+\item{verbose}{integer controlling the amount of printed detail.
 If \code{NULL}, the verbosity stored in the object metadata is used.
 
 \describe{
-\item{0--1}{Core statistics only (range, span, coverage,
-quantiles, sentinel detection).}
-\item{2}{Additionally prints weekday distribution with observed
+\item{0--1}{core statistics only (range, span, coverage,
+quantiles, and sentinel detection)}
+\item{2}{additionally prints weekday distribution with observed
 counts, expected counts, standardized residuals and
-chi-square p-value.}
-\item{3}{Additionally prints month distribution.}
+chi-square p-value}
+\item{3}{additionally prints month distribution}
 }}
 
-\item{...}{Further arguments passed to underlying print methods.}
+\item{...}{further arguments passed to underlying print methods}
 }
 \description{
 Prints a structured summary of a \code{"Desc.Date"} object as created

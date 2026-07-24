@@ -37,19 +37,19 @@ test_that("kappaM all three methods return different values for this data", {
 
 test_that("kappaM perfect agreement gives kappa near 1", {
   x <- data.frame(A = 1:10, B = 1:10, C = 1:10)
-  expect_equal(kappaM(x), 1, tolerance = 1e-6)
+  expect_equal(unname(kappaM(x)), 1, tolerance = 1e-6)
 })
 
-test_that("kappaM conf.level returns named vector kappa/lci/uci", {
+test_that("kappaM conf.level returns named vector est/lci/uci", {
   res <- kappaM(.kappa_dat, conf.level = 0.95)
   expect_length(res, 3)
-  expect_named(res, c("kappa","lci","uci"))
+  expect_named(res, c("est","lci","uci"))
 })
 
-test_that("kappaM CI: lci < kappa < uci", {
+test_that("kappaM CI: lci < est < uci", {
   res <- kappaM(.kappa_dat, conf.level = 0.95)
-  expect_lt(res["lci"], res["kappa"])
-  expect_gt(res["uci"], res["kappa"])
+  expect_lt(res["lci"], res["est"])
+  expect_gt(res["uci"], res["est"])
 })
 
 test_that("kappaM accepts a matrix input", {

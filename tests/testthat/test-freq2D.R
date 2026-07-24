@@ -21,6 +21,21 @@ test_that("freq2D formula interface gives same total as default", {
   expect_equal(sum(res_def), sum(res_form))
 })
 
+test_that("freq2D formula interface forwards n, pad, and dnn", {
+  res_def <- freq2D(
+    quakes$long, quakes$lat,
+    n = c(10, 15), pad = 1, dnn = c("lon", "lat")
+  )
+  res_form <- freq2D(
+    lat ~ long, data = quakes,
+    n = c(10, 15), pad = 1, dnn = c("lon", "lat")
+  )
+
+  expect_equal(dim(res_form), dim(res_def))
+  expect_equal(as.vector(res_form), as.vector(res_def))
+  expect_equal(names(dimnames(res_form)), names(dimnames(res_def)))
+})
+
 test_that("freq2D n argument changes number of bins", {
   r10 <- freq2D(quakes$long, quakes$lat, n = 10)
   r5  <- freq2D(quakes$long, quakes$lat, n = 5)

@@ -47,31 +47,28 @@
 #' 
 #' @name logSt
 #' @aliases logSt logStInv
-#' @param x a vector or matrix of data, which is to be transformed 
+#' @param x a vector or matrix of data to transform
 #' @param base a positive or complex number: the base with respect to which
 #' logarithms are computed. Defaults to 10. Use \code{base = exp(1)} for natural log. 
 #' @param calib a vector or matrix of data used to calibrate the
-#' transformation(s), i.e., to determine the constant \eqn{c} needed 
+#' transformation and determine the required constant \eqn{c}
 #' @param threshold constant \eqn{c} that determines the transformation. The
 #' inverse function \code{logStInv} will look for an attribute named
 #' \code{"threshold"} if the argument is set to \code{NULL}. 
 #' @param mult a tuning constant affecting the transformation of small values,
-#' see \code{Details}. 
+#' as described in Details
 #' 
 #' @return the transformed data. The value \eqn{c} used for the transformation
 #' and needed for inverse transformation is returned as
 #' \code{attr(.,"threshold")} and the used base as \code{attr(.,"base")}.
 #' 
-#' @author Werner A. Stahel, ETH Zurich \cr slight modifications Andri
-#' Signorell <andri@@signorell.net>
+#' @note Based on code by Werner A. Stahel, adapted to conform to package standards.
 #' 
 #' @seealso \code{\link{log}}, \code{\link{log10}}
 #' 
 #' @references Rocke, D M, Durbin B (2003): Approximate variance-stabilizing
 #' transformations for gene-expression microarray data, \emph{Bioinformatics}.
 #' 22;19(8):966-72.
-#' @keywords math
-#' 
 #' @examples
 #' 
 #' dd <- c(seq(0,1,0.1), 5 * 10^rnorm(100, 0, 0.2))
@@ -84,10 +81,9 @@
 #' # should give 0 (or at least something small):
 #' logStInv(logSt(x)) - x
 #' 
-
-
+#'
 #' @rdname logSt
-
+#'
 #' @family transform  
 #' @concept transformation  
 #' @concept variance-stabilization
@@ -183,5 +179,4 @@ logStInv <- function (x, base=NULL, threshold = NULL) {
 #     attr(x,"untransformed") <- c(ljdt)
 #   }
 #   x
-
 

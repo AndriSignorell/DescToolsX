@@ -44,7 +44,8 @@ print.Desc.AllNA <- function(x, ...) {
   ), na.rm = TRUE)
   
   m <- rbind(lst$l1, lst$l2, "")
-  out <- capture.output(.print.charmatrix(m))
+  out <- capture.output(printCharMatrix(m, showRownames = FALSE))
+  
   cat(out, sep = "\n")
   
   if (x$meta$plotit)

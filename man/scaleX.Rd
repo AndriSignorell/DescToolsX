@@ -2,40 +2,77 @@
 % Please edit documentation in R/scaleX.R
 \name{scaleX}
 \alias{scaleX}
-\title{Robust Scaling With Median and Mad}
+\title{Robust Scaling With Median and MAD}
 \usage{
-scaleX(x, center = TRUE, scale = TRUE)
+scaleX(x, center = TRUE, scale = TRUE, na.rm = TRUE)
 }
 \arguments{
-\item{x}{a numeric matrix(like object).}
+\item{x}{a numeric matrix-like object}
 
-\item{center}{a logical value defining whether x should be centered by the
-median.  Centering is done by subtracting the column medians (omitting \code{NA}s)
-of x from their corresponding columns.  If center is \code{FALSE},
-no centering is done.}
+\item{center}{logical scalar or numeric vector. If \code{TRUE}, the column
+medians are subtracted; if \code{FALSE}, no centering is performed.
+Alternatively, a numeric vector of length \code{ncol(x)} supplies the
+values to subtract directly.}
 
-\item{scale}{a logical value defining whether x should be scaled by the mad.
-Scaling is done by dividing the (centered) columns of x by their mad.  If
-scale is \code{FALSE}, no scaling is done.}
+\item{scale}{logical scalar or numeric vector. If \code{TRUE}, the
+(centered) columns are divided by their MAD; if \code{FALSE}, no scaling
+is performed. Alternatively, a numeric vector of length \code{ncol(x)}
+supplies the divisors directly.}
+
+\item{na.rm}{logical; if \code{TRUE} (default), missing values are omitted
+when the column medians and MADs are computed. Ignored for whichever of
+\code{center} and \code{scale} is given as a numeric vector. Missing
+entries of \code{x} itself always remain missing in the result.}
 }
 \value{
-the centered, scaled matrix.  The numeric centering and scalings
-used (if any) are returned as attributes "scaled:center" and "scaled:scale"
+the centered and scaled matrix. The numeric centerings and scalings used (if
+any) are returned as attributes \code{"scaled:center"} and
+\code{"scaled:scale"}.
 }
 \description{
-\code{scaleX} is a wrapper function for robust standardization, using
-\code{\link{median}} and \code{\link{mad}} instead of \code{\link{mean}} and
-\code{\link{sd}}.
+\code{scaleX} performs robust standardization, using
+\code{\link[stats]{median}} and \code{\link[stats]{mad}} instead of
+\code{\link[base]{mean}} and \code{\link[stats]{sd}}.
+}
+\details{
+The function mirrors the interface of \code{\link[base]{scale}}: both
+\code{center} and \code{scale} accept either a logical flag or a numeric
+vector of values to use directly, in which case that vector must have one
+entry per column of \code{x}.
+
+Because the median absolute deviation is invariant to location shifts, it
+has the same value whether computed before or after centering. The scale
+factors are therefore computed from the original columns, so that the
+returned \code{"scaled:scale"} remains interpretable independently of
+\code{center}.
+
+A zero or non-finite scaling factor can produce undefined or non-finite
+results. \code{scaleX} emits a warning naming the affected columns rather
+than failing, since the result may still be usable when those columns are
+subsequently dropped.
 }
 \examples{
+x <- bedrock::Pizza$temperature
 
-x <- Pizza$temperature
-plot(x=seq_along(x), y=scaleX(x), xlim=c(0,100))
-points(x=seq_along(x), y=scale(x), col="red" )
+# robust standardization is far less affected by the extreme values
+plot(scaleX(x), col = "black", pch = 16, cex = 0.4,
+     ylab = "standardized temperature")
+points(scale(x), col = "red", pch = 16, cex = 0.4)
+legend("topright", legend = c("scaleX (median/MAD)", "scale (mean/SD)"),
+       col = c("black", "red"), pch = 16, bty = "n")
+
+# the centerings and scalings used are recoverable
+z <- scaleX(cbind(a = c(1, 2, 3, 4, 100), b = c(10, 20, 30, 40, 50)))
+attr(z, "scaled:center")
+attr(z, "scaled:scale")
+
+# supplying the values directly, as base::scale allows
+scaleX(matrix(1:6, ncol = 2), center = c(0, 0), scale = c(1, 2))
 
 }
 \seealso{
-\link[base:scale]{base::scale}, \link[base:sweep]{base::sweep}
+\code{\link[base]{scale}}, \code{\link[base]{sweep}},
+\code{\link[stats]{mad}}
 
 Other transform:
 \code{\link[=boxCox]{boxCox()}},
@@ -43,12 +80,7 @@ Other transform:
 \code{\link[=logSt]{logSt()}},
 \code{\link[=yeoJohnson]{yeoJohnson()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{data processing}
-\concept{robust-statistics}
+\concept{outlier-resistance}
+\concept{robust-statistic}
 \concept{standardization}
-\concept{topic.dataProcessing}
 \concept{transform}
-\concept{transformation}

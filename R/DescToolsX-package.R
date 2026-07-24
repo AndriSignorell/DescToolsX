@@ -12,13 +12,15 @@
 #'
 #' Statistical summary functions that would otherwise mask base R functions are
 #' suffixed with \code{X} (e.g. \code{meanX()}, \code{sdX()}, \code{medianX()}).
-#' So functions ending in X are extended versions provided by DescToolsX and are 
+#' So functions ending in X are extended versions (typically supporting weights 
+#' or implementing confidence intervals) provided by DescToolsX and are 
 #' designed to coexist with base R functions without masking them.
 #' 
 #' DescToolsX follows a strict and consistent naming scheme to ensure
 #' predictability and to avoid name clashes with base R and other packages.
 #' 
 #' @docType package
+#' 
 #' @name DescToolsX
 #' @aliases DescToolsX-package
 #' 
@@ -28,7 +30,6 @@
 #'    \verb{  }\link{Formulas}             \tab Handling formulas \cr
 #'    \verb{  }\link{Association}\verb{  } \tab Association  \cr
 #'    \verb{  }\link{Agreement}\verb{  } \tab Interrater agreement  \cr
-#'    \verb{  }\link{Tests}\verb{  } \tab Hypothesis-Tests  \cr
 #'    \verb{  }\link{ConfidenceIntervals}\verb{  } \tab Confidence intervals  \cr
 #'    \verb{  }\link{Association}\verb{  } \tab Measures  \cr
 #'    \verb{  }\link{Association}\verb{  } \tab Plots  \cr
@@ -78,7 +79,7 @@
 #' conventions. This design choice is a key difference between DescToolsX and
 #' DescTools.
 #' 
-#' #' Design principles
+#' \strong{Design principles}
 #'
 #' DescToolsX follows a set of strict design principles to ensure consistency,
 #' usability, and performance across the entire package.
@@ -124,11 +125,9 @@
 #' Performance improvements are a core design goal of DescToolsX and a key
 #' motivation for the package redesign.
 #' 
-#' aurora is listed in Depends because this package extends its
+#' pharos is listed in Depends because this package extends its
 #' user-facing API and expects it to be attached. Functions used internally
 #' are explicitly imported via the NAMESPACE.
 #' 
-#' @keywords internal
 "_PACKAGE"
-
 

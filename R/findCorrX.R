@@ -6,19 +6,20 @@
 #' greedy approach similar to \code{caret::findCorrelation()}, but extends it
 #' with flexible scoring methods and multiple output formats.
 #'
-#' @param x A symmetric correlation matrix.
-#' @param cutoff Numeric threshold in (0, 1). Pairs with absolute correlation
+#' @param x a symmetric correlation matrix
+#' @param cutoff numeric threshold in (0, 1). Pairs with absolute correlation
 #'   above this value are considered too highly correlated.
-#' @param method Character string specifying how variable importance is scored.
+#' @param method character string specifying how variable importance is scored.
 #'   One of \code{"mean"}, \code{"max"}, or \code{"median"}. Default is \code{"mean"}.
-#' @param output Character string specifying the return format:
+#' @param output character string specifying the return format:
 #'   \itemize{
-#'     \item \code{"index"}: indices of variables to remove (default)
-#'     \item \code{"names"}: column names of variables to remove
-#'     \item \code{"logical"}: logical vector indicating removed variables
-#'     \item \code{"report"}: detailed list with removed, kept variables and decision log
+#'     \item \code{"index"} for indices of variables to remove (default)
+#'     \item \code{"names"} for column names of variables to remove
+#'     \item \code{"logical"} for a logical vector indicating removed variables
+#'     \item \code{"report"} for a detailed list of removed and retained
+#'       variables and the decision log
 #'   }
-#' @param verbose Logical; if \code{TRUE}, prints progress information.
+#' @param verbose logical; if \code{TRUE}, progress information is printed
 #'
 #' @details
 #' The function iteratively examines pairs of variables with correlations above
@@ -30,12 +31,13 @@
 #'
 #' This is a greedy heuristic and does not guarantee a globally optimal solution.
 #'
-#' @return Depending on \code{return}:
-#' \itemize{
-#'   \item \code{"index"}: integer vector of column indices to remove
-#'   \item \code{"names"}: character vector of column names
-#'   \item \code{"logical"}: logical vector (length = ncol(x))
-#'   \item \code{"report"}: list with elements \code{removed}, \code{kept}, \code{log}
+#' @return depending on \code{output}:
+#' \describe{
+#'   \item{\code{"index"}}{integer vector of column indices to remove}
+#'   \item{\code{"names"}}{character vector of column names}
+#'   \item{\code{"logical"}}{logical vector with one element per column}
+#'   \item{\code{"report"}}{list with elements \code{removed}, \code{kept},
+#'     and \code{log}}
 #' }
 #'
 #' @examples
@@ -157,5 +159,4 @@ findCorrX <- function(x,
   
   return(out)
 }
-
 

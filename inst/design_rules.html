@@ -522,7 +522,7 @@ plot.Desc.table &lt;- function(x, ...) { ... }</code></pre>
 export(plot.Desc.table)</code></pre>
 <p><strong>When this applies:</strong> any
 <code>plot.Desc.*</code>/<code>print.Desc.*</code>/etc. method that (a)
-lives in <code>aurora</code> (or another helper package) rather than in
+lives in <code>pharos</code> (or another helper package) rather than in
 <code>DescToolsX</code> where the class itself is defined,
 <strong>and</strong> (b) is called by unqualified name from
 <code>DescToolsX</code> code rather than purely through
@@ -1644,11 +1644,11 @@ underlying function ignores <code>par()</code>.</p>
 <div id="dispatching-plot.desc.-methods" class="section level2">
 <h2>9.7 Dispatching <code>plot.Desc.*</code> Methods</h2>
 <p><code>plot.Desc.*</code> S3 methods (one per <code>Desc</code>
-subclass) typically live in <code>aurora</code>, not in
+subclass) typically live in <code>pharos</code>, not in
 <code>DescToolsX</code> where the <code>Desc</code> classes themselves
-are constructed, because they require <code>aurora</code>’s internal
+are constructed, because they require <code>pharos</code>’s internal
 plotting helpers (9.2) which cannot be used from outside
-<code>aurora</code>’s namespace. See 3.1.1.1 for the resulting export
+<code>pharos</code>’s namespace. See 3.1.1.1 for the resulting export
 requirements - this is the most common case where the
 <code>@rawNamespace export()</code> pattern is needed.</p>
 <p>Selecting multiple panels via <code>which = c(...)</code> never

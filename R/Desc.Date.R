@@ -14,11 +14,11 @@
 #'
 #' @inheritParams desc
 #'
-#' @param wprobs Numeric vector of length 7 specifying expected
+#' @param wprobs numeric vector of length 7 specifying expected
 #' probabilities for weekdays (Monday to Sunday). The default is a
 #' uniform distribution \code{rep(1/7, 7)}.
 #'
-#' @param mprobs Numeric vector of length 12 specifying expected
+#' @param mprobs numeric vector of length 12 specifying expected
 #' probabilities for months (January to December). If \code{NULL}
 #' (default), probabilities proportional to the number of days per month
 #' in a non-leap year are used.
@@ -48,16 +48,15 @@
 #' large future dates or implausibly early calendar dates. It is meant
 #' as a diagnostic aid rather than a formal validation procedure.
 #'
-#' @return
-#' An object of class \code{"Desc.Date"} and \code{"Desc"} containing:
-#' \itemize{
-#'   \item \code{core}: time-axis statistics
-#'   \item \code{weekday}: observed counts, expected counts,
-#'         standardized residuals and p-value
-#'   \item \code{month}: observed counts, expected counts,
-#'         standardized residuals and p-value
-#'   \item \code{sentinel}: heuristic data-quality diagnostics
-#'   \item \code{meta}: metadata information
+#' @return an object of class \code{c("Desc.Date", "Desc")} with components:
+#' \describe{
+#'   \item{\code{core}}{time-axis statistics}
+#'   \item{\code{weekday}}{observed and expected weekday counts, standardized
+#'     residuals, and p-value}
+#'   \item{\code{month}}{observed and expected month counts, standardized
+#'     residuals, and p-value}
+#'   \item{\code{sentinel}}{heuristic data-quality diagnostics}
+#'   \item{\code{meta}}{metadata}
 #' }
 #'
 #' @seealso \code{\link{desc}}, \code{\link{print.Desc.Date}}
@@ -231,21 +230,21 @@ desc.Date <- function(x,
 #' the magnitude and direction of deviation from expectation but do not
 #' represent separate hypothesis tests.
 #'
-#' @param x An object of class \code{"Desc.Date"}.
+#' @param x an object of class \code{"Desc.Date"}
 #'
-#' @param verbose Integer controlling the amount of printed detail.
+#' @param verbose integer controlling the amount of printed detail.
 #' If \code{NULL}, the verbosity stored in the object metadata is used.
 #'
 #' \describe{
-#'   \item{0--1}{Core statistics only (range, span, coverage,
-#'               quantiles, sentinel detection).}
-#'   \item{2}{Additionally prints weekday distribution with observed
+#'   \item{0--1}{core statistics only (range, span, coverage,
+#'               quantiles, and sentinel detection)}
+#'   \item{2}{additionally prints weekday distribution with observed
 #'            counts, expected counts, standardized residuals and
-#'            chi-square p-value.}
-#'   \item{3}{Additionally prints month distribution.}
+#'            chi-square p-value}
+#'   \item{3}{additionally prints month distribution}
 #' }
 #'
-#' @param ... Further arguments passed to underlying print methods.
+#' @param ... further arguments passed to underlying print methods
 #'
 #' @details
 #' Weekday and month distributions are compared to their expected
@@ -286,7 +285,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
                rep("", 2)
              ))
 
-  .printMatrix(m, justify = "right", padding = 2)
+  printCharMatrix(m, align = "right", sep = 2, showRownames = FALSE, useCliStyle = TRUE)
   cat("\n")
 
   if (x$sentinel$flag)
@@ -311,7 +310,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
   )
   out <- cbind(out[, 1:4], " ", out[, 5])
   colnames(out) <- c("level", "obs", "perc", "stdres", "", "dev")
-  .printMatrix(out, justify = c(rep("right", 5), "left"))
+  printCharMatrix(out, align = c(rep("right", 5), "left"), showRownames = FALSE, useCliStyle = TRUE)
   .printFootnote(gettextf("Chi-squared p-value: %s", fm(wd$p.value, fmt = "p")))
 
   if (verbose < 3)
@@ -333,7 +332,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
   )
   out2 <- cbind(out2[, 1:4], " ", out2[, 5])
   colnames(out2) <- c("level", "obs", "perc", "stdres", "", "dev")
-  .printMatrix(out2, justify = c(rep("right", 5), "left"))
+  printCharMatrix(out2, align = c(rep("right", 5), "left"), showRownames = FALSE, useCliStyle = TRUE)
   .printFootnote(gettextf("Chi-squared p-value: %s", fm(mo$p.value, fmt = "p")))
 
   invisible(x)
@@ -361,36 +360,39 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
   return(m)
 }
 
-.printMatrix <- function(m, justify = "left", padding = 2) {
 
-  m      <- as.matrix(m)
-  mChar  <- apply(m, 2, as.character)
-  ncols  <- ncol(mChar)
+# .printMatrix <- function(m, justify = "left", padding = 2) {
+# 
+#   m      <- as.matrix(m)
+#   mChar  <- apply(m, 2, as.character)
+#   ncols  <- ncol(mChar)
+# 
+#   if (length(justify) == 1)
+#     justify <- rep(justify, ncols)
+#   if (length(justify) != ncols)
+#     stop("Length of 'justify' must be 1 or equal to number of columns.")
+# 
+#   colWidths <- sapply(seq_len(ncols), function(j) {
+#     max(nchar(c(colnames(mChar)[j], mChar[, j])))
+#   })
+# 
+#   if (ncols > 1)
+#     colWidths[1:ncols] <- colWidths[1:ncols] + padding
+# 
+#   header <- mapply(function(x, w, j) format(x, width = w, justify = j),
+#                    colnames(mChar), colWidths, justify)
+#   cat(cli::style_bold(paste(header, collapse = ""), "\n"))
+# 
+#   for (i in seq_len(nrow(mChar))) {
+#     row <- mapply(function(x, w, j) format(x, width = w, justify = j),
+#                   mChar[i, ], colWidths, justify)
+#     cat(paste(row, collapse = ""), "\n")
+#   }
+# 
+#   invisible(NULL)
+# }
 
-  if (length(justify) == 1)
-    justify <- rep(justify, ncols)
-  if (length(justify) != ncols)
-    stop("Length of 'justify' must be 1 or equal to number of columns.")
 
-  colWidths <- sapply(seq_len(ncols), function(j) {
-    max(nchar(c(colnames(mChar)[j], mChar[, j])))
-  })
-
-  if (ncols > 1)
-    colWidths[1:ncols] <- colWidths[1:ncols] + padding
-
-  header <- mapply(function(x, w, j) format(x, width = w, justify = j),
-                   colnames(mChar), colWidths, justify)
-  cat(cli::style_bold(paste(header, collapse = ""), "\n"))
-
-  for (i in seq_len(nrow(mChar))) {
-    row <- mapply(function(x, w, j) format(x, width = w, justify = j),
-                  mChar[i, ], colWidths, justify)
-    cat(paste(row, collapse = ""), "\n")
-  }
-
-  invisible(NULL)
-}
 
 .printFootnote <- function(x, len = 20, ...) {
   cat(gettextf("\n%s\n%s \n\n", strrep("\u2500", 20), x))

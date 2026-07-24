@@ -15,36 +15,37 @@ tukeyBiweight(
 )
 }
 \arguments{
-\item{x}{A non-empty numeric vector of data values.}
+\item{x}{a non-empty numeric vector of data values}
 
-\item{conf.level}{Confidence level of the interval.  A single numeric
+\item{conf.level}{confidence level of the interval. A single numeric
 value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
 point estimate.}
 
-\item{sides}{A character string specifying the side of the interval:
+\item{sides}{a character string specifying the side of the interval:
 \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
 Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
 \code{"right"} sets \code{lci = -Inf}.  Ignored when
 \code{conf.level = NA}.}
 
-\item{method}{CI method.  Currently only \code{"boot"} is supported.}
+\item{method}{confidence interval method. Currently only \code{"boot"} is
+supported.}
 
-\item{const}{Tuning constant passed to \code{tbrm()}.  Default
-\code{9}.}
+\item{const}{tuning constant passed to \code{tbrm()}. Defaults to \code{9}.}
 
-\item{na.rm}{Logical.  Should missing values be removed before
-computation?  Default \code{FALSE}.}
+\item{na.rm}{logical. Should missing values be removed before computation?
+Defaults to \code{FALSE}.}
 
-\item{...}{Further arguments passed to the bootstrap engine when
-a confidence interval is requested: \code{R}, \code{type}.  See Details.}
+\item{...}{further arguments passed to the bootstrap engine when a
+confidence interval is requested, including \code{R} and \code{type}}
 }
 \value{
-If \code{conf.level = NA}: a single numeric value (the biweight mean).
-
-If \code{conf.level} is specified: a named numeric vector with elements
-\item{est}{Biweight mean estimate.}
-\item{lci}{Lower confidence bound.}
-\item{uci}{Upper confidence bound.}
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Tukey's biweight mean}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Computes Tukey's biweight robust mean (also known as the bisquare mean)
@@ -79,6 +80,7 @@ tukeyBiweight(x, conf.level = 0.95)
 tukeyBiweight(x, conf.level = 0.95, type = "perc", R = 499)
 tukeyBiweight(x, conf.level = 0.95, type = "bca", R = 499)
 
+
 }
 \seealso{
 Other location:
@@ -86,8 +88,7 @@ Other location:
 \code{\link[=hmean]{hmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},
 \code{\link[=huberM]{huberM()}},
-\code{\link[=meanAD]{meanAD()}},
-\code{\link[=meanSE]{meanSE()}},
+\code{\link[=meanX]{meanX()}},
 \code{\link[=medianX]{medianX()}},
 \code{\link[=modeX]{modeX()}}
 }

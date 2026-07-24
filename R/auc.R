@@ -4,18 +4,18 @@
 #' Calculates the area under a curve defined by points \code{(x, y)} using
 #' different numerical integration methods.
 #'
-#' @param x,y Numeric vectors of equal length defining the coordinates of the curve.
-#' @param from,to Numeric values specifying the integration interval. Defaults to
+#' @param x,y numeric vectors of equal length defining the curve coordinates
+#' @param from,to numeric values specifying the integration interval. Defaults to
 #'   the range of \code{x}.
-#' @param method Character string specifying the integration method:
-#'   \code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}.
-#' @param absoluteArea Logical; if \code{TRUE}, the absolute area is computed,
-#'   i.e., areas below zero are treated as positive.
-#' @param subdivisions Integer; number of subdivisions for spline integration.
-#' @param na.rm Logical; if \code{TRUE}, missing values are removed before computation.
-#' @param ... Additional arguments passed to \code{\link{approx}}.
+#' @param method character string specifying the integration method:
+#'   \code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}
+#' @param absoluteArea logical; if \code{TRUE}, areas below zero are treated
+#'   as positive
+#' @param subdivisions integer; number of subdivisions for spline integration
+#' @param na.rm logical; if \code{TRUE}, missing values are removed before computation
+#' @param ... additional arguments passed to \code{\link{approx}}
 #'
-#' @return A numeric value representing the computed area under the curve.
+#' @return a numeric value representing the computed area under the curve
 #'
 #' @details
 #' The function supports three methods:

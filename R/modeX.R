@@ -4,55 +4,47 @@
 #' Calculate the mode, the most frequent value, of a numeric or character
 #' vector x.
 #' 
-#' The mode is usually useful for qualitative data, sometimes still for an
-#' integer vector. For numerical vectors, it is not so much the central
-#' tendency property of the mode that is interesting as the information about
-#' conspicuous accumulation points, which sometimes can indicate data errors.
-#' In \code{desc()} it is integrated in the numeric description to draw the
-#' analyst's attention to strikingly high frequencies of a single value as soon
-#' as they exceed a certain treshold. (In a numeric vector we would in general
-#' rather expect low numbers of tied values, or we should be aware of the
-#' process properties that generates them.)
-#' 
-#' The handling of \code{NA} values follows the standards of the package. As
-#' soon as a single \code{NA} value occurs, \code{NA} is returned as result.
-#' This approach can sometimes be conservative when calculating the mode. The
-#' mode could be determined unambiguously in cases where the number of missing
-#' values is small enough that - regardless of what value they have - they
-#' cannot alter the sample mode. The modal frequency could then be determined
-#' within a lower and upper range. In the example of \code{x=c(1,1,1,1,2,2,NA)}
-#' we know that the mode of x is 1 regardless of what the true value is for the
-#' one missing value; and we know that the modal frequency must be between 4
-#' and 5. However this is not implemented in the function and further
-#' considerations in this direction are left to the user here.
-#' 
-#' The mode is elsewhere often calculated in a crude and wasteful way by
-#' tabulating the frequency for all elements of the vector and returning the
-#' most frequent one. This function uses a sophisticated data structure in C++
-#' and is limited to determining the most frequent element only. Therefore it
-#' is orders of magnitude faster than other implementations, especially for
-#' large numeric vectors with large numbers of distinct values.
-#' 
-#' @note
-#' There are other approaches for determining the mode, e.g. one might use
-#' \code{density(x)$x[which.max(density(x)$y)]} for quantitative data, resp. 
+#' The mode is mainly useful for qualitative data, sometimes still for
+#' integer vectors.
+#'
+#' For numeric vectors, the interest lies less in central tendency than in
+#' conspicuous accumulation points, which can indicate data errors.
+#' \code{desc()} therefore reports it within the numeric description once the
+#' frequency of a single value exceeds a threshold, since ties are generally
+#' unexpected in numeric data unless the generating process explains them.
+#'
+#' \code{NA} handling follows the package standard: a single \code{NA} yields
+#' \code{NA}. This is conservative, as the mode is sometimes determined
+#' unambiguously despite missing values. For \code{x = c(1,1,1,1,2,2,NA)} the
+#' mode is 1 whatever the missing value is, and the modal frequency lies
+#' between 4 and 5. Exploiting this is left to the user.
+#'
+#' The mode is elsewhere often obtained by tabulating every element and
+#' returning the most frequent. This function uses a dedicated C++ data
+#' structure and determines only the most frequent element, making it orders
+#' of magnitude faster, especially for large numeric vectors with many
+#' distinct values.
+#'  
+#' \strong{Note:} \verb{     }There are other approaches for determining the mode, e.g. one might use\cr
+#' \code{density(x)$x[which.max(density(x)$y)]} \cr for quantitative data, resp. 
 #' \code{hist()}.\cr Another interesting idea for a more
-#' robust estimation of the mode:\cr 
+#' robust estimation of the mode: 
 #' \preformatted{ peak <- optimize(function(x, model) 
 #'   predict(model, data.frame(x = x)), 
 #'     c(min(x), max(x)), maximum = TRUE, model = y.loess)
 #'   points(peak$maximum, peak$objective) 
 #' }
 #' 
-#' @param x a (non-empty) numeric vector of data values.
+#' @param x a non-empty numeric vector of data values
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' \code{FALSE}.
-#' @return The most frequent value as number or character, depending of
+#' @return the most frequent value as a number or character, depending on
 #' \code{class(x)}. If there is more than one, all are returned in a vector.\cr
 #' The modal frequency is attached as attribute named \code{"freq"}.
-#' @author Andri Signorell <andri@@signorell.net>, \cr great Rcpp part by Joseph
-#' Wood and Ralf Stubner
-#' @seealso \code{\link{meanX}}, \code{\link{medianX}}
+#' 
+#' @note Great Rcpp part contributed by Joseph Wood and Ralf Stubner.
+#' 
+#' 
 #' @references
 #' \href{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/}{rcpp-fast-statistical-mode}
 #' 
@@ -79,10 +71,6 @@
 #' sapply(Pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 #' 
 #' 
- 
-
-
-
 #' @family location  
 #' @concept location
 #'
@@ -122,5 +110,4 @@ modeX <- function(x, na.rm=FALSE) {
     return(structure(res[order(res)], freq = attr(res, "freq")))
   
 }
-
 

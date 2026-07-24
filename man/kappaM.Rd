@@ -4,100 +4,136 @@
 \alias{kappaM}
 \title{Kappa for m Raters}
 \usage{
-kappaM(x, conf.level = NA, method = c("fleiss", "conger", "light"))
+kappaM(
+  x,
+  method = c("fleiss", "conger", "light"),
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  use = c("complete.obs", "everything", "pairwise.complete.obs")
+)
 }
 \arguments{
-\item{x}{\eqn{n \times m}{n x m} matrix or dataframe, n subjects m raters.}
+\item{x}{a \eqn{n \times m}{n x m} matrix or data frame, \eqn{n} subjects
+in rows and \eqn{m} raters in columns}
 
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence intervals will be calculated.}
+\item{method}{a character string specifying the coefficient to compute.
+One of \code{"fleiss"} (default), \code{"conger"}, or \code{"light"}.}
 
-\item{method}{a logical indicating whether the exact Kappa (Conger, 1980),
-the Kappa described by Fleiss (1971) or Light's Kappa (1971) should be
-computed.}
+\item{conf.level}{a single confidence level for the returned confidence
+interval. Set to \code{NA} (default) to suppress confidence interval
+calculation.}
+
+\item{sides}{a character string specifying a two-sided or one-sided
+confidence interval}
+
+\item{use}{a character string giving the treatment of missing values. One
+of \code{"complete.obs"} (default), which drops any subject rated
+incompletely; \code{"everything"}, which returns \code{NA} if any value is
+missing; or \code{"pairwise.complete.obs"}, which uses all subjects rated
+by both members of each rater pair. The last is available for
+\code{method = "light"} only, since Fleiss' and Conger's coefficients
+require a complete row per subject.}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+a named numeric vector. If \code{conf.level = NA}, only
+\code{est} is returned; otherwise the vector has elements:
+\describe{
+\item{\code{est}}{point estimate of the selected kappa coefficient}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
-Computes Fleiss' kappa, which quantifies agreement among \eqn{m \geq 2} raters on
-categorical items by contrasting the mean observed agreement with the chance
-agreement implied by the overall category proportions. It equals Scott's pi
-when m=2 (but not Cohen's kappa).
+Computes agreement among \eqn{m \ge 2} raters on categorical items, using
+Fleiss' kappa (the default), Conger's exact kappa, or Light's kappa.
 }
 \details{
-Missing data are omitted in a listwise way.\cr Fleiss' kappa (Fleiss, 1971)
-is a multi-rater agreement coefficient that generalises Scott's pi (Scott,
-1955) to m raters by basing chance agreement on the average category
-proportions across raters. For m = 2 it equals Scott's pi (not Cohen's
-kappa). Cohen's kappa, by contrast, is defined for two raters and computes
-chance agreement from each rater's own marginal distribution; it can also be
-extended with weights for ordinal scales (weighted Cohen's kappa). Light's
-kappa (Light, 1971) is simply the unweighted mean of all pairwise Cohen
-kappas among multiple raters, whereas Conger's kappa (Conger, 1980) is a
-principled multi-rater generalisation that reduces exactly to Cohen's kappa
-when m = 2.\cr Standard errors and Wald-type confidence intervals are
-available for all of these coefficients (Cohen, Scott, Fleiss, Conger);
-bootstrap intervals are a practical alternative when assumptions are
-doubtful.
+All three coefficients contrast the mean observed agreement with the
+agreement expected by chance, and differ in how that chance agreement is
+derived.
+
+\describe{
+\item{\code{"fleiss"}}{Fleiss (1971) bases chance agreement on the
+category proportions pooled across all raters. It generalises Scott's
+pi (Scott, 1955), and for \eqn{m = 2} it equals Scott's pi - not
+Cohen's kappa.}
+\item{\code{"conger"}}{Conger (1980) derives chance agreement from each
+rater's own marginal distribution, and reduces exactly to Cohen's
+kappa when \eqn{m = 2}.}
+\item{\code{"light"}}{Light (1971) is the unweighted mean of all
+\eqn{\binom{m}{2}} pairwise Cohen kappas.}
+}
+
+Confidence intervals are of Wald type. For \code{"fleiss"} and
+\code{"conger"} the standard error is the analytic one given by the
+respective author. For \code{"light"} no closed-form variance exists;
+since the estimate is the mean of the pairwise kappas, its standard error
+is estimated as their standard deviation divided by
+\eqn{\sqrt{\binom{m}{2}}}. This treats the pairwise kappas as independent,
+which they are not - they share raters - so the interval is approximate
+and tends to be too narrow. A bootstrap interval is preferable when the
+assumption is doubtful.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
+\eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+\code{\link[stats]{t.test}}.
 }
 \note{
-This function was previously published as \code{kappaM.fleiss()} in
-the \pkg{irr} package and has been integrated here with some changes in the
-interface.
+Based on code by Matthias Gamer previously published as \code{kappaM.fleiss()} in
+the \pkg{irr} package, rewritten to conform to package standards.
 }
 \examples{
-
 statement <- data.frame(
-  A=c(2,3,1,3,1,2,1,2,3,3,3,3,3,2,1,3,3,2,2,1,
-      2,1,3,3,2,2,1,2,1,1,2,3,3,3,3,3,1,2,1,1),
-  B=c(2,2,2,1,1,2,1,2,3,3,2,3,1,3,1,1,3,2,1,2,
-      2,1,3,2,2,2,3,2,1,1,2,2,3,3,3,3,2,2,2,3),
-  C=c(2,2,2,1,1,2,1,2,3,3,2,3,3,3,3,2,2,2,2,3,
-      2,2,3,3,2,2,3,2,2,2,2,3,3,3,3,3,3,2,2,2),
-  D=c(2,2,2,1,1,2,1,2,3,3,2,3,3,3,3,3,2,2,2,2,
-      3,1,3,2,2,2,1,2,2,1,2,3,3,3,3,3,3,2,2,1),
-  E=c(2,2,2,3,3,2,3,1,3,3,2,3,3,3,3,3,2,2,2,3,
-      2,3,3,2,2,2,3,2,1,3,2,3,3,1,3,3,3,2,2,1)
+  A = c(2,3,1,3,1,2,1,2,3,3,3,3,3,2,1,3,3,2,2,1,
+        2,1,3,3,2,2,1,2,1,1,2,3,3,3,3,3,1,2,1,1),
+  B = c(2,2,2,1,1,2,1,2,3,3,2,3,1,3,1,1,3,2,1,2,
+        2,1,3,2,2,2,3,2,1,1,2,2,3,3,3,3,2,2,2,3),
+  C = c(2,2,2,1,1,2,1,2,3,3,2,3,3,3,3,2,2,2,2,3,
+        2,2,3,3,2,2,3,2,2,2,2,3,3,3,3,3,3,2,2,2),
+  D = c(2,2,2,1,1,2,1,2,3,3,2,3,3,3,3,3,2,2,2,2,
+        3,1,3,2,2,2,1,2,2,1,2,3,3,3,3,3,3,2,2,1),
+  E = c(2,2,2,3,3,2,3,1,3,3,2,3,3,3,3,3,2,2,2,3,
+        2,3,3,2,2,2,3,2,1,3,2,3,3,1,3,3,3,2,2,1)
 )
 
 kappaM(statement)
 
-kappaM(statement, method="conger")   # Exact Kappa
-kappaM(statement, conf.level=0.95)   # Fleiss' Kappa and confidence intervals
+# Conger's exact kappa
+kappaM(statement, method = "conger")
 
-kappaM(statement, method="light")   # Exact Kappa
+# Light's kappa, the mean of the pairwise Cohen kappas
+kappaM(statement, method = "light")
+
+# Fleiss' kappa with a confidence interval
+kappaM(statement, conf.level = 0.95)
 
 }
 \references{
-Conger, A.J. (1980): Integration and generalisation of Kappas
-for multiple raters. \emph{Psychological Bulletin}, 88, 322-328
+Conger, A. J. (1980). Integration and generalisation of Kappas for
+multiple raters. \emph{Psychological Bulletin}, \emph{88}(2), 322-328.
 
-Fleiss, J.L. (1971): Measuring nominal scale agreement among many raters
-\emph{Psychological Bulletin}, 76, 378-382
+Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
+\emph{Psychological Bulletin}, \emph{76}(5), 378-382.
 
-Fleiss, J.L., Levin, B., & Paik, M.C. (2003): \emph{Statistical Methods for
-Rates and Proportions}, 3rd Edition. New York: John Wiley & Sons
+Fleiss, J. L., Levin, B., & Paik, M. C. (2003). \emph{Statistical Methods
+for Rates and Proportions} (3rd ed.). New York: John Wiley & Sons.
 
-Light, R.J. (1971): Measures of response agreement for qualitative data:
-Some generalizations and alternatives.  \emph{Psychological Bulletin}, 76,
-365-377.
+Light, R. J. (1971). Measures of response agreement for qualitative data:
+Some generalizations and alternatives. \emph{Psychological Bulletin},
+\emph{76}(5), 365-377.
 
-Scott, W.A. (1955). Reliability of content analysis: the case of nominal
-scale coding. \emph{Public Opinion Quarterly}, XIX, 321-325.
+Scott, W. A. (1955). Reliability of content analysis: The case of nominal
+scale coding. \emph{Public Opinion Quarterly}, \emph{19}(3), 321-325.
 }
 \seealso{
-\code{\link{cohenKappa}}
-
 Other assoc.agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
 \code{\link[=pabak]{pabak()}},
@@ -105,10 +141,6 @@ Other assoc.agreement:
 \code{\link[=randolphKappa]{randolphKappa()}},
 \code{\link[=raterFrame]{raterFrame()}}
 }
-\author{
-Matthias Gamer, with some modifications by Andri Signorell
-\href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{agreement}
 \concept{assoc.agreement}
 \concept{categorical-agreement}
+\concept{interrater-agreement}

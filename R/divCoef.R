@@ -4,15 +4,15 @@
 #' Computes a quadratic diversity coefficient for each column of a data frame,
 #' optionally using a provided distance matrix.
 #'
-#' @param df A data frame or matrix of non-negative values (e.g. abundances).
+#' @param df a data frame or matrix of non-negative values (e.g. abundances).
 #'   Rows correspond to entities, columns to samples.
-#' @param dis Optional object of class \code{dist}. If \code{NULL}, a default
+#' @param dis optional object of class \code{dist}. If \code{NULL}, a default
 #'   Euclidean distance is used.
-#' @param normalize Logical; if \code{TRUE}, the diversity is scaled by its
-#'   theoretical maximum.
-#' @param tol Numeric tolerance used for numerical checks.
+#' @param normalize logical; if \code{TRUE}, the diversity is scaled by its
+#'   theoretical maximum
+#' @param tol numeric tolerance used for numerical checks
 #'
-#' @return A numeric vector of diversity coefficients (one per column).
+#' @return a numeric vector of diversity coefficients, one per column
 #'
 #' @details
 #' The diversity coefficient is defined as
@@ -95,7 +95,6 @@ divCoef <- function(df, dis = NULL, normalize = FALSE, tol = 1e-8) {
 
 
 
-#' @keywords internal
 .divCoefMax <- function(D2, tol = 1e-8, maxit = 1000) {
   
   n <- nrow(D2)
@@ -131,5 +130,4 @@ divCoef <- function(df, dis = NULL, normalize = FALSE, tol = 1e-8) {
     converged = (i < maxit)
   )
 }
-
 

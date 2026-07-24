@@ -1,7 +1,7 @@
 
 #' Create a Factor Variable Using the Quantiles of a Continuous Variable
 #' 
-#' Create a factor variable using the quantiles of a continous variable.
+#' Creates a factor variable using the quantiles of a continuous variable.
 #' 
 #' 
 #' This function uses \code{\link{quantile}} to obtain the specified quantiles
@@ -13,25 +13,24 @@
 #' be fewer generated factor levels than the specified number of quantile
 #' intervals.
 #' 
-#' @param x continous variable.
-#' @param breaks the breaks for creating groups. By default the quartiles will
-#' be used, say \code{quantile} \code{seq(0, 1, by = 0.25)} quantiles. See
-#' \code{\link{quantile}} for details. If breaks is given as a single integer
-#' it is interpreted as the intended number of groups, e.g. \code{breaks=10}
-#' will return x cut in deciles.
+#' @param x continuous variable
+#' @param breaks cut points used to create groups. By default, quartiles are
+#' used. See \code{\link{quantile}} for details. A single integer specifies
+#' the intended number of groups; for example, \code{breaks = 10} creates
+#' deciles.
 #' @param labels labels for the levels of the resulting category. By default,
-#' labels are defined as \code{Q1}, \code{Q2} to the length of breaks - 1. The
-#' parameter ist passed to \code{\link{cut}}, so if \code{labels} are set to
-#' \code{FALSE}, simple integer codes are returned instead of a factor. 
-#' @param na.rm Boolean indicating whether missing values should be removed
-#' when computing quantiles.  Defaults to TRUE.
-#' @param \dots Optional arguments passed to \code{\link{cut}}.
-#' @return Factor variable with one level for each quantile interval given by
-#' \code{q}.
-#' @author Gregory R. Warnes <greg@@warnes.net>, some slight modifications
-#' Andri Signorell <andri@@signorell.net>
+#' labels are defined as \code{Q1}, \code{Q2}, and so on. The argument is
+#' passed to \code{\link{cut}}, so \code{labels = FALSE} returns integer codes
+#' instead of a factor.
+#' @param na.rm logical. Should missing values be removed when computing
+#' quantiles? Defaults to \code{TRUE}.
+#' @param \dots optional arguments passed to \code{\link{cut}}
+#' @return a factor with one level for each quantile interval, or an integer
+#' vector when \code{labels = FALSE}
+#' @note Based on code by Gregory R. Warnes, adapted to conform to package standards.
+#' 
 #' @seealso \code{\link{cut}}, \code{\link{quantile}}
-#' @keywords manip univar
+#' 
 #' @examples
 #' 
 #' # create example data
@@ -53,9 +52,6 @@
 #' 
 #' table(deciles) # note that there are only 5 groups (not 10) 
 #'                # due to duplicates
-
-
-
 #' @family cut  
 #' @concept binning
 #'
@@ -63,12 +59,6 @@
 #' @export
 cutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE), 
                  labels=NULL, na.rm = FALSE, ...){
-  
-  # old version:
-  #  cut(x, breaks=probsile(x, breaks=probs, na.rm = na.rm), include.lowest=TRUE, labels=labels)
-  
-  # $Id: probscut.R 1431 2010-04-28 17:23:08Z ggrothendieck2 $
-  # from gtools
   
   if(na.rm) x <- na.omit(x)
   
@@ -139,5 +129,3 @@ cutQ <- function(x, breaks=quantile(x, seq(0, 1, by=0.25), na.rm=TRUE),
   return(retval)
   
 }
-
-

@@ -32,31 +32,25 @@
 #' @aliases kurt
 #' 
 #' @inheritParams ConfidenceIntervals
-#' @param x a numeric vector. An object which is not a vector is coerced (if
-#' possible) by \code{as.vector}.
+#' @param x a numeric vector. An object that is not a vector is coerced by
+#' \code{as.vector} if possible.
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
 #' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}.
+#' giving the weights to use for elements of \code{x}
 #' @param na.rm logical, indicating whether \code{NA} values should be stripped
 #' before the computation proceeds. Defaults to \code{FALSE}.
-#' @param \dots the dots are passed to the function \code{\link[boot]{boot}},
-#' when confidence intervalls are calculated.
+#' @param \dots further arguments passed to \code{\link[boot]{boot}} when
+#' confidence intervals are calculated
 #' 
-#' @return
-#' If \code{conf.level = NA}:
-#' numeric kurtosis estimate.
-#'
-#' Otherwise:
-#' named numeric vector with:
-#' \itemize{
-#'   \item \code{est}: kurtosis estimate
-#'   \item \code{lci}: lower confidence limit
-#'   \item \code{uci}: upper confidence limit
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{kurtosis estimate}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #' 
-#' @seealso \code{\link{skew}}, \code{\link{meanX}}, \code{\link{sdX}}, similar code in
-#' \code{library(e1071)}
 #' @references Cramer, D. (1997): \emph{Basic Statistics for Social Research}
 #' Routledge.
 #' 
@@ -74,8 +68,8 @@
 #' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
 #'       kurt, na.rm=TRUE)
 #' 
-
-
+#' @seealso [meanX], [sdX], similar code in \pkg{e1071}
+#'
 #' @family shape
 #' @concept descriptive-statistics
 #' @concept robust-statistics
@@ -257,9 +251,9 @@ kurt <- function(x,
   )
   
   c(
-    est = res["est"],
-    lci = qnorm((1 - conf.level) / 2) * sqrt(res["var"]),
-    uci = qnorm(1 - (1 - conf.level) / 2) * sqrt(res["var"])
+    est = unname(res["est"]),
+    lci = unname(qnorm((1 - conf.level) / 2) * sqrt(res["var"])),
+    uci = unname(qnorm(1 - (1 - conf.level) / 2) * sqrt(res["var"]))
   )
 }
 
@@ -307,20 +301,18 @@ kurt <- function(x,
     
     c(
       est = unname(boot.fun$t0[1]),
-      lci = ci[[4]][2],
-      uci = ci[[4]][3]
+      lci = unname(ci[[4]][2]),
+      uci = unname(ci[[4]][3])
     )
     
   } else {
     
     c(
       est = unname(boot.fun$t0[1]),
-      lci = ci[[4]][4],
-      uci = ci[[4]][5]
+      lci = unname(ci[[4]][4]),
+      uci = unname(ci[[4]][5])
     )
   }
 }
-
-
 
 

@@ -14,26 +14,30 @@ isConfusionTable(
 )
 }
 \arguments{
-\item{x}{Object to check (typically a \code{table}, \code{matrix}, or
-numeric \code{data.frame}).}
+\item{x}{object to check, typically a \code{table}, \code{matrix}, or
+numeric \code{data.frame}}
 
-\item{requireDimnames}{Logical; if \code{TRUE}, both row and column names
+\item{requireDimnames}{logical; if \code{TRUE}, both row and column names
 must be present. Defaults to \code{TRUE}.}
 
-\item{requireSameLevels}{Logical; if \code{TRUE} and dimnames are present,
+\item{requireSameLevels}{logical; if \code{TRUE} and dimnames are present,
 row and column names must be the same set (order ignored). Defaults to \code{TRUE}.}
 
-\item{integerTol}{Numeric tolerance for "integer-like" counts. Defaults to
-\code{sqrt(.Machine$double.eps)}.}
+\item{integerTol}{numeric tolerance for integer-like counts; defaults to
+\code{sqrt(.Machine$double.eps)}}
 
-\item{acceptProportions}{Logical; if \code{TRUE}, also accepts proportion
-tables (all entries in [0,1] and total sum approx. 1). Defaults to \code{TRUE}.}
+\item{acceptProportions}{logical; if \code{TRUE}, proportion tables are
+accepted when all entries are in \eqn{[0, 1]} and their sum is approximately
+\enumerate{
+\item Defaults to \code{TRUE}.
+}}
 
-\item{requireSquare}{Logical; require a square table. Defaults to \code{TRUE}.}
+\item{requireSquare}{logical; whether to require a square table; defaults to
+\code{TRUE}}
 }
 \value{
-\code{TRUE} if \code{x} looks like a confusion/coincidence matrix,
-otherwise \code{FALSE}.
+\code{TRUE} if \code{x} looks like a confusion or coincidence
+matrix, otherwise \code{FALSE}
 }
 \description{
 Checks if \code{x} behaves like a rater-by-rater contingency table:
@@ -47,7 +51,7 @@ isConfusionTable(tab)               # TRUE
 
 M <- as.matrix(tab)
 isConfusionTable(M)                 # TRUE (dimnames present)
-isConfusionTable(M, requireDimnames = FALSE)  # TRUE even without names
+isConfusionTable(unname(M), requireDimnames = FALSE)  # TRUE without names
 
 df <- as.data.frame.matrix(tab)
 isConfusionTable(df)                # TRUE (numeric data.frame)
@@ -56,22 +60,7 @@ isConfusionTable(df)                # TRUE (numeric data.frame)
 ratings <- cbind(r1 = sample(0:1, 50, TRUE), r2 = sample(0:1, 50, TRUE))
 isConfusionTable(ratings)           # FALSE (not square)
 
-}
-\seealso{
-Other assoc.agreement:
-\code{\link[=blandAltmanData]{blandAltmanData()}},
-\code{\link[=ccc]{ccc()}},
-\code{\link[=cohenKappa]{cohenKappa()}},
-\code{\link[=cronbachAlpha]{cronbachAlpha()}},
-\code{\link[=icc]{icc()}},
-\code{\link[=kappaM]{kappaM()}},
-\code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
-\code{\link[=pabak]{pabak()}},
-\code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}},
-\code{\link[=raterFrame]{raterFrame()}}
+
 }
 \concept{agreement}
-\concept{assoc.agreement}
 \concept{confusion-matrix}

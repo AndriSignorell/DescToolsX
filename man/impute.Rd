@@ -7,19 +7,19 @@
 impute(x, FUN = median, na.rm = TRUE, ...)
 }
 \arguments{
-\item{x}{An atomic vector.}
+\item{x}{atomic vector}
 
-\item{FUN}{A function used to compute the imputation value,
-or a single scalar value. Default is \code{median}.}
+\item{FUN}{function used to compute the imputation value, or a scalar value;
+default is \code{median}}
 
-\item{na.rm}{Logical. Should missing values be removed before
-computing the summary statistic? Default is \code{TRUE}.}
+\item{na.rm}{logical; whether to remove missing values before computing the
+summary statistic}
 
-\item{...}{Additional arguments passed to \code{FUN}.}
+\item{...}{additional arguments passed to \code{FUN}}
 }
 \value{
-A vector of the same length and type as \code{x},
-with missing values replaced.
+vector with the same length and type as \code{x}, with missing
+values replaced
 }
 \description{
 Replaces missing values (\code{NA}) in a vector by either
@@ -61,7 +61,6 @@ For direct value replacement see \code{\link[bedrock:naReplace]{bedrock::naRepla
 
 Other impute:
 \code{\link[=imputeKnn]{imputeKnn()}},
-\code{\link[=lof]{lof()}},
 \code{\link[=outlier]{outlier()}}
 }
 \concept{imputation}

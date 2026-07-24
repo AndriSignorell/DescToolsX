@@ -19,13 +19,13 @@
 #' To remove them, call \code{\link{detachAliases}()} or simply
 #' \code{rm(or, rr, envir = .GlobalEnv)}.
 #'
-#' @param envir The environment into which the aliases are assigned.
+#' @param envir the environment into which the aliases are assigned.
 #'   Defaults to \code{.GlobalEnv}.  Supply a different environment
 #'   (e.g. the calling frame via \code{environment()}) if you want
 #'   script-local aliases.
 #'
-#' @return Invisibly returns a named character vector of the aliases that
-#'   were created.
+#' @return invisibly, a named character vector of the aliases that were
+#'   created
 #'
 #' @seealso \code{\link{detachAliases}}, \code{\link{oddsRatio}},
 #'   \code{\link{relRisk}}
@@ -67,12 +67,11 @@ attachAliases <- function(envir = .GlobalEnv) {
 #' \code{\link{attachAliases}()} from the given environment.  Aliases
 #' that do not exist in the environment are silently ignored.
 #'
-#' @param envir The environment from which the aliases are removed.
+#' @param envir the environment from which the aliases are removed.
 #'   Must match the \code{envir} argument used in \code{attachAliases()}.
 #'   Defaults to \code{.GlobalEnv}.
 #'
-#' @return Invisibly returns a character vector of the alias names that
-#'   were removed.
+#' @return invisibly, a character vector of the alias names that were removed
 #'
 #' @seealso \code{\link{attachAliases}}
 #'

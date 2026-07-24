@@ -2,7 +2,7 @@
 % Please edit documentation in R/desc.numeric.R
 \name{desc.numeric}
 \alias{desc.numeric}
-\title{Desc.numeric}
+\title{Describe a Numeric Variable}
 \usage{
 \method{desc}{numeric}(
   x,
@@ -17,7 +17,8 @@
 )
 }
 \arguments{
-\item{x}{An object of class \code{"Desc.numeric"}.}
+\item{x}{numeric vector to describe, or an object of class
+\code{"Desc.numeric"} for the print and plot methods}
 
 \item{maxrows}{numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
@@ -25,20 +26,17 @@ interesting to see all of them. Default is set to 12 most frequent ones
 (resp. the first ones if \code{ord} is set to \code{"levels"} or
 \code{"names"}).}
 
-\item{conf.level}{Confidence level for interval estimates (default 0.95).}
+\item{conf.level}{confidence level for interval estimates (default 0.95)}
 
-\item{include_x}{(logical) if \code{TRUE} (default) the original vector
-will be returned
-in the result object. This is necessary for producing specific plot
-(e.g. the density, ecdf, etc.). However if no plots are required the result
-object can be kept small and handy without the original data.}
+\item{include_x}{logical; if \code{TRUE}, the original vector is retained
+in the result}
 
-\item{main}{Character string (character|\code{NULL}|\code{NA})
-defining the main title. By default (\code{main = NULL}) the title will
+\item{main}{character string, \code{NULL}, or \code{NA}, defining the main
+title. By default (\code{main = NULL}) the title will
 be composed as: \if{html}{\out{<variable name>}} (<class(es)>).
 If \code{NA}, no title is printed.}
 
-\item{verbose}{Integer controlling verbosity of table output.
+\item{verbose}{integer controlling verbosity of table output.
 One of \code{1} (minimal), \code{2} (default), \code{3} (extensive).
 Applies to tables only.}
 
@@ -46,20 +44,17 @@ Applies to tables only.}
 on the classes of the variables. Default can be defined by
 the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.}
 
-\item{digits}{integer. With how many digits should the real numbers
-be formatted? Default is taken from \code{\link{setDescToolsXOption}(digits=x)}.}
+\item{digits}{number of digits used to format numeric values}
 
-\item{...}{Further graphical parameters passed to the underlying
-base R plotting functions.}
+\item{...}{further arguments passed to methods}
 }
 \value{
-Invisibly returns \code{NULL}.
+an object of class \code{c("Desc.numeric", "Desc")} containing
+descriptive statistics, frequency information, and metadata
 }
 \description{
-Displays a set of statistical measures describing a numeric data vector.
-Visualizes the distribution of a numeric \code{Desc} object.
-The plot may include a histogram, density curve, boxplot
-and empirical distribution.
+Compute descriptive statistics for a numeric vector. The plot method may
+display a histogram, density curve, box plot, and empirical distribution.
 }
 \details{
 This function is an S3 method for \code{\link[graphics]{plot}}.
@@ -102,11 +97,9 @@ Other desc:
 \code{\link{desc.nq}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{data-description}
 \concept{desc}
 \concept{descriptive-statistics}
-\keyword{multivariate}
-\keyword{print}
-\keyword{univar}

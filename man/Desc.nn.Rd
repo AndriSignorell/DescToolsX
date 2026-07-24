@@ -14,7 +14,8 @@
 \method{plot}{Desc.nn}(x, main = x$meta$main, which = 1, verbose = NULL, ...)
 }
 \arguments{
-\item{x}{an object of class \code{"Desc.nn"} as returned by \code{desc()}.}
+\item{x}{numeric predictor for \code{.descNN()}, or an object of class
+\code{"Desc.nn"} for the print and plot methods}
 
 \item{verbose}{integer controlling the amount of output (1, 2, or 3).
 \code{NULL} (default) falls back to
@@ -26,20 +27,29 @@
 \item{per.sty}{format style for proportions. \code{NULL} falls back to
 \code{getOption("DescTools.per.sty")}.}
 
-\item{\dots}{further arguments passed to the underlying plot functions.}
+\item{\dots}{further arguments passed to the underlying plot functions}
 
-\item{main}{a main title for the plot. Defaults to the title stored in
+\item{main}{main title for the plot. Defaults to the title stored in
 \code{x$meta$main}.}
 
 \item{which}{integer vector selecting which plots to draw. See Details.
 \code{NULL} (default) selects plots automatically based on \code{verbose}.}
 
-\item{y}{A categorical variable (factor or coercible to factor).}
+\item{y}{numeric response variable}
 
-\item{conf.level}{Confidence level for interval estimates (default 0.95).}
+\item{conf.level}{confidence level for interval estimates (default 0.95)}
 }
 \value{
-Both functions return \code{x} invisibly.
+\code{.descNN()} returns an object of class
+\code{c("Desc.nn", "Desc")}. Its \code{lm$intercept} and \code{lm$slope}
+components contain:
+\describe{
+\item{\code{est}}{point estimate of the coefficient}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+\item{\code{p}}{p-value}
+}
+The print and plot methods return \code{x} invisibly.
 }
 \description{
 Computes, prints and plots a comprehensive bivariate description for two
@@ -131,6 +141,7 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{bivariate numeric regression correlation scatterplot}

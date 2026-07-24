@@ -7,24 +7,24 @@
 somersDelta(x, y = NULL, conf.level = NA, direction = c("row", "column"))
 }
 \arguments{
-\item{x}{A numeric vector or a contingency table (matrix or table).}
+\item{x}{a numeric vector or a contingency table (matrix or table)}
 
-\item{y}{Optional numeric vector. If supplied, must have the same length as \code{x}.}
+\item{y}{optional numeric vector. If supplied, must have the same length as \code{x}.}
 
-\item{conf.level}{Confidence level for confidence intervals. If \code{NA},
+\item{conf.level}{confidence level for confidence intervals. If \code{NA},
 no confidence interval is returned.}
 
-\item{direction}{Direction for contingency tables:
+\item{direction}{direction for contingency tables:
 \code{"row"} (default) computes \eqn{D(Y|X)},
-\code{"column"} computes \eqn{D(X|Y)}.}
+while \code{"column"} computes \eqn{D(X|Y)}}
 }
 \value{
-If \code{conf.level = NA}, a single numeric value is returned.
-Otherwise a named numeric vector with elements:
-\itemize{
-\item \code{somers}: estimate
-\item \code{lci}: lower confidence interval
-\item \code{uci}: upper confidence interval
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Somers' D}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -79,6 +79,7 @@ somersDelta(tab, direction="column", conf.level=0.95)
 # Vector interface
 somersDelta(mtcars$wt, mtcars$mpg)
 
+
 }
 \references{
 Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
@@ -103,7 +104,6 @@ Measures of association for cross classifications III.
 \code{\link[Hmisc]{somers2}} (restricted to binary response),
 
 Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},

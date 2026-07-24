@@ -7,19 +7,19 @@
 herfindahl(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE)
 }
 \arguments{
-\item{x}{Numeric vector of non-negative values (e.g. market shares,
-incomes, or frequencies).}
+\item{x}{numeric vector of non-negative values, such as market shares,
+incomes, or frequencies}
 
-\item{n}{Optional frequency weights. Each element of \code{x}
+\item{n}{optional frequency weights. Each element of \code{x}
 is replicated \code{n} times.}
 
-\item{parameter}{Parameter \eqn{m} controlling the sensitivity
-to concentration. Default is \code{1}.}
+\item{parameter}{parameter \eqn{m} controlling sensitivity to concentration;
+default is \code{1}}
 
-\item{na.rm}{Logical. If \code{TRUE}, missing values are removed.}
+\item{na.rm}{logical; whether to remove missing values}
 }
 \value{
-Numeric value of the Herfindahl index.
+numeric scalar containing the Herfindahl index
 }
 \description{
 Computes the Herfindahl (or Herfindahl-Hirschman) index as a measure
@@ -34,8 +34,10 @@ Larger values indicate higher concentration.
 If negative values or missing values (when \code{na.rm = FALSE})
 are present, \code{NA} is returned.
 }
+\note{
+Based on code by Achim Zeileis, rewritten to conform to package standards.
+}
 \examples{
-
 # generate vector (of sales)
 x <- c(541, 1463, 2445, 3438, 4437, 5401, 6392, 8304, 11904, 22261)
 
@@ -45,9 +47,7 @@ herfindahl(x)
 # Some more examples
 herfindahl(c(261,29,33,15,39,28,95,5,6,28,69,8,105,38,15))
 herfindahl(c(783,121,112,70,201,153,425,19,37,126,325,51,442,193,41))
-
-
-
+ 
 
 }
 \references{
@@ -63,18 +63,15 @@ Hall, M., Tidemann, N. (1967) \emph{Measures of Concentration}, JASA 62,
 Hirschman, A. O. (1964). The paternity of an index.
 }
 \seealso{
-See \code{\link{gini}}, \code{\link{atkinson}} and
+\code{\link{gini}}, \code{\link{atkinson}}
 
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}}
-}
-\author{
-originally based on code of Achim Zeileis \href{mailto:achim.zeileis@r-project.org}{achim.zeileis@r-project.org},
-rewritten by Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}
 \concept{inequality}

@@ -3,6 +3,7 @@
 #' All association measures in this package share a common interface. 
 #'
 #' @name Association
+#' 
 #' @details
 #' The association is defined between two variables that can be 
 #' provided to the calculation functions in different ways. 
@@ -47,20 +48,20 @@
 #'    \verb{  }\link{lambda}\verb{  } \tab Goodman's Lambda \cr
 #'    }
 #'
-#' @param x Either a contingency table, a two-column object
+#' @param x either a contingency table, a two-column object
 #'   (matrix, data.frame or list), or a vector of observations 
-#'   (together with \code{y}).
-#' @param y Optional second vector. If \code{x} is not a vector,
+#'   (together with \code{y})
+#' @param y optional second vector. If \code{x} is not a vector,
 #'   \code{y} must be \code{NULL}.
-#' @param conf.level Confidence level for confidence intervals.
+#' @param conf.level confidence level for confidence intervals.
 #'   If \code{NA}, no confidence interval is computed.
-#' @param sides Alternative hypothesis:
-#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}.
-#' @param method Method used for inference. Available options depend
+#' @param sides alternative hypothesis:
+#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}
+#' @param method method used for inference. Available options depend
 #'   on the selected association measure.
-#' @param ... Additional arguments passed to internal helper functions,
+#' @param ... additional arguments passed to internal helper functions,
 #'   such as bootstrap routines (\code{\link[boot]{boot}}) or 
-#'   table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R}).
+#'   table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})
 #'
 #' @references 
 #' Cramer, H. (1946) \emph{Mathematical Methods of Statistics}. Princeton
@@ -69,6 +70,5 @@
 #' Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
 #' John Wiley and Sons
 #' 
-#' @keywords internal
 #' @family topic.associationMeasures
 NULL

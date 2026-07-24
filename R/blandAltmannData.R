@@ -12,27 +12,27 @@
 #' using \code{plot()} when the Aurora package is installed.
 #'
 #' @name blandAltmanData
-#' @param x Numeric vector or formula.
-#' @param y Numeric vector.
-#' @param data Optional data frame used with the formula interface.
-#' @param conf.level Confidence level.
-#' @param na.rm Logical; if \code{TRUE}, incomplete observation pairs are
-#' removed before computation.
-#' @param ... Further arguments passed to or from other methods.
+#' @param x numeric vector or formula
+#' @param y numeric vector
+#' @param data optional data frame used with the formula interface
+#' @param conf.level confidence level
+#' @param na.rm logical; if \code{TRUE}, incomplete observation pairs are
+#' removed before computation
+#' @param ... further arguments passed to or from other methods
 #' 
 #' @return
-#' An object of class \code{"blandAltman"} with components:
+#' an object of class \code{"BlandAltman"} with components:
 #'
 #' \describe{
-#'   \item{mean}{Pairwise means.}
-#'   \item{diff}{Pairwise differences (\code{y - x}).}
-#'   \item{bias}{Mean difference.}
-#'   \item{loaLower}{Lower limit of agreement.}
-#'   \item{loaUpper}{Upper limit of agreement.}
-#'   \item{biasCI}{Confidence interval for the bias.}
-#'   \item{loaLowerCI}{Confidence interval for the lower LoA.}
-#'   \item{loaUpperCI}{Confidence interval for the upper LoA.}
-#'   \item{nObs}{Number of observations used.}
+#'   \item{\code{mean}}{pairwise means}
+#'   \item{\code{diff}}{pairwise differences (\code{y - x})}
+#'   \item{\code{bias}}{mean difference}
+#'   \item{\code{loaLower}}{lower limit of agreement}
+#'   \item{\code{loaUpper}}{upper limit of agreement}
+#'   \item{\code{biasCI}}{confidence interval for the bias}
+#'   \item{\code{loaLowerCI}}{confidence interval for the lower LoA}
+#'   \item{\code{loaUpperCI}}{confidence interval for the upper LoA}
+#'   \item{\code{nObs}}{number of observations used}
 #' }
 #'
 #' @references
@@ -208,13 +208,13 @@ blandAltmanData.formula <- function(
 #' the estimated bias, limits of agreement, corresponding confidence
 #' intervals, and the number of observations.
 #'
-#' @param x An object of class \code{"blandAltman"} as returned by
-#' \code{\link{blandAltmanData}}.
-#' @param digits Number of digits to display.
-#' @param ... Further arguments passed to or from other methods.
+#' @param x an object of class \code{"BlandAltman"} as returned by
+#' \code{\link{blandAltmanData}}
+#' @param digits number of digits to display
+#' @param ... further arguments passed to or from other methods
 #'
 #' @return
-#' Invisibly returns \code{x}.
+#' invisibly, \code{x}
 #'
 #'
 

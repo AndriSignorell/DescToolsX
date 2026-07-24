@@ -4,11 +4,11 @@
 #' Computes the mean absolute percentage error (MAPE) between predicted
 #' and reference values.
 #'
-#' @param x An object. Methods are available for numeric vectors and
+#' @param x an object. Methods are available for numeric vectors and
 #'   model objects (e.g. \code{lm}).
-#' @param ... Additional arguments passed to methods.
+#' @param ... additional arguments passed to methods
 #'
-#' @return A numeric value representing the MAPE.
+#' @return a numeric scalar containing the MAPE
 #'
 #' @details
 #' The MAPE is defined as:
@@ -29,9 +29,7 @@
 #' fit <- lm(mpg ~ hp, data = mtcars)
 #' mape(fit)
 #'
-
-
-
+#'
 #' @family model.metrics  
 #' @concept model-evaluation  
 #' @concept prediction-error
@@ -55,8 +53,8 @@ mape.lm <- function(x, ...) {
 
 
 #' @rdname mape
-#' @param ref Numeric vector of reference (true) values.
-#' @param na.rm Logical; should missing values be removed?
+#' @param ref numeric vector of reference (true) values
+#' @param na.rm logical; whether to remove missing values
 #' @export
 mape.default <- function(x, ref, na.rm = FALSE, ...) {
   
@@ -70,5 +68,4 @@ mape.default <- function(x, ref, na.rm = FALSE, ...) {
   
   mean(res, na.rm = na.rm, ...)
 }
-
 

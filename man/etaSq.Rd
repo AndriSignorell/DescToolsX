@@ -19,26 +19,28 @@ aovlDetails(fit)
 aovlErrorTerms(fit)
 }
 \arguments{
-\item{fit}{An analysis of variance (\code{aov}, \code{aovlist}) object.}
+\item{fit}{an analysis of variance object of class \code{"aov"} or
+\code{"aovlist"}}
 
-\item{type}{What type of sum of squares to calculate? \code{etaSq.aovlist}
-requires \code{type=1}.}
+\item{type}{type of sums of squares to calculate.
+\code{etaSq.aovlist()} requires \code{type = 1}.}
 
-\item{anova}{Should the full ANOVA table be printed out in addition to the
-effect sizes?}
+\item{anova}{logical; whether to include the full ANOVA table with the
+effect sizes}
 }
 \value{
-If \code{anova=FALSE}, the output for \code{etaSq.lm} is an M fit 2
-matrix, for \code{etaSq.aovlist} it is an M x 3 matrix. Each of the M rows
-corresponds to one of the terms in the ANOVA (e.g., main effect 1, main
-effect 2, interaction, etc), and each of the columns corresponds to a
-different measure of effect size. Column 1 contains the eta-squared values,
-and column 2 contains partial eta-squared values. Column 3 contains the
-generalized eta-squared values. If \code{anova=TRUE}, the output contains
-additional columns containing the sums of squares, mean squares, degrees of
-freedom, F-statistics and p-values. For \code{etaSq.aovlist}, additional
-columns contain the error sum of squares and error degrees of freedom
-corresponding to an effect term.
+for \code{etaSq.lm()}, a numeric matrix with one row per model term
+and columns \code{eta.sq} and \code{eta.sq.part}; for
+\code{etaSq.aovlist()}, a numeric matrix that additionally contains
+\code{eta.sq.gen}. If \code{anova = TRUE}, ANOVA statistics are included in
+additional columns. \code{aovlDetails()} returns a data frame of effect
+terms and their ANOVA statistics, while \code{aovlErrorTerms()} returns a
+list with components:
+\describe{
+\item{\code{SS}}{error sums of squares}
+\item{\code{MS}}{error mean squares}
+\item{\code{DF}}{error degrees of freedom}
+}
 }
 \description{
 Calculates eta-squared, partial eta-squared and generalized eta-squared

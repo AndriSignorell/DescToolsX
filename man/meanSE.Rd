@@ -7,23 +7,23 @@
 meanSE(x, sd = NULL, na.rm = FALSE)
 }
 \arguments{
-\item{x}{a (non-empty) numeric vector of data values.}
+\item{x}{a non-empty numeric vector of data values}
 
-\item{sd}{the standard deviation of \code{x}. If provided it's interpreted
-as sd of the population. If left to \code{NULL} (default) the sample
-\code{sd(x)} will be used.}
+\item{sd}{the standard deviation of \code{x}. If supplied, it is interpreted
+as the population standard deviation. If \code{NULL} (default), the sample
+standard deviation \code{sd(x)} is used.}
 
 \item{na.rm}{logical. Should missing values be removed? Defaults to
 \code{FALSE}.}
 }
 \value{
-the standard error as numeric value.
+the standard error as a numeric scalar
 }
 \description{
 Calculates the standard error of mean.
 }
 \details{
-MeanSE calculates the standard error of the mean defined as:
+\code{meanSE()} calculates the standard error of the mean defined as:
 \deqn{\frac{\sigma}{\sqrt{n}}} \eqn{\sigma} being standard deviation of
 \code{x} and n the length of \code{x}.
 }
@@ -32,25 +32,19 @@ MeanSE calculates the standard error of the mean defined as:
 meanSE(Pizza$price, na.rm=TRUE)
 
 # evaluate data.frame
-sapply(Pizza[,1:4], meanSE, na.rm=TRUE)
+sapply(Pizza[, 1:4], meanSE, na.rm=TRUE)
+
 
 }
 \seealso{
-\code{\link[lumen]{meanCI}}
+\link[lumen:meanCI]{lumen::meanCI}
 
-Other location:
-\code{\link[=gmean]{gmean()}},
-\code{\link[=hmean]{hmean()}},
-\code{\link[=hodgesLehmann]{hodgesLehmann()}},
-\code{\link[=huberM]{huberM()}},
+Other dispersion:
+\code{\link[=coefVar]{coefVar()}},
+\code{\link[=iqrX]{iqrX()}},
+\code{\link[=madX]{madX()}},
 \code{\link[=meanAD]{meanAD()}},
-\code{\link[=medianX]{medianX()}},
-\code{\link[=modeX]{modeX()}},
-\code{\link[=tukeyBiweight]{tukeyBiweight()}}
+\code{\link[=rangeX]{rangeX()}},
+\code{\link[=varX]{varX()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
-}
-\concept{confidence-interval}
-\concept{location}
-\keyword{univar}
+\concept{dispersion}

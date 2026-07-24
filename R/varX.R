@@ -21,20 +21,25 @@
 #' 
 #' @name varX
 #' @aliases varX varX.default varS.Freq sdX
-#' @param x a numeric vector, matrix or data frame.
+#' @param x a numeric vector, matrix, or data frame
 #' @param estimator determines the estimator type; if \code{"unbiased"} (the
 #' default) then the usual unbiased estimate (using \eqn{n - 1} as denominator)
 #' is returned, if \code{"ml"} then it is the maximum likelihood estimate for a
 #' Gaussian distribution (denominator \eqn{n}). Internally \code{\link{cov.wt}}
 #' is used for both methods.
 #' @param weights non-negative numeric vector of weights the same length as
-#' \code{x} nterpreted as frequency (replication) weights. Observations with
+#' \code{x}, interpreted as frequency (replication) weights. Observations with
 #' larger weights contribute more strongly to the empirical distribution.
 #' @param na.rm logical. Should missing values be removed?
 #' @param breaks breaks for calculating the variance for classified data as
-#' composed by \code{\link{freq}}.
-#' @param \dots further arguments passed to or from other methods.
-#' @return single numeric value
+#' composed by \code{\link{freq}}
+#' @param \dots further arguments passed to or from other methods
+#' @return
+#' \describe{
+#'   \item{\code{varX()}}{a numeric scalar for vector input or a covariance
+#'     matrix for an unweighted matrix or data frame}
+#'   \item{\code{sdX()}}{a numeric scalar containing the standard deviation}
+#' }
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
 #' 
@@ -65,10 +70,9 @@
 #' varX(freq(as.table(c(6,16,24,25,17))),
 #'           breaks=c(0, 10, 20, 30, 40, 50))
 #'      
-
-
+#'
 #' @rdname varX
-
+#'
 #' @family dispersion  
 #' @concept dispersion
 #'
@@ -139,4 +143,3 @@ varX.Freq <- function(x, breaks, ...)  {
   
   return(s2)
 }
-

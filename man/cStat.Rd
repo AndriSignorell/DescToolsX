@@ -4,7 +4,7 @@
 \alias{cStat}
 \alias{cStat.glm}
 \alias{cStat.default}
-\title{Concordance statistic (C-statistic / AUC)}
+\title{Concordance Statistic (C-Statistic / AUC)}
 \usage{
 cStat(x, ...)
 
@@ -13,17 +13,24 @@ cStat(x, ...)
 \method{cStat}{default}(x, resp, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{An object for which the C-statistic should be computed,
-numeric vector of predicted values in vector interface.}
+\item{x}{an object for which the C-statistic should be computed; for the
+default method, a numeric vector of predicted values}
 
-\item{...}{Additional arguments passed to methods.}
+\item{...}{additional arguments passed to methods}
 
-\item{resp}{A binary response vector (numeric, logical, or factor).}
+\item{resp}{a binary response vector (numeric, logical, or factor)}
 
-\item{conf.level}{confidence level for CI, \code{NA} will return none.}
+\item{conf.level}{confidence level for the interval; \code{NA} suppresses
+interval calculation}
 }
 \value{
-A numeric value between 0 and 1 representing the C-statistic.
+if \code{conf.level = NA}, a numeric scalar between 0 and 1;
+otherwise a named numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the C-statistic.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
 }
 \description{
 Computes the concordance statistic (C-statistic), equivalent to the
@@ -34,7 +41,7 @@ The C-statistic is defined as the probability that, for a randomly chosen
 pair of observations with different outcomes, the observation with the
 higher predicted value has the higher observed outcome.
 
-Ties in the outcome are handled by assigning a weight of 0.5.
+Ties in predicted values are handled by assigning a weight of 0.5.
 
 This implementation uses:
 \itemize{
@@ -43,8 +50,8 @@ This implementation uses:
 \item Efficient memory handling
 }
 
-Number of bootstrap samples for the boostrap CIs can be given
-in the dots as \code{R = 5,000} (default is 1,000).
+The number of bootstrap samples can be supplied through \code{...} as
+\code{R}; the default is 1000.
 }
 \examples{
 # Default method
@@ -61,7 +68,6 @@ cStat(r.mod, conf.level=0.95)
 }
 \seealso{
 Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},

@@ -20,7 +20,7 @@
 #' 
 #' @name hmean
 #' @param x a positive numeric vector. An object which is not a vector is
-#' coerced (if possible) by as.vector.
+#' coerced, if possible, by \code{as.vector()}.
 #' @param conf.level confidence level of the interval. Default is \code{NA}. 
 #' @param sides a character string specifying the side of the confidence
 #' interval, must be one of \code{"two.sided"} (default), \code{"left"} or
@@ -39,12 +39,17 @@
 #' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
 #' \code{parallel} and \code{999} for \code{R}.
 #' 
-#' @return a numeric value.
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of the harmonic mean}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #' 
 #' @seealso \code{\link{meanX}}, \code{\link{gmean}} 
 #' @references Snedecor, G. W., Cochran, W. G. (1989) Statistical Methods, 8th
 #' ed. Ames, \emph{IA: Iowa State University Press }
-#' @keywords arith
 #' @examples
 #' 
 #' x <- runif(5)
@@ -112,4 +117,3 @@ hmean <- function(x, conf.level = NA,
   return(res)
   
 }
-

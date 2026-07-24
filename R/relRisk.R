@@ -27,26 +27,23 @@
 #' Confidence intervals can be calculated using the score method of Koopman
 #' (1984), a Wald approximation, or via transformation of the odds ratio.
 #'
-#' @param x A numeric 2x2 matrix or table containing non-negative counts.
-#' @param y An optional vector. If supplied, \code{table(x, y, ...)} is
+#' @param x a numeric 2x2 matrix or table containing non-negative counts
+#' @param y an optional vector. If supplied, \code{table(x, y, ...)} is
 #'   computed.
-#' @param method Character string specifying the confidence interval method.
+#' @param method character string specifying the confidence interval method.
 #'   One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.
-#' @param delta Small continuity correction added to the event counts for the
+#' @param delta small continuity correction added to the event counts for the
 #'   Wald interval. Only used if \code{method = "wald"}.
-#' @param conf.level Confidence level for the interval estimate. If
+#' @param conf.level confidence level for the interval estimate. If
 #'   \code{NA} (default), only the point estimate is returned.
-#' @param \dots Further arguments passed to \code{\link{table}}.
+#' @param \dots further arguments passed to \code{\link{table}}
 #'
-#' @return
-#' If \code{conf.level = NA}, a numeric scalar containing the relative risk.
-#'
-#' Otherwise a named numeric vector with elements:
-#'
-#' \itemize{
-#'   \item \code{estimate} Relative risk estimate.
-#'   \item \code{lci} Lower confidence interval bound.
-#'   \item \code{uci} Upper confidence interval bound.
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{relative risk estimate}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
 #' @details
@@ -67,9 +64,6 @@
 #'
 #' Rothman, K. J., Greenland, S., & Lash, T. L. (2008).
 #' \emph{Modern Epidemiology} (3rd ed.). Lippincott Williams & Wilkins.
-#'
-#' @seealso
-#' \code{\link{oddsRatio}}
 #'
 #' @examples
 #' m <- matrix(
@@ -101,9 +95,7 @@
 #'   method = "use-or"
 #' )
 #'
-
-
-
+#'
 #' @family effect.size  
 #' @concept effect-size  
 #' @concept binary-outcome
@@ -186,7 +178,7 @@ relRisk <- function(
   )
   
   c(
-    estimate = estimate,
+    est = estimate,
     lci = ci[["lci"]],
     uci = ci[["uci"]]
   )
@@ -414,5 +406,4 @@ relRisk <- function(
   )
   
 }
-
 

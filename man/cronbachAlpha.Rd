@@ -4,81 +4,128 @@
 \alias{cronbachAlpha}
 \title{Cronbach's Coefficient Alpha}
 \usage{
-cronbachAlpha(x, conf.level = NA, cond = FALSE, na.rm = FALSE)
+cronbachAlpha(
+  x,
+  returnConditional = FALSE,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  na.rm = FALSE
+)
 }
 \arguments{
-\item{x}{\eqn{n \times m}{k x m} matrix or dataframe with item responses, k
-subjects (in rows) m items (in columns).}
+\item{x}{a \eqn{n \times m} matrix or data frame with item responses,
+\eqn{n} subjects (in rows) and \eqn{m} items (in columns)}
 
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence interval will be calculated.}
+\item{returnConditional}{logical; if \code{TRUE}, alpha is additionally
+calculated for the dataset with each item left out}
 
-\item{cond}{logical. If set to \code{TRUE}, alpha is additionally calculated
-for the dataset with each item left out.}
+\item{conf.level}{a single confidence level for the returned confidence
+interval. Set to \code{NA} (default) to suppress confidence interval
+calculation.}
 
-\item{na.rm}{logical, indicating whether \code{NA} values should be stripped
-before the computation proceeds. If set to \code{TRUE} only the complete
-cases of the ratings will be used. Defaults to \code{FALSE}.}
+\item{sides}{a character string specifying a two-sided or one-sided
+confidence interval}
+
+\item{na.rm}{logical; if \code{TRUE}, incomplete cases are removed before
+the computation proceeds}
 }
 \value{
-Either a numeric value or \cr a named vector of 3 columns if
-confidence levels are required (estimate, lower and upper ci) or \cr
+a named numeric vector, or a list when
+\code{returnConditional = TRUE}.
 
-a list containing the following components, if the argument \code{cond} is
-set to \code{TRUE}: \item{unconditional}{Cronbach's Alpha, either the single
-value only or with confidence intervals} \item{condcronbachAlpha}{The alpha
-that would be realized if the item were excluded}
+If \code{na.rm = FALSE} and \code{x} contains missing values, a single
+\code{NA_real_} is returned instead of either structure.
+
+If \code{conf.level = NA}, the numeric vector contains only \code{est};
+otherwise it has elements:
+\describe{
+\item{\code{est}}{point estimate.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
+
+If \code{returnConditional = TRUE}, a list with the components:
+
+\describe{
+\item{\code{unconditional}}{alpha for the full set of items, as above}
+\item{\code{conditional}}{a data frame with one row per item, giving the
+alpha that would be realized if that item were excluded. \code{NULL}
+when \code{x} has fewer than 3 items, since dropping one would leave
+too few to compute alpha.}
+}
 }
 \description{
 Cronbach's alpha is a measure of internal consistency and often used for
-validating psychometric tests. It determines the internal consistency or
-average correlation of items in a survey instrument to gauge its
-reliability. This reduces to Kuder-Richardson formula 20 (KR-20) when the
-columns of the data matrix are dichotomous.
+validating psychometric tests. The unstandardized form implemented here
+is computed from the item variances and the variance of the total score,
+expressing the proportion of total-score variance not attributable to
+item-specific variance. This reduces to Kuder-Richardson formula 20
+(KR-20) when the columns of the data matrix are dichotomous.
+}
+\details{
+The confidence interval follows Feldt (1965) and is based on the
+\eqn{F} distribution with \eqn{n - 1} and \eqn{(m - 1)(n - 1)} degrees of
+freedom, where \eqn{n} is the number of subjects (rows) and \eqn{m} the
+number of items (columns). It inherits the assumptions of the underlying
+ANOVA derivation - in particular normally distributed scores and
+essentially parallel items with homogeneous variances and covariances -
+and should be read with more caution than the point estimate when these
+are doubtful, for instance with markedly skewed or heterogeneous items.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
+\eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+\code{\link[stats]{t.test}}.
+
+Missing values are handled according to package conventions: if
+\code{na.rm = FALSE} and \code{x} contains missing values, a single
+\code{NA_real_} is returned, irrespective of \code{returnConditional} and
+\code{conf.level}. If \code{na.rm = TRUE}, complete cases are used.
+Infinite values leave the variances undefined and are rejected with an
+error.
+}
+\note{
+Based on code of Harold C. Doran, adapted to conform to package
+standards.
 }
 \examples{
-
 set.seed(1234)
 tmp <- data.frame(
-  item1=sample(c(0,1), 20, replace=TRUE),
-  item2=sample(c(0,1), 20, replace=TRUE),
-  item3=sample(c(0,1), 20, replace=TRUE),
-  item4=sample(c(0,1), 20, replace=TRUE),
-  item5=sample(c(0,1), 20, replace=TRUE)
-  )
+  item1 = sample(c(0, 1), 20, replace = TRUE),
+  item2 = sample(c(0, 1), 20, replace = TRUE),
+  item3 = sample(c(0, 1), 20, replace = TRUE),
+  item4 = sample(c(0, 1), 20, replace = TRUE),
+  item5 = sample(c(0, 1), 20, replace = TRUE)
+)
 
-cronbachAlpha(tmp[,1:4], cond=FALSE, conf.level=0.95)
-cronbachAlpha(tmp[,1:4], cond=TRUE, conf.level=0.95)
+cronbachAlpha(tmp[, 1:4])
 
-cronbachAlpha(tmp[,1:4], cond=FALSE)
-cronbachAlpha(tmp[,1:2], cond=TRUE, conf.level=0.95)
+cronbachAlpha(tmp[, 1:4], conf.level = 0.95)
 
-\dontrun{
-# Calculate bootstrap confidence intervals for cronbachAlpha
-library(boot)
-cronbach.boot <- function(data,x) {cronbachAlpha(data[x,])[[3]]}
-res <- boot::boot(datafile, cronbach.boot, 1000)
+# the conditional table is labelled with the column names of x
+cronbachAlpha(tmp[, 1:4], returnConditional = TRUE, conf.level = 0.95)
 
-# two-sided bootstrapped confidence interval of Cronbach's alpha
-quantile(res$t, c(0.025,0.975))   
-# adjusted bootstrap percentile (BCa) confidence interval (better)
-boot::boot.ci(res, type="bca")    
-}
+# fewer than 3 items: the conditional component is NULL
+cronbachAlpha(tmp[, 1:2], returnConditional = TRUE, conf.level = 0.95)
 
 }
 \references{
-Cohen, J. (1960), A coefficient of agreement for nominal scales.
-\emph{Educational and Psychological Measurement}, 20, 37-46.
+Cronbach, L. J. (1951). Coefficient alpha and the internal structure of
+tests. \emph{Psychometrika}, \emph{16}(3), 297-334.
+\doi{10.1007/BF02310555}
+
+Feldt, L. S. (1965). The approximate sampling distribution of
+Kuder-Richardson reliability coefficient twenty.
+\emph{Psychometrika}, \emph{30}(3), 357-370.
+\doi{10.1007/BF02289499}
 }
 \seealso{
-\code{\link{cohenKappa}}, \code{\link{kappaM}}
-
 Other assoc.agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
@@ -87,11 +134,7 @@ Other assoc.agreement:
 \code{\link[=randolphKappa]{randolphKappa()}},
 \code{\link[=raterFrame]{raterFrame()}}
 }
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}, based on code of Harold C.
-Doran
-}
-\concept{agreement}
 \concept{assoc.agreement}
+\concept{confidence-interval}
 \concept{internal-consistency}
 \concept{reliability}

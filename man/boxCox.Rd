@@ -10,16 +10,16 @@ boxCox(x, lambda, tol = 0.000001)
 boxCoxInv(x, lambda, tol = 0.000001)
 }
 \arguments{
-\item{x}{A numeric vector. Must contain strictly positive values
+\item{x}{a numeric vector. Must contain strictly positive values
 (except \code{NA}s).}
 
-\item{lambda}{A single numeric transformation parameter.}
+\item{lambda}{a single numeric transformation parameter}
 
-\item{tol}{Numeric tolerance for detecting the special case
-\eqn{\lambda \approx 0}.}
+\item{tol}{numeric tolerance for detecting the special case
+\eqn{\lambda \approx 0}}
 }
 \value{
-A numeric vector of the same length as \code{x}.
+a numeric vector of the same length as \code{x}
 }
 \description{
 \code{boxCox()} applies the Box-Cox transformation to a numeric vector.
@@ -57,6 +57,7 @@ max(abs(x - x_back))
 # Log-transform (lambda ~ 0)
 y0 <- boxCox(x, lambda = 0)
 
+
 }
 \references{
 Box, G. E. P. and Cox, D. R. (1964).
@@ -65,8 +66,6 @@ An analysis of transformations.
 \bold{26}(2), 211--252.
 }
 \seealso{
-\code{\link{yeoJohnson}}, \code{\link{yeoJohnsonInv}}
-
 Other transform:
 \code{\link[=boxCoxLambda]{boxCoxLambda()}},
 \code{\link[=logSt]{logSt()}},

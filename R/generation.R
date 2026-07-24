@@ -1,5 +1,5 @@
 
-#' Generation by Birthyear
+#' Generation by Birth Year
 #' 
 #' Yields the generation of a person based on the year of birth.
 #' 
@@ -11,19 +11,17 @@
 #' Generation Alpha\cr }
 #' 
 #' @param year year of birth
-#' @return Ordered factor with levels \code{c("Babyboomer", "Gen X",
-#' "Millennials", "Gen Z", "Gen Alpha")}\cr Values which fall outside the range
+#' 
+#' @return ordered factor with levels \code{c("Babyboomer", "Gen X",
+#' "Millennial", "Gen Z", "Gen Alpha")}\cr
+#' Values which fall outside the range
 #' of breaks are coded as \code{NA}, as are \code{NaN} and \code{NA} values.
 #' 
-#' @author Andri Signorell <andri@@signorell.net>
 #' @seealso \code{\link{cutAge}}, \code{\link{zodiac}}
 #' @examples
 #' 
 #' generation(c(1946, 1964, 1972, 2001, 2003, 2018, 2026))
 #' 
-
-
-
 #' @family date.time  
 #' @concept date-time  
 #' @concept categorization
@@ -44,4 +42,3 @@ generation <- function(year){
       ordered = TRUE)
   
 }
-

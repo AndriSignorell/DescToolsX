@@ -7,31 +7,24 @@
 rangeX(x, trim = NULL, robust = FALSE, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{a numeric vector.}
+\item{x}{a numeric vector}
 
 \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each
-end of \code{x} before the mean is computed.  Values of trim outside that
+end of \code{x} before the range is computed. Values outside that
 range are taken as the nearest endpoint. Default is 0 for
-\code{robust=FALSE} and 0.2 for \code{robust=TRUE}}
+\code{robust = FALSE} and 0.2 for \code{robust = TRUE}.}
 
-\item{robust}{logical, determining whether the robust or the convential
-range should be returned.}
+\item{robust}{logical; whether to return the robust or conventional range}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be
-stripped before the computation proceeds.}
+stripped before the computation proceeds}
 
-\item{...}{the dots are sent to \code{robRange} and can be used to set
-\code{fac} (See details).}
+\item{...}{further arguments passed to \code{.robRange}, including
+\code{fac}}
 }
 \value{
-If \code{trim} is zero (the default), the arithmetic mean of the
-values in \code{x} is computed, as a numeric or complex vector of length
-one.  If \code{x} is not logical (coerced to numeric), numeric (including
-integer) or complex, \code{NA_real_} is returned, with a warning.
-
-If \code{trim} is non-zero, a symmetrically trimmed mean is computed with a
-fraction of \code{trim} observations deleted from each end before the mean
-is computed.
+a numeric scalar containing the range width. The corresponding
+lower and upper bounds are returned in the \code{"bounds"} attribute.
 }
 \description{
 Determines the range of the data, which can possibly be trimmed before
@@ -48,6 +41,9 @@ and then the "upper trimmed mean" s of absolute deviations from m,
 multiplied by \code{fac} (fac is 3 by default). The robust minimum is then
 defined as m-fac*s or min(x), whichever is larger, and similarly for the
 maximum.
+}
+\note{
+Robust range contributed by Werner Stahel.
 }
 \examples{
 
@@ -69,10 +65,8 @@ Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=varX]{varX()}}
-}
-\author{
-Werner Stahel, ETH Zurich (robust range)\cr Andri Signorell
-\href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{dispersion}

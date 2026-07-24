@@ -7,19 +7,19 @@
 divCoef(df, dis = NULL, normalize = FALSE, tol = 0.00000001)
 }
 \arguments{
-\item{df}{A data frame or matrix of non-negative values (e.g. abundances).
+\item{df}{a data frame or matrix of non-negative values (e.g. abundances).
 Rows correspond to entities, columns to samples.}
 
-\item{dis}{Optional object of class \code{dist}. If \code{NULL}, a default
+\item{dis}{optional object of class \code{dist}. If \code{NULL}, a default
 Euclidean distance is used.}
 
-\item{normalize}{Logical; if \code{TRUE}, the diversity is scaled by its
-theoretical maximum.}
+\item{normalize}{logical; if \code{TRUE}, the diversity is scaled by its
+theoretical maximum}
 
-\item{tol}{Numeric tolerance used for numerical checks.}
+\item{tol}{numeric tolerance used for numerical checks}
 }
 \value{
-A numeric vector of diversity coefficients (one per column).
+a numeric vector of diversity coefficients, one per column
 }
 \description{
 Computes a quadratic diversity coefficient for each column of a data frame,
@@ -50,7 +50,6 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

@@ -13,32 +13,32 @@ blandAltmanData(x, ...)
 \method{blandAltmanData}{formula}(x, data = NULL, conf.level = 0.95, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{Numeric vector or formula.}
+\item{x}{numeric vector or formula}
 
-\item{...}{Further arguments passed to or from other methods.}
+\item{...}{further arguments passed to or from other methods}
 
-\item{y}{Numeric vector.}
+\item{y}{numeric vector}
 
-\item{conf.level}{Confidence level.}
+\item{conf.level}{confidence level}
 
-\item{na.rm}{Logical; if \code{TRUE}, incomplete observation pairs are
-removed before computation.}
+\item{na.rm}{logical; if \code{TRUE}, incomplete observation pairs are
+removed before computation}
 
-\item{data}{Optional data frame used with the formula interface.}
+\item{data}{optional data frame used with the formula interface}
 }
 \value{
-An object of class \code{"blandAltman"} with components:
+an object of class \code{"BlandAltman"} with components:
 
 \describe{
-\item{mean}{Pairwise means.}
-\item{diff}{Pairwise differences (\code{y - x}).}
-\item{bias}{Mean difference.}
-\item{loaLower}{Lower limit of agreement.}
-\item{loaUpper}{Upper limit of agreement.}
-\item{biasCI}{Confidence interval for the bias.}
-\item{loaLowerCI}{Confidence interval for the lower LoA.}
-\item{loaUpperCI}{Confidence interval for the upper LoA.}
-\item{nObs}{Number of observations used.}
+\item{\code{mean}}{pairwise means}
+\item{\code{diff}}{pairwise differences (\code{y - x})}
+\item{\code{bias}}{mean difference}
+\item{\code{loaLower}}{lower limit of agreement}
+\item{\code{loaUpper}}{upper limit of agreement}
+\item{\code{biasCI}}{confidence interval for the bias}
+\item{\code{loaLowerCI}}{confidence interval for the lower LoA}
+\item{\code{loaUpperCI}}{confidence interval for the upper LoA}
+\item{\code{nObs}}{number of observations used}
 }
 }
 \description{
@@ -72,7 +72,6 @@ Other assoc.agreement:
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
-\code{\link[=isConfusionTable]{isConfusionTable()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
 \code{\link[=normalizeToConfusion]{normalizeToConfusion()}},

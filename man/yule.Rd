@@ -25,25 +25,30 @@ yuleY(
 )
 }
 \arguments{
-\item{x}{A 2x2 contingency table (matrix or table). If \code{y} is supplied,
+\item{x}{a 2x2 contingency table (matrix or table). If \code{y} is supplied,
 \code{x} and \code{y} are cross-tabulated via \code{table()}.}
 
-\item{y}{Optional second variable for cross-tabulation.}
+\item{y}{optional second variable for cross-tabulation}
 
-\item{conf.level}{Confidence level for the interval. Default is 0.95.}
+\item{conf.level}{confidence level for the interval. Defaults to \code{0.95};
+use \code{NA} to return only the point estimate.}
 
-\item{sides}{Indicates the alternative hypothesis and type of interval.
-One of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
+\item{sides}{type of confidence interval, one of \code{"two.sided"},
+\code{"left"}, or \code{"right"}}
 
-\item{correction}{Logical; if \code{TRUE}, applies Haldane-Anscombe correction
-(adds 0.5 to all cells).}
+\item{correction}{logical; if \code{TRUE}, applies the Haldane--Anscombe
+correction by adding 0.5 to all cells}
 
-\item{...}{Further arguments passed to \code{table()}.}
+\item{...}{further arguments passed to \code{table()}}
 }
 \value{
-a single numeric value if no confidence intervals are requested,\cr
-and otherwise a numeric vector with 3 elements for the estimate, the lower
-and the upper confidence interval
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Yule's Q or Y}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Computes Yule's Q or Y for a 2x2 contingency table, optionally with
@@ -56,11 +61,12 @@ Odds ratio:
 \deqn{OR = \frac{ad}{bc}}
 
 Yule's Q:
-\deqn{Q = \frac{OR - 1}{OR + 1} = \tanh(\log(OR))}
+\deqn{Q = \frac{OR - 1}{OR + 1}
+     = \tanh\left(\frac{1}{2}\log(OR)\right)}
 
 Yule's Y:
 \deqn{Y = \frac{\sqrt{OR} - 1}{\sqrt{OR} + 1}
-     = \tanh\left(\frac{1}{2}\log(OR)\right)}
+     = \tanh\left(\frac{1}{4}\log(OR)\right)}
 
 Confidence intervals are obtained from the asymptotic normal approximation:
 \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
@@ -85,7 +91,6 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}}
 }

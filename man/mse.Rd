@@ -13,17 +13,17 @@ mse(x, ...)
 \method{mse}{default}(x, ref, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{An object. Methods are available for numeric vectors and
+\item{x}{an object. Methods are available for numeric vectors and
 model objects (e.g. \code{lm}).}
 
-\item{...}{Additional arguments passed to methods.}
+\item{...}{additional arguments passed to methods}
 
-\item{ref}{Numeric vector of reference (true) values.}
+\item{ref}{numeric vector of reference (true) values}
 
-\item{na.rm}{Logical; should missing values be removed?}
+\item{na.rm}{logical; whether to remove missing values}
 }
 \value{
-A numeric value representing the MSE.
+a numeric scalar containing the MSE
 }
 \description{
 Computes the mean squared error (MSE) between predicted

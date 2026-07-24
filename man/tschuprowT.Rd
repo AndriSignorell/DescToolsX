@@ -7,19 +7,19 @@
 tschuprowT(x, y = NULL, correct = FALSE, ...)
 }
 \arguments{
-\item{x}{A vector of categorical data or a contingency table
-(matrix or \code{table}).}
+\item{x}{a vector of categorical data or a contingency table
+(matrix or \code{table})}
 
-\item{y}{Optional second categorical vector. If provided, a contingency
+\item{y}{optional second categorical vector. If provided, a contingency
 table is constructed from \code{x} and \code{y}.}
 
-\item{correct}{Logical; if \code{TRUE}, applies a bias correction
+\item{correct}{logical; if \code{TRUE}, applies a bias correction
 according to Bergsma (2013).}
 
-\item{...}{Additional arguments passed to \code{\link[base]{table}}.}
+\item{...}{additional arguments passed to \code{\link[base]{table}}}
 }
 \value{
-A numeric value representing Tschuprow's T.
+a numeric scalar containing Tschuprow's T
 }
 \description{
 Computes Tschuprow's T, a measure of association between two categorical
@@ -54,6 +54,7 @@ tschuprowT(tab)
 # Bias-corrected version
 tschuprowT(tab, correct = TRUE)
 
+
 }
 \references{
 Tschuprow, A. A. (1939). \emph{Principles of the Mathematical Theory of
@@ -74,7 +75,6 @@ Other assoc.nominal:
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
-\code{\link[=theil]{theil()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }

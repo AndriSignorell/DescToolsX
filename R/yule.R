@@ -4,15 +4,16 @@
 #' Computes Yule's Q or Y for a 2x2 contingency table, optionally with
 #' asymptotic confidence interval based on the log odds ratio.
 #'
-#' @param x A 2x2 contingency table (matrix or table). If \code{y} is supplied,
+#' @param x a 2x2 contingency table (matrix or table). If \code{y} is supplied,
 #'   \code{x} and \code{y} are cross-tabulated via \code{table()}.
-#' @param y Optional second variable for cross-tabulation.
-#' @param conf.level Confidence level for the interval. Default is 0.95.
-#' @param sides Indicates the alternative hypothesis and type of interval.
-#'   One of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.
-#' @param correction Logical; if \code{TRUE}, applies Haldane-Anscombe correction
-#'   (adds 0.5 to all cells).
-#' @param ... Further arguments passed to \code{table()}.
+#' @param y optional second variable for cross-tabulation
+#' @param conf.level confidence level for the interval. Defaults to \code{0.95};
+#'   use \code{NA} to return only the point estimate.
+#' @param sides type of confidence interval, one of \code{"two.sided"},
+#'   \code{"left"}, or \code{"right"}
+#' @param correction logical; if \code{TRUE}, applies the Haldane--Anscombe
+#'   correction by adding 0.5 to all cells
+#' @param ... further arguments passed to \code{table()}
 #'
 #' @details
 #' For a 2x2 table with cell counts \eqn{a, b, c, d}:
@@ -21,11 +22,12 @@
 #' \deqn{OR = \frac{ad}{bc}}
 #'
 #' Yule's Q:
-#' \deqn{Q = \frac{OR - 1}{OR + 1} = \tanh(\log(OR))}
+#' \deqn{Q = \frac{OR - 1}{OR + 1}
+#'      = \tanh\left(\frac{1}{2}\log(OR)\right)}
 #'
 #' Yule's Y:
 #' \deqn{Y = \frac{\sqrt{OR} - 1}{\sqrt{OR} + 1}
-#'      = \tanh\left(\frac{1}{2}\log(OR)\right)}
+#'      = \tanh\left(\frac{1}{4}\log(OR)\right)}
 #'
 #' Confidence intervals are obtained from the asymptotic normal approximation:
 #' \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
@@ -33,9 +35,13 @@
 #' 
 #' @name yule
 #'
-#' @return a single numeric value if no confidence intervals are requested,\cr
-#' and otherwise a numeric vector with 3 elements for the estimate, the lower
-#' and the upper confidence interval
+#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' numeric vector with elements:
+#' \describe{
+#'   \item{\code{est}}{point estimate of Yule's Q or Y}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#' }
 #'
 #' @references
 #' Yule, G. U. (1912). On the methods of measuring association between two attributes.
@@ -47,7 +53,7 @@
 #'
 #' 
 #' @rdname yule
-
+#'
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal  
@@ -74,6 +80,9 @@ yuleQ <- function(x, y=NULL,
   
   OR <- (a*d)/(b*c)
   Q  <- (OR - 1)/(OR + 1)
+
+  if (is.na(conf.level))
+    return(Q)
   
   se <- sqrt(1/a + 1/b + 1/c + 1/d)
   logOR <- log(OR)
@@ -134,7 +143,10 @@ yuleY <- function(x, y=NULL,
   logOR <- log(OR)
   
   # Schaetzer fuer Y (stabiler via tanh)
-  Y <- tanh(logOR / 2)
+  Y <- tanh(logOR / 4)
+
+  if (is.na(conf.level))
+    return(Y)
   
   se <- sqrt(1/a + 1/b + 1/c + 1/d)
   alpha <- 1 - conf.level
@@ -157,8 +169,8 @@ yuleY <- function(x, y=NULL,
     upper_log <- logOR + z*se
   }
   
-  lower_Y <- if(is.finite(lower_log)) tanh(lower_log/2) else -1
-  upper_Y <- if(is.finite(upper_log)) tanh(upper_log/2) else 1
+  lower_Y <- if(is.finite(lower_log)) tanh(lower_log/4) else -1
+  upper_Y <- if(is.finite(upper_log)) tanh(upper_log/4) else 1
   
   c(est = Y,
     lci = lower_Y,

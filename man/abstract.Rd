@@ -9,52 +9,55 @@ abstract(
   x,
   sep = ", ",
   zeroForm = ".",
-  maxlevels = 5,
-  trunc = TRUE,
-  list.len = 999
+  maxLevels = 5,
+  maxVars = Inf,
+  truncate = TRUE
 )
 
-\method{print}{Abstract}(x, sep = NULL, width = NULL, trunc = NULL, print.gap = 2, ...)
+\method{print}{Abstract}(x, sep = NULL, width = NULL, truncate = NULL, print.gap = 2, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame} to be described}
 
 \item{sep}{the separator for concatenating the levels of a factor}
 
-\item{zeroForm}{a symbol to be used, when a variable has zero NAs.}
+\item{zeroForm}{a symbol to be used when a variable has zero NAs}
 
-\item{maxlevels}{(integer, \code{Inf}) Max. number of factor levels to display.
-Default is 5. Set this to \code{Inf}, if all levels are needed.}
+\item{maxLevels}{integer; maximum number of factor levels to display.
+Default is 5. Set this to \code{Inf} if all levels are needed.}
 
-\item{trunc}{logical, defining if level names exceeding the column with
-should be truncated. Default is \code{TRUE}.}
+\item{maxVars}{integer; maximum number of variables (rows) to display.
+Default is \code{Inf}, meaning all variables.}
 
-\item{list.len}{numeric; maximum number of list elements to display.}
+\item{truncate}{logical; whether level names exceeding the column
+width should be truncated. Default is \code{TRUE}.}
 
-\item{width}{Console width. If \code{NULL}, defaults to
+\item{width}{console width. If \code{NULL}, defaults to
 \link[base:options]{options("width")}.}
 
-\item{print.gap}{(integer) Number of spaces between columns.}
+\item{print.gap}{integer; number of spaces between columns}
 
-\item{...}{Further arguments to \code{print} method.}
+\item{...}{further arguments passed to the \code{print} method}
 }
 \value{
-an object of class \code{abstract}, essentially a character matrix
-with 5 or 6 columns containing:
-\enumerate{
-\item a column number (\code{Nr}),
-\item the name of the column (\code{ColName}),
-\item the column class (\code{Class}),
-\item the number of NAs (\code{NAs}),
-\item the levels if the variable is a factor (\code{Levels}),
-\item (if there are any) descriptive labels for the column (\code{Labels}).
+a data frame of class \code{Abstract} with columns:
+
+\describe{
+\item{\code{Nr}}{column number}
+\item{\code{Class}}{column class}
+\item{\code{ColName}}{column name}
+\item{\code{NAs}}{number of missing values}
+\item{\code{Levels}}{factor levels, if applicable}
+\item{\code{Label}}{descriptive column label}
 }
+
+When printing, the \code{Label} column is hidden if no labels are set.
 }
 \description{
 Compactly display the content and structure of a \code{data.frame}, including
 variable labels. \code{str()} is optimized for lists and its output is
 relatively technical, when it comes to e.g. attributes. \code{summary()} on
-the other side already calculates some basic statistics.
+the other hand already calculates some basic statistics.
 }
 \details{
 The levels of a factor and describing variable labels (as created by
@@ -64,20 +67,20 @@ The first 4 columns are printed with the needed fix width, the last 2
 (Levels and Labels) are wrapped within the column. The width is calculated
 depending on the width of the screen as given by \code{getOption("width")}.
 
-\code{ToWord} has an interface for the class \code{abstract}.
+\code{toWord} has an interface for the class \code{Abstract}.
 }
 \examples{
 
 d.mydata <- CO2
 
 # let's use describing labels
-label(d.mydata) <- "CO2 contains data from an experiment on the cold 
+label(d.mydata) <- "CO2 contains data from an experiment on the cold
 tolerance of the grass species Echinochloa crus-galli."
 
-label(d.mydata$Plant) <- "an ordered factor with levels Qn1 < Qn2 < Qn3 < ... < Mc1 
+label(d.mydata$Plant) <- "an ordered factor with levels Qn1 < Qn2 < Qn3 < ... < Mc1
 giving a unique identifier for each plant."
 
-label(d.mydata$Plant) <- "a factor with levels Quebec Mississippi giving the 
+label(d.mydata$Type) <- "a factor with levels Quebec Mississippi giving the
 origin of the plant"
 
 abstract(d.mydata)
@@ -86,10 +89,6 @@ abstract(d.mydata)
 \seealso{
 \code{\link[utils:str]{utils::str()}}, \code{\link[base:summary]{base::summary()}}, \code{\link[bedrock:columnWrap]{columnWrap()}},
 \code{\link[=desc]{desc()}}
-
-Other descriptive:
-\code{\link[=desc]{desc()}}
 }
-\concept{descriptive}
+\concept{data.inspection}
 \concept{summary}
-\keyword{print}

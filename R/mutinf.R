@@ -17,20 +17,19 @@
 #' where \eqn{H(X)} and \eqn{H(Y)} are marginal entropies
 #' and \eqn{H(X,Y)} is the joint entropy.
 #'
-#' @param x A contingency table, matrix, or a vector that can
-#'   be coerced into a contingency table.
-#' @param y An optional second variable used together with
+#' @param x a contingency table, matrix, or vector that can be coerced into a
+#'   contingency table
+#' @param y an optional second variable used together with
 #'   \code{x} to create a contingency table via
-#'   \code{table(x, y, ...)}.
-#' @param base Logarithm base.
+#'   \code{table(x, y, ...)}
+#' @param base logarithm base.
 #'   Defaults to \code{2} (bits).
-#' @param normalize Logical.
+#' @param normalize logical.
 #'   If \code{TRUE}, returns normalized mutual information
 #'   (NMI).
-#' @param ... Additional arguments passed to \code{table()}.
+#' @param ... additional arguments passed to \code{table()}
 #'
-#' @return
-#' A numeric scalar containing the mutual information.
+#' @return a numeric scalar containing the mutual information
 #'
 #' @details
 #' Mutual information is always nonnegative:
@@ -71,9 +70,7 @@
 #' Elements of Information Theory (2nd ed.).
 #' Wiley.
 #'
-
-
-
+#'
 #' @family assoc.nominal  
 #' @concept association-measure  
 #' @concept nominal  
@@ -110,4 +107,3 @@ mutInf <- function(x,
   
   return(mi)
 }
-

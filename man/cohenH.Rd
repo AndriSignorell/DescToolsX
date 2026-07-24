@@ -7,26 +7,24 @@
 cohenH(x, y = NULL, conf.level = 0.95, ...)
 }
 \arguments{
-\item{x}{A 2x2 contingency table, matrix, or a vector that can
-be coerced into a table.}
+\item{x}{a 2x2 contingency table, matrix, or vector that can
+be coerced into a table}
 
-\item{y}{An optional second variable used together with \code{x}
-to create a contingency table via \code{table(x, y, ...)}.}
+\item{y}{an optional second variable used together with \code{x}
+to create a contingency table via \code{table(x, y, ...)}}
 
-\item{conf.level}{Confidence level for the interval.
+\item{conf.level}{confidence level for the interval.
 If \code{NA}, only the point estimate is returned.}
 
-\item{...}{Additional arguments passed to \code{table()}.}
+\item{...}{additional arguments passed to \code{table()}}
 }
 \value{
-If \code{conf.level = NA}, a numeric scalar containing
-Cohen's \eqn{h}.
-
-Otherwise, a named numeric vector with:
+if \code{conf.level = NA}, a numeric scalar containing Cohen's
+\eqn{h}; otherwise a named numeric vector with elements:
 \describe{
-\item{estimate}{Cohen's h estimate}
-\item{lci}{Lower confidence interval bound}
-\item{uci}{Upper confidence interval bound}
+\item{\code{est}}{point estimate of Cohen's \eqn{h}.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
 }
 }
 \description{

@@ -1,7 +1,7 @@
 
 #' Percentage Table
 #' 
-#' Prints a 2-way contingency table along with percentages, marginal, and
+#' Creates a 2-way contingency table along with percentages, marginal, and
 #' conditional distributions. All the frequencies are nested into one single
 #' table. 
 #' 
@@ -12,11 +12,11 @@
 #' (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is
 #' the first dimension of the table, 2 the second and 3 the percentages). \cr
 #' Use \code{sortX()} if you want to have your table sorted by rows.\cr\cr The
-#' style in which numbers are formatted is selected by \code{\link[aurora]{style}()} from
+#' style in which numbers are formatted is selected by \code{\link[pharos]{style}()} from
 #' the DescToolsX options. Absolute frequencies will use \code{style("abs.sty")} and
 #' \code{style("per.sty")} will do it for the percentages. The options can be changed
 #' with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
-#' containing any format information used in \code{\link[aurora]{fm}}.
+#' containing any format information used in \code{\link[pharos]{fm}}.
 #' 
 #' \code{Margins()} returns a list containing all the one dimensional margin
 #' tables of a n-dimensional table along the given dimensions. It uses
@@ -27,50 +27,42 @@
 #' @inheritParams Association
 #' @aliases percTable percTable.default percTable.table percTable.formula percTable.matrix print.PercTable
 #' 
-#' @param row.vars a vector of row variables (see Details). 
+#' @param row.vars a vector of row variables (see Details)
 #' @param col.vars a vector of column variables (see Details). If this is left
 #' to \code{NULL} the table structure will be preserved. 
 #' @param justify either \code{"left"} or \code{"right"} for defining the
-#' alignment of the table cells. 
-#' @param freq boolean. Should absolute frequencies be included? Defaults to
-#' TRUE. 
-#' @param prop a string defining the conditional propotions to be displayed. 
-#' Can be \code{"rows"} for rowwise percentages \code{"cols"} for columnwise
-#' or both of them.
-#' produces a table output with row and column
-#' percentages. 
-#' @param expected the expected counts under the null hypothesis.
-#' @param margins a vector, consisting out of 1 and/or 2. Defines the margin
-#' sums to be included.  1 stands for row margins, 2 for column margins, c(1,2)
-#' for both. Default is \code{NULL} (none). 
+#' alignment of the table cells
+#' @param freq logical. Should absolute frequencies be included? Defaults to
+#' \code{TRUE}.
+#' @param prop character vector specifying the proportions to display, using
+#' \code{"rows"}, \code{"cols"}, \code{"total"}, or \code{"none"}
+#' @param expected logical; whether to include expected counts under independence
+#' @param margins vector specifying the margins to include. Use \code{1} or
+#' \code{"rows"} for row margins, \code{2} or \code{"cols"} for column
+#' margins, or both; \code{NULL} includes none.
 #' @param formula a formula of the form \code{lhs ~ rhs} where \code{lhs} will
-#' be tabled versus rhs (\code{table(lhs, rhs)}).
+#' be tabled versus rhs (\code{table(lhs, rhs)})
 #' @param data an optional matrix or data frame (or similar: see
 #' \code{\link{model.frame}}) containing the variables in the formula
 #' \code{formula}.  By default the variables are taken from
 #' \code{environment(formula)}.
 #' @param subset an optional vector specifying a subset of observations to be
-#' used.
+#' used
 #' @param na.action a function which indicates what should happen when the data
 #' contain NAs. Defaults to \code{getOption("na.action")}.
 #' @param blockSep logical, defining if an empty row should be introduced between
 #' the table rows. Default is FALSE, if only a table with one single
 #' description (either frequencies or percents) should be returned and
 #' \code{TRUE} in any other case. 
-#' @param \dots the dots are passed to \code{print.PercTable()} 
+#' @param \dots further arguments passed to \code{print.PercTable()}
 #' 
-#' @return Returns an object of class \code{"ftable"}. 
+#' @return an object of class \code{"PercTable"} containing the requested
+#' frequency and percentage tables
 #' 
-#' @author Andri Signorell <andri@@signorell.net> 
-#' @seealso \code{\link{freq}}, \code{\link{table}}, \code{\link{ftable}},
-#' \code{\link{proportions}}, \code{\link{addmargins}},
-#' \code{\link{setDescToolsXOption}}, \code{\link[aurora]{style}}\cr There are similar
-#' functions in package \pkg{sfsmisc} \code{\link[sfsmisc]{printTable2}} and
-#' package \pkg{vcd} \code{\link[vcd]{table2d_summary}}, both lacking some of
-#' the flexibility we needed here. \cr
+#' 
 #' @references Agresti, Alan (2007) \emph{Introduction to categorical data
 #' analysis}. NY: John Wiley and Sons, Section 2.4.5\cr
-#' @keywords multivariate
+#' 
 #' @examples
 #' 
 #' tab <- as.table(apply(HairEyeColor, c(1,2), sum))
@@ -82,23 +74,23 @@
 #' percTable(tab, col.vars=2, margins=1)
 #' percTable(tab, col.vars=2, margins=NULL)
 #' 
-#' percTable(tab, col.vars=2, prob=NULL)
+#' percTable(tab, col.vars=2, prop="none")
 #' 
 #' # just the percentages without absolute values
-#' percTable(tab, col.vars=2, prob=c("total","rows"), freq=FALSE)
+#' percTable(tab, col.vars=2, prop=c("total","rows"), freq=FALSE)
 #' 
 #' # just the row percentages
-#' percTable(tab, freq= FALSE, prob="rows")
+#' percTable(tab, freq= FALSE, prop="rows")
 #' 
 #' # just the expected frequencies and the standard residuals
-#' percTable(tab, prob=NULL, expected = TRUE)
+#' percTable(tab, prop="none", expected = TRUE)
 #' 
 #' 
 #' # rearrange output such that freq are inserted as columns instead of rows
 #' percTable(tab, col.vars=c(3,2))
 #' 
 #' # putting the areas in rows
-#' percTable(tab, col.vars=c(3,1), prob="total", margins=c(1,2))
+#' percTable(tab, col.vars=c(3,1), prop="total", margins=c(1,2))
 #' 
 #' # formula interface with subset
 #' percTable(driver ~ area, data=Pizza, subset=wine_delivered==0)
@@ -118,12 +110,14 @@
 #' # one dimensional x falls back to the function freq()
 #' # percTable(x=Pizza$driver)
 #' 
- 
-
-
+#' @seealso [table], [ftable], [proportions], [addmargins], 
+#' [setDescToolsXOption], [pharos::style]\cr 
+#' There are similar functions in [sfsmisc::printTable2] and
+#' package \pkg{vcd} [vcd::table2d_summary], both lacking some of
+#' the flexibility we needed here. 
+#' 
 #' @family frequency  
 #' @concept frequency-table
-#'
 #'
 #' @export
 percTable <- function (...) UseMethod("percTable")
@@ -340,7 +334,7 @@ print.PercTable <- function(x,
   if (length(tables) == 1) {
     out <- ftable(tables[[1]])
   } else {
-    arr <- abind(tables, along = 3)
+    arr <- bedrock::abind(tables, along = 3)
     out <- ftable(arr, col.vars=col.vars, row.vars=row.vars)
   }
   
@@ -377,4 +371,3 @@ print.PercTable <- function(x,
 #' @rdname percTable
 #' @export
 percTable.matrix <- percTable.table
-

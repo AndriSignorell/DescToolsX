@@ -90,20 +90,6 @@
 
 
 
-# print routine for charactermatrix
-
-.print.charmatrix <- function(x, quote = FALSE, print.gap = 2,
-                              right = TRUE, ...) {
-  # prints a character matrix without rownames, by default right aligned and
-  # with gap = 2
-  # this is used by the print.Desc routines
-  
-  rownames(x) <- rep("", nrow(x))
-  print(x, quote = quote, print.gap = print.gap, right = right, ...)
-}
-
-
-
 .captOut <- function(..., file = NULL, append = FALSE, width=150) {
   
   opt <- options(width=width)
@@ -147,6 +133,40 @@
   if (is.null(rval))
     invisible(NULL)
   else rval
+  
+}
+
+
+
+.makeEstimateResult <- function(
+    est,
+    lci = NULL,
+    uci = NULL,
+    attrs = NULL
+){
+  
+  # unname() throughout: values arriving from quantile() carry names such
+  # as "2.5%", and c(res, lci = <named scalar>) would compose these into
+  # "lci.2.5%", breaking the binding est/lci/uci output convention.
+  res <- c(est = unname(est))
+  
+  if(!is.null(lci))
+    res <- c(res, lci = unname(lci))
+  
+  if(!is.null(uci))
+    res <- c(res, uci = unname(uci))
+  
+  # Set attributes individually rather than assigning the whole
+  # attributes() list: a wholesale assignment would drop or overwrite
+  # 'names' if attrs ever carried an entry of that name.
+  if(!is.null(attrs) && length(attrs)) {
+    
+    for(nm in names(attrs))
+      attr(res, nm) <- attrs[[nm]]
+    
+  }
+  
+  res
   
 }
 

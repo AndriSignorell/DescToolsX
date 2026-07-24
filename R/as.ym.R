@@ -2,15 +2,15 @@
 
 #' A Class for Dealing with the Yearmonth Format
 #' 
-#' The representation of year and month information in YYYYYMM format as an
-#' integer is often handy and a useful and efficient data structure. Adding a
-#' number of months to such a date is not quite catchy, however, since the date
-#' structure is to be retained. For example, 201201 - 2 \verb{[months]} is expected to
-#' result in 201111 instead of 201199. \code{addMonthsYM()} does this job.
+#' Representing year and month information as an integer in YYYYMM format is
+#' compact and efficient. Calendar arithmetic must nevertheless preserve the
+#' date structure: for example, subtracting two months from 201201 should
+#' return 201111 rather than 201199. \code{addMonths()} provides this
+#' arithmetic for objects of class \code{"ym"}.
 #' 
-#' All parameters will be recyled if necessary. The therefore used function
-#' \code{\link{mapply}} will display a warning, if the longer argument is not a
-#' multiple of the length of the shorter one.
+#' All parameters are recycled if necessary. The underlying
+#' \code{\link{mapply}} call warns if the longer argument is not a multiple
+#' of the length of the shorter one.
 #' 
 #' @name as_ym
 #' @aliases as.ym as.Date.ym addMonths.ym
@@ -21,14 +21,20 @@
 #' 1.  
 #' @param n the number of months to be added. If n is negative the months will
 #' be subtracted. 
-#' @param \dots further arguments (not used here).
-#' @return a vector of class \code{integer} with the same dimension as x,
-#' containing the transformed dates.
-#' @author Andri Signorell <andri@@signorell.net>, originally based on code by
-#' Roland Rapold
+#' @param \dots further arguments; currently unused
+#' @return
+#' \describe{
+#'   \item{\code{as.ym()}}{an integer vector of class \code{"ym"}}
+#'   \item{\code{as.Date.ym()}}{a vector of class \code{"Date"}}
+#'   \item{\code{addMonths.ym()}}{a numeric vector containing the transformed
+#'     YYYYMM or YYYYMMDD values}
+#'   \item{\code{print.ym()}}{invisibly, the printed unclassed vector}
+#' }
+#' 
+#' @note Based on code by Roland Rapold, adapted to conform to package standards. 
+#' 
 #' @seealso \code{\link{addMonths}}; Date functions, like \code{\link{year}},
 #' \code{\link{month}}, etc. 
-#' @keywords chron
 #' @examples
 #' 
 #' 
@@ -131,8 +137,6 @@ addMonths.ym <- function (x, n, ...) {
 `-.ym` <- function(x, y){
   addMonths(x, -y)
 }
-
-
 
 
 

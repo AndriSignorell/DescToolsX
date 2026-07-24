@@ -7,22 +7,22 @@
 stuartTauC(x, y = NULL, conf.level = NA, ...)
 }
 \arguments{
-\item{x}{A numeric vector or a contingency table (matrix or table).}
+\item{x}{a numeric vector or a contingency table (matrix or table)}
 
-\item{y}{Optional numeric vector. If supplied, must have the same length as \code{x}.}
+\item{y}{optional numeric vector. If supplied, must have the same length as \code{x}.}
 
-\item{conf.level}{Confidence level for confidence intervals. If \code{NA},
+\item{conf.level}{confidence level for confidence intervals. If \code{NA},
 no confidence interval is returned.}
 
-\item{\dots}{Further arguments passed to \code{\link{table}} in the vector interface.}
+\item{\dots}{further arguments passed to \code{\link{table}} in the vector interface}
 }
 \value{
-If \code{conf.level = NA}, a single numeric value is returned.
-Otherwise a named numeric vector with elements:
-\itemize{
-\item \code{est}: estimate
-\item \code{lci}: lower confidence interval
-\item \code{uci}: upper confidence interval
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Stuart's tau-c}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
@@ -66,6 +66,7 @@ stuartTauC(tab, conf.level=0.95)
 # Vector interface
 stuartTauC(mtcars$wt, mtcars$mpg)
 
+
 }
 \references{
 Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
@@ -83,10 +84,7 @@ Measures of association for cross classifications III.
 \emph{Journal of the American Statistical Association}, 58, 310–364.
 }
 \seealso{
-\code{\link{kendallTauB}} for Kendall's \eqn{\tau_b},
-
 Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},

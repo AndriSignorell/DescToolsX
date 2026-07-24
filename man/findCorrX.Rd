@@ -13,31 +13,33 @@ findCorrX(
 )
 }
 \arguments{
-\item{x}{A symmetric correlation matrix.}
+\item{x}{a symmetric correlation matrix}
 
-\item{cutoff}{Numeric threshold in (0, 1). Pairs with absolute correlation
+\item{cutoff}{numeric threshold in (0, 1). Pairs with absolute correlation
 above this value are considered too highly correlated.}
 
-\item{method}{Character string specifying how variable importance is scored.
+\item{method}{character string specifying how variable importance is scored.
 One of \code{"mean"}, \code{"max"}, or \code{"median"}. Default is \code{"mean"}.}
 
-\item{output}{Character string specifying the return format:
+\item{output}{character string specifying the return format:
 \itemize{
-\item \code{"index"}: indices of variables to remove (default)
-\item \code{"names"}: column names of variables to remove
-\item \code{"logical"}: logical vector indicating removed variables
-\item \code{"report"}: detailed list with removed, kept variables and decision log
+\item \code{"index"} for indices of variables to remove (default)
+\item \code{"names"} for column names of variables to remove
+\item \code{"logical"} for a logical vector indicating removed variables
+\item \code{"report"} for a detailed list of removed and retained
+variables and the decision log
 }}
 
-\item{verbose}{Logical; if \code{TRUE}, prints progress information.}
+\item{verbose}{logical; if \code{TRUE}, progress information is printed}
 }
 \value{
-Depending on \code{return}:
-\itemize{
-\item \code{"index"}: integer vector of column indices to remove
-\item \code{"names"}: character vector of column names
-\item \code{"logical"}: logical vector (length = ncol(x))
-\item \code{"report"}: list with elements \code{removed}, \code{kept}, \code{log}
+depending on \code{output}:
+\describe{
+\item{\code{"index"}}{integer vector of column indices to remove}
+\item{\code{"names"}}{character vector of column names}
+\item{\code{"logical"}}{logical vector with one element per column}
+\item{\code{"report"}}{list with elements \code{removed}, \code{kept},
+and \code{log}}
 }
 }
 \description{
@@ -71,7 +73,6 @@ Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }

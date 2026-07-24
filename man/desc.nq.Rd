@@ -14,24 +14,28 @@
 \method{plot}{Desc.nq}(x, main = x$meta$main, which = NULL, ...)
 }
 \arguments{
-\item{x}{A numeric variable.}
+\item{x}{a numeric variable}
 
-\item{digits}{integer. With how many digits should the relative frequencies
-be formatted? Default can be set by
-\code{\link{setDescToolsXOption}(digits=x)}.}
+\item{digits}{number of digits used to format relative frequencies}
 
-\item{...}{Further arguments (currently not used).}
+\item{...}{further arguments, currently unused}
 
-\item{main}{a main title for the plot. Defaults to the title stored in
-\code{x$meta$main}.}
+\item{main}{main title for the plot; defaults to the title stored in
+\code{x$meta$main}}
 
 \item{which}{integer vector selecting which plots to draw. See Details.
 \code{NULL} (default) selects plots automatically based on \code{verbose}.}
 
-\item{g}{A categorical grouping variable (factor or coercible to factor).}
+\item{g}{a categorical grouping variable (factor or coercible to factor)}
 }
 \value{
-An object of class \code{"Desc.nq"} inheriting from \code{"Desc"}.
+an object of class \code{c("Desc.nq", "Desc")} with components:
+\describe{
+\item{\code{tab}}{group-wise summary table}
+\item{\code{test}}{result of the Kruskal-Wallis test}
+\item{\code{vtest}}{result of Levene's test}
+\item{\code{eta}}{effect size}
+}
 }
 \description{
 Computes descriptive statistics for a numeric variable \code{x}
@@ -54,19 +58,9 @@ The Kruskal-Wallis test evaluates whether the distribution of \code{x}
 differs between groups defined by \code{g}. The effect size \eqn{\eta^2}
 provides a standardized measure of group differences.
 }
-\section{Output components}{
-
-\itemize{
-\item \code{tab}: group-wise summary table
-\item \code{test}: Kruskal-Wallis test
-\item \code{vtest}: Levene test
-\item \code{eta}: effect size
-}
-}
-
 \seealso{
-\code{\link{desc}}, \code{\link{desc.qn}}, \code{\link{desc.nn}},
-\code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
+\link{desc}, \link{desc.qn}, \link{desc.nn}, \link[pharos:plot.Desc.qn]{pharos::plot.Desc.qn}
+\link{kruskal.test}, \link[lumen:leveneTest]{lumen::leveneTest}
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -76,6 +70,7 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
+\code{\link[=desc.ts]{desc.ts()}},
 \code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{data-description}

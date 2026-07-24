@@ -26,37 +26,43 @@ coefVarCI(
 )
 }
 \arguments{
-\item{x}{a (non-empty) numeric vector of data values.}
+\item{x}{a non-empty numeric vector of data values}
 
-\item{\dots}{further arguments.}
+\item{\dots}{further arguments}
 
-\item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}.}
+\item{weights}{a numeric vector of weights the same length as \code{x}
+giving the weights to use for elements of \code{x}}
 
-\item{unbiased}{logical value determining, if a bias correction should be
-used (see. details). Default is \code{FALSE}.}
+\item{unbiased}{logical; whether to apply a bias correction. See Details.
+Defaults to \code{FALSE}.}
 
 \item{na.rm}{logical. Should missing values be removed? Defaults to
 \code{FALSE}.}
 
-\item{conf.level}{confidence level of the interval. Defaults to 0.95.}
+\item{conf.level}{confidence level of the interval; defaults to 0.95}
 
 \item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter. \code{"left"} would
-be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
+\code{"right"}. Partial matching is supported. \code{"left"} is analogous
+to a hypothesis of \code{"greater"} in a \code{t.test}.}
 
-\item{method}{character string specifing the method to use for calculating
-the confidence intervals, can be one out of: \code{"nct"} (default),
+\item{method}{character string specifying the confidence interval method:
+\code{"nct"} (default),
 \code{"vangel"}, \code{"mckay"}, \code{"verrill"} (currently not yet
-implemented) and \code{"naive"}. Abbreviation of method is accepted. See
-details.}
+implemented), or \code{"naive"}. Partial matching is supported. See
+Details.}
 }
 \value{
-if no confidence intervals are requested: the estimate as numeric
-value (without any name)\cr\cr else a named numeric vector with 3 elements
-\item{est}{estimate} \item{lci}{lower confidence interval} \item{uci}{upper
-confidence interval}
+an unnamed numeric scalar containing the coefficient of variation
+for \code{coefVar()}. If recycling in \code{coefVarCI()} yields a
+single case, it returns a named numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of the coefficient of variation.}
+\item{\code{lci}}{lower confidence interval bound.}
+\item{\code{uci}}{upper confidence interval bound.}
+}
+Otherwise, \code{coefVarCI()} returns a numeric matrix with one row per case
+and the columns \code{est}, \code{lci}, and \code{uci}.
 }
 \description{
 Calculates the coefficient of variation and its confidence limits using
@@ -80,13 +86,13 @@ confidence limit for the standard deviation by the sample mean.
 infinity. McKay recommends this approximation only if the coefficient of
 variation is less than 0.33. Note that if the coefficient of variation is
 greater than 0.33, either the normality of the data is suspect or the
-probability of negative values in the data is non-neglible. In this case,
+probability of negative values in the data is non-negligible. In this case,
 McKay's approximation may not be valid. Also, it is generally recommended
 that the sample size should be at least 10 before using McKay's
 approximation.
 
 \bold{Vangel's modified McKay method} \verb{ } is more accurate than the
-McKay in most cases, particilarly for small samples.. According to Vangel,
+McKay method in most cases, particularly for small samples. According to Vangel,
 the unmodified McKay is only more accurate when both the coefficient of
 variation and alpha are large. However, if the coefficient of variation is
 large, then this implies either that the data contains negative values or
@@ -94,7 +100,7 @@ the data does not follow a normal distribution. In this case, neither the
 McKay or the modified McKay should be used. In general, the Vangel's
 modified McKay method is recommended over the McKay method. It generally
 provides good approximations as long as the data is approximately normal and
-the coefficient of variation is less than 0.33. This is the default method.
+the coefficient of variation is less than 0.33.
 
 See also:
 https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
@@ -113,16 +119,14 @@ Parts of the code contributed by Michael Smithson.
 
 set.seed(15)
 x <- runif(100)
-coefVar(x, conf.level=0.95)
-
-#       est    low.ci    upr.ci
-# 0.5092566 0.4351644 0.6151409
+coefVar(x)
+coefVarCI(x)
 
 # Coefficient of variation for a linear model
 r.lm <- lm(Fertility ~ ., swiss)
 coefVar(r.lm)
 
-# the function is vectorized, so arguments are recyled...
+# the function is vectorized, so arguments are recycled
 fn <- "https://www.itl.nist.gov/div898/handbook/datasets/ZARR13.DAT"
 zarr <- as.numeric(readr::read_lines(fn, skip=25))
 
@@ -159,7 +163,7 @@ t-distribution. \emph{Biometrika}, 31, 362--389.
 Mark Vangel (1996) Confidence Intervals for a Normal Coefficient of
 Variation, \emph{American Statistician}, Vol. 15, No. 1, pp. 21-26.
 
-Kelley, K. (2007). Sample size planning for the coefcient of variation from
+Kelley, K. (2007). Sample size planning for the coefficient of variation from
 the accuracy in parameter estimation approach. \emph{Behavior Research
 Methods, 39} (4), 755-766
 
@@ -184,6 +188,8 @@ Statistics Theory and Methods}, Volume 36, No. 12, pp 2187-2206.
 Other dispersion:
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
+\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}
 }

@@ -7,18 +7,19 @@
 conDisPairs(x, y = NULL)
 }
 \arguments{
-\item{x}{A numeric/ordinal vector or a contingency table.}
+\item{x}{a numeric or ordinal vector, or a contingency table}
 
-\item{y}{Optional second numeric/ordinal vector. If provided, vector mode is used.}
+\item{y}{optional second numeric or ordinal vector. If provided, vector mode
+is used.}
 }
 \value{
-A named numeric vector with elements:
-\itemize{
-\item \code{C} Concordant pairs
-\item \code{D} Discordant pairs
-\item \code{Ties_X} Ties in \code{x}
-\item \code{Ties_Y} Ties in \code{y}
-\item \code{Ties_XY} Joint ties
+a named numeric vector with elements:
+\describe{
+\item{\code{C}}{number of concordant pairs}
+\item{\code{D}}{number of discordant pairs}
+\item{\code{Ties_X}}{number of ties in \code{x}}
+\item{\code{Ties_Y}}{number of ties in \code{y}}
+\item{\code{Ties_XY}}{number of joint ties}
 }
 }
 \description{
@@ -48,7 +49,6 @@ conDisPairs(tab)
 }
 \seealso{
 Other assoc.ordinal:
-\code{\link[=assocsTab]{assocsTab()}},
 \code{\link[=cStat]{cStat()}},
 \code{\link[=gkGamma]{gkGamma()}},
 \code{\link[=gkTau]{gkTau()}},

@@ -7,14 +7,14 @@
 nmae(x, ref, trainY)
 }
 \arguments{
-\item{x}{Numeric vector of predicted values.}
+\item{x}{numeric vector of predicted values}
 
-\item{ref}{Numeric vector of reference (true) values.}
+\item{ref}{numeric vector of reference (true) values}
 
-\item{trainY}{Numeric vector used as baseline to compute normalization.}
+\item{trainY}{numeric vector used as the normalization baseline}
 }
 \value{
-A numeric value representing the normalized mean absolute error.
+a numeric scalar containing the normalized mean absolute error
 }
 \description{
 Computes the normalized mean absolute error (NMAE) between predictions

@@ -13,25 +13,29 @@ spearmanCor(
 )
 }
 \arguments{
-\item{x}{Either a contingency table, a two-column object
+\item{x}{either a contingency table, a two-column object
 (matrix, data.frame or list), or a vector of observations
-(together with \code{y}).}
+(together with \code{y})}
 
-\item{y}{Optional second vector. If \code{x} is not a vector,
+\item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{Confidence level for confidence intervals.
+\item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{Alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{alternative hypothesis:
+\code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{na.rm}{logical, should NAs be removed?}
+\item{na.rm}{logical; whether to remove missing values}
 }
 \value{
-Either a single numeric value, if no confidence interval is
-required, \cr or a vector with 3 elements for estimate, lower and upper
-confidence intervall.
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+numeric vector with elements:
+\describe{
+\item{\code{est}}{point estimate of Spearman's rank correlation}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
+}
 }
 \description{
 Calculate Spearman correlation coefficient and its confidence interval. In
@@ -76,11 +80,7 @@ Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
-\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}}
-}
-\author{
-Andri Signorell \href{mailto:andri@signorell.net}{andri@signorell.net}
 }
 \concept{assoc.continuous}
 \concept{correlation}

@@ -18,7 +18,8 @@ with base R and other packages.
 
 Statistical summary functions that would otherwise mask base R functions are
 suffixed with \code{X} (e.g. \code{meanX()}, \code{sdX()}, \code{medianX()}).
-So functions ending in X are extended versions provided by DescToolsX and are
+So functions ending in X are extended versions (typically supporting weights
+or implementing confidence intervals) provided by DescToolsX and are
 designed to coexist with base R functions without masking them.
 
 DescToolsX follows a strict and consistent naming scheme to ensure
@@ -28,7 +29,7 @@ Consistency and predictability take precedence over historical base R naming
 conventions. This design choice is a key difference between DescToolsX and
 DescTools.
 
-#' Design principles
+\strong{Design principles}
 
 DescToolsX follows a set of strict design principles to ensure consistency,
 usability, and performance across the entire package.
@@ -40,7 +41,6 @@ Following section explain further principles valid throughout \bold{DescToolsX}:
 \verb{  }\link{Formulas}             \tab Handling formulas \cr
 \verb{  }\link{Association}\verb{  } \tab Association  \cr
 \verb{  }\link{Agreement}\verb{  } \tab Interrater agreement  \cr
-\verb{  }\link{Tests}\verb{  } \tab Hypothesis-Tests  \cr
 \verb{  }\link{ConfidenceIntervals}\verb{  } \tab Confidence intervals  \cr
 \verb{  }\link{Association}\verb{  } \tab Measures  \cr
 \verb{  }\link{Association}\verb{  } \tab Plots  \cr
@@ -142,7 +142,7 @@ accuracy and user-facing behaviour.
 Performance improvements are a core design goal of DescToolsX and a key
 motivation for the package redesign.
 
-aurora is listed in Depends because this package extends its
+pharos is listed in Depends because this package extends its
 user-facing API and expects it to be attached. Functions used internally
 are explicitly imported via the NAMESPACE.
 }
@@ -166,97 +166,36 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Ken Aho [contributor]
   \item Andreas Alfons [contributor]
   \item Nanina Anderegg [contributor]
-  \item Tomas Aragon [contributor]
-  \item Chandima Arachchige [contributor]
+  \item Antonio [contributor]
   \item Antti Arppe [contributor]
-  \item Kamil Barton [contributor]
-  \item Ben Bolker [contributor]
-  \item Hans W. Borchers [contributor]
-  \item Stephane Champely [contributor]
-  \item Daniel Chessel [contributor]
+  \item Markus Brueckl [contributor]
   \item Leanne Chhay [contributor]
-  \item Nicholas Cooper [contributor]
-  \item Michael Dewey [contributor]
   \item Harold C. Doran [contributor]
-  \item Stephane Dray [contributor]
-  \item Charles Dupont [contributor]
-  \item Dirk Eddelbuettel [contributor]
-  \item Claus Ekstrom [contributor]
-  \item Martin Elff [contributor]
-  \item Jeff Enos [contributor]
   \item Romain Francois [contributor]
   \item Matthias Gamer [contributor]
-  \item Vilmantas Gegzna [contributor]
-  \item Sereina Graber [contributor]
-  \item Gabor Grothendieck [contributor]
-  \item Frank E. Harrell Jr [contributor]
-  \item Richard Heiberger [contributor]
-  \item Christian W. Hoffmann [contributor]
-  \item Soeren Hojsgaard [contributor]
-  \item Markus Huerzeler [contributor]
   \item Rob J. Hyndman [contributor]
-  \item Christopher Jackson [contributor]
-  \item Ken Kelly [contributor]
-  \item Mikko Korpela [contributor]
-  \item Max Kuhn [contributor]
-  \item Friederich Leisch [contributor]
-  \item Dong Li [contributor]
   \item Martin Maechler [contributor]
   \item Arni Magnusson [contributor]
-  \item Ben Mainwaring [contributor]
-  \item Alina Matei [contributor]
-  \item Yongyi Min [contributor]
-  \item Cyril Flurin Moser [contributor]
-  \item Franziska Mueller [contributor]
+  \item David Meyer [contributor]
   \item Markus Naepflin [contributor]
   \item Danielle Navarro [contributor]
-  \item Henric Nilsson [contributor]
-  \item Derek Ogle [contributor]
-  \item Hong Ooi [contributor]
-  \item Nick Parsons [contributor]
-  \item Sandrine Pavoine [contributor]
-  \item Bernhard Pfaff [contributor]
-  \item Tony Plate [contributor]
-  \item Luke Prendergast [contributor]
   \item Roland Rapold [contributor]
   \item William Revelle [contributor]
   \item Tyler Rinker [contributor]
-  \item Brian D. Ripley [contributor]
-  \item Caroline Rodriguez [contributor]
   \item Nathan Russell [contributor]
-  \item Nick Sabbe [contributor]
-  \item Ralph Scherer [contributor]
+  \item Luis Gustavo Schuck [contributor]
   \item Michael Smithson [contributor]
-  \item Karline Soetaert [contributor]
   \item Werner A. Stahel [contributor]
-  \item Alec Stephenson [contributor]
-  \item Mark Stevenson [contributor]
   \item Ralf Stubner [contributor]
   \item Matthias Templ [contributor]
-  \item Duncan Temple Lang [contributor]
-  \item Terry Therneau [contributor]
-  \item Yves Tille [contributor]
-  \item Luis Torgo [contributor]
-  \item Adrian Trapletti [contributor]
-  \item Joshua Ulrich [contributor]
-  \item Kevin Ushey [contributor]
-  \item Jeremy VanDerWal [contributor]
-  \item Bill Venables [contributor]
-  \item John Verzani [contributor]
-  \item Pablo J. Villacorta Iglesias [contributor]
   \item Gregory R. Warnes [contributor]
-  \item Hadley Wickham [contributor]
-  \item Rand R. Wilcox [contributor]
-  \item Peter Wolf [contributor]
   \item Daniel Wollschlaeger [contributor]
   \item Joseph Wood [contributor]
-  \item Ying Wu [contributor]
-  \item Thomas Yee [contributor]
   \item Achim Zeileis [contributor]
+  \item OpenAI Codex (AI-assisted code and documentation review; all suggestions reviewed by the maintainer) [contributor]
+  \item Anthropic Claude (AI-assisted code and documentation review; all suggestions reviewed by the maintainer) [contributor]
 }
 
 }
-\keyword{internal}

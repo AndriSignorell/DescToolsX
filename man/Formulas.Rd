@@ -4,19 +4,19 @@
 \alias{Formulas}
 \title{Formula Interface - Common Arguments}
 \arguments{
-\item{formula}{A formula of the form \code{lhs ~ rhs}, where \code{lhs}
+\item{formula}{formula of the form \code{lhs ~ rhs}, where \code{lhs}
 gives the response values and \code{rhs} the corresponding groups
-or explanatory variables.}
+or explanatory variables}
 
-\item{data}{An optional matrix or data frame (or similar; see
+\item{data}{optional matrix or data frame (or similar; see
 \code{\link[stats]{model.frame}}) containing the variables in the
 formula. By default the variables are taken from
 \code{environment(formula)}.}
 
-\item{subset}{An optional vector specifying a subset of observations
-to be used in the analysis.}
+\item{subset}{optional vector specifying a subset of observations
+to be used in the analysis}
 
-\item{na.action}{A function which indicates what should happen when
+\item{na.action}{function indicating what should happen when
 the data contain \code{NA}s. Defaults to
 \code{getOption("na.action")}.}
 }
@@ -38,4 +38,3 @@ See also:
 \item \code{\link[stats]{terms}}
 }
 }
-\keyword{internal}

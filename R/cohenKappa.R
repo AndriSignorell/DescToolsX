@@ -27,35 +27,33 @@
 #' Missing values are handled as \code{\link{table}} does — excluded by
 #' default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
 #'
-#' @param x        A square confusion matrix (or data frame), or a
-#'   categorical vector when \code{y} is provided.
+#' @param x        a square confusion matrix (or data frame), or a
+#'   categorical vector when \code{y} is provided
 #' @param y        \code{NULL} (default) or a categorical vector with
-#'   compatible dimensions to \code{x}.  When supplied,
-#'   \code{table(x, y, \dots)} is computed.  The vector interface is
+#'   compatible dimensions to \code{x}. When supplied,
+#'   \code{table(x, y, \dots)} is computed. The vector interface is
 #'   available for unweighted kappa only (see Details).
-#' @param weights  Either a character string selecting a built-in weight
+#' @param weights  either a character string selecting a built-in weight
 #'   scheme — \code{"unweighted"} (default), \code{"equal-spacing"}, or
 #'   \code{"fleiss-cohen"} — or a numeric matrix with the same dimensions
-#'   as \code{x} supplying user-defined weights for each cell.
-#' @param conf.level Confidence level of the interval.  A single numeric
+#'   as \code{x} supplying user-defined weights for each cell
+#' @param conf.level confidence level of the interval. A single numeric
 #'   value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
 #'   point estimate.
-#' @param sides    A character string specifying the side of the interval:
+#' @param sides    a character string specifying the side of the interval:
 #'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-#'   Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-#'   \code{"right"} sets \code{lci = -Inf}.  Ignored when
+#'   Partial matching is supported. \code{"left"} sets \code{uci = Inf};
+#'   \code{"right"} sets \code{lci = -Inf}. Ignored when
 #'   \code{conf.level = NA}.
-#' @param ...      Further arguments passed to \code{\link{table}} (vector
-#'   interface only), e.g. \code{useNA}.
+#' @param ...      further arguments passed to \code{\link{table}} for the
+#'   vector interface, for example \code{useNA}
 #'
-#' @return
-#' If \code{conf.level = NA}: a single numeric value (kappa).
-#'
-#' If \code{conf.level} is specified: a named numeric vector with elements
+#' @return if \code{conf.level = NA}, a numeric scalar containing kappa;
+#' otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{Kappa estimate.}
-#'   \item{\code{lci}}{Lower confidence bound.}
-#'   \item{\code{uci}}{Upper confidence bound.}
+#'   \item{\code{est}}{point estimate of kappa.}
+#'   \item{\code{lci}}{lower confidence interval bound.}
+#'   \item{\code{uci}}{upper confidence interval bound.}
 #' }
 #'
 #' @note
@@ -78,7 +76,7 @@
 #'   reliability of scoring EEG sleep recordings.
 #'   \emph{American Journal of EEG Technology}, \emph{11}(3), 101–109.
 #'
-#' @seealso \code{\link{kappaM}}, \code{\link[bedrock]{pairApply}}
+#' @seealso \code{\link[bedrock]{pairApply}}
 #'
 #' @examples
 #' # from Bortz et al. (1990), p. 459
