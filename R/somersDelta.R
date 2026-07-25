@@ -110,10 +110,10 @@ somersDelta <- function(x, y = NULL,
     # ============================
     # TABLE MODE
     # ============================
-    # .assocs() handles 'direction' itself in the table path (it picks
+    # ordAssocs() handles 'direction' itself in the table path (it picks
     # colSums vs rowSums for the denominator), so pass it through rather
     # than transposing here.
-    res <- .assocs(
+    res <- ordAssocs(
       x = x,
       which = "somers",
       conf.level = conf.level,
@@ -127,14 +127,14 @@ somersDelta <- function(x, y = NULL,
     # ============================
     # assoc_cpp() always treats its SECOND argument as the dependent
     # variable, so 'direction' has no effect on the vector path of
-    # .assocs() - swapping the vectors is the only way to flip it.
+    # ordAssocs() - swapping the vectors is the only way to flip it.
     if(direction == "column"){
       tmp <- x
       x <- y
       y <- tmp
     }
     
-    res <- .assocs(
+    res <- ordAssocs(
       x = x,
       y = y,
       which = "somers",

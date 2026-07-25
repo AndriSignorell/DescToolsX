@@ -92,6 +92,7 @@ Other assoc.ordinal:
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},
+\code{\link[=ordAssocs]{ordAssocs()}},
 \code{\link[=somersDelta]{somersDelta()}}
 }
 \concept{assoc.ordinal}

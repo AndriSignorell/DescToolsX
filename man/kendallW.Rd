@@ -118,6 +118,7 @@ Other assoc.ordinal:
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
+\code{\link[=ordAssocs]{ordAssocs()}},
 \code{\link[=somersDelta]{somersDelta()}},
 \code{\link[=stuartTauC]{stuartTauC()}}
 }

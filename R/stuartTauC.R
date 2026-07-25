@@ -82,7 +82,7 @@ stuartTauC <- function(x, y = NULL,
                        conf.level = NA,
                        ...){
   
-  res <- .assocs(
+  res <- ordAssocs(
     x = x,
     y = y,
     which = "tauC",

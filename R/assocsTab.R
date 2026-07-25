@@ -8,7 +8,7 @@
 #' mutual information into a single matrix.
 #'
 #' Performs no computation of its own: the concordance-based ordinal
-#' measures come from \code{.assocs()}, the remaining ones from their
+#' measures come from \code{ordAssocs()}, the remaining ones from their
 #' respective exported functions. Its job is to collect them, stage the
 #' level of detail via \code{verbose}, and format the result.
 #'
@@ -35,9 +35,9 @@
   verbose <- .checkVerbose(verbose)
   
   # all association measures combined for table description
-  ords <- .assocs(x, conf.level = conf.level)
+  ords <- ordAssocs(x, conf.level = conf.level)
   
-  # .assocs() returns bare scalars when conf.level is NA and c(est, lci,
+  # ordAssocs() returns bare scalars when conf.level is NA and c(est, lci,
   # uci) otherwise; rbind() would recycle a scalar across all three
   # columns, so pad explicitly. Keeps every row 3 wide and the column
   # names fixed, independent of conf.level and verbose.
@@ -91,23 +91,26 @@ print.AssocsTab <- function(x, digits = 4, ...){
 }
 
 
-#' Concordance-based ordinal association measures (internal calculation engine)
+#' Concordance-based ordinal association measures
 #'
 #' Computes Goodman-Kruskal \eqn{\gamma}, Kendall's \eqn{\tau_a},
 #' \eqn{\tau_b}, \eqn{\tau_c}, Somers' \eqn{D} and the c-statistic for a
 #' pair of ordinal vectors or a contingency table, optionally with
 #' confidence intervals.
 #'
-#' Not exported: this is the shared calculation core behind the exported
-#' one-measure functions \code{gkGamma()}, \code{kendallTauA()},
-#' \code{kendallTauB()}, \code{stuartTauC()} and \code{somersDelta()},
-#' plus the report layer \code{.assocsTab()}. Every measure it produces is
-#' publicly reachable through one of those, so exporting it as well would
-#' only add a second, clumsier route to the same numbers - and one whose
-#' return shape varies with \code{conf.level}. \code{cStat()} is
-#' deliberately NOT a client: it computes the AUC for a score against a
-#' binary outcome with half-weighted ties and bootstrap intervals, a
-#' different estimator from the \code{(somers + 1) / 2} returned here.
+#' This is the shared calculation core: it counts the concordant and
+#' discordant pairs once and derives every measure from them, so requesting
+#' several measures at once is cheaper than calling the single-measure
+#' functions (\code{\link{gkGamma}}, \code{\link{kendallTauA}},
+#' \code{\link{kendallTauB}}, \code{\link{stuartTauC}},
+#' \code{\link{somersDelta}}) separately - each of those wraps this
+#' function for one measure. Use \code{ordAssocs()} directly when a model or
+#' report needs a bundle of them.
+#'
+#' \code{\link{cStat}} is a related but separate estimator: it returns the
+#' AUC of a score against a binary outcome with half-weighted ties and
+#' bootstrap intervals, which differs from the \code{(somers + 1) / 2}
+#' reported here.
 #'
 #' Two computational paths are used:
 #'
@@ -117,8 +120,8 @@ print.AssocsTab <- function(x, digits = 4, ...){
 #'     substantially faster than the table path for large vectors.}
 #'   \item{\code{y = NULL}}{\code{x} is treated as a contingency table;
 #'     concordant and discordant pairs are counted via
-#'     \code{conDisPairs()}.  Confidence intervals are obtained from
-#'     \code{.tableAssocCI()}.}
+#'     \code{\link{conDisPairs}}.  Confidence intervals are obtained from
+#'     \code{.tableAssocCI}.}
 #' }
 #'
 #' Both paths return the same measures - the choice is one of input
@@ -151,8 +154,30 @@ print.AssocsTab <- function(x, digits = 4, ...){
 #'   \item{\code{uci}}{upper confidence interval bound.}
 #' }
 #'
-#' @noRd
-.assocs <- function(x, y = NULL,
+#' @seealso \code{\link{gkGamma}}, \code{\link{kendallTauA}},
+#'   \code{\link{kendallTauB}}, \code{\link{stuartTauC}},
+#'   \code{\link{somersDelta}}, \code{\link{cStat}},
+#'   \code{\link{conDisPairs}}
+#'
+#' @examples
+#' # A bundle of measures from raw vectors, computed in one pass
+#' ord <- ordAssocs(swiss$Fertility, swiss$Agriculture, conf.level = 0.95)
+#' ord$somers
+#' ord$cstat
+#'
+#' # A single measure
+#' ordAssocs(swiss$Fertility, swiss$Agriculture, which = "gamma")
+#'
+#' # From a contingency table
+#' tab <- table(cut(swiss$Fertility, 3), cut(swiss$Education, 3))
+#' ordAssocs(tab)
+#'
+#' @family assoc.ordinal
+#' @concept association-measure
+#' @concept ordinal
+#'
+#' @export
+ordAssocs <- function(x, y = NULL,
                    which = c("all", "gamma", "tauA", "tauB", "tauC", "somers", "cstat"),
                    conf.level = NA,
                    direction = c("row", "column")) {

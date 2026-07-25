@@ -111,6 +111,7 @@ Other assoc.ordinal:
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},
+\code{\link[=ordAssocs]{ordAssocs()}},
 \code{\link[=stuartTauC]{stuartTauC()}}
 }
 \concept{assoc.ordinal}
