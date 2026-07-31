@@ -13,7 +13,8 @@
 #' @param n optional frequency weights. Each element of \code{x}
 #'   is replicated \code{n} times.
 #' @param parameter parameter \eqn{m} controlling sensitivity to concentration;
-#' default is \code{1}
+#' must be strictly positive, default is \code{1}. \code{m = 0} is rejected:
+#' it degenerates to a constant 1 for every input.
 #' @param na.rm logical; whether to remove missing values
 #'
 #' @return numeric scalar containing the Herfindahl index
@@ -50,24 +51,31 @@
 #' 
 #' @seealso \code{\link{gini}}, \code{\link{atkinson}}
 #' 
-#' @family inequality  
-#' @concept inequality  
+#' @family inequality
+#' @concept inequality
 #' @concept concentration-index
-#'
-#'
 #' @export
-herfindahl <- function(x, n = rep(1, length(x)), parameter=1, na.rm = FALSE) {
-  
+herfindahl <- function(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE) {
+
+  # same validation as atkinson(), which shares the family
+  if (!is.numeric(n) || anyNA(n) || any(n < 0, na.rm = TRUE) ||
+      any(n %% 1 != 0, na.rm = TRUE))
+    stop("'n' must be a vector of non-negative whole numbers")
+
+  m <- if (is.null(parameter)) 1 else parameter
+
+  if (!is.numeric(m) || length(m) != 1L || is.na(m) || m <= 0)
+    stop("'parameter' must be a single positive number")
+
   x <- rep(x, n)    # same handling as Lc and Gini
-  
-  if(na.rm) x <- na.omit(x)
+
+  if(na.rm) x <- as.numeric(na.omit(x))
+  if (length(x) == 0L) return(NA_real_)
   if (any(is.na(x)) || any(x < 0)) return(NA_real_)
-  
-  if(is.null(parameter))
-    m <- 1
-  else
-    m <- parameter
-  
+
+  # all shares zero leaves 0/0
+  if (sum(x) == 0) return(NA_real_)
+
   Herf <- x/sum(x)
   Herf <- Herf^(m+1)
   Herf <- sum(Herf)^(1/m)

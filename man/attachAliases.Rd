@@ -4,16 +4,20 @@
 \alias{attachAliases}
 \title{Attach Short Aliases for Selected DescToolsX Functions}
 \usage{
-attachAliases(envir = .GlobalEnv)
+attachAliases(envir = .GlobalEnv, overwrite = FALSE)
 }
 \arguments{
 \item{envir}{the environment into which the aliases are assigned.
 Defaults to \code{.GlobalEnv}.  Supply a different environment
 (e.g. the calling frame via \code{environment()}) if you want
 script-local aliases.}
+
+\item{overwrite}{logical; if \code{TRUE}, objects already present under
+an alias name are replaced. Default is \code{FALSE}, in which case
+such names are skipped with a warning.}
 }
 \value{
-invisibly, a named character vector of the aliases that were
+invisibly, a character vector of the alias names that were
 created
 }
 \description{
@@ -34,15 +38,21 @@ Aliases are plain function objects assigned with \code{\link{assign}()};
 they are indistinguishable from calling the original function directly.
 To remove them, call \code{\link{detachAliases}()} or simply
 \code{rm(or, rr, envir = .GlobalEnv)}.
+
+An existing object of the same name is not overwritten unless
+\code{overwrite = TRUE} is given, so a user's own \code{or} or
+\code{rr} cannot be clobbered by accident.
 }
 \examples{
-attachAliases()
+# aliases are written into an environment; use a local one in scripts
+e <- new.env()
+attachAliases(envir = e)
 
 m <- matrix(c(10, 20, 30, 40), nrow = 2)
-or(m)   # same as oddsRatio(m)
-rr(m)   # same as relRisk(m)
+e$or(m)   # same as oddsRatio(m)
+e$rr(m)   # same as relRisk(m)
 
-detachAliases()
+detachAliases(envir = e)
 
 }
 \seealso{

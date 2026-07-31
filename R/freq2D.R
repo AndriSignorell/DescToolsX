@@ -43,9 +43,8 @@
 #' freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 #' 
 #' @rdname freq2D
-#' @family frequency  
+#' @family frequency
 #' @concept frequency-table
-#'
 #' @export
 freq2D <- function(x, ...)
 {
@@ -55,9 +54,15 @@ freq2D <- function(x, ...)
 
 #' @rdname freq2D
 #' @export
-freq2D.formula <- function(formula, data, subset, na.action, 
+freq2D.formula <- function(x, data, subset, na.action,
                            n=20, pad=0, dnn=NULL, ...) {
-  
+
+  # the generic is freq2D(x, ...), so the first formal has to be named x -
+  # 'formula' here triggered the S3 generic/method consistency check in
+  # R CMD check, and blandAltmanData.formula() in this package already
+  # uses x
+  formula <- x
+
   if (missing(formula) || length(formula) != 3L)
     stop("'formula' missing or incorrect")
   
@@ -66,7 +71,7 @@ freq2D.formula <- function(formula, data, subset, na.action,
   subset_expr <- if (!missing(subset)) substitute(subset) else NULL
   na_expr     <- if (!missing(na.action)) substitute(na.action) else NULL
   
-  pf <- resolveFormula(
+  pf <- bedrock::resolveFormula(
     formula   = formula,
     data      = data,
     subset    = subset_expr,
@@ -129,8 +134,14 @@ freq2D.default <- function(x, y, n=20, pad=0, dnn=NULL, ...) {
   z <- table(xfac, yfac, dnn=c(xname,yname))
   
   ## 4  Remove existing edges with only zeros
-  z <- z[cumsum(rowSums(z))>0, cumsum(colSums(z))>0]
-  z <- z[rev(cumsum(rev(rowSums(z))))>0, rev(cumsum(rev(colSums(z))))>0]
+  # drop = FALSE: trimming down to a single row or column turned the table
+  # into a vector, and rowSums() on the next line then failed
+  z <- z[cumsum(rowSums(z))>0, cumsum(colSums(z))>0, drop = FALSE]
+  z <- z[rev(cumsum(rev(rowSums(z))))>0, rev(cumsum(rev(colSums(z))))>0,
+         drop = FALSE]
+
+  if (nrow(z) == 0L || ncol(z) == 0L)
+    stop("no non-empty bins remain; check 'x' and 'y' for missing values")
   
   ## 5  Add edges with only zeros
   for(i in seq_len(pad))
@@ -141,36 +152,8 @@ freq2D.default <- function(x, y, n=20, pad=0, dnn=NULL, ...) {
     names(dimnames(tmp)) <- names(dimnames(z))
     z <- tmp
   }
-  
-  # ## 5  Prepare output
-  # xnum <- as.numeric(rownames(z))
-  # ynum <- as.numeric(colnames(z))
-  
-  t(z)[ncol(z):1,]
-  
-  # if(layout == 1)
-  # {
-  #   output <- t(z)[ncol(z):1,]
-  #   if(print)
-  #   {
-  #     print.table(output, zero.print=".")
-  #     return(invisible(output))
-  #   }
-  #   else
-  #   {
-  #     return(output)
-  #   }
-  # }
-  # else if(layout == 2)
-  # {
-  #   output <- list(x=xnum, y=ynum, z=z)
-  #   return(output)
-  # }
-  # else  # layout 3
-  # {
-  #   output <- data.frame(x=rep(xnum,length(ynum)), y=rep(ynum,each=length(xnum)), z=c(z))
-  #   names(output) <- make.names(c(xname,yname,"Freq"), unique=TRUE)
-  #   return(output)
-  # }
-  
+
+  ## 5  Prepare output: rows are the y bins in descending order
+  t(z)[rev(seq_len(ncol(z))), , drop = FALSE]
+
 }

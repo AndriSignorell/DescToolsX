@@ -23,10 +23,15 @@ deciles.}
 \item{labels}{labels for the levels of the resulting category. By default,
 labels are defined as \code{Q1}, \code{Q2}, and so on. The argument is
 passed to \code{\link{cut}}, so \code{labels = FALSE} returns integer codes
-instead of a factor.}
+instead of a factor. When quantiles are tied, the levels are built from
+the observed interval bounds instead and \code{labels} is ignored - a
+warning is issued in that case.}
 
-\item{na.rm}{logical. Should missing values be removed when computing
-quantiles? Defaults to \code{TRUE}.}
+\item{na.rm}{logical. Should missing values be removed before the
+quantiles are computed? Defaults to \code{FALSE}. Note that the
+quantiles themselves are always taken with \code{na.rm = TRUE}; this
+argument decides whether the missing values are dropped from the
+returned factor as well.}
 
 \item{\dots}{optional arguments passed to \code{\link{cut}}}
 }
@@ -53,7 +58,7 @@ Based on code by Gregory R. Warnes, adapted to conform to package standards.
 \examples{
 
 # create example data
-\testonly{set.seed(1234)}
+set.seed(1234)
 x <- rnorm(1000)
 
 # cut into quartiles
@@ -76,6 +81,7 @@ table(deciles) # note that there are only 5 groups (not 10)
 \code{\link{cut}}, \code{\link{quantile}}
 
 Other cut:
+\code{\link[=cut.integer]{cut.integer()}},
 \code{\link[=cutAge]{cutAge()}}
 }
 \concept{binning}

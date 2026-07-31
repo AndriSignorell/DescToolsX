@@ -14,7 +14,7 @@ expFreq(x, freq = c("abs", "rel"))
 }
 \value{
 a table with either the absolute or the relative expected
-frequencies
+frequencies, of the same dimension and dimnames as \code{x}
 }
 \description{
 Calculate the expected frequencies of an n-way table assuming independence.

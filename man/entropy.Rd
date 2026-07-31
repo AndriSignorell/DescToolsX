@@ -4,10 +4,11 @@
 \alias{entropy}
 \title{Shannon Entropy}
 \usage{
-entropy(x, y = NULL, base = 2, normalize = FALSE, ...)
+entropy(x, y = NULL, base = 2, normalize = FALSE, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{a vector, table, matrix, or array of counts}
+\item{x}{a table, matrix or array of counts, or a categorical vector
+(factor, character or logical), which is tabulated first}
 
 \item{y}{an optional second variable used together with
 \code{x} to create a contingency table via
@@ -19,13 +20,17 @@ entropy(x, y = NULL, base = 2, normalize = FALSE, ...)
 If \code{TRUE}, entropy is normalized to the interval
 \eqn{[0,1]}.}
 
+\item{na.rm}{logical; if \code{TRUE}, missing counts are dropped. A
+categorical \code{x} is tabulated with \code{\link{table}}, which
+excludes \code{NA} by default in any case.}
+
 \item{...}{additional arguments passed to \code{table()}}
 }
 \value{
 a numeric scalar containing the entropy
 }
 \description{
-Computes the Shannon entropy of a vector, contingency table,
+Computes the Shannon entropy of a categorical vector, contingency table,
 or matrix.
 }
 \details{
@@ -33,7 +38,7 @@ Entropy is defined as:
 
 \deqn{
 H(X) = - \sum_i p_i \log_b(p_i)
-}
+}{H(X) = -sum(p * log(p, base = b))}
 
 where \eqn{p_i} are empirical probabilities and
 \eqn{b} is the logarithm base.
@@ -47,18 +52,27 @@ base = 10 \tab entropy in bans
 }
 
 Zero probabilities are ignored in the summation.
+
+\code{normalize = TRUE} divides by \eqn{\log_b k}, with \eqn{k} the
+number of \emph{occupied} categories rather than the number of possible
+ones. The maximum of 1 is therefore reached whenever the observed
+categories are equally frequent, independently of how many empty levels
+the input carries. With a single occupied category the normalized value
+is 0.
 }
 \examples{
 x <- c("A", "A", "B", "B", "C")
 
 entropy(x)
 
-tab <- matrix( c(10, 20,
-                 30, 40), nrow = 2 )
-                 
+tab <- matrix(c(10, 20,
+                30, 40), nrow = 2)
+
 entropy(tab)
 entropy(tab, normalize = TRUE)
 
+# a fair coin carries exactly one bit
+entropy(c(50, 50))
 
 }
 \references{
@@ -69,7 +83,7 @@ Bell System Technical Journal, 27, 379-423.
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=divCoef]{divCoef()}},
+\code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},

@@ -33,9 +33,8 @@ point estimate.}
 
 \item{sides}{a character string specifying the side of the interval:
 \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported. \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}. Ignored when
-\code{conf.level = NA}.}
+Partial matching is supported. Ignored when \code{conf.level = NA}.
+See Details.}
 
 \item{method}{confidence interval method: \code{"normal"} (delta-method
 approximation, default) or \code{"boot"} (bootstrap via
@@ -61,7 +60,8 @@ with a confidence interval via a normal approximation or bootstrap.
 \details{
 The Brier score is defined as
 \deqn{BS = \frac{1}{n}\sum_{i=1}^n
-  \bigl[y_i(1-\hat p_i)^2 + (1-y_i)\hat p_i^2\bigr]}
+  \bigl[y_i(1-\hat p_i)^2 + (1-y_i)\hat p_i^2\bigr]}{
+  BS = mean(y * (1 - p)^2 + (1 - y) * p^2)}
 where \eqn{y_i \in \{0,1\}} and \eqn{\hat p_i} is the predicted
 probability.  Lower is better; a perfect model scores 0.
 
@@ -69,11 +69,21 @@ The scaled Brier score (\code{scaled = TRUE}) expresses skill relative
 to the climatological baseline \eqn{BS_{\max}}, yielding 1 for a
 perfect model and 0 for the no-skill reference.
 
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+\eqn{(-\infty, uci]}. This is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+\code{\link[stats]{t.test}}.
+
 \strong{Normal interval} (\code{method = "normal"})
 
 A delta-method normal approximation based on the variance of the
 per-observation Brier losses.  Fast and deterministic; reliable for
-moderate to large samples.
+moderate to large samples.  With \code{scaled = TRUE} the standard error
+is carried onto the skill scale by dividing through \eqn{BS_{\max}},
+which is treated as fixed; the interval therefore ignores the sampling
+variability of the baseline and is mildly anti-conservative. Prefer
+\code{method = "boot"} for scaled scores.
 
 \strong{Bootstrap interval} (\code{method = "boot"})
 

@@ -105,8 +105,8 @@ Newbury Park, CA: Sage, pp. 17--24
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=entropy]{entropy()}},
+\code{\link[=gkTau]{gkTau()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},
 \code{\link[=tschuprowT]{tschuprowT()}},

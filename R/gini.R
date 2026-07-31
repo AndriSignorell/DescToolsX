@@ -23,8 +23,10 @@
 #' \code{"two.sided"} (default), \code{"left"}, or \code{"right"}
 #' @param method confidence interval method; currently only \code{"boot"} is
 #' supported
-#' @param unbiased logical; whether to apply the bias correction factor
-#' \eqn{1/(1 - \sum w_i^2)}
+#' @param unbiased logical; whether to apply the small-sample bias
+#' correction factor \eqn{n/(n-1)}, with \eqn{n} the effective sample size
+#' (the sum of the weights). For unweighted data this is the usual
+#' \eqn{1/(1 - \sum w_i^2)}.
 #' @param weights optional non-negative numeric vector with the same length as
 #' \code{x}
 #' @param na.rm logical; whether to remove missing values before computation
@@ -67,13 +69,20 @@
 #' gini(x, conf.level = 0.95, R = 499)
 #'
 
-#' @family inequality  
-#' @concept inequality  
+#' @details
+#' \code{sides} names the side on which the finite bound lies: \code{"left"}
+#' yields an interval bounded below, \code{"right"} one bounded above. The
+#' coefficient is bounded, so the open side is reported at the range
+#' boundary (0 or 1) rather than as \eqn{\pm\infty} (design_rules.md 4.1).
+#'
+#' @section Random number generation:
+#' A confidence level triggers a bootstrap and therefore advances R's
+#' global random number generator. Call \code{\link[base]{set.seed}}
+#' beforehand for reproducible intervals.
+#'
+#' @family inequality
+#' @concept inequality
 #' @concept concentration-index
-#'
-#'
-
-
 #' @export
 gini <- function(x, 
                  conf.level = NA,
@@ -118,35 +127,46 @@ gini <- function(x,
   
   
   # --- core gini ---
-  i.gini <- function(x, w, unbiased = FALSE) {
-    
+  .giniCore <- function(x, w, unbiased = FALSE) {
+
     o <- order(x)
     x <- x[o]
     w <- w[o]
-    
+
     wsum <- sum(w)
-    w <- w / wsum
-    
-    cw <- cumsum(w)
-    F <- cw - w / 2
-    
-    mu <- sum(w * x)
-    
+    wn <- w / wsum
+
+    cw <- cumsum(wn)
+    # 'F' as a local name shadows the base alias for FALSE
+    midF <- cw - wn / 2
+
+    mu <- sum(wn * x)
+
     if (mu == 0)
       return(0)
-    
-    G <- sum(w * x * (2 * F - 1)) / mu
-    
-    if (unbiased)
-      G <- G / (1 - sum(w^2))
-    
+
+    G <- sum(wn * x * (2 * midF - 1)) / mu
+
+    # The correction used to be 1/(1 - sum(wn^2)) on the NORMALIZED
+    # weights, which makes it depend on how the sample is expressed
+    # rather than on its size: gini(c(10, 0), weights = c(2, 3)) gave
+    # 1.25 - outside [0, 1] - while the equivalent replicated vector
+    # c(0,0,0,10,10) gave 0.75. Weights are documented as frequency
+    # weights, so the effective sample size is their sum, and n/(n-1)
+    # reproduces the old (correct) value for unweighted data exactly.
+    if (unbiased) {
+      if (wsum <= 1)
+        stop("the bias correction needs an effective sample size above 1")
+      G <- G * wsum / (wsum - 1)
+    }
+
     G
   }
   
   
   # --- no CI ---
   if (is.na(conf.level)) {
-    return(i.gini(x, weights, unbiased = unbiased))
+    return(.giniCore(x, weights, unbiased = unbiased))
   }
   
   
@@ -162,7 +182,7 @@ gini <- function(x,
   boot.fun <- boot::boot(
     data = x,
     statistic = function(z, i, u, unbiased)
-      i.gini(z[i], u[i], unbiased),
+      .giniCore(z[i], u[i], unbiased),
     R = boot_args$R,
     u = weights,
     unbiased = unbiased,
@@ -176,15 +196,23 @@ gini <- function(x,
     type = boot_args$type
   )
   
-  if (boot_args$type == "norm") {
-    res <- c(est = boot.fun$t0,
-             lci = ci[[4]][2],
-             uci = ci[[4]][3])
-  } else {
-    res <- c(est = boot.fun$t0,
-             lci = ci[[4]][4],
-             uci = ci[[4]][5])
-  }
-  
-  res
+  # ci[[4]] happens to be the first interval component, but naming it is
+  # both clearer and safe if boot.ci ever gains a component
+  ciMat <- ci[[switch(boot_args$type,
+                      norm = "normal", basic = "basic", stud = "student",
+                      perc = "percent", bca = "bca")]]
+
+  bounds <- if (boot_args$type == "norm") ciMat[2:3] else ciMat[4:5]
+
+  # The one-sided case doubled alpha above and then did nothing with it:
+  # gini(x, conf.level = 0.95, sides = "left") returned a two-sided 90%
+  # interval labelled as one-sided. Gini is bounded, so the open side goes
+  # to the range boundary.
+  lci <- max(bounds[1L], 0)
+  uci <- min(bounds[2L], 1)
+
+  if (sides == "left")  uci <- 1
+  if (sides == "right") lci <- 0
+
+  c(est = unname(boot.fun$t0), lci = unname(lci), uci = unname(uci))
 }

@@ -23,8 +23,8 @@ compatible dimensions to \code{x}. When supplied,
 available for unweighted kappa only (see Details).}
 
 \item{weights}{either a character string selecting a built-in weight
-scheme — \code{"unweighted"} (default), \code{"equal-spacing"}, or
-\code{"fleiss-cohen"} — or a numeric matrix with the same dimensions
+scheme -- \code{"unweighted"} (default), \code{"equal-spacing"}, or
+\code{"fleiss-cohen"} -- or a numeric matrix with the same dimensions
 as \code{x} supplying user-defined weights for each cell}
 
 \item{conf.level}{confidence level of the interval. A single numeric
@@ -33,9 +33,8 @@ point estimate.}
 
 \item{sides}{a character string specifying the side of the interval:
 \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported. \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}. Ignored when
-\code{conf.level = NA}.}
+Partial matching is supported. Ignored when \code{conf.level = NA}.
+See Details.}
 
 \item{...}{further arguments passed to \code{\link{table}} for the
 vector interface, for example \code{useNA}}
@@ -59,9 +58,9 @@ frequencies, corrected for chance agreement and standardised by its
 maximum value.
 
 The equal-spacing weights (Cicchetti & Allison, 1971) are defined as
-\deqn{1 - \frac{|i - j|}{r - 1}}
+\deqn{1 - \frac{|i - j|}{r - 1}}{1 - |i - j| / (r - 1)}
 and the Fleiss-Cohen weights as
-\deqn{1 - \frac{(i - j)^2}{(r - 1)^2}}
+\deqn{1 - \frac{(i - j)^2}{(r - 1)^2}}{1 - (i - j)^2 / (r - 1)^2}
 where \eqn{r} is the number of rows/columns.  The Fleiss-Cohen weights
 attach greater importance to closer disagreements.
 
@@ -73,8 +72,17 @@ an error if \code{weights} is not \code{"unweighted"} and \code{y} is
 supplied, because the level ordering of two independent factors cannot
 be guaranteed to be consistent when constructing the confusion table.
 
-Missing values are handled as \code{\link{table}} does — excluded by
+Missing values are handled as \code{\link{table}} does -- excluded by
 default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields an interval bounded below, with the upper limit
+fixed at 1, and \code{"right"} one bounded above, with the lower limit
+fixed at -1. Kappa is a bounded parameter, so the open side is reported
+at the range boundary rather than as \eqn{\pm\infty} (design_rules.md
+4.1), matching \code{\link{ccc}}. This is the reverse of the convention
+in \pkg{DescTools}, where \code{sides} follows the alternative
+hypothesis of \code{\link[stats]{t.test}}.
 }
 \note{
 Based on code by David Meyer, adapted to conform to package standards.
@@ -84,8 +92,8 @@ Based on code by David Meyer, adapted to conform to package standards.
 m <- matrix(c(53,  5, 2,
               11, 14, 5,
                1,  6, 3), nrow = 3, byrow = TRUE,
-            dimnames = list(rater1 = c("V","N","P"),
-                            rater2 = c("V","N","P")))
+            dimnames = list(rater1 = c("V", "N", "P"),
+                            rater2 = c("V", "N", "P")))
 
 cohenKappa(m)
 cohenKappa(m, conf.level = 0.95)
@@ -95,7 +103,7 @@ x <- bedrock::untable(m)
 cohenKappa(x$rater1, x$rater2)
 
 # equal-spacing weights
-cats <- c("<10\%","11-20\%","21-30\%","31-40\%","41-50\%",">50\%")
+cats <- c("<10\%", "11-20\%", "21-30\%", "31-40\%", "41-50\%", ">50\%")
 mw <- matrix(
   c(5,8,1,2,4,2, 3,5,3,5,5,0, 1,2,6,11,2,1,
     0,1,5,4,3,3, 0,0,1,2,5,2, 0,0,1,2,1,4),
@@ -113,28 +121,28 @@ rating <- data.frame(
   rtr1 = c(4,2,2,5,2,1,3,1,1,5,1,1,2,1,2,3,1,1,2,1,5,2,2,1,1,2,1,2,1,5),
   rtr2 = c(4,2,3,5,2,1,3,1,1,5,4,2,2,4,2,3,1,1,2,3,5,4,2,1,4,2,1,2,3,5))
 
-pairApply(rating, FUN = cohenKappa, symmetric = TRUE)
+bedrock::pairApply(rating, FUN = cohenKappa, symmetric = TRUE)
 
 }
 \references{
 Cohen, J. (1960). A coefficient of agreement for nominal scales.
 \emph{Educational and Psychological Measurement}, \emph{20}(1),
-37–46.
+37--46.
 
 Everitt, B. S. (1968). Moments of statistics kappa and weighted kappa.
 \emph{The British Journal of Mathematical and Statistical Psychology},
-\emph{21}(1), 97–103.
+\emph{21}(1), 97--103.
 
 Fleiss, J. L., Cohen, J., & Everitt, B. S. (1969). Large sample
 standard errors of kappa and weighted kappa.
-\emph{Psychological Bulletin}, \emph{72}(5), 323–327.
+\emph{Psychological Bulletin}, \emph{72}(5), 323--327.
 
 Cicchetti, D. V., & Allison, T. (1971). A new procedure for assessing
 reliability of scoring EEG sleep recordings.
-\emph{American Journal of EEG Technology}, \emph{11}(3), 101–109.
+\emph{American Journal of EEG Technology}, \emph{11}(3), 101--109.
 }
 \seealso{
-\code{\link[bedrock]{pairApply}}
+\code{\link[bedrock]{pairApply}}, \code{\link{ccc}}
 
 Other assoc.agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},

@@ -12,9 +12,10 @@ gkTau(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 \item{y}{\code{NULL} (default) or a vector with compatible dimensions to
 \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.}
 
-\item{direction}{direction of the calculation. Must be \code{"row"} (default)
-or \code{"column"}, where \code{"row"} calculates Goodman Kruskal's tau-a
-(R|C) ("column dependent").}
+\item{direction}{direction of the calculation. Must be \code{"row"}
+(default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
+variable is the dependent one and is predicted from the column variable;
+\code{"column"} gives tau (C|R).}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
@@ -117,20 +118,20 @@ Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 Newbury Park, CA: Sage, pp. 24--30
 }
 \seealso{
-There's another implementation of gamma in \pkg{vcdExtra}
-\code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
+\code{\link{lambda}}, \code{\link{cramerV}},
+\code{\link{Association}}
 
-Other assoc.ordinal:
-\code{\link[=cStat]{cStat()}},
-\code{\link[=conDisPairs]{conDisPairs()}},
-\code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=kendallTauA]{kendallTauA()}},
-\code{\link[=kendallTauB]{kendallTauB()}},
-\code{\link[=kendallW]{kendallW()}},
-\code{\link[=ordAssocs]{ordAssocs()}},
-\code{\link[=somersDelta]{somersDelta()}},
-\code{\link[=stuartTauC]{stuartTauC()}}
+Other assoc.nominal:
+\code{\link[=contCoef]{contCoef()}},
+\code{\link[=cramerV]{cramerV()}},
+\code{\link[=entropy]{entropy()}},
+\code{\link[=lambda]{lambda()}},
+\code{\link[=mutInf]{mutInf()}},
+\code{\link[=phi]{phi()}},
+\code{\link[=tschuprowT]{tschuprowT()}},
+\code{\link[=uncertCoef]{uncertCoef()}},
+\code{\link{yule}}
 }
-\concept{assoc.ordinal}
+\concept{assoc.nominal}
 \concept{association-measure}
-\concept{ordinal}
+\concept{nominal}

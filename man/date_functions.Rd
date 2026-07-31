@@ -30,11 +30,11 @@
 \alias{month.default}
 \title{Basic Date Functions}
 \usage{
-year(x)
+year(x, ...)
 
-\method{year}{ym}(x)
+\method{year}{ym}(x, ...)
 
-\method{year}{default}(x)
+\method{year}{default}(x, ...)
 
 month(
   x,
@@ -106,6 +106,10 @@ isLeapYear(x)
 \item{x}{a \code{Date}, \code{POSIXct}, \code{POSIXlt}, or \code{ym} object
 to evaluate}
 
+\item{...}{further arguments passed to methods. \code{year()} is generic
+and carries them for the sake of S3 consistency; none of the methods
+currently uses them.}
+
 \item{fmt}{format code controlling the output of \code{month()} and
 \code{weekday()}.\cr
 For \code{month()}: \code{"m"} = integer (default), \code{"mm"} =
@@ -122,9 +126,10 @@ option if set; otherwise \code{"local"} is used.}
 from \code{month()} and \code{weekday()} are returned as ordered factors
 whose levels follow calendar order}
 
-\item{method}{calculation convention: \code{"eu"} (European, default) or
-\code{"us"} (US) for \code{diffDays360()} and \code{week()}/
-\code{yearWeek()}}
+\item{method}{calculation convention. For \code{diffDays360()} either
+\code{"eu"} (European, default) or \code{"us"} (US); for \code{week()}
+and \code{yearWeek()} either \code{"iso"} (ISO 8601, default) or
+\code{"us"}. The two sets are not interchangeable.}
 
 \item{value}{replacement value for the \code{day<-} assignment function}
 
@@ -139,7 +144,7 @@ integer-valued components, an ordered factor or character vector when
 }
 \description{
 Convenience wrappers for extracting date/time components and performing
-common date calculations — a readable alternative to \code{\link{format}()}
+common date calculations - a readable alternative to \code{\link{format}()}
 and its cryptic format codes.
 }
 \section{Date component extractors}{
@@ -147,12 +152,12 @@ and its cryptic format codes.
 \tabular{lll}{
 \bold{Function}    \tab \bold{Returns}                                          \tab \bold{Range / Notes} \cr
 \code{year}        \tab Year of a date or \code{ym} object                     \tab \code{yyyy} \cr
-\code{quarter}     \tab Quarter of the year                                    \tab 1–4 \cr
-\code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1–12; S3 dispatch for \code{ym} \cr
+\code{quarter}     \tab Quarter of the year                                    \tab 1-4 \cr
+\code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for \code{ym} \cr
 \code{week}        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
-\code{day}         \tab Day of the month (readable/writable)                   \tab 1–31 \cr
-\code{weekday}     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon … 7 = Sun \cr
-\code{yearDay}     \tab Day of the year                                        \tab 1–366 \cr
+\code{day}         \tab Day of the month (readable/writable)                   \tab 1-31 \cr
+\code{weekday}     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon ... 7 = Sun \cr
+\code{yearDay}     \tab Day of the year                                        \tab 1-366 \cr
 \code{yearWeek}    \tab Compact year-week integer                              \tab \code{yyyyww} (ISO or US) \cr
 \code{yearMonth}   \tab Compact year-month integer                             \tab \code{yyyymm} \cr
 }
@@ -162,9 +167,9 @@ and its cryptic format codes.
 
 \tabular{ll}{
 \bold{Function}  \tab \bold{Returns} \cr
-\code{hour}      \tab Hour (0–23) \cr
-\code{minute}    \tab Minute (0–59) \cr
-\code{second}    \tab Second (0–60) \cr
+\code{hour}      \tab Hour (0-23) \cr
+\code{minute}    \tab Minute (0-59) \cr
+\code{second}    \tab Second (0-60) \cr
 \code{timezone}  \tab Time zone string \cr
 \code{now}       \tab Current date and time (\code{Sys.time()}) \cr
 \code{today}     \tab Current date (\code{Sys.Date()}) \cr
@@ -187,7 +192,7 @@ and its cryptic format codes.
 \code{diffDays360}     \tab Days between two dates using the 360-day calendar convention \cr
 \code{lastDayOfMonth}  \tab Last calendar day of the month of \code{x} \cr
 \code{yearDays}        \tab Total number of days in the year of \code{x} (365 or 366) \cr
-\code{monthDays}       \tab Number of days in the month of \code{x} (28–31) \cr
+\code{monthDays}       \tab Number of days in the month of \code{x} (28-31) \cr
 }
 }
 
@@ -243,9 +248,13 @@ lastDayOfMonth(as.Date(c("2014-10-12", "2013-01-31", "2011-12-05")))
 monthDays(x)
 yearDays(x)
 
-# 360-day calendar difference
+# 360-day calendar difference. The two conventions agree here ...
 diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"))
 diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"), method = "us")
+
+# ... but not here, which is the point of having both
+diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28"))
+diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28"), method = "us")
 
 
 }

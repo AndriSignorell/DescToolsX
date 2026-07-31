@@ -79,7 +79,6 @@ Other assoc.ordinal:
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},
 \code{\link[=ordAssocs]{ordAssocs()}},

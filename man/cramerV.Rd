@@ -52,6 +52,12 @@ a contingency table (see \link{Association}).
 }
 \details{
 Cramer's V ranges from 0 to 1, with 0 indicating statistical independence.
+
+\code{correct = TRUE} applies Bergsma's bias correction to the point
+estimate \emph{and} to the interval: both are put through the same
+transformation of the chi-squared statistic, so estimate and bounds
+always live on the same scale. Formerly the two noncentral chi-squared
+methods returned an uncorrected interval around a corrected estimate.
 }
 \note{
 Based on code by  Michael Smithson (confidence intervals),
@@ -66,33 +72,34 @@ cramerV(tab)
 cramerV(Pizza$driver, Pizza$wine_delivered)
 
 # data.frame
-bedrock::pairApply(Pizza[,c("driver","operator","area")], cramerV, symmetric = TRUE)
+bedrock::pairApply(Pizza[, c("driver", "operator", "area")], cramerV,
+                   symmetric = TRUE)
 
+# useNA is passed on to table()
+bedrock::pairApply(Pizza[, c("driver", "operator", "area")], cramerV,
+                   useNA = "ifany", symmetric = TRUE)
 
-# useNA is passed to table
-bedrock::pairApply(Pizza[,c("driver","operator","area")], cramerV,
-          useNA="ifany", symmetric = TRUE)
-
-d.frm <- Pizza[,c("driver","operator","area")]
-bedrock::pairApply(d.frm[complete.cases(d.frm),], cramerV, symmetric = TRUE)
+d.frm <- Pizza[, c("driver", "operator", "area")]
+bedrock::pairApply(d.frm[complete.cases(d.frm), ], cramerV, symmetric = TRUE)
 
 
 # Bootstrap confidence intervals for Cramer's V
 # http://support.sas.com/documentation/cdl/en/statugfreq/63124/PDF/default/statugfreq.pdf, p. 1821
 
 tab <- as.table(rbind(
-  c(26,26,23,18, 9),
-  c( 6, 7, 9,14,23)))
+  c(26, 26, 23, 18,  9),
+  c( 6,  7,  9, 14, 23)))
 d.frm <- bedrock::untable(tab)
 
+set.seed(1)
 n <- 1000
-idx <- matrix(sample(nrow(d.frm), size=nrow(d.frm) * n, replace=TRUE), ncol=n, byrow=FALSE)
-v <- apply(idx, 2, function(x) cramerV(d.frm[x,1], d.frm[x,2]))
-quantile(v, probs=c(0.025,0.975))
+idx <- matrix(sample(nrow(d.frm), size = nrow(d.frm) * n, replace = TRUE),
+              ncol = n, byrow = FALSE)
+v <- apply(idx, 2, function(x) cramerV(d.frm[x, 1], d.frm[x, 2]))
+quantile(v, probs = c(0.025, 0.975))
 
 # compare this to the analytical ones
-cramerV(tab, conf.level=0.95)
-
+cramerV(tab, conf.level = 0.95)
 
 }
 \references{
@@ -112,8 +119,8 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=entropy]{entropy()}},
+\code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},

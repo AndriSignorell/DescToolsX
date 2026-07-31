@@ -23,8 +23,13 @@ The generations are defined as:\cr
 
 \tabular{ll}{ \code{1946-1964} \verb{ } \tab Babyboomer\cr \code{1965-1979}
 \tab Generation X \cr \code{1980-1995} \tab Generation Y - also known as
-Millennials\cr \code{1996-2010} \tab Generation Z \cr \code{2011-2025} \tab
-Generation Alpha\cr }
+Millennials\cr \code{1996-2010} \tab Generation Z \cr \code{2011 and later}
+\tab Generation Alpha\cr }
+
+The last class is left open at the top. The table formerly gave it as
+1946-2025 while the code used \code{Inf}, so a birth year of 2026 was
+documented as \code{NA} and returned as \code{"Gen Alpha"}. Naming the
+successor generation is not settled enough to hard-code an upper bound.
 }
 \examples{
 

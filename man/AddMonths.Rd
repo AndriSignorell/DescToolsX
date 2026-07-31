@@ -10,14 +10,15 @@ addMonths(x, n, ...)
 \item{x}{a Date object, or an object coercible to one by
 \code{\link{as.Date}}(x, ...), to which months are added}
 
-\item{n}{number of months to add. Negative values subtract months.}
+\item{n}{number of months to add, a whole number. Negative values
+subtract months.}
 
 \item{\dots}{further arguments passed to \code{\link{as.Date}}, for example
-to supply \code{origin}}
+to supply \code{origin} or \code{tz}}
 }
 \value{
-a vector of class \code{Date} with the same dimension as \code{x},
-containing the transformed dates
+a vector of class \code{Date}, of the length of the longer of
+\code{x} and \code{n}, containing the transformed dates
 }
 \description{
 Naively adding months to a date can produce invalid dates, for example
@@ -26,7 +27,14 @@ valid date: adding one month to \code{as.Date("2013-01-31")} returns
 \code{"2013-02-28"}. Negative values of \code{n} subtract months.
 }
 \details{
-All parameters are recycled if necessary.
+All parameters are recycled if necessary. The result is always of class
+\code{Date}, also when \code{x} is supplied as \code{POSIXct} or as a
+character string; time-of-day information is therefore dropped. Note that
+\code{\link{as.Date}} converts a \code{POSIXct} in UTC by default, which
+can shift the calendar day - pass \code{tz} through \code{\dots} to
+control this.
+
+Missing values in either argument propagate to \code{NA}.
 }
 \note{
 Based on code by Roland Rapold and Antonio, adapted to conform to package standards.
@@ -39,18 +47,20 @@ addMonths("2013-01-31", 1)
 # negative n
 addMonths(as.Date("2013-03-31"), -1)
 
-# Arguments will be recycled
+# arguments will be recycled
 # (with warning if the longer is not a multiple of length of shorter)
-addMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1,-1))
+addMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1, -1))
 
+# missing values propagate
+addMonths(c("2013-01-31", NA), 1)
 
-x <- as.POSIXct(c("2015-01-31", "2015-08-31"))
-n <- c(1, 3)
-addMonths(x, n)
+# POSIXct input is converted to Date first; supply tz to pin the day down
+x <- as.POSIXct(c("2015-01-31", "2015-08-31"), tz = "UTC")
+addMonths(x, c(1, 3), tz = "UTC")
 
 # mind the origin if x supplied as numeric ...
 x <- as.numeric(as.Date(x))
-addMonths(x, n, origin=as.Date("1970-01-01"))
+addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 
 }
 \references{

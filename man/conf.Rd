@@ -18,7 +18,7 @@
 \usage{
 conf(x, ...)
 
-\method{conf}{table}(x, pos = NULL, ...)
+\method{conf}{table}(x, pos = NULL, conf.level = 0.95, ...)
 
 \method{conf}{default}(x, ref, pos = NULL, na.rm = TRUE, ...)
 
@@ -46,7 +46,8 @@ conf(x, ...)
 \item{x}{object containing predictions; one of:
 \itemize{
 \item a factor or character vector of predicted classes
-\item a confusion matrix (\code{table} or \code{matrix})
+\item a confusion matrix (\code{table} or \code{matrix}) with
+\strong{predictions in the rows and references in the columns}
 \item a fitted model object (e.g., \code{glm}, \code{rpart})
 }}
 
@@ -55,6 +56,9 @@ conf(x, ...)
 \item{pos}{optional character specifying the positive class (binary
 classification only). If \code{NULL}, the second level is used and
 a message is issued.}
+
+\item{conf.level}{confidence level for the accuracy interval; defaults
+to 0.95}
 
 \item{ref}{optional reference (true labels). Required for the default
 method.}
@@ -77,6 +81,7 @@ an object of class \code{"Conf"} containing:
 \item{\code{diag}}{number of correct predictions}
 \item{\code{n}}{total number of observations}
 \item{\code{acc}, \code{acc.lci}, \code{acc.uci}}{accuracy and CI}
+\item{\code{conf.level}}{confidence level used for the accuracy CI}
 \item{\code{nir}}{no-information rate}
 \item{\code{acc.pval}}{p-value for accuracy greater than the
 no-information rate}
@@ -94,9 +99,13 @@ This is a generic function with methods for tables, vectors, and several
 model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
 \code{svm}).
 
+The orientation of the table matters: rows are read as predictions and
+columns as references, so the no-information rate is taken from the
+column margin. \code{conf.default()} builds the table accordingly.
+
 \strong{Overall statistics:}
 \itemize{
-\item Accuracy with 95\\% confidence interval
+\item Accuracy with confidence interval
 \item No Information Rate (NIR) and p-value (Accuracy > NIR)
 \item Cohen's Kappa
 \item McNemar test p-value
@@ -128,6 +137,11 @@ conf(table(pred, ref))
 m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 conf(m)
 
+}
+\seealso{
+Other model.classification:
+\code{\link[=sensX]{sensX()}},
+\code{\link[=specX]{specX()}}
 }
 \concept{classification}
 \concept{confusion-matrix}

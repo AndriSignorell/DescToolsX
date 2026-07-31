@@ -82,6 +82,7 @@ https://doi.org/10.1162/rest.2003.85.1.226
 \seealso{
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},

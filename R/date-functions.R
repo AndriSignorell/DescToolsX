@@ -2,19 +2,19 @@
 #' Basic Date Functions
 #'
 #' Convenience wrappers for extracting date/time components and performing
-#' common date calculations — a readable alternative to \code{\link{format}()}
+#' common date calculations - a readable alternative to \code{\link{format}()}
 #' and its cryptic format codes.
 #'
 #' @section Date component extractors:
 #' \tabular{lll}{
 #'   \bold{Function}    \tab \bold{Returns}                                          \tab \bold{Range / Notes} \cr
 #'   \code{year}        \tab Year of a date or \code{ym} object                     \tab \code{yyyy} \cr
-#'   \code{quarter}     \tab Quarter of the year                                    \tab 1–4 \cr
-#'   \code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1–12; S3 dispatch for \code{ym} \cr
+#'   \code{quarter}     \tab Quarter of the year                                    \tab 1-4 \cr
+#'   \code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for \code{ym} \cr
 #'   \code{week}        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
-#'   \code{day}         \tab Day of the month (readable/writable)                   \tab 1–31 \cr
-#'   \code{weekday}     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon … 7 = Sun \cr
-#'   \code{yearDay}     \tab Day of the year                                        \tab 1–366 \cr
+#'   \code{day}         \tab Day of the month (readable/writable)                   \tab 1-31 \cr
+#'   \code{weekday}     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon ... 7 = Sun \cr
+#'   \code{yearDay}     \tab Day of the year                                        \tab 1-366 \cr
 #'   \code{yearWeek}    \tab Compact year-week integer                              \tab \code{yyyyww} (ISO or US) \cr
 #'   \code{yearMonth}   \tab Compact year-month integer                             \tab \code{yyyymm} \cr
 #' }
@@ -22,9 +22,9 @@
 #' @section Time component extractors (POSIXct/POSIXlt):
 #' \tabular{ll}{
 #'   \bold{Function}  \tab \bold{Returns} \cr
-#'   \code{hour}      \tab Hour (0–23) \cr
-#'   \code{minute}    \tab Minute (0–59) \cr
-#'   \code{second}    \tab Second (0–60) \cr
+#'   \code{hour}      \tab Hour (0-23) \cr
+#'   \code{minute}    \tab Minute (0-59) \cr
+#'   \code{second}    \tab Second (0-60) \cr
 #'   \code{timezone}  \tab Time zone string \cr
 #'   \code{now}       \tab Current date and time (\code{Sys.time()}) \cr
 #'   \code{today}     \tab Current date (\code{Sys.Date()}) \cr
@@ -43,7 +43,7 @@
 #'   \code{diffDays360}     \tab Days between two dates using the 360-day calendar convention \cr
 #'   \code{lastDayOfMonth}  \tab Last calendar day of the month of \code{x} \cr
 #'   \code{yearDays}        \tab Total number of days in the year of \code{x} (365 or 366) \cr
-#'   \code{monthDays}       \tab Number of days in the month of \code{x} (28–31) \cr
+#'   \code{monthDays}       \tab Number of days in the month of \code{x} (28-31) \cr
 #' }
 #'
 #' @section Language for month and weekday names:
@@ -68,14 +68,18 @@
 #'   \code{weekday()}.  Either \code{"local"} (current system locale, the
 #'   default) or \code{"en"} (English).  Falls back to the \code{"lang"}
 #'   option if set; otherwise \code{"local"} is used.
+#' @param ... further arguments passed to methods. \code{year()} is generic
+#'   and carries them for the sake of S3 consistency; none of the methods
+#'   currently uses them.
 #' @param stringsAsFactors logical; if \code{TRUE} (default), character results
 #'   from \code{month()} and \code{weekday()} are returned as ordered factors
 #'   whose levels follow calendar order
 #' @param value replacement value for the \code{day<-} assignment function
 #' @param startDate,endDate start and end dates for \code{diffDays360()}
-#' @param method calculation convention: \code{"eu"} (European, default) or
-#'   \code{"us"} (US) for \code{diffDays360()} and \code{week()}/
-#'   \code{yearWeek()}
+#' @param method calculation convention. For \code{diffDays360()} either
+#'   \code{"eu"} (European, default) or \code{"us"} (US); for \code{week()}
+#'   and \code{yearWeek()} either \code{"iso"} (ISO 8601, default) or
+#'   \code{"us"}. The two sets are not interchangeable.
 #'
 #' @return a vector whose type depends on the function: numeric for
 #' integer-valued components, an ordered factor or character vector when
@@ -131,34 +135,35 @@
 #' monthDays(x)
 #' yearDays(x)
 #'
-#' # 360-day calendar difference
+#' # 360-day calendar difference. The two conventions agree here ...
 #' diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"))
 #' diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"), method = "us")
+#'
+#' # ... but not here, which is the point of having both
+#' diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28"))
+#' diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28"), method = "us")
 #' 
 #' 
 
 
 
 #' @rdname date_functions
-
-#' @family date.time  
+#' @family date.time
 #' @concept date-time
-#'
-#'
 #' @export
-year <-  function(x){
+year <- function(x, ...){
   UseMethod("year")
 }
 
 #' @rdname date_functions
 #' @method year ym
 #' @export
-year.ym  <- function(x){  unclass(round((x/100)))   }
+year.ym <- function(x, ...){ unclass(x) %/% 100L }
 
 #' @rdname date_functions
 #' @method year default
 #' @export
-year.default <- function(x){ as.POSIXlt(x)$year + 1900L }
+year.default <- function(x, ...){ as.POSIXlt(x)$year + 1900L }
 
 
 
@@ -178,7 +183,7 @@ month <- function(x, fmt = c("m", "mm", "mmm"),
 month.ym <- function(x, fmt = c("m", "mm", "mmm"), 
                      lang = .getOption("lang"), stringsAsFactors = TRUE) {
   # unclass(x - year(x) * 100)   
-  x <- as.Date(x)
+  x <- .asDateInTz(x)
   NextMethod()
 }
 
@@ -242,7 +247,7 @@ week <- function(x, method = c("iso", "us")){
   # --> We are superfast!!
   
   # cast x to date, such as being able to handle POSIX-Dates automatically
-  x <- as.Date(x)
+  x <- .asDateInTz(x)
   
   method <- match.arg(method, c("iso", "us"))
   switch(method,
@@ -267,7 +272,16 @@ day <- function(x){ as.POSIXlt(x)$mday }
 # Accessor for day, as defined by library(lubridate)
 #' @rdname date_functions
 #' @export
-"day<-" <- function(x, value) { x <- x + (value - day(x)) }
+"day<-" <- function(x, value) {
+
+  # "+" adds DAYS to a Date but SECONDS to a POSIXct, so the plain
+  # x + (value - day(x)) shifted a date-time by a few seconds instead of
+  # to the requested day of the month, silently and without error.
+  if (inherits(x, "POSIXt"))
+    x + (value - day(x)) * 86400
+  else
+    x + (value - day(x))
+}
 
 
 #' @rdname date_functions
@@ -275,7 +289,9 @@ day <- function(x){ as.POSIXlt(x)$mday }
 weekday <- function (x, fmt = c("d", "dd", "ddd"), 
                      lang = .getOption("lang"), stringsAsFactors = TRUE) {
   
-  # x <- as.Date(x)
+  # deliberately no as.Date() here: as.POSIXlt() already breaks a Date
+  # down in UTC and a POSIXct in its own zone, which is exactly right.
+  # Coercing first would push a timestamp onto the previous day.
   res <- as.POSIXlt(x)$wday
   res <- replace(res, res==0, 7)
   
@@ -365,11 +381,16 @@ timezone <- function(x) {
 #' @export
 yearMonth <- function(x){
   # returns the yearmonth representation of a date x
-  # x <- as.POSIXlt(x)
-  # return(as.ym((x$year + 1900L)*100L + x$mon + 1L))
-  
-  return(.Call("_DescToolsX_usYearmonth", x, PACKAGE="DescToolsX")) 
-  
+
+  # reduce x to a Date first, as week() and yearWeek() do: the compiled
+  # routine reads the underlying double as DAYS since the epoch, so a
+  # POSIXct (seconds since the epoch) used to be interpreted as a date
+  # roughly 86400 times too far in the future - no error, just a wrong
+  # year and month.
+  x <- .asDateInTz(x)
+
+  return(.Call("_DescToolsX_usYearmonth", x, PACKAGE="DescToolsX"))
+
 }
 
 
@@ -378,7 +399,7 @@ yearMonth <- function(x){
 yearWeek <- function(x, method = c("iso", "us")){
   
   # cast x to date, such as being able to handle POSIX-Dates automatically
-  x <- as.Date(x)
+  x <- .asDateInTz(x)
   
   method <- match.arg(method, c("iso", "us"))
   switch(method,
@@ -429,21 +450,29 @@ diffDays360 <- function(startDate, endDate, method=c("eu","us")){
   method = match.arg(method)
   switch(method,
          "eu" = {
-           if(day(startDate)==31L) startDate <- startDate-1L
-           if(day(endDate)==31L) endDate <- endDate-1L
+           # The former version adjusted startDate/endDate here, but d1
+           # and d2 had already been read off above and were never
+           # recomputed - so the whole European rule was dead code and
+           # "eu" silently returned the unadjusted difference. Only the
+           # "us" branch below worked, because it assigns to d1/d2
+           # directly. Adjust the day numbers, as the convention says.
+           if(any(d1 == 31L)) d1[d1 == 31L] <- 30L
+           if(any(d2 == 31L)) d2[d2 == 31L] <- 30L
          }
          , "us" ={
-           if( (day(startDate+1L)==1L & month(startDate+1L)==3L) &
-               (day(endDate+1L)==1L & month(endDate+1L)==3L)) d2 <- 30L
-           if( d1==31L ||
-               (day(startDate+1L)==1L & month(startDate+1L)==3L)) {
-             d1 <- 30L
-             if(d2==31L) d2 <- 30L
-           }
-           
+           endFeb1 <- day(startDate + 1L) == 1L & month(startDate + 1L) == 3L
+           endFeb2 <- day(endDate + 1L)   == 1L & month(endDate + 1L)   == 3L
+
+           # vectorised: the former if()s made the function scalar-only
+           # and error out on vector input under R >= 4.2
+           d2[endFeb1 & endFeb2] <- 30L
+
+           adj1 <- d1 == 31L | endFeb1
+           d2[adj1 & d2 == 31L] <- 30L
+           d1[adj1] <- 30L
          }
   )
-  
+
   return( (y2-y1)*360L + (m2-m1)*30L + d2-d1)
   
 }
@@ -464,7 +493,12 @@ lastDayOfMonth <- function(x){
 yearDays <- function (x) {
   # return the number of days in the specific year of x
   x <- as.POSIXlt(x)
-  x$mon[] <- x$mday[] <- x$sec[] <- x$min <- x$hour <- 0
+  # [] on every component: a plain x$min <- 0 replaces the whole vector
+  # with a single element and leaves the POSIXlt fields of unequal
+  # length. isdst is reset so that a DST transition cannot shift the
+  # constructed midnight into the previous day.
+  x$mon[] <- x$mday[] <- x$sec[] <- x$min[] <- x$hour[] <- 0
+  x$isdst[] <- -1L
   x$year <- x$year + 1
   return(as.POSIXlt(as.POSIXct(x))$yday + 1)
 }
@@ -475,7 +509,8 @@ yearDays <- function (x) {
 monthDays <- function (x) {
   # return the number of days in the specific month of x
   x <- as.POSIXlt(x)
-  x$mday[] <- x$sec[] <- x$min <- x$hour <- 0
+  x$mday[] <- x$sec[] <- x$min[] <- x$hour[] <- 0
+  x$isdst[] <- -1L
   x$mon <- x$mon + 1
   return(as.POSIXlt(as.POSIXct(x))$mday)
 }
@@ -494,12 +529,62 @@ isWeekend <- function(x) {
 #' @rdname date_functions
 #' @export
 isLeapYear <- function(x){
-  
-  if(!isWholeLike(x))
-    .Call("_DescToolsX_isLeapYearDate", x, PACKAGE="DescToolsX")
-  else 
-    .Call("_DescToolsX_isLeapYearInt", x, PACKAGE="DescToolsX")
-  
+
+  # Dispatch on the class, not on isWholeLike(): a bare year vector
+  # containing NA is not "whole like", so isLeapYear(c(2020L, NA)) fell
+  # into the Date branch, where as.Date() read 2020 as days since the
+  # epoch and answered for 1975.
+  if(!inherits(x, c("Date", "POSIXt")) && is.numeric(x)){
+
+    if(any(x %% 1 != 0, na.rm = TRUE))
+      stop("a numeric 'x' must contain whole years")
+
+    return(.Call("_DescToolsX_isLeapYearInt", as.integer(x),
+                 PACKAGE="DescToolsX"))
+  }
+
+  # .asDateInTz() for the same reason as in yearMonth(): the compiled
+  # routine reads days since the epoch, and the calendar day has to be
+  # the one the timestamp's own zone shows.
+  .Call("_DescToolsX_isLeapYearDate", .asDateInTz(x), PACKAGE="DescToolsX")
+
 }
 
 
+# == internal helper functions =================================================
+
+# Which calendar day is this value on?
+#
+# The compiled routines below read days since the epoch, so a POSIXct has
+# to be reduced to a Date first. as.Date() alone is not enough: since
+# R 4.3 as.Date.POSIXct() defaults to tz = "UTC", so a timestamp shortly
+# after midnight in a positive-offset zone falls back onto the previous
+# day -
+#
+#   x <- as.POSIXct("2019-01-01 00:30:00", tz = "Europe/Zurich")
+#   as.Date(x)             # "2018-12-31"
+#   format(x, "%Y-%m-%d")  # "2019-01-01"
+#
+# - and week(), yearWeek(), yearMonth() and isLeapYear() then answered for
+# the wrong day. The calendar day of a timestamp follows its own zone,
+# which is also what format() reports. Mirror of .toWallClock() in
+# pharos's fm.R, one step simpler: only the date is needed here, not a
+# wall-clock instant.
+#' @noRd
+.asDateInTz <- function(x) {
+
+  if(inherits(x, "Date"))
+    return(x)
+
+  if(!inherits(x, "POSIXt"))
+    return(as.Date(x))
+
+  if(inherits(x, "POSIXlt"))
+    x <- as.POSIXct(x)
+
+  tz <- attr(x, "tzone")
+  if(is.null(tz) || !nzchar(tz[1L]))
+    tz <- Sys.timezone()
+
+  as.Date(x, tz = tz)
+}

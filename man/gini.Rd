@@ -27,8 +27,10 @@ no confidence interval is computed.}
 \item{method}{confidence interval method; currently only \code{"boot"} is
 supported}
 
-\item{unbiased}{logical; whether to apply the bias correction factor
-\eqn{1/(1 - \sum w_i^2)}}
+\item{unbiased}{logical; whether to apply the small-sample bias
+correction factor \eqn{n/(n-1)}, with \eqn{n} the effective sample size
+(the sum of the weights). For unweighted data this is the usual
+\eqn{1/(1 - \sum w_i^2)}.}
 
 \item{weights}{optional non-negative numeric vector with the same length as
 \code{x}}
@@ -79,7 +81,19 @@ G = \frac{1}{\mu} \sum_i w_i x_i (2F_i - 1)
 
 where \eqn{F_i} are midpoints of cumulative weights and \eqn{\mu} is the
 weighted mean.
+
+\code{sides} names the side on which the finite bound lies: \code{"left"}
+yields an interval bounded below, \code{"right"} one bounded above. The
+coefficient is bounded, so the open side is reported at the range
+boundary (0 or 1) rather than as \eqn{\pm\infty} (design_rules.md 4.1).
 }
+\section{Random number generation}{
+
+A confidence level triggers a bootstrap and therefore advances R's
+global random number generator. Call \code{\link[base]{set.seed}}
+beforehand for reproducible intervals.
+}
+
 \examples{
 x <- c(10, 20, 30, 40)
 gini(x)
@@ -94,6 +108,7 @@ gini(x, conf.level = 0.95, R = 499)
 \seealso{
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},

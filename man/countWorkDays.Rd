@@ -11,10 +11,12 @@ countWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
 
 \item{to}{final dates}
 
-\item{holiday}{a vector of dates to exclude}
+\item{holiday}{a vector of dates (or strings coercible with
+\code{\link{as.Date}}) to exclude}
 
-\item{nonworkdays}{a character vector containing the abbreviations of the
-weekdays (as in \code{day.abb}) to be treated as non-work days. Default is
+\item{nonworkdays}{a character vector containing the English three-letter
+weekday abbreviations to be treated as non-work days, i.e. a subset of
+\code{c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")}. Default is
 \code{c("Sat", "Sun")}.}
 }
 \value{
@@ -27,22 +29,32 @@ provided holiday dates.
 \details{
 The function is vectorised so that multiple initial and final dates can be
 supplied. The date vectors are recycled if their lengths differ.
+
+Both endpoints are counted, so \code{countWorkDays(d, d)} is 1 for a
+working day and 0 otherwise. A \code{to} that lies before \code{from}
+yields 0.
+
+Holidays outside the interval are ignored, as are holidays falling on a
+non-work day; duplicated holiday dates are counted once.
 }
 \examples{
 
 from <- as.Date("2019-01-01") + rep(0, 10)
-to <- as.Date("2020-01-15") + seq(0, 9)
+to   <- as.Date("2019-01-15") + seq(0, 9)
 
 countWorkDays(from, to)
 
-x <- seq(from[1], from[1]+11, "days")
-x <- to
-data.frame(
-  date = x, 
-  day  = fm(x, fmt="ddd"))
+# which weekdays are involved
+x <- seq(min(from), max(to), by = "days")
+head(data.frame(date = x, day = weekday(x, fmt = "dd", lang = "en")))
 
-countWorkDays(from = min(x), to = max(x), holiday = c("2019-01-06", "2019-01-07"))
+# two holidays inside the period reduce the count by two
+countWorkDays(from = min(x), to = max(x))
+countWorkDays(from = min(x), to = max(x),
+              holiday = c("2019-01-07", "2019-01-08"))
 
+# a single day
+countWorkDays(as.Date("2019-01-05"), as.Date("2019-01-05"))  # Saturday: 0
 
 }
 \seealso{

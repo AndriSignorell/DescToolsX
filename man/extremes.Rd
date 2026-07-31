@@ -82,7 +82,7 @@ small(x, 3, unique=TRUE)
 small(x, 3, unique=FALSE)
 
 # Both ends
-cat(highLow(Pizza$temperature, na.last=NA))
+cat(highLow(bedrock::Pizza$temperature, na.last=NA))
 
  
 }

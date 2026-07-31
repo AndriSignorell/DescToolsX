@@ -30,9 +30,11 @@ as positive}
 
 \item{subdivisions}{integer; number of subdivisions for spline integration}
 
-\item{na.rm}{logical; if \code{TRUE}, missing values are removed before computation}
+\item{na.rm}{logical; if \code{TRUE}, incomplete \code{(x, y)} pairs are
+removed before computation. If \code{FALSE} and missing values are
+present, \code{NA_real_} is returned.}
 
-\item{...}{additional arguments passed to \code{\link{approx}}}
+\item{...}{additional arguments passed to \code{\link[stats]{approx}}}
 }
 \value{
 a numeric value representing the computed area under the curve
@@ -51,6 +53,11 @@ The function supports three methods:
 
 If \code{absoluteArea = TRUE}, the function accounts for sign changes by
 inserting zero-crossings and summing absolute areas.
+
+\code{from} and \code{to} must lie inside the range of \code{x} for the
+interpolating methods: outside it there is nothing to interpolate, and
+\code{\link[stats]{approx}} would return \code{NA} for those points and
+hence an \code{NA} area. Extrapolation is not attempted.
 }
 \examples{
 x <- c(1, 2, 3, 5)
@@ -63,7 +70,8 @@ auc(x, y, absoluteArea = TRUE)
 
 }
 \seealso{
-\code{\link{approx}}, \code{\link{splinefun}}, \code{\link{integrate}}
+\code{\link[stats]{approx}}, \code{\link[stats]{splinefun}},
+\code{\link[stats]{integrate}}
 
 Other model.metrics:
 \code{\link[=brierScore]{brierScore()}},

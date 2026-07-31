@@ -1,23 +1,41 @@
 #' Cohen's and Hedges' Effect Size
-#' 
+#'
 #' Computes the Cohen's d and Hedges' g effect size statistics.
-#' 
-#' 
+#'
+#' @details
+#' For a single sample, \eqn{d = \bar{x} / s}; for two samples,
+#' \eqn{d = (\bar{x} - \bar{y}) / s_{pooled}}. With \code{correct = TRUE}
+#' Hedges' bias correction \eqn{J = 1 - 3/(4\nu - 1)}, with \eqn{\nu} the
+#' residual degrees of freedom, is applied to the estimate and, where
+#' computed, to the interval.
+#'
+#' Confidence intervals invert the noncentral \eqn{t} distribution
+#' (Steiger & Fouladi): the noncentrality parameter is
+#' \eqn{d\sqrt{n}} with \eqn{n - 1} degrees of freedom in the one-sample
+#' case, and \eqn{d / \sqrt{1/n_x + 1/n_y}} with \eqn{n_x + n_y - 2}
+#' degrees of freedom in the two-sample case.
+#'
+#' \code{sides} names the side on which the finite bound lies:
+#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' \eqn{(-\infty, uci]}. This is the reverse of the convention in
+#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis
+#' of \code{\link[stats]{t.test}}; both packages accept the same values, so
+#' the change is silent.
+#'
 #' @param x a non-empty numeric vector of data values
 #' @param y an optional non-empty numeric vector of data values
 #' @param conf.level confidence level of the interval. Set this to \code{NA}
 #' if no confidence interval should be calculated. This is the default.
 #' @param sides a character string specifying the side of the confidence
 #' interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-#' \code{"right"}. Partial matching is supported. \code{"left"} is analogous
-#' to a hypothesis of \code{"greater"} in a \code{t.test}.
+#' \code{"right"}. Partial matching is supported. See Details.
 #' @param correct logical; whether to apply the Hedges correction. Defaults to
 #' \code{FALSE}.
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' \code{FALSE}.
-
+#'
 #' @name cohenD
-
+#'
 #' @return if \code{conf.level = NA}, a numeric scalar containing the effect
 #' size; otherwise a named numeric vector with elements:
 #' \describe{
@@ -26,219 +44,179 @@
 #'   \item{\code{uci}}{upper confidence interval bound.}
 #' }
 #' The magnitude category and pooled standard deviation are stored in the
-#' attributes \code{magnitude} and \code{sd_pooled}, respectively.
-#' 
+#' attributes \code{magnitude} and \code{sdPooled}, respectively.
+#'
 #' @note
 #' Based on code by William Revelle.
-#' 
+#'
 #' @seealso \code{\link{glassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
-#' 
+#'
 #' @references Cohen, J. (1988) \emph{Statistical power analysis for the
 #' behavioral sciences (2nd ed.)} Academic Press, New York.
-#' 
+#'
 #' Hedges, L. V. & Olkin, I. (1985) \emph{Statistical methods for
 #' meta-analysis} Academic Press, Orlando, FL
-#' 
+#'
 #' Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications
 #' in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
-#' 
+#'
 #' @examples
-#' 
-#' x <- Pizza$price[Pizza$driver=="Carter"]
-#' y <- Pizza$price[Pizza$driver=="Miller"]
-#' 
-#' cohenD(x, y, conf.level=0.95, na.rm=TRUE)
-#' 
-
-
-
+#'
+#' x <- Pizza$price[Pizza$driver == "Carter"]
+#' y <- Pizza$price[Pizza$driver == "Miller"]
+#'
+#' cohenD(x, y, conf.level = 0.95, na.rm = TRUE)
+#'
+#' # Hedges' g
+#' cohenD(x, y, conf.level = 0.95, correct = TRUE, na.rm = TRUE)
+#'
+#' # one-sided: the finite bound lies on the left
+#' cohenD(x, y, conf.level = 0.95, sides = "left", na.rm = TRUE)
+#'
 #' @rdname cohenD
-
-#' @family effect.size  
+#' @family effect.size
 #' @concept effect-size
-#'
-#'
 #' @export
-cohenD <- function(x, y=NULL, 
-                   conf.level = NA, sides = c("two.sided", "left", "right"), 
+cohenD <- function(x, y = NULL,
+                   conf.level = NA, sides = c("two.sided", "left", "right"),
                    correct = FALSE, na.rm = FALSE) {
-  
+
+  sides <- match.arg(sides)
+
   if (na.rm) {
     x <- na.omit(x)
-    if(!is.null(y)) y <- na.omit(y)
+    if (!is.null(y)) y <- na.omit(y)
   }
-  
-  sides <- match.arg(sides, choices = c("two.sided","left","right"), 
-                     several.ok = FALSE)
-  
-  if(is.null(y)){   # one sample Cohen d
+
+  if (!is.na(conf.level) &&
+      (!is.numeric(conf.level) || length(conf.level) != 1L ||
+       conf.level <= 0 || conf.level >= 1))
+    stop("'conf.level' must be a single number in (0, 1), or NA")
+
+  if (is.null(y)) {
+
+    # ---- one sample -----------------------------------------------------
+    n   <- length(x)
     .sd <- sd(x)
-    d <- mean(x) / .sd
-    n <- length(x)
-    if(!is.na(conf.level)){
-      
-      if(sides!="two.sided")
-        conf.level <- 1 - 2*(1-conf.level)
-      
-      # # reference: Smithson Confidence Intervals pp. 36:
-      # ci <- .nctCI(d / sqrt(n), df = n-1, conf = conf.level)
-      # res <- c(d=d, lwr.ci=ci[1]/sqrt(n), upr.ci=ci[3]/sqrt(n))
-      
-      # changed to Revelle 2022-10-22:
-      ci <- .cohenDCI(d = d, n = n, alpha = 1-conf.level)
-      
-      if(sides=="left")        ci[1] <- Inf
-      else if(sides=="right")  ci[3] <- -Inf
-      
-      res <- c(est=d, lci=ci[1], uci=ci[3])
-      
-      
+    d   <- mean(x) / .sd
+
+    # 'correct' used to be silently ignored on this branch: cohenD(x,
+    # correct = TRUE) returned the uncorrected d.
+    corr <- if (correct) .hedgesJ(n - 1) else 1
+
+    if (is.na(conf.level)) {
+      res <- d * corr
+
     } else {
-      res <- d
+      ci <- .cohenDCI(d = d, n = n, alpha = .oneSidedAlpha(conf.level, sides))
+      res <- .cohenDAssemble(ci * corr, sides)
     }
+
   } else {
-    
-    meanx <- mean(x)
-    meany <- mean(y)
-    #     ssqx <- sum((x - meanx)^2)
-    #     ssqy <- sum((y - meany)^2)
+
+    # ---- two samples ----------------------------------------------------
     nx <- length(x)
     ny <- length(y)
-    
     DF <- nx + ny - 2
-    d <- (meanx - meany)
-    
+
     .sd <- sqrt(((nx - 1) * var(x) + (ny - 1) * var(y)) / DF)
-    d <- d / .sd
-    
-    #  if(unbiased) d <- d * gamma(DF/2)/(sqrt(DF/2) * gamma((DF - 1)/2))
-    
-    if(!is.na(conf.level)) {
-      
-      if(sides!="two.sided")
-        conf.level <- 1 - 2*(1-conf.level)
-      
-      # old:
-      # The Handbook of Research Synthesis and Meta-Analysis (Cooper, Hedges, & Valentine, 2009)
-      ## p 238
-      # ci <- d + c(-1, 1) * sqrt(((nx+ny) / (nx*ny) + .5 * d^2 / DF) * ((nx + ny)/DF)) * qt((1 - conf.level) / 2, DF)
-      
-      # # supposed to be better, Smithson's version:
-      # ci <- .nctCI(d / sqrt(nx*ny/(nx+ny)), df = DF, conf = conf.level)
-      # res <- c(d=d, lwr.ci=ci[1]/sqrt(nx*ny/(nx+ny)), upr.ci=ci[3]/sqrt(nx*ny/(nx+ny)))
-      
-      # changed to Revelle      
-      ci <- .cohenDCI(d, n2 = nx, n1 = ny, alpha = 1-conf.level)
-      
-      if(correct){  # "Hedges' g"
-        # Hedges, L. V. & Olkin, I. (1985). Statistical methods for meta-analysis. Orlando, FL: Academic Press.
-        ci <- ci * .J(nx, ny)
-      }
-      
-      if(sides=="left")        ci[1] <- Inf
-      else if(sides=="right")  ci[3] <- -Inf
-      
-      res <- c(est=ci[2], lci=unname(ci[1]), uci=unname(ci[3]))
-      
+    d   <- (mean(x) - mean(y)) / .sd
+
+    # Hedges, L. V. & Olkin, I. (1985). Statistical methods for
+    # meta-analysis. Orlando, FL: Academic Press.
+    corr <- if (correct) .hedgesJ(DF) else 1
+
+    if (is.na(conf.level)) {
+      res <- d * corr
+
     } else {
-      
-      if(correct) d <- d * .J(nx, ny)
-      
-      res <- d
+      ci <- .cohenDCI(d = d, n1 = nx, n2 = ny,
+                      alpha = .oneSidedAlpha(conf.level, sides))
+      res <- .cohenDAssemble(ci * corr, sides)
     }
   }
-  
-  ## Cohen, J. (1992). A power primer. Psychological Bulletin, 112, 155-159. Crow, E. L. (1991).
-  attr(res, "magnitude") <- c("negligible","small","medium","large")[findInterval(abs(d), c(0.2, 0.5, 0.8)) + 1]
-  attr(res, "sd_pooled") <- .sd
-  return(res)
-  
-}
 
+  ## Cohen, J. (1992). A power primer. Psychological Bulletin, 112, 155-159.
+  # the category describes the value actually reported, i.e. after the
+  # Hedges correction when one was applied
+  est <- if (length(res) == 3L) res[["est"]] else res
+  attr(res, "magnitude") <-
+    c("negligible", "small", "medium", "large")[
+      findInterval(abs(est), c(0.2, 0.5, 0.8)) + 1]
+  attr(res, "sdPooled") <- .sd
+
+  return(res)
+}
 
 
 # == internal helper functions ==================================================
 
+# One-sided intervals put the full alpha on the single finite side. The
+# doubling below lets every method compute a two-sided interval and pick
+# the relevant bound afterwards.
+.oneSidedAlpha <- function(conf.level, sides)
+  if (sides == "two.sided") 1 - conf.level else 2 * (1 - conf.level)
 
-.J <- function(nx, ny) {
-  (1 - 3 / ( 4 * (nx + ny) - 9))
+
+# Turns the (lower, effect, upper) triple into the package's est/lci/uci
+# vector and opens the appropriate side.
+#
+# The previous version had this inverted AND mis-indexed: sides == "left"
+# set ci[1] - the LOWER bound - to +Inf, producing lci = Inf with a finite
+# uci. Per design_rules.md 4.1 'sides' names the side carrying the FINITE
+# bound, so "left" opens the upper end and "right" the lower one.
+.cohenDAssemble <- function(ci, sides) {
+
+  lci <- ci[[1L]]
+  uci <- ci[[3L]]
+
+  if (sides == "left")       uci <- Inf
+  else if (sides == "right") lci <- -Inf
+
+  c(est = unname(ci[[2L]]), lci = unname(lci), uci = unname(uci))
 }
 
 
-.cohenDCI <- function (d, 
-                       n = NULL, n2 = NULL, n1 = NULL, 
-                       alpha = 0.05) {
-  
-  # William Revelle in psych
-  
-  d2t <- function (d, n = NULL, n2 = NULL, n1 = NULL) {
-    
-    if (is.null(n1)) {
-      t <- d * sqrt(n)/2
-    } else if (is.null(n2)) {
-      t <- d * sqrt(n1)
-    } else {
-      t <- d/sqrt(1/n1 + 1/n2)
-    }
-    return(t)
+# Hedges' bias correction, expressed in degrees of freedom so that it is
+# defined for one and two samples alike. For two samples nu = nx + ny - 2
+# and this reproduces the previous .J(nx, ny) exactly; for one sample
+# nu = n - 1, which the old two-argument form could not express.
+.hedgesJ <- function(df) {
+  1 - 3 / (4 * df - 1)
+}
+
+
+# Noncentral-t confidence interval for Cohen's d (Steiger & Fouladi), via
+# the shared root finder in .nctCI().
+#
+# The former implementation carried its own copy of Revelle's uniroot
+# machinery and routed the one-sample case through the TWO-sample
+# equal-group formulas: t = d*sqrt(n)/2 with df = n/2 - 1, where the
+# one-sample quantities are t = d*sqrt(n) with df = n - 1. The one-sample
+# interval was therefore the interval of a two-group design of the same
+# total size. Two-sample results are unchanged.
+.cohenDCI <- function(d, n = NULL, n1 = NULL, n2 = NULL, alpha = 0.05) {
+
+  if (is.null(n1) || is.null(n2)) {
+    if (is.null(n))
+      stop("either 'n' or both 'n1' and 'n2' must be supplied")
+    tval <- d * sqrt(n)
+    df   <- n - 1
+    toD  <- function(ncp) ncp / sqrt(n)
+
+  } else {
+    scale <- sqrt(1 / n1 + 1 / n2)
+    tval  <- d / scale
+    df    <- n1 + n2 - 2
+    toD   <- function(ncp) ncp * scale
   }
-  
-  t2d <- function (t, n = NULL, n2 = NULL, n1 = NULL) {
-    
-    if (is.null(n1)) {
-      d <- 2 * t/sqrt(n)
-    } else {
-      if (is.null(n2)) {
-        d <- t/sqrt(n1)
-      } else {
-        d <- t * sqrt(1/n1 + 1/n2)
-      }
-    }
-    return(d)
-  }
-  
-  t <- d2t(d = d, n = n, n2 = n2, n1 = n1)
-  
-  tail <- 1 - alpha/2
-  ci <- matrix(NA, ncol = 3, nrow = length(d))
-  
-  for (i in 1:length(d)) {
-    nmax <- max(c(n/2 + 1, n1 + 1, n1 + n2))
-    
-    upper <- try(t2d(uniroot(function(x) {
-      suppressWarnings(pt(q = t[i], df = nmax - 2, ncp = x)) - 
-        alpha/2
-    }, c(min(-5, -abs(t[i]) * 10), max(5, abs(t[i]) * 10)))$root, 
-    n = n[i], n2 = n2[i], n1 = n1[i]), silent = TRUE)
-    if (inherits(upper, "try-error")) {
-      ci[i, 3] <- NA
-    }
-    else {
-      ci[i, 3] <- upper
-    }
-    ci[i, 2] <- d[i]
-    
-    lower.ci <- try(
-      t2d(uniroot(function(x) {
-        suppressWarnings( 
-          pt(q = t[i], df = nmax - 2, ncp = x)
-        ) - tail }, 
-        c(min(-5, -abs(t[i]) * 10), 
-          max(5, abs(t[i]) * 10)))$root, 
-        n = n[i], n2 = n2[i], n1 = n1[i]
-      ), 
-      silent = TRUE)
-    
-    if (inherits(lower.ci, "try-error")) {
-      ci[i, 1] <- NA
-    }
-    else {
-      ci[i, 1] <- lower.ci
-    }
-  }
-  
-  colnames(ci) <- c("lower", "effect", "upper")
-  rownames(ci) <- names(d)
-  return(ci)
-  
+
+  if (df < 1)
+    stop("too few observations to compute a confidence interval")
+
+  ncp <- .nctCI(tval, df = df, conf.level = 1 - alpha)
+
+  c(lower = toD(unname(ncp[["lci"]])),
+    effect = d,
+    upper = toD(unname(ncp[["uci"]])))
 }

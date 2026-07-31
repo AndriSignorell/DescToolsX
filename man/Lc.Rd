@@ -169,6 +169,7 @@ Lorenz, M. O. (1905). Methods of measuring the concentration of wealth.
 
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=rosenbluth]{rosenbluth()}},

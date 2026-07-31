@@ -10,10 +10,16 @@
 #' arithmetic mean of the reciprocals of the values. The same applies to the
 #' confidence interval.
 #' 
-#' The harmonic mean is restricted to strictly positive inputs, if any argument
-#' is negative, then the result will be \code{NA}. If the lower bound of the
-#' confidence interval is not greater than zero, then the confidence interval
-#' is not defined, and thus \code{NA} will be reported.
+#' The harmonic mean is restricted to strictly positive inputs. Non-positive
+#' values are turned into \code{NA} and therefore make the result \code{NA}
+#' unless \code{na.rm = TRUE}, in which case they are dropped. If the lower
+#' bound of the confidence interval is not greater than zero, then the
+#' confidence interval is not defined, and thus \code{NA} will be reported.
+#'
+#' \code{sides} names the side on which the finite bound lies: \code{"left"}
+#' yields an interval bounded below, \code{"right"} one bounded above. The
+#' harmonic mean of positive values is itself positive, so the open lower
+#' side is reported as 0 rather than as \code{NA} or \eqn{-\infty}.
 #' 
 #' Use \code{\link{sapply}} to calculate the measures from data frame, resp.
 #' from a matrix. \cr
@@ -62,12 +68,9 @@
 #' 
 
 #' @rdname hmean
-
-#' @family location  
-#' @concept location  
+#' @family location
+#' @concept location
 #' @concept nonlinear-mean
-#'
-#'
 #' @export
 hmean <- function(x, conf.level = NA, 
                   sides = c("two.sided","left","right"), method = c("classic", "boot"),
@@ -104,13 +107,16 @@ hmean <- function(x, conf.level = NA,
     if( mci[2] <= 0) 
       res[2:3] <- NA
     
-    names(res) <- names(res)[c(1,3,2)]
+    names(res) <- c("est", "lci", "uci")
     
     if (sides == "left")
       res[3] <- Inf
     else if (sides == "right")
-      # it's not clear, if we should not set this to 0
-      res[2] <- NA
+      # 0, not NA: the harmonic mean of positive values is positive, so
+      # the open lower side has a boundary. NA claims the bound is unknown
+      # (design_rules.md 4.1). gmean() arrives at the same 0 by way of
+      # exp(-Inf).
+      res[2] <- 0
     
   }
   

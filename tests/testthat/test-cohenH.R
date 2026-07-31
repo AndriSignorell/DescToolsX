@@ -154,10 +154,9 @@ try(
 # CI contains estimate
 # ---------------------------------------------------------
 
-res <- cohenH(tab)
-
+res <- cohenH(tab, conf.level = 0.95)
 stopifnot(
-  res["lci"] <= res["est"],
+  res["lci"] <= res["est"], 
   res["uci"] >= res["est"]
 )
 

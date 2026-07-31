@@ -16,12 +16,14 @@ invisibly, a character vector of the alias names that were removed
 }
 \description{
 Removes the short-name aliases that were previously created by
-\code{\link{attachAliases}()} from the given environment.  Aliases
-that do not exist in the environment are silently ignored.
+\code{\link{attachAliases}()} from the given environment.  Names that do
+not exist, or that hold something other than the aliased function, are
+left untouched.
 }
 \examples{
-attachAliases()
-detachAliases()
+e <- new.env()
+attachAliases(envir = e)
+detachAliases(envir = e)
 
 }
 \seealso{

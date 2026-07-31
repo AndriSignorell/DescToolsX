@@ -47,6 +47,7 @@ Theil, H. (1967). Economics and Information Theory.
 \seealso{
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},

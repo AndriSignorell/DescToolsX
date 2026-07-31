@@ -10,14 +10,15 @@ corPolychor(
   method = c("two-step", "ML"),
   se = FALSE,
   control = list(),
-  maxcor = 0.9999
+  maxcor = 0.9999,
+  ...
 )
 }
 \arguments{
 \item{x}{a contingency table or an ordinal vector}
 
 \item{y}{optional second ordinal vector. If supplied, a contingency table
-is constructed via \code{table(x, y)}.}
+is constructed via \code{table(x, y, \dots)}.}
 
 \item{method}{character string specifying the estimation method:
 \describe{
@@ -26,12 +27,16 @@ is constructed via \code{table(x, y)}.}
 }}
 
 \item{se}{logical; if \code{TRUE}, standard errors are computed via the
-Hessian matrix (ML estimation only)}
+Hessian matrix. This requires ML estimation, so it is an error to
+combine it with \code{method = "two-step"}.}
 
 \item{control}{a list of control parameters passed to \code{\link[stats]{optim}}}
 
 \item{maxcor}{numeric; maximum absolute correlation allowed (default
 \code{0.9999}) to avoid numerical issues near the boundary}
+
+\item{...}{further arguments passed to \code{\link{table}} when \code{y}
+is supplied, for example \code{useNA}}
 }
 \value{
 if \code{se = FALSE}, a numeric value giving the estimated correlation.
@@ -42,13 +47,16 @@ If \code{se = TRUE}, a list with components:
 \item{\code{rho}}{estimated polychoric correlation}
 \item{\code{rowCuts}}{estimated row thresholds}
 \item{\code{colCuts}}{estimated column thresholds}
-\item{\code{var}}{variance-covariance matrix of the estimates}
+\item{\code{var}}{variance-covariance matrix of the estimates, on the
+scale of \code{rho} and the thresholds. The optimiser works on
+\code{atanh(rho)}, so the leading row and column are transformed
+back with the delta method, factor \eqn{(1 - \rho^2)}.}
 \item{\code{n}}{total sample size}
 \item{\code{chisq}}{likelihood-ratio test statistic}
 \item{\code{df}}{degrees of freedom}
-\item{\code{method}}{estimation method used}
+\item{\code{method}}{estimation method actually used}
 }
-The returned object has class \code{"polychor"}.
+The returned object has class \code{"Polychor"}.
 }
 \description{
 Estimates the polychoric correlation between two ordinal variables based
@@ -65,7 +73,9 @@ evaluated via \code{\link[mvtnorm]{pmvnorm}}.
 For numerical stability:
 \itemize{
 \item The correlation parameter is internally transformed using
-\code{tanh()} to enforce \eqn{|\rho| < 1}.
+\code{tanh()} to enforce \eqn{|\rho| < 1}. The search range on that
+scale is derived from \code{maxcor}, so the estimate is free to
+approach the documented boundary.
 \item Cell probabilities are bounded away from zero to avoid
 \code{log(0)}.
 }
@@ -74,8 +84,10 @@ Empty rows or columns in the contingency table are removed with a warning.
 }
 \examples{
 # Example with ordinal variables
-x <- factor(sample(1:3, 100, replace = TRUE), ordered = TRUE)
-y <- factor(sample(1:3, 100, replace = TRUE), ordered = TRUE)
+set.seed(1)
+z <- rnorm(200)
+x <- factor(cut(z + rnorm(200, sd = 0.6), 3), ordered = TRUE)
+y <- factor(cut(z + rnorm(200, sd = 0.6), 3), ordered = TRUE)
 
 # Two-step estimate
 corPolychor(x, y)
@@ -90,7 +102,7 @@ res$rho
 }
 \references{
 Olsson, U. (1979). Maximum likelihood estimation of the polychoric
-correlation coefficient. \emph{Psychometrika}, 44(4), 443–460.
+correlation coefficient. \emph{Psychometrika}, 44(4), 443--460.
 
 Fox, J. (2016). \emph{Applied Regression Analysis and Generalized Linear Models}.
 }

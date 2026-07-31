@@ -184,7 +184,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // isLeapYearDate
-IntegerVector isLeapYearDate(DateVector x);
+LogicalVector isLeapYearDate(DateVector x);
 RcppExport SEXP _DescToolsX_isLeapYearDate(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -195,7 +195,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // isLeapYearInt
-IntegerVector isLeapYearInt(IntegerVector x);
+LogicalVector isLeapYearInt(IntegerVector x);
 RcppExport SEXP _DescToolsX_isLeapYearInt(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

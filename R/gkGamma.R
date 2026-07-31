@@ -1,12 +1,12 @@
 
-#' Goodman–Kruskal's Gamma
+#' Goodman-Kruskal's Gamma
 #'
 #' @description
-#' Computes Goodman–Kruskal's Gamma, a measure of association for ordinal variables.
+#' Computes Goodman-Kruskal's Gamma, a measure of association for ordinal variables.
 #' The function provides interfaces for both contingency tables and paired vectors.
 #'
 #' @details
-#' Goodman–Kruskal's Gamma is based solely on the number of concordant and
+#' Goodman-Kruskal's Gamma is based solely on the number of concordant and
 #' discordant pairs and ignores ties. It is defined as
 #'
 #' \deqn{
@@ -32,8 +32,10 @@
 #' as \code{x}.
 #' @param conf.level confidence level for the interval. If \code{NA},
 #'   no confidence interval is returned.
-#' @param \dots further arguments passed to \code{\link{table}} in the vector
-#' interface
+#' @param direction character string controlling the direction for the
+#' asymmetric part of the calculation; passed to \code{\link{ordAssocs}}.
+#' Gamma itself is symmetric, so this only matters for a non-square table.
+#' @param \dots further arguments passed to \code{\link{ordAssocs}}
 #'
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
@@ -47,19 +49,19 @@
 #' \code{\link{yuleQ}} for \eqn{2 \times 2} tables
 #'
 #' @references
-#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57-59.
 #'
 #' Brown, M. B., & Benedetti, J. K. (1977).
 #' Sampling behavior of tests for correlation in two-way contingency tables.
-#' \emph{Journal of the American Statistical Association}, 72, 309–315.
+#' \emph{Journal of the American Statistical Association}, 72, 309-315.
 #'
 #' Goodman, L. A., & Kruskal, W. H. (1954).
 #' Measures of association for cross classifications.
-#' \emph{Journal of the American Statistical Association}, 49, 732–764.
+#' \emph{Journal of the American Statistical Association}, 49, 732-764.
 #'
 #' Goodman, L. A., & Kruskal, W. H. (1963).
 #' Measures of association for cross classifications III.
-#' \emph{Journal of the American Statistical Association}, 58, 310–364.
+#' \emph{Journal of the American Statistical Association}, 58, 310-364.
 #'
 #' @examples
 #'
@@ -80,20 +82,26 @@
 
 
 
-#' @family assoc.ordinal  
-#' @concept association-measure  
+#' @family assoc.ordinal
+#' @concept association-measure
 #' @concept ordinal
-#'
-#'
 #' @export
 gkGamma <- function(x, y = NULL,
-                    conf.level = NA, ...){
-  
+                    conf.level = NA,
+                    direction = c("row", "column"), ...){
+
+  direction <- match.arg(direction)
+
+  # ... was accepted and then dropped: it never reached ordAssocs(), and
+  # the documentation promised it went to table() - which ordAssocs()
+  # does not call on the vector path at all.
   res <- ordAssocs(
     x = x,
     y = y,
     which = "gamma",
-    conf.level = conf.level
+    conf.level = conf.level,
+    direction = direction,
+    ...
   )
   
   if(is.na(conf.level))

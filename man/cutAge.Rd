@@ -53,13 +53,21 @@ suitable defaults.
 }
 \examples{
 
-desc(cutAge(sample(0:100, size=100, replace=TRUE)))
+set.seed(1)
+desc(cutAge(sample(0:100, size = 100, replace = TRUE)))
+
+# readable labels
+table(cutAge(c(3, 17, 42, 67, 95), labels = TRUE))
+
+# drop the empty groups at both ends
+table(cutAge(c(42, 47, 51), labels = TRUE, full = FALSE))
 
 }
 \seealso{
 \code{\link{cut}}, \code{\link{seq}}
 
 Other cut:
+\code{\link[=cut.integer]{cut.integer()}},
 \code{\link[=cutQ]{cutQ()}}
 }
 \concept{binning}

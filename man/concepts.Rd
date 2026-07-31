@@ -18,9 +18,11 @@ conceptAudit(pkg)
 }
 \value{
 \describe{
-\item{\code{getConcepts}}{character vector of unique concept names}
-\item{\code{conceptMap}}{named list mapping concepts to functions}
-\item{\code{conceptAudit}}{data frame with concept frequencies}
+\item{\code{getConcepts}}{character vector of unique concept names,
+sorted}
+\item{\code{conceptMap}}{named list mapping concepts to topics}
+\item{\code{conceptAudit}}{data frame with the columns \code{concept}
+and \code{nTopics}, ordered by decreasing frequency}
 }
 }
 \description{
@@ -47,14 +49,9 @@ documentation consistency checks, and conceptual audits.
 }
 \examples{
 getConcepts("DescToolsX")
-conceptMap("DescToolsX")
-conceptAudit("DescToolsX")
-
+head(conceptMap("DescToolsX"))
+head(conceptAudit("DescToolsX"))
 
 }
-\seealso{
-Other utils:
-\code{\link[=setDescToolsXOption]{setDescToolsXOption()}}
-}
-\concept{programming}
-\concept{utils}
+\concept{introspection}
+\concept{pkg.introspection}

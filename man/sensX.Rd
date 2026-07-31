@@ -10,7 +10,8 @@ sensX(x, ...)
 \item{x}{object containing predictions; one of:
 \itemize{
 \item a factor or character vector of predicted classes
-\item a confusion matrix (\code{table} or \code{matrix})
+\item a confusion matrix (\code{table} or \code{matrix}) with
+\strong{predictions in the rows and references in the columns}
 \item a fitted model object (e.g., \code{glm}, \code{rpart})
 }}
 
@@ -25,7 +26,9 @@ Extract Sensitivity from a Confusion Matrix
 \seealso{
 \code{\link{conf}}, \code{\link{specX}}
 
-Other classification:
+Other model.classification:
+\code{\link[=conf]{conf()}},
 \code{\link[=specX]{specX()}}
 }
 \concept{classification}
+\concept{model.classification}

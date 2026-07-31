@@ -2,9 +2,9 @@
 % Please edit documentation in R/gkGamma.R
 \name{gkGamma}
 \alias{gkGamma}
-\title{Goodman–Kruskal's Gamma}
+\title{Goodman-Kruskal's Gamma}
 \usage{
-gkGamma(x, y = NULL, conf.level = NA, ...)
+gkGamma(x, y = NULL, conf.level = NA, direction = c("row", "column"), ...)
 }
 \arguments{
 \item{x}{numeric vector or a contingency table (matrix or table)}
@@ -15,8 +15,11 @@ as \code{x}.}
 \item{conf.level}{confidence level for the interval. If \code{NA},
 no confidence interval is returned.}
 
-\item{\dots}{further arguments passed to \code{\link{table}} in the vector
-interface}
+\item{direction}{character string controlling the direction for the
+asymmetric part of the calculation; passed to \code{\link{ordAssocs}}.
+Gamma itself is symmetric, so this only matters for a non-square table.}
+
+\item{\dots}{further arguments passed to \code{\link{ordAssocs}}}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -28,11 +31,11 @@ numeric vector with elements:
 }
 }
 \description{
-Computes Goodman–Kruskal's Gamma, a measure of association for ordinal variables.
+Computes Goodman-Kruskal's Gamma, a measure of association for ordinal variables.
 The function provides interfaces for both contingency tables and paired vectors.
 }
 \details{
-Goodman–Kruskal's Gamma is based solely on the number of concordant and
+Goodman-Kruskal's Gamma is based solely on the number of concordant and
 discordant pairs and ignores ties. It is defined as
 
 \deqn{
@@ -70,19 +73,19 @@ gkGamma(mtcars$wt, mtcars$mpg)
 
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57-59.
 
 Brown, M. B., & Benedetti, J. K. (1977).
 Sampling behavior of tests for correlation in two-way contingency tables.
-\emph{Journal of the American Statistical Association}, 72, 309–315.
+\emph{Journal of the American Statistical Association}, 72, 309-315.
 
 Goodman, L. A., & Kruskal, W. H. (1954).
 Measures of association for cross classifications.
-\emph{Journal of the American Statistical Association}, 49, 732–764.
+\emph{Journal of the American Statistical Association}, 49, 732-764.
 
 Goodman, L. A., & Kruskal, W. H. (1963).
 Measures of association for cross classifications III.
-\emph{Journal of the American Statistical Association}, 58, 310–364.
+\emph{Journal of the American Statistical Association}, 58, 310-364.
 }
 \seealso{
 \code{\link{yuleQ}} for \eqn{2 \times 2} tables
@@ -90,7 +93,6 @@ Measures of association for cross classifications III.
 Other assoc.ordinal:
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
-\code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},

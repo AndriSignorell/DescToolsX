@@ -31,14 +31,16 @@ suppresses intervals.}
 \item{direction}{character string controlling the direction for Somers'
 \eqn{D}: \code{"row"} (default) treats row totals as the dependent
 variable, \code{"column"} the column totals. Ignored by the symmetric
-measures.}
+measures. Only available in table mode; the vector path always
+reports \code{"row"} and rejects any other value rather than
+returning a differently defined estimate under the requested name.}
 }
 \value{
 a named list with one element per requested measure
 (\code{gamma}, \code{tauA}, \code{tauB}, \code{tauC},
-\code{somers}, \code{cstat}). Each element is a named numeric scalar
-containing only the point estimate, or, when \code{conf.level} is
-supplied, a named numeric vector with elements:
+\code{somers}, \code{cstat}). Each element is an unnamed numeric
+scalar containing only the point estimate, or, when
+\code{conf.level} is supplied, a named numeric vector with elements:
 \describe{
 \item{\code{est}}{point estimate.}
 \item{\code{lci}}{lower confidence interval bound.}
@@ -105,7 +107,6 @@ Other assoc.ordinal:
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},

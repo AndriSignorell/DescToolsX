@@ -91,6 +91,7 @@
 #' 
 #' #### Example 4: two-way split-plot ANOVA -> etaSq.aovlist ####
 #' 
+#' set.seed(1)
 #' DV_t1 <- round(rnorm(3*10, -0.5, 1), 2)
 #' DV_t2 <- round(rnorm(3*10,  0,   1), 2)
 #' DV_t3 <- round(rnorm(3*10,  0.5, 1), 2)
@@ -104,13 +105,10 @@
 
 
 #' @rdname etaSq
-
-#' @family effect.size  
-#' @concept effect-size  
-#' @concept variance-analysis  
+#' @family effect.size
+#' @concept effect-size
+#' @concept variance-analysis
 #' @concept anova-effect-size
-#'
-#'
 #' @export
 etaSq <- function (fit, type = 2, anova = FALSE) {
   UseMethod("etaSq")
@@ -141,8 +139,17 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
     stop("type must be equal to 1, 2 or 3")
   }
   
+  if (is.null(fit$model)) {
+    stop("'fit' does not contain the model frame - refit with model = TRUE")
+  }
+  
+  # stats::anova() is still reachable in call position, but the logical
+  # argument of the same name makes every anova(fit) below read like a
+  # mistake; alias it once and use the alias.
+  anovaTab <- stats::anova
+  
   if (type == 1) {
-    ss <- anova(fit)[, "Sum Sq", drop = FALSE]
+    ss <- anovaTab(fit)[, "Sum Sq", drop = FALSE]
     ss.res <- ss[dim(ss)[1], ]
     ss.tot <- sum(ss)
     ss <- ss[-dim(ss)[1], , drop = FALSE]
@@ -162,10 +169,10 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
         m0 <- lm(fit$terms[-dependent.terms], fit$model)
         if (length(dependent.terms) > 1) {
           m1 <- lm(fit$terms[-setdiff(dependent.terms, i)], fit$model)
-          ss[i] <- anova(m0, m1)$`Sum of Sq`[2]
+          ss[i] <- anovaTab(m0, m1)$`Sum of Sq`[2]
         }
         else {
-          ss[i] <- anova(m0, fit)$`Sum of Sq`[2]
+          ss[i] <- anovaTab(m0, fit)$`Sum of Sq`[2]
         }
       }
     }
@@ -227,10 +234,12 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
     eta2p <- ss/(ss + ss.res)
     k <- length(ss)
     eta2p[k] <- NA
-    df <- anova(fit)[, "Df"]
+    df <- anovaTab(fit)[, "Df"]
     ms <- ss/df
     Fval <- ms/ms[k]
-    p <- 1 - pf(Fval, df, rep.int(df[k], k))
+    # lower.tail = FALSE rather than 1 - pf(): the complement loses all
+    # precision once the p-value drops below about 1e-16
+    p <- pf(Fval, df, rep.int(df[k], k), lower.tail = FALSE)
     E <- cbind(eta2, eta2p, ss, df, ms, Fval, p)
     E[k, 6:7] <- NA
     colnames(E) <- c("eta.sq", "eta.sq.part", "SS", "df", "MS", "F", "p")

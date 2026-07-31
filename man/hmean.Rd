@@ -58,10 +58,16 @@ arithmetic mean and its confidence interval are computed by
 arithmetic mean of the reciprocals of the values. The same applies to the
 confidence interval.
 
-The harmonic mean is restricted to strictly positive inputs, if any argument
-is negative, then the result will be \code{NA}. If the lower bound of the
-confidence interval is not greater than zero, then the confidence interval
-is not defined, and thus \code{NA} will be reported.
+The harmonic mean is restricted to strictly positive inputs. Non-positive
+values are turned into \code{NA} and therefore make the result \code{NA}
+unless \code{na.rm = TRUE}, in which case they are dropped. If the lower
+bound of the confidence interval is not greater than zero, then the
+confidence interval is not defined, and thus \code{NA} will be reported.
+
+\code{sides} names the side on which the finite bound lies: \code{"left"}
+yields an interval bounded below, \code{"right"} one bounded above. The
+harmonic mean of positive values is itself positive, so the open lower
+side is reported as 0 rather than as \code{NA} or \eqn{-\infty}.
 
 Use \code{\link{sapply}} to calculate the measures from data frame, resp.
 from a matrix. \cr

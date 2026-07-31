@@ -98,8 +98,11 @@ glassDelta(x, y)
 
 glassDelta(x, y, conf.level = 0.95)
 
-# one-sided lower bound
+# one-sided: "right" bounds the interval from ABOVE
 glassDelta(x, y, conf.level = 0.95, sides = "right")
+
+# ... and "left" from below
+glassDelta(x, y, conf.level = 0.95, sides = "left")
 
 # small-sample bias correction
 glassDelta(x, y, conf.level = 0.95, correct = TRUE)
@@ -121,6 +124,8 @@ Theory, application, and implementation. \emph{Journal of Statistical
 Software}, 20(8), 1-24.
 }
 \seealso{
+\code{\link{cohenD}}
+
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},
 \code{\link[=cohenH]{cohenH()}},

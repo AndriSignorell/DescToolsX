@@ -71,13 +71,12 @@
 #' small(x, 3, unique=FALSE)
 #' 
 #' # Both ends
-#' cat(highLow(Pizza$temperature, na.last=NA))
+#' cat(highLow(bedrock::Pizza$temperature, na.last=NA))
 #' 
 #'  
-#' @family quantile  
-#' @concept order-statistic  
+#' @family quantile
+#' @concept order-statistic
 #' @concept distribution-summary
-#'
 #' @rdname extremes
 #' @export
 large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
@@ -115,8 +114,10 @@ large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
     
   } else {
     
-    # do not allow k be bigger than n
-    k <- min(k, n)
+    # cap k by the number of NON-MISSING values: x has just been stripped
+    # of its NAs, so min(k, n) with the original length let k exceed
+    # length(x) and top_i_cpp() then read past the end of the vector
+    k <- min(k, length(x))
     
     res <- x[top_i_cpp(x, k)]
     
@@ -156,13 +157,13 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
       if(!is.na(na.last)){
         if(na.last==FALSE) {
           k <- min(length(res$value) + 1L, k)
-          res$value <- c(NA, res$value)[1L:k]
-          res$frequency <- c(na_n, res$frequency)[1L:k]
+          res$value <- c(NA, res$value)[seq_len(k)]
+          res$frequency <- c(na_n, res$frequency)[seq_len(k)]
         }
         if(na.last==TRUE){
           k <- min(length(res$value) + 1L, k)
-          res$value <- c(res$value, NA)[1L:k]
-          res$frequency <- c(res$frequency, na_n)[1L:k]
+          res$value <- c(res$value, NA)[seq_len(k)]
+          res$frequency <- c(res$frequency, na_n)[seq_len(k)]
         }
       }
     }
@@ -173,16 +174,16 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
     
   } else {
     
-    # do not allow k be bigger than n
-    k <- min(k, n)
+    # see large(): cap by the stripped length, not the original one
+    k <- min(k, length(x))
     
     res <- rev(x[bottom_i_cpp(x, k)])
     
-    if(!is.na(na.last)){
+    if(!is.na(na.last) && k > 0L){
       if(na.last==FALSE)
-        res <- c(rep(NA, na_n), res)[1L:k]
+        res <- c(rep(NA, na_n), res)[seq_len(k)]
       if(na.last==TRUE)
-        res <- c(res, rep(NA, na_n))[1L:k]
+        res <- c(res, rep(NA, na_n))[seq_len(k)]
     }
     
   }

@@ -32,7 +32,7 @@ highest, for \code{right = FALSE}) \code{"breaks"} value should be included.
 Ignored if x is not of numeric type or if \code{breaks = FALSE}.}
 
 \item{ord}{how should the result be ordered? Default is \code{"level"},
-other choices are 'by frequency' (\code{"descending"} or \code{"ascending"})
+other choices are 'by frequency' (\code{"desc"} or \code{"asc"})
 or 'by name of the levels' (\code{"name"}). The argument can be abbreviated.
 This is ignored if x is numeric and classed (\code{breaks} not \code{FALSE}).}
 

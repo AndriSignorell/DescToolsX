@@ -54,7 +54,9 @@ The function iteratively examines pairs of variables with correlations above
 correlation (based on \code{method}) is removed.
 
 The scoring is computed once at the beginning and kept fixed throughout,
-ensuring deterministic and efficient behavior.
+ensuring deterministic and efficient behavior. Because the columns are
+then processed in decreasing score order, the variable removed from a
+pair is always the earlier - i.e. the higher-scoring - one.
 
 This is a greedy heuristic and does not guarantee a globally optimal solution.
 }

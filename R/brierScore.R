@@ -1,5 +1,4 @@
 
-
 #' Brier Score
 #'
 #' Computes the Brier score for binary probabilistic predictions, optionally
@@ -8,7 +7,8 @@
 #' @details
 #' The Brier score is defined as
 #' \deqn{BS = \frac{1}{n}\sum_{i=1}^n
-#'   \bigl[y_i(1-\hat p_i)^2 + (1-y_i)\hat p_i^2\bigr]}
+#'   \bigl[y_i(1-\hat p_i)^2 + (1-y_i)\hat p_i^2\bigr]}{
+#'   BS = mean(y * (1 - p)^2 + (1 - y) * p^2)}
 #' where \eqn{y_i \in \{0,1\}} and \eqn{\hat p_i} is the predicted
 #' probability.  Lower is better; a perfect model scores 0.
 #'
@@ -16,11 +16,21 @@
 #' to the climatological baseline \eqn{BS_{\max}}, yielding 1 for a
 #' perfect model and 0 for the no-skill reference.
 #'
+#' \code{sides} names the side on which the finite bound lies:
+#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' \eqn{(-\infty, uci]}. This is the reverse of the convention in
+#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+#' \code{\link[stats]{t.test}}.
+#'
 #' **Normal interval** (\code{method = "normal"})
 #'
 #' A delta-method normal approximation based on the variance of the
 #' per-observation Brier losses.  Fast and deterministic; reliable for
-#' moderate to large samples.
+#' moderate to large samples.  With \code{scaled = TRUE} the standard error
+#' is carried onto the skill scale by dividing through \eqn{BS_{\max}},
+#' which is treated as fixed; the interval therefore ignores the sampling
+#' variability of the baseline and is mildly anti-conservative. Prefer
+#' \code{method = "boot"} for scaled scores.
 #'
 #' **Bootstrap interval** (\code{method = "boot"})
 #'
@@ -58,9 +68,8 @@
 #'   point estimate.
 #' @param sides   a character string specifying the side of the interval:
 #'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-#'   Partial matching is supported. \code{"left"} sets \code{uci = Inf};
-#'   \code{"right"} sets \code{lci = -Inf}. Ignored when
-#'   \code{conf.level = NA}.
+#'   Partial matching is supported. Ignored when \code{conf.level = NA}.
+#'   See Details.
 #' @param method  confidence interval method: \code{"normal"} (delta-method
 #'   approximation, default) or \code{"boot"} (bootstrap via
 #'   \code{brier_boot_cpp()})
@@ -88,13 +97,9 @@
 #' brierScore(resp, pred, conf.level = 0.95, method = "boot", type = "bca")
 #' brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
 #'
-
-
-#' @family model.metrics  
-#' @concept model-evaluation  
+#' @family model.metrics
+#' @concept model-evaluation
 #' @concept calibration
-#'
-#'
 #' @export
 brierScore <- function(x,
                        pred       = NULL,
@@ -103,8 +108,10 @@ brierScore <- function(x,
                        sides      = c("two.sided", "left", "right"),
                        method     = c("normal", "boot"),
                        ...) {
-  
-  
+
+  sides  <- match.arg(sides)
+  method <- match.arg(method)
+
   # --- extract resp / pred ---------------------------------------------
   if (!is.null(pred)) {
     resp <- x
@@ -117,91 +124,113 @@ brierScore <- function(x,
       resp <- .numResponse(x)
     }
   }
-  
+
   # --- validate resp / pred --------------------------------------------
+  if (length(resp) != length(pred))
+    stop("'x' and 'pred' must have the same length.")
+  if (anyNA(resp) || anyNA(pred))
+    stop("'x' and 'pred' must not contain missing values.")
   if (!all(resp %in% c(0L, 1L)))
     stop("'x' (response) must be binary (0/1).")
   if (any(pred < 0 | pred > 1))
     stop("'pred' must contain probabilities in [0, 1].")
-  if (length(resp) != length(pred))
-    stop("'x' and 'pred' must have the same length.")
-  
+
   # --- point estimate --------------------------------------------------
-  bs_hat <- .brierLoss(resp, pred, scaled)
-  
+  bsHat <- .brierLoss(resp, pred, scaled)
+
   if (is.na(conf.level))
-    return(bs_hat)
-  
+    return(bsHat)
+
   # --- CI setup --------------------------------------------------------
   if (!is.numeric(conf.level) || length(conf.level) != 1L ||
       conf.level <= 0 || conf.level >= 1)
     stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
-  
-  sides  <- match.arg(sides)
-  method <- match.arg(method)
-  
-  conf_adj <- if (sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
-  alpha    <- 1 - conf_adj
-  n        <- length(resp)
-  
+
+  # A one-sided interval puts the full alpha on its single finite side, so
+  # the two-sided machinery below is run at a doubled alpha and the
+  # irrelevant bound opened afterwards.
+  confAdj <- if (sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
+  alpha   <- 1 - confAdj
+  n       <- length(resp)
+
+  bootType <- NA_character_
+
   ci <- switch(method,
-               
+
                normal = {
-                 loss    <- resp * (1 - pred)^2 + (1 - resp) * pred^2
-                 se      <- sqrt(var(loss) / n)
-                 z       <- qnorm(1 - alpha / 2)
-                 c(bs_hat - z * se, bs_hat + z * se)
+                 loss <- resp * (1 - pred)^2 + (1 - resp) * pred^2
+                 se   <- sqrt(var(loss) / n)
+
+                 # se above is on the raw Brier scale. When bsHat is the
+                 # SCALED score the two live on different scales entirely,
+                 # and the former code combined them directly - producing
+                 # an interval whose width had nothing to do with the
+                 # estimate. Delta method with BSmax held fixed.
+                 if (scaled) {
+                   meanY <- mean(resp)
+                   bsMax <- meanY * (1 - meanY)^2 + (1 - meanY) * meanY^2
+                   if (bsMax <= 0)
+                     stop("the scaled Brier score is undefined: the response has no variation.")
+                   se <- se / bsMax
+                 }
+
+                 z <- qnorm(1 - alpha / 2)
+                 c(bsHat - z * se, bsHat + z * se)
                },
-               
+
                boot = {
-                 dots      <- list(...)
-                 boot_args <- .extractBootArgs(dots)
-                 
-                 boot_vals <- brier_boot_cpp(resp, pred, boot_args$R, scaled)
-                 
-                 switch(boot_args$type,
-                        
+                 bootArgs <- .extractBootArgs(list(...))
+                 bootType <- bootArgs$type
+
+                 bootVals <- brier_boot_cpp(resp, pred, bootArgs$R, scaled)
+
+                 switch(bootType,
+
                         perc = {
-                          probs <- switch(sides,
-                                          two.sided = c(alpha / 2, 1 - alpha / 2),
-                                          left      = c(alpha,     1             ),
-                                          right     = c(0,         1 - alpha     ))
-                          quantile(boot_vals, probs = probs, names = FALSE)
+                          # alpha/2, not alpha: alpha has already been
+                          # doubled above for one-sided requests, so using
+                          # it undivided delivered a 90% bound where 95%
+                          # was asked for. The open side is set to +/-Inf
+                          # below like every other method, rather than to
+                          # the extreme order statistic of the resamples.
+                          quantile(bootVals, probs = c(alpha / 2, 1 - alpha / 2),
+                                   names = FALSE)
                         },
-                        
+
                         norm = {
-                          se_boot <- sd(boot_vals)
-                          z       <- qnorm(1 - alpha / 2)
-                          c(bs_hat - z * se_boot, bs_hat + z * se_boot)
+                          seBoot <- sd(bootVals)
+                          z      <- qnorm(1 - alpha / 2)
+                          c(bsHat - z * seBoot, bsHat + z * seBoot)
                         },
-                        
+
                         bca = {
-                          z0 <- qnorm(mean(boot_vals < bs_hat))
-                          
-                          jack      <- vapply(seq_len(n),
-                                              function(i) .brierLoss(resp[-i], pred[-i], scaled),
-                                              numeric(1L))
-                          jack_mean <- mean(jack)
-                          num       <- sum((jack_mean - jack)^3)
-                          den       <- 6 * sum((jack_mean - jack)^2)^(3 / 2)
-                          a         <- num / den
-                          
-                          z_alpha <- qnorm(c(alpha / 2, 1 - alpha / 2))
-                          adj     <- pnorm(z0 + (z0 + z_alpha) / (1 - a * (z0 + z_alpha)))
-                          quantile(boot_vals, probs = adj, names = FALSE)
+                          pLess <- mean(bootVals < bsHat)
+                          if (pLess <= 0 || pLess >= 1)
+                            stop("BCa bias correction is not finite; ",
+                                 "use type = \"perc\" or increase R.")
+                          z0 <- qnorm(pLess)
+
+                          jack <- vapply(seq_len(n),
+                                         function(i) .brierLoss(resp[-i], pred[-i], scaled),
+                                         numeric(1L))
+                          jackMean <- mean(jack)
+                          num <- sum((jackMean - jack)^3)
+                          den <- 6 * sum((jackMean - jack)^2)^(3 / 2)
+                          a   <- if (den == 0) 0 else num / den
+
+                          zAlpha <- qnorm(c(alpha / 2, 1 - alpha / 2))
+                          adj <- pnorm(z0 + (z0 + zAlpha) / (1 - a * (z0 + zAlpha)))
+                          quantile(bootVals, probs = adj, names = FALSE)
                         }
                  )
                }
   )
-  
+
   # --- one-sided truncation --------------------------------------------
-  # (perc boot with sides already handled above; apply to all others)
-  if (!(method == "boot" && boot_args$type == "perc")) {
-    if (sides == "left")  ci[2L] <- Inf
-    if (sides == "right") ci[1L] <- -Inf
-  }
-  
-  c(est = bs_hat, lci = ci[1L], uci = ci[2L])
+  if (sides == "left")  ci[2L] <- Inf
+  if (sides == "right") ci[1L] <- -Inf
+
+  c(est = bsHat, lci = ci[1L], uci = ci[2L])
 }
 
 
@@ -213,9 +242,9 @@ brierScore <- function(x,
   loss <- resp * (1 - pred)^2 + (1 - resp) * pred^2
   bs   <- mean(loss)
   if (scaled) {
-    mean_y <- mean(resp)
-    bs_max <- mean_y * (1 - mean_y)^2 + (1 - mean_y) * mean_y^2
-    bs     <- 1 - bs / bs_max
+    meanY <- mean(resp)
+    bsMax <- meanY * (1 - meanY)^2 + (1 - meanY) * meanY^2
+    bs    <- 1 - bs / bsMax
   }
   bs
 }
@@ -224,10 +253,18 @@ brierScore <- function(x,
 
 # --- internal: extract response from model object --------------------
 
+# glm stores the (numeric) response in $y, which is exactly what is
+# needed here. The former version instead overwrote obj$terms with
+# eval(obj$call$formula) before calling model.frame(): the assignment
+# replaced a valid terms object with a bare formula, and the eval() ran in
+# this function's frame, so a call built from a formula held in a variable
+# ("object not found") or fitted with model = FALSE would break.
 .numResponse <- function(obj) {
-  obj$terms <- eval(obj$call$formula)
-  res <- model.response(model.frame(obj))
-  if (is.factor(res)) res <- as.numeric(res) - 1L
-  res
-}
 
+  if (!is.null(obj$y))
+    return(as.numeric(obj$y))
+
+  res <- model.response(model.frame(obj))
+  if (is.factor(res)) res <- as.numeric(res) - 1
+  as.numeric(res)
+}

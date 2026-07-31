@@ -7,11 +7,8 @@
 #' Cohen's \eqn{h} is defined as:
 #'
 #' \deqn{
-#' h =
-#' 2\arcsin(\sqrt{p_1})
-#' -
-#' 2\arcsin(\sqrt{p_2})
-#' }
+#' h = 2\arcsin(\sqrt{p_1}) - 2\arcsin(\sqrt{p_2})
+#' }{h = 2*asin(sqrt(p1)) - 2*asin(sqrt(p2))}
 #'
 #' where \eqn{p_1} and \eqn{p_2} are the event probabilities
 #' in the first and second row, respectively.
@@ -19,12 +16,16 @@
 #' Optionally, an approximate asymptotic confidence interval
 #' is computed.
 #'
-#' @param x a 2x2 contingency table, matrix, or vector that can
-#'   be coerced into a table
+#' @param x a 2x2 contingency table or matrix, or a categorical vector
+#'   when \code{y} is supplied
 #' @param y an optional second variable used together with \code{x}
 #'   to create a contingency table via \code{table(x, y, ...)}
-#' @param conf.level confidence level for the interval.
-#'   If \code{NA}, only the point estimate is returned.
+#' @param conf.level confidence level for the interval. Set this to
+#'   \code{NA} if no confidence interval should be calculated. This is the
+#'   default.
+#' @param sides a character string specifying the side of the confidence
+#'   interval. Must be one of \code{"two.sided"} (default), \code{"left"},
+#'   or \code{"right"}. Partial matching is supported. See Details.
 #' @param ... additional arguments passed to \code{table()}
 #'
 #' @return if \code{conf.level = NA}, a numeric scalar containing Cohen's
@@ -51,13 +52,14 @@
 #' The confidence interval is based on the asymptotic standard error:
 #'
 #' \deqn{
-#' SE(h) =
-#' \sqrt{
-#' \frac{1}{n_1}
-#' +
-#' \frac{1}{n_2}
-#' }
-#' }
+#' SE(h) = \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}
+#' }{SE(h) = sqrt(1/n1 + 1/n2)}
+#'
+#' \code{sides} names the side on which the finite bound lies:
+#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' \eqn{(-\infty, uci]}. This is the reverse of the convention in
+#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis
+#' of \code{\link[stats]{t.test}}.
 #'
 #' @examples
 #' tab <- matrix(
@@ -68,68 +70,70 @@
 #' )
 #'
 #' cohenH(tab)
+#' cohenH(tab, conf.level = 0.95)
 #'
 #' x <- c(rep("A", 52), rep("B", 13))
-#' y <- c(rep(c("yes", "no"), c(26,26)),
-#'        rep(c("yes", "no"), c(6,7)))
+#' y <- c(rep(c("yes", "no"), c(26, 26)),
+#'        rep(c("yes", "no"), c(6, 7)))
 #'
-#' cohenH(x, y)
+#' cohenH(x, y, conf.level = 0.95)
 #'
 #' @references
 #' Cohen J (1988). Statistical Power Analysis for the Behavioral
 #' Sciences (2nd ed.). Lawrence Erlbaum Associates.
 #'
-
-
-
-#' @family effect.size  
-#' @concept effect-size  
+#' @family effect.size
+#' @concept effect-size
 #' @concept binary-outcome
-#'
-#'
 #' @export
 cohenH <- function(x,
-                    y = NULL,
-                    conf.level = 0.95,
-                    ...) {
-  
+                   y = NULL,
+                   conf.level = NA,
+                   sides = c("two.sided", "left", "right"),
+                   ...) {
+
+  sides <- match.arg(sides)
+
   if (!is.null(y))
     x <- table(x, y, ...)
-  
-  if (!all(dim(x) == c(2,2)))
-    stop("Input must be a 2x2 table.")
-  
-  a <- x[1,1]
-  b <- x[1,2]
-  c <- x[2,1]
-  d <- x[2,2]
-  
-  n1 <- a + b
-  n2 <- c + d
-  
-  p1 <- a / n1
-  p2 <- c / n2
-  
-  h <- 2 * asin(sqrt(p1)) -
-    2 * asin(sqrt(p2))
-  
+
+  # dim(x) is NULL for a plain vector, and all(NULL == c(2, 2)) is
+  # all(logical(0)), i.e. TRUE - so a vector used to sail past this guard
+  # and fail two lines later with "incorrect number of dimensions".
+  if (length(dim(x)) != 2L || !all(dim(x) == c(2L, 2L)))
+    stop("Input must be a 2x2 table; supply 'y' to cross-tabulate two vectors.")
+
+  if (!is.numeric(x) && !is.table(x))
+    stop("Input must be numeric.")
+
+  # a/b/c/d as local names would mask base::c(); spelled out instead
+  n1 <- x[1L, 1L] + x[1L, 2L]
+  n2 <- x[2L, 1L] + x[2L, 2L]
+
+  if (n1 == 0 || n2 == 0)
+    stop("Both rows of the table must contain at least one observation.")
+
+  p1 <- x[1L, 1L] / n1
+  p2 <- x[2L, 1L] / n2
+
+  h <- 2 * asin(sqrt(p1)) - 2 * asin(sqrt(p2))
+
   if (is.na(conf.level))
     return(h)
-  
-  se <- sqrt(1/n1 + 1/n2)
-  
-  alpha <- 1 - conf.level
-  z <- qnorm(1 - alpha/2)
-  
-  lci <- h - z * se
-  uci <- h + z * se
-  
-  out <- c(
-    est = h,
-    lci = lci,
-    uci = uci
-  )
-  
+
+  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
+      conf.level <= 0 || conf.level >= 1)
+    stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
+
+  se <- sqrt(1 / n1 + 1 / n2)
+
+  confAdj <- if (sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
+  z <- qnorm(1 - (1 - confAdj) / 2)
+
+  out <- c(est = h, lci = h - z * se, uci = h + z * se)
+
+  if (sides == "left")  out[["uci"]] <- Inf
+  if (sides == "right") out[["lci"]] <- -Inf
+
   return(out)
 }
-

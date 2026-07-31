@@ -19,10 +19,12 @@ as.ym(x)
 \arguments{
 \item{x}{a vector of integers, representing the dates in the format YYYYMM,
 to which a number of months has to be added. YYYY must lie in the range of
-1000-3000, MM in 1-12.}
+1000-3000, MM in 1-12. Values outside that range become \code{NA}.}
 
 \item{d}{the day to be used for converting a yearmonth to a date. Default is
-1.}
+\enumerate{
+\item Combinations that do not exist (e.g. 30 February) yield \code{NA}.
+}}
 
 \item{\dots}{further arguments; currently unused}
 
@@ -33,9 +35,8 @@ be subtracted.}
 \describe{
 \item{\code{as.ym()}}{an integer vector of class \code{"ym"}}
 \item{\code{as.Date.ym()}}{a vector of class \code{"Date"}}
-\item{\code{addMonths.ym()}}{a numeric vector containing the transformed
-YYYYMM or YYYYMMDD values}
-\item{\code{print.ym()}}{invisibly, the printed unclassed vector}
+\item{\code{addMonths.ym()}}{an integer vector of class \code{"ym"}}
+\item{\code{print.ym()}}{invisibly, \code{x}}
 }
 }
 \description{
@@ -46,15 +47,14 @@ return 201111 rather than 201199. \code{addMonths()} provides this
 arithmetic for objects of class \code{"ym"}.
 }
 \details{
-All parameters are recycled if necessary. The underlying
-\code{\link{mapply}} call warns if the longer argument is not a multiple
-of the length of the shorter one.
+All parameters are recycled if necessary, following the usual arithmetic
+recycling rules; a warning is issued when the longer argument is not a
+multiple of the length of the shorter one.
 }
 \note{
 Based on code by Roland Rapold, adapted to conform to package standards.
 }
 \examples{
-
 
 month(as.ym(202408))
 year(as.ym(202408))
@@ -63,12 +63,17 @@ year(as.Date("2024-12-05"))
 year(as.ym(202412))
 
 month(as.Date("2024-12-05"), fmt = "mm")
-month(as.ym(202412), fmt="mm")
+month(as.ym(202412), fmt = "mm")
 
-addMonths(201511, 5)
+# arithmetic stays in the ym domain, so it can be chained
+addMonths(as.ym(201511), 5)
+as.ym(201511) + 5 - 2
 
-addMonths(c(201511, 201302), c(5, 15))
-addMonths(c(201511, 201302), c(5, -4))
+addMonths(as.ym(c(201511, 201302)), c(5, 15))
+addMonths(as.ym(c(201511, 201302)), c(5, -4))
+
+# out-of-range input is flagged, not silently mangled
+as.ym(c(201513, 999901))
 
 }
 \seealso{

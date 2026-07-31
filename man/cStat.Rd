@@ -20,12 +20,12 @@ default method, a numeric vector of predicted values}
 
 \item{resp}{a binary response vector (numeric, logical, or factor)}
 
-\item{conf.level}{confidence level for the interval; \code{NA} suppresses
-interval calculation}
+\item{conf.level}{confidence level for the interval; \code{NA} (default)
+suppresses interval calculation}
 }
 \value{
-if \code{conf.level = NA}, a numeric scalar between 0 and 1;
-otherwise a named numeric vector with elements:
+if \code{conf.level = NA}, an unnamed numeric scalar between 0
+and 1; otherwise a named numeric vector with elements:
 \describe{
 \item{\code{est}}{point estimate of the C-statistic.}
 \item{\code{lci}}{lower confidence interval bound.}
@@ -43,6 +43,13 @@ higher predicted value has the higher observed outcome.
 
 Ties in predicted values are handled by assigning a weight of 0.5.
 
+\code{resp} is converted with \code{as.numeric(factor(resp)) - 1}, so
+the \strong{second} level in sort order counts as the event - \code{1}
+for a 0/1 coding, \code{TRUE} for a logical, and the second factor level
+otherwise. Getting this backwards returns \eqn{1 - C} rather than an
+error, so check the level order when the response is a factor with
+unusual labels.
+
 This implementation uses:
 \itemize{
 \item O(n log n) concordance computation
@@ -53,6 +60,13 @@ This implementation uses:
 The number of bootstrap samples can be supplied through \code{...} as
 \code{R}; the default is 1000.
 }
+\section{Random number generation}{
+
+A confidence level triggers a bootstrap, which draws a seed from R's
+global random number generator and therefore advances it. Call
+\code{\link[base]{set.seed}} beforehand for reproducible intervals.
+}
+
 \examples{
 # Default method
 set.seed(1)
@@ -61,16 +75,15 @@ y <- rbinom(100, 1, 0.5)
 cStat(x, resp = y)
 
 # GLM method
-r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered, 
+r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
              data = bedrock::Pizza, family = binomial)
-cStat(r.mod, conf.level=0.95)
+cStat(r.mod, conf.level = 0.95)
 
 }
 \seealso{
 Other assoc.ordinal:
 \code{\link[=conDisPairs]{conDisPairs()}},
 \code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=gkTau]{gkTau()}},
 \code{\link[=kendallTauA]{kendallTauA()}},
 \code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},

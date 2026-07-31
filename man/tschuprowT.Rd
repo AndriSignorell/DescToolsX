@@ -70,8 +70,8 @@ https://doi.org/10.1016/j.jkss.2012.10.002
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=entropy]{entropy()}},
+\code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},

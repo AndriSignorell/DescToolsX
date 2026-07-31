@@ -1,19 +1,18 @@
 
-#' Partial Correlation Matrix via Schur Complement
+#' Partial Correlation Matrix
 #'
 #' Computes the partial correlation matrix of a set of variables \code{x}
 #' while controlling for another set of variables \code{y}, based on a
-#' correlation matrix or raw data.
-#'
-#' If \code{m} is not a square matrix, it is interpreted as a data matrix
-#' (observations in rows, variables in columns), and a correlation matrix
-#' is computed internally using \code{cor(..., use = "pairwise.complete.obs")}.
+#' covariance/correlation matrix or on raw data.
 #'
 #' @param m a numeric matrix, either:
 #'   \itemize{
-#'     \item a square correlation matrix, or
-#'     \item a data matrix (observations × variables)
+#'     \item a square, symmetric covariance or correlation matrix, or
+#'     \item a data matrix (observations in rows, variables in columns)
 #'   }
+#'   The two are told apart by symmetry, not by shape alone - a data
+#'   matrix with as many rows as columns would otherwise be mistaken for
+#'   a correlation matrix.
 #' @param x integer vector of indices specifying the variables of interest
 #'   for which partial correlations are computed
 #' @param y integer vector of indices specifying the control variables
@@ -24,33 +23,30 @@
 #'   Row and column names correspond to \code{colnames(m)[x]}.
 #'
 #' @details
-#' The function computes the partial correlation matrix using the
-#' Schur complement:
+#' Partial correlations are read off the precision matrix. Let \eqn{K} be
+#' the inverse of the joint covariance matrix of \eqn{(x, y)}; then
 #'
-#' \deqn{
-#' \Sigma_{xx \cdot y} = \Sigma_{xx} - \Sigma_{xy} \Sigma_{yy}^{-1} \Sigma_{yx}
-#' }
+#' \deqn{\rho_{ij \cdot y} = - K_{ij} / \sqrt{K_{ii} K_{jj}}}{
+#'   rho_ij.y = -K_ij / sqrt(K_ii * K_jj)}
 #'
-#' where:
-#' \itemize{
-#'   \item \eqn{\Sigma_{xx}} is the submatrix for variables \code{x}
-#'   \item \eqn{\Sigma_{yy}} is the submatrix for variables \code{y}
-#'   \item \eqn{\Sigma_{xy}} is the cross-covariance block
-#' }
+#' for \eqn{i, j} in \eqn{x}. This is algebraically equivalent to forming
+#' the Schur complement
+#' \eqn{\Sigma_{xx} - \Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}} and scaling
+#' it to unit diagonal, but needs a single inversion instead of two.
 #'
-#' The resulting matrix is then scaled to unit diagonal to yield a
-#' correlation matrix.
+#' Because the result is scaled to unit diagonal, it makes no difference
+#' whether \code{m} is a covariance or a correlation matrix.
 #'
 #' @section Numerical considerations:
 #' \itemize{
-#'   \item If \eqn{\Sigma_{yy}} (denoted as \code{phi}) is singular or
-#'     ill-conditioned (e.g., due to collinearity in \code{y}), the
-#'     function stops with an error.
-#'   \item If the resulting residual covariance matrix is not positive
-#'     definite (e.g., negative or zero diagonal elements), the function
-#'     stops with an error.
-#'   \item Pairwise correlations may introduce inconsistencies if missing
-#'     data are present.
+#'   \item The joint submatrix of \code{x} and \code{y} must be invertible.
+#'     Near-singularity from collinearity among the control variables is
+#'     detected via the reciprocal condition number, not merely by a
+#'     failure of \code{\link[base]{solve}}, which succeeds and returns
+#'     nonsense well before the matrix is numerically singular.
+#'   \item \code{x} and \code{y} must not overlap.
+#'   \item For raw data, correlations are computed pairwise, which can
+#'     produce a non-positive-definite matrix when values are missing.
 #' }
 #'
 #' @examples
@@ -66,63 +62,79 @@
 #' C <- cor(X)
 #' corPart(C, x = 1:2, y = 3:4)
 #'
-#' @seealso \code{\link[stats]{cor}}, \code{\link[stats]{cov}},
-#'   \code{\link[MASS]{ginv}} for generalized inverse
+#' # a single variable of interest is allowed and returns a 1x1 matrix
+#' corPart(C, x = 1, y = 3:4)
 #'
-
-
-
-#' @family assoc.continuous  
-#' @concept correlation  
+#' @seealso \code{\link[stats]{cor}}, \code{\link[stats]{cov}}
+#'
+#' @family assoc.continuous
+#' @concept correlation
 #' @concept association-measure
-#'
-#'
 #' @export
 corPart <- function(m, x, y) {
-  
+
   if (!is.matrix(m)) m <- as.matrix(m)
-  
-  # --- wenn Datenmatrix: Kovarianz berechnen ---
-  if (nrow(m) != ncol(m)) {
-    S <- cov(m, use = "pairwise.complete.obs")
-  } else {
-    # Input ist bereits Matrix → als Kovarianz interpretieren
-    S <- m
-  }
-  
+
+  if (!is.numeric(m))
+    stop("'m' must be numeric")
+
+  # Squareness alone is not enough to identify a covariance matrix: a data
+  # set with as many observations as variables (5 subjects, 5 items) was
+  # silently taken to be one, with no error anywhere downstream.
+  isCovMat <- nrow(m) == ncol(m) && isSymmetric(unname(m))
+
+  S <- if (isCovMat) m else cov(m, use = "pairwise.complete.obs")
+
   p <- ncol(S)
-  
-  # --- Index Checks ---
+
+  # --- index checks ---
+  if (length(x) == 0L || length(y) == 0L)
+    stop("'x' and 'y' must each name at least one variable")
+
   if (any(!is.finite(x)) || any(!is.finite(y)) ||
       any(x %% 1 != 0) || any(y %% 1 != 0) ||
       any(x < 1) || any(y < 1) ||
       any(x > p) || any(y > p)) {
     stop("x and y must be integer indices in 1:ncol(m)")
   }
-  
-  # --- relevante Submatrix ---
+
+  if (length(intersect(x, y)) > 0L)
+    stop("'x' and 'y' must not overlap - a variable cannot be both of ",
+         "interest and a control")
+
+  # --- relevant submatrix ---
   idx <- c(x, y)
   S_sub <- S[idx, idx, drop = FALSE]
-  
-  # --- Inversion (Präzisionsmatrix) ---
-  P <- tryCatch(
-    solve(S_sub),
-    error = function(e) {
-      stop("Covariance matrix is singular or ill-conditioned (collinearity)")
-    }
-  )
-  
+
+  if (anyNA(S_sub))
+    stop("the covariance matrix contains missing values; too few complete ",
+         "pairs in 'm'")
+
+  # --- inversion (precision matrix) ---
+  # solve() only errors below its own tolerance and happily returns
+  # garbage for a merely ill-conditioned matrix, which the documentation
+  # nevertheless promised to catch
+  if (rcond(S_sub) < .Machine$double.eps^0.5)
+    stop("Covariance matrix is singular or ill-conditioned (collinearity)")
+
+  P <- solve(S_sub)
+
   k <- length(x)
-  
-  # --- Partial correlations aus Präzisionsmatrix ---
-  P_xx <- P[1:k, 1:k, drop = FALSE]
-  
-  D <- diag(1 / sqrt(diag(P_xx)))
+
+  # --- partial correlations from the precision matrix ---
+  P_xx <- P[seq_len(k), seq_len(k), drop = FALSE]
+
+  # diag(v) with a length-1 v builds an identity matrix of size round(v)
+  # instead of a 1x1 matrix - corPart(m, x = 1, y = ...) died on a
+  # non-conformable multiplication. nrow= forces the intended reading.
+  dv <- 1 / sqrt(diag(P_xx))
+  D  <- diag(dv, nrow = k)
+
   pc <- -D %*% P_xx %*% D
-  
+
   diag(pc) <- 1
-  
+
   colnames(pc) <- rownames(pc) <- colnames(m)[x]
-  
+
   return(pc)
 }

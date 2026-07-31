@@ -59,7 +59,8 @@
 #' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
 #' \code{parallel} and \code{999} for \code{R}.
 #' 
-#' @return for \code{gsd()}, a numeric scalar. For \code{gmean()}, a numeric
+#' @return for \code{gsd()}, a numeric scalar (\code{NA} if fewer than two
+#' strictly positive values remain). For \code{gmean()}, a numeric
 #' scalar if \code{conf.level = NA}; otherwise a named numeric vector with
 #' elements:
 #' \describe{
@@ -76,6 +77,7 @@
 #' \cr\url{https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf}
 #' 
 #' @examples
+#' set.seed(1)
 #' x <- runif(5)
 #' gmean(x)
 #' 
@@ -91,14 +93,15 @@
 #' # positives only
 #' gmean(x[x>0], na.rm=TRUE, conf.level=0.95)
 #' 
-#' # add 5 to original values and remove zeros
-#' gmean(naReplace(x+5, 0), na.rm=TRUE, conf.level = 0.95)
+#' # shift by 5 so that everything is positive, then drop the zeros:
+#' # naReplace() puts zeros IN (turning NA into 0), which makes the
+#' # geometric mean collapse to 0 - the opposite of what is wanted here
+#' z <- x + 5
+#' gmean(z[!is.na(z) & z > 0], conf.level = 0.95)
 #' 
-#' @family location  
-#' @concept location  
+#' @family location
+#' @concept location
 #' @concept nonlinear-mean
-#'
-#'
 #' @rdname gmean
 #' @export
 gmean <- function (x, conf.level = NA, sides = c("two.sided","left","right"),
@@ -144,9 +147,15 @@ gmean <- function (x, conf.level = NA, sides = c("two.sided","left","right"),
 #' @rdname gmean
 #' @export
 gsd <- function (x, na.rm = FALSE) {
-  
-  if(na.rm) x <- na.omit(x)
+
+  # Non-positive values become NA here, i.e. AFTER na.omit() has run, so
+  # sd() saw them and returned NA even when na.rm = TRUE was requested.
   is.na(x) <- x <= 0
-  
-  exp(sd(log(x)))
+
+  if(na.rm) x <- as.numeric(na.omit(x))
+
+  if(length(x) < 2L)
+    return(NA_real_)
+
+  exp(sd(log(x), na.rm = na.rm))
 }

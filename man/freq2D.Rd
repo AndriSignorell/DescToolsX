@@ -8,7 +8,7 @@
 \usage{
 freq2D(x, ...)
 
-\method{freq2D}{formula}(formula, data, subset, na.action, n = 20, pad = 0, dnn = NULL, ...)
+\method{freq2D}{formula}(x, data, subset, na.action, n = 20, pad = 0, dnn = NULL, ...)
 
 \method{freq2D}{default}(x, y, n = 20, pad = 0, dnn = NULL, ...)
 }
@@ -17,8 +17,6 @@ freq2D(x, ...)
 contain the x and y values}
 
 \item{\dots}{named arguments passed to the default method}
-
-\item{formula}{a \code{\link{formula}}, such as \code{y ~ x}}
 
 \item{data}{a \code{data.frame}, \code{matrix}, or \code{list} from which
 the variables in \code{formula} should be taken}
@@ -38,6 +36,8 @@ zeros}
 \item{dnn}{names for the dimensions in the result}
 
 \item{y}{a vector of y values}
+
+\item{formula}{a \code{\link{formula}}, such as \code{y ~ x}}
 }
 \value{
 a frequency matrix whose rows represent the y bins in descending

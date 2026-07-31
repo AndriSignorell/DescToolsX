@@ -34,7 +34,7 @@ method. One of \code{"z-transform"}, \code{"boot"}, or
 removed before computation}
 
 \item{...}{additional arguments controlling the bootstrap procedure.
-Currently \code{R} and \code{parallel} are supported.}
+Currently \code{R}, \code{parallel} and \code{ncpus} are supported.}
 }
 \value{
 a named numeric vector containing only \code{est} when

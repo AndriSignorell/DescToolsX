@@ -18,17 +18,19 @@
 #' are doubtful, for instance with markedly skewed or heterogeneous items.
 #'
 #' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
-#' \eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
+#' \code{"left"} yields an interval bounded below and \code{"right"} one
+#' bounded above. Alpha cannot exceed 1, so the open upper side is reported
+#' at that boundary rather than as \eqn{\infty} (design_rules.md 4.1),
+#' while the open lower side stays \eqn{-\infty} because alpha is
+#' unbounded below. Note that this is the reverse of the convention in
 #' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
 #' \code{\link[stats]{t.test}}.
 #'
 #' Missing values are handled according to package conventions: if
-#' \code{na.rm = FALSE} and \code{x} contains missing values, a single
-#' \code{NA_real_} is returned, irrespective of \code{returnConditional} and
-#' \code{conf.level}. If \code{na.rm = TRUE}, complete cases are used.
-#' Infinite values leave the variances undefined and are rejected with an
-#' error.
+#' \code{na.rm = FALSE} and \code{x} contains missing values, the usual
+#' structure is returned with \code{NA_real_} in place of every estimate.
+#' If \code{na.rm = TRUE}, complete cases are used. Infinite values leave
+#' the variances undefined and are rejected with an error.
 #'
 #' @param x a \eqn{n \times m} matrix or data frame with item responses,
 #' \eqn{n} subjects (in rows) and \eqn{m} items (in columns)
@@ -45,8 +47,8 @@
 #' @return a named numeric vector, or a list when
 #' \code{returnConditional = TRUE}.
 #'
-#' If \code{na.rm = FALSE} and \code{x} contains missing values, a single
-#' \code{NA_real_} is returned instead of either structure.
+#' If \code{na.rm = FALSE} and \code{x} contains missing values, the same
+#' structure is returned with \code{NA_real_} throughout.
 #'
 #' If \code{conf.level = NA}, the numeric vector contains only \code{est};
 #' otherwise it has elements:
@@ -102,7 +104,6 @@
 #' @family assoc.agreement
 #' @concept internal-consistency
 #' @concept reliability
-#' @concept confidence-interval
 #'
 #' @export
 cronbachAlpha <- function(x,
@@ -166,8 +167,22 @@ cronbachAlpha <- function(x,
   if(nrow(x) < 2L)
     stop("Argument 'x' must have at least 2 subjects (rows).")
 
-  if(anyNA(x))
-    return(NA_real_)
+  # Shape consistency with every other exit: a bare NA_real_ forced callers
+  # to type-check the result before they could index it, and it silently
+  # ignored returnConditional as well.
+  if(anyNA(x)) {
+
+    naRes <- .makeEstimateResult(
+      est = NA_real_,
+      lci = if(is.na(conf.level)) NULL else NA_real_,
+      uci = if(is.na(conf.level)) NULL else NA_real_
+    )
+
+    if(!returnConditional)
+      return(naRes)
+
+    return(list(unconditional = naRes, conditional = NULL))
+  }
 
   # Checked only after the NA policy has been applied: is.finite() is
   # FALSE for NA too, so an earlier check would turn the documented
@@ -199,7 +214,7 @@ cronbachAlpha <- function(x,
     itemNames <- colnames(x)
 
     if(is.null(itemNames))
-      itemNames <- seq_len(nItems)
+      itemNames <- as.character(seq_len(nItems))
 
     condList <- vector("list", nItems)
 
@@ -280,7 +295,7 @@ cronbachAlpha <- function(x,
   } else if(sides == "left") {
 
     lci <- 1 - (1 - est) * qf(1 - alpha, df1, df2)
-    uci <- Inf
+    uci <- 1
 
   } else {
 

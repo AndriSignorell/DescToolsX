@@ -27,7 +27,9 @@
 #' correlation (based on \code{method}) is removed.
 #'
 #' The scoring is computed once at the beginning and kept fixed throughout,
-#' ensuring deterministic and efficient behavior.
+#' ensuring deterministic and efficient behavior. Because the columns are
+#' then processed in decreasing score order, the variable removed from a
+#' pair is always the earlier - i.e. the higher-scoring - one.
 #'
 #' This is a greedy heuristic and does not guarantee a globally optimal solution.
 #'
@@ -53,11 +55,9 @@
 
 
 
-#' @family assoc.continuous  
-#' @concept correlation  
+#' @family assoc.continuous
+#' @concept correlation
 #' @concept feature-selection
-#'
-#'
 #' @export
 findCorrX <- function(x,
                       cutoff = 0.9,
@@ -72,7 +72,10 @@ findCorrX <- function(x,
   if (!is.matrix(x))
     stop("x must be a matrix")
   
-  if (!isTRUE(all.equal(x, t(x), tolerance = 1e-8)))
+  # isSymmetric() on the unnamed matrix: all.equal() also compares
+  # dimnames, so a matrix whose row and column names differ was rejected
+  # as asymmetric even when it was numerically symmetric
+  if (!isSymmetric(unname(x), tol = 1e-8))
     stop("x must be a symmetric correlation matrix")
   
   if (nrow(x) < 2)
@@ -82,36 +85,36 @@ findCorrX <- function(x,
     stop("cutoff must be a numeric value between 0 and 1 (exclusive).")
   
   if (output == "names" && is.null(colnames(x)))
-    stop("x has no column names; use return = 'index' instead.")
+    stop("x has no column names; use output = 'index' instead.")
   
   # --- Preprocessing ---
   x <- abs(x)
   diag(x) <- NA
   
-  score_fun <- switch(method,
+  scoreFun <- switch(method,
                       mean   = function(v) mean(v, na.rm = TRUE),
                       max    = function(v) max(v, na.rm = TRUE),
                       median = function(v) median(v, na.rm = TRUE)
   )
   
-  scores <- apply(x, 2, score_fun)
+  scores <- apply(x, 2, scoreFun)
   ord <- order(scores, decreasing = TRUE)
   
-  x_ord <- x[ord, ord, drop = FALSE]
-  removed <- rep(FALSE, nrow(x_ord))
+  xOrd <- x[ord, ord, drop = FALSE]
+  removed <- rep(FALSE, nrow(xOrd))
   
-  removal_log <- list()
+  removalLog <- list()
   
   # --- Main loop ---
-  for (i in seq_len(nrow(x_ord) - 1)) {
+  for (i in seq_len(nrow(xOrd) - 1)) {
     
     if (removed[i]) next
     
-    for (j in (i + 1):nrow(x_ord)) {
+    for (j in seq.int(i + 1L, nrow(xOrd))) {
       
       if (removed[j]) next
       
-      cij <- x_ord[i, j]
+      cij <- xOrd[i, j]
       
       if (is.na(cij)) next
       
@@ -124,36 +127,33 @@ findCorrX <- function(x,
           ))
         }
         
-        if (scores[ord[i]] >= scores[ord[j]]) {
-          removed[i] <- TRUE
-          removal_log[[length(removal_log) + 1]] <-
-            list(remove = ord[i], keep = ord[j], corr = cij)
-          break
-        } else {
-          removed[j] <- TRUE
-          removal_log[[length(removal_log) + 1]] <-
-            list(remove = ord[j], keep = ord[i], corr = cij)
-        }
+        # ord sorts by decreasing score, so for i < j the first branch
+        # always held and the else was unreachable. Kept as a single
+        # statement rather than a comparison that can only go one way.
+        removed[i] <- TRUE
+        removalLog[[length(removalLog) + 1L]] <-
+          list(remove = ord[i], keep = ord[j], corr = cij)
+        break
       }
     }
   }
   
-  removed_idx <- ord[removed]
-  kept_idx <- ord[!removed]
+  removedIdx <- ord[removed]
+  keptIdx <- ord[!removed]
   
   # --- Output ---
   out <- switch(output,
-                index   = removed_idx,
-                names   = colnames(x)[removed_idx],
+                index   = removedIdx,
+                names   = colnames(x)[removedIdx],
                 logical = {
                   res <- rep(FALSE, ncol(x))
-                  res[removed_idx] <- TRUE
+                  res[removedIdx] <- TRUE
                   res
                 },
                 report  = list(
-                  removed = removed_idx,
-                  kept = kept_idx,
-                  log = removal_log
+                  removed = removedIdx,
+                  kept = keptIdx,
+                  log = removalLog
                 )
   )
   

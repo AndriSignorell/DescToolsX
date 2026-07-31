@@ -2,16 +2,19 @@
 % Please edit documentation in R/corPart.R
 \name{corPart}
 \alias{corPart}
-\title{Partial Correlation Matrix via Schur Complement}
+\title{Partial Correlation Matrix}
 \usage{
 corPart(m, x, y)
 }
 \arguments{
 \item{m}{a numeric matrix, either:
 \itemize{
-\item a square correlation matrix, or
-\item a data matrix (observations × variables)
-}}
+\item a square, symmetric covariance or correlation matrix, or
+\item a data matrix (observations in rows, variables in columns)
+}
+The two are told apart by symmetry, not by shape alone - a data
+matrix with as many rows as columns would otherwise be mistaken for
+a correlation matrix.}
 
 \item{x}{integer vector of indices specifying the variables of interest
 for which partial correlations are computed}
@@ -27,41 +30,34 @@ Row and column names correspond to \code{colnames(m)[x]}.
 \description{
 Computes the partial correlation matrix of a set of variables \code{x}
 while controlling for another set of variables \code{y}, based on a
-correlation matrix or raw data.
+covariance/correlation matrix or on raw data.
 }
 \details{
-If \code{m} is not a square matrix, it is interpreted as a data matrix
-(observations in rows, variables in columns), and a correlation matrix
-is computed internally using \code{cor(..., use = "pairwise.complete.obs")}.
+Partial correlations are read off the precision matrix. Let \eqn{K} be
+the inverse of the joint covariance matrix of \eqn{(x, y)}; then
 
-The function computes the partial correlation matrix using the
-Schur complement:
+\deqn{\rho_{ij \cdot y} = - K_{ij} / \sqrt{K_{ii} K_{jj}}}{
+  rho_ij.y = -K_ij / sqrt(K_ii * K_jj)}
 
-\deqn{
-\Sigma_{xx \cdot y} = \Sigma_{xx} - \Sigma_{xy} \Sigma_{yy}^{-1} \Sigma_{yx}
-}
+for \eqn{i, j} in \eqn{x}. This is algebraically equivalent to forming
+the Schur complement
+\eqn{\Sigma_{xx} - \Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}} and scaling
+it to unit diagonal, but needs a single inversion instead of two.
 
-where:
-\itemize{
-\item \eqn{\Sigma_{xx}} is the submatrix for variables \code{x}
-\item \eqn{\Sigma_{yy}} is the submatrix for variables \code{y}
-\item \eqn{\Sigma_{xy}} is the cross-covariance block
-}
-
-The resulting matrix is then scaled to unit diagonal to yield a
-correlation matrix.
+Because the result is scaled to unit diagonal, it makes no difference
+whether \code{m} is a covariance or a correlation matrix.
 }
 \section{Numerical considerations}{
 
 \itemize{
-\item If \eqn{\Sigma_{yy}} (denoted as \code{phi}) is singular or
-ill-conditioned (e.g., due to collinearity in \code{y}), the
-function stops with an error.
-\item If the resulting residual covariance matrix is not positive
-definite (e.g., negative or zero diagonal elements), the function
-stops with an error.
-\item Pairwise correlations may introduce inconsistencies if missing
-data are present.
+\item The joint submatrix of \code{x} and \code{y} must be invertible.
+Near-singularity from collinearity among the control variables is
+detected via the reciprocal condition number, not merely by a
+failure of \code{\link[base]{solve}}, which succeeds and returns
+nonsense well before the matrix is numerically singular.
+\item \code{x} and \code{y} must not overlap.
+\item For raw data, correlations are computed pairwise, which can
+produce a non-positive-definite matrix when values are missing.
 }
 }
 
@@ -78,10 +74,12 @@ corPart(X, x = 1:2, y = 3:4)
 C <- cor(X)
 corPart(C, x = 1:2, y = 3:4)
 
+# a single variable of interest is allowed and returns a 1x1 matrix
+corPart(C, x = 1, y = 3:4)
+
 }
 \seealso{
-\code{\link[stats]{cor}}, \code{\link[stats]{cov}},
-\code{\link[MASS]{ginv}} for generalized inverse
+\code{\link[stats]{cor}}, \code{\link[stats]{cov}}
 
 Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},

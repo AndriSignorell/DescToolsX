@@ -1,13 +1,13 @@
 
 #' Create a Factor Variable by Cutting an Age Variable
-#' 
+#'
 #' Dividing the range of an age variable \code{x} into intervals is a frequent
 #' task in data analysis. The commonly used function \code{\link{cut}} has
 #' unfavourable default values for this. \code{cutAge()} is a convenient
 #' wrapper for cutting age variables in groups of e.g. 10 years with more
 #' suitable defaults.
-#' 
-#' 
+#'
+#'
 #' @param x continuous variable
 #' @param breaks either a numeric vector of two or more unique cut points or a
 #' single number (greater than or equal to 2) giving the number of intervals
@@ -25,41 +25,65 @@
 #' to change the labels
 #' @return a factor, or an integer vector of level codes when
 #' \code{labels = FALSE}
-#' 
+#'
 #' Values which fall outside the range of breaks are coded as \code{NA}, as are
 #' \code{NaN} and \code{NA} values.
-#' 
+#'
 #' @seealso \code{\link{cut}}, \code{\link{seq}}
-#' 
+#'
 #' @examples
-#' 
-#' desc(cutAge(sample(0:100, size=100, replace=TRUE)))
-#' 
-#' @family cut  
-#' @concept binning  
+#'
+#' set.seed(1)
+#' desc(cutAge(sample(0:100, size = 100, replace = TRUE)))
+#'
+#' # readable labels
+#' table(cutAge(c(3, 17, 42, 67, 95), labels = TRUE))
+#'
+#' # drop the empty groups at both ends
+#' table(cutAge(c(42, 47, 51), labels = TRUE, full = FALSE))
+#'
+#' @family cut
+#' @concept binning
 #' @concept demographics
-#'
-#'
 #' @export
-cutAge <- function(x, breaks=c(seq(from=0, to=90, by=10), Inf), 
-                   right=FALSE, ordered_result=TRUE, full=TRUE, 
-                   labels=NULL, ...) {
-  
-  
-  if(identical(labels, TRUE)){
-    labels <- paste(fm(head(breaks, -1), ldigits=2, digits=0), 
-                    c(head(breaks[-1], -1)-1, ".."), sep="-")
+cutAge <- function(x, breaks = c(seq(from = 0, to = 90, by = 10), Inf),
+                   right = FALSE, ordered_result = TRUE, full = TRUE,
+                   labels = NULL, ...) {
+
+  if (identical(labels, TRUE)) {
+
+    lower <- head(breaks, -1)
+    upper <- head(breaks[-1], -1) - 1
+
+    # formatC(), not fm(ldigits=): ldigits does not zero-pad, so the
+    # labels came out as "0-9" rather than the documented "00-09". The
+    # width follows the largest finite break, so breaks beyond 99 widen
+    # every label consistently instead of ragged.
+    wd <- max(2L, nchar(as.character(as.integer(
+      max(c(lower, upper)[is.finite(c(lower, upper))])))))
+
+    pad <- function(v) formatC(as.integer(v), width = wd, flag = "0")
+
+    labels <- paste(pad(lower), c(pad(upper), ".."), sep = "-")
   }
-  
-  res <- cut(x, breaks = breaks, 
-             right=right, ordered_result = ordered_result, 
+
+  res <- cut(x, breaks = breaks,
+             right = right, ordered_result = ordered_result,
              labels = labels, ...)
-  
-  if(!full)
-    res <- factor(res, 
-                  levels=levels(res)[do.call(seq, 
-                                             as.list(range(which(freq(res)$freq != 0))))])			
-  
-  return(res)  
-  
+
+  if (!full && is.factor(res)) {
+
+    used <- which(tabulate(as.integer(res), nbins = nlevels(res)) != 0)
+
+    if (length(used)) {
+      keep <- levels(res)[seq(min(used), max(used))]
+
+      # factor() drops the ordering unless it is asked for again, so
+      # cutAge(x, full = FALSE) silently returned an unordered factor
+      # despite ordered_result = TRUE.
+      res <- factor(res, levels = keep, ordered = is.ordered(res))
+    }
+  }
+
+  return(res)
 }

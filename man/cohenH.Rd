@@ -4,17 +4,28 @@
 \alias{cohenH}
 \title{Cohen's h for a 2x2 Table}
 \usage{
-cohenH(x, y = NULL, conf.level = 0.95, ...)
+cohenH(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  ...
+)
 }
 \arguments{
-\item{x}{a 2x2 contingency table, matrix, or vector that can
-be coerced into a table}
+\item{x}{a 2x2 contingency table or matrix, or a categorical vector
+when \code{y} is supplied}
 
 \item{y}{an optional second variable used together with \code{x}
 to create a contingency table via \code{table(x, y, ...)}}
 
-\item{conf.level}{confidence level for the interval.
-If \code{NA}, only the point estimate is returned.}
+\item{conf.level}{confidence level for the interval. Set this to
+\code{NA} if no confidence interval should be calculated. This is the
+default.}
+
+\item{sides}{a character string specifying the side of the confidence
+interval. Must be one of \code{"two.sided"} (default), \code{"left"},
+or \code{"right"}. Partial matching is supported. See Details.}
 
 \item{...}{additional arguments passed to \code{table()}}
 }
@@ -35,11 +46,8 @@ difference between two proportions in a 2x2 contingency table.
 Cohen's \eqn{h} is defined as:
 
 \deqn{
-h =
-2\arcsin(\sqrt{p_1})
--
-2\arcsin(\sqrt{p_2})
-}
+h = 2\arcsin(\sqrt{p_1}) - 2\arcsin(\sqrt{p_2})
+}{h = 2*asin(sqrt(p1)) - 2*asin(sqrt(p2))}
 
 where \eqn{p_1} and \eqn{p_2} are the event probabilities
 in the first and second row, respectively.
@@ -62,13 +70,14 @@ Approximate interpretation thresholds suggested by Cohen are:
 The confidence interval is based on the asymptotic standard error:
 
 \deqn{
-SE(h) =
-\sqrt{
-\frac{1}{n_1}
-+
-\frac{1}{n_2}
-}
-}
+SE(h) = \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}
+}{SE(h) = sqrt(1/n1 + 1/n2)}
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+\eqn{(-\infty, uci]}. This is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis
+of \code{\link[stats]{t.test}}.
 }
 \examples{
 tab <- matrix(
@@ -79,12 +88,13 @@ tab <- matrix(
 )
 
 cohenH(tab)
+cohenH(tab, conf.level = 0.95)
 
 x <- c(rep("A", 52), rep("B", 13))
-y <- c(rep(c("yes", "no"), c(26,26)),
-       rep(c("yes", "no"), c(6,7)))
+y <- c(rep(c("yes", "no"), c(26, 26)),
+       rep(c("yes", "no"), c(6, 7)))
 
-cohenH(x, y)
+cohenH(x, y, conf.level = 0.95)
 
 }
 \references{

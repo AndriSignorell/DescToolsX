@@ -23,8 +23,7 @@ if no confidence interval should be calculated. This is the default.}
 
 \item{sides}{a character string specifying the side of the confidence
 interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-\code{"right"}. Partial matching is supported. \code{"left"} is analogous
-to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\code{"right"}. Partial matching is supported. See Details.}
 
 \item{correct}{logical; whether to apply the Hedges correction. Defaults to
 \code{FALSE}.}
@@ -41,20 +40,46 @@ size; otherwise a named numeric vector with elements:
 \item{\code{uci}}{upper confidence interval bound.}
 }
 The magnitude category and pooled standard deviation are stored in the
-attributes \code{magnitude} and \code{sd_pooled}, respectively.
+attributes \code{magnitude} and \code{sdPooled}, respectively.
 }
 \description{
 Computes the Cohen's d and Hedges' g effect size statistics.
+}
+\details{
+For a single sample, \eqn{d = \bar{x} / s}; for two samples,
+\eqn{d = (\bar{x} - \bar{y}) / s_{pooled}}. With \code{correct = TRUE}
+Hedges' bias correction \eqn{J = 1 - 3/(4\nu - 1)}, with \eqn{\nu} the
+residual degrees of freedom, is applied to the estimate and, where
+computed, to the interval.
+
+Confidence intervals invert the noncentral \eqn{t} distribution
+(Steiger & Fouladi): the noncentrality parameter is
+\eqn{d\sqrt{n}} with \eqn{n - 1} degrees of freedom in the one-sample
+case, and \eqn{d / \sqrt{1/n_x + 1/n_y}} with \eqn{n_x + n_y - 2}
+degrees of freedom in the two-sample case.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+\eqn{(-\infty, uci]}. This is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis
+of \code{\link[stats]{t.test}}; both packages accept the same values, so
+the change is silent.
 }
 \note{
 Based on code by William Revelle.
 }
 \examples{
 
-x <- Pizza$price[Pizza$driver=="Carter"]
-y <- Pizza$price[Pizza$driver=="Miller"]
+x <- Pizza$price[Pizza$driver == "Carter"]
+y <- Pizza$price[Pizza$driver == "Miller"]
 
-cohenD(x, y, conf.level=0.95, na.rm=TRUE)
+cohenD(x, y, conf.level = 0.95, na.rm = TRUE)
+
+# Hedges' g
+cohenD(x, y, conf.level = 0.95, correct = TRUE, na.rm = TRUE)
+
+# one-sided: the finite bound lies on the left
+cohenD(x, y, conf.level = 0.95, sides = "left", na.rm = TRUE)
 
 }
 \references{

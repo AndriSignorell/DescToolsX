@@ -65,6 +65,37 @@
 abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
                      maxVars = Inf, truncate = TRUE) {
 
+  # deparse BEFORE x is touched: assigning to a formal replaces its
+  # promise, after which substitute() would return the value - i.e. the
+  # whole data frame - instead of the call.
+  mainTxt <- gsub(" +", " ", paste(deparse(substitute(x)), collapse = " "))
+
+  if (!is.data.frame(x))
+    x <- as.data.frame(x)
+
+  # unlist() on an empty list returns NULL, not character(0), so with zero
+  # columns every derived column below vanished from the data.frame and
+  # the reordering by name failed with "undefined columns selected".
+  if (ncol(x) == 0L) {
+    res <- data.frame(Nr = integer(0), Class = character(0),
+                      ColName = character(0), NAs = character(0),
+                      Levels = character(0), Label = character(0),
+                      stringsAsFactors = FALSE)
+    attr(res, "main")     <- mainTxt
+    attr(res, "nrow")     <- nrow(x)
+    attr(res, "ncol")     <- 0L
+    attr(res, "complete") <- 0L
+    attr(res, "truncate") <- truncate
+    class(res) <- append(class(res), "Abstract", after = 0)
+    return(res)
+  }
+
+  if (length(maxLevels) != 1L || (!is.na(maxLevels) && maxLevels < 1))
+    stop("'maxLevels' must be a single number >= 1 (or Inf/NA for all)")
+
+  if (length(maxVars) != 1L || (!is.na(maxVars) && maxVars < 0))
+    stop("'maxVars' must be a single non-negative number (or Inf for all)")
+
   shortclass <- function(x) {
     z <- unlist(lapply(x, function(z) paste(class(z), collapse = ", ")))
     res <- tolower(substr(z, 1, 3))
@@ -73,6 +104,7 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
     return(res)
   }
 
+  nRow <- nrow(x)
 
   res <- data.frame(
     nr = seq_along(x),
@@ -83,18 +115,23 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
       x,
       function(z) {
         if (nlevels(z) > 0) {
-          maxLevels <- ifelse(is.na(maxLevels) || is.infinite(maxLevels),
-                              nlevels(z), min(nlevels(z), maxLevels)
-          )
+          nShow <- if (is.na(maxLevels) || is.infinite(maxLevels))
+            nlevels(z)
+          else
+            min(nlevels(z), maxLevels)
+
+          # seq_len(), not 1:nShow - the latter counts backwards from 1
+          # for nShow == 0 and would index level 0 and level 1.
+          idx <- seq_len(nShow)
 
           txt <- gettextf(
             "(%s): %s", nlevels(z),
-            paste(1:maxLevels, "-", levels(z)[1:maxLevels],
+            paste(idx, "-", levels(z)[idx],
                   sep = "", collapse = sep
             )
           )
 
-          if (maxLevels < nlevels(z)) {
+          if (nShow < nlevels(z)) {
             txt <- paste(txt, ", ...", sep = "")
           }
 
@@ -110,7 +147,7 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
 
   res$NAs <- ifelse(res$NAs != 0,
                     paste(res$NAs, " (",
-                          fm(res$NAs / dim(x)[1], fmt = "%", digits = 1), ")",
+                          fm(res$NAs / max(nRow, 1L), fmt = "%", digits = 1), ")",
                           sep = ""
                     ), zeroForm
   )
@@ -119,15 +156,16 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
   res <- res[, c("nr", "class", "varname", "NAs", "levels", "label")]
   colnames(res) <- c("Nr", "Class", "ColName", "NAs", "Levels", "Label")
 
-  res <- res[1:min(nrow(res), maxVars), ]
+  # seq_len() again: a data frame without columns gave 1:0 and hence two
+  # rows, the first of them all NA.
+  res <- res[seq_len(min(nrow(res), maxVars)), , drop = FALSE]
 
-  attr(res, "main") <-
-    gsub(" +", " ", paste(deparse(substitute(x)), collapse = " "))
-  attr(res, "nrow") <- dim(x)[1]
-  attr(res, "ncol") <- dim(x)[2]
+  attr(res, "main") <- mainTxt
+  attr(res, "nrow") <- nRow
+  attr(res, "ncol") <- ncol(x)
   # complete.cases can not be constructed with lists in data.frames
   attr(res, "complete") <-
-    ifelse(all(sapply(x, is.atomic)), sum(complete.cases(x)), NA)
+    ifelse(all(vapply(x, is.atomic, logical(1L))), sum(complete.cases(x)), NA)
   attr(res, "truncate") <- truncate
 
   if (!is.null(attr(x, "label"))) {
@@ -146,20 +184,35 @@ abstract <- function(x, sep = ", ", zeroForm = ".", maxLevels = 5,
 #' @param print.gap integer; number of spaces between columns
 #' @param ... further arguments passed to the `print` method
 #' @rdname abstract
+#' @method print Abstract
 #' @export
-print.Abstract <- function(x, sep = NULL, width = NULL,
-                           truncate = NULL, print.gap = 2, ...) {
+print.Abstract <- function(x, width = NULL, truncate = NULL,
+                           print.gap = 2, ...) {
+
+  # 'sep' used to sit in this signature but was never read - it belongs to
+  # abstract(), where the levels are pasted together.
+
   # check if there are labels, if there aren't, we will hide the labels column
   lbl_fg <- !all(x["Label"] == "-")
 
   if (is.null(width)) {
-    width <- unlist(lapply(x, function(x) {
-      max(nchar(as.character(x))) +
-        1
-    }))[1:4]
-    width <-
-      c(width, rep((getOption("width") - (sum(width) + 6 * print.gap)) /
-                     (1 + lbl_fg), (1 + lbl_fg)))
+    # the header is part of the column too, so the fixed columns must be
+    # at least as wide as their names
+    fixed <- vapply(
+      seq_len(4L),
+      function(i) max(c(nchar(as.character(x[[i]])),
+                        nchar(colnames(x)[i])), na.rm = TRUE) + 1,
+      numeric(1L))
+
+    nCol <- 4L + 1L + lbl_fg
+    rest <- (getOption("width") - (sum(fixed) + nCol * print.gap)) /
+      (1 + lbl_fg)
+
+    # a narrow console produced a negative width here, which then reached
+    # strTrunc() as a negative maxlen
+    rest <- max(rest, 12)
+
+    width <- c(fixed, rep(rest, 1 + lbl_fg))
   }
 
   opt <- options(max.print = 1e4)
@@ -189,6 +242,11 @@ print.Abstract <- function(x, sep = NULL, width = NULL,
     x["Label"] <- NULL
   }
 
+  if (nrow(x) == 0L) {
+    cat("<no variables>\n\n")
+    return(invisible(x))
+  }
+
   res <- apply(x, 1, columnWrap, width = width)
   res <- data.frame(
     if (is.matrix(res)) {
@@ -212,4 +270,6 @@ print.Abstract <- function(x, sep = NULL, width = NULL,
 
   print(x = res, print.gap = print.gap, right = FALSE, row.names = FALSE, ...)
   cat("\n")
+
+  invisible(x)
 }

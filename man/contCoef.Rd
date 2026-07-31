@@ -2,7 +2,6 @@
 % Please edit documentation in R/contCoef.R
 \name{contCoef}
 \alias{contCoef}
-\alias{ContCoef}
 \title{Pearson's Contingency Coefficient}
 \usage{
 contCoef(
@@ -57,19 +56,40 @@ The contingency coefficient goes from 0 to
 corrected contingency coefficient with a range between 0 and 1.
 }
 \details{
+Two arguments of the bootstrap are read out of \code{\dots}:
+\code{R}, the number of replicates (default 5000), and \code{type},
+the interval type, either \code{"perc"} (default) or \code{"bca"}.
+
 For Pearson's contingency coefficient
 no generally accepted analytical confidence intervals exist. If interval
 estimation is required, resampling methods such as the bootstrap may be
 applied. In applied research, effect size measures with better inferential
 properties (e.g. Cramer's V) are usually preferred.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields an interval bounded below and \code{"right"} one
+bounded above. The coefficient is bounded, so the open side is reported
+at the range boundary rather than as \eqn{\pm\infty} (design_rules.md
+4.1): 0 below, and above either 1 (with \code{correct = TRUE}) or
+\eqn{\sqrt{(m-1)/m}} with \eqn{m = \min(r, c)}.
 }
+\section{Random number generation}{
+
+\code{conf.level} triggers a bootstrap, which draws a seed from R's
+global random number generator and therefore advances it. Call
+\code{\link[base]{set.seed}} beforehand for reproducible intervals.
+}
+
 \examples{
 
-tab <- apply(HairEyeColor, c(1,2), sum)
+tab <- apply(HairEyeColor, c(1, 2), sum)
 contCoef(tab)
 
 # just x and y
 with(bedrock::untable(tab), contCoef(Hair, Eye))
+
+set.seed(1)
+contCoef(tab, conf.level = 0.95)
 
 }
 \references{
@@ -78,12 +98,12 @@ Tables, \emph{Proceedings of the Social Statistics Section of the American
 Statistical Association} (Part III), 777-780.
 }
 \seealso{
-\code{\link[bedrock]{pairApply}}
+\code{\link[bedrock]{pairApply}}, \code{\link{cramerV}}
 
 Other assoc.nominal:
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=divCoef]{divCoef()}},
 \code{\link[=entropy]{entropy()}},
+\code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},

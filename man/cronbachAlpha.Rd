@@ -33,8 +33,8 @@ the computation proceeds}
 a named numeric vector, or a list when
 \code{returnConditional = TRUE}.
 
-If \code{na.rm = FALSE} and \code{x} contains missing values, a single
-\code{NA_real_} is returned instead of either structure.
+If \code{na.rm = FALSE} and \code{x} contains missing values, the same
+structure is returned with \code{NA_real_} throughout.
 
 If \code{conf.level = NA}, the numeric vector contains only \code{est};
 otherwise it has elements:
@@ -73,17 +73,19 @@ and should be read with more caution than the point estimate when these
 are doubtful, for instance with markedly skewed or heterogeneous items.
 
 \code{sides} names the side on which the finite bound lies:
-\code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
-\eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
+\code{"left"} yields an interval bounded below and \code{"right"} one
+bounded above. Alpha cannot exceed 1, so the open upper side is reported
+at that boundary rather than as \eqn{\infty} (design_rules.md 4.1),
+while the open lower side stays \eqn{-\infty} because alpha is
+unbounded below. Note that this is the reverse of the convention in
 \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
 \code{\link[stats]{t.test}}.
 
 Missing values are handled according to package conventions: if
-\code{na.rm = FALSE} and \code{x} contains missing values, a single
-\code{NA_real_} is returned, irrespective of \code{returnConditional} and
-\code{conf.level}. If \code{na.rm = TRUE}, complete cases are used.
-Infinite values leave the variances undefined and are rejected with an
-error.
+\code{na.rm = FALSE} and \code{x} contains missing values, the usual
+structure is returned with \code{NA_real_} in place of every estimate.
+If \code{na.rm = TRUE}, complete cases are used. Infinite values leave
+the variances undefined and are rejected with an error.
 }
 \note{
 Based on code of Harold C. Doran, adapted to conform to package
@@ -135,6 +137,5 @@ Other assoc.agreement:
 \code{\link[=raterFrame]{raterFrame()}}
 }
 \concept{assoc.agreement}
-\concept{confidence-interval}
 \concept{internal-consistency}
 \concept{reliability}

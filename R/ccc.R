@@ -42,7 +42,7 @@
 #' @param na.rm logical; if \code{TRUE}, incomplete observation pairs are
 #' removed before computation
 #' @param ... additional arguments controlling the bootstrap procedure.
-#' Currently \code{R} and \code{parallel} are supported.
+#' Currently \code{R}, \code{parallel} and \code{ncpus} are supported.
 #'
 #' @return a named numeric vector containing only \code{est} when
 #' \code{conf.level = NA}; otherwise a named numeric vector with elements:
@@ -181,8 +181,23 @@ ccc <- function(
   if(length(x) < 3L)
     stop("Arguments 'x' and 'y' must have at least 3 observations.")
 
-  if(anyNA(x) || anyNA(y))
-    return(NA_real_)
+  # Shape consistency: every other exit returns the est/lci/uci vector
+  # with its diagnostic attributes, so a bare NA_real_ here forced callers
+  # to type-check the result before they could index it.
+  if(anyNA(x) || anyNA(y)) {
+
+    if(is.na(conf.level))
+      return(.makeEstimateResult(est = NA_real_,
+                                 attrs = list(nObs = length(x))))
+
+    return(.makeEstimateResult(est = NA_real_,
+                               lci = NA_real_,
+                               uci = NA_real_,
+                               attrs = list(nObs = length(x),
+                                            method = method,
+                                            confLevel = conf.level,
+                                            sides = sides)))
+  }
 
   # Checked only after the NA policy has been applied: is.finite() is
   # FALSE for NA too, so an earlier check would turn the documented
@@ -287,11 +302,14 @@ ccc <- function(
 
     }
 
+    # ncpus was extracted but never handed on, so parallel = "multicore"
+    # silently ran on a single core.
     bootObj <- boot::boot(
       data = cbind(x, y),
       statistic = statFun,
       R = bootArgs$R,
-      parallel = bootArgs$parallel
+      parallel = bootArgs$parallel,
+      ncpus = bootArgs$ncpus
     )
 
     # Only the informative bound is taken from the resampling

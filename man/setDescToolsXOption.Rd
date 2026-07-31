@@ -34,9 +34,6 @@ options(DescToolsX.plotit = old)
 }
 \seealso{
 \code{\link{options}}, \code{\link{getOption}}
-
-Other utils:
-\code{\link{concepts}}
 }
 \concept{programming}
 \concept{utils}

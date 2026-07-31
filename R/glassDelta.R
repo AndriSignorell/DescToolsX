@@ -87,8 +87,11 @@
 #'
 #' glassDelta(x, y, conf.level = 0.95)
 #'
-#' # one-sided lower bound
+#' # one-sided: "right" bounds the interval from ABOVE
 #' glassDelta(x, y, conf.level = 0.95, sides = "right")
+#'
+#' # ... and "left" from below
+#' glassDelta(x, y, conf.level = 0.95, sides = "left")
 #'
 #' # small-sample bias correction
 #' glassDelta(x, y, conf.level = 0.95, correct = TRUE)
@@ -96,6 +99,8 @@
 #' # standardize by the treatment group instead
 #' glassDelta(x, y, useControlSd = FALSE)
 #'
+#'
+#' @seealso \code{\link{cohenD}}
 #'
 #' @family effect.size
 #' @concept effect-size
@@ -106,7 +111,7 @@ glassDelta <- function(x, y, conf.level = NA,
                        sides = c("two.sided", "left", "right"),
                        useControlSd = TRUE, correct = FALSE, na.rm = FALSE) {
 
-  # ── validate ─────────────────────────────────────────────────────────────
+  # -- validate ------------------------------------------------------------
   if (!is.numeric(x) || !is.null(dim(x)))
     stop("'x' must be a numeric vector")
 
@@ -132,7 +137,7 @@ glassDelta <- function(x, y, conf.level = NA,
 
   sides <- match.arg(sides)
 
-  # ── missing values ───────────────────────────────────────────────────────
+  # -- missing values -------------------------------------------------------
   if (na.rm) {
     x <- x[!is.na(x)]
     y <- y[!is.na(y)]
@@ -149,7 +154,7 @@ glassDelta <- function(x, y, conf.level = NA,
   if (any(is.infinite(x)) || any(is.infinite(y)))
     stop("'x' and 'y' must not contain infinite values")
 
-  # ── estimate ─────────────────────────────────────────────────────────────
+  # -- estimate ------------------------------------------------------------
   # sizes of the standardizing (control) and the other (experimental) group;
   # the group supplying the sd defines the reference scale and the df
   nC <- if (useControlSd) length(y) else length(x)
@@ -175,13 +180,20 @@ glassDelta <- function(x, y, conf.level = NA,
     cf <- 1
   }
 
-  # ── confidence interval ──────────────────────────────────────────────────
+  # -- confidence interval --------------------------------------------------
   if (is.na(conf.level)) {
     res <- c(est = cf * delta)
 
   } else {
     tObs <- delta * sqrt(nC * nE / (nC + nE))
-    lim  <- .nctCI(tObs, df = nC - 1, conf.level = conf.level, sides = sides)
+    # unname(): the merged .nctCI() returns c(lci = , uci = ), while the
+    # copy that used to live in this file returned a bare pair. The call
+    # site still wrote lci = lim[1L], so the names composed into
+    # "lci.lci" and res["lci"] became NA. Same lesson as .toWallClock():
+    # when a shared helper changes shape, every caller has to be checked,
+    # not just the one being fixed.
+    lim  <- unname(.nctCI(tObs, df = nC - 1, conf.level = conf.level,
+                          sides = sides))
     scl  <- sqrt((nC + nE) / (nC * nE))
 
     res <- cf * c(est = delta, lci = lim[1L] * scl, uci = lim[2L] * scl)
@@ -197,45 +209,5 @@ glassDelta <- function(x, y, conf.level = NA,
 
 # == internal helper functions ===================================================
 
-# Confidence limits for the noncentrality parameter of the t-distribution,
-# obtained by root-finding on pt(): the limits are the ncp values for which
-# the observed statistic tObs sits at the required tail probability.
-# pt(tObs, df, ncp) is strictly decreasing in ncp, hence a unique root.
-# One-sided intervals put the full alpha on one tail: "left" yields a
-# lower limit only, "right" an upper limit only; the other limit is +/-Inf.
-# Replaces the two-method optimize()/nlm() search from MBESS
-# (verified to agree to < 1e-7 across ncp in [-8, 12], df in [2, 120]).
-
-.nctCI <- function(tObs, df, conf.level, sides = "two.sided") {
-
-  alpha <- 1 - conf.level
-
-  # sides names the side on which the finite bound lies: "left" gives
-  # [lci, Inf), "right" gives (-Inf, uci].
-  lim <- switch(sides,
-    "two.sided" = c(.nctRoot(tObs, df, prob = 1 - alpha / 2),
-                    .nctRoot(tObs, df, prob = alpha / 2)),
-    "left"      = c(.nctRoot(tObs, df, prob = 1 - alpha), Inf),
-    "right"     = c(-Inf, .nctRoot(tObs, df, prob = alpha)))
-
-  if (any(abs(lim[is.finite(lim)]) > 37.62))
-    warning("a confidence limit for the noncentrality parameter exceeds ",
-            "37.62 in magnitude, R's limit for accurate noncentral t ",
-            "probabilities; confidence limits may be inaccurate")
-
-  lim
-}
-
-
-.nctRoot <- function(tObs, df, prob) {
-
-  f <- function(d) suppressWarnings(pt(tObs, df = df, ncp = d)) - prob
-
-  uniroot(f,
-          interval  = c(min(-150, 5 * tObs - 5), max(150, 5 * tObs + 5)),
-          extendInt = "downX",
-          tol       = 1e-9)$root
-}
-
-
-
+# .nctCI() and .nctRoot() used to live here. They collided with a second,
+# differently-shaped .nctCI() in coefVar.R; both now come from nctCI.R.

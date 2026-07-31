@@ -14,7 +14,8 @@ incomes, or frequencies}
 is replicated \code{n} times.}
 
 \item{parameter}{parameter \eqn{m} controlling sensitivity to concentration;
-default is \code{1}}
+must be strictly positive, default is \code{1}. \code{m = 0} is rejected:
+it degenerates to a constant 1 for every input.}
 
 \item{na.rm}{logical; whether to remove missing values}
 }
@@ -67,6 +68,7 @@ Hirschman, A. O. (1964). The paternity of an index.
 
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
+\code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},

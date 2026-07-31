@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.931
+Version: 0.0.0.932
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -56,7 +56,7 @@ Imports:
 Suggests:
     goftest, testthat (>= 3.0.0), R.rsp, readr, vegan, VGAM, nnet,
     MASS, rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
-    survival, pons, dbscan
+    survival, pons, dbscan, prettyunits
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/

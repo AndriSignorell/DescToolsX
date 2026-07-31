@@ -15,7 +15,7 @@
 #' tables.
 #' 
 #' @return a table with either the absolute or the relative expected
-#' frequencies
+#' frequencies, of the same dimension and dimnames as \code{x}
 #' @note Based on code by David Meyer previously published as 
 #' \code{independence_table} in \pkg{vcd}, adapted to conform to package standards.
 #' 
@@ -28,11 +28,9 @@
 #' expFreq(UCBAdmissions, freq="r")
 #' 
 #' 
-#' @family frequency  
-#' @concept frequency-table  
+#' @family frequency
+#' @concept frequency-table
 #' @concept chi-square-based
-#'
-#'
 #' @export
 expFreq <- function(x, freq = c("abs", "rel")) {
   
@@ -44,19 +42,28 @@ expFreq <- function(x, freq = c("abs", "rel")) {
   if (!is.array(x))
     stop("Need array of absolute frequencies!")
   
-  frequency <- match.arg(freq)
-  
+  # 'frequency' would mask stats::frequency; the argument itself is
+  # already matched here
+  freq <- match.arg(freq)
+
   n <- sum(x)
   x <- x/n
   d <- dim(x)
-  margins <- lapply(1:length(d), function(i) apply(x, i, sum))
-  
-  tab <- array(apply(expand.grid(margins), 1, prod), 
+  margins <- lapply(seq_along(d), function(i) apply(x, i, sum))
+
+  # expand.grid() varies the first factor fastest and array() fills
+  # column-major, so the two orderings agree
+  tab <- array(apply(expand.grid(margins), 1, prod),
                d, dimnames = dimnames(x))
-  
-  if (frequency == "rel")
-    tab
-  else 
-    tab * n
-  
+
+  if (freq == "abs")
+    tab <- tab * n
+
+  # the input is a table, so the expected frequencies should be one too -
+  # array() dropped the class and with it the table print method
+  if (inherits(x, "table"))
+    tab <- as.table(tab)
+
+  tab
+
 }

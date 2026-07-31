@@ -4,56 +4,66 @@
 \alias{divCoef}
 \title{Compute a diversity coefficient}
 \usage{
-divCoef(df, dis = NULL, normalize = FALSE, tol = 0.00000001)
+divCoef(x, dis = NULL, normalize = FALSE, na.rm = FALSE, tol = 0.00000001)
 }
 \arguments{
-\item{df}{a data frame or matrix of non-negative values (e.g. abundances).
+\item{x}{a data frame or matrix of non-negative values (e.g. abundances).
 Rows correspond to entities, columns to samples.}
 
 \item{dis}{optional object of class \code{dist}. If \code{NULL}, a default
-Euclidean distance is used.}
+Euclidean distance is used, in which case the coefficient reduces to the
+Gini-Simpson index \eqn{1 - \sum p_i^2}.}
 
 \item{normalize}{logical; if \code{TRUE}, the diversity is scaled by its
 theoretical maximum}
 
-\item{tol}{numeric tolerance used for numerical checks}
+\item{na.rm}{logical; if \code{TRUE}, columns containing missing values
+yield \code{NA} instead of aborting}
+
+\item{tol}{numeric convergence tolerance for the iterative maximisation
+used by \code{normalize = TRUE}}
 }
 \value{
 a numeric vector of diversity coefficients, one per column
 }
 \description{
-Computes a quadratic diversity coefficient for each column of a data frame,
-optionally using a provided distance matrix.
+Computes Rao's quadratic diversity coefficient for each column of a data
+frame, optionally using a provided distance matrix.
 }
 \details{
 The diversity coefficient is defined as
-\deqn{D = \frac{x^T D^2 x}{2 (\sum x)^2}}
-where \eqn{x} is a column of \code{df} and \eqn{D} is the distance matrix.
+\deqn{D = \frac{x^T D^2 x}{2 (\sum x)^2}}{D = t(x) \%*\% D^2 \%*\% x / (2 * sum(x)^2)}
+where \eqn{x} is a column of \code{x} and \eqn{D} is the distance matrix.
 
 If \code{normalize = TRUE}, values are divided by the maximum achievable
-diversity under the given distance matrix.
+diversity under the given distance matrix. That maximum is found by a
+fixed-point iteration over the simplex, which is a heuristic: it is not
+guaranteed to reach the global optimum for an arbitrary distance matrix.
+A warning is issued when the iteration has not converged within
+\code{tol}.
 }
 \examples{
 set.seed(1)
-df <- matrix(runif(20), ncol = 4)
+x <- matrix(runif(20), ncol = 4)
 d <- dist(matrix(rnorm(10), ncol = 2))
 
-divCoef(df, d)
-divCoef(df, d, normalize = TRUE)
+divCoef(x, d)
+divCoef(x, d, normalize = TRUE)
+
+# without a distance matrix this is the Gini-Simpson index
+divCoef(matrix(c(1, 1, 1, 1, 0, 0), ncol = 2))
 
 }
 \seealso{
-Other assoc.nominal:
-\code{\link[=contCoef]{contCoef()}},
-\code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
-\code{\link[=lambda]{lambda()}},
-\code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
-\code{\link[=tschuprowT]{tschuprowT()}},
-\code{\link[=uncertCoef]{uncertCoef()}},
-\code{\link{yule}}
+Other inequality:
+\code{\link[=atkinson]{atkinson()}},
+\code{\link[=gini]{gini()}},
+\code{\link[=herfindahl]{herfindahl()}},
+\code{\link[=lc]{lc()}},
+\code{\link[=rosenbluth]{rosenbluth()}},
+\code{\link[=simpson]{simpson()}},
+\code{\link[=theil]{theil()}}
 }
-\concept{assoc.nominal}
-\concept{association-measure}
-\concept{nominal}
+\concept{concentration-index}
+\concept{diversity}
+\concept{inequality}

@@ -22,9 +22,10 @@
 #' @param x numeric vector or contingency table. A matrix is treated as a table.
 #' @param y \code{NULL} (default) or a vector with compatible dimensions to
 #' \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.
-#' @param direction direction of the calculation. Must be \code{"row"} (default)
-#' or \code{"column"}, where \code{"row"} calculates Goodman Kruskal's tau-a
-#' (R|C) ("column dependent"). 
+#' @param direction direction of the calculation. Must be \code{"row"}
+#' (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
+#' variable is the dependent one and is predicted from the column variable;
+#' \code{"column"} gives tau (C|R).
 #' @param conf.level confidence level of the interval. If set to \code{NA}
 #' (which is the default) no confidence interval will be calculated. 
 #' @param \dots further arguments are passed to the function
@@ -59,8 +60,8 @@
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 24--30
 #' 
-#' @seealso There's another implementation of gamma in \pkg{vcdExtra}
-#' \code{\link[vcdExtra]{GKgamma}} \code{\link{Association}}
+#' @seealso \code{\link{lambda}}, \code{\link{cramerV}},
+#' \code{\link{Association}}
 #' 
 #' @examples
 #' # example in:
@@ -106,16 +107,15 @@
 #' 
 
 #' @rdname gkTau
-
-#' @family assoc.ordinal  
-#' @concept association-measure  
-#' @concept ordinal
-#'
-#'
+#' @family assoc.nominal
+#' @concept association-measure
+#' @concept nominal
 #' @export
 gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...){
   
   if(!is.null(y)) x <- table(x, y, ...)
+  
+  x <- as.matrix(x)
   
   n <- sum(x)
   n.err.unconditional <- n^2
@@ -164,7 +164,9 @@ gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, 
   } else {
     pr2 <- 1 - (1 - conf.level)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
-    res <- c(est=est, lci=ci[1], uci=ci[2])
+    # tau is a proportional-reduction-in-error measure and lives in
+    # [0, 1]; cramerV() clamps its interval the same way
+    res <- c(est = est, lci = max(ci[1], 0), uci = min(ci[2], 1))
   }
   
   return(res)

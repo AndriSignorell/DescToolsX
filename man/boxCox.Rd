@@ -19,7 +19,8 @@ boxCoxInv(x, lambda, tol = 0.000001)
 \eqn{\lambda \approx 0}}
 }
 \value{
-a numeric vector of the same length as \code{x}
+a numeric vector of the same length as \code{x}. An input
+consisting only of \code{NA} is an error.
 }
 \description{
 \code{boxCox()} applies the Box-Cox transformation to a numeric vector.
@@ -30,12 +31,11 @@ The Box-Cox transformation is defined for strictly positive values of
 \code{x} and is given by
 
 \deqn{
-f_\lambda(x) =
-\begin{cases}
-\frac{x^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\
-\log(x) & \text{if } \lambda = 0
-\end{cases}
-}
+f_\lambda(x) = \left\{ \begin{array}{ll}
+  (x^\lambda - 1) / \lambda & \mbox{if } \lambda \neq 0 \\
+  \log(x)                   & \mbox{if } \lambda = 0
+\end{array} \right.
+}{f(x) = (x^lambda - 1)/lambda for lambda != 0, and log(x) for lambda = 0}
 
 The transformation requires strictly positive input values. If
 \code{|lambda| < tol}, the logarithmic transformation is used instead
@@ -49,14 +49,13 @@ set.seed(1)
 x <- rlnorm(500, 1, 0.5)
 
 y <- boxCox(x, lambda = 0.5)
-x_back <- boxCoxInv(y, lambda = 0.5)
+xBack <- boxCoxInv(y, lambda = 0.5)
 
-# Check inversion
-max(abs(x - x_back))
+# check inversion
+max(abs(x - xBack))
 
-# Log-transform (lambda ~ 0)
+# log-transform (lambda ~ 0)
 y0 <- boxCox(x, lambda = 0)
-
 
 }
 \references{
@@ -66,6 +65,8 @@ An analysis of transformations.
 \bold{26}(2), 211--252.
 }
 \seealso{
+\code{\link{boxCoxLambda}}
+
 Other transform:
 \code{\link[=boxCoxLambda]{boxCoxLambda()}},
 \code{\link[=logSt]{logSt()}},

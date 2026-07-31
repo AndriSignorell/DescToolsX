@@ -40,7 +40,7 @@
 #' highest, for \code{right = FALSE}) \code{"breaks"} value should be included.
 #' Ignored if x is not of numeric type or if \code{breaks = FALSE}.
 #' @param ord how should the result be ordered? Default is \code{"level"},
-#' other choices are 'by frequency' (\code{"descending"} or \code{"ascending"})
+#' other choices are 'by frequency' (\code{"desc"} or \code{"asc"})
 #' or 'by name of the levels' (\code{"name"}). The argument can be abbreviated.
 #' This is ignored if x is numeric and classed (\code{breaks} not \code{FALSE}).
 #' @param useNA one of \code{"no"}, \code{"ifany"}, or \code{"always"}.
@@ -92,7 +92,7 @@
 #' \code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
 #' \code{\link{freq2D}}
 #' 
-#' @family frequency  
+#' @family frequency
 #' @concept frequency-table
 #'
 #' @rdname freq
@@ -123,7 +123,10 @@ freq <- function(x, breaks = hist(x, plot = FALSE)$breaks,
   # how should the table be sorted, by name, level or frq? (NULL means "desc")
   switch(match.arg(ord, c("level", "desc", "asc", "name")),
          level  = {  }
-         , name   = { tab <- tab[rownames(tab)] }
+           # tab[rownames(tab)] reindexed the table by its own names in
+           # their existing order - a no-op. ord = "name" therefore did
+           # exactly what ord = "level" does.
+         , name   = { tab <- tab[order(names(tab))] }
          , asc    = { tab <- sort(tab) }
          , desc   = { tab <- -sort(-tab) }
   )

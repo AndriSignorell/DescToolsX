@@ -43,7 +43,8 @@ be set to their defaults, being \code{"basic"} for \code{type}, option
 \code{parallel} and \code{999} for \code{R}.}
 }
 \value{
-for \code{gsd()}, a numeric scalar. For \code{gmean()}, a numeric
+for \code{gsd()}, a numeric scalar (\code{NA} if fewer than two
+strictly positive values remain). For \code{gmean()}, a numeric
 scalar if \code{conf.level = NA}; otherwise a named numeric vector with
 elements:
 \describe{
@@ -90,6 +91,7 @@ types of averages and decide what makes the most sense for you and the
 results you are trying to report."
 }
 \examples{
+set.seed(1)
 x <- runif(5)
 gmean(x)
 
@@ -105,8 +107,11 @@ x <- c(5,4,-4,-5,0,0,NA,7)
 # positives only
 gmean(x[x>0], na.rm=TRUE, conf.level=0.95)
 
-# add 5 to original values and remove zeros
-gmean(naReplace(x+5, 0), na.rm=TRUE, conf.level = 0.95)
+# shift by 5 so that everything is positive, then drop the zeros:
+# naReplace() puts zeros IN (turning NA into 0), which makes the
+# geometric mean collapse to 0 - the opposite of what is wanted here
+z <- x + 5
+gmean(z[!is.na(z) & z > 0], conf.level = 0.95)
 
 }
 \references{

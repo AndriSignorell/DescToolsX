@@ -14,7 +14,7 @@ abstract(
   truncate = TRUE
 )
 
-\method{print}{Abstract}(x, sep = NULL, width = NULL, truncate = NULL, print.gap = 2, ...)
+\method{print}{Abstract}(x, width = NULL, truncate = NULL, print.gap = 2, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame} to be described}

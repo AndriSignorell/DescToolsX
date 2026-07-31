@@ -18,6 +18,8 @@ coefVar(x, ...)
 
 coefVarCI(
   x,
+  weights = NULL,
+  unbiased = FALSE,
   conf.level = 0.95,
   sides = c("two.sided", "left", "right"),
   method = c("nct", "vangel", "mckay", "verrill", "naive"),
@@ -26,7 +28,8 @@ coefVarCI(
 )
 }
 \arguments{
-\item{x}{a non-empty numeric vector of data values}
+\item{x}{a non-empty numeric vector of data values, or a fitted model for
+the \code{lm}/\code{aov} methods}
 
 \item{\dots}{further arguments}
 
@@ -37,20 +40,18 @@ giving the weights to use for elements of \code{x}}
 Defaults to \code{FALSE}.}
 
 \item{na.rm}{logical. Should missing values be removed? Defaults to
-\code{FALSE}.}
+\code{FALSE}, in which case missing values are an error.}
 
 \item{conf.level}{confidence level of the interval; defaults to 0.95}
 
 \item{sides}{a character string specifying the side of the confidence
 interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-\code{"right"}. Partial matching is supported. \code{"left"} is analogous
-to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\code{"right"}. Partial matching is supported. See Details.}
 
 \item{method}{character string specifying the confidence interval method:
 \code{"nct"} (default),
-\code{"vangel"}, \code{"mckay"}, \code{"verrill"} (currently not yet
-implemented), or \code{"naive"}. Partial matching is supported. See
-Details.}
+\code{"vangel"}, \code{"mckay"}, \code{"verrill"} (not implemented), or
+\code{"naive"}. Partial matching is supported. See Details.}
 }
 \value{
 an unnamed numeric scalar containing the coefficient of variation
@@ -76,7 +77,7 @@ CV^2 + \frac{1}{2 \cdot (n-1)^2} \right) }
 
 For determining\verb{ }\bold{the confidence intervals}\verb{ } for the
 coefficient of variation a number of methods have been proposed.
-\code{coefVarCI()} currently supports five different methods. The details
+\code{coefVarCI()} currently supports four different methods. The details
 for the methods are given in the specific references.
 
 The \bold{"naive" method} \verb{ } is based on dividing the standard
@@ -108,6 +109,16 @@ https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
 \bold{nct} \verb{ }uses the noncentral t-distribution to calculate the
 confidence intervals. See Smithson (2003).
 
+Verrill's method is named in the references but not implemented;
+\code{method = "verrill"} raises an error rather than returning a
+placeholder.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+\eqn{(-\infty, uci]}. This is the reverse of the convention in
+\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
+\code{\link[stats]{t.test}}.
+
 \bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
 \code{\link[stats]{cov.wt}}.
@@ -126,18 +137,16 @@ coefVarCI(x)
 r.lm <- lm(Fertility ~ ., swiss)
 coefVar(r.lm)
 
-# the function is vectorized, so arguments are recycled
-fn <- "https://www.itl.nist.gov/div898/handbook/datasets/ZARR13.DAT"
-zarr <- as.numeric(readr::read_lines(fn, skip=25))
+# conf.level is recycled, so several levels can be requested at once.
+# Reproduces the NIST reference table for the ZARR13 dataset (see the
+# URL above) from a sample rebuilt to its published mean and sd, so the
+# example needs no network access.
+set.seed(1)
+zarr <- 9.261460 + 0.022789 * as.vector(scale(rnorm(195)))
 
-round(coefVarCI(zarr, method="vangel", 
-          sides="two.sided", conf.level = c(.5,.8,.9,.95,.99,.999)), 5)
-          
-# https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
-#
-#  Two-Sided Confidence Limits for the Coefficient of Variation
-#                 for Normally Distributed Data
-# 
+round(coefVarCI(zarr, method = "vangel", sides = "two.sided",
+                conf.level = c(.5, .8, .9, .95, .99, .999)), 5)
+
 # ---------------------------------------------------------
 #  Confidence    Coefficient          Lower          Upper
 #   Value (\%)   of Variation          Limit          Limit
@@ -148,8 +157,6 @@ round(coefVarCI(zarr, method="vangel",
 #        95.0        0.00246        0.00224        0.00273
 #        99.0        0.00246        0.00217        0.00283
 #        99.9        0.00246        0.00210        0.00294
-
-
 
 }
 \references{

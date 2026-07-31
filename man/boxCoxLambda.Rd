@@ -76,6 +76,7 @@ lambda <- boxCoxLambda(AirPassengers)
 boxCoxLambda(AirPassengers, method = "loglik")
 
 # plain numeric vector, treated as non-seasonal
+set.seed(1)
 boxCoxLambda(rlnorm(100), method = "loglik")
 
 }
@@ -87,6 +88,8 @@ Guerrero, V.M. (1993) Time-series analysis supported by power
 transformations. \emph{Journal of Forecasting}, \bold{12}, 37--48.
 }
 \seealso{
+\code{\link{boxCox}}
+
 Other transform:
 \code{\link[=boxCox]{boxCox()}},
 \code{\link[=logSt]{logSt()}},

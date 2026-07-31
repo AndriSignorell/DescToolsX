@@ -1,6 +1,6 @@
 
 #' Automatic Selection of Box-Cox Transformation Parameter
-#' 
+#'
 #' Selects the Box-Cox transformation parameter automatically, using either
 #' Guerrero's method or the profile log likelihood.\cr Guerrero's (1993)
 #' method yields a lambda which
@@ -9,8 +9,8 @@
 #' profile log likelihood of a linear model fitted to \code{x}.  For
 #' non-seasonal data, a linear time trend is fitted while for seasonal data, a
 #' linear time trend with seasonal dummy variables is used.
-#' 
-#' 
+#'
+#'
 #' @param x a numeric vector or univariate time series. All values must be
 #' strictly positive and finite, as the Box-Cox transformation is undefined
 #' otherwise; missing values are not removed but rejected, since subsetting
@@ -46,37 +46,38 @@
 #' coefficient of variation degenerates to \eqn{0/0} and the profile log
 #' likelihood is singular.
 #'
-#' @note Based on code by Leanne Chhay and Rob J Hyndman previously 
-#' published as \code{BoxCox.lambda()} in the \pkg{forecast} package, adapted 
+#' @note Based on code by Leanne Chhay and Rob J Hyndman previously
+#' published as \code{BoxCox.lambda()} in the \pkg{forecast} package, adapted
 #' to conform to package standards.
-#' 
+#'
 #' @references Box, G. E. P. and Cox, D. R. (1964) An analysis of
 #' transformations. \emph{JRSS B} \bold{26} 211--246.
-#' 
+#'
 #' Guerrero, V.M. (1993) Time-series analysis supported by power
 #' transformations. \emph{Journal of Forecasting}, \bold{12}, 37--48.
-#' 
+#'
+#' @seealso \code{\link{boxCox}}
+#'
 #' @examples
 #' lambda <- boxCoxLambda(AirPassengers)
-#' 
+#'
 #' # profile log likelihood, seasonal trend model
 #' boxCoxLambda(AirPassengers, method = "loglik")
-#' 
+#'
 #' # plain numeric vector, treated as non-seasonal
+#' set.seed(1)
 #' boxCoxLambda(rlnorm(100), method = "loglik")
-#' 
-#' @family transform  
-#' @concept transformation  
+#'
+#' @family transform
+#' @concept transformation
 #' @concept variance-stabilization
-#'
-#'
 #' @export
 boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
                          lower = -1, upper = 2, nonseasonalLength = 2) {
 
   method <- match.arg(method)
 
-  if (!is.numeric(x) || !is.null(dim(x)) && !identical(length(dim(x)), 1L))
+  if (!is.numeric(x) || (!is.null(dim(x)) && !identical(length(dim(x)), 1L)))
     stop("'x' must be a numeric vector or a univariate time series")
 
   # Non-finite values are rejected rather than dropped: subsetting a ts
@@ -120,9 +121,12 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
   if (lower >= upper)
     stop("'lower' must be strictly less than 'upper'")
 
+  # %% 1, not as.integer(): as.integer() overflows to NA (with a warning)
+  # for anything beyond .Machine$integer.max, and the NA then propagated
+  # into the if() condition as "missing value where TRUE/FALSE needed".
   if (!is.numeric(nonseasonalLength) || length(nonseasonalLength) != 1L ||
-      !is.finite(nonseasonalLength) || nonseasonalLength < 2L ||
-      nonseasonalLength != as.integer(nonseasonalLength))
+      !is.finite(nonseasonalLength) || nonseasonalLength < 2 ||
+      nonseasonalLength %% 1 != 0)
     stop("'nonseasonalLength' must be a single whole number >= 2")
 
   if (method == "loglik")
@@ -153,7 +157,7 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
   # Input: x = original time series as a time series object
   # Output: lambda that minimises the coefficient of variation
 
-  period <- max(nonseasonalLength, .seasonalPeriod(x))
+  period <- max(as.integer(nonseasonalLength), .seasonalPeriod(x))
   nObs <- length(x)
   nSub <- nObs %/% period
 

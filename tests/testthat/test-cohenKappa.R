@@ -4,27 +4,39 @@
 # ============================================================
 
 # shared test matrices
+#
+# All of them carry dimnames: normalizeToConfusion() warns "Matrix has no
+# dimnames; consider supplying 'levels=' for stable ordering" otherwise,
+# which produced 30 warnings across this file and buried the real ones.
+lvl3 <- c("V", "N", "P")
+
 m3 <- matrix(c(53,  5, 2,
                11, 14, 5,
                1,  6, 3),
              nrow = 3, byrow = TRUE,
-             dimnames = list(rater1 = c("V","N","P"),
-                             rater2 = c("V","N","P")))
+             dimnames = list(rater1 = lvl3, rater2 = lvl3))
 
 # Fleiss, Cohen & Everitt (1969) reference matrix
 fleiss <- matrix(c(106, 10,  4,
                    22, 28, 10,
                    2, 12,  6),
-                 nrow = 3, byrow = TRUE)
+                 nrow = 3, byrow = TRUE,
+                 dimnames = list(rater1 = lvl3, rater2 = lvl3))
 
 # 2x2 for simple checks
 m2 <- matrix(c(40, 10,
                8, 42),
-             nrow = 2, byrow = TRUE)
+             nrow = 2, byrow = TRUE,
+             dimnames = list(rater1 = c("yes", "no"),
+                             rater2 = c("yes", "no")))
+
+# perfect agreement, kappa = 1 exactly
+mPerfect <- diag(c(20, 30, 10))
+dimnames(mPerfect) <- list(rater1 = lvl3, rater2 = lvl3)
 
 
 # -----------------------------------------------------------------------
-# Point estimate — unweighted
+# Point estimate - unweighted
 # -----------------------------------------------------------------------
 
 test_that("unweighted: returns single numeric", {
@@ -35,8 +47,7 @@ test_that("unweighted: returns single numeric", {
 
 
 test_that("unweighted: perfect agreement gives kappa = 1", {
-  m <- diag(c(20, 30, 10))
-  expect_equal(cohenKappa(m), 1)
+  expect_equal(cohenKappa(mPerfect), 1)
 })
 
 
@@ -66,7 +77,7 @@ test_that("unweighted: 2x2 matrix", {
 
 
 # -----------------------------------------------------------------------
-# Point estimate — weighted
+# Point estimate - weighted
 # -----------------------------------------------------------------------
 
 test_that("equal-spacing: returns numeric scalar", {
@@ -92,8 +103,8 @@ test_that("fleiss-cohen: returns numeric scalar", {
 
 
 test_that("fleiss-cohen >= equal-spacing (quadratic > linear penalty)", {
-  # Fleiss-Cohen weights decrease more slowly from the diagonal →
-  # closer disagreements penalised less → higher weighted kappa
+  # Fleiss-Cohen weights decrease more slowly from the diagonal ->
+  # closer disagreements penalised less -> higher weighted kappa
   expect_gte(cohenKappa(m3, weights = "fleiss-cohen"),
              cohenKappa(m3, weights = "equal-spacing"))
 })
@@ -117,7 +128,7 @@ test_that("user weight matrix: equal-spacing matches built-in", {
 
 
 # -----------------------------------------------------------------------
-# CI — structure and properties
+# CI - structure and properties
 # -----------------------------------------------------------------------
 
 test_that("CI: returns named numeric vector of length 3", {
@@ -180,17 +191,25 @@ test_that("weighted CI: lci < est < uci", {
 # Sides
 # -----------------------------------------------------------------------
 
-test_that("sides = 'left' sets uci = Inf", {
+# m3, not m: 'm' was never defined at file scope - it only existed as a
+# local inside the perfect-agreement test above, so these two picked up
+# whatever 'm' happened to sit in the global environment. That is where
+# the puzzling 0.3 came from. And a perfect-agreement matrix would be the
+# wrong fixture here anyway: at kappa = 1 the interval touches the
+# boundary and expect_lt(lci, est) has nothing to compare.
+
+test_that("sides = 'left' bounds the interval from below", {
   res <- cohenKappa(m3, conf.level = 0.95, sides = "left")
-  expect_equal(unname(res["uci"]), Inf)
-  expect_false(is.infinite(res["lci"]))
+  expect_equal(unname(res["uci"]), 1)          # offene Seite -> Grenze
+  expect_true(is.finite(res["lci"]))           # informative Seite
+  expect_lt(unname(res["lci"]), unname(res["est"]))
 })
 
-
-test_that("sides = 'right' sets lci = -Inf", {
+test_that("sides = 'right' bounds the interval from above", {
   res <- cohenKappa(m3, conf.level = 0.95, sides = "right")
-  expect_equal(unname(res["lci"]), -Inf)
-  expect_false(is.infinite(res["uci"]))
+  expect_equal(unname(res["lci"]), -1)         # offene Seite -> Grenze
+  expect_true(is.finite(res["uci"]))           # informative Seite
+  expect_gt(unname(res["uci"]), unname(res["est"]))
 })
 
 
@@ -287,16 +306,17 @@ test_that("asymmetric weight matrix gives warning", {
 
 
 test_that("empty confusion matrix raises error", {
-  m0 <- matrix(0L, 3, 3)
+  m0 <- matrix(0L, 3, 3, dimnames = list(rater1 = lvl3, rater2 = lvl3))
   expect_error(cohenKappa(m0), "empty")
 })
 
 
-test_that("degenerate marginals (pc ≈ 1) raise error", {
-  # All observations on one diagonal → colFreqs and rowFreqs both
-  # concentrated on one category → pc ≈ 1
+test_that("degenerate marginals (pc close to 1) raise error", {
+  # All observations on one diagonal -> colFreqs and rowFreqs both
+  # concentrated on one category -> pc ~ 1
   m_deg <- matrix(c(1000, 0, 0,
                     0, 0, 0,
-                    0, 0, 0), nrow = 3)
+                    0, 0, 0), nrow = 3,
+                  dimnames = list(rater1 = lvl3, rater2 = lvl3))
   expect_error(cohenKappa(m_deg), "too close to 1")
 })

@@ -1,133 +1,166 @@
 
 #' Compute a diversity coefficient
 #'
-#' Computes a quadratic diversity coefficient for each column of a data frame,
-#' optionally using a provided distance matrix.
+#' Computes Rao's quadratic diversity coefficient for each column of a data
+#' frame, optionally using a provided distance matrix.
 #'
-#' @param df a data frame or matrix of non-negative values (e.g. abundances).
+#' @param x a data frame or matrix of non-negative values (e.g. abundances).
 #'   Rows correspond to entities, columns to samples.
 #' @param dis optional object of class \code{dist}. If \code{NULL}, a default
-#'   Euclidean distance is used.
+#'   Euclidean distance is used, in which case the coefficient reduces to the
+#'   Gini-Simpson index \eqn{1 - \sum p_i^2}.
 #' @param normalize logical; if \code{TRUE}, the diversity is scaled by its
 #'   theoretical maximum
-#' @param tol numeric tolerance used for numerical checks
+#' @param na.rm logical; if \code{TRUE}, columns containing missing values
+#'   yield \code{NA} instead of aborting
+#' @param tol numeric convergence tolerance for the iterative maximisation
+#'   used by \code{normalize = TRUE}
 #'
 #' @return a numeric vector of diversity coefficients, one per column
 #'
 #' @details
 #' The diversity coefficient is defined as
-#' \deqn{D = \frac{x^T D^2 x}{2 (\sum x)^2}}
-#' where \eqn{x} is a column of \code{df} and \eqn{D} is the distance matrix.
+#' \deqn{D = \frac{x^T D^2 x}{2 (\sum x)^2}}{D = t(x) \%*\% D^2 \%*\% x / (2 * sum(x)^2)}
+#' where \eqn{x} is a column of \code{x} and \eqn{D} is the distance matrix.
 #'
 #' If \code{normalize = TRUE}, values are divided by the maximum achievable
-#' diversity under the given distance matrix.
+#' diversity under the given distance matrix. That maximum is found by a
+#' fixed-point iteration over the simplex, which is a heuristic: it is not
+#' guaranteed to reach the global optimum for an arbitrary distance matrix.
+#' A warning is issued when the iteration has not converged within
+#' \code{tol}.
 #'
 #' @examples
 #' set.seed(1)
-#' df <- matrix(runif(20), ncol = 4)
+#' x <- matrix(runif(20), ncol = 4)
 #' d <- dist(matrix(rnorm(10), ncol = 2))
 #'
-#' divCoef(df, d)
-#' divCoef(df, d, normalize = TRUE)
+#' divCoef(x, d)
+#' divCoef(x, d, normalize = TRUE)
 #'
-
-
-
-#' @family assoc.nominal  
-#' @concept association-measure  
-#' @concept nominal
+#' # without a distance matrix this is the Gini-Simpson index
+#' divCoef(matrix(c(1, 1, 1, 1, 0, 0), ncol = 2))
 #'
-#'
+#' @family inequality
+#' @concept diversity
+#' @concept concentration-index
 #' @export
-divCoef <- function(df, dis = NULL, normalize = FALSE, tol = 1e-8) {
-  
+divCoef <- function(x, dis = NULL, normalize = FALSE, na.rm = FALSE,
+                    tol = 1e-8) {
+
   # --- input checks ---
-  if (!is.matrix(df) && !is.data.frame(df))
-    stop("df must be a matrix or data.frame")
-  
-  df <- as.matrix(df)
-  
-  if (any(df < 0, na.rm = TRUE))
-    stop("Negative values in df not allowed")
-  
-  n <- nrow(df)
-  
+  # 'df' as an argument name masked stats::df and read as "data frame"
+  # where a matrix of abundances is meant
+  if (!is.matrix(x) && !is.data.frame(x))
+    stop("'x' must be a matrix or data.frame")
+
+  x <- as.matrix(x)
+
+  if (!is.numeric(x))
+    stop("'x' must be numeric")
+
+  if (any(x < 0, na.rm = TRUE))
+    stop("Negative values in 'x' not allowed")
+
+  n <- nrow(x)
+
   # --- distance handling ---
   if (is.null(dis)) {
     # default: Euclidean distances on simplex vertices
-    D2 <- matrix(2, n, n)
-    diag(D2) <- 0
-    D2 <- D2 / 2
+    d2 <- matrix(2, n, n)
+    diag(d2) <- 0
+    d2 <- d2 / 2
   } else {
     if (!inherits(dis, "dist"))
-      stop("dis must be of class 'dist'")
-    
+      stop("'dis' must be of class 'dist'")
+
     if (!isEuclid(dis))
       warning("Distance matrix is not Euclidean")
-    
-    D <- as.matrix(dis)
-    if (nrow(D) != n)
-      stop("df and dis have incompatible dimensions")
-    
-    D2 <- D^2 / 2
+
+    dmat <- as.matrix(dis)
+    if (nrow(dmat) != n)
+      stop("'x' and 'dis' have incompatible dimensions")
+
+    d2 <- dmat^2 / 2
   }
-  
+
   # --- compute diversity (vectorized) ---
-  col_sums <- colSums(df)
-  valid <- col_sums > .Machine$double.eps
-  
-  div <- rep(0, ncol(df))
-  
+  colSum <- colSums(x)
+
+  # A logical index containing NA is an error in subassignment, so columns
+  # with missing values have to be resolved before div[valid] <- ... is
+  # reached: previously any NA in the input died on
+  # "NAs are not allowed in subscripted assignments".
+  isNA <- is.na(colSum)
+
+  if (any(isNA) && !na.rm)
+    stop("'x' contains missing values; use na.rm = TRUE to return NA for ",
+         "the affected columns")
+
+  valid <- !isNA & colSum > .Machine$double.eps
+
+  div <- rep(0, ncol(x))
+  div[isNA] <- NA_real_
+
   if (any(valid)) {
-    X <- df[, valid, drop = FALSE]
-    div[valid] <- colSums(X * (D2 %*% X)) / (col_sums[valid]^2)
+    xv <- x[, valid, drop = FALSE]
+    div[valid] <- colSums(xv * (d2 %*% xv)) / (colSum[valid]^2)
   }
-  
+
   # --- normalization ---
   if (normalize) {
-    max_val <- .divCoefMax(D2, tol = tol)$value
-    div <- div / max_val
+    maxRes <- .divCoefMax(d2, tol = tol)
+
+    if (!maxRes$converged)
+      warning("the maximisation of the diversity coefficient did not ",
+              "converge; the normalized values may be too large")
+
+    if (maxRes$value <= 0)
+      stop("the maximum diversity is not positive; 'dis' is degenerate")
+
+    div <- div / maxRes$value
   }
-  
+
   return(div)
 }
 
 
 
+#' @noRd
+.divCoefMax <- function(d2, tol = 1e-8, maxit = 1000) {
 
-.divCoefMax <- function(D2, tol = 1e-8, maxit = 1000) {
-  
-  n <- nrow(D2)
-  
+  n <- nrow(d2)
+
   # start with uniform weights
   x <- rep(1 / n, n)
-  
+  converged <- FALSE
+
   for (i in seq_len(maxit)) {
-    x_new <- D2 %*% x
-    
+    xNew <- as.vector(d2 %*% x)
+
     # projection onto simplex
-    x_new <- pmax(x_new, 0)
-    s <- sum(x_new)
-    
+    xNew <- pmax(xNew, 0)
+    s <- sum(xNew)
+
     if (s == 0) {
-      x_new <- rep(1 / n, n)
+      xNew <- rep(1 / n, n)
     } else {
-      x_new <- x_new / s
+      xNew <- xNew / s
     }
-    
-    if (max(abs(x - x_new)) < tol)
+
+    if (max(abs(x - xNew)) < tol) {
+      x <- xNew
+      converged <- TRUE
       break
-    
-    x <- x_new
+    }
+
+    x <- xNew
   }
-  
-  value <- as.numeric(t(x) %*% D2 %*% x)
-  
+
   list(
-    value = value,
+    value = as.numeric(t(x) %*% d2 %*% x),
     weights = x,
     iterations = i,
-    converged = (i < maxit)
+    converged = converged
   )
 }
-

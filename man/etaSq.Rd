@@ -102,6 +102,7 @@ etaSq(aov(DV ~ IV1t*IV2t, data=dfMD), type=1)
 
 #### Example 4: two-way split-plot ANOVA -> etaSq.aovlist ####
 
+set.seed(1)
 DV_t1 <- round(rnorm(3*10, -0.5, 1), 2)
 DV_t2 <- round(rnorm(3*10,  0,   1), 2)
 DV_t3 <- round(rnorm(3*10,  0.5, 1), 2)
