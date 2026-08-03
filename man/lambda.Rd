@@ -25,8 +25,12 @@ lambda(
 \item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}}
+\item{sides}{character string specifying the side of the confidence
+interval, one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. It names the side on which the \emph{finite} bound
+lies, not the direction of an alternative hypothesis - see
+\link{ConfidenceIntervals} for the full definition and for the
+difference to \pkg{DescTools}.}
 
 \item{method}{character string selecting the interval method; currently
 only \code{"classic"} is implemented}
@@ -105,7 +109,6 @@ Newbury Park, CA: Sage, pp. 17--24
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=mutInf]{mutInf()}},
 \code{\link[=phi]{phi()}},

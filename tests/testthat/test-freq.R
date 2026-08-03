@@ -76,3 +76,17 @@ test_that("freq print method works without error", {
   x <- factor(c("A","B","A","C"))
   expect_output(print(freq(x)))
 })
+
+
+test_that("freq actually sorts by level name", {
+  
+  x <- factor(c("b", "b", "a", "c", "c", "c"),
+              levels = c("c", "b", "a"))   # levels NOT alphabetical
+  
+  byLevel <- freq(x, ord = "level")
+  byName  <- freq(x, ord = "name")
+  
+  expect_equal(as.character(byLevel$level), c("c", "b", "a"))
+  expect_equal(as.character(byName$level),  c("a", "b", "c"))
+})
+

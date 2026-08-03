@@ -80,16 +80,9 @@ Shannon CE (1948). A Mathematical Theory of Communication.
 Bell System Technical Journal, 27, 379-423.
 }
 \seealso{
-Other assoc.nominal:
-\code{\link[=contCoef]{contCoef()}},
-\code{\link[=cramerV]{cramerV()}},
-\code{\link[=gkTau]{gkTau()}},
-\code{\link[=lambda]{lambda()}},
-\code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
-\code{\link[=tschuprowT]{tschuprowT()}},
-\code{\link[=uncertCoef]{uncertCoef()}},
-\code{\link{yule}}
+Other diversity.concentration:
+\code{\link[=herfindahl]{herfindahl()}},
+\code{\link[=simpson]{simpson()}}
 }
-\concept{assoc.nominal}
+\concept{diversity.concentration}
 \concept{information-theory}

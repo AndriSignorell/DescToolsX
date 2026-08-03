@@ -164,7 +164,7 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
       "freq", "perc",
       gettextf(
         c("lci%s", "uci%s"),
-        fm(x$conf.level, digits = 2, ldigits = 0)
+        fm(x$conf.level, digits = 2, leadDigits = 0)
       )
     )
     

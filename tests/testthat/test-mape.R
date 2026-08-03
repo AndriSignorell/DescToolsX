@@ -40,3 +40,20 @@ test_that("mape.lm returns a non-negative numeric for a linear model", {
   expect_gte(res, 0)
   expect_length(res, 1)
 })
+
+
+
+test_that("mape is a fraction and mae is on the data scale", {
+  
+  x   <- c(2.5, 3.0, 2.8)
+  ref <- c(3.0, 2.5, 3.0)
+  
+  expect_equal(mae(x, ref), mean(abs(ref - x)))
+  expect_equal(mape(x, ref), mean(abs((ref - x) / ref)))
+  expect_lt(mape(x, ref), 1)          # a fraction, not a percentage
+  
+  # a zero reference is NA, and a missing one does not break the index
+  expect_true(is.na(mape(c(1, 2), c(0, 2))))
+  expect_equal(mape(c(1, 2, 3), c(0, 2, NA), na.rm = TRUE),
+               mean(abs((2 - 2) / 2)))
+})

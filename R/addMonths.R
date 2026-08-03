@@ -1,57 +1,68 @@
 
-
 #' Add Months to a Date
 #'
-#' Naively adding months to a date can produce invalid dates, for example
-#' when adding one month to 2012-01-30. \code{addMonths()} always returns a
-#' valid date: adding one month to \code{as.Date("2013-01-31")} returns
-#' \code{"2013-02-28"}. Negative values of \code{n} subtract months.
+#' Adds or subtracts whole calendar months while ensuring that the result is
+#' always a valid date.
 #'
-#' All parameters are recycled if necessary. The result is always of class
-#' \code{Date}, also when \code{x} is supplied as \code{POSIXct} or as a
-#' character string; time-of-day information is therefore dropped. Note that
-#' \code{\link{as.Date}} converts a \code{POSIXct} in UTC by default, which
-#' can shift the calendar day - pass \code{tz} through \code{\dots} to
-#' control this.
+#' Naively adding months can produce invalid dates. For example, adding one
+#' month to \code{as.Date("2013-01-31")} returns \code{"2013-02-28"} rather
+#' than a date in March. Negative values of \code{n} subtract months.
 #'
-#' Missing values in either argument propagate to \code{NA}.
+#' @param x a \code{Date} object or an object coercible to one with
+#'   \code{\link{as.Date}}
+#' @param n numeric vector containing finite whole numbers of months or
+#'   missing values
+#' @param \dots further arguments passed to \code{\link{as.Date}}, such as
+#'   \code{origin}, \code{format}, or \code{tz}
 #'
-#' @param x a Date object, or an object coercible to one by
-#' \code{\link{as.Date}}(x, ...), to which months are added
-#' @param n number of months to add, a whole number. Negative values
-#' subtract months.
-#' @param \dots further arguments passed to \code{\link{as.Date}}, for example
-#' to supply \code{origin} or \code{tz}
-#' @return a vector of class \code{Date}, of the length of the longer of
-#' \code{x} and \code{n}, containing the transformed dates
-#' @note Based on code by Roland Rapold and Antonio, adapted to conform to package standards.
+#' @return a vector of class \code{Date} having the length of the longer of
+#'   \code{x} and \code{n}
 #'
-#' @seealso \code{\link{as.ym}}; Date functions: \code{\link{year}},
-#' \code{\link{month}}, etc.
+#' @details
+#' The arguments \code{x} and \code{n} are recycled to their common maximum
+#' length using [bedrock::recycle()]. Partial recycling does not produce a
+#' warning.
+#'
+#' If either argument has length zero, an empty \code{Date} vector is
+#' returned. Missing values in either argument produce missing values in the
+#' corresponding result.
+#'
+#' Inputs supplied as \code{POSIXct} are converted to \code{Date}, and their
+#' time-of-day information is discarded. By default, \code{as.Date.POSIXct}
+#' performs this conversion in UTC. Supply \code{tz} through \code{\dots} if
+#' another time zone should determine the calendar date.
+#'
+#' @note Based on code by Roland Rapold and Antonio, adapted to conform to
+#'   package standards.
+#'
 #' @references
 #' \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 #'
-#' @examples
+#' @seealso [as.ym()], [bedrock::recycle()],
+#'   [year()], [month()]
 #'
-#' # characters will be coerced to Date
+#' @examples
+#' # character input is converted to Date
 #' addMonths("2013-01-31", 1)
 #'
-#' # negative n
+#' # negative values subtract months
 #' addMonths(as.Date("2013-03-31"), -1)
 #'
-#' # arguments will be recycled
-#' # (with warning if the longer is not a multiple of length of shorter)
-#' addMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1, -1))
+#' # x and n are recycled
+#' addMonths(
+#'   c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"),
+#'   c(1, -1)
+#' )
 #'
 #' # missing values propagate
 #' addMonths(c("2013-01-31", NA), 1)
 #'
-#' # POSIXct input is converted to Date first; supply tz to pin the day down
+#' # POSIXct input is converted to Date
 #' x <- as.POSIXct(c("2015-01-31", "2015-08-31"), tz = "UTC")
 #' addMonths(x, c(1, 3), tz = "UTC")
 #'
-#' # mind the origin if x supplied as numeric ...
-#' x <- as.numeric(as.Date(x))
+#' # numeric dates require an origin
+#' x <- as.numeric(as.Date(c("2015-01-31", "2015-08-31")))
 #' addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 #'
 #' @family date.time
@@ -62,43 +73,85 @@ addMonths <- function(x, n, ...) {
 }
 
 
+.addMonthsEngine <- function(x, n) {
+  
+  if (is.na(x) || is.na(n))
+    return(NA_real_)
+  
+  if (n == 0)
+    return(unclass(x))
+  
+  originalDay <- day(x)
+  day(x) <- 1L
+  
+  by <- paste(
+    format(n, scientific = FALSE, trim = TRUE),
+    "months"
+  )
+  
+  targetMonth <- seq(
+    from = x,
+    by = by,
+    length.out = 2L
+  )[2L]
+  
+  nextMonth <- seq(
+    from = targetMonth,
+    by = "1 month",
+    length.out = 2L
+  )[2L]
+  
+  daysInTargetMonth <- as.integer(nextMonth - targetMonth)
+  targetDay <- min(originalDay, daysInTargetMonth)
+  
+  return(unclass(targetMonth + targetDay - 1L))
+}
+
+
+#' @rdname addMonths
 #' @method addMonths default
 #' @export
 addMonths.default <- function(x, n, ...) {
-
-  # ref: http://stackoverflow.com/questions/14169620/add-a-month-to-a-date
-  # Author: Antonio
-  .addMonths <- function(x, n) {
-
-    # seq.Date() errors on a missing 'from', so NAs are caught up front
-    # rather than aborting the whole call.
-    if (is.na(x) || is.na(n))
-      return(NA_real_)
-
-    # naive shift - may roll over into the following month,
-    # e.g. 2013-01-31 + 1 month -> 2013-03-03
-    res <- unclass(seq(x, by = paste(n, "months"), length.out = 2L)[2L])
-
-    # ceiling: the last day of the target month
-    day(x) <- 1L
-    resC <- unclass(seq(x, by = paste(n + 1L, "months"),
-                        length.out = 2L)[2L]) - 1L
-
-    min(res, resC)
-  }
-
+  
   x <- as.Date(x, ...)
-
-  if (!is.numeric(n) || any(n %% 1 != 0, na.rm = TRUE))
-    stop("'n' must be a whole number of months")
-
+  
+  if (!is.numeric(n))
+    stop("'n' must be a numeric vector")
+  
+  invalidN <- !is.na(n) &
+    (!is.finite(n) | n != trunc(n))
+  
+  if (any(invalidN))
+    stop("'n' must contain finite whole numbers or NA")
+  
+  # seq.Date() parses the number of months as an integer.
+  outsideRange <- !is.na(n) & abs(n) > .Machine$integer.max
+  
+  if (any(outsideRange))
+    stop("'n' is outside the supported range")
+  
+  invalidX <- !is.na(x) & !is.finite(unclass(x))
+  
+  if (any(invalidX))
+    stop("'x' must contain finite dates or NA")
+  
   if (length(x) == 0L || length(n) == 0L)
     return(x[0L])
-
-  # mapply() supplies the recycling (and the mismatch warning documented
-  # above); as.numeric() guards the all-NA case, where mapply() would
-  # otherwise hand back a logical vector that must not be classed Date.
-  res <- as.numeric(mapply(.addMonths, x, as.integer(n), USE.NAMES = FALSE))
-
-  structure(res, class = "Date")
+  
+  arg <- recycle(x = x, n = n)
+  maxdim <- attr(arg, "maxdim")
+  
+  res <- vapply(
+    seq_len(maxdim),
+    function(i) {
+      .addMonthsEngine(
+        x = arg$x[i],
+        n = arg$n[i]
+      )
+    },
+    numeric(1L)
+  )
+  
+  return(structure(res, class = "Date"))
 }
+

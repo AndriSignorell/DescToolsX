@@ -14,7 +14,7 @@ kendallTauA(x, y = NULL, conf.level = NA, ...)
 \item{conf.level}{confidence level for confidence intervals. If \code{NA},
 no confidence interval is returned.}
 
-\item{\dots}{further arguments passed to \code{\link{table}} in the vector interface}
+\item{\dots}{further arguments passed to \code{\link{ordAssocs}}}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -66,9 +66,9 @@ kendallTauA(x, y, conf.level=0.95)
 
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley and Sons, pp. 57--59.
 
-Hollander, M., Wolfe, D. A., & Chicken, E. (2014)
+Hollander, M., Wolfe, D. A. and Chicken, E. (2014)
 \emph{Nonparametric Statistical Methods}, 3rd edition, Wiley.
 
 Liebetrau, A. M. (1983)

@@ -6,6 +6,7 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^design_rules.md
 Rplots.pdf
 desktop\.ini$
 prepare.R

@@ -6,6 +6,11 @@
 #' 
 #' Outlier detection is a tricky problem and should be handled with care. We
 #' implement Tukey's boxplot rule as a rough idea of spotting extreme values.
+#' The fences are built from the hinges, exactly as
+#' \code{\link[grDevices]{boxplot.stats}} does, so the result matches what
+#' a boxplot of the same data draws. Note that the hinges are not the
+#' type-7 quartiles of \code{\link[stats]{quantile}} and differ from them
+#' for many sample sizes.
 #' 
 #' Hampel considers values outside of median +/- 3 * (median absolute
 #' deviation) to be outliers.
@@ -51,17 +56,23 @@
 #' 
 #' @seealso \code{\link{boxplot}}
 #' 
-#' @family impute  
+#' @family data.inspection
 #' @concept outlier-detection
-#'
-#'
 #' @export
 outlier <- function(x, method=c("boxplot", "hampel"), value=TRUE, na.rm=FALSE){
   
   switch(match.arg(arg = method, choices = c("boxplot", "hampel")),
          
          boxplot =  {
-           qq <- quantile(as.numeric(x), c(0.25, 0.75), na.rm = na.rm, names = FALSE)
+           # fivenum(), not quantile(): boxplot.stats() builds its fences
+           # from the HINGES, and those differ from the type-7 quartiles
+           # for many sample sizes. For 1:20 the hinges are 5.5 and 15.5
+           # while the quartiles are 5.75 and 15.25, so the quantile
+           # fences are the narrower pair and this function flagged
+           # points that the boxplot next to it did not draw as outliers
+           # - although the examples assert the two agree.
+           fn  <- fivenum(as.numeric(x), na.rm = na.rm)
+           qq  <- fn[c(2L, 4L)]
            iqr <- diff(qq)
            id <- x < (qq[1] - 1.5 * iqr) | x > (qq[2] + 1.5 * iqr)
          },
@@ -69,7 +80,7 @@ outlier <- function(x, method=c("boxplot", "hampel"), value=TRUE, na.rm=FALSE){
          hampel = {
            med_x <- median(x, na.rm=na.rm)
            
-           # hampel considers values outside of median ± 3*(median absolute deviation) 
+           # hampel considers values outside of median +/- 3*(median absolute deviation) 
            # to be outliers
            id <- x %][% (med_x + c(-3, 3) * mad(x, na.rm=na.rm, center = med_x))
          }

@@ -385,8 +385,13 @@ ordAssocs <- function(x, y = NULL,
   delta1 <- sqrt(1 - sum(rowsum^2))
   delta2 <- sqrt(1 - sum(colsum^2))
 
-  tauphi <- (2 * pdiff + Pdiff * colmat) * delta2 * delta1 +
-    (Pdiff * rowmat * delta2) / delta1
+  # wrong:
+  # tauphi <- (2 * pdiff + Pdiff * colmat) * delta2 * delta1 +
+  #   (Pdiff * rowmat * delta2) / delta1
+  
+  tauphi <- 2 * pdiff * delta1 * delta2 +
+    Pdiff * rowmat * delta2 / delta1 +
+    Pdiff * colmat * delta1 / delta2
 
   # tauphi is on the O(1) scale (built from probabilities), not the
   # O(1/n) scale of the psi above, hence the explicit centring and the

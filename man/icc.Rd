@@ -65,7 +65,7 @@ decisions:
 \item \strong{unit}: single rating or average of k ratings
 }
 
-The six classical Shrout–Fleiss cases are:
+The six classical Shrout--Fleiss cases are:
 
 \tabular{lll}{
 model \tab type \tab unit \cr
@@ -83,7 +83,8 @@ Confidence intervals can be computed using different inference methods:
 
 \itemize{
 \item \code{"anova"}: exact F-based intervals following Shrout and Fleiss (1979)
-\item \code{"reml"}: variance components estimated via REML (Wald approximation)
+\item \code{"reml"}: variance components estimated via REML. Point
+estimate only; no confidence interval is available for this method.
 \item \code{"boot"}: nonparametric percentile bootstrap
 }
 
@@ -92,12 +93,19 @@ absolute agreement. ICC(2) assumes raters are randomly sampled
 and generalizable, while ICC(3) assumes a fixed set of raters.
 
 The average forms (k) reflect the reliability of the mean of k raters
-and correspond to the Spearman–Brown adjusted reliability.
+and correspond to the Spearman--Brown adjusted reliability.
 
 The ANOVA-based confidence intervals follow the exact formulas
 of Shrout and Fleiss (1979), including the variance approximation
 for ICC(2).
 }
+\section{Random number generation}{
+
+\code{method = "boot"} resamples subjects and therefore advances R's
+global random number generator. Call \code{\link[base]{set.seed}}
+beforehand for reproducible intervals.
+}
+
 \examples{
 #example from Shrout and Fleiss (1979)
 sf <- matrix(c( 9, 2, 5, 8,    6, 1, 3, 2,    8, 4, 6, 8,     
@@ -127,11 +135,11 @@ t(simplify2array(out))
 \references{
 Shrout, P. E., Fleiss, J. L. (1979).
 Intraclass correlations: uses in assessing rater reliability.
-\emph{Psychological Bulletin}, 86, 420–428.
+\emph{Psychological Bulletin}, 86, 420--428.
 
 McGraw, K. O., Wong, S. P. (1996).
 Forming inferences about some intraclass correlation coefficients.
-\emph{Psychological Methods}, 1, 30–46.
+\emph{Psychological Methods}, 1, 30--46.
 }
 \seealso{
 Other assoc.agreement:

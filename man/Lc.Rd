@@ -171,9 +171,7 @@ Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}
 }
 \concept{descriptive-statistics}

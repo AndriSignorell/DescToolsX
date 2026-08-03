@@ -215,3 +215,146 @@ test_that("invalid conf.level raises error", {
   expect_error(tukeyBiweight(rnorm(10), conf.level = 0),   "conf.level")
 })
 
+
+# independent reference implementation of the biweight mean
+.tbrmRef <- function(x, C = 9) {
+  med <- median(x)
+  d   <- C * median(abs(x - med)) + 1e-6
+  u   <- (x - med) / d
+  keep <- abs(u) <= 1
+  w   <- (1 - u[keep]^2)^2
+  sum(w * x[keep]) / sum(w)
+}
+
+
+test_that("tbrm_cpp() sums only the retained observations", {
+  
+  # regression: the C++ rewrite reduced over the WHOLE recycled vectors
+  # instead of the first my_count entries, so every observation that was
+  # downweighted to zero left its raw value in the numerator and its
+  # absolute deviation in the denominator - i.e. the estimator was wrong
+  # exactly in the situation it exists for
+  x <- c(1, 2, 3, 4, 100)
+  expect_equal(tbrm_cpp(x, 9), .tbrmRef(x, 9))
+  expect_equal(tbrm_cpp(x, 9), 2.531119, tolerance = 1e-6)
+  
+  set.seed(7)
+  for(k in 1:20){
+    y <- c(rnorm(29), rnorm(3, mean = 50))
+    expect_equal(tbrm_cpp(y, 9), .tbrmRef(y, 9))
+  }
+  
+  # without outliers all observations are kept and the old code agreed
+  z <- c(4, 5, 6, 5, 4)
+  expect_equal(tbrm_cpp(z, 9), .tbrmRef(z, 9))
+  
+  # even n (median is the mean of the two middle values)
+  expect_equal(tbrm_cpp(c(1, 2, 3, 4, 5, 100), 9), .tbrmRef(c(1, 2, 3, 4, 5, 100), 9))
+  
+})
+
+
+test_that("tbrm_cpp() reports non-finite input as NA", {
+  
+  expect_true(is.na(tbrm_cpp(c(1, 2, NA), 9)))
+  expect_true(is.na(tbrm_cpp(numeric(0), 9)))
+  
+})
+
+
+test_that("the point estimate is tbrm_cpp() and is robust", {
+  
+  set.seed(1)
+  x <- c(rnorm(50), 10)
+  
+  expect_equal(tukeyBiweight(x), tbrm_cpp(x, C = 9))
+  expect_equal(tukeyBiweight(x), .tbrmRef(x, 9))
+  expect_lt(tukeyBiweight(x), mean(x))          # the outlier is downweighted
+  
+  # the tuning constant is honoured for the point estimate
+  expect_false(isTRUE(all.equal(tukeyBiweight(x, const = 3),
+                                tukeyBiweight(x, const = 9))))
+  
+})
+
+
+test_that("missing values are handled consistently", {
+  
+  x <- c(1, 2, 3, NA, 5)
+  
+  expect_true(is.na(tukeyBiweight(x)))
+  expect_equal(tukeyBiweight(x, na.rm = TRUE), .tbrmRef(c(1, 2, 3, 5), 9))
+  
+  # regression: with a requested interval the NA case returned a bare scalar,
+  # so res[["est"]] failed in every caller
+  res <- tukeyBiweight(x, conf.level = 0.95)
+  expect_named(res, c("est", "lci", "uci"))
+  expect_true(all(is.na(res)))
+  
+})
+
+
+test_that("the bootstrap interval brackets the estimate and is reproducible", {
+  
+  set.seed(1)
+  x <- c(rnorm(50), 10)
+  
+  set.seed(2)
+  a <- tukeyBiweight(x, conf.level = 0.95, R = 499, type = "perc")
+  set.seed(2)
+  b <- tukeyBiweight(x, conf.level = 0.95, R = 499, type = "perc")
+  
+  expect_equal(a, b)
+  expect_named(a, c("est", "lci", "uci"))
+  expect_lte(a[["lci"]], a[["est"]])
+  expect_lte(a[["est"]], a[["uci"]])
+  
+})
+
+
+test_that("sides sets the open bound to infinity", {
+  
+  set.seed(3)
+  x <- rnorm(60)
+  
+  set.seed(4)
+  left <- tukeyBiweight(x, conf.level = 0.95, sides = "left", R = 299, type = "perc")
+  set.seed(4)
+  right <- tukeyBiweight(x, conf.level = 0.95, sides = "right", R = 299, type = "perc")
+  
+  expect_equal(left[["uci"]], Inf)
+  expect_equal(right[["lci"]], -Inf)
+  expect_true(is.finite(left[["lci"]]))
+  expect_true(is.finite(right[["uci"]]))
+  
+})
+
+
+test_that("tukeyBiweight() validates its arguments", {
+  
+  x <- rnorm(20)
+  
+  expect_error(tukeyBiweight(character(3)), "non-empty numeric")
+  expect_error(tukeyBiweight(numeric(0)), "non-empty numeric")
+  expect_error(tukeyBiweight(x, const = -1), "positive")
+  expect_error(tukeyBiweight(x, const = c(3, 9)), "positive")
+  expect_error(tukeyBiweight(x, conf.level = 1), "conf.level")
+  expect_error(tukeyBiweight(x, conf.level = 0.4, sides = "left"), "greater than 0.5")
+  expect_error(tukeyBiweight(x, conf.level = 0.95, method = "asymptotic"))
+  
+})
+
+
+test_that("const reaches the bootstrap engine", {
+  
+  # regression: tbrm_boot_cpp() was called without the tuning constant, so
+  # est with an interval and est without one were different quantities
+  set.seed(1)
+  x <- c(rnorm(50), 10)
+  
+  set.seed(5)
+  a <- tukeyBiweight(x, conf.level = 0.95, const = 3, R = 299, type = "perc")
+  expect_equal(a[["est"]], tukeyBiweight(x, const = 3))
+  expect_false(isTRUE(all.equal(a[["est"]], tukeyBiweight(x, const = 9))))
+  
+})

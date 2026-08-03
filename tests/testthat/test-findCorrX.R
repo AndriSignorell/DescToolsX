@@ -87,3 +87,24 @@ test_that("findCorrX removed + kept indices cover all original columns", {
   all_idx <- sort(c(res$removed, res$kept))
   expect_equal(all_idx, seq_len(ncol(cmat)))
 })
+
+
+test_that("findCorrX removes the higher-scoring variable of a pair", {
+  
+  cmat <- matrix(c(1,   0.95, 0.10,
+                   0.95, 1,   0.12,
+                   0.10, 0.12, 1), nrow = 3,
+                 dimnames = list(paste0("V", 1:3), paste0("V", 1:3)))
+  
+  idx <- findCorrX(cmat, cutoff = 0.8)
+  expect_length(idx, 1L)
+  expect_true(idx %in% c(1L, 2L))
+  
+  # differing row and column names must not be read as asymmetry
+  cm2 <- cmat
+  rownames(cm2) <- paste0("r", 1:3)
+  expect_silent(findCorrX(cm2, cutoff = 0.8))
+  
+  expect_error(findCorrX(unname(cmat), cutoff = 0.8, output = "names"),
+               "output = 'index'")
+})

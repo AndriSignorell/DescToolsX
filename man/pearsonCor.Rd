@@ -66,7 +66,7 @@ bedrock::pairApply(swiss, pearsonCor)
 
 bedrock::pairApply(swiss, 
            function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
-                               digits=3, ldigits=0))
+                               digits=3, leadDigits=0))
 
 }
 \seealso{
@@ -77,6 +77,7 @@ Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=keepSig]{keepSig()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }
 \concept{assoc.continuous}

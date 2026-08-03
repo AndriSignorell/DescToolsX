@@ -2,7 +2,7 @@
 % Please edit documentation in R/auc.R
 \name{auc}
 \alias{auc}
-\title{Compute Area Under the Curve (auc)}
+\title{Compute Area Under the Curve}
 \usage{
 auc(
   x,
@@ -19,45 +19,49 @@ auc(
 \arguments{
 \item{x, y}{numeric vectors of equal length defining the curve coordinates}
 
-\item{from, to}{numeric values specifying the integration interval. Defaults to
-the range of \code{x}.}
+\item{from, to}{single numeric values specifying the integration interval;
+by default, the range of \code{x}}
 
 \item{method}{character string specifying the integration method:
-\code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}}
+\code{"trapezoid"}, \code{"step"}, or \code{"spline"}}
 
-\item{absoluteArea}{logical; if \code{TRUE}, areas below zero are treated
-as positive}
+\item{absoluteArea}{logical; whether areas below zero are counted as positive}
 
-\item{subdivisions}{integer; number of subdivisions for spline integration}
+\item{subdivisions}{positive whole number specifying the maximum number of
+subdivisions used for spline integration}
 
-\item{na.rm}{logical; if \code{TRUE}, incomplete \code{(x, y)} pairs are
-removed before computation. If \code{FALSE} and missing values are
-present, \code{NA_real_} is returned.}
+\item{na.rm}{logical; whether incomplete \code{(x, y)} pairs are removed}
 
-\item{...}{additional arguments passed to \code{\link[stats]{approx}}}
+\item{...}{additional arguments passed to \code{\link[stats]{approx}} for
+trapezoidal interpolation}
 }
 \value{
-a numeric value representing the computed area under the curve
+a numeric value representing the computed area
 }
 \description{
 Calculates the area under a curve defined by points \code{(x, y)} using
 different numerical integration methods.
 }
 \details{
-The function supports three methods:
+The available methods are:
 \itemize{
-\item \strong{trapezoid}: Linear interpolation between points.
-\item \strong{step}: Step function using left endpoints.
-\item \strong{spline}: Smooth interpolation using cubic splines.
+\item \code{"trapezoid"}: linear interpolation between successive points
+\item \code{"step"}: a right-continuous step function using the value at
+the left endpoint of each interval
+\item \code{"spline"}: a natural cubic spline integrated numerically
 }
 
-If \code{absoluteArea = TRUE}, the function accounts for sign changes by
-inserting zero-crossings and summing absolute areas.
+For \code{method = "step"}, an integration boundary lying between two
+observed \code{x} values retains the value of the preceding point. No
+linear interpolation is performed at the boundary.
 
-\code{from} and \code{to} must lie inside the range of \code{x} for the
-interpolating methods: outside it there is nothing to interpolate, and
-\code{\link[stats]{approx}} would return \code{NA} for those points and
-hence an \code{NA} area. Extrapolation is not attempted.
+If \code{absoluteArea = TRUE}, the absolute value of the interpolated curve
+is integrated. Sign changes in linear segments are split at their exact
+zero-crossing. For the step method, the absolute values of the constant
+step heights are used.
+
+Both integration limits must lie inside the range of \code{x}.
+Extrapolation is not performed.
 }
 \examples{
 x <- c(1, 2, 3, 5)
@@ -67,6 +71,24 @@ auc(x, y)
 auc(x, y, method = "step")
 auc(x, y, method = "spline")
 auc(x, y, absoluteArea = TRUE)
+
+# interval boundaries between observed x values
+auc(
+  x = c(0, 1, 2),
+  y = c(-2, 10, 4),
+  from = 0.5,
+  to = 1.5,
+  method = "step"
+)
+
+auc(
+  x = c(0, 1, 2),
+  y = c(-2, 10, 4),
+  from = 0.5,
+  to = 1.5,
+  method = "step",
+  absoluteArea = TRUE
+)
 
 }
 \seealso{

@@ -23,10 +23,15 @@ spearmanCor(
 \item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}}
+\item{sides}{character string specifying the side of the confidence
+interval, one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. It names the side on which the \emph{finite} bound
+lies, not the direction of an alternative hypothesis - see
+\link{ConfidenceIntervals} for the full definition and for the
+difference to \pkg{DescTools}.}
 
-\item{na.rm}{logical; whether to remove missing values}
+\item{na.rm}{logical; whether to remove incomplete pairs. Applies to the
+vector interface; a frequency table must not contain missing counts.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -46,14 +51,26 @@ also accepted as arguments (i.e. actually weights are used).
 The function calculates Spearman's rho statistic by means of \code{cor(...,
 method="spearman")} when two variables \code{x} and \code{y} are supplied.
 If a frequency table is provided an implementation based on SAS
-documentation is used.\cr The confidence intervals are calculated via
+documentation is used. Both routes use midranks for ties and agree exactly;
+see the examples.\cr The confidence intervals are calculated via
 z-Transformation.\cr
+
+The number of observations entering the z-transformation is
+\code{length(x)} in the vector interface and \code{sum(x)}, the table total,
+in the table interface. At least four observations are needed for an
+interval.
+
+\code{sides} names the side of the interval that carries the finite bound,
+so \code{"left"} returns \code{[lci, 1]} and \code{"right"} returns
+\code{[-1, uci]}. Since rho is bounded, the open side is reported at the
+range boundary rather than as infinite.
 }
 \examples{
 
+# Example from SAS documentation (PROC FREQ)
 pain <- as.table(matrix(c(26,  6, 26, 7, 23, 
                            9, 18, 14, 9, 23), 
-                           ncol=5, byrow=TRUE, 
+                           ncol=5, 
         dimnames=list(adverse=c("no", "yes"), dose=1:5)))
 
 spearmanCor(pain)
@@ -80,6 +97,7 @@ Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}}
 }
 \concept{assoc.continuous}

@@ -4,14 +4,18 @@
 \alias{randolphKappa}
 \title{Randolph's Free-Marginal Multirater Kappa}
 \usage{
-randolphKappa(x, conf.level = NA, ...)
+randolphKappa(x, categories = NULL, conf.level = NA, ...)
 }
 \arguments{
 \item{x}{a matrix of size \eqn{N \times m} with subjects in rows and raters
 in columns; cells contain the assigned categories}
 
-\item{conf.level}{reserved for future confidence intervals and currently
-ignored}
+\item{categories}{the categories a rater could have chosen from, or a single
+number giving how many there were. Defaults to \code{NULL}, i.e. the
+categories actually observed in \code{x}. See Details.}
+
+\item{conf.level}{reserved for future confidence intervals; must be
+\code{NA}}
 
 \item{...}{reserved for future bootstrap options and currently ignored}
 }
@@ -24,15 +28,24 @@ Computes Randolph's free-marginal multirater kappa for \eqn{m} raters over
 distributions (i.e., it is free-marginal).
 }
 \details{
-Let \eqn{k} be the number of distinct categories across all ratings,
-\eqn{m} the number of raters, and \eqn{N} the number of subjects. Randolph's
-kappa is
+Let \eqn{k} be the number of categories, \eqn{m} the number of raters, and
+\eqn{N} the number of subjects. Randolph's kappa is
 \deqn{\kappa = \frac{P_o - 1/k}{1 - 1/k},}
-where the observed agreement \eqn{P_o} is
-\deqn{P_o = \frac{1}{N} \sum_{i=1}^{N} \frac{\max_j n_{ij}}{m}.}
+where the observed agreement \eqn{P_o} is the proportion of agreeing rater
+\emph{pairs},
+\deqn{P_o = \frac{1}{N} \sum_{i=1}^{N}
+      \frac{\sum_{j} n_{ij}(n_{ij}-1)}{m(m-1)}.}
 Here, \eqn{n_{ij}} denotes the number of raters who assigned subject \eqn{i}
-to category \eqn{j}; \eqn{\max_j n_{ij}} is the modal (most frequent)
-category count per subject.
+to category \eqn{j}. This is the same observed agreement as in Fleiss'
+kappa (and as computed by \code{\link{percAgreement}}); Randolph's
+coefficient differs from Fleiss' only in the chance agreement \eqn{P_e},
+which is fixed at \eqn{1/k} instead of being estimated from the marginals.
+
+\eqn{P_e = 1/k} refers to the categories a rater could have \emph{chosen},
+not to those that happen to occur in the data. If a category was available
+but never used, the default \code{categories = NULL} understates \eqn{k}
+and thus overstates chance agreement, which biases \eqn{\kappa} downwards.
+Supply \code{categories} whenever the coding scheme is known.
 
 Long-format ratings can first be reshaped with \code{\link{raterFrame}}.
 }
@@ -46,6 +59,10 @@ x <- matrix(c(
   2,2,1
 ), ncol = 3, byrow = TRUE)
 randolphKappa(x)
+
+# the raters could have chosen from five categories, not just the three
+# they used
+randolphKappa(x, categories = 5)
 
 ## Long format with a formula
 df <- data.frame(

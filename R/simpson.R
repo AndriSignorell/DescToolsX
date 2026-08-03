@@ -14,10 +14,15 @@
 #'
 #' The Deltas correction is defined as
 #' \eqn{(1 - \sum p_i^2) * k / (k - 1)}, where \eqn{k} is the number of
-#' observed (non-empty) categories.
+#' observed (non-empty) categories. The factor is the reciprocal of
+#' \eqn{(k-1)/k}, the largest value the Gini-Simpson index can attain with
+#' \eqn{k} categories, so the corrected index reaches 1 for a uniform
+#' distribution over the observed categories.
 #'
-#' @param x a vector of observations (factor, character, numeric), or a named
-#'   vector of non-negative integer counts
+#' @param x a factor or character vector of observations, or a vector of
+#'   non-negative counts. Note that a \emph{numeric} vector is always read as
+#'   counts, never as observations; wrap it in \code{\link{factor}} to have it
+#'   tabulated instead.
 #' @param method character string specifying the index to compute:
 #'   \code{"gini"}, \code{"hunter"}, or \code{"deltas"}
 #' @param na.rm logical. If \code{TRUE}, missing values are removed before
@@ -32,12 +37,18 @@
 #' observations belong to different categories.
 #'
 #' The Hunter-Gaston index corrects for finite sample size, while the
-#' Deltas correction adjusts for a small number of observed categories.
+#' Deltas correction adjusts for a small number of observed categories. Note
+#' that the finite-sample correction \eqn{N/(N-1)} applied to the
+#' Gini-Simpson index reproduces the Hunter-Gaston index exactly; the two are
+#' the same adjustment with \eqn{N} and \eqn{k} in the correction factor.
+#'
+#' A sample concentrated in a single category is perfectly homogeneous rather
+#' than undefined, so \code{"gini"} and \code{"hunter"} return 0 for it. Only
+#' the Deltas correction requires \eqn{k \ge 2}, since \eqn{k - 1} appears in
+#' its denominator.
 #'
 #' When \code{x} is numeric, it is treated as a vector of counts. Non-integer
 #' values produce a warning; the Hunter-Gaston index requires integer counts.
-#'
-#' The Deltas correction uses the number of observed (non-empty) categories.
 #'
 #' @examples
 #' x <- c("A", "A", "B", "C", "C", "C")
@@ -49,6 +60,10 @@
 #' # Using counts directly
 #' counts <- c(A = 2, B = 1, C = 3)
 #' simpson(counts, method = "hunter")
+#'
+#' # a numeric vector of observations must be tabulated first, otherwise
+#' # its values are read as counts
+#' simpson(factor(c(1, 1, 2, 2, 3)), method = "gini")
 #'
 #' # With missing values
 #' x <- c("A", "A", NA, "B")
@@ -69,8 +84,7 @@
 #' https://doi.org/10.1162/rest.2003.85.1.226
 #'
 #'
-#' @family inequality  
-#' @concept inequality  
+#' @family diversity.concentration
 #' @concept concentration-index
 #'
 #'
@@ -78,6 +92,9 @@
 simpson <- function(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE) {
   
   method <- match.arg(method)
+  
+  if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("'na.rm' must be a single non-missing logical value")
   
   # Coerce single-row data frame (e.g. vegan BCI[1,]) to numeric vector
   if (is.data.frame(x)) {
@@ -117,17 +134,21 @@ simpson <- function(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE) {
   # Gini-Simpson
   if (method == "gini") {
     p <- tt / N
-    return(1 - sum(p^2))
+    return(unname(1 - sum(p^2)))
   }
   
   # Hunter-Gaston
   if (method == "hunter") {
-    if (N < 2 || sum(tt > 0) < 2) {
-      warning("Hunter-Gaston index requires N >= 2 and at least 2 non-empty categories; returning NA")
+    
+    # N >= 2 is what the index needs: with a single observation there is no
+    # pair to draw. A single non-empty category is not a degenerate case at
+    # all - the answer is 0, the same value "gini" reports for it.
+    if (N < 2) {
+      warning("Hunter-Gaston index requires N >= 2; returning NA")
       return(NA_real_)
     }
     
-    return(1 - sum(tt * (tt - 1)) / (N * (N - 1)))
+    return(unname(1 - sum(tt * (tt - 1)) / (N * (N - 1))))
   }
   
   # Deltas correction
@@ -139,6 +160,6 @@ simpson <- function(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE) {
     }
     
     p <- tt / N
-    return((1 - sum(p^2)) * k / (k - 1))
+    return(unname((1 - sum(p^2)) * k / (k - 1)))
   }
 }

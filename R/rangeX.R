@@ -1,5 +1,3 @@
-
-
 #' (Robust) Range 
 #' 
 #' Determines the range of the data, which can possibly be trimmed before
@@ -18,17 +16,19 @@
 #' 
 #' @param x a numeric vector
 #' @param trim the fraction (0 to 0.5) of observations to be trimmed from each
-#' end of \code{x} before the range is computed. Values outside that
-#' range are taken as the nearest endpoint. Default is 0 for
+#' end of \code{x} before the range is computed. Values of \code{trim} outside
+#' that range are taken as the nearest endpoint. Default is 0 for
 #' \code{robust = FALSE} and 0.2 for \code{robust = TRUE}.
 #' @param robust logical; whether to return the robust or conventional range
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #' stripped before the computation proceeds
 #' @param ... further arguments passed to \code{.robRange}, including
-#' \code{fac}
+#' \code{fac}. Only used if \code{robust = TRUE}.
 #' 
 #' @return a numeric scalar containing the range width. The corresponding
 #' lower and upper bounds are returned in the \code{"bounds"} attribute.
+#' Note that the attribute is dropped by subsetting and by
+#' \code{\link{as.vector}}, so read it before computing on the result.
 #' 
 #' @note Robust range contributed by Werner Stahel.
 #' 
@@ -83,6 +83,15 @@ rangeX <- function(x, trim=NULL, robust=FALSE, na.rm = FALSE, ...){
   # author: Werner Stahel
   # from:   regr.r
   
+  # x[is.finite(x)] below removes NAs unconditionally, so na.rm = FALSE was
+  # silently ignored in this branch while the conventional branch returned NA.
+  # Missing values are now answered with NA in both branches.
+  if (!na.rm && anyNA(x)) {
+    res <- NA_real_
+    attr(res, "bounds") <- c(NA_real_, NA_real_)
+    return(res)
+  }
+
   if(na.rm) x <- na.omit(x)
   
   ldat <- x[is.finite(x)]
@@ -96,7 +105,7 @@ rangeX <- function(x, trim=NULL, robust=FALSE, na.rm = FALSE, ...){
     warning("Not enough valid data. returning ordinary range")
     lsd <- Inf
   } else {
-    lsd <- fac * sum(lds[1:ln] / (ln-1))
+    lsd <- fac * sum(lds[seq_len(ln)] / (ln-1))
     if (lsd == 0) {
       warning("Robust range has width 0. returning ordinary range")
       lsd <- Inf }

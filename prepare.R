@@ -21,13 +21,14 @@ devtools::test()
 devtools::run_examples()
 
 
+
 covr::package_coverage()
 goodpractice::gp()
 
 
 pkgdown::build_site()
 pkgdown::build_reference_index()
-
+pkgdown::build_favicons()
 
 # hard CRAN check
 rhub::rhub_check()

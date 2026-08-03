@@ -14,7 +14,7 @@
 #'   \item \strong{unit}: single rating or average of k ratings
 #' }
 #'
-#' The six classical Shrout–Fleiss cases are:
+#' The six classical Shrout--Fleiss cases are:
 #'
 #' \tabular{lll}{
 #' model \tab type \tab unit \cr
@@ -32,7 +32,8 @@
 #'
 #' \itemize{
 #'   \item \code{"anova"}: exact F-based intervals following Shrout and Fleiss (1979)
-#'   \item \code{"reml"}: variance components estimated via REML (Wald approximation)
+#'   \item \code{"reml"}: variance components estimated via REML. Point
+#'     estimate only; no confidence interval is available for this method.
 #'   \item \code{"boot"}: nonparametric percentile bootstrap
 #' }
 #'
@@ -60,13 +61,18 @@
 #'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
+#' @section Random number generation:
+#' \code{method = "boot"} resamples subjects and therefore advances R's
+#' global random number generator. Call \code{\link[base]{set.seed}}
+#' beforehand for reproducible intervals.
+#'
 #' @details
 #' ICC(1) is based on a one-way random effects ANOVA and measures
 #' absolute agreement. ICC(2) assumes raters are randomly sampled
 #' and generalizable, while ICC(3) assumes a fixed set of raters.
 #'
 #' The average forms (k) reflect the reliability of the mean of k raters
-#' and correspond to the Spearman–Brown adjusted reliability.
+#' and correspond to the Spearman--Brown adjusted reliability.
 #'
 #' The ANOVA-based confidence intervals follow the exact formulas
 #' of Shrout and Fleiss (1979), including the variance approximation
@@ -75,11 +81,11 @@
 #' @references
 #' Shrout, P. E., Fleiss, J. L. (1979).
 #' Intraclass correlations: uses in assessing rater reliability.
-#' \emph{Psychological Bulletin}, 86, 420–428.
+#' \emph{Psychological Bulletin}, 86, 420--428.
 #'
 #' McGraw, K. O., Wong, S. P. (1996).
 #' Forming inferences about some intraclass correlation coefficients.
-#' \emph{Psychological Methods}, 1, 30–46.
+#' \emph{Psychological Methods}, 1, 30--46.
 #'
 #' @examples
 #' #example from Shrout and Fleiss (1979)
@@ -104,20 +110,14 @@
 #'       method = "anova",
 #'       conf.level = 0.95) )
 #'       
-#'t(simplify2array(out))
-#' 
-
-
+#' t(simplify2array(out))
+#'
 #' @rdname icc
-
-#' @family assoc.agreement  
-#' @concept agreement  
-#' @concept reliability  
+#' @family assoc.agreement
+#' @concept agreement
+#' @concept reliability
 #' @concept variance-component
-#'
-#'
 #' @export
-#' 
 icc <- function(x,
                 model = c("twoway","oneway"),
                 type  = c("agreement","consistency"),
@@ -142,6 +142,16 @@ icc <- function(x,
   unit   <- match.arg(unit)
   method <- match.arg(method)
   sides  <- match.arg(sides)
+
+  # A one-way design has no rater effect to hold constant, so consistency
+  # is undefined. The switch() in .iccEstimateAnova() has no entry for the
+  # combination and returned NULL, which travelled out of icc() as NULL -
+  # or, with conf.level set, as a two-element vector missing its est. The
+  # documented example works around it by dropping rows 4 and 8 of the
+  # grid, a sign that the case was known but never refused.
+  if(model == "oneway" && type == "consistency")
+    stop("type = \"consistency\" is not defined for model = \"oneway\"; ",
+         "a one-way design has no rater effect", call. = FALSE)
 
   if(!is.na(conf.level) && sides != "two.sided")
     stop("only two-sided confidence intervals are currently implemented")
@@ -240,22 +250,52 @@ icc <- function(x,
     rater   = factor(rep(seq_len(nr), each = ns))
   )
   
-  if(model=="oneway") {
-    fit <- lme4::lmer(value ~ 1 + (1|subject), df_long, REML=TRUE)
-    vc  <- as.data.frame(lme4::VarCorr(fit))
-    sigma_s <- vc$vcov[1]
-    sigma_e <- vc$vcov[2]
-    icc <- sigma_s/(sigma_s+sigma_e)
-  } else {
-    fit <- lme4::lmer(value ~ 1 + (1|subject)+(1|rater), df_long, REML=TRUE)
+  # By name, not by position: the one-way branch used vc$vcov[1] and [2],
+  # which relies on VarCorr() ordering subject before Residual.
+  getVc <- function(fit, grp) {
     vc <- as.data.frame(lme4::VarCorr(fit))
-    sigma_s <- vc$vcov[vc$grp=="subject"]
-    sigma_r <- vc$vcov[vc$grp=="rater"]
-    sigma_e <- attr(lme4::VarCorr(fit),"sc")^2
-    icc <- sigma_s/(sigma_s+sigma_r+sigma_e)
+    vc$vcov[vc$grp == grp]
   }
-  
-  list(est=icc)
+
+  if(model=="oneway") {
+
+    fit <- lme4::lmer(value ~ 1 + (1|subject), df_long, REML=TRUE)
+    sigma_s <- getVc(fit, "subject")
+    sigma_r <- 0
+    sigma_e <- getVc(fit, "Residual")
+
+  } else {
+
+    fit <- lme4::lmer(value ~ 1 + (1|subject)+(1|rater), df_long, REML=TRUE)
+    sigma_s <- getVc(fit, "subject")
+    sigma_r <- getVc(fit, "rater")
+    sigma_e <- getVc(fit, "Residual")
+
+  }
+
+  # type and unit were ignored entirely: the function always returned the
+  # single-rating ABSOLUTE-agreement coefficient, so
+  # icc(x, method = "reml", unit = "average") silently gave the same
+  # number as unit = "single", and type = "consistency" the same as
+  # type = "agreement".
+  #
+  # consistency drops the rater variance from the denominator, agreement
+  # keeps it; the average form divides the error terms by nr, which is the
+  # Spearman-Brown adjustment written in variance components.
+  icc <- if(unit == "single") {
+
+    sigma_s / if(type == "consistency") sigma_s + sigma_e
+              else sigma_s + sigma_r + sigma_e
+
+  } else {
+
+    sigma_s / if(type == "consistency") sigma_s + sigma_e / nr
+              else sigma_s + (sigma_r + sigma_e) / nr
+
+  }
+
+  list(est = icc, ns = ns, nr = nr,
+       sigmaS = sigma_s, sigmaR = sigma_r, sigmaE = sigma_e)
 }
 
 ############################################################
@@ -358,13 +398,27 @@ icc <- function(x,
 ############################################################
 
 .iccCIReml <- function(obj, conf.level) {
-  
-  alpha <- 1-conf.level
-  z <- atanh(obj$est)
-  se <- 1/sqrt(50)
-  zl <- z - qnorm(1-alpha/2)*se
-  zu <- z + qnorm(1-alpha/2)*se
-  c(tanh(zl),tanh(zu))
+
+  # The former body read
+  #
+  #     z  <- atanh(obj$est)
+  #     se <- 1/sqrt(50)          # <- a constant
+  #     c(tanh(z - qnorm(...)*se), tanh(z + qnorm(...)*se))
+  #
+  # The standard error did not depend on the number of subjects, the
+  # number of raters, or the fitted variance components, so the interval
+  # was exactly as wide for ns = 10 as for ns = 10000 - the 50 amounts to
+  # a fixed n of 53 - while being documented as a REML "Wald
+  # approximation". A number that looks like a confidence interval and is
+  # not one is worse than none.
+  #
+  # A defensible interval needs the sampling covariance of the variance
+  # components, which lme4 does not expose directly; the usual route is a
+  # profile or parametric bootstrap over the fit (lme4::confint.merMod).
+  # Until that exists, refuse.
+  stop("confidence intervals for method = \"reml\" are not implemented; ",
+       "use method = \"anova\" for the exact F-based interval, ",
+       "or method = \"boot\"", call. = FALSE)
 }
 
 ############################################################

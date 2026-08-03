@@ -66,14 +66,10 @@ Hirschman, A. O. (1964). The paternity of an index.
 \seealso{
 \code{\link{gini}}, \code{\link{atkinson}}
 
-Other inequality:
-\code{\link[=atkinson]{atkinson()}},
-\code{\link[=divCoef]{divCoef()}},
-\code{\link[=gini]{gini()}},
-\code{\link[=lc]{lc()}},
-\code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
-\code{\link[=theil]{theil()}}
+Other diversity.concentration:
+\code{\link[=entropy]{entropy()}},
+\code{\link[=simpson]{simpson()}}
 }
 \concept{concentration-index}
+\concept{diversity.concentration}
 \concept{inequality}

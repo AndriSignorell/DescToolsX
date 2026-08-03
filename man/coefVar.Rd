@@ -22,7 +22,7 @@ coefVarCI(
   unbiased = FALSE,
   conf.level = 0.95,
   sides = c("two.sided", "left", "right"),
-  method = c("nct", "vangel", "mckay", "verrill", "naive"),
+  method = c("nct", "vangel", "mckay", "naive"),
   na.rm = FALSE,
   ...
 )
@@ -50,7 +50,7 @@ interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
 
 \item{method}{character string specifying the confidence interval method:
 \code{"nct"} (default),
-\code{"vangel"}, \code{"mckay"}, \code{"verrill"} (not implemented), or
+\code{"vangel"}, \code{"mckay"}, or
 \code{"naive"}. Partial matching is supported. See Details.}
 }
 \value{
@@ -108,10 +108,6 @@ https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
 
 \bold{nct} \verb{ }uses the noncentral t-distribution to calculate the
 confidence intervals. See Smithson (2003).
-
-Verrill's method is named in the references but not implemented;
-\code{method = "verrill"} raises an error rather than returning a
-placeholder.
 
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields

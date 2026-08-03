@@ -19,18 +19,30 @@
 # The two-sided interval is clamped to [lo, hi] as well, so an interval
 # can never claim a value the statistic cannot take.
 #' @noRd
-.applySides <- function(ci, sides = "two.sided", lo = -Inf, hi = Inf) {
-
-  stopifnot(length(ci) == 2L)
-
-  lci <- max(ci[[1L]], lo)
-  uci <- min(ci[[2L]], hi)
-
-  switch(sides,
-         "two.sided" = NULL,
-         "left"      = uci <- hi,
-         "right"     = lci <- lo,
-         stop("'sides' must be one of \"two.sided\", \"left\", \"right\""))
-
+.applySides <- function(ci, sides = "two.sided",
+                        lo = -Inf, hi = Inf) {
+  
+  if (!is.numeric(ci) || length(ci) != 2L)
+    stop("'ci' must be a numeric vector of length 2")
+  
+  if (!is.numeric(lo) || length(lo) != 1L || is.na(lo) ||
+      !is.numeric(hi) || length(hi) != 1L || is.na(hi) ||
+      lo > hi)
+    stop("'lo' and 'hi' must define a valid parameter range")
+  
+  if (!anyNA(ci) && ci[[1L]] > ci[[2L]])
+    stop("'ci' must contain the lower and upper bound in that order")
+  
+  lci <- min(max(ci[[1L]], lo), hi)
+  uci <- min(max(ci[[2L]], lo), hi)
+  
+  switch(
+    sides,
+    "two.sided" = NULL,
+    "left"      = uci <- hi,
+    "right"     = lci <- lo,
+    stop("'sides' must be one of \"two.sided\", \"left\", \"right\"")
+  )
+  
   c(lci = unname(lci), uci = unname(uci))
 }

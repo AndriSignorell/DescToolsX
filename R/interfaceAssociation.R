@@ -28,10 +28,12 @@
 #' Most functions support calculation of confidence intervals.
 #' These can be requested by setting \code{conf.level} to the desired value (usually 0.95). 
 #' If it is set to \code{NA}, no confidence interval is computed. 
-#' One-sided confidence intervals 
-#' can be controlled using the sides argument. The definition is following the
-#' handling in statistical tests. Alternative hypothesis: \code{"two.sided"}, 
-#' \code{"left"}, or \code{"right"}. Frequently there is a classic and 
+#' One-sided confidence intervals
+#' can be controlled using the \code{sides} argument. It names the side on
+#' which the \emph{finite} bound lies, which is NOT the convention used for
+#' the alternative hypothesis of a test: \code{"left"} yields an interval
+#' bounded below and corresponds to an alternative of \code{"greater"}.
+#' See \link{ConfidenceIntervals}. Frequently there is a classic and 
 #' a bootstrap approach (\code{"classic"}, \code{"boot"}). 
 #' However most measures have their own specific confidence intervals methods.
 #' 
@@ -44,8 +46,18 @@
 #' 
 #' Following association measures are implemented in \strong{DescToolsX}:
 #'  \tabular{ll}{
-#'    \verb{  }\link{cramerV}             \tab Cramer's V \cr
-#'    \verb{  }\link{lambda}\verb{  } \tab Goodman's Lambda \cr
+#'    \verb{  }\link{cramerV}          \tab Cramer's V \cr
+#'    \verb{  }\link{contCoef}         \tab Pearson's Contingency Coefficient \cr
+#'    \verb{  }\link{lambda}           \tab Goodman's Lambda \cr
+#'    \verb{  }\link{gkTau}            \tab Goodman Kruskal's Tau \cr
+#'    \verb{  }\link{gkGamma}          \tab Goodman Kruskal's Gamma \cr
+#'    \verb{  }\link{kendallTauB}      \tab Kendall's Tau-b \cr
+#'    \verb{  }\link{stuartTauC}       \tab Stuart's Tau-c \cr
+#'    \verb{  }\link{somersDelta}      \tab Somers' Delta \cr
+#'    \verb{  }\link{uncertCoef}       \tab Theil's Uncertainty Coefficient \cr
+#'    \verb{  }\link{mutInf}           \tab Mutual Information \cr
+#'    \verb{  }\link{hoeffdingD}       \tab Hoeffding's D \cr
+#'    \verb{  }\link{corPolychor}      \tab Polychoric Correlation \cr
 #'    }
 #'
 #' @param x either a contingency table, a two-column object
@@ -55,8 +67,12 @@
 #'   \code{y} must be \code{NULL}.
 #' @param conf.level confidence level for confidence intervals.
 #'   If \code{NA}, no confidence interval is computed.
-#' @param sides alternative hypothesis:
-#'   \code{"two.sided"}, \code{"left"}, or \code{"right"}
+#' @param sides character string specifying the side of the confidence
+#'   interval, one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}. It names the side on which the \emph{finite} bound
+#'   lies, not the direction of an alternative hypothesis - see
+#'   \link{ConfidenceIntervals} for the full definition and for the
+#'   difference to \pkg{DescTools}.
 #' @param method method used for inference. Available options depend
 #'   on the selected association measure.
 #' @param ... additional arguments passed to internal helper functions,
@@ -70,5 +86,5 @@
 #' Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
 #' John Wiley and Sons
 #' 
-#' @family topic.associationMeasures
+#' @concept association-measure
 NULL

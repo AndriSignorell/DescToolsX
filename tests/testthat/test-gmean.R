@@ -44,3 +44,16 @@ test_that("gmean CI: lci < estimate < uci", {
   expect_lt(res[2], res[1])
   expect_gt(res[3], res[1])
 })
+
+
+
+test_that("gsd survives a zero when na.rm = TRUE", {
+  
+  expect_equal(gsd(c(1, 2, 4), na.rm = TRUE), gsd(c(1, 2, 4)))
+  expect_false(is.na(gsd(c(1, 2, 0, 4), na.rm = TRUE)))
+  expect_equal(gsd(c(1, 2, 0, 4), na.rm = TRUE), gsd(c(1, 2, 4)))
+  
+  expect_true(is.na(gsd(c(1, 2, 0, 4))))   # na.rm = FALSE
+})
+
+

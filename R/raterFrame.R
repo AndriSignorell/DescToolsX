@@ -19,7 +19,8 @@
 #' \code{na.action} is applied to the \emph{wide} frame, i.e. per subject:
 #' \code{na.omit} removes subjects with at least one missing rating. The
 #' \code{"na.action"} attribute of the result carries a \code{"values"}
-#' attribute with the identifiers of the omitted subjects.
+#' attribute with the identifiers of the omitted subjects; it is absent if
+#' nothing was omitted.
 #'
 #' @param formula something like \code{rating ~ subjects | raters}
 #' @param data the data
@@ -29,7 +30,8 @@
 #' @param dropSubj logical; whether to drop the subject column (default
 #'   \code{FALSE})
 #' @return a \code{data.frame} of class \code{"raterFrame"} with subjects in rows and
-#'   raters in columns
+#'   raters in columns. The name of the subject column is kept in the
+#'   \code{"subject"} attribute (\code{NA} if it was dropped).
 #'   
 #' @seealso [bedrock::resolveFormula]
 #' 
@@ -74,8 +76,22 @@ raterFrame <- function(formula, data, subset, na.action, dropSubj = FALSE) {
 
   mf <- r$mf   # columns: rating, subject, rater (order guaranteed)
 
+  subjName <- names(mf)[2L]
+
   dname <- gettextf("%s by %s (rows) and %s (columns)",
                     names(mf)[1L], names(mf)[2L], names(mf)[3L])
+
+  # reshape() keeps only the first of several rows with the same
+  # subject/rater combination and merely warns; for a function whose whole
+  # purpose is the sequential join that has to be an error
+  dup <- duplicated(mf[, c(2L, 3L)])
+  if (any(dup))
+    stop(gettextf(
+      paste("%d duplicated subject/rater combination(s) in the data, e.g. %s.",
+            "Each rater may rate each subject only once."),
+      sum(dup),
+      paste(utils::head(paste(mf[dup, 2L], mf[dup, 3L], sep = "/"), 3L),
+            collapse = ", ")), domain = NA)
 
   # --- long -> wide -------------------------------------------------------
   m <- reshape(mf, idvar = names(mf)[2L], timevar = names(mf)[3L],
@@ -83,7 +99,10 @@ raterFrame <- function(formula, data, subset, na.action, dropSubj = FALSE) {
 
   # order rows by subject, columns by rater
   m <- m[order(m[[1L]]), ]
-  m <- cbind(m[, 1L, drop = FALSE], m[, -1L][, order(colnames(m)[-1L])])
+  # drop = FALSE: with a single rater m[, -1L] would collapse to a vector and
+  # the column reordering would fail with "incorrect number of dimensions"
+  m <- cbind(m[, 1L, drop = FALSE],
+             m[, -1L, drop = FALSE][, order(colnames(m)[-1L]), drop = FALSE])
 
   # strip the "<rating>." prefix from the rater columns
   # (fixed-prefix removal, robust against regex metacharacters in the name)
@@ -93,23 +112,29 @@ raterFrame <- function(formula, data, subset, na.action, dropSubj = FALSE) {
   rownames(m) <- NULL
 
   # --- na.action on the wide frame ---------------------------------------
+  naAct <- NULL
   if (!missing(na.action)) {
-    subj <- m[[names(mf)[2L]]]
+    subj <- m[[subjName]]
     m <- na.action(m)
-    # provide the identifiers of omitted subjects
-    attr(attr(m, "na.action"), "values") <-
-      subj[as.integer(attr(m, "na.action"))]
+    naAct <- attr(m, "na.action")
+    # na.pass, identity and na.omit-with-nothing-to-omit leave no attribute;
+    # attr<-() on NULL is an error, so guard before touching it
+    if (!is.null(naAct))
+      attr(naAct, "values") <- subj[as.integer(naAct)]
   }
-
-  attr(m, "data.name") <- dname
 
   # remove the subject column if not required
   if (dropSubj)
     m <- m[, -1L, drop = FALSE]
 
+  # attributes LAST: `[.data.frame` keeps only names, row.names and class, so
+  # anything set before the dropSubj subsetting was silently discarded
+  attr(m, "data.name") <- dname
+  attr(m, "subject") <- if (dropSubj) NA_character_ else subjName
+  if (!is.null(naAct))
+    attr(m, "na.action") <- naAct
+
   class(m) <- c("raterFrame", class(m))
 
   m
 }
-
-

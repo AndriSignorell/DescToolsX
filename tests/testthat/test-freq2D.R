@@ -55,3 +55,17 @@ test_that("freq2D dimnames are set when dnn is provided", {
   # → dimnames order in the output is c("lat","lon")
   expect_equal(sort(names(dimnames(res))), sort(c("lon","lat")))
 })
+
+
+
+test_that("freq2D copes with a single occupied bin row", {
+  
+  x <- c(1, 1, 1, 1)
+  y <- c(1, 2, 3, 4)
+  
+  # trimming empty margins used to drop the matrix to a vector
+  expect_silent(z <- freq2D(x, y, n = 5))
+  expect_true(is.matrix(z))
+})
+
+

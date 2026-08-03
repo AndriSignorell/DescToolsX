@@ -20,7 +20,7 @@ model objects (e.g. \code{lm}).}
 
 \item{ref}{numeric vector of reference (true) values}
 
-\item{na.rm}{logical; whether to remove missing values}
+\item{na.rm}{logical; whether to remove missing and undefined terms}
 }
 \value{
 a numeric scalar containing the SMAPE
@@ -35,8 +35,15 @@ The SMAPE is defined as:
 \frac{1}{n} \sum \frac{2 |ref - x|}{|x| + |ref|}
 }
 
-Values are bounded between 0 and 2. Division by zero is handled by
-returning \code{NA} for those terms.
+Values are bounded between 0 and 2. Note that this is a ratio, not a
+percentage: the factor 100 of the original definition is not applied, which
+is the form for which the bound of 2 holds.
+
+A term is undefined when \code{x} and \code{ref} are both zero, and is set
+to \code{NA}. With the default \code{na.rm = FALSE} a single such pair
+therefore makes the whole result \code{NA}; with \code{na.rm = TRUE} those
+terms are dropped along with genuinely missing ones, so the mean is taken
+over fewer than \code{length(x)} terms.
 }
 \examples{
 x <- c(2.5, 3.0, 2.8)
@@ -61,6 +68,5 @@ Other model.metrics:
 \code{\link[=nmse]{nmse()}},
 \code{\link[=rmse]{rmse()}}
 }
-\concept{model-evaluation}
 \concept{model.metrics}
 \concept{prediction-error}

@@ -18,7 +18,8 @@ yeoJohnsonInv(x, lambda, tol = 0.000001)
 \eqn{\lambda \approx 0} and \eqn{\lambda \approx 2}}
 }
 \value{
-a numeric vector of the same length as \code{x}
+a numeric vector of the same length as \code{x}. Names and
+dimensions of \code{x} are preserved.
 }
 \description{
 \code{yeoJohnson()} applies the Yeo-Johnson transformation to a numeric
@@ -26,24 +27,34 @@ vector. \cr \code{yeoJohnsonInv()} reverses the transformation.
 }
 \details{
 The Yeo-Johnson transformation extends the Box-Cox transformation to allow
-for zero and negative values.
+for zero and negative values. It is defined piecewise:
 
-\deqn{
-f_\lambda(x) =
-\begin{cases}
-\frac{(x+1)^\lambda - 1}{\lambda} & \text{if } x \ge 0,\ \lambda \neq 0 \\
-\log(x+1) & \text{if } x \ge 0,\ \lambda = 0 \\
--\frac{(-x+1)^{2-\lambda} - 1}{2-\lambda} & \text{if } x < 0,\ \lambda \neq 2 \\
--\log(-x+1) & \text{if } x < 0,\ \lambda = 2
-\end{cases}
-}
+\deqn{f_\lambda(x) = \frac{(x+1)^\lambda - 1}{\lambda}}{
+      f(x) = ((x+1)^lambda - 1) / lambda}
+for \eqn{x \ge 0} and \eqn{\lambda \ne 0},
+
+\deqn{f_\lambda(x) = \log(x+1)}{f(x) = log(x+1)}
+for \eqn{x \ge 0} and \eqn{\lambda = 0},
+
+\deqn{f_\lambda(x) = -\frac{(-x+1)^{2-\lambda} - 1}{2-\lambda}}{
+      f(x) = -((-x+1)^(2-lambda) - 1) / (2-lambda)}
+for \eqn{x < 0} and \eqn{\lambda \ne 2}, and
+
+\deqn{f_\lambda(x) = -\log(-x+1)}{f(x) = -log(-x+1)}
+for \eqn{x < 0} and \eqn{\lambda = 2}.
 
 The transformation is defined for all real-valued inputs and is continuous
 and differentiable for all \eqn{x}. It is commonly used as an alternative to
 the Box-Cox transformation when the data include zero or negative values.
 
+The transformation is strictly increasing and maps 0 to 0, so the sign of
+the transformed value identifies the branch to be inverted.
+
 The inverse transformation recovers the original data (up to numerical
-precision) when the same \code{lambda} and \code{tol} are used.
+precision) when the same \code{lambda} and \code{tol} are used. For
+\eqn{\lambda < 0} the image of the transformation is bounded above by
+\eqn{-1/\lambda} (and correspondingly for \eqn{\lambda > 2} below); values
+outside that range have no preimage and are reported as an error.
 }
 \examples{
 set.seed(1)

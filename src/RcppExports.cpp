@@ -117,91 +117,91 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// isoWeek
-IntegerVector isoWeek(DateVector x);
-RcppExport SEXP _DescToolsX_isoWeek(SEXP xSEXP) {
+// isoWeek_cpp
+IntegerVector isoWeek_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_isoWeek_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(isoWeek(x));
+    rcpp_result_gen = Rcpp::wrap(isoWeek_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// usWeek
-IntegerVector usWeek(DateVector x);
-RcppExport SEXP _DescToolsX_usWeek(SEXP xSEXP) {
+// usWeek_cpp
+IntegerVector usWeek_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_usWeek_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(usWeek(x));
+    rcpp_result_gen = Rcpp::wrap(usWeek_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// isoYear
-IntegerVector isoYear(DateVector x);
-RcppExport SEXP _DescToolsX_isoYear(SEXP xSEXP) {
+// isoYear_cpp
+IntegerVector isoYear_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_isoYear_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(isoYear(x));
+    rcpp_result_gen = Rcpp::wrap(isoYear_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// isoYearweek
-IntegerVector isoYearweek(DateVector x);
-RcppExport SEXP _DescToolsX_isoYearweek(SEXP xSEXP) {
+// isoYearweek_cpp
+IntegerVector isoYearweek_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_isoYearweek_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(isoYearweek(x));
+    rcpp_result_gen = Rcpp::wrap(isoYearweek_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// usYearweek
-IntegerVector usYearweek(DateVector x);
-RcppExport SEXP _DescToolsX_usYearweek(SEXP xSEXP) {
+// usYearweek_cpp
+IntegerVector usYearweek_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_usYearweek_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(usYearweek(x));
+    rcpp_result_gen = Rcpp::wrap(usYearweek_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// usYearmonth
-IntegerVector usYearmonth(DateVector x);
-RcppExport SEXP _DescToolsX_usYearmonth(SEXP xSEXP) {
+// usYearmonth_cpp
+IntegerVector usYearmonth_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_usYearmonth_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(usYearmonth(x));
+    rcpp_result_gen = Rcpp::wrap(usYearmonth_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// isLeapYearDate
-LogicalVector isLeapYearDate(DateVector x);
-RcppExport SEXP _DescToolsX_isLeapYearDate(SEXP xSEXP) {
+// isLeapYearDate_cpp
+LogicalVector isLeapYearDate_cpp(DateVector x);
+RcppExport SEXP _DescToolsX_isLeapYearDate_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< DateVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(isLeapYearDate(x));
+    rcpp_result_gen = Rcpp::wrap(isLeapYearDate_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
-// isLeapYearInt
-LogicalVector isLeapYearInt(IntegerVector x);
-RcppExport SEXP _DescToolsX_isLeapYearInt(SEXP xSEXP) {
+// isLeapYearInt_cpp
+LogicalVector isLeapYearInt_cpp(IntegerVector x);
+RcppExport SEXP _DescToolsX_isLeapYearInt_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(isLeapYearInt(x));
+    rcpp_result_gen = Rcpp::wrap(isLeapYearInt_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -275,37 +275,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// hlqest
-double hlqest(NumericVector x);
-RcppExport SEXP _DescToolsX_hlqest(SEXP xSEXP) {
+// hlqest_cpp
+double hlqest_cpp(NumericVector xIn);
+RcppExport SEXP _DescToolsX_hlqest_cpp(SEXP xInSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(hlqest(x));
+    Rcpp::traits::input_parameter< NumericVector >::type xIn(xInSEXP);
+    rcpp_result_gen = Rcpp::wrap(hlqest_cpp(xIn));
     return rcpp_result_gen;
 END_RCPP
 }
-// hl2qest
-double hl2qest(NumericVector x, NumericVector y);
-RcppExport SEXP _DescToolsX_hl2qest(SEXP xSEXP, SEXP ySEXP) {
+// hl2qest_cpp
+double hl2qest_cpp(NumericVector xIn, NumericVector yIn);
+RcppExport SEXP _DescToolsX_hl2qest_cpp(SEXP xInSEXP, SEXP yInSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(hl2qest(x, y));
+    Rcpp::traits::input_parameter< NumericVector >::type xIn(xInSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type yIn(yInSEXP);
+    rcpp_result_gen = Rcpp::wrap(hl2qest_cpp(xIn, yIn));
     return rcpp_result_gen;
 END_RCPP
 }
 // hoeffdingD_cpp
-double hoeffdingD_cpp(std::vector<unsigned long> perm);
-RcppExport SEXP _DescToolsX_hoeffdingD_cpp(SEXP permSEXP) {
+double hoeffdingD_cpp(std::vector<double> permIn);
+RcppExport SEXP _DescToolsX_hoeffdingD_cpp(SEXP permInSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<unsigned long> >::type perm(permSEXP);
-    rcpp_result_gen = Rcpp::wrap(hoeffdingD_cpp(perm));
+    Rcpp::traits::input_parameter< std::vector<double> >::type permIn(permInSEXP);
+    rcpp_result_gen = Rcpp::wrap(hoeffdingD_cpp(permIn));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -370,15 +370,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// tbrm
-double tbrm(const std::vector<double>& x, double C);
-RcppExport SEXP _DescToolsX_tbrm(SEXP xSEXP, SEXP CSEXP) {
+// tbrm_cpp
+double tbrm_cpp(const std::vector<double>& x, double C);
+RcppExport SEXP _DescToolsX_tbrm_cpp(SEXP xSEXP, SEXP CSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::vector<double>& >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type C(CSEXP);
-    rcpp_result_gen = Rcpp::wrap(tbrm(x, C));
+    rcpp_result_gen = Rcpp::wrap(tbrm_cpp(x, C));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -432,29 +432,29 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_contcoef_table_boot_bca_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_boot_bca_cpp, 5},
     {"_DescToolsX_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_cpp, 2},
     {"_DescToolsX_contcoef_table_boot_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_boot_cpp, 4},
-    {"_DescToolsX_isoWeek", (DL_FUNC) &_DescToolsX_isoWeek, 1},
-    {"_DescToolsX_usWeek", (DL_FUNC) &_DescToolsX_usWeek, 1},
-    {"_DescToolsX_isoYear", (DL_FUNC) &_DescToolsX_isoYear, 1},
-    {"_DescToolsX_isoYearweek", (DL_FUNC) &_DescToolsX_isoYearweek, 1},
-    {"_DescToolsX_usYearweek", (DL_FUNC) &_DescToolsX_usYearweek, 1},
-    {"_DescToolsX_usYearmonth", (DL_FUNC) &_DescToolsX_usYearmonth, 1},
-    {"_DescToolsX_isLeapYearDate", (DL_FUNC) &_DescToolsX_isLeapYearDate, 1},
-    {"_DescToolsX_isLeapYearInt", (DL_FUNC) &_DescToolsX_isLeapYearInt, 1},
+    {"_DescToolsX_isoWeek_cpp", (DL_FUNC) &_DescToolsX_isoWeek_cpp, 1},
+    {"_DescToolsX_usWeek_cpp", (DL_FUNC) &_DescToolsX_usWeek_cpp, 1},
+    {"_DescToolsX_isoYear_cpp", (DL_FUNC) &_DescToolsX_isoYear_cpp, 1},
+    {"_DescToolsX_isoYearweek_cpp", (DL_FUNC) &_DescToolsX_isoYearweek_cpp, 1},
+    {"_DescToolsX_usYearweek_cpp", (DL_FUNC) &_DescToolsX_usYearweek_cpp, 1},
+    {"_DescToolsX_usYearmonth_cpp", (DL_FUNC) &_DescToolsX_usYearmonth_cpp, 1},
+    {"_DescToolsX_isLeapYearDate_cpp", (DL_FUNC) &_DescToolsX_isLeapYearDate_cpp, 1},
+    {"_DescToolsX_isLeapYearInt_cpp", (DL_FUNC) &_DescToolsX_isLeapYearInt_cpp, 1},
     {"_DescToolsX_top_n_cpp", (DL_FUNC) &_DescToolsX_top_n_cpp, 2},
     {"_DescToolsX_bottom_n_cpp", (DL_FUNC) &_DescToolsX_bottom_n_cpp, 2},
     {"_DescToolsX_top_i_cpp", (DL_FUNC) &_DescToolsX_top_i_cpp, 2},
     {"_DescToolsX_bottom_i_cpp", (DL_FUNC) &_DescToolsX_bottom_i_cpp, 2},
     {"_DescToolsX_fastMode", (DL_FUNC) &_DescToolsX_fastMode, 2},
     {"_DescToolsX_fast_mode_cpp", (DL_FUNC) &_DescToolsX_fast_mode_cpp, 2},
-    {"_DescToolsX_hlqest", (DL_FUNC) &_DescToolsX_hlqest, 1},
-    {"_DescToolsX_hl2qest", (DL_FUNC) &_DescToolsX_hl2qest, 2},
+    {"_DescToolsX_hlqest_cpp", (DL_FUNC) &_DescToolsX_hlqest_cpp, 1},
+    {"_DescToolsX_hl2qest_cpp", (DL_FUNC) &_DescToolsX_hl2qest_cpp, 2},
     {"_DescToolsX_hoeffdingD_cpp", (DL_FUNC) &_DescToolsX_hoeffdingD_cpp, 1},
     {"_DescToolsX_n_pow_sum_cpp", (DL_FUNC) &_DescToolsX_n_pow_sum_cpp, 1},
     {"_DescToolsX_skew_cpp", (DL_FUNC) &_DescToolsX_skew_cpp, 2},
     {"_DescToolsX_skew_weighted_cpp", (DL_FUNC) &_DescToolsX_skew_weighted_cpp, 3},
     {"_DescToolsX_kurt_cpp", (DL_FUNC) &_DescToolsX_kurt_cpp, 2},
     {"_DescToolsX_kurt_weighted_cpp", (DL_FUNC) &_DescToolsX_kurt_weighted_cpp, 3},
-    {"_DescToolsX_tbrm", (DL_FUNC) &_DescToolsX_tbrm, 2},
+    {"_DescToolsX_tbrm_cpp", (DL_FUNC) &_DescToolsX_tbrm_cpp, 2},
     {"_DescToolsX_tbrm_boot_cpp", (DL_FUNC) &_DescToolsX_tbrm_boot_cpp, 6},
     {"_DescToolsX_himed_weighted_cpp", (DL_FUNC) &_DescToolsX_himed_weighted_cpp, 2},
     {"_DescToolsX_himed_int_weighted_cpp", (DL_FUNC) &_DescToolsX_himed_int_weighted_cpp, 2},

@@ -91,10 +91,8 @@
 #'
 #' @rdname medianX
 #'
-#' @family location  
+#' @family location
 #' @concept location
-#'
-#'
 #' @export
 medianX <- function(x, ...)
   UseMethod("medianX")
@@ -105,8 +103,14 @@ medianX <- function(x, ...)
 medianX.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
   if(is.null(weights))
     median(x=x, na.rm=na.rm)
-  else 
-    quantileX(x, weights, probs=0.5, na.rm=na.rm, names=FALSE)
+  else
+    # type = 5, not the quantileX default of 7. Type 7 reads the weights
+    # as replication counts and is therefore not scale invariant, so a
+    # weight vector normalized to sum to 1 - which callers inside this
+    # package do supply, e.g. madX() via .normWeights() - would collapse
+    # every quantile onto the largest value. Type 5 depends only on the
+    # ratios, which is what "weighted median" is normally taken to mean.
+    quantileX(x, weights, probs=0.5, na.rm=na.rm, names=FALSE, type=5)
 }
 
 
@@ -118,9 +122,11 @@ medianX.factor <- function(x, na.rm = FALSE, ...) {
   # Answered by Hong Ooi on 2011-10-28T00:37:08-04:00
   # http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html
   
-  # return NA, if x is not ordered
-  # clearme: why not median.ordered?
-  if(!is.ordered(x)) return(NA)
+  # An unordered factor has no median, and saying so is more useful than
+  # a bare NA that looks like a missing value in the data.
+  if(!is.ordered(x))
+    stop("the median of an unordered factor is not defined; ",
+         "use an ordered factor", call. = FALSE)
   
   if(na.rm) x <- na.omit(x)
   if(any(is.na(x))) return(NA)
@@ -140,9 +146,20 @@ medianX.factor <- function(x, na.rm = FALSE, ...) {
 #' @rdname medianX
 #' @export
 medianX.Freq <- function(x, breaks, ...)  {
-  
+
+  if (length(breaks) != nrow(x) + 1L)
+    stop("'breaks' must have one more element than 'x' has classes")
+
   mi <- min(which(x$cumperc > 0.5))
-  breaks[mi] + (tail(x$cumfreq, 1)/2 - x[mi-1, "cumfreq"]) /
+
+  # x[mi - 1, "cumfreq"] is x[0, ] when the FIRST class already carries
+  # more than half the mass - a zero-row selection, so the whole
+  # expression collapsed to numeric(0) and the function returned an empty
+  # vector rather than a median. Below the first class the cumulative
+  # frequency is zero by definition.
+  cumBelow <- if (mi == 1L) 0 else x[mi - 1L, "cumfreq"]
+
+  breaks[mi] + (tail(x$cumfreq, 1)/2 - cumBelow) /
     x[mi, "freq"] * diff(breaks[c(mi, mi+1)])
-  
+
 }

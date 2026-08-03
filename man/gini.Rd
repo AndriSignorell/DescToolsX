@@ -109,10 +109,8 @@ gini(x, conf.level = 0.95, R = 499)
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=divCoef]{divCoef()}},
-\code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}

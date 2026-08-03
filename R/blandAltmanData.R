@@ -79,43 +79,112 @@ blandAltmanData.default <- function(
     conf.level = 0.95,
     na.rm = FALSE,
     ...
-){
-
-  if(!is.numeric(x))
-    stop("Argument 'x' must be numeric.")
-
-  if(!is.numeric(y))
-    stop("Argument 'y' must be numeric.")
-
-  if(length(x) != length(y))
-    stop("Arguments 'x' and 'y' must have equal length.")
-
-  if(!is.numeric(conf.level) || length(conf.level) != 1L ||
-     is.na(conf.level) || conf.level <= 0 || conf.level >= 1)
-    stop("Argument 'conf.level' must be a single number in (0, 1).")
-
-  if(na.rm){
-
+) {
+  
+  if (!is.numeric(x))
+    stop("'x' must be numeric")
+  
+  if (!is.numeric(y))
+    stop("'y' must be numeric")
+  
+  if (length(x) != length(y))
+    stop("'x' and 'y' must have equal lengths")
+  
+  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
+      !is.finite(conf.level) ||
+      conf.level <= 0 || conf.level >= 1)
+    stop("'conf.level' must be a single number in (0, 1)")
+  
+  if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("'na.rm' must be TRUE or FALSE")
+  
+  if (na.rm) {
     keep <- complete.cases(x, y)
-
     x <- x[keep]
     y <- y[keep]
-
   }
-
-  # Returning a bare logical NA here would hand back an object that is
-  # neither of class "BlandAltman" nor plottable nor printable, and the
-  # failure would surface far away from its cause. Every other invalid
-  # input in this function stops, so this one does too.
-  if(anyNA(x) || anyNA(y))
-    stop("Missing values present; use na.rm = TRUE to drop incomplete pairs.")
-
-  .blandAltmanData(
-    x = x,
-    y = y,
-    conf.level = conf.level
+  
+  if (anyNA(x) || anyNA(y))
+    stop("Missing values present; use 'na.rm = TRUE' to remove incomplete pairs")
+  
+  return(
+    .blandAltmanData(
+      x = x,
+      y = y,
+      conf.level = conf.level
+    )
   )
+}
 
+
+#' @noRd
+.blandAltmanData <- function(
+    x,
+    y,
+    conf.level = 0.95
+) {
+  
+  if (any(!is.finite(x)) || any(!is.finite(y)))
+    stop("'x' and 'y' must contain only finite values")
+  
+  nObs <- length(x)
+  
+  if (nObs < 3L)
+    stop("At least 3 complete observations are required")
+  
+  meanVals <- (x + y) / 2
+  diffVals <- y - x
+  
+  bias <- mean(diffVals)
+  sdDiff <- sd(diffVals)
+  
+  # Conventional 95% limits of agreement.
+  loaMult <- qnorm(0.975)
+  
+  loaLower <- bias - loaMult * sdDiff
+  loaUpper <- bias + loaMult * sdDiff
+  
+  alpha <- 1 - conf.level
+  tCrit <- qt(
+    1 - alpha / 2,
+    df = nObs - 1L
+  )
+  
+  seBias <- sdDiff / sqrt(nObs)
+  seLoA <- sqrt(3 * sdDiff^2 / nObs)
+  
+  biasCI <- c(
+    bias - tCrit * seBias,
+    bias + tCrit * seBias
+  )
+  
+  loaLowerCI <- c(
+    loaLower - tCrit * seLoA,
+    loaLower + tCrit * seLoA
+  )
+  
+  loaUpperCI <- c(
+    loaUpper - tCrit * seLoA,
+    loaUpper + tCrit * seLoA
+  )
+  
+  return(
+    structure(
+      list(
+        mean = meanVals,
+        diff = diffVals,
+        bias = bias,
+        loaLower = loaLower,
+        loaUpper = loaUpper,
+        biasCI = biasCI,
+        loaLowerCI = loaLowerCI,
+        loaUpperCI = loaUpperCI,
+        nObs = nObs,
+        conf.level = conf.level
+      ),
+      class = "BlandAltman"
+    )
+  )
 }
 
 
@@ -145,84 +214,6 @@ blandAltmanData.formula <- function(
 }
 
 
-#' @noRd
-.blandAltmanData <- function(
-    x,
-    y,
-    conf.level = 0.95
-){
-
-  nObs <- length(x)
-
-  if(nObs < 3L)
-    stop("At least 3 complete observations are required.")
-
-  meanVals <- (x + y) / 2
-  diffVals <- y - x
-
-  bias <- mean(diffVals)
-
-  sdDiff <- sd(diffVals)
-
-  # 1.96 is the conventional LoA multiplier and is deliberately not tied
-  # to conf.level - see the Details section.
-  loaMult <- qnorm(0.975)
-
-  loaLower <- bias - loaMult * sdDiff
-  loaUpper <- bias + loaMult * sdDiff
-
-  alpha <- 1 - conf.level
-  zCrit <- qnorm(1 - alpha / 2)
-
-  seBias <- sdDiff / sqrt(nObs)
-
-  seLoA <- sqrt(
-    3 * sdDiff^2 / nObs
-  )
-
-  biasCI <- c(
-    bias - zCrit * seBias,
-    bias + zCrit * seBias
-  )
-
-  loaLowerCI <- c(
-    loaLower - zCrit * seLoA,
-    loaLower + zCrit * seLoA
-  )
-
-  loaUpperCI <- c(
-    loaUpper - zCrit * seLoA,
-    loaUpper + zCrit * seLoA
-  )
-
-  structure(
-
-    list(
-
-      mean = meanVals,
-      diff = diffVals,
-
-      bias = bias,
-
-      loaLower = loaLower,
-      loaUpper = loaUpper,
-
-      biasCI = biasCI,
-
-      loaLowerCI = loaLowerCI,
-      loaUpperCI = loaUpperCI,
-
-      nObs = nObs,
-
-      conf.level = conf.level
-
-    ),
-
-    class = "BlandAltman"
-
-  )
-
-}
 
 
 

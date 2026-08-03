@@ -28,8 +28,12 @@ returned; defaults to \code{FALSE}}
 \item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}}
+\item{sides}{character string specifying the side of the confidence
+interval, one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. It names the side on which the \emph{finite} bound
+lies, not the direction of an alternative hypothesis - see
+\link{ConfidenceIntervals} for the full definition and for the
+difference to \pkg{DescTools}.}
 
 \item{method}{character string specifying the confidence interval method
 for the contingency coefficient; currently only \code{"boot"} is implemented}
@@ -102,7 +106,6 @@ Statistical Association} (Part III), 777-780.
 
 Other assoc.nominal:
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},

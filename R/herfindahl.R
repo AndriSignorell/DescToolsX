@@ -51,7 +51,7 @@
 #' 
 #' @seealso \code{\link{gini}}, \code{\link{atkinson}}
 #' 
-#' @family inequality
+#' @family diversity.concentration
 #' @concept inequality
 #' @concept concentration-index
 #' @export

@@ -58,10 +58,8 @@ divCoef(matrix(c(1, 1, 1, 1, 0, 0), ncol = 2))
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}

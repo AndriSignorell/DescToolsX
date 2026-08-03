@@ -69,3 +69,33 @@ test_that("cronbachAlpha works with a matrix input", {
   m <- as.matrix(.items_good)
   expect_true(is.numeric(cronbachAlpha(m)))
 })
+
+
+
+test_that("cronbachAlpha keeps its shape for missing input", {
+  
+  set.seed(9)
+  d <- data.frame(a = rnorm(10), b = rnorm(10), c = rnorm(10))
+  d$a[1] <- NA
+  
+  res <- cronbachAlpha(d, conf.level = 0.95)
+  expect_named(res, c("est", "lci", "uci"))
+  expect_true(all(is.na(res)))
+  
+  resCond <- cronbachAlpha(d, returnConditional = TRUE, conf.level = 0.95)
+  expect_named(resCond, c("unconditional", "conditional"))
+})
+
+
+test_that("cronbachAlpha closes the bounded side at 1", {
+  
+  set.seed(10)
+  d <- as.data.frame(matrix(rnorm(60), ncol = 3))
+  
+  left <- cronbachAlpha(d, conf.level = 0.95, sides = "left")
+  right <- cronbachAlpha(d, conf.level = 0.95, sides = "right")
+  
+  expect_equal(unname(left[["uci"]]), 1)      # alpha <= 1
+  expect_identical(unname(right[["lci"]]), -Inf)  # unbounded below
+})
+

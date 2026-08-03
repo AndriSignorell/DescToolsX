@@ -252,10 +252,10 @@ week <- function(x, method = c("iso", "us")){
   method <- match.arg(method, c("iso", "us"))
   switch(method,
          "iso" = {
-           wn <- .Call("_DescToolsX_isoWeek", x, PACKAGE="DescToolsX")
+           wn <- .Call("_DescToolsX_isoWeek_cpp", x, PACKAGE="DescToolsX")
          },
          "us"={
-           wn <- .Call("_DescToolsX_usWeek", x, PACKAGE="DescToolsX")
+           wn <- .Call("_DescToolsX_usWeek_cpp", x, PACKAGE="DescToolsX")
          }
   )
   return(wn)
@@ -389,7 +389,7 @@ yearMonth <- function(x){
   # year and month.
   x <- .asDateInTz(x)
 
-  return(.Call("_DescToolsX_usYearmonth", x, PACKAGE="DescToolsX"))
+  return(.Call("_DescToolsX_usYearmonth_cpp", x, PACKAGE="DescToolsX"))
 
 }
 
@@ -404,11 +404,11 @@ yearWeek <- function(x, method = c("iso", "us")){
   method <- match.arg(method, c("iso", "us"))
   switch(method,
          "iso" = {
-           res <- .Call("_DescToolsX_isoYearweek", x, PACKAGE="DescToolsX") 
+           res <- .Call("_DescToolsX_isoYearweek_cpp", x, PACKAGE="DescToolsX") 
            
          },
          "us"={
-           res <- .Call("_DescToolsX_usYearweek", x, PACKAGE="DescToolsX") 
+           res <- .Call("_DescToolsX_usYearweek_cpp", x, PACKAGE="DescToolsX") 
          }
   )
   
@@ -539,14 +539,14 @@ isLeapYear <- function(x){
     if(any(x %% 1 != 0, na.rm = TRUE))
       stop("a numeric 'x' must contain whole years")
 
-    return(.Call("_DescToolsX_isLeapYearInt", as.integer(x),
+    return(.Call("_DescToolsX_isLeapYearInt_cpp", as.integer(x),
                  PACKAGE="DescToolsX"))
   }
 
   # .asDateInTz() for the same reason as in yearMonth(): the compiled
   # routine reads days since the epoch, and the calendar day has to be
   # the one the timestamp's own zone shows.
-  .Call("_DescToolsX_isLeapYearDate", .asDateInTz(x), PACKAGE="DescToolsX")
+  .Call("_DescToolsX_isLeapYearDate_cpp", .asDateInTz(x), PACKAGE="DescToolsX")
 
 }
 

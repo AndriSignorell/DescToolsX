@@ -52,3 +52,23 @@ test_that("contCoef CI: lci <= est <= uci", {
   expect_lte(res["lci"], res["est"])
   expect_gte(res["uci"], res["est"])
 })
+
+
+test_that("contCoef puts the finite bound on the named side", {
+  
+  tab <- apply(HairEyeColor, c(1, 2), sum)
+  mn  <- min(dim(tab))
+  cMax <- sqrt((mn - 1) / mn)
+  
+  set.seed(6)
+  left <- contCoef(tab, conf.level = 0.95, sides = "left")
+  set.seed(6)
+  right <- contCoef(tab, conf.level = 0.95, sides = "right")
+  
+  expect_equal(unname(left[["uci"]]), cMax)
+  expect_lt(unname(left[["lci"]]), unname(left[["est"]]))
+  
+  expect_equal(unname(right[["lci"]]), 0)
+  expect_gt(unname(right[["uci"]]), unname(right[["est"]]))
+})
+

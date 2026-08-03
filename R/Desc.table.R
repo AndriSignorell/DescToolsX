@@ -349,7 +349,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
               "rel. risk (col1)  " = x$relRisk1,
               "rel. risk (col2)  " = x$relRisk2,
               "prop. diff        " = x$propdiff
-            ), digits = 3, nsmall = 3, align="right"))
+            ), digits = 3, align = "\\r"))
           } else {
             m <- ftable(fm(rbind(
               "odds ratio    " = x$or,
@@ -360,7 +360,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
               "prop. diff        " = x$propdiff,
               "Cramer's V        " = x$assocs[1,],
               "Cohen's H         " = x$cohenH
-            ), digits = 3, nsmall = 3, align = "right"))
+            ), digits = 3, align = "\\r"))
           }
           attr(m, "col.vars")[[1]][1] <- "est"
           txt <- capture.output(print(m))

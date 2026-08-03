@@ -68,13 +68,16 @@
 #' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
 #'       kurt, na.rm=TRUE)
 #' 
-#' @seealso [meanX], [sdX], similar code in \pkg{e1071}
+#' @seealso [meanX], [sdX], [skew], similar code in \pkg{e1071}
+#'
+#' @section Random number generation:
+#' \code{method = "boot"} - the default - resamples and therefore advances
+#' R's global random number generator. Call \code{\link[base]{set.seed}}
+#' beforehand for reproducible intervals.
 #'
 #' @family shape
 #' @concept descriptive-statistics
 #' @concept robust-statistics
-#'
-#'
 #' @export
 kurt <- function(x,
                   conf.level = NA,
@@ -97,12 +100,14 @@ kurt <- function(x,
   
   if (is.na(conf.level)) {
     
-    res <- .i.kurt(
+    # unname(): the documented return is "a numeric scalar", but the
+    # subsetting carried the name "est" through
+    res <- unname(.i.kurt(
       x,
       weights = weights,
       na.rm = na.rm,
       estimator = estimator
-    )["est"]
+    )[["est"]])
     
   } else {
     
@@ -250,10 +255,23 @@ kurt <- function(x,
     estimator = estimator
   )
   
+  est <- unname(res[["est"]])
+  se  <- sqrt(unname(res[["var"]]))
+
+  # The estimate was MISSING from both bounds. The former lines read
+  #
+  #     lci = qnorm((1 - conf.level)/2)     * sqrt(res["var"])
+  #     uci = qnorm(1 - (1 - conf.level)/2) * sqrt(res["var"])
+  #
+  # i.e. -z*se and +z*se: an interval centred on ZERO rather than on the
+  # kurtosis. Excess kurtosis often sits near zero, so the result looked
+  # plausible - but for a sample with est = 1.8 and se = 0.4 the reported
+  # interval was (-0.78, 0.78), which does not even contain the estimate
+  # printed beside it.
   c(
-    est = unname(res["est"]),
-    lci = unname(qnorm((1 - conf.level) / 2) * sqrt(res["var"])),
-    uci = unname(qnorm(1 - (1 - conf.level) / 2) * sqrt(res["var"]))
+    est = est,
+    lci = est - qnorm(1 - (1 - conf.level) / 2) * se,
+    uci = est + qnorm(1 - (1 - conf.level) / 2) * se
   )
 }
 
@@ -274,18 +292,34 @@ kurt <- function(x,
   # adjusted bootstrap percentile (BCa) interval
   
   args <- .extractBootArgs(list(...))
-  
+
+  # na.rm was accepted and then ignored: x was never filtered and the
+  # statistic below called .i.kurt() without it, so kurt(x, conf.level =,
+  # na.rm = TRUE) on data with NAs produced NA replicates and a failing
+  # boot.ci(). Filter once, here, keeping weights aligned.
+  if (na.rm) {
+    keep <- !is.na(x)
+    x <- x[keep]
+    if (!is.null(weights)) weights <- weights[keep]
+  }
+
   boot.fun <- boot::boot(
-    
+
     x,
-    
+
+    # weights[d], not weights: the resample takes observation d[i] but was
+    # handed the weight of observation i, so every replicate paired values
+    # with the wrong weights. Unweighted calls were unaffected, which is
+    # why it survived. Returning only est also keeps boot()'s statistic
+    # one-dimensional - it used to get c(est, var) and silently bootstrap
+    # the variance alongside.
     function(x, d)
       .i.kurt(
         x[d],
-        weights = weights,
+        weights = if (is.null(weights)) NULL else weights[d],
         estimator = estimator
-      ),
-    
+      )[["est"]],
+
     R        = args$R,
     parallel = args$parallel,
     ncpus    = args$ncpus
@@ -297,22 +331,18 @@ kurt <- function(x,
     type = args$type
   )
   
-  if (args$type == "norm") {
-    
-    c(
-      est = unname(boot.fun$t0[1]),
-      lci = unname(ci[[4]][2]),
-      uci = unname(ci[[4]][3])
-    )
-    
-  } else {
-    
-    c(
-      est = unname(boot.fun$t0[1]),
-      lci = unname(ci[[4]][4]),
-      uci = unname(ci[[4]][5])
-    )
-  }
+  # by name rather than by position, as in gini() and hodgesLehmann()
+  ciMat <- ci[[switch(args$type,
+                      norm = "normal", basic = "basic", stud = "student",
+                      perc = "percent", bca = "bca")]]
+
+  bounds <- if (args$type == "norm") ciMat[2:3] else ciMat[4:5]
+
+  c(
+    est = unname(boot.fun$t0[1]),
+    lci = unname(bounds[1L]),
+    uci = unname(bounds[2L])
+  )
 }
 
 

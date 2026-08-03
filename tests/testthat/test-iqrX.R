@@ -33,3 +33,24 @@ test_that("iqrX with weights returns a positive numeric", {
   expect_gte(res, 0)
   expect_length(res, 1)
 })
+
+
+
+test_that("iqrX returns the same shape with and without weights", {
+  
+  x <- c(3.7, 3.3, 3.5, 2.8)
+  w <- c(5, 5, 4, 1) / 15
+  
+  plain <- iqrX(x)
+  wtd   <- iqrX(x, weights = w)
+  
+  expect_null(names(plain))
+  expect_null(names(wtd))        # was labelled "75%"
+  expect_length(wtd, 1L)
+  expect_gte(wtd, 0)
+  
+  # the weighted branch now depends only on the RATIOS of the weights
+  expect_equal(iqrX(x, weights = w), iqrX(x, weights = w * 15))
+  expect_equal(iqrX(x, weights = w), iqrX(x, weights = w / 3))
+})
+

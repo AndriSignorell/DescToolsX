@@ -26,22 +26,46 @@ The Rosenbluth index is based on the ranked shares and is
 directly related to market concentration. Larger values
 indicate stronger concentration.
 
-The measure is computed from the ordered values of \code{x}
-and reflects the distribution of shares across units.
+With the shares \eqn{p_i = x_i / \sum x} sorted in decreasing order and
+\eqn{i} their rank, the index is
+\deqn{HT = 1 / (2 \sum i p_i - 1).}
+It ranges from \eqn{1/k} for \eqn{k} units of equal size to 1 for a single
+unit holding everything, so it is read on the same scale as the Herfindahl
+index rather than as an inequality measure.
+
 If negative values or missing values (when \code{na.rm = FALSE})
-are present, \code{NA} is returned.
+are present, \code{NA} is returned. The index is undefined when all values
+are zero, and \code{NA} is returned in that case as well.
+}
+\examples{
+# four units of equal size: the index takes its minimum 1/4
+rosenbluth(c(1, 1, 1, 1))
+
+# one unit holding everything: the maximum 1
+rosenbluth(c(1, 0, 0, 0))
+
+# a dominant unit next to three small ones
+rosenbluth(c(10, 1, 1, 1))
+
+# frequency weights replicate the values
+rosenbluth(c(10, 1), n = c(1, 3))
+
 }
 \references{
-Rosenbluth, G. (1955). Measures of concentration.
+Rosenbluth, G. (1955). Measures of concentration. In: \emph{Business
+Concentration and Price Policy}. Princeton University Press, 57-99.
+
+Hall, M., Tideman, N. (1967). Measures of concentration.
+\emph{Journal of the American Statistical Association}, 62, 162-168.
 }
 \seealso{
+\code{\link{gini}}, \code{\link{lc}}
+
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
-\code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}

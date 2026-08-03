@@ -51,9 +51,9 @@
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 #' New S Language}.  Wadsworth & Brooks/Cole.
 #' 
-#' @family location  
-#' @concept location  
-#'  
+#' @family location
+#' @concept location
+#'
 #' @examples
 #' 
 #' x <- c(0:10, 50)
@@ -81,7 +81,13 @@ meanX.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
   if(is.null(weights)) {
     # use mean here instead of mean.default in order to be able to handle
     # mean.Date, mean.POSIXct etc.
-    mean(x, trim, na.rm, ...)
+    # named, not positional. The comment above is the reason this must be
+    # named: mean() dispatches, and only mean.default() has trim and
+    # na.rm as its second and third formals. mean.Date(x, ...) and
+    # mean.difftime(x, ...) take everything else through the dots, so
+    # mean(x, 0, FALSE) hands them two unnamed arguments whose meaning
+    # depends on what the method does with its dots.
+    mean(x, trim = trim, na.rm = na.rm, ...)
     
   } else {
     if(trim!=0)

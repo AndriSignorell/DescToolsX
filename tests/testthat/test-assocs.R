@@ -123,3 +123,9 @@ gkGamma(x0, y0)
 
 # small n
 kendallTauB(1:2, 2:1)
+
+
+
+expect_equal(unname(ordAssocs(tab2, conf.level = .95)$tauB),
+             unname(ordAssocs(t(tab2), conf.level = .95)$tauB))
+

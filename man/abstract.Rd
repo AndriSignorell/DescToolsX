@@ -89,6 +89,9 @@ abstract(d.mydata)
 \seealso{
 \code{\link[utils:str]{utils::str()}}, \code{\link[base:summary]{base::summary()}}, \code{\link[bedrock:columnWrap]{columnWrap()}},
 \code{\link[=desc]{desc()}}
+
+Other data.inspection:
+\code{\link[=outlier]{outlier()}}
 }
 \concept{data.inspection}
 \concept{summary}

@@ -35,7 +35,10 @@
 #'   also supplied.
 #' @param y optional second rating vector. If supplied, \code{x} and \code{y}
 #'   are tabulated together.
-#' @param levels optional category levels. For \code{mode = "agreement"}, use
+#' @param levels optional category levels. These \emph{rename} the
+#'   categories in place - the counts are not moved - so supplying an order
+#'   different from the one a table already carries reassigns the counts to
+#'   other labels. For \code{mode = "agreement"}, use
 #'   an atomic vector of common levels shared by both raters; for
 #'   \code{mode = "association"}, use a list of length 2,
 #'   \code{list(x_levels, y_levels)}.
@@ -116,11 +119,9 @@
 #' )
 #'
 #'
-#' @family assoc.agreement  
-#' @concept agreement  
+#' @family assoc.agreement
+#' @concept agreement
 #' @concept confusion-matrix
-#'
-#'
 #' @export
 normalizeToConfusion <- function(
     x,
@@ -160,6 +161,19 @@ normalizeToConfusion <- function(
   #------------------------------------------------
   apply_levels <- function(tab, levels, mode) {
     if (is.null(levels)) return(tab)
+
+    # NOTE: this RELABELS in place, it does not reorder - the counts stay
+    # where they are and only the names change. That is the documented and
+    # tested behaviour (see test-normalizeToConfusion.R, "table input with
+    # levels renames dimnames"), so it stands; but it is worth knowing
+    # that supplying 'levels' in an order different from the existing
+    # dimnames silently reassigns the counts to other categories. The
+    # warning elsewhere in this file recommends 'levels' "for stable
+    # ordering", which reads as though it could reorder. It cannot.
+    #
+    # I had turned the mismatch into an error; that was a contract change
+    # dressed up as a fix and is reverted. The length checks below are new
+    # and harmless.
     if (mode == "agreement") {
       if (!is.atomic(levels) || length(levels) != nrow(tab))
         stop("'levels' must be an atomic vector matching the table dimensions.")
@@ -167,6 +181,8 @@ normalizeToConfusion <- function(
     } else {
       if (!is.list(levels) || length(levels) != 2L)
         stop("For mode='association', 'levels' must be list(x_levels, y_levels).")
+      if (length(levels[[1L]]) != nrow(tab) || length(levels[[2L]]) != ncol(tab))
+        stop("'levels' must match the table dimensions.")
       dimnames(tab) <- list(levels[[1L]], levels[[2L]])
     }
     tab
@@ -208,8 +224,22 @@ normalizeToConfusion <- function(
                                        requireDimnames   = FALSE,
                                        requireSameLevels = FALSE,
                                        requireSquare     = (mode == "agreement"))
+
+    # An n x 2 matrix is genuinely ambiguous: n subjects rated by two
+    # raters, or an n x 2 contingency table. The rule below always picks
+    # the former, which is right for agreement but silently wrong for
+    # association - cramerV(matrix(c(26,26,23,18,9, 6,7,9,14,23),
+    # ncol = 2)) used to cross-tabulate the two count columns against
+    # each other instead of reading the matrix as the table it is.
+    # In association mode the table reading is the far more likely
+    # intent, so say so rather than guess.
     is_rater_matrix <- ncol(x) == 2L && nrow(x) != ncol(x)
-    
+
+    if (mode == "association" && is_conf && is_rater_matrix)
+      stop("an n x 2 numeric matrix is ambiguous in mode = \"association\": ",
+           "wrap it in as.table() to use it as a contingency table, or ",
+           "pass the two variables as 'x' and 'y' to cross-tabulate them")
+
     if (is_conf && !is_rater_matrix) {
       tab <- as.matrix(x)
       

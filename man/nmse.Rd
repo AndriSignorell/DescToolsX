@@ -4,7 +4,7 @@
 \alias{nmse}
 \title{Normalized Mean Squared Error}
 \usage{
-nmse(x, ref, trainY)
+nmse(x, ref, trainY, na.rm = FALSE)
 }
 \arguments{
 \item{x}{numeric vector of predicted values}
@@ -12,6 +12,10 @@ nmse(x, ref, trainY)
 \item{ref}{numeric vector of reference (true) values}
 
 \item{trainY}{numeric vector used as the normalization baseline}
+
+\item{na.rm}{logical; whether to remove incomplete cases before the
+computation. Defaults to \code{FALSE}, in which case a missing value
+anywhere makes the result \code{NA}.}
 }
 \value{
 a numeric scalar containing the normalized mean squared error

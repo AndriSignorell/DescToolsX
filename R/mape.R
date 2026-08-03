@@ -8,7 +8,10 @@
 #'   model objects (e.g. \code{lm}).
 #' @param ... additional arguments passed to methods
 #'
-#' @return a numeric scalar containing the MAPE
+#' @return a numeric scalar containing the MAPE, as a \strong{fraction},
+#' not a percentage: a mean absolute relative error of six percent is
+#' returned as \code{0.06}. Multiply by 100 for the percentage form. The
+#' name is conventional; the definition below is the one implemented.
 #'
 #' @details
 #' The MAPE is defined as:
@@ -30,11 +33,9 @@
 #' mape(fit)
 #'
 #'
-#' @family model.metrics  
-#' @concept model-evaluation  
+#' @family model.metrics
+#' @concept model-evaluation
 #' @concept prediction-error
-#'
-#'
 #' @export
 mape <- function(x, ...) {
   UseMethod("mape")
@@ -63,8 +64,10 @@ mape.default <- function(x, ref, na.rm = FALSE, ...) {
   
   res <- abs((ref - x) / ref)
   
-  # handle division by zero
-  res[ref == 0] <- NA_real_
+  # handle division by zero. !is.na() guards the index: a missing ref
+  # makes `ref == 0` NA, and a logical index containing NA is only
+  # tolerated because the replacement has length 1.
+  res[!is.na(ref) & ref == 0] <- NA_real_
   
   mean(res, na.rm = na.rm, ...)
 }

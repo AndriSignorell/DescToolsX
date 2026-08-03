@@ -7,7 +7,8 @@
 zodiac(x, lang = c("en", "de"), stringsAsFactors = TRUE)
 }
 \arguments{
-\item{x}{the date to transform}
+\item{x}{the date to transform, a \code{Date} or anything that
+\code{month()} and \code{day()} accept}
 
 \item{lang}{language of the zodiac names, either English (\code{"en"}) or
 German (\code{"de"})}
@@ -27,11 +28,14 @@ discovered such a function... ;-)
 
 The following rule to determine zodiac symbols is implemented:
 
-\preformatted{Dec. 22 - Jan. 19 : Capricorn | Jan. 20 - Feb. 17 : Aquarius | 
+\preformatted{Dec. 22 - Jan. 19 : Capricorn | Jan. 20 - Feb. 17 : Aquarius |
 Feb. 18 - Mar. 19 : Pisces | March 20 - April 19 : Aries | April 20 - May 19 :
 Taurus | May 20 - June 20 : Gemini | June 21 - July 21 : Cancer | July 22 - Aug.
-22 : Leo | Aug 23 - Sept. 21 : Virgo | Sept. 22 - Oct. 22 : Libran | Oct. 23 -
+22 : Leo | Aug 23 - Sept. 21 : Virgo | Sept. 22 - Oct. 22 : Libra | Oct. 23 -
 Nov. 21 : Scorpio | Nov. 22 - Dec. 21 : Sagittarius }
+
+The boundaries are fixed calendar dates; the astronomical dates of the sun's
+entry into a sign shift by up to a day from year to year.
 }
 \note{
 Based on code from Markus Naepflin, adapted to conform to package standards.
@@ -41,6 +45,10 @@ Based on code from Markus Naepflin, adapted to conform to package standards.
 zodiac(as.Date(c("1937-07-28", "1936-06-01", "1966-02-25",
                  "1964-11-17", "1972-04-25")), lang="de")
 
+# the boundary days
+zodiac(as.Date(c("2015-01-19", "2015-01-20", "2015-12-21", "2015-12-22")))
+
+set.seed(1)
 d <- sample(seq(as.Date("2015-01-01"), as.Date("2015-12-31"), 1), 120)
 z <- zodiac(d)
 desc(z)

@@ -40,10 +40,8 @@
 #' isConfusionTable(ratings)           # FALSE (not square)
 #'
 #'
-#' @concept agreement  
+#' @concept agreement
 #' @concept confusion-matrix
-#'
-#'
 #' @export
 isConfusionTable <- function(
     x,

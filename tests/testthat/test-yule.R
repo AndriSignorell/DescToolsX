@@ -57,3 +57,124 @@ test_that("yuleQ and yuleY work correctly", {
   expect_equal(resQ[["est"]], Q_expected, tolerance = 1e-12)
   expect_equal(resY[["est"]], Y_expected, tolerance = 1e-12)
 })
+
+
+m <- matrix(c(12, 5, 3, 20), nrow = 2)   # OR = 12*20/(3*5) = 16
+
+
+test_that("yuleQ() and yuleY() reproduce the closed forms", {
+  
+  OR <- 12 * 20 / (3 * 5)
+  
+  expect_equal(yuleQ(m, conf.level = NA), (OR - 1)/(OR + 1))
+  expect_equal(yuleQ(m, conf.level = NA), 15/17)
+  
+  expect_equal(yuleY(m, conf.level = NA), (sqrt(OR) - 1)/(sqrt(OR) + 1))
+  expect_equal(yuleY(m, conf.level = NA), 0.6)
+  
+  # Y = tanh(atanh(Q)/2)
+  expect_equal(yuleY(m, conf.level = NA),
+               tanh(atanh(yuleQ(m, conf.level = NA))/2))
+  
+})
+
+
+test_that("a zero cell yields the limiting value instead of NaN", {
+  
+  # regression: Q was computed as (OR-1)/(OR+1) with OR = Inf, giving NaN,
+  # while the doc gives the stable form tanh(log(OR)/2) - which yuleY used
+  z1 <- matrix(c(12, 5, 0, 20), nrow = 2)    # OR = Inf
+  expect_equal(yuleQ(z1, conf.level = NA), 1)
+  expect_equal(yuleY(z1, conf.level = NA), 1)
+  
+  z0 <- matrix(c(0, 5, 3, 20), nrow = 2)     # OR = 0
+  expect_equal(yuleQ(z0, conf.level = NA), -1)
+  expect_equal(yuleY(z0, conf.level = NA), -1)
+  
+  # ... and the interval does not contain NaN either
+  ci <- yuleQ(z1)
+  expect_false(anyNA(ci))
+  expect_equal(unname(ci), c(1, -1, 1))
+  
+  # both diagonal products zero -> undefined
+  expect_true(is.na(yuleQ(matrix(c(0, 5, 0, 20), nrow = 2), conf.level = NA)))
+  
+})
+
+
+test_that("est lies inside the confidence interval", {
+  
+  for(f in list(yuleQ, yuleY)){
+    ci <- f(m, conf.level = 0.95)
+    expect_named(ci, c("est", "lci", "uci"))
+    expect_lte(ci[["lci"]], ci[["est"]])
+    expect_lte(ci[["est"]], ci[["uci"]])
+    expect_gte(ci[["lci"]], -1)
+    expect_lte(ci[["uci"]], 1)
+  }
+  
+})
+
+
+test_that("the interval is the transformed log odds ratio interval", {
+  
+  se <- sqrt(1/12 + 1/3 + 1/5 + 1/20)
+  lo <- log(16) - qnorm(0.975) * se
+  hi <- log(16) + qnorm(0.975) * se
+  
+  expect_equal(unname(yuleQ(m)[["lci"]]), tanh(lo/2))
+  expect_equal(unname(yuleQ(m)[["uci"]]), tanh(hi/2))
+  expect_equal(unname(yuleY(m)[["lci"]]), tanh(lo/4))
+  expect_equal(unname(yuleY(m)[["uci"]]), tanh(hi/4))
+  
+})
+
+
+test_that("one-sided intervals report the open side at the range limit", {
+  
+  left  <- yuleQ(m, sides = "left")
+  right <- yuleQ(m, sides = "right")
+  
+  expect_equal(left[["uci"]], 1)
+  expect_equal(right[["lci"]], -1)
+  expect_gt(left[["lci"]], yuleQ(m)[["lci"]])
+  expect_lt(right[["uci"]], yuleQ(m)[["uci"]])
+  
+})
+
+
+test_that("the Haldane-Anscombe correction gives a finite interval", {
+  
+  z1 <- matrix(c(12, 5, 0, 20), nrow = 2)
+  ci <- yuleQ(z1, correction = TRUE)
+  
+  expect_lt(ci[["est"]], 1)
+  expect_gt(ci[["lci"]], -1)
+  expect_lte(ci[["lci"]], ci[["est"]])
+  
+  # with a corrected table the estimate equals the one of the shifted table
+  expect_equal(ci[["est"]], yuleQ(z1 + 0.5, conf.level = NA))
+  
+})
+
+
+test_that("the vector interface tabulates", {
+  
+  x <- c("a", "a", "b", "b", "a", "b", "a", "b")
+  y <- c("u", "v", "u", "v", "u", "u", "v", "v")
+  expect_equal(yuleQ(x, y), yuleQ(table(x, y)))
+  
+})
+
+
+test_that("yule coefficients validate their input", {
+  
+  expect_error(yuleQ(matrix(1:6, nrow = 2)), "2x2")
+  expect_error(yuleQ(1:4), "2x2")
+  expect_error(yuleQ(matrix(c(1, 2, -3, 4), nrow = 2)), "non-negative")
+  expect_error(yuleQ(m, conf.level = 0), "conf.level")
+  expect_error(yuleQ(m, correction = NA), "TRUE or FALSE")
+  expect_error(yuleY(m, conf.level = 0.4, sides = "right"), "greater than 0.5")
+  
+})
+

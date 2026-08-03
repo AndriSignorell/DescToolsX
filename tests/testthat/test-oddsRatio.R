@@ -291,3 +291,18 @@ test_that("print.OddsRatio returns object invisibly", {
   
 })
 
+
+
+test_that("oddsRatio closes the open side at the parameter's range", {
+  
+  m <- matrix(c(30, 10, 12, 28), nrow = 2)
+  
+  left  <- oddsRatio(m, conf.level = 0.95, sides = "left")
+  right <- oddsRatio(m, conf.level = 0.95, sides = "right")
+  
+  # the odds ratio lives in (0, Inf): unbounded above, bounded below by 0
+  expect_identical(unname(left[["uci"]]), Inf)
+  expect_equal(unname(right[["lci"]]), 0)
+  
+  expect_equal(unname(oddsRatio(m)), (30 * 28) / (10 * 12))
+})

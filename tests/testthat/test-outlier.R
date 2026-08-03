@@ -45,3 +45,38 @@ test_that("outlier returns empty vector when no outliers present", {
   res <- outlier(x)
   expect_length(res, 0)
 })
+
+
+
+test_that("outlier agrees with boxplot, as documented", {
+  
+  # boxplot.stats() builds its fences from the HINGES, not from the
+  # type-7 quartiles. For 1:20 the hinges are 5.5/15.5 and the quartiles
+  # 5.75/15.25, so the quantile fences were the narrower pair and this
+  # function flagged points the boxplot did not.
+  for (n in c(6, 7, 8, 10, 12, 20, 47)) {
+    x <- c(seq_len(n), 10 * n)
+    expect_equal(sort(outlier(x)), sort(boxplot.stats(x)$out),
+                 label = paste("n =", n))
+  }
+  
+  set.seed(1)
+  z <- c(rnorm(50), 12, -9)
+  expect_equal(sort(outlier(z)), sort(boxplot.stats(z)$out))
+})
+
+
+test_that("outlier returns values or indices consistently", {
+  
+  x <- c(1, 2, 3, 4, 5, 100)
+  
+  expect_equal(outlier(x), 100)
+  expect_equal(outlier(x, value = FALSE), 6L)
+  expect_equal(x[outlier(x, value = FALSE)], outlier(x))
+  
+  # NAs are dropped from the result, not reported as outliers
+  y <- c(x, NA)
+  expect_equal(outlier(y, na.rm = TRUE), 100)
+  expect_false(anyNA(outlier(y, na.rm = TRUE)))
+})
+

@@ -135,3 +135,90 @@ test_that("ISO weeks are right for dates before 1970", {
 
   expect_equal(week(d), as.integer(format(d, "%V")))
 })
+
+
+
+test_that("diffDays360 actually applies the European 30/360 rule", {
+  
+  # the documented example cannot distinguish the conventions: both ends
+  # are the 31st, so eu and us agree at 60
+  expect_equal(diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31")), 60)
+  
+  # this one can. eu: 31 -> 30, so 30 + (28 - 30) = 28.
+  # Without the adjustment the result was 27.
+  expect_equal(diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28")), 28)
+  
+  # a whole year is 360 days under both conventions
+  expect_equal(diffDays360(as.Date("2023-01-01"), as.Date("2024-01-01")), 360)
+  expect_equal(diffDays360(as.Date("2023-01-01"), as.Date("2024-01-01"),
+                           method = "us"), 360)
+})
+
+
+test_that("diffDays360 is vectorised", {
+  
+  from <- as.Date(c("2023-01-31", "2023-01-01"))
+  to   <- as.Date(c("2023-02-28", "2024-01-01"))
+  
+  expect_equal(diffDays360(from, to), c(28, 360))
+})
+
+
+test_that("yearMonth and isLeapYear cope with date-times", {
+  
+  d  <- as.Date("2024-03-15")
+  dt <- as.POSIXct("2024-03-15 13:45:00", tz = "UTC")
+  
+  # the compiled routines read days since the epoch; a POSIXct counts
+  # seconds and used to land some 86400 times too far in the future
+  expect_equal(unclass(yearMonth(dt)), unclass(yearMonth(d)))
+  expect_equal(isLeapYear(dt), isLeapYear(d))
+  
+  expect_true(isLeapYear(2000L))
+  expect_false(isLeapYear(1900L))
+  expect_true(isLeapYear(as.Date("2024-01-01")))
+})
+
+
+test_that("day<- moves a POSIXct to the requested day of the month", {
+  
+  x <- as.POSIXct("2024-01-10 08:30:00", tz = "UTC")
+  day(x) <- 20
+  
+  expect_equal(day(x), 20)
+  expect_equal(hour(x), 8)   # "+" adds seconds to a POSIXct
+  expect_equal(minute(x), 30)
+  
+  d <- as.Date("2024-01-10")
+  day(d) <- 20
+  expect_equal(d, as.Date("2024-01-20"))
+})
+
+
+test_that("yearDays and monthDays stay vectorised", {
+  
+  x <- as.Date(c("2024-02-05", "2023-02-05", "2024-12-31"))
+  
+  expect_equal(monthDays(x), c(29, 28, 31))
+  expect_equal(yearDays(x), c(366, 365, 366))
+})
+
+
+
+
+test_that("date predicates classify the base classes", {
+  
+  d  <- as.Date("2024-01-01")
+  dt <- as.POSIXct("2024-01-01 08:00:00", tz = "UTC")
+  
+  expect_true(isDate(d));    expect_false(isTime(d));  expect_false(isDateTime(d))
+  expect_true(isDate(dt));   expect_true(isTime(dt));  expect_true(isDateTime(dt))
+  expect_false(isDate("2024-01-01"))
+  
+  same <- as.POSIXct(c("2024-01-01 08:00:00", "2024-01-02 08:00:00"), tz = "UTC")
+  expect_false(hasVaryingTime(same))
+  expect_true(hasVaryingTime(dt + c(0, 3600)))
+  expect_false(hasVaryingTime(d))
+})
+
+

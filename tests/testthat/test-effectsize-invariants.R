@@ -153,11 +153,6 @@ test_that("coefVarCI refuses model objects and honours unbiased", {
 })
 
 
-test_that("verrill is refused rather than faked", {
-  expect_error(coefVarCI(runif(30), method = "verrill"), "not implemented")
-})
-
-
 test_that("ccc returns the documented shape for missing input", {
 
   x <- c(1, 2, 3, NA, 5)

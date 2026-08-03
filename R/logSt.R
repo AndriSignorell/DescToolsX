@@ -93,12 +93,23 @@
 logSt <- function(x, base = 10, calib = x, threshold = NULL, mult = 1) {
 
   if(is.null(threshold)){
-    lq <- quantile(calib[calib > 0], probs = c(0.25, 0.75), na.rm = TRUE)
+
+    pos <- calib[calib > 0 & !is.na(calib)]
+
+    # The original (regr::logst) set a flag and warned here; the port
+    # dropped the guard, so with no positive values quantile() on an
+    # empty vector produced NA, the threshold became NA, and every
+    # element of the result came back NA without a word.
+    if(length(pos) == 0L)
+      stop("'calib' contains no positive values, so no threshold can be ",
+           "derived; supply 'threshold' explicitly", call. = FALSE)
+
+    lq <- quantile(pos, probs = c(0.25, 0.75), na.rm = TRUE)
     if (lq[1] == lq[2]) lq[1] <- lq[2]/2
     threshold <- lq[1]^(1 + mult)/lq[2]^mult
   }
   
-  res <- rep(NA, length(x))
+  res <- rep(NA_real_, length(x))
   idx <- (x < threshold)
   idx.na <- is.na(idx)
   res[idx & !idx.na] <- log(x = threshold, base=base) + ((x[idx & !idx.na] - threshold)/(threshold * log(base)))
@@ -115,11 +126,20 @@ logSt <- function(x, base = 10, calib = x, threshold = NULL, mult = 1) {
 #' @rdname logSt
 #' @export
 logStInv <- function (x, base=NULL, threshold = NULL) {
-  
+
   if(is.null(threshold)) threshold <- attr(x, "threshold")
   if(is.null(base)) base <- attr(x, "base")
-  
-  res <- rep(NA, length(x))
+
+  # Both are normally carried on the object by logSt(), but any
+  # arithmetic on the result drops attributes - x + 0 is enough. Without
+  # this check log(NULL, base) is numeric(0), the index below becomes
+  # logical(0), and the function returns a vector of NA the length of x.
+  if(is.null(threshold) || is.null(base))
+    stop("'threshold' and 'base' must be supplied when 'x' does not carry ",
+         "them as attributes (arithmetic on the result of logSt() drops ",
+         "them)", call. = FALSE)
+
+  res <- rep(NA_real_, length(x))
   idx <- (x < (lgth <- log(threshold, base)))
   idx.na <- is.na(idx)
   res[ idx & !idx.na] <- threshold - (threshold * log(base)) * (lgth - x[idx & !idx.na]) 

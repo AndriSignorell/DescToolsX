@@ -1,47 +1,43 @@
 
-test_that("rangeX returns the full range for untrimmed data", {
-  x <- c(1, 2, 3, 4, 5)
-  expect_equal(rangeX(x), 4, ignore_attr = TRUE)
-})
+test_that("rangeX() returns the span and its bounds", {
 
-test_that("rangeX returns 0 for a constant vector", {
-  expect_equal(rangeX(rep(5, 10)), 0, ignore_attr = TRUE)
-})
-
-test_that("rangeX trim reduces the range", {
   x <- c(0:10, 50)
-  expect_lt(rangeX(x, trim = 0.1), rangeX(x))
+  r <- rangeX(x)
+  expect_equal(as.vector(r), 50)
+  expect_equal(attr(r, "bounds"), c(0, 50))
 })
 
-test_that("rangeX has a 'bounds' attribute with min and max", {
-  x <- 1:10
-  res <- rangeX(x)
-  b <- attr(res, "bounds")
-  expect_length(b, 2)
-  expect_equal(b, c(1, 10))
+
+test_that("rangeX() treats na.rm the same way in both branches", {
+
+  set.seed(3)
+  x <- c(rnorm(30), NA)
+
+  # the robust branch dropped NAs unconditionally via x[is.finite(x)] while
+  # the conventional branch returned NA
+  expect_true(is.na(rangeX(x)))
+  expect_true(is.na(rangeX(x, robust = TRUE)))
+
+  expect_false(is.na(rangeX(x, na.rm = TRUE)))
+  expect_false(is.na(rangeX(x, robust = TRUE, na.rm = TRUE)))
 })
 
-test_that("rangeX robust = TRUE returns a smaller range than standard for outlier data", {
-  set.seed(1)
-  x <- c(rnorm(20), 100)
-  expect_lt(rangeX(x, robust = TRUE), rangeX(x))
+
+test_that("rangeX(robust = TRUE) shrinks the span of a contaminated sample", {
+
+  set.seed(7)
+  x <- c(rnorm(40), 100, -100)
+  expect_lt(as.vector(rangeX(x, robust = TRUE)), as.vector(rangeX(x)))
+  expect_length(attr(rangeX(x, robust = TRUE), "bounds"), 2L)
 })
 
-test_that("rangeX robust = TRUE returns a non-negative value", {
-  set.seed(2)
-  x <- c(rnorm(30), rnorm(3, 5, 20))
-  expect_gte(rangeX(x, robust = TRUE), 0)
-})
 
-test_that("rangeX robust result has a 'bounds' attribute", {
-  x <- c(rnorm(20), 100)
-  res <- rangeX(x, robust = TRUE)
-  expect_false(is.null(attr(res, "bounds")))
-})
+test_that("rangeX() falls back to the ordinary range on degenerate input", {
 
-test_that("rangeX na.rm = TRUE works for both modes", {
-  x <- c(1, 2, NA, 4, 5)
-  expect_equal(rangeX(x, na.rm = TRUE), rangeX(c(1,2,4,5)))
-  expect_true(is.numeric(rangeX(x, robust = TRUE, na.rm = TRUE)))
-})
+  expect_warning(r <- rangeX(c(1, 1, 1, 1, 1), robust = TRUE),
+                 "width 0")
+  expect_equal(attr(r, "bounds"), c(1, 1))
 
+  expect_warning(r2 <- rangeX(c(1, 2), robust = TRUE), "Not enough valid data")
+  expect_equal(attr(r2, "bounds"), c(1, 2))
+})

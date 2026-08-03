@@ -147,10 +147,10 @@ scaleX <- function(x, center = TRUE, scale = TRUE, robust = FALSE,
   if(!is.null(centerVals))
     x <- sweep(x, 2L, centerVals, "-", check.margin = FALSE)
 
-  # The scale is taken from different data in the two branches, which is
-  # why centering happens in between. The MAD is invariant to location, so
-  # the robust factors are the same either way and are read off the
-  # original columns, keeping "scaled:scale" independent of 'center'. The
+  # The scale is taken from the centered matrix in both branches. The MAD is
+  # invariant to location, so the robust factors come out the same as on the
+  # original columns, which is what keeps "scaled:scale" independent of
+  # 'center' - it is a property of the estimator, not of the order here. The
   # root mean square is not invariant, and base::scale computes it after
   # centering, so the conventional branch does the same - which is what
   # makes it equal the standard deviation when 'center' is TRUE.

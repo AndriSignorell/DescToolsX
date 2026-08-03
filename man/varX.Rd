@@ -4,7 +4,6 @@
 \alias{varX}
 \alias{sdX}
 \alias{varX.default}
-\alias{varS.Freq}
 \alias{varX.Freq}
 \title{(Weighted) Variance and Standard Deviation}
 \usage{
@@ -14,7 +13,7 @@ varX(x, ...)
 
 \method{varX}{default}(x, estimator = c("unbiased", "ml"), weights = NULL, na.rm = FALSE, ...)
 
-\method{varX}{Freq}(x, breaks, ...)
+\method{varX}{Freq}(x, breaks, estimator = c("unbiased", "ml"), ...)
 }
 \arguments{
 \item{x}{a numeric vector, matrix, or data frame}
@@ -22,12 +21,12 @@ varX(x, ...)
 \item{estimator}{determines the estimator type; if \code{"unbiased"} (the
 default) then the usual unbiased estimate (using \eqn{n - 1} as denominator)
 is returned, if \code{"ml"} then it is the maximum likelihood estimate for a
-Gaussian distribution (denominator \eqn{n}). Internally \code{\link{cov.wt}}
-is used for both methods.}
+Gaussian distribution (denominator \eqn{n}).}
 
 \item{weights}{non-negative numeric vector of weights the same length as
 \code{x}, interpreted as frequency (replication) weights. Observations with
-larger weights contribute more strongly to the empirical distribution.}
+larger weights contribute more strongly to the empirical distribution.
+Weights are supported for vector input only.}
 
 \item{na.rm}{logical. Should missing values be removed?}
 
@@ -39,7 +38,7 @@ composed by \code{\link{freq}}}
 \value{
 \describe{
 \item{\code{varX()}}{a numeric scalar for vector input or a covariance
-matrix for an unweighted matrix or data frame}
+matrix for a matrix or data frame}
 \item{\code{sdX()}}{a numeric scalar containing the standard deviation}
 }
 }
@@ -54,10 +53,11 @@ deviation following the same logic.
 Using estimator \code{"unbiased"} the denominator \eqn{n - 1} is used (known
 as "Bessel's correction") which gives an unbiased estimator of the
 (co)variance for i.i.d. observations.\cr \code{"ml"} yields the biased
-version using the denominator \eqn{n}.
+version using the denominator \eqn{n}. With frequency weights \eqn{n} is the
+sum of the weights.
 
-These functions return \code{\link{NA}} when there is only one observation,
-and fail if \code{x} has length zero.
+These functions return \code{\link{NA}} when there is only one observation
+and \code{NA} when \code{x} has length zero.
 
 \bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
@@ -68,9 +68,10 @@ likelihood-based weighted variance estimation, see
 varX(1:10)                 # 9.166667
 sdX(1:10)
 
-varX(1:5, weights=1:5)     # 2.5
-# same as c(1 2 2 3 3 3 4 4 4 4 5 5 5 5 5):
-varX(rep(1:5, times=1:5))  # 2.5
+# frequency weights replicate the observations, so the result is the
+# variance of the expanded vector c(1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5)
+varX(1:5, weights=1:5)     # 1.666667
+varX(rep(1:5, times=1:5))  # 1.666667
 
 # weighted Variance
 set.seed(45)
@@ -85,7 +86,7 @@ all.equal(varX(x), varX(z, weights=w))
 # Variance for frequency tables
 varX(freq(as.table(c(6,16,24,25,17))),
           breaks=c(0, 10, 20, 30, 40, 50))
-     
+
 
 }
 \references{

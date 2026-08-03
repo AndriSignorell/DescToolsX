@@ -273,3 +273,43 @@ test_that("imputeKnn gives the same result with and without dbscan", {
   expect_true(is.finite(res$x[3]))
 
 })
+
+
+test_that("imputeKnn ignores variables without variation instead of NaN", {
+  
+  set.seed(1)
+  dat <- data.frame(
+    x = c(1, 2, 3, 4, 5, 6),
+    const = rep(7, 6),
+    z = factor(c("a", "b", "a", "b", "a", "b"))
+  )
+  dat[2, "x"] <- NA
+  
+  expect_warning(res <- imputeKnn(dat, k = 2), "no variation")
+  expect_false(anyNA(res))
+  # the imputed value must come from the neighbours, not from an
+  # arbitrary first-k pick
+  expect_true(res$x[2] >= min(dat$x, na.rm = TRUE) &&
+                res$x[2] <= max(dat$x, na.rm = TRUE))
+})
+
+
+test_that("imputeKnn keeps types and fills every hole", {
+  
+  set.seed(2)
+  dat <- data.frame(
+    x = c(1, 2, 3, 4, 5, 6),
+    y = c(1, 2, 3, 4, 5, 6),
+    z = factor(c("a", "b", "a", "b", "a", "b"))
+  )
+  dat[c(1, 3), "x"] <- NA
+  dat[c(2, 5), "y"] <- NA
+  
+  res <- imputeKnn(dat, k = 2)
+  
+  expect_false(anyNA(res))
+  expect_s3_class(res$z, "factor")
+  expect_identical(levels(res$z), levels(dat$z))
+  expect_identical(dim(res), dim(dat))
+})
+

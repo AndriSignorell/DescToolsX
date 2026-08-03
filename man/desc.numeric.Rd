@@ -82,6 +82,7 @@ Named colors defined by \code{DescToolsX} (e.g. \code{"hred"},
 \examples{
 
 desc(Pizza$delivery_min)             # numeric
+
 }
 \seealso{
 \code{\link[base:summary]{base::summary()}},

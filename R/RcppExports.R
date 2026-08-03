@@ -33,36 +33,36 @@ contcoef_table_boot_cpp <- function(tab, R = 5000L, seed = 0L, correct = FALSE) 
     .Call(`_DescToolsX_contcoef_table_boot_cpp`, tab, R, seed, correct)
 }
 
-isoWeek <- function(x) {
-    .Call(`_DescToolsX_isoWeek`, x)
+isoWeek_cpp <- function(x) {
+    .Call(`_DescToolsX_isoWeek_cpp`, x)
 }
 
-usWeek <- function(x) {
-    .Call(`_DescToolsX_usWeek`, x)
+usWeek_cpp <- function(x) {
+    .Call(`_DescToolsX_usWeek_cpp`, x)
 }
 
-isoYear <- function(x) {
-    .Call(`_DescToolsX_isoYear`, x)
+isoYear_cpp <- function(x) {
+    .Call(`_DescToolsX_isoYear_cpp`, x)
 }
 
-isoYearweek <- function(x) {
-    .Call(`_DescToolsX_isoYearweek`, x)
+isoYearweek_cpp <- function(x) {
+    .Call(`_DescToolsX_isoYearweek_cpp`, x)
 }
 
-usYearweek <- function(x) {
-    .Call(`_DescToolsX_usYearweek`, x)
+usYearweek_cpp <- function(x) {
+    .Call(`_DescToolsX_usYearweek_cpp`, x)
 }
 
-usYearmonth <- function(x) {
-    .Call(`_DescToolsX_usYearmonth`, x)
+usYearmonth_cpp <- function(x) {
+    .Call(`_DescToolsX_usYearmonth_cpp`, x)
 }
 
-isLeapYearDate <- function(x) {
-    .Call(`_DescToolsX_isLeapYearDate`, x)
+isLeapYearDate_cpp <- function(x) {
+    .Call(`_DescToolsX_isLeapYearDate_cpp`, x)
 }
 
-isLeapYearInt <- function(x) {
-    .Call(`_DescToolsX_isLeapYearInt`, x)
+isLeapYearInt_cpp <- function(x) {
+    .Call(`_DescToolsX_isLeapYearInt_cpp`, x)
 }
 
 top_n_cpp <- function(x, n = 5L) {
@@ -89,16 +89,16 @@ fast_mode_cpp <- function(x, narm = FALSE) {
     .Call(`_DescToolsX_fast_mode_cpp`, x, narm)
 }
 
-hlqest <- function(x) {
-    .Call(`_DescToolsX_hlqest`, x)
+hlqest_cpp <- function(xIn) {
+    .Call(`_DescToolsX_hlqest_cpp`, xIn)
 }
 
-hl2qest <- function(x, y) {
-    .Call(`_DescToolsX_hl2qest`, x, y)
+hl2qest_cpp <- function(xIn, yIn) {
+    .Call(`_DescToolsX_hl2qest_cpp`, xIn, yIn)
 }
 
-hoeffdingD_cpp <- function(perm) {
-    .Call(`_DescToolsX_hoeffdingD_cpp`, perm)
+hoeffdingD_cpp <- function(permIn) {
+    .Call(`_DescToolsX_hoeffdingD_cpp`, permIn)
 }
 
 n_pow_sum_cpp <- function(x) {
@@ -121,8 +121,8 @@ kurt_weighted_cpp <- function(x, mean, w) {
     .Call(`_DescToolsX_kurt_weighted_cpp`, x, mean, w)
 }
 
-tbrm <- function(x, C) {
-    .Call(`_DescToolsX_tbrm`, x, C)
+tbrm_cpp <- function(x, C) {
+    .Call(`_DescToolsX_tbrm_cpp`, x, C)
 }
 
 tbrm_boot_cpp <- function(x, R = 999L, alpha = 0.05, constant = 9.0, seed = -1L, method = "perc") {

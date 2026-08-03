@@ -18,15 +18,20 @@
 #' with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
 #' containing any format information used in \code{\link[pharos]{fm}}.
 #' 
-#' \code{Margins()} returns a list containing all the one dimensional margin
-#' tables of a n-dimensional table along the given dimensions. It uses
-#' \code{\link{margin.table}()} for all the dimensions and adds the appropriate
-#' percentages.
+#' \code{margins} adds the marginal distributions. In the frequency table
+#' these are the usual row/column sums; in the percentage tables the margin
+#' holds the \emph{marginal distribution}, i.e. the row resp. column sums of
+#' the frequency table divided by the grand total. A margin is only shown
+#' where it carries information: the sum column of the row percentages is
+#' \eqn{100\%} by construction and the sum row of the row percentages is not a
+#' distribution at all, so whichever of the two is uninformative is printed as
+#' \code{"."}.
 #' 
 #' @name percTable
-#' @inheritParams Association
 #' @aliases percTable percTable.default percTable.table percTable.formula percTable.matrix print.PercTable
 #' 
+#' @param x a table, a matrix, or a vector to be tabulated
+#' @param y an optional second vector to be tabulated against \code{x}
 #' @param row.vars a vector of row variables (see Details)
 #' @param col.vars a vector of column variables (see Details). If this is left
 #' to \code{NULL} the table structure will be preserved. 
@@ -82,7 +87,7 @@
 #' # just the row percentages
 #' percTable(tab, freq= FALSE, prop="rows")
 #' 
-#' # just the expected frequencies and the standard residuals
+#' # just the expected frequencies
 #' percTable(tab, prop="none", expected = TRUE)
 #' 
 #' 
@@ -107,9 +112,6 @@
 #' percTable(x=Pizza$driver, y=Pizza$area, prop="rows", 
 #' margins=c("rows","cols"))
 #' 
-#' # one dimensional x falls back to the function freq()
-#' # percTable(x=Pizza$driver)
-#' 
 #' @seealso [table], [ftable], [proportions], [addmargins], 
 #' [setDescToolsXOption], [pharos::style]\cr 
 #' There are similar functions in [sfsmisc::printTable2] and
@@ -127,24 +129,36 @@ percTable <- function (...) UseMethod("percTable")
 #' @export 
 percTable.default <- function (x, y = NULL, ...) {
   
-  # all arguments which match percTable.table or print function
+  # all arguments which match percTable.table or the print function
   percTableArgs <- names(c(formals(percTable.table), 
                            formals(print.PercTable)))
-  
-  # all dot arguments
-  dot.args <- match.call(expand.dots=FALSE)$...
-  # the dot arguments which match PercTable.table
-  pt.args <- dot.args[names(dot.args) %in% percTableArgs ]
-  # the dot arguments which DO NOT match PercTable.table
-  tab.args <- dot.args[names(dot.args) %notin% percTableArgs ]
 
-  if(is.null(y)){
-    tab <- do.call("table", append(list(x), tab.args) )
-  } else {
-    tab <- do.call("table", append(list(x, y), tab.args) )
-  }
-  
-  do.call( "percTable", append(list(x=tab), pt.args) )
+  # Split the *evaluated* dots. The previous version carried the unevaluated
+  # expressions from match.call(expand.dots = FALSE)$... through do.call(),
+  # which then evaluated them in do.call's default envir = parent.frame().
+  # That works, but it makes the result depend on which frame parent.frame()
+  # refers to after UseMethod() dispatch; list(...) forces each promise in its
+  # own environment and needs no such assumption. No behaviour change intended.
+  dotArgs <- list(...)
+  nms <- names(dotArgs)
+  if (is.null(nms)) nms <- rep("", length(dotArgs))
+
+  ptArgs  <- dotArgs[nms %in% percTableArgs]
+  tabArgs <- dotArgs[!(nms %in% percTableArgs)]
+
+  tab <- if (is.null(y))
+    do.call(table, c(list(x), tabArgs))
+  else
+    do.call(table, c(list(x, y), tabArgs))
+
+  if (length(dim(tab)) != 2L)
+    stop(gettextf(
+      paste("percTable() needs a two-dimensional table; tabulating the given",
+            "argument(s) yielded %d dimension(s). Use freq() for a single",
+            "variable."),
+      length(dim(tab))), domain = NA)
+
+  do.call(percTable, c(list(x = tab), ptArgs))
   
 }
 
@@ -182,7 +196,6 @@ percTable.formula <- function(formula, data, subset, na.action, ...) {
 
 
 
-
 #' @rdname percTable
 #' @export
 percTable.table <- function(x, freq=TRUE, 
@@ -199,6 +212,9 @@ percTable.table <- function(x, freq=TRUE,
   }
   
   prop <- match.arg(prop, c("rows","cols","total","none"), several.ok = TRUE)
+
+  if ("none" %in% prop && length(prop) > 1L)
+    stop("'prop = \"none\"' cannot be combined with other proportions.")
   
   res <- list()
   
@@ -216,6 +232,9 @@ percTable.table <- function(x, freq=TRUE,
   
   if (expected)
     res$expected <- expFreq(x)
+
+  if (length(res) == 0L)
+    stop("nothing to show: at least one of 'freq', 'prop' or 'expected' is needed.")
   
   res$.printArgs <- list(...)
   
@@ -252,49 +271,45 @@ print.PercTable <- function(x,
   
   row.vars <- row.vars %||% .printArgs[["row.vars"]] 
   col.vars <- col.vars %||% .printArgs[["col.vars"]] 
+
+  # a single table has two dimensions only -- the third (the "idx" dimension
+  # holding freq/perc/...) exists only once several tables are stacked
+  nd <- if (length(tables) > 1L) 3L else 2L
+  if (is.numeric(row.vars)) row.vars <- row.vars[row.vars <= nd]
+  if (is.numeric(col.vars)) col.vars <- col.vars[col.vars <= nd]
+  if (length(row.vars) == 0L) row.vars <- NULL
+  if (length(col.vars) == 0L) col.vars <- NULL
   
   if(is.null(row.vars)){
     if(is.null(col.vars)){
       # neither row.vars, nor col.vars provided, set defaults
-      row.vars <- c(1, 3)
-      col.vars <- 2
+      row.vars <- setdiff(seq_len(nd), 2L)
+      col.vars <- 2L
     } else
       # default row.vars  with given col.vars 
-      row.vars <- setdiff(1:3, col.vars)
+      row.vars <- setdiff(seq_len(nd), col.vars)
   } else {      
     if(is.null(col.vars))
       # default col.vars with given row.vars
-      col.vars <- setdiff(1:3, row.vars)
+      col.vars <- setdiff(seq_len(nd), row.vars)
     # else: both are defined by the user
   }
   
   if (!is.null(mar)) {
-    if(!is.numeric(mar))
+
+    if (!is.numeric(mar)) {
+      marIn <- mar
       mar <- match(mar, c("rows", "cols"))
-    
-    hasFreq <- "freq" %in% names(tables)
-    
-    tableNames <- names(tables)  # Namen vorher sichern
-    tables <- lapply(tableNames, function(nm) {
-      tab <- tables[[nm]]
-      if (nm %in% c("p.row", "p.col", "perc")) {
-        if (hasFreq) {
-          freqWithMar <- addmargins(tables[["freq"]], margin = mar)
-          total <- freqWithMar[nrow(freqWithMar), ncol(freqWithMar)]
-          result <- addmargins(tab, margin = mar)
-          if (1 %in% mar)
-            result[nrow(result), ] <- freqWithMar[nrow(freqWithMar), ] / total
-          if (2 %in% mar)
-            result[, ncol(result)] <- freqWithMar[, ncol(freqWithMar)] / total
-          result
-        } else {
-          addmargins(tab, margin = mar)
-        }
-      } else {
-        addmargins(tab, margin = mar)
-      }
-    })
-    names(tables) <- tableNames  # Namen direkt wiederverwenden
+      if (anyNA(mar))
+        stop(gettextf("invalid margin(s): %s. Use 1/\"rows\" and/or 2/\"cols\".",
+                      paste(sQuote(marIn[is.na(mar)]), collapse = ", ")),
+             domain = NA)
+    }
+    if (!all(mar %in% c(1L, 2L)))
+      stop("'margins' must be 1 (\"rows\") and/or 2 (\"cols\").")
+    mar <- sort(unique(as.integer(mar)))
+
+    tables <- .addPercTableMargins(tables, mar)
   }  
   
   abstab <- names(tables) %in% c("freq", "expected")
@@ -303,36 +318,32 @@ print.PercTable <- function(x,
   tables[ptab] <- lapply(tables[ptab], fm, fmt="per.sty")
   
   if (!is.null(mar)) {
+    hasFreq <- "freq" %in% names(tables)
     hasPerc <- "perc" %in% names(tables)
     condTabs <- names(tables) %in% c("p.row", "p.col")
     tables[condTabs] <- lapply(names(tables[condTabs]), function(nm) {
       tab <- tables[[nm]]
-      if (nm == "p.row") {
-        if (hasPerc) {
-          # perc already shows all margins → suppress both in p.row
-          if (1 %in% mar) tab[nrow(tab), ] <- "."
-          if (2 %in% mar) tab[, ncol(tab)] <- "."
-        } else {
-          # standalone p.row: sum column is meaningless (adds to >100%)
-          if (2 %in% mar) tab[, ncol(tab)] <- "."
-        }
+      if (hasPerc) {
+        # perc already carries both marginal distributions
+        if (1 %in% mar) tab[nrow(tab), ] <- "."
+        if (2 %in% mar) tab[, ncol(tab)] <- "."
+      } else if (!hasFreq) {
+        # no frequency table: the margins are plain sums of proportions.
+        # For p.row the rows sum to 1, so the added *column* is the 100%
+        # column and informative, while the added *row* sums proportions
+        # across rows and is not a distribution. For p.col it is the other
+        # way round.
+        if (nm == "p.row" && 1 %in% mar) tab[nrow(tab), ] <- "."
+        if (nm == "p.col" && 2 %in% mar) tab[, ncol(tab)] <- "."
       }
-      if (nm == "p.col") {
-        if (hasPerc) {
-          # perc already shows all margins → suppress both in p.col
-          if (1 %in% mar) tab[nrow(tab), ] <- "."
-          if (2 %in% mar) tab[, ncol(tab)] <- "."
-        } else {
-          # standalone p.col: sum row is meaningless (adds to >100%)
-          if (1 %in% mar) tab[nrow(tab), ] <- "."
-        }
-      }
+      # hasFreq && !hasPerc: both margins were replaced by the marginal
+      # distributions above and are shown as they are.
       tab
     })
   }
   
   if (length(tables) == 1) {
-    out <- ftable(tables[[1]])
+    out <- ftable(tables[[1]], row.vars = row.vars, col.vars = col.vars)
   } else {
     arr <- bedrock::abind(tables, along = 3)
     out <- ftable(arr, col.vars=col.vars, row.vars=row.vars)
@@ -360,7 +371,9 @@ print.PercTable <- function(x,
   }
   
   cat(paste(txt, collapse="\n"), "\n")
-  
+
+  # NOTE: unlike the usual print() contract this returns the formatted lines,
+  # not its argument. Left unchanged -- see REVIEW.md, open question (P6).
   invisible(txt)
   
 }
@@ -371,3 +384,43 @@ print.PercTable <- function(x,
 #' @rdname percTable
 #' @export
 percTable.matrix <- percTable.table
+
+
+
+# == internal helper functions ================================================
+
+# Adds the requested margins to every table of a PercTable list. In the
+# percentage tables the margin must hold the MARGINAL DISTRIBUTION, i.e. the
+# row/column sums of the frequency table divided by the grand total.
+#
+# The grand total is sum(freq). It used to be read as the corner element of
+# the marginalised frequency table, which is the grand total only when both
+# margins were added: with margins = 1 that corner is the total of the last
+# COLUMN, with margins = 2 the total of the last ROW. For
+# percTable(HairEyeColor-table, margins = 1) the sum row therefore read
+# 343.8%, 335.9%, 145.3%, 100.0% instead of 37.2%, 36.3%, 15.7%, 10.8%.
+.addPercTableMargins <- function(tables, mar) {
+
+  hasFreq <- "freq" %in% names(tables)
+  total <- if (hasFreq) sum(tables[["freq"]]) else NA_real_
+  freqWithMar <- if (hasFreq) addmargins(tables[["freq"]], margin = mar) else NULL
+
+  tableNames <- names(tables)
+
+  out <- lapply(tableNames, function(nm) {
+    tab <- tables[[nm]]
+    if (hasFreq && nm %in% c("p.row", "p.col", "perc")) {
+      result <- addmargins(tab, margin = mar)
+      if (1 %in% mar)
+        result[nrow(result), ] <- freqWithMar[nrow(freqWithMar), ] / total
+      if (2 %in% mar)
+        result[, ncol(result)] <- freqWithMar[, ncol(freqWithMar)] / total
+      result
+    } else {
+      addmargins(tab, margin = mar)
+    }
+  })
+
+  names(out) <- tableNames
+  out
+}

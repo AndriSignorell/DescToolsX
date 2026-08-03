@@ -63,6 +63,14 @@ The uncertainty coefficient is computed as \deqn{U(C|R) = \frac{H(X) + H(Y)
 \note{
 Based on code from Antti Arppe
 }
+\section{Confidence interval}{
+
+The interval is based on the asymptotic standard error (Goodman & Kruskal)
+and is truncated to the parameter range \eqn{[0, 1]}. For a one-sided
+interval (\code{sides = "left"} or \code{"right"}) the open side is reported
+at the corresponding range limit, not at \eqn{\pm\infty}.
+}
+
 \examples{
 
 # example from Goodman Kruskal (1954)
@@ -89,7 +97,6 @@ Amsterdam: North-Holland Publishing Company.
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},

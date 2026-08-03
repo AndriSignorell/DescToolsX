@@ -14,7 +14,7 @@ kendallTauB(x, y = NULL, conf.level = NA, ...)
 \item{conf.level}{confidence level for confidence intervals. If \code{NA},
 no confidence interval is returned.}
 
-\item{\dots}{further arguments passed to \code{\link{table}} in the vector interface}
+\item{\dots}{further arguments passed to \code{\link{ordAssocs}}}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -68,14 +68,14 @@ kendallTauB(mtcars$wt, mtcars$mpg)
 
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley and Sons, pp. 57--59.
 
 Kendall, M. (1955) \emph{Rank Correlation Methods}, Second Edition.
 London: Charles Griffin and Co.
 
-Brown, M. B., & Benedetti, J. K. (1977).
+Brown, M. B. and Benedetti, J. K. (1977).
 Sampling behavior of tests for correlation in two-way contingency tables.
-\emph{Journal of the American Statistical Association}, 72, 309–315.
+\emph{Journal of the American Statistical Association}, 72, 309--315.
 }
 \seealso{
 \code{\link{cor}} for the standard Kendall correlation without confidence intervals.

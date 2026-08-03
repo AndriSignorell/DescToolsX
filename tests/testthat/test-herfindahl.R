@@ -45,3 +45,15 @@ test_that("herfindahl parameter argument changes the result", {
   h2 <- herfindahl(x, parameter = 2)
   expect_false(isTRUE(all.equal(h1, h2)))
 })
+
+
+
+test_that("herfindahl rejects a degenerate parameter", {
+  
+  x <- c(541, 1463, 2445, 3438)
+  
+  expect_error(herfindahl(x, parameter = 0), "positive")
+  expect_true(is.na(herfindahl(c(0, 0, 0))))
+  expect_equal(herfindahl(x), sum((x / sum(x))^2))
+})
+

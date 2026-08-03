@@ -26,7 +26,8 @@ one-sample case.}
 \item{sides}{character string specifying the side of the interval:
 \code{"two.sided"}, \code{"left"}, or \code{"right"}}
 
-\item{method}{confidence interval method}
+\item{method}{confidence interval method; currently only
+\code{"boot"} is implemented}
 
 \item{na.rm}{logical; whether to remove missing values}
 
@@ -60,8 +61,44 @@ difference in location parameters does not estimate the
 difference in medians (a common misconception) but rather
 the median of the difference between a sample from x and
 a sample from y.
+
+\code{sides} names the side on which the finite bound lies:
+\code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+\eqn{(-\infty, uci]}. The estimator is unbounded, so the open side is
+reported as \eqn{\pm\infty}.
+
+\code{x} and \code{y} are not modified.
+}
+\section{Random number generation}{
+
+A confidence level triggers a bootstrap and therefore advances R's
+global random number generator. Call \code{\link[base]{set.seed}}
+beforehand for reproducible intervals. The point estimate itself is
+deterministic: the compiled routine picks its pivots from a local
+generator and does not touch R's stream.
+}
+
+\examples{
+x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+hodgesLehmann(x)
+
+# the input is left alone
+v <- c(3, 1, 2)
+hodgesLehmann(v)
+v
+
+# two-sample: median of the pairwise differences, NOT the difference
+# of the medians
+y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+hodgesLehmann(x, y)
+
+set.seed(1)
+hodgesLehmann(x, conf.level = 0.95)
+
 }
 \seealso{
+\code{\link[stats]{wilcox.test}}, \code{\link{medianX}}
+
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hmean]{hmean()}},

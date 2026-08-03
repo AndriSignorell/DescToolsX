@@ -71,12 +71,12 @@
 #' Wiley.
 #'
 #'
-#' @family assoc.nominal  
-#' @concept association-measure  
-#' @concept nominal  
+#' @seealso \code{\link{entropy}}, \code{\link{uncertCoef}}
+#'
+#' @family assoc.nominal
+#' @concept association-measure
+#' @concept nominal
 #' @concept information-theory
-#'
-#'
 #' @export
 mutInf <- function(x,
                    y = NULL,
@@ -89,18 +89,35 @@ mutInf <- function(x,
   
   x <- as.matrix(x)
   
-  mi <- entropy(rowSums(x), base = base) +
-    entropy(colSums(x), base = base) -
-    entropy(x, base = base)
+  if (!is.numeric(x))
+    stop("'x' must be a numeric table or matrix of counts")
+  if (any(x < 0, na.rm = TRUE))
+    stop("'x' must contain non-negative counts")
+  if (anyNA(x))
+    return(NA_real_)
+  if (sum(x) == 0)
+    return(NA_real_)
+  
+  # computed once: the two marginal entropies were evaluated twice when
+  # normalize = TRUE, once for mi and once for the denominator
+  hx <- entropy(rowSums(x), base = base)
+  hy <- entropy(colSums(x), base = base)
+  
+  mi <- hx + hy - entropy(x, base = base)
+  
+  # Mutual information is non-negative; a difference of three entropies
+  # can land marginally below zero in floating point, and a printed
+  # -2.2e-16 invites the reader to look for a sign error that is not
+  # there.
+  mi <- max(mi, 0)
   
   if (normalize) {
-    
-    hx <- entropy(rowSums(x), base = base)
-    hy <- entropy(colSums(x), base = base)
     
     if (hx > 0 && hy > 0)
       mi <- mi / sqrt(hx * hy)
     else
+      # one margin is degenerate, so the variables cannot share
+      # information and the normalized value is 0 by definition
       mi <- 0
     
   }

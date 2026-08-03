@@ -58,3 +58,30 @@ test_that("cramerV works for non-square tables", {
   expect_gte(v, 0)
   expect_lte(v, 1)
 })
+
+
+
+test_that("cramerV keeps estimate and interval on the same scale", {
+  
+  tab <- as.table(rbind(c(26, 26, 23, 18,  9),
+                        c( 6,  7,  9, 14, 23)))
+  
+  plain <- cramerV(tab, conf.level = 0.95)
+  corr  <- cramerV(tab, conf.level = 0.95, correct = TRUE)
+  
+  # the corrected estimate is smaller, and so must its bounds be
+  expect_lt(unname(corr[["est"]]), unname(plain[["est"]]))
+  expect_lt(unname(corr[["lci"]]), unname(plain[["lci"]]))
+  expect_lt(unname(corr[["uci"]]), unname(plain[["uci"]]))
+  
+  # and the interval still brackets its own estimate
+  expect_lte(unname(corr[["lci"]]), unname(corr[["est"]]))
+  expect_gte(unname(corr[["uci"]]), unname(corr[["est"]]))
+})
+
+
+test_that("cramerV rejects a misspelled method even without a CI", {
+  tab <- table(c("a", "a", "b", "b"), c("x", "y", "x", "y"))
+  expect_error(cramerV(tab, method = "nochisq"), "arg")
+})
+

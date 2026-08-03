@@ -26,14 +26,18 @@
 #' 
 #' @seealso [lumen::meanCI]
 #' 
-#' @family dispersion  
-#'
-#'
+#' @family dispersion
+#' @concept dispersion
 #' @export
 meanSE <- function(x, sd = NULL, na.rm = FALSE) {
   # standard error of mean
   if(na.rm) x <- na.omit(x)
-  s <- if(is.null(sd)) sd(x) else sd
+
+  # stats::sd(), spelled out: the argument of the same name shadows the
+  # function for every reader, and only R's habit of skipping non-function
+  # bindings in call position keeps `sd(x)` working at all
+  s <- if(is.null(sd)) stats::sd(x) else sd
+
   s/sqrt(length(x))
 }
 

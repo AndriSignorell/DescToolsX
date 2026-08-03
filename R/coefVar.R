@@ -43,10 +43,6 @@
 #' \bold{nct} \verb{ }uses the noncentral t-distribution to calculate the
 #' confidence intervals. See Smithson (2003).
 #'
-#' Verrill's method is named in the references but not implemented;
-#' \code{method = "verrill"} raises an error rather than returning a
-#' placeholder.
-#'
 #' \code{sides} names the side on which the finite bound lies:
 #' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
 #' \eqn{(-\infty, uci]}. This is the reverse of the convention in
@@ -71,7 +67,7 @@
 #' \code{"right"}. Partial matching is supported. See Details.
 #' @param method character string specifying the confidence interval method:
 #' \code{"nct"} (default),
-#' \code{"vangel"}, \code{"mckay"}, \code{"verrill"} (not implemented), or
+#' \code{"vangel"}, \code{"mckay"}, or
 #' \code{"naive"}. Partial matching is supported. See Details.
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' \code{FALSE}, in which case missing values are an error.
@@ -255,7 +251,7 @@ coefVar.aov <- function (x, unbiased = FALSE, na.rm = FALSE, ...) {
 coefVarCI <- function (x, weights = NULL, unbiased = FALSE,
                        conf.level = 0.95,
                        sides = c("two.sided", "left", "right"),
-                       method = c("nct", "vangel", "mckay", "verrill", "naive"),
+                       method = c("nct", "vangel", "mckay", "naive"),
                        na.rm = FALSE, ... ) {
 
   # coefVar() is generic, so passing a model object here used to dispatch
@@ -295,7 +291,7 @@ coefVarCI <- function (x, weights = NULL, unbiased = FALSE,
 
 .coefVarCI <- function (K, n, conf.level = 0.95,
                         sides = c("two.sided", "left", "right"),
-                        method = c("nct", "vangel", "mckay", "verrill", "naive")) {
+                        method = c("nct", "vangel", "mckay", "naive")) {
 
   # Description of confidence intervals
   # https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
@@ -316,11 +312,6 @@ coefVarCI <- function (x, weights = NULL, unbiased = FALSE,
     u2 <- qchisq(alpha/2, df)
 
     switch(method,
-           verrill = {
-             # returning c(0, 1) here silently produced a plausible-looking
-             # but meaningless interval
-             stop("method = \"verrill\" is not implemented")
-           },
 
            vangel = {
              ciLower <- K / sqrt(((u1 + 2)/n - 1) * K^2 + u1/df)
@@ -371,3 +362,5 @@ coefVarCI <- function (x, weights = NULL, unbiased = FALSE,
 # .nctCI() moved to nctCI.R. It used to be defined here AND, with a
 # different signature and an unnamed return value, in glassDelta.R -
 # same name, same namespace, so only the last-collated one survived.
+
+

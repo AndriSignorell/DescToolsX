@@ -23,7 +23,10 @@ also supplied.}
 \item{y}{optional second rating vector. If supplied, \code{x} and \code{y}
 are tabulated together.}
 
-\item{levels}{optional category levels. For \code{mode = "agreement"}, use
+\item{levels}{optional category levels. These \emph{rename} the
+categories in place - the counts are not moved - so supplying an order
+different from the one a table already carries reassigns the counts to
+other labels. For \code{mode = "agreement"}, use
 an atomic vector of common levels shared by both raters; for
 \code{mode = "association"}, use a list of length 2,
 \code{list(x_levels, y_levels)}.}

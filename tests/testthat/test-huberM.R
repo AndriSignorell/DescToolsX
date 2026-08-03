@@ -311,3 +311,37 @@ test_that("invalid conf.level raises error", {
   expect_error(huberM(x, conf.level = 1.5), "conf.level")
 })
 
+
+
+
+test_that("huberM's Wald interval uses the scale it was given", {
+  
+  set.seed(7)
+  x <- c(round(rnorm(200), 1), round(rnorm(10, mean = 10, sd = 10)))
+  
+  # With the default mu and s the two routes agree, which is why the bug
+  # was invisible: .tauHuber()'s default s = mad(x) equals
+  # mad(x, center = median(x)).
+  a <- huberM(x, conf.level = 0.95)
+  expect_named(a, c("est", "lci", "uci"))
+  
+  # Supplying s explicitly used to leave tau standardized by mad(x) while
+  # the interval was scaled by s. Doubling s must widen the interval by
+  # the same factor, since the estimate is unchanged when s only rescales
+  # the winsorizing window symmetrically.
+  b <- huberM(x, conf.level = 0.95, s = mad(x))
+  expect_equal(unname(b[["uci"]] - b[["lci"]]),
+               unname(a[["uci"]] - a[["lci"]]), tolerance = 1e-8)
+  
+  # the interval brackets the estimate
+  expect_lt(a[["lci"]], a[["est"]])
+  expect_gt(a[["uci"]], a[["est"]])
+})
+
+
+test_that("huberM survives a zero scale", {
+  
+  expect_equal(suppressWarnings(huberM(rep(9, 100))), 9)
+  expect_warning(huberM(rep(9, 100)), "zero")
+})
+

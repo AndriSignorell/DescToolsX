@@ -43,3 +43,48 @@ test_that("lambda accepts two vectors", {
   res <- lambda(x, y)
   expect_length(res, 1)
 })
+
+
+test_that("lambda survives a non-square table with a confidence interval", {
+  
+  # L.col was allocated with ncol elements but indexed by row (and L.row
+  # the other way round), so a matrix - which does not grow - aborted with
+  # "subscript out of bounds". The documented example is 3x4 and uses
+  # direction = "symmetric", which reaches neither branch.
+  m <- as.table(cbind(c(1768, 946, 115), c(807, 1387, 438),
+                      c(189, 746, 288), c(47, 53, 16)))
+  dimnames(m) <- list(paste("A", 1:3), paste("B", 1:4))
+  
+  expect_silent(a <- lambda(m, direction = "column", conf.level = 0.95))
+  expect_silent(b <- lambda(m, direction = "row", conf.level = 0.95))
+  
+  for (r in list(a, b)) {
+    expect_named(r, c("est", "lci", "uci"))
+    expect_gte(r[["lci"]], 0)
+    expect_lte(r[["uci"]], 1)
+    expect_lte(r[["lci"]], r[["est"]])
+    expect_gte(r[["uci"]], r[["est"]])
+  }
+  
+  # transposed table: row and column swap roles
+  expect_equal(unname(lambda(t(m), direction = "row")),
+               unname(lambda(m, direction = "column")))
+})
+
+
+test_that("lambda reports the open side at the range boundary", {
+  
+  m <- as.table(cbind(c(1768, 946, 115), c(807, 1387, 438),
+                      c(189, 746, 288), c(47, 53, 16)))
+  
+  left  <- lambda(m, conf.level = 0.95, sides = "left")
+  right <- lambda(m, conf.level = 0.95, sides = "right")
+  
+  # lambda lies in [0, 1] and the two-sided interval is already clamped
+  # to it, so +/-Inf claimed values the measure cannot take
+  expect_equal(unname(left[["uci"]]), 1)
+  expect_equal(unname(right[["lci"]]), 0)
+  expect_true(is.finite(left[["lci"]]))
+  expect_true(is.finite(right[["uci"]]))
+})
+

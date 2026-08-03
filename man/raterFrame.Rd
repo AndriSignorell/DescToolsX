@@ -21,7 +21,8 @@ raterFrame(formula, data, subset, na.action, dropSubj = FALSE)
 }
 \value{
 a \code{data.frame} of class \code{"raterFrame"} with subjects in rows and
-raters in columns
+raters in columns. The name of the subject column is kept in the
+\code{"subject"} attribute (\code{NA} if it was dropped).
 }
 \description{
 Creates a \code{data.frame} for a formula \code{rating ~ subjects | raters}
@@ -43,7 +44,8 @@ subsequent inter-rater agreement functions. Missing values are marked as
 \code{na.action} is applied to the \emph{wide} frame, i.e. per subject:
 \code{na.omit} removes subjects with at least one missing rating. The
 \code{"na.action"} attribute of the result carries a \code{"values"}
-attribute with the identifiers of the omitted subjects.
+attribute with the identifiers of the omitted subjects; it is absent if
+nothing was omitted.
 }
 \examples{
 

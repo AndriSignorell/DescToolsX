@@ -65,7 +65,7 @@
 #' Shannon CE (1948). A Mathematical Theory of Communication.
 #' Bell System Technical Journal, 27, 379-423.
 #'
-#' @family assoc.nominal
+#' @family diversity.concentration
 #' @concept information-theory
 #' @export
 entropy <- function(x,

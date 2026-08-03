@@ -11,19 +11,31 @@ hoeffdingD(x, y, jitter = FALSE, eps = NULL, seed = NULL)
 
 \item{y}{numeric vector with the same length as \code{x}}
 
-\item{jitter}{logical. If \code{TRUE}, small random noise is added to \code{y}
-to break ties. This is useful when the data contain ties, since the fast
-algorithm assumes continuous data.}
+\item{jitter}{logical. If \code{TRUE}, small random noise is added to
+\strong{both} \code{x} and \code{y} to break ties. This is useful when
+the data contain ties, since the fast algorithm assumes continuous data.}
 
-\item{eps}{optional numeric magnitude of the jitter noise; defaults to
-\code{1e-10 * sd(y)} if not specified}
+\item{eps}{optional numeric half-width of the uniform jitter noise, which
+is drawn from \eqn{U(-eps, eps)}. Defaults to \code{1e-10} times the
+standard deviation of the affected variable. A variable with zero
+variance cannot be jittered and raises an error.}
 
 \item{seed}{optional integer random seed for reproducibility when
-\code{jitter = TRUE}}
+\code{jitter = TRUE}. The state of R's random number generator is
+restored afterwards, so passing a seed does not disturb the calling
+session.}
 }
 \value{
-numeric scalar containing Hoeffding's D statistic. The statistic lies approximately in
-the interval \eqn{[-1/60, 1/30]}, where values near 0 indicate independence.
+numeric scalar containing Hoeffding's D statistic on the
+conventional scale: 1 under perfect monotone or antitone dependence,
+0 under independence, with a lower bound that approaches \eqn{-0.5}
+for large \eqn{n} (for \eqn{n = 7} the minimum over all permutations
+is \eqn{-0.26}).
+
+Note that the raw statistic of Hollander and Wolfe lies in
+\eqn{[-1/60, 1/30]}; this function returns 30 times that value, which
+is the scale \code{Hmisc::hoeffd()} reports. The two differ by exactly
+the factor 30, so results are comparable only after accounting for it.
 }
 \description{
 Computes Hoeffding's D statistic for testing independence between two variables
@@ -39,12 +51,24 @@ The algorithm requires a strict ordering of the data and therefore assumes
 no ties. If ties are present and \code{jitter = FALSE}, a warning is issued
 and results may be biased.
 
+Missing values are an error rather than a silent approximation:
+\code{\link{order}} and \code{\link{rank}} place \code{NA}s at the end
+by default, which yields a formally valid permutation and hence a number
+that looks like an answer. Remove or impute them before calling.
+
 Setting \code{jitter = TRUE} resolves ties by adding small random noise,
 yielding a fast and practical approximation.
 
 In contrast, \code{Hmisc::hoeffd()} handles ties via midranks but uses a
 slower algorithm.
 }
+\section{Random number generation}{
+
+\code{jitter = TRUE} draws from R's random number generator and
+therefore advances it, unless \code{seed} is supplied - in which case
+the previous state is restored.
+}
+
 \examples{
 set.seed(1)
 x <- rnorm(200)
@@ -55,22 +79,28 @@ hoeffdingD(x, y)
 
 # with ties
 y2 <- round(y, 1)
-hoeffdingD(x, y2)               # warning
-hoeffdingD(x, y2, jitter=TRUE) # recommended
+hoeffdingD(x, y2)                # warning
+hoeffdingD(x, y2, jitter = TRUE) # recommended
+
+# perfect monotone dependence is 1 on this scale
+hoeffdingD(1:50, (1:50)^3)
 
 }
 \references{
-Even-Zohar, C., & Leng, C. (2020).
-Fast computation of Hoeffding’s D statistic.
+Even-Zohar, C. and Leng, C. (2020).
+Fast computation of Hoeffding's D statistic.
 
-Hollander, M., Wolfe, D. A., & Chicken, E. (2013).
+Hollander, M., Wolfe, D. A. and Chicken, E. (2013).
 Nonparametric Statistical Methods (3rd ed.).
 }
 \seealso{
+\code{\link{spearmanCor}}, \code{\link{kendallTauB}}
+
 Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }

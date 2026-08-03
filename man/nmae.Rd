@@ -4,7 +4,7 @@
 \alias{nmae}
 \title{Normalized Mean Absolute Error}
 \usage{
-nmae(x, ref, trainY)
+nmae(x, ref, trainY, na.rm = FALSE)
 }
 \arguments{
 \item{x}{numeric vector of predicted values}
@@ -12,6 +12,10 @@ nmae(x, ref, trainY)
 \item{ref}{numeric vector of reference (true) values}
 
 \item{trainY}{numeric vector used as the normalization baseline}
+
+\item{na.rm}{logical; whether to remove incomplete cases before the
+computation. Defaults to \code{FALSE}, in which case a missing value
+anywhere makes the result \code{NA}.}
 }
 \value{
 a numeric scalar containing the normalized mean absolute error

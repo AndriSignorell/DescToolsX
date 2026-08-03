@@ -119,7 +119,6 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},

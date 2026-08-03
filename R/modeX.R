@@ -71,10 +71,8 @@
 #' sapply(Pizza[,c("driver", "temperature", "date")], modeX, na.rm=TRUE)
 #' 
 #' 
-#' @family location  
+#' @family location
 #' @concept location
-#'
-#'
 #' @export
 modeX <- function(x, na.rm=FALSE) {
   
@@ -82,7 +80,8 @@ modeX <- function(x, na.rm=FALSE) {
   # // https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type
   # // Author: Ralf Stubner, Joseph Wood
   
-  if(!is.atomic(x) | is.matrix(x)) stop("modeX supports only atomic vectors. Use sapply(*, modeX) instead.")
+  if(!is.atomic(x) || is.matrix(x))
+    stop("modeX supports only atomic vectors. Use sapply(*, modeX) instead.")
   
   if (na.rm) 
     x <- x[!is.na(x)]
@@ -101,8 +100,17 @@ modeX <- function(x, na.rm=FALSE) {
   # or they've been stripped above
   res <- fast_mode_cpp(x, narm=FALSE)
   
-  # no mode existing, if max freq is only 1 observation
-  if(length(res)== 0L & attr(res, "freq")==1L)
+  # No mode exists if the largest frequency is 1 - every value occurs once.
+  #
+  # NOTE: the original condition `length(res) == 0L & attr(res, "freq") == 1L`
+  # was CORRECT, contrary to what I first assumed. fastModeImplX() only
+  # pushes a value into `modes` once its count REACHES two (a first
+  # occurrence lands in the hash map, not in modes), so an all-distinct
+  # input yields an empty result with myMax still at 1. The two halves of
+  # that condition are therefore equivalent, not complementary.
+  # Keeping the frequency test alone: same behaviour, one clause instead
+  # of a redundant pair, and no non-short-circuiting `&`.
+  if(attr(res, "freq") == 1L)
     return(structure(NA_real_, freq = NA_integer_))
   
   else

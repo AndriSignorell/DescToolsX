@@ -15,52 +15,85 @@ atkinson(
 \arguments{
 \item{x}{numeric vector of non-negative values, such as incomes}
 
-\item{n}{optional frequency weights, a vector of non-negative whole
-numbers. Each element of \code{x} is replicated \code{n} times.}
+\item{n}{optional frequency weights; either a single non-negative whole
+number or a vector having the same length as \code{x}}
 
-\item{epsilon}{inequality aversion parameter \eqn{\varepsilon}.
-The case \code{epsilon = 1} is handled separately. A negative value
-yields \code{NA}.}
+\item{epsilon}{single non-negative numeric value specifying the inequality
+aversion parameter}
 
-\item{na.rm}{logical. If \code{TRUE}, missing values are removed.}
+\item{na.rm}{logical; whether missing values in \code{x} are removed}
 
-\item{tol}{numeric tolerance for detecting the special case
-\eqn{\varepsilon \approx 1}}
+\item{tol}{single non-negative numeric value specifying the tolerance for
+treating \code{epsilon} as equal to one}
 }
 \value{
-numeric value of the Atkinson index in the interval \verb{[0, 1]}
+a numeric value in the interval \verb{[0, 1]}, or
+\code{NA_real_} if the index is undefined
 }
 \description{
 Computes the Atkinson inequality index.
 }
 \details{
-The Atkinson index measures income inequality based on a
-social welfare function and includes an inequality aversion
-parameter \eqn{\varepsilon \ge 0}. Larger values of
-\code{epsilon} imply greater sensitivity to lower incomes.
-
-The index is defined as
+With frequency weights \eqn{n_i}, the weighted arithmetic mean is
 
 \deqn{
-A(\varepsilon) = 1 - \frac{\left( \frac{1}{n} \sum x_i^{1-\varepsilon} \right)^{1/(1-\varepsilon)}}{\bar{x}}
-}{A(e) = 1 - (mean(x^(1-e)))^(1/(1-e)) / mean(x)}
+\bar{x}_n =
+\frac{\sum_i n_i x_i}{\sum_i n_i}.
+}{
+mean_n(x) = sum(n * x) / sum(n)
+}
 
-for \eqn{\varepsilon \neq 1}. For \eqn{\varepsilon = 1},
+For \eqn{\varepsilon \ne 1}, the Atkinson index is
 
 \deqn{
-A(1) = 1 - \frac{\exp\left( \frac{1}{n} \sum \log x_i \right)}{\bar{x}}
-}{A(1) = 1 - exp(mean(log(x))) / mean(x)}
+A(\varepsilon) =
+1 -
+\frac{
+\left(
+\frac{\sum_i n_i x_i^{1-\varepsilon}}
+     {\sum_i n_i}
+\right)^{1/(1-\varepsilon)}
+}{\bar{x}_n}.
+}{
+A(e) =
+1 - (sum(n * x^(1-e)) / sum(n))^(1/(1-e)) / mean_n(x)
+}
 
-The limiting case is used whenever \code{|epsilon - 1| < tol}. Without
-that tolerance the general branch raises a quantity very close to 1 to
-the power \eqn{1/(1-\varepsilon)}, which loses all precision as
-\code{epsilon} approaches 1.
+For \eqn{\varepsilon = 1},
 
-If negative values or missing values (when \code{na.rm = FALSE})
-are present, \code{NA} is returned.
+\deqn{
+A(1) =
+1 -
+\frac{
+\exp\left(
+\frac{\sum_i n_i \log(x_i)}
+     {\sum_i n_i}
+\right)
+}{\bar{x}_n}.
+}{
+A(1) =
+1 - exp(sum(n * log(x)) / sum(n)) / mean_n(x)
+}
+
+The calculation uses normalized frequency weights and logarithmic power
+means. It therefore does not construct the potentially very large vector
+that would result from \code{rep(x, n)}.
+
+Observations with zero frequency are ignored. If all frequencies are zero
+or no observations remain after removing missing values, \code{NA_real_}
+is returned.
+
+If all values are zero, the index is defined as zero. If at least one value
+is zero and \code{epsilon >= 1}, the equally distributed equivalent value
+is zero and the index is one.
+
+Negative values, non-finite values, and missing values when
+\code{na.rm = FALSE} produce \code{NA_real_}. A negative
+\code{epsilon} also produces \code{NA_real_}.
 }
 \examples{
-x <- c(541, 1463, 2445, 3438, 4437, 5401, 6392, 8304, 11904, 22261)
+x <- c(541, 1463, 2445, 3438, 4437,
+       5401, 6392, 8304, 11904, 22261)
 
 atkinson(x)
 atkinson(x, epsilon = 1)
@@ -69,19 +102,20 @@ atkinson(x, epsilon = 2)
 # frequency weights
 atkinson(c(10, 20, 30), n = c(3, 1, 1))
 
+# zero incomes
+atkinson(c(0, 10, 20), epsilon = 1)
+
 }
 \references{
 Atkinson, A. B. (1970). On the measurement of inequality.
-Journal of Economic Theory.
+\emph{Journal of Economic Theory}, 2(3), 244--263.
 }
 \seealso{
 Other inequality:
 \code{\link[=divCoef]{divCoef()}},
 \code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
 \code{\link[=lc]{lc()}},
 \code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=simpson]{simpson()}},
 \code{\link[=theil]{theil()}}
 }
 \concept{concentration-index}

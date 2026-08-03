@@ -52,3 +52,36 @@ test_that("countWorkDays nonworkdays parameter changes which days are excluded",
   # Mon-Sat = 6 days
   expect_equal(res, 6L)
 })
+
+
+
+test_that("countWorkDays counts both endpoints and handles reversed dates", {
+  
+  # 2019-01-07 is a Monday
+  mon <- as.Date("2019-01-07")
+  expect_equal(countWorkDays(mon, mon), 1L)
+  expect_equal(countWorkDays(mon, mon + 4), 5L)      # Mon..Fri
+  expect_equal(countWorkDays(mon, mon + 6), 5L)      # full week
+  expect_equal(countWorkDays(as.Date("2019-01-05"),
+                             as.Date("2019-01-05")), 0L)  # Saturday
+  
+  # reversed pair used to abort with "wrong sign in 'by' argument"
+  expect_equal(countWorkDays(mon + 4, mon), 0L)
+})
+
+
+test_that("countWorkDays subtracts holidays once and validates nonworkdays", {
+  
+  mon <- as.Date("2019-01-07")
+  
+  expect_equal(countWorkDays(mon, mon + 4,
+                             holiday = c("2019-01-08", "2019-01-09")), 3L)
+  # duplicated holidays count once
+  expect_equal(countWorkDays(mon, mon + 4,
+                             holiday = rep("2019-01-08", 3)), 4L)
+  # a holiday on a weekend changes nothing
+  expect_equal(countWorkDays(mon, mon + 6, holiday = "2019-01-12"), 5L)
+  
+  expect_error(countWorkDays(mon, mon + 4, nonworkdays = "Sunday"), "subset")
+})
+

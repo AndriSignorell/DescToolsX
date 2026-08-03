@@ -20,8 +20,7 @@ a numeric scalar containing the Phi coefficient
 }
 \description{
 Computes the Phi coefficient as a measure of association between two
-categorical variables. For 2x2 contingency tables, Phi is equivalent
-to the Pearson correlation coefficient.
+categorical variables.
 }
 \details{
 If \code{y} is provided, a contingency table is created using
@@ -38,6 +37,13 @@ The Phi coefficient is defined as:
 where \eqn{\chi^2} is the chi-squared test statistic and \eqn{n} is
 the total sample size.
 
+This definition is \strong{unsigned}. For a 2x2 table the signed
+coefficient \eqn{(n_{11} n_{22} - n_{12} n_{21}) /
+\sqrt{n_{1\cdot} n_{2\cdot} n_{\cdot 1} n_{\cdot 2}}} equals the Pearson
+correlation of the two 0/1 indicators and lies in \eqn{[-1, 1]}; the value
+returned here is its absolute value, so the direction of the association
+is not reported. See \code{\link{pearsonCor}} if the sign is needed.
+
 For contingency tables larger than 2x2, Phi is not bounded by 1 and
 may exceed 1. In such cases, \code{\link{cramerV}} is usually preferred.
 }
@@ -47,7 +53,8 @@ x <- c("A", "A", "B", "B")
 y <- c("yes", "no", "yes", "no")
 phi(x, y)
 
-# Example with contingency table
+# Example with contingency table. Note that the signed coefficient is
+# -0.0891 here: phi() reports the magnitude only.
 tab <- matrix(c(10, 20, 30, 40), nrow = 2)
 phi(tab)
 
@@ -59,7 +66,6 @@ phi(tab)
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},

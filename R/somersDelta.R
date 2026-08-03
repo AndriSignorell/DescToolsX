@@ -7,7 +7,7 @@
 #'
 #' @details
 #' Somers' D is a directional measure of association related to Kendall's
-#' \eqn{\tau_b} and Goodman–Kruskal's Gamma. It differs from Gamma in that
+#' \eqn{\tau_b} and Goodman-Kruskal's Gamma. It differs from Gamma in that
 #' it corrects only for ties on the dependent variable.
 #'
 #' For two variables \eqn{X} and \eqn{Y}, Somers' D is defined as
@@ -24,8 +24,10 @@
 #' \itemize{
 #'   \item For vectors: \code{somersDelta(x, y)} estimates \eqn{D(Y|X)}.
 #'   \item Reversing the order, \code{somersDelta(y, x)}, estimates \eqn{D(X|Y)}.
-#'   \item For tables: \code{direction="row"} computes \eqn{D(Y|X)},
-#'   \code{direction="column"} computes \eqn{D(X|Y)}.
+#'   \item For tables: \code{direction="row"} computes \eqn{D(Y|X)}, that is
+#'   the column variable explained by the row variable (SAS reports this as
+#'   Somers' D C|R), \code{direction="column"} computes \eqn{D(X|Y)} (SAS:
+#'   Somers' D R|C).
 #' }
 #'
 #' Somers' D is appropriate only when both variables are ordinal.
@@ -46,27 +48,27 @@
 #'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
-#' @seealso
-#' \code{\link[Hmisc]{somers2}} (restricted to binary response),
+#' @seealso \code{somers2()} in package \pkg{Hmisc}, restricted to a binary
+#' response
 #'
 #' @references
-#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57-59.
 #'
 #' Brown, M. B., & Benedetti, J. K. (1977).
 #' Sampling behavior of tests for correlation in two-way contingency tables.
-#' \emph{Journal of the American Statistical Association}, 72, 309–315.
+#' \emph{Journal of the American Statistical Association}, 72, 309-315.
 #'
 #' Goodman, L. A., & Kruskal, W. H. (1954).
 #' Measures of association for cross classifications.
-#' \emph{Journal of the American Statistical Association}, 49, 732–764.
+#' \emph{Journal of the American Statistical Association}, 49, 732-764.
 #'
 #' Somers, R. H. (1962).
 #' A new asymmetric measure of association for ordinal variables.
-#' \emph{American Sociological Review}, 27, 799–811.
+#' \emph{American Sociological Review}, 27, 799-811.
 #'
 #' Goodman, L. A., & Kruskal, W. H. (1963).
 #' Measures of association for cross classifications III.
-#' \emph{Journal of the American Statistical Association}, 58, 310–364.
+#' \emph{Journal of the American Statistical Association}, 58, 310-364.
 #'
 #' @examples
 #'
@@ -105,6 +107,13 @@ somersDelta <- function(x, y = NULL,
   
   direction <- match.arg(direction)
   
+  if(length(conf.level) != 1L)
+    stop("'conf.level' must be a single value, or NA")
+  
+  if(!is.na(conf.level) &&
+     (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
+    stop("'conf.level' must be a single number in (0, 1), or NA")
+  
   if(is.null(y)){
     
     # ============================
@@ -121,6 +130,11 @@ somersDelta <- function(x, y = NULL,
     )
     
   } else {
+    
+    # A table given together with 'y' would silently be treated as a long
+    # vector of counts here, so it is refused rather than answered.
+    if(!is.null(dim(x)) && length(dim(x)) > 1L)
+      stop("'y' must not be given when 'x' is a contingency table")
     
     # ============================
     # XY MODE
@@ -142,9 +156,6 @@ somersDelta <- function(x, y = NULL,
     )
   }
   
-  if(is.na(conf.level))
-    unname(res[[1]])
-  else
-    setNamesX(unname(res[[1]]), c("est", "lci", "uci"))
+  .ordAssocResult(res, conf.level)
   
 }

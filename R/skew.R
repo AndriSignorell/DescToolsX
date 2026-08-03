@@ -14,15 +14,22 @@
 #' 1 is the typical definition used in Stata and in many older textbooks.  \cr
 #' 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
 #' 
-#' Cramer (1997) mentions the asymptotic standard error of the skewness:
+#' Cramer (1997) mentions the asymptotic standard error of \code{G_1}, that is
+#' of \code{estimator = 2}:
 #' \cr \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
-#' used for calculating the confidence intervals.  This is implemented here
-#' with \code{method="classic"}. \cr However, Joanes and Gill (1998) advise
+#' used for calculating the confidence intervals. The standard errors of the
+#' other two estimators follow from it by the same factors that relate the
+#' estimators themselves, so that \code{est/se} does not depend on the choice
+#' of \code{estimator}. This is implemented here with \code{method="classic"}.
+#' \cr However, Joanes and Gill (1998) advise
 #' against this approach, pointing out that the normal assumptions would
 #' virtually always be violated.  They suggest using the bootstrap method.
 #' That's why the default method for the confidence interval type is set to
 #' \code{"boot"}. If not further specified the boot ci type will be chosen as
 #' \code{"bca"}.\cr
+#' 
+#' The standard error is only defined for \code{n >= 3}; for shorter input the
+#' variance, and with it any \code{method="classic"} interval, is \code{NA}.
 #' 
 #' This implementation of the two functions is comparably fast, as the
 #' expensive sums are coded in C++.
@@ -30,12 +37,13 @@
 #' @name skew
 #' 
 #' @inheritParams ConfidenceIntervals
-#' @param x a numeric vector. An object that is not a vector is coerced by
-#' \code{as.vector} if possible.
+#' @param x a numeric vector
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
 #' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}
+#' giving the weights to use for elements of \code{x}. The weights are read as
+#' frequencies, so that their sum takes the place of the sample size in the
+#' estimator's bias corrections and in the standard error.
 #' @param na.rm logical, indicating whether \code{NA} values should be stripped
 #' before the computation proceeds. Defaults to \code{FALSE}.
 #' @param \dots further arguments passed to \code{\link[boot]{boot}} when
@@ -56,51 +64,61 @@
 #' Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 #' kurtosis. \emph{The Statistician}, 47, 183-189.
 #' 
-#' @family topic.dispersion
-#' @concept shape
+#' @family shape
 #' @concept moments
-#' @concept descriptive-statistics
 #' 
 #' 
 #' @examples
 #' 
-#' skew(Pizza$price, na.rm=TRUE)
+#' skew(bedrock::Pizza$price, na.rm=TRUE)
 #' 
 #' # use sapply to calculate skewness for a data.frame
-#' sapply(Pizza[,c("temperature","price","delivery_min")], skew, na.rm=TRUE)
+#' sapply(bedrock::Pizza[,c("temperature","price","delivery_min")], 
+#'        skew, na.rm=TRUE)
 #' 
-#' # or apply to do that columnwise with a matrix
-#' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
-#'       skew, na.rm=TRUE)
+#' # the estimate lies inside its own confidence interval
+#' set.seed(1)
+#' skew(rlnorm(50), conf.level=0.95, method="classic")
 #' 
 #'
 #' @seealso [meanX], [sdX], similar code in \pkg{e1071}
-#' 
-#' @family shape
-#' @concept descriptive-statistics
-#' @concept robust-statistics
-#'
 #'
 #'
 #' @export
 skew <- function(x,
-                  conf.level = NA,
-                  sides = c("two.sided", "left", "right"),
-                  method = c("boot", "classic"),
-                  estimator = 3,
-                  weights = NULL,
-                  na.rm = FALSE,
-                  ...) {
+                 conf.level = NA,
+                 sides = c("two.sided", "left", "right"),
+                 method = c("boot", "classic"),
+                 estimator = 3,
+                 weights = NULL,
+                 na.rm = FALSE,
+                 ...) {
   
   if (!is.numeric(x))
     stop("'x' must be numeric")
   
-  if (!is.null(weights) &&
-      length(weights) != length(x))
-    stop("'weights' must have same length as 'x'")
+  if (!is.null(weights)) {
+    
+    if (!is.numeric(weights))
+      stop("'weights' must be numeric")
+    
+    if (length(weights) != length(x))
+      stop("'weights' must have same length as 'x'")
+  }
   
-  if (!estimator %in% c(1, 2, 3))
+  # length(estimator) is checked as well: %in% is vectorised, so a vector of
+  # length 2 would have produced a condition of length > 1 here.
+  if (length(estimator) != 1L || !isTRUE(estimator %in% c(1, 2, 3)))
     stop("'estimator' must be one of 1, 2, or 3")
+  
+  if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("'na.rm' must be a single non-missing logical value")
+  
+  # conf.level is the switch between the two return shapes, so it has to be a
+  # single value before it can be tested with is.na(); NULL or a vector would
+  # otherwise fail inside if() with an unrelated message.
+  if (length(conf.level) != 1L)
+    stop("'conf.level' must be a single value, or NA")
   
   if (is.na(conf.level)) {
     
@@ -113,16 +131,15 @@ skew <- function(x,
     
   } else {
     
-    sides <- match.arg(
-      sides,
-      choices = c("two.sided", "left", "right"),
-      several.ok = FALSE
-    )
+    if (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1)
+      stop("'conf.level' must be a single number in (0, 1), or NA")
+    
+    sides <- match.arg(sides)
+    
+    method <- match.arg(method)
     
     if (sides != "two.sided")
       conf.level <- 1 - 2 * (1 - conf.level)
-    
-    method <- match.arg(method)
     
     res <- switch(
       
@@ -146,6 +163,8 @@ skew <- function(x,
       )
     )
     
+    # Skewness is unbounded in both directions, so the open side is reported
+    # as infinite rather than clipped to a range boundary.
     if (sides == "left") {
       
       res[3] <- Inf
@@ -164,9 +183,9 @@ skew <- function(x,
 
 
 .skew <- function(x,
-                    weights = NULL,
-                    estimator = 3,
-                    na.rm = FALSE) {
+                  weights = NULL,
+                  estimator = 3,
+                  na.rm = FALSE) {
   
   # C++ part for the expensive
   # (x - mean(x))^2 etc.
@@ -182,6 +201,9 @@ skew <- function(x,
       weights,
       na.rm = na.rm
     )
+    
+    if (anyNA(z$x))
+      return(c(est = NA_real_, var = NA_real_))
     
     r.skew <- skew_weighted_cpp(
       as.numeric(z$x),
@@ -207,10 +229,21 @@ skew <- function(x,
     n <- length(x)
   }
   
-  se <- sqrt(
-    (6 * (n - 2)) /
-      ((n + 1) * (n + 3))
-  )
+  # The asymptotic standard error is only defined from n = 3 on: below that
+  # the radicand is negative and the estimator corrections divide by n - 2.
+  # Returning NA here is what keeps .skew.classic() from reporting a NaN
+  # interval next to a perfectly finite estimate.
+  if (is.na(n) || n < 3) {
+    
+    se <- NA_real_
+    
+  } else {
+    
+    se <- sqrt(
+      (6 * (n - 2)) /
+        ((n + 1) * (n + 3))
+    )
+  }
   
   if (estimator == 2) {
     
@@ -237,17 +270,17 @@ skew <- function(x,
   }
   
   c(
-    est = r.skew,
-    var = se^2
+    est = unname(r.skew),
+    var = unname(se^2)
   )
 }
 
 
 .skew.classic <- function(x,
-                           conf.level,
-                           estimator = 3,
-                           weights = NULL,
-                           na.rm = FALSE) {
+                          conf.level,
+                          estimator = 3,
+                          weights = NULL,
+                          na.rm = FALSE) {
   
   res <- .skew(
     x,
@@ -256,22 +289,26 @@ skew <- function(x,
     na.rm = na.rm
   )
   
+  est <- unname(res["est"])
+  se  <- unname(sqrt(res["var"]))
+  
+  # The Wald interval is centred on the estimate. Without the est term the
+  # bounds are symmetric about zero and need not contain the value they are
+  # reported next to.
   c(
-    est = unname(res["est"]),
-    lci = unname(qnorm((1 - conf.level) / 2) *
-      sqrt(res["var"])),
-    uci = unname(qnorm(1 - (1 - conf.level) / 2) *
-      sqrt(res["var"]))
+    est = est,
+    lci = est + qnorm((1 - conf.level) / 2) * se,
+    uci = est + qnorm(1 - (1 - conf.level) / 2) * se
   )
 }
 
 
 .skew.boot <- function(x,
-                        conf.level,
-                        estimator = 3,
-                        weights = NULL,
-                        na.rm = FALSE,
-                        ...) {
+                       conf.level,
+                       estimator = 3,
+                       weights = NULL,
+                       na.rm = FALSE,
+                       ...) {
   
   # Problematic standard errors and confidence intervals
   # for skewness and kurtosis.
@@ -283,14 +320,33 @@ skew <- function(x,
   
   args <- .extractBootArgs(list(...))
   
+  # Missing values are removed once, here, rather than inside the statistic:
+  # replicates of differing length would each be a sample from a different
+  # sample size, and boot() would resample the NAs along with the data.
+  if (na.rm) {
+    
+    ok <- !is.na(x)
+    
+    if (!is.null(weights))
+      ok <- ok & !is.na(weights)
+    
+    x <- x[ok]
+    
+    if (!is.null(weights))
+      weights <- weights[ok]
+  }
+  
   boot.fun <- boot::boot(
     
     x,
     
+    # weights[d] rather than weights: the indices d resample x, and a weight
+    # belongs to its observation. Passing the unpermuted vector pairs replicate
+    # i with the weight of the original observation i.
     function(x, d)
       .skew(
         x[d],
-        weights = weights,
+        weights = if (is.null(weights)) NULL else weights[d],
         estimator = estimator
       ),
     
@@ -305,21 +361,11 @@ skew <- function(x,
     type = args$type
   )
   
-  if (args$type == "norm") {
-    
-    c(
-      est = unname(boot.fun$t0[1]),
-      lci = unname(ci[[4]][2]),
-      uci = unname(ci[[4]][3])
-    )
-    
-  } else {
-    
-    c(
-      est = unname(boot.fun$t0[1]),
-      lci = unname(ci[[4]][4]),
-      uci = unname(ci[[4]][5])
-    )
-  }
+  bounds <- .bootCIBounds(ci, args$type)
+  
+  c(
+    est = unname(boot.fun$t0[1]),
+    lci = unname(bounds[1]),
+    uci = unname(bounds[2])
+  )
 }
-

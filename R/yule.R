@@ -1,4 +1,3 @@
-
 #' Yule's Coefficients of Association (Q and Y)
 #'
 #' Computes Yule's Q or Y for a 2x2 contingency table, optionally with
@@ -29,10 +28,19 @@
 #' \deqn{Y = \frac{\sqrt{OR} - 1}{\sqrt{OR} + 1}
 #'      = \tanh\left(\frac{1}{4}\log(OR)\right)}
 #'
+#' Both coefficients are computed from the \code{tanh} form, which stays
+#' well defined when a zero cell drives the odds ratio to 0 or \code{Inf}
+#' (the coefficient is then -1 or 1).
+#'
 #' Confidence intervals are obtained from the asymptotic normal approximation:
 #' \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
-#' and then transformed to the selected coefficient.
-#' 
+#' and then transformed to the selected coefficient. With a zero cell the
+#' standard error is infinite and the interval degenerates to
+#' \eqn{[-1, 1]}; use \code{correction = TRUE} to obtain a finite interval.
+#'
+#' For a one-sided interval the open side is reported at the range limit
+#' (-1 resp. 1), not at \eqn{\pm\infty}.
+#'
 #' @name yule
 #'
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -48,131 +56,103 @@
 #'
 #' @examples
 #' m <- matrix(c(12, 5, 3, 20), nrow = 2)
-#' yuleQ(m)
-#' yuleY(m, conf.level = 0.95)
+#' yuleQ(m)                        # 0.8823529
+#' yuleY(m, conf.level = 0.95)     # 0.6
 #'
-#' 
+#' # a zero cell yields the limiting value 1 (and not NaN)
+#' yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), conf.level = NA)
+#'
+#' # ... a finite interval requires the Haldane-Anscombe correction
+#' yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), correction = TRUE)
+#'
 #' @rdname yule
 #'
-#' @family assoc.nominal  
-#' @concept association-measure  
-#' @concept nominal  
+#' @family assoc.nominal
+#' @concept association-measure
+#' @concept nominal
 #' @concept binary-association
 #'
-#'
 #' @export
-yuleQ <- function(x, y=NULL,
+yuleQ <- function(x, y = NULL,
                   conf.level = 0.95,
-                  sides = c("two.sided","left","right"),
+                  sides = c("two.sided", "left", "right"),
                   correction = FALSE, ...){
-  
-  if(!is.null(y))
-    x <- table(x, y, ...)
-  
-  sides <- match.arg(sides)
-  
-  stopifnot(is.matrix(x), all(dim(x) == c(2,2)))
-  
-  if(correction) x <- x + 0.5
-  
-  a <- x[1,1]; b <- x[1,2]
-  c <- x[2,1]; d <- x[2,2]
-  
-  OR <- (a*d)/(b*c)
-  Q  <- (OR - 1)/(OR + 1)
 
-  if (is.na(conf.level))
-    return(Q)
-  
-  se <- sqrt(1/a + 1/b + 1/c + 1/d)
-  logOR <- log(OR)
-  
-  alpha <- 1 - conf.level
-  
-  if(sides == "two.sided"){
-    z <- qnorm(1 - alpha/2)
-    lower_log <- logOR - z*se
-    upper_log <- logOR + z*se
-  }
-  
-  if(sides == "left"){
-    z <- qnorm(1 - alpha)
-    lower_log <- logOR - z*se
-    upper_log <- Inf
-  }
-  
-  if(sides == "right"){
-    z <- qnorm(1 - alpha)
-    lower_log <- -Inf
-    upper_log <- logOR + z*se
-  }
-  
-  lower_OR <- exp(lower_log)
-  upper_OR <- exp(upper_log)
-  
-  lower_Q <- if(is.finite(lower_OR)) (lower_OR - 1)/(lower_OR + 1) else -1
-  upper_Q <- if(is.finite(upper_OR)) (upper_OR - 1)/(upper_OR + 1) else 1
-  
-  c(est = Q,
-    lci = lower_Q,
-    uci = upper_Q)
+  .yuleCoef(x, y, conf.level = conf.level, sides = match.arg(sides),
+            correction = correction, divisor = 2, ...)
+
 }
 
 
-
 #' @rdname yule
 #' @export
-yuleY <- function(x, y=NULL, 
-                     conf.level = 0.95,
-                     sides = c("two.sided","left","right"),
-                     correction = FALSE, ...){
-  
+yuleY <- function(x, y = NULL,
+                  conf.level = 0.95,
+                  sides = c("two.sided", "left", "right"),
+                  correction = FALSE, ...){
+
+  .yuleCoef(x, y, conf.level = conf.level, sides = match.arg(sides),
+            correction = correction, divisor = 4, ...)
+
+}
+
+
+# Yule's Q and Y differ only in the divisor of the log odds ratio:
+#   Q = tanh(log(OR)/2),  Y = tanh(log(OR)/4)
+# Everything else - table construction, checks, continuity correction and the
+# confidence interval - is identical, so it lives here once.
+.yuleCoef <- function(x, y = NULL, conf.level, sides, correction,
+                      divisor, ...){
+
   if(!is.null(y))
     x <- table(x, y, ...)
-  
-  sides <- match.arg(sides)
-  
-  stopifnot(is.matrix(x), all(dim(x) == c(2,2)))
-  
-  if(correction) x <- x + 0.5
-  
-  a <- x[1,1]; b <- x[1,2]
-  c <- x[2,1]; d <- x[2,2]
-  
-  OR <- (a*d)/(b*c)
-  logOR <- log(OR)
-  
-  # Schaetzer fuer Y (stabiler via tanh)
-  Y <- tanh(logOR / 4)
 
-  if (is.na(conf.level))
-    return(Y)
-  
-  se <- sqrt(1/a + 1/b + 1/c + 1/d)
-  alpha <- 1 - conf.level
-  
-  if(sides == "two.sided"){
-    z <- qnorm(1 - alpha/2)
-    lower_log <- logOR - z*se
-    upper_log <- logOR + z*se
-  }
-  
-  if(sides == "left"){
-    z <- qnorm(1 - alpha)
-    lower_log <- logOR - z*se
-    upper_log <- Inf
-  }
-  
-  if(sides == "right"){
-    z <- qnorm(1 - alpha)
-    lower_log <- -Inf
-    upper_log <- logOR + z*se
-  }
-  
-  lower_Y <- if(is.finite(lower_log)) tanh(lower_log/4) else -1
-  upper_Y <- if(is.finite(upper_log)) tanh(upper_log/4) else 1
-  
-  c(est = Y,
-    lci = lower_Y,
-    uci = upper_Y)
+  if(!isTRUE(correction) && !isFALSE(correction))
+    stop("Argument 'correction' must be TRUE or FALSE.")
+
+  if(length(dim(x)) != 2L || !all(dim(x) == c(2L, 2L)))
+    stop("'x' must be a 2x2 table, or 'y' must be supplied.")
+
+  if(!is.numeric(x) || anyNA(x) || any(x < 0))
+    stop("'x' must contain non-negative counts without missing values.")
+
+  if(correction)
+    x <- x + 0.5
+
+  # note: do not name these a, b, c, d - 'c' would mask base::c()
+  n11 <- x[1L, 1L]; n12 <- x[1L, 2L]
+  n21 <- x[2L, 1L]; n22 <- x[2L, 2L]
+
+  if((n11 * n22 == 0) && (n12 * n21 == 0))
+    # both diagonals are zero, the odds ratio is 0/0
+    return(if(is.na(conf.level)) NA_real_
+           else c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+
+  logOR <- log(n11 * n22) - log(n12 * n21)   # +-Inf for a single zero cell
+  est   <- tanh(logOR / divisor)             # stays in [-1, 1]
+
+  if(is.na(conf.level))
+    return(est)
+
+  if(!is.numeric(conf.level) || length(conf.level) != 1L ||
+     conf.level <= 0 || conf.level >= 1)
+    stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
+
+  se <- sqrt(1/n11 + 1/n12 + 1/n21 + 1/n22)  # Inf if any cell is 0
+
+  conf_adj <- if(sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
+  if(conf_adj <= 0)
+    stop("For a one-sided interval 'conf.level' must be greater than 0.5.")
+  z <- qnorm(1 - (1 - conf_adj)/2)
+
+  # logOR - z*se would be Inf - Inf = NaN for a zero cell, hence the
+  # explicit limits
+  lower <- if(is.finite(logOR) && is.finite(se)) tanh((logOR - z*se)/divisor) else -1
+  upper <- if(is.finite(logOR) && is.finite(se)) tanh((logOR + z*se)/divisor) else  1
+
+  if(sides == "left")  upper <-  1
+  if(sides == "right") lower <- -1
+
+  c(est = est, lci = lower, uci = upper)
+
 }

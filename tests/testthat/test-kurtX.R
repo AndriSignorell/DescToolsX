@@ -56,3 +56,62 @@ test_that("kurt CI: lci < est < uci", {
   expect_lt(res["lci"], res["est"])
   expect_gt(res["uci"], res["est"])
 })
+
+
+
+test_that("the classic kurtosis interval is centred on the estimate", {
+  
+  set.seed(1)
+  x <- rgamma(200, shape = 2)          # clearly leptokurtic, est well above 0
+  
+  res <- kurt(x, conf.level = 0.95, method = "classic")
+  est <- kurt(x)
+  
+  expect_equal(unname(res[["est"]]), unname(est))
+  
+  # the former version returned -z*se and +z*se, an interval around ZERO
+  # that need not even contain the estimate it is printed beside
+  expect_lt(res[["lci"]], res[["est"]])
+  expect_gt(res[["uci"]], res[["est"]])
+  
+  # and it is symmetric about the estimate
+  expect_equal(res[["est"]] - res[["lci"]], res[["uci"]] - res[["est"]])
+})
+
+
+test_that("kurt honours na.rm on the bootstrap path", {
+  
+  set.seed(2)
+  x <- c(rgamma(150, shape = 2), NA, NA)
+  
+  # x was never filtered and the resampling statistic ignored na.rm, so
+  # every replicate came back NA and boot.ci() failed
+  # type = "perc": my own tightened .extractBootArgs() now requires at
+  # least 200 replicates for BCa, and R = 199 was chosen to keep the test
+  # fast. Percentile has no such floor.
+  expect_silent(res <- kurt(x, conf.level = 0.95, na.rm = TRUE,
+                            R = 199, type = "perc"))
+  expect_false(anyNA(res))
+  expect_named(res, c("est", "lci", "uci"))
+})
+
+
+test_that("kurt pairs bootstrap values with their own weights", {
+  
+  set.seed(3)
+  x <- c(rep(1, 40), rep(9, 10))
+  w <- c(rep(1, 40), rep(5, 10))
+  
+  # weights were passed unsubset, so replicate i got the weight of the
+  # ORIGINAL observation i rather than of the resampled one
+  expect_silent(res <- kurt(x, weights = w, conf.level = 0.95,
+                            R = 199, type = "perc"))
+  expect_equal(unname(res[["est"]]), unname(kurt(x, weights = w)))
+})
+
+
+test_that("kurt returns an unnamed scalar without conf.level", {
+  set.seed(4)
+  expect_null(names(kurt(rnorm(50))))
+})
+

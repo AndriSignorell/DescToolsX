@@ -3,7 +3,7 @@
 #'
 #' Replaces entries in a symmetric matrix (typically a correlation matrix)
 #' with \code{NA} wherever the corresponding p-value exceeds a significance
-#' threshold – retaining only the statistically supported associations.
+#' threshold - retaining only the statistically supported associations.
 #' Designed as a pre-processing step for \code{\link[pharos]{plotWeb}} and
 #' \code{\link[pharos]{plotCor}}.
 #'
@@ -30,10 +30,13 @@
 #'
 #' @examples
 #' # compute p-values on the fly from the raw data
-#' plotWeb(keepSig(cor(mtcars), data = mtcars))
+#' keepSig(cor(mtcars), data = mtcars)
 #'
-#' # stricter threshold
-#' plotCor(keepSig(cor(swiss), data = swiss, sig.level = 0.01))
+#' # stricter threshold, and drop the diagonal as well
+#' keepSig(cor(swiss), data = swiss, sig.level = 0.01, diag = FALSE)
+#'
+#' # the intended use is as a pre-processing step for the plots
+#' pharos::plotWeb(keepSig(cor(mtcars), data = mtcars))
 #'
 #' # supply a pre-computed p-value matrix
 #' m <- cor(mtcars)
@@ -48,10 +51,9 @@
 #' @seealso [pharos::plotWeb], [pharos::plotCor], [lumen::corTest], [stats::cor.test]
 #'   
 #'
-#' @concept correlation  
+#' @family assoc.continuous
+#' @concept correlation
 #' @concept multiple-testing
-#'
-#'
 #' @export
 keepSig <- function(m, p = NULL, data = NULL,
                     sig.level  = 0.05,
@@ -82,11 +84,25 @@ keepSig <- function(m, p = NULL, data = NULL,
   if (!identical(dim(m), dim(p)))
     stop("'m' and 'p' must have the same dimensions.")
   
-  out          <- m
-  out[p > sig.level] <- NA
-  
+  if (!is.numeric(sig.level) || length(sig.level) != 1L ||
+      !is.finite(sig.level) || sig.level <= 0 || sig.level > 1)
+    stop("'sig.level' must be a single number in (0, 1].")
+
+  out <- m
+
+  # A logical index containing NA skips those positions when the
+  # replacement has length 1, so cells whose p-value is NA - which is
+  # exactly what the internally computed diagonal is - were left
+  # untouched. That made `diag` a no-op in BOTH directions: TRUE restored
+  # a diagonal that had never changed, and FALSE did not blank it, which
+  # is what the documentation promises. Decide the diagonal explicitly.
+  drop <- !is.na(p) & p > sig.level
+  out[drop] <- NA
+
   if (diag)
     diag(out) <- diag(m)
-  
+  else
+    diag(out) <- NA
+
   out
 }

@@ -91,3 +91,25 @@ test_that("highLow nlow = 0 and nhigh = 0 returns empty lines", {
   out <- highLow(1:10, nlow = 0, nhigh = 0)
   expect_match(out, "lowest :", fixed = TRUE)
 })
+
+
+
+test_that("large/small do not read past the end when NAs dominate", {
+  
+  # The point of this test is the out-of-bounds read: k was capped at the
+  # length BEFORE the NAs were stripped, so top_i_cpp() ran past the end
+  # of a two-element vector. Assert the contents, not the ordering - both
+  # functions return ascending, which is a separate contract and not what
+  # is under test here.
+  x <- c(1, 2, NA, NA, NA)
+  
+  expect_length(large(x, k = 5), 2L)
+  expect_length(small(x, k = 5), 2L)
+  expect_setequal(large(x, k = 5), c(1, 2))
+  expect_setequal(small(x, k = 5), c(1, 2))
+  
+  expect_equal(max(large(x, k = 5)), 2)
+  expect_equal(min(small(x, k = 5)), 1)
+})
+
+

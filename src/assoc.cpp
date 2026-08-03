@@ -315,9 +315,17 @@ Rcpp::NumericVector assoc_cpp(Rcpp::NumericVector xR,
         int    cnt = kv.second.count;
         double pi_cell    = cnt / (double)nn;
         double pdiff_cell = (kv.second.C / cnt - kv.second.D / cnt) / (double)nn;
+        
+        // bug:
+        // double tauphi =
+        //   (2.0 * pdiff_cell + Pdiff * colsum_v[yi]) * delta1 * delta2
+        // + (Pdiff * rowsum_v[xi] * delta2) / delta1;
+        
         double tauphi =
-          (2.0 * pdiff_cell + Pdiff * colsum_v[yi]) * delta1 * delta2
-        + (Pdiff * rowsum_v[xi] * delta2) / delta1;
+          2.0 * pdiff_cell * delta1 * delta2
+        + Pdiff * rowsum_v[xi] * delta2 / delta1
+        + Pdiff * colsum_v[yi] * delta1 / delta2;        
+        
         sum_pi_tp  += pi_cell * tauphi;
         sum_pi_tp2 += pi_cell * tauphi * tauphi;
       }

@@ -30,7 +30,7 @@ Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
 \item{method}{confidence interval method. Currently only \code{"boot"} is
 supported.}
 
-\item{const}{tuning constant passed to \code{tbrm()}. Defaults to \code{9}.}
+\item{const}{tuning constant passed to \code{tbrm_cpp()}. Defaults to \code{9}.}
 
 \item{na.rm}{logical. Should missing values be removed before computation?
 Defaults to \code{FALSE}.}
@@ -58,15 +58,13 @@ observations far from the median.  It is defined via the tuning constant
 values are less resistant but more efficient under normality.
 
 When \code{conf.level} is not \code{NA} a bootstrap confidence interval
-is returned.  Bootstrap arguments are passed through \code{...} and
+is returned.  The resampling is done in C++; the R random number generator
+is used only to draw the seed, so \code{set.seed()} makes the result
+reproducible.  Bootstrap arguments are passed through \code{...} and
 extracted via \code{.extractBootArgs()}:
 \describe{
 \item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
 \item{\code{type}}{CI type: \code{"perc"} or \code{"bca"} (default).}
-\item{\code{parallel}}{Parallelisation: \code{"no"}, \code{"multicore"},
-or \code{"snow"} (default \code{"no"}).}
-\item{\code{ncpus}}{Number of CPUs for parallel bootstrap
-(default \code{getOption("boot.ncpus", 1L)}).}
 }
 }
 \examples{

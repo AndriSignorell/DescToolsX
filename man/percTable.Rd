@@ -44,12 +44,9 @@ percTable(...)
 \arguments{
 \item{\dots}{further arguments passed to \code{print.PercTable()}}
 
-\item{x}{either a contingency table, a two-column object
-(matrix, data.frame or list), or a vector of observations
-(together with \code{y})}
+\item{x}{a table, a matrix, or a vector to be tabulated}
 
-\item{y}{optional second vector. If \code{x} is not a vector,
-\code{y} must be \code{NULL}.}
+\item{y}{an optional second vector to be tabulated against \code{x}}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will
 be tabled versus rhs (\code{table(lhs, rhs)})}
@@ -113,10 +110,14 @@ the DescToolsX options. Absolute frequencies will use \code{style("abs.sty")} an
 with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
 containing any format information used in \code{\link[pharos]{fm}}.
 
-\code{Margins()} returns a list containing all the one dimensional margin
-tables of a n-dimensional table along the given dimensions. It uses
-\code{\link{margin.table}()} for all the dimensions and adds the appropriate
-percentages.
+\code{margins} adds the marginal distributions. In the frequency table
+these are the usual row/column sums; in the percentage tables the margin
+holds the \emph{marginal distribution}, i.e. the row resp. column sums of
+the frequency table divided by the grand total. A margin is only shown
+where it carries information: the sum column of the row percentages is
+\eqn{100\%} by construction and the sum row of the row percentages is not a
+distribution at all, so whichever of the two is uninformative is printed as
+\code{"."}.
 }
 \examples{
 
@@ -137,7 +138,7 @@ percTable(tab, col.vars=2, prop=c("total","rows"), freq=FALSE)
 # just the row percentages
 percTable(tab, freq= FALSE, prop="rows")
 
-# just the expected frequencies and the standard residuals
+# just the expected frequencies
 percTable(tab, prop="none", expected = TRUE)
 
 
@@ -161,9 +162,6 @@ percTable(tab, row.vars=c(3, 1))
 percTable(x=Pizza$driver, y=Pizza$area)
 percTable(x=Pizza$driver, y=Pizza$area, prop="rows", 
 margins=c("rows","cols"))
-
-# one dimensional x falls back to the function freq()
-# percTable(x=Pizza$driver)
 
 }
 \references{

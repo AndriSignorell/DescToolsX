@@ -222,11 +222,16 @@ pabak <- function(x,
   lci <- max(-1, est - zCrit * se)
   uci <- min( 1, est + zCrit * se)
 
+  # PABAK = 2*po - 1 lies in [-1, 1], and the two-sided bounds are
+  # truncated to exactly that range four lines above. The open side
+  # therefore belongs at the boundary, not at +/-Inf (design_rules.md 4.1,
+  # as decided for cohenKappa) - an uci of Inf claims a value the measure
+  # cannot take.
   if (sides == "left")
-    uci <- Inf
+    uci <- 1
 
   if (sides == "right")
-    lci <- -Inf
+    lci <- -1
 
   .makeEstimateResult(
     est = est,

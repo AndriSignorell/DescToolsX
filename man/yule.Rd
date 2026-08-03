@@ -68,15 +68,29 @@ Yule's Y:
 \deqn{Y = \frac{\sqrt{OR} - 1}{\sqrt{OR} + 1}
      = \tanh\left(\frac{1}{4}\log(OR)\right)}
 
+Both coefficients are computed from the \code{tanh} form, which stays
+well defined when a zero cell drives the odds ratio to 0 or \code{Inf}
+(the coefficient is then -1 or 1).
+
 Confidence intervals are obtained from the asymptotic normal approximation:
 \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
-and then transformed to the selected coefficient.
+and then transformed to the selected coefficient. With a zero cell the
+standard error is infinite and the interval degenerates to
+\eqn{[-1, 1]}; use \code{correction = TRUE} to obtain a finite interval.
+
+For a one-sided interval the open side is reported at the range limit
+(-1 resp. 1), not at \eqn{\pm\infty}.
 }
 \examples{
 m <- matrix(c(12, 5, 3, 20), nrow = 2)
-yuleQ(m)
-yuleY(m, conf.level = 0.95)
+yuleQ(m)                        # 0.8823529
+yuleY(m, conf.level = 0.95)     # 0.6
 
+# a zero cell yields the limiting value 1 (and not NaN)
+yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), conf.level = NA)
+
+# ... a finite interval requires the Haldane-Anscombe correction
+yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), correction = TRUE)
 
 }
 \references{
@@ -86,7 +100,6 @@ Yule, G. U. (1912). On the methods of measuring association between two attribut
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},

@@ -78,6 +78,11 @@
 #' @seealso \code{\link[MASS]{huber}}, \code{\link{mad}},
 #'   \code{\link{tukeyBiweight}}
 #'
+#' @section Random number generation:
+#' \code{method = "boot"} resamples and therefore advances R's global
+#' random number generator. Call \code{\link[base]{set.seed}} beforehand
+#' for reproducible intervals.
+#'
 #' @examples
 #' huberM(c(1:9, 1000))
 #' mad(c(1:9, 1000))
@@ -91,14 +96,9 @@
 #' # degenerate case: scale zero
 #' huberM(rep(9, 100))
 #'
-
-
-
-#' @family location  
-#' @concept location  
+#' @family location
+#' @concept location
 #' @concept robust-statistics
-#'
-#'
 #' @export
 huberM <- function(x,
                    conf.level = NA,
@@ -162,8 +162,18 @@ huberM <- function(x,
                 wald = {
                   hm  <- .huberM(x = x, k = k, mu = mu, s = s,
                                  se = TRUE, warn0scale = TRUE)
-                  ci  <- qt(1 - alpha / 2, length(x) - 1L) *
-                    sqrt(.tauHuber(x, hm$mu, k = k)) * hm$s / sqrt(length(x))
+
+                  # hm$SE, not a second hand-rolled computation. The
+                  # former line called .tauHuber(x, hm$mu, k = k) without
+                  # passing s, so tau fell back to its default s = mad(x)
+                  # while the interval was scaled by hm$s. Those agree
+                  # only for the default mu and s; supply either argument
+                  # and the residuals entering tau are standardized by a
+                  # different scale than the one multiplying them.
+                  # .huberM(se = TRUE) already returns exactly
+                  # s * sqrt(tau(x, mu, s, k) / n) - it was computed and
+                  # then discarded.
+                  ci <- qt(1 - alpha / 2, length(x) - 1L) * hm$SE
                   c(est = hm$mu, lci = hm$mu - ci, uci = hm$mu + ci)
                 },
                 
@@ -171,7 +181,7 @@ huberM <- function(x,
                   dots      <- list(...)
                   boot_args <- .extractBootArgs(dots)
                   
-                  # freeze mu/s/k — not re-estimated per resample (see @details)
+                  # freeze mu/s/k - not re-estimated per resample (see @details)
                   k_  <- k
                   mu_ <- mu
                   s_  <- s
@@ -207,11 +217,12 @@ huberM <- function(x,
                       "Try a different 'type', increase 'R', or use method = 'wald'."
                     )
                   
-                  if (boot_args$type == "norm") {
-                    c(est = boot_obj$t0, lci = ci_mat[2L], uci = ci_mat[3L])
-                  } else {
-                    c(est = boot_obj$t0, lci = ci_mat[4L], uci = ci_mat[5L])
-                  }
+                  bounds <- if (boot_args$type == "norm")
+                    ci_mat[2:3] else ci_mat[4:5]
+
+                  c(est = unname(boot_obj$t0),
+                    lci = unname(bounds[1L]),
+                    uci = unname(bounds[2L]))
                 }
   )
   

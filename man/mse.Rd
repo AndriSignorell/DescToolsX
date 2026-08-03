@@ -49,6 +49,8 @@ mse(fit)
 \seealso{
 \code{\link{mean}}
 
+\code{\link{mae}}, \code{\link{mape}}, \code{\link{nmse}}
+
 Other model.metrics:
 \code{\link[=auc]{auc()}},
 \code{\link[=brierScore]{brierScore()}},

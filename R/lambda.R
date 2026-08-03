@@ -64,11 +64,9 @@
 #' lambda(m, direction="column")
 #' 
 #'
-#' @family assoc.nominal  
-#' @concept association-measure  
+#' @family assoc.nominal
+#' @concept association-measure
 #' @concept nominal
-#'
-#'
 #' @export
 lambda <- function(x, y = NULL,  
                    conf.level = NA, 
@@ -94,7 +92,11 @@ lambda <- function(x, y = NULL,
   nr <- nrow(x)
   nc <- ncol(x)
   
-  switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
+  # matched once, up front: the two switch() blocks below each called
+  # match.arg() again on the raw argument
+  direction <- match.arg(direction, choices = c("symmetric", "row", "column"))
+  
+  switch( direction
           , "symmetric" = { res <- 0.5*(sum(rmax, cmax) - (max.csum +  max.rsum)) / (n - 0.5*(max.csum +  max.rsum)) }
           , "column" = { res <- (sum(rmax) - max.csum) / (n - max.csum) }
           , "row" = { res <- (sum(cmax) - max.rsum) / (n - max.rsum) }
@@ -111,10 +113,17 @@ lambda <- function(x, y = NULL,
       conf.level <- 1 - 2*(1-conf.level)
     
     
-    L.col <- matrix(,nc)
-    L.row <- matrix(,nr)
+    # Lengths were SWAPPED. L.col is indexed by row in the "column"
+    # branch below (for(i in 1:nr)) but was allocated with nc elements,
+    # and L.row the other way round. A matrix does not grow on
+    # out-of-range assignment, so a non-square table with nr > nc aborted
+    # with "subscript out of bounds" as soon as conf.level was supplied.
+    # The documented example is 3x4 and takes direction = "symmetric",
+    # which avoids both branches.
+    L.col <- rep(NA_integer_, nr)
+    L.row <- rep(NA_integer_, nc)
     
-    switch( match.arg( arg = direction, choices = c("symmetric", "row", "column") )
+    switch( direction
             , "symmetric" = {
               
               #     How to see:
@@ -132,17 +141,19 @@ lambda <- function(x, y = NULL,
               xx <- sum(rmax[li==l], cmax[ki==k], rmax[k], cmax[l])
               y <- 8*n-w-v-2*xx
               
-              t <- rep(NA, length(li))
-              for (i in 1:length(li)){
-                t[i] <- (ki[li[i]]==i & li[ki[li[i]]]==li[i])
+              # 'isPeak', not 't': the latter masks base::t(), which is
+              # the fifth instance of this in the suite
+              isPeak <- logical(length(li))
+              for (i in seq_along(li)){
+                isPeak[i] <- (ki[li[i]]==i & li[ki[li[i]]]==li[i])
               }
               
-              sigma2 <- 1/w^4*(w*v*y-2 *w^2*(n - sum(rmax[t]))-2*v^2*(n-x[k,l]))
+              sigma2 <- 1/w^4*(w*v*y-2 *w^2*(n - sum(rmax[isPeak]))-2*v^2*(n-x[k,l]))
               
             }
             , "column" = {
               L.col.max <- min(which(csum == max.csum))
-              for(i in 1:nr) {
+              for(i in seq_len(nr)) {
                 if(length(which(x[i, intersect(which(x[i,] == max.csum), 
                                                which(x[i,] == max.rsum))] == n))>0)
                   L.col[i] <- min(which(x[i, intersect(which(x[i,] == max.csum), 
@@ -159,11 +170,16 @@ lambda <- function(x, y = NULL,
             }
             , "row" = {
               L.row.max <- min(which(rsum == max.rsum))
-              for(i in 1:nc) {
+              for(i in seq_len(nc)) {
+                # The condition tests COLUMN i (x[..., i]) while the
+                # assignment below read ROW i (x[i, ...]) - a verbatim
+                # copy of the "column" branch that was never transposed
+                # with the rest. Both now work on column i, mirroring the
+                # "column" branch exactly.
                 if(length(which(x[intersect(which(x[,i] == max.rsum), 
                                             which(x[,i] == max.csum)),i] == n))>0)
-                  L.row[i] <- min(which(x[i,intersect(which(x[i,] == max.csum), 
-                                                      which(x[i,] == max.rsum))] == n))
+                  L.row[i] <- min(which(x[intersect(which(x[,i] == max.rsum),
+                                                    which(x[,i] == max.csum)), i] == n))
                 else
                   if(x[L.row.max,i] == max.rsum)
                     L.row[i] <- L.row.max
@@ -181,10 +197,14 @@ lambda <- function(x, y = NULL,
     ci <- pmin(1, pmax(0, qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res))
     res <- c(est = res,  lci=ci[1], uci=ci[2])
     
+    # Lambda lies in [0, 1] - the two-sided interval is clamped to it two
+    # lines above - so the open side belongs at that boundary, not at
+    # +/-Inf (design_rules.md 4.1, as decided for cohenKappa). An
+    # uci of Inf claimed a value the measure cannot take.
     if(sides=="left")
-      res[3] <- Inf
+      res[["uci"]] <- 1
     else if(sides=="right")
-      res[2] <- -Inf
+      res[["lci"]] <- 0
 
   }
   

@@ -93,8 +93,7 @@ imputeKnn(dat, k = 2, distData = ref)
 }
 \seealso{
 Other impute:
-\code{\link[=impute]{impute()}},
-\code{\link[=outlier]{outlier()}}
+\code{\link[=impute]{impute()}}
 }
 \concept{imputation}
 \concept{impute}

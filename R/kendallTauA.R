@@ -27,7 +27,7 @@
 #' @param y optional numeric vector. If supplied, must have the same length as \code{x}.
 #' @param conf.level confidence level for confidence intervals. If \code{NA},
 #'   no confidence interval is returned.
-#' @param \dots further arguments passed to \code{\link{table}} in the vector interface
+#' @param \dots further arguments passed to \code{\link{ordAssocs}}
 #'
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
@@ -38,9 +38,9 @@
 #' }
 #'
 #' @references
-#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+#' Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley and Sons, pp. 57--59.
 #'
-#' Hollander, M., Wolfe, D. A., & Chicken, E. (2014)
+#' Hollander, M., Wolfe, D. A. and Chicken, E. (2014)
 #' \emph{Nonparametric Statistical Methods}, 3rd edition, Wiley.
 #'
 #' Liebetrau, A. M. (1983)
@@ -63,22 +63,25 @@
 #' kendallTauA(x, y, conf.level=0.95)
 #'
 #'
-#' @family assoc.ordinal  
-#' @concept association-measure  
-#' @concept ordinal  
+#' @family assoc.ordinal
+#' @concept association-measure
+#' @concept ordinal
 #' @concept rank-correlation
-#'
-#'
 #' @export
 kendallTauA <- function(x, y = NULL,
                         conf.level = NA,
                         ...){
   
+  # ... was documented as reaching table() and then never forwarded at
+  # all - the same defect as in gkGamma(). ordAssocs() does not call
+  # table() on the vector path either, so the promise was doubly wrong;
+  # the arguments now go where they can actually be used.
   res <- ordAssocs(
     x = x,
     y = y,
     which = "tauA",
-    conf.level = conf.level
+    conf.level = conf.level,
+    ...
   )
   
   if(is.na(conf.level))

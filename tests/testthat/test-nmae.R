@@ -40,3 +40,23 @@ test_that("nmae returns 0 for perfect predictions when den != 0", {
   expect_equal(nmae(x, ref, trainY), 0)
 })
 
+
+test_that("nmae and nmse honour na.rm like the rest of their family", {
+  
+  x   <- c(2.5, 3.0, NA, 2.8)
+  ref <- c(3.0, 2.5, 3.0, 3.0)
+  tr  <- c(2, 3, 4, 3)
+  
+  expect_true(is.na(nmae(x, ref, tr)))
+  expect_true(is.na(nmse(x, ref, tr)))
+  
+  ok <- !is.na(x)
+  expect_equal(nmae(x, ref, tr, na.rm = TRUE),
+               sum(abs(ref[ok] - x[ok])) / sum(abs(ref[ok] - mean(tr))))
+  expect_equal(nmse(x, ref, tr, na.rm = TRUE),
+               sum((ref[ok] - x[ok])^2) / sum((ref[ok] - mean(tr))^2))
+  
+  # a degenerate baseline still gives NA, not a division by zero
+  expect_true(is.na(nmse(c(1, 2), c(3, 3), c(3, 3))))
+})
+

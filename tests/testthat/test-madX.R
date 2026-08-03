@@ -46,3 +46,33 @@ test_that("madX medianType = 'low' and 'high' give valid results", {
   expect_gte(res_low, 0)
   expect_gte(res_high, 0)
 })
+
+
+test_that("madX honours the weights for every medianType", {
+  
+  # low/high used the plain order statistics of the deviations and threw
+  # the weights away, so all three types gave the same answer whenever
+  # the weights mattered
+  x <- c(1, 2, 3, 4, 100)
+  w <- c(1, 1, 1, 1, 50)
+  
+  std  <- madX(x, weights = w)
+  low  <- madX(x, weights = w, medianType = "low")
+  high <- madX(x, weights = w, medianType = "high")
+  
+  expect_false(isTRUE(all.equal(low, madX(x, medianType = "low"))))
+  expect_lte(low, high)
+  
+  # equal weights must reproduce the unweighted result
+  for (ty in c("standard", "low", "high"))
+    expect_equal(madX(x, weights = rep(1, 5), medianType = ty),
+                 madX(x, medianType = ty), label = ty)
+})
+
+
+test_that("madX reduces to mad() in the standard case", {
+  x <- c(1, 2, 3, 4, 100)
+  expect_equal(madX(x), mad(x))
+  expect_equal(madX(x, constant = 1), mad(x, constant = 1))
+})
+

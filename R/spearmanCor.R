@@ -8,12 +8,24 @@
 #' The function calculates Spearman's rho statistic by means of \code{cor(...,
 #' method="spearman")} when two variables \code{x} and \code{y} are supplied.
 #' If a frequency table is provided an implementation based on SAS
-#' documentation is used.\cr The confidence intervals are calculated via
+#' documentation is used. Both routes use midranks for ties and agree exactly;
+#' see the examples.\cr The confidence intervals are calculated via
 #' z-Transformation.\cr
+#' 
+#' The number of observations entering the z-transformation is
+#' \code{length(x)} in the vector interface and \code{sum(x)}, the table total,
+#' in the table interface. At least four observations are needed for an
+#' interval.
+#' 
+#' \code{sides} names the side of the interval that carries the finite bound,
+#' so \code{"left"} returns \code{[lci, 1]} and \code{"right"} returns
+#' \code{[-1, uci]}. Since rho is bounded, the open side is reported at the
+#' range boundary rather than as infinite.
 #' 
 #' @inheritParams Association
 #' 
-#' @param na.rm logical; whether to remove missing values
+#' @param na.rm logical; whether to remove incomplete pairs. Applies to the
+#' vector interface; a frequency table must not contain missing counts.
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
@@ -27,9 +39,10 @@
 #' 
 #' @examples
 #' 
+#' # Example from SAS documentation (PROC FREQ)
 #' pain <- as.table(matrix(c(26,  6, 26, 7, 23, 
 #'                            9, 18, 14, 9, 23), 
-#'                            ncol=5, byrow=TRUE, 
+#'                            ncol=5, 
 #'         dimnames=list(adverse=c("no", "yes"), dose=1:5)))
 #' 
 #' spearmanCor(pain)
@@ -52,9 +65,18 @@
 #'
 #' @export 
 spearmanCor <- function(x, y = NULL,
-                       conf.level = NA,
-                       sides = c("two.sided","left","right"),
-                       na.rm = FALSE) {
+                        conf.level = NA,
+                        sides = c("two.sided","left","right"),
+                        na.rm = FALSE) {
+  
+  sides <- match.arg(sides)
+  
+  if (length(conf.level) != 1L)
+    stop("'conf.level' must be a single value, or NA")
+  
+  if (!is.na(conf.level) &&
+      (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
+    stop("'conf.level' must be a single number in (0, 1), or NA")
   
   if(is.null(y)) {
     # implemented following
@@ -69,34 +91,51 @@ spearmanCor <- function(x, y = NULL,
     # fisher z transformation for calc spearmanCor ci :
     # Conover WJ, Practical Nonparametric Statistics (3rd edition). Wiley 1999.
     
+    # Without y the whole branch indexes x by two margins, so anything that is
+    # not a two-dimensional table fails several lines further down with a
+    # message about dim(X) rather than about the argument the caller passed.
+    # The check must come BEFORE as.matrix(): that turns a plain vector into an
+    # n x 1 matrix, which then passes any test on length(dim(x)) - the vector
+    # ran through the whole SAS branch and came back as a silent NA.
+    if (length(dim(x)) != 2L)
+      stop("'x' must be a two-dimensional numeric frequency table when 'y' is not given")
+    
+    x <- as.matrix(x)
+    
+    if (!is.numeric(x))
+      stop("'x' must be a two-dimensional numeric frequency table when 'y' is not given")
+    
+    if (anyNA(x))
+      stop("'x' must not contain missing counts; 'na.rm' applies to the vector interface only")
+    
+    if (any(x < 0))
+      stop("'x' must not contain negative counts")
     
     n <- sum(x)
-    ni. <- apply(x, 1, sum)
-    n.j <- apply(x, 2, sum)
+    ni. <- rowSums(x)
+    n.j <- colSums(x)
     
-    ri <- rank(rownames(x))
-    ci <- rank(colnames(x))
-    ri <- 1:nrow(x)
-    ci <- 1:ncol(x)
+    # SAS defines the rank score of row i as the count in the preceding rows
+    # plus (n_i. + 1)/2 and centres it at (n + 1)/2. The two halves cancel, so
+    # the midrank can be built without them.
+    R1i <- cumsum(ni.) - ni. / 2
+    C1i <- cumsum(n.j) - n.j / 2
     
-    R1i <- c(sapply(seq_along(ri), 
-                    function(i) ifelse(i==1, 0, cumsum(ni.)[i-1]) + ni.[i]/2))
-    C1i <- c(sapply(seq_along(ci), 
-                    function(i) ifelse(i==1, 0, cumsum(n.j)[i-1]) + n.j[i]/2))
-    
-    Ri <- R1i - n/2
-    Ci <- C1i - n/2
+    Ri <- R1i - n / 2
+    Ci <- C1i - n / 2
     
     v <- sum(x * outer(Ri, Ci))
-    F <- n^3 - sum(ni.^3)
-    G <- n^3 - sum(n.j^3)
     
-    w <- 1/12*sqrt(F * G)
+    # F and G would mask the base constants FALSE and TRUE for the rest of the
+    # body; named after the SAS notation but spelled out here.
+    fRow <- n^3 - sum(ni.^3)
+    gCol <- n^3 - sum(n.j^3)
     
-    rho <- v/w
+    w <- 1/12 * sqrt(fRow * gCol)
+    
+    rho <- if (w == 0) NA_real_ else v / w
     
   } else {
-    
     
     if (is.ordered(x)) x <- as.numeric(x)
     if (is.ordered(y)) y <- as.numeric(y)
@@ -105,6 +144,8 @@ spearmanCor <- function(x, y = NULL,
       stop("'x' and 'y' must be numeric or ordered factors.",
            call. = FALSE)
     
+    if (length(x) != length(y))
+      stop("'x' and 'y' must have the same length.", call. = FALSE)
     
     # http://www-01.ibm.com/support/docview.wss?uid=swg21478368
     
@@ -117,28 +158,46 @@ spearmanCor <- function(x, y = NULL,
     n <- length(x)
     rho <- cor(x, y, method="spearman")
     
-    # rho <- cor(as.numeric(x), as.numeric(y), method="spearman", use = use)
-
   }
   
+  rho <- unname(rho)
   
-  e_fx <- exp( 2 * ((.5 * log((1+rho) / (1-rho))) - c(1, -1) *
-                      (abs(qnorm((1 - conf.level)/2))) * (1 / sqrt(sum(n) - 3)) ))
-  ci <- (e_fx - 1) / (e_fx + 1)
+  if (is.na(conf.level))
+    return(rho)
   
-  if (is.na(conf.level)) {
-    result <- rho
+  # The z-transformation is undefined at |rho| = 1 (atanh is infinite) and
+  # needs n > 3. Both cases are answered by a degenerate interval at the
+  # estimate rather than by NaN.
+  if (is.na(rho)) {
+    
+    ci <- c(NA_real_, NA_real_)
+    
+  } else if (abs(rho) >= 1) {
+    
+    ci <- c(rho, rho)
+    
+  } else if (is.na(n) || n <= 3) {
+    
+    ci <- c(-1, 1)
+    
   } else {
     
-    if(identical(rho, 1)){     # will blast the fisher z transformation
-      result <- c(est = 1, lci = 1, uci = 1)
-      
-    } else {
-      pr2 <- 1 - (1 - conf.level) / 2
-      result <- c(est = rho, lci = max(ci[1], -1), uci = min(ci[2], 1))
-    }
+    alpha <- if (sides == "two.sided") 1 - conf.level else 2 * (1 - conf.level)
+    
+    zr <- atanh(rho)
+    se <- 1 / sqrt(n - 3)
+    
+    ci <- tanh(zr + c(-1, 1) * qnorm(1 - alpha / 2) * se)
+    
+    ci <- c(max(ci[1], -1), min(ci[2], 1))
   }
   
-  return(result)
+  # rho is bounded, so the open side is reported at the range boundary.
+  if (sides == "left")
+    ci[2] <- 1
+  else if (sides == "right")
+    ci[1] <- -1
+  
+  c(est = rho, lci = ci[1], uci = ci[2])
   
 }

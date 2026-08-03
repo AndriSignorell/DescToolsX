@@ -49,3 +49,132 @@ test_that("spearmanCor accepts a frequency table", {
   res <- spearmanCor(pain)
   expect_gte(res, -1); expect_lte(res, 1)
 })
+
+
+
+
+# The 2x5 table from the SAS PROC FREQ documentation, the same one used by
+# somersDelta() and stuartTauC().
+sasTab <- as.table(rbind(
+  c(26, 26, 23, 18,  9),
+  c( 6,  7,  9, 14, 23)
+))
+
+
+test_that("the table branch agrees with cor(method='spearman')", {
+  
+  # Both routes use midranks, so the agreement is exact, not approximate -
+  # this is the claim the examples make.
+  long <- data.frame(
+    row = rep(rep(1:2, times = 5), times = as.vector(sasTab)),
+    col = rep(rep(1:5, each  = 2), times = as.vector(sasTab))
+  )
+  
+  expect_equal(
+    spearmanCor(sasTab),
+    cor(long$row, long$col, method = "spearman")
+  )
+  
+  expect_equal(spearmanCor(sasTab), 0.3770608813, tolerance = 1e-9)
+})
+
+
+test_that("the confidence interval follows the z-transformation", {
+  
+  res <- spearmanCor(sasTab, conf.level = 0.95)
+  
+  expect_named(res, c("est", "lci", "uci"))
+  expect_equal(unname(res),
+               c(0.3770608813, 0.2361592722, 0.5024329224),
+               tolerance = 1e-9)
+  
+  expect_true(res[["lci"]] <= res[["est"]])
+  expect_true(res[["est"]] <= res[["uci"]])
+})
+
+
+test_that("table and vector interface give the same interval", {
+  
+  long <- data.frame(
+    row = rep(rep(1:2, times = 5), times = as.vector(sasTab)),
+    col = rep(rep(1:5, each  = 2), times = as.vector(sasTab))
+  )
+  
+  expect_equal(
+    spearmanCor(sasTab, conf.level = 0.95),
+    spearmanCor(long$row, long$col, conf.level = 0.95)
+  )
+})
+
+
+test_that("sides is applied and names the finite side", {
+  
+  # sides used to be accepted and then ignored entirely.
+  two   <- spearmanCor(sasTab, conf.level = 0.95)
+  left  <- spearmanCor(sasTab, conf.level = 0.95, sides = "left")
+  right <- spearmanCor(sasTab, conf.level = 0.95, sides = "right")
+  
+  expect_identical(left[["uci"]], 1)
+  expect_identical(right[["lci"]], -1)
+  
+  # the full alpha sits on the finite side, so the one-sided bound is inside
+  # the two-sided one
+  expect_true(left[["lci"]] > two[["lci"]])
+  expect_true(right[["uci"]] < two[["uci"]])
+  
+  n <- sum(sasTab)
+  expect_equal(
+    left[["lci"]],
+    tanh(atanh(0.3770608813) - qnorm(0.95) / sqrt(n - 3)),
+    tolerance = 1e-9
+  )
+})
+
+
+test_that("perfect correlation does not blow up the transformation", {
+  
+  res <- spearmanCor(1:10, 1:10, conf.level = 0.95)
+  expect_equal(unname(res), c(1, 1, 1))
+  
+  res <- spearmanCor(1:10, 10:1, conf.level = 0.95)
+  expect_equal(unname(res), c(-1, -1, -1))
+})
+
+
+test_that("ordered factors are accepted", {
+  
+  a <- ordered(c("lo", "lo", "mid", "hi", "hi"),
+               levels = c("lo", "mid", "hi"))
+  b <- c(1, 2, 2, 4, 5)
+  
+  expect_equal(spearmanCor(a, b),
+               cor(as.numeric(a), b, method = "spearman"))
+})
+
+
+test_that("na.rm removes incomplete pairs", {
+  
+  a <- c(1, 2, 3, 4, NA)
+  b <- c(2, 1, 4, 3,  5)
+  
+  expect_true(is.na(spearmanCor(a, b)))
+  expect_equal(spearmanCor(a, b, na.rm = TRUE),
+               cor(a[1:4], b[1:4], method = "spearman"))
+})
+
+
+test_that("a non-table input is refused instead of failing on dim()", {
+  
+  # regression: the guard sat AFTER as.matrix(), which turns a vector into an
+  # n x 1 matrix - spearmanCor(1:10) then ran through the table branch and
+  # returned NA instead of refusing the input
+  expect_error(spearmanCor(1:10), "two-dimensional")
+  expect_error(spearmanCor(c(a = 1, b = 2, c = 3)), "two-dimensional")
+  expect_error(spearmanCor(as.table(c(a = 4, b = 6))), "two-dimensional")
+  expect_error(spearmanCor(array(1:8, dim = c(2, 2, 2))), "two-dimensional")
+  expect_error(spearmanCor(matrix(letters[1:4], 2)), "two-dimensional")
+  expect_error(spearmanCor(matrix(c(1, NA, 2, 3), 2)), "missing")
+  expect_error(spearmanCor(matrix(c(1, -1, 2, 3), 2)), "negative")
+  expect_error(spearmanCor(sasTab, conf.level = 0), "conf.level")
+  expect_error(spearmanCor(sasTab, conf.level = NULL), "single value")
+})

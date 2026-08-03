@@ -56,27 +56,37 @@
 #' 
 #' @seealso \code{\link{mad}}
 #' 
-#' @family dispersion  
-#' 
-#'
+#' @family dispersion
+#' @concept dispersion
 #' @export
 meanAD <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
   
-  if (na.rm) 
-    x <- na.omit(x)
+  # weights have to be filtered ALONGSIDE x. The former na.omit(x) left
+  # weights at their original length, so from here on observation i of x
+  # was paired with the weight of a different observation - and the
+  # center below was computed from that mismatched pair as well.
+  if (na.rm) {
+    ok <- !is.na(x)
+    x <- x[ok]
+    if (!is.null(weights)) weights <- weights[ok]
+  }
   
+  # Call the function; do not build a call as a string and parse it.
+  # eval(parse(text = "FUN(x, weights=weights)")) does nothing that
+  # FUN(x, weights = weights) does not, and it hides the call from every
+  # tool that reads the source.
   if (is.function(center)) {
-    FUN <- center
-    center <- "FUN"
-    if(is.null(weights))
-      center <- gettextf("%s(x)", center)
+    center <- if (is.null(weights))
+      center(x)
     else
-      center <- gettextf("%s(x, weights=weights)", center)
-    center <- eval(parse(text = center))
+      center(x, weights = weights)
   }
   
   if(!is.null(weights)) {
-    z <- .normWeights(x, weights, na.rm=na.rm)
+    # na.rm = FALSE: the removal has already happened above, and doing it
+    # again here would filter x a second time against weights that are
+    # already aligned
+    z <- .normWeights(x, weights, na.rm=FALSE)
     res <- sum(abs(z$x - center) * z$weights) / z$wsum
     
   } else {

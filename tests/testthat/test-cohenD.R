@@ -64,3 +64,19 @@ test_that("cohenD magnitude attribute is set", {
   d <- cohenD(x, y)
   expect_false(is.null(attr(d, "magnitude")))
 })
+
+
+
+test_that("cohenD and coefVarCI still work through the shared .nctCI", {
+  
+  x <- c(5.1, 4.8, 6.2, 5.5, 5.9, 6.4, 4.9, 5.7)
+  y <- c(4.2, 4.6, 4.1, 5.0, 4.4, 4.8, 4.3, 4.7)
+  
+  d <- cohenD(x, y, conf.level = 0.95)
+  expect_named(d, c("est", "lci", "uci"))
+  expect_lt(d[["lci"]], d[["est"]])
+  
+  cv <- coefVarCI(c(x, y), method = "nct")
+  expect_named(cv, c("est", "lci", "uci"))
+})
+

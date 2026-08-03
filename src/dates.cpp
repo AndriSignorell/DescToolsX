@@ -56,7 +56,7 @@ int isoWeekOf(const Date& thursday) {
 // ************************ week ***************
 
 // [[Rcpp::export]]
-IntegerVector isoWeek(DateVector x) {
+IntegerVector isoWeek_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   IntegerVector weeks(n);
@@ -77,7 +77,7 @@ IntegerVector isoWeek(DateVector x) {
 
 
 // [[Rcpp::export]]
-IntegerVector usWeek(DateVector x) {
+IntegerVector usWeek_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   IntegerVector weeks(n);
@@ -109,7 +109,7 @@ IntegerVector usWeek(DateVector x) {
 
 
 // [[Rcpp::export]]
-IntegerVector isoYear(DateVector x) {
+IntegerVector isoYear_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   IntegerVector res(n);
@@ -138,7 +138,7 @@ IntegerVector isoYear(DateVector x) {
 
 
 // [[Rcpp::export]]
-IntegerVector isoYearweek(DateVector x) {
+IntegerVector isoYearweek_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   IntegerVector res(n);
@@ -160,7 +160,7 @@ IntegerVector isoYearweek(DateVector x) {
 
 
 // [[Rcpp::export]]
-IntegerVector usYearweek(DateVector x) {
+IntegerVector usYearweek_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   IntegerVector res(n);
@@ -191,7 +191,7 @@ IntegerVector usYearweek(DateVector x) {
 
 
 // [[Rcpp::export]]
-IntegerVector usYearmonth(DateVector x) {
+IntegerVector usYearmonth_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   IntegerVector res(n);
@@ -218,7 +218,7 @@ IntegerVector usYearmonth(DateVector x) {
 // IntegerVector, so isLeapYear() handed back integers and
 // expect_true(isLeapYear(d)) failed on the type.
 // [[Rcpp::export]]
-LogicalVector isLeapYearDate(DateVector x) {
+LogicalVector isLeapYearDate_cpp(DateVector x) {
 
   R_xlen_t n = x.size();
   LogicalVector res(n);
@@ -241,7 +241,7 @@ LogicalVector isLeapYearDate(DateVector x) {
 
 
 // [[Rcpp::export]]
-LogicalVector isLeapYearInt(IntegerVector x) {
+LogicalVector isLeapYearInt_cpp(IntegerVector x) {
 
   R_xlen_t n = x.size();
   LogicalVector res(n);

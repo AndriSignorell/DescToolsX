@@ -60,20 +60,36 @@
 #' @concept date-time
 #' @export
 as.ym <- function(x) {
-
-  x <- suppressWarnings(as.integer(x))
-
-  y <- x %/% 100L
-  m <- x %% 100L
-
-  # is.na() first: a logical index containing NA is an error in
-  # subassignment, so the invalid positions must be resolved to FALSE/TRUE.
-  bad <- is.na(x) | y < 1000L | y > 3000L | m < 1L | m > 12L
-  x[bad] <- NA_integer_
-
-  # "num" was never a real class - the vector is an integer carrying the
-  # single class "ym", and print.ym() unclasses it for display.
-  structure(x, class = "ym")
+  
+  nm <- names(x)
+  
+  if (is.factor(x))
+    x <- as.character(x)
+  
+  z <- suppressWarnings(as.numeric(x))
+  
+  res <- rep(NA_integer_, length(z))
+  
+  candidate <- !is.na(z) &
+    is.finite(z) &
+    z == trunc(z) &
+    z >= 100001 &
+    z <= 300012
+  
+  idx <- which(candidate)
+  
+  if (length(idx)) {
+    y <- z[idx] %/% 100
+    m <- z[idx] %% 100
+    
+    valid <- y >= 1000 & y <= 3000 &
+      m >= 1 & m <= 12
+    
+    res[idx[valid]] <- as.integer(z[idx[valid]])
+  }
+  
+  names(res) <- nm
+  structure(res, class = "ym")
 }
 
 
@@ -111,33 +127,40 @@ print.ym <- function(x, ...) {
 #' @method addMonths ym
 #' @export
 addMonths.ym <- function(x, n, ...) {
-
-  if (!is.numeric(n) || any(n %% 1 != 0, na.rm = TRUE))
-    stop("'n' must be a whole number of months")
-
-  # Straight month arithmetic on a linear month index. This replaces the
-  # per-element mapply()/branch construction, which
-  #   * left 'res' undefined - and thus errored - for any value outside
-  #     the two hard-coded ranges,
-  #   * carried a YYYYMMDD branch that as.ym() can never produce, and
-  #   * returned a bare numeric, so a ym lost its class after one
-  #     operation and the next '+' silently fell through to the Date
-  #     method.
-  # NA propagates by itself, so no special-casing is needed.
-  idx <- unclass(x) %/% 100L * 12L + (unclass(x) %% 100L - 1L) + as.integer(n)
-
-  structure(as.integer(idx %/% 12L * 100L + idx %% 12L + 1L), class = "ym")
+  
+  if (!is.numeric(n) ||
+      any(!is.na(n) & (!is.finite(n) | n %% 1 != 0)))
+    stop("'n' must contain whole finite numbers or NA")
+  
+  idx <- unclass(x) %/% 100 * 12 +
+    (unclass(x) %% 100 - 1) +
+    n
+  
+  res <- idx %/% 12 * 100 + idx %% 12 + 1
+  
+  as.ym(res)
 }
+
 
 
 #' @export
 `+.ym` <- function(e1, e2) {
+  
   if (missing(e2))
     return(e1)
-  if (inherits(e2, "ym"))
+  
+  if (inherits(e1, "ym") && inherits(e2, "ym"))
     stop("two 'ym' objects cannot be added")
-  addMonths(e1, e2)
+  
+  if (inherits(e1, "ym"))
+    return(addMonths(e1, e2))
+  
+  if (inherits(e2, "ym"))
+    return(addMonths(e2, e1))
+  
+  stop("one operand must be a 'ym' object")
 }
+
 
 #' @export
 `-.ym` <- function(e1, e2) {

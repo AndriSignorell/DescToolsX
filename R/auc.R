@@ -1,39 +1,43 @@
 
-#' Compute Area Under the Curve (auc)
+#' Compute Area Under the Curve
 #'
 #' Calculates the area under a curve defined by points \code{(x, y)} using
 #' different numerical integration methods.
 #'
 #' @param x,y numeric vectors of equal length defining the curve coordinates
-#' @param from,to numeric values specifying the integration interval. Defaults to
-#'   the range of \code{x}.
+#' @param from,to single numeric values specifying the integration interval;
+#'   by default, the range of \code{x}
 #' @param method character string specifying the integration method:
-#'   \code{"trapezoid"} (default), \code{"step"}, or \code{"spline"}
-#' @param absoluteArea logical; if \code{TRUE}, areas below zero are treated
-#'   as positive
-#' @param subdivisions integer; number of subdivisions for spline integration
-#' @param na.rm logical; if \code{TRUE}, incomplete \code{(x, y)} pairs are
-#'   removed before computation. If \code{FALSE} and missing values are
-#'   present, \code{NA_real_} is returned.
-#' @param ... additional arguments passed to \code{\link[stats]{approx}}
+#'   \code{"trapezoid"}, \code{"step"}, or \code{"spline"}
+#' @param absoluteArea logical; whether areas below zero are counted as positive
+#' @param subdivisions positive whole number specifying the maximum number of
+#'   subdivisions used for spline integration
+#' @param na.rm logical; whether incomplete \code{(x, y)} pairs are removed
+#' @param ... additional arguments passed to \code{\link[stats]{approx}} for
+#'   trapezoidal interpolation
 #'
-#' @return a numeric value representing the computed area under the curve
+#' @return a numeric value representing the computed area
 #'
 #' @details
-#' The function supports three methods:
+#' The available methods are:
 #' \itemize{
-#'   \item \strong{trapezoid}: Linear interpolation between points.
-#'   \item \strong{step}: Step function using left endpoints.
-#'   \item \strong{spline}: Smooth interpolation using cubic splines.
+#'   \item \code{"trapezoid"}: linear interpolation between successive points
+#'   \item \code{"step"}: a right-continuous step function using the value at
+#'     the left endpoint of each interval
+#'   \item \code{"spline"}: a natural cubic spline integrated numerically
 #' }
 #'
-#' If \code{absoluteArea = TRUE}, the function accounts for sign changes by
-#' inserting zero-crossings and summing absolute areas.
+#' For \code{method = "step"}, an integration boundary lying between two
+#' observed \code{x} values retains the value of the preceding point. No
+#' linear interpolation is performed at the boundary.
 #'
-#' \code{from} and \code{to} must lie inside the range of \code{x} for the
-#' interpolating methods: outside it there is nothing to interpolate, and
-#' \code{\link[stats]{approx}} would return \code{NA} for those points and
-#' hence an \code{NA} area. Extrapolation is not attempted.
+#' If \code{absoluteArea = TRUE}, the absolute value of the interpolated curve
+#' is integrated. Sign changes in linear segments are split at their exact
+#' zero-crossing. For the step method, the absolute values of the constant
+#' step heights are used.
+#'
+#' Both integration limits must lie inside the range of \code{x}.
+#' Extrapolation is not performed.
 #'
 #' @examples
 #' x <- c(1, 2, 3, 5)
@@ -44,6 +48,24 @@
 #' auc(x, y, method = "spline")
 #' auc(x, y, absoluteArea = TRUE)
 #'
+#' # interval boundaries between observed x values
+#' auc(
+#'   x = c(0, 1, 2),
+#'   y = c(-2, 10, 4),
+#'   from = 0.5,
+#'   to = 1.5,
+#'   method = "step"
+#' )
+#'
+#' auc(
+#'   x = c(0, 1, 2),
+#'   y = c(-2, 10, 4),
+#'   from = 0.5,
+#'   to = 1.5,
+#'   method = "step",
+#'   absoluteArea = TRUE
+#' )
+#'
 #' @seealso \code{\link[stats]{approx}}, \code{\link[stats]{splinefun}},
 #'   \code{\link[stats]{integrate}}
 #'
@@ -51,91 +73,148 @@
 #' @concept model-evaluation
 #' @concept roc
 #' @export
-auc <- function(x, y, from = min(x, na.rm = TRUE), to = max(x, na.rm = TRUE),
-                method = c("trapezoid", "step", "spline"), absoluteArea = FALSE,
-                subdivisions = 100, na.rm = FALSE, ...) {
-
-  # calculates area under the curve
-  # example:
-  #   auc(x = c(1, 2, 3, 5), y = c(0, 1, 1, 2))
-  #   auc(x = c(2, 3, 4, 5), y = c(0, 1, 1, 2))
-
+auc <- function(x, y, from = min(x, na.rm = TRUE),
+                to = max(x, na.rm = TRUE),
+                method = c("trapezoid", "step", "spline"),
+                absoluteArea = FALSE, subdivisions = 100,
+                na.rm = FALSE, ...) {
+  
   method <- match.arg(method)
-
+  
+  if (!is.numeric(x) || !is.numeric(y))
+    stop("'x' and 'y' must be numeric vectors")
+  
   if (length(x) != length(y))
-    stop("length x must equal length y")
-
+    stop("'x' and 'y' must have equal lengths")
+  
+  if (!is.logical(absoluteArea) || length(absoluteArea) != 1L ||
+      is.na(absoluteArea))
+    stop("'absoluteArea' must be TRUE or FALSE")
+  
+  if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("'na.rm' must be TRUE or FALSE")
+  
+  if (method == "spline" &&
+      (!is.numeric(subdivisions) || length(subdivisions) != 1L ||
+       !is.finite(subdivisions) || subdivisions < 1 ||
+       subdivisions != floor(subdivisions)))
+    stop("'subdivisions' must be a single positive whole number")
+  
   if (na.rm) {
-    idx <- complete.cases(cbind(x, y))
-    x <- x[idx]
-    y <- y[idx]
-
+    keep <- complete.cases(x, y)
+    x <- x[keep]
+    y <- y[keep]
+    
   } else if (anyNA(x) || anyNA(y)) {
-    # approx() defaults to na.rm = TRUE and would have dropped the missing
-    # pairs silently, while splinefun() errors - so na.rm = FALSE meant
-    # three different behaviours for three methods. Be explicit instead.
     return(NA_real_)
   }
-
-  if (length(x) < 2)
+  
+  if (length(x) < 2L)
     return(NA_real_)
-
+  
+  if (any(!is.finite(x)) || any(!is.finite(y)))
+    stop("'x' and 'y' must contain finite values")
+  
   o <- order(x)
   x <- x[o]
   y <- y[o]
-
-  # 'from'/'to' are promises evaluated here for the first time, i.e. after
-  # the NA removal and sorting above - force them before they are used so
-  # the checks below see the same values the integration will.
+  
+  if (anyDuplicated(x))
+    stop("'x' values must be unique")
+  
   force(from)
   force(to)
-
-  if (!is.numeric(from) || length(from) != 1L || !is.finite(from) ||
-      !is.numeric(to) || length(to) != 1L || !is.finite(to))
-    stop("'from' and 'to' must be single finite numbers")
-
+  
+  if (!is.numeric(from) || length(from) != 1L || !is.finite(from))
+    stop("'from' must be a single finite number")
+  
+  if (!is.numeric(to) || length(to) != 1L || !is.finite(to))
+    stop("'to' must be a single finite number")
+  
   if (from > to)
     stop("'from' must not be greater than 'to'")
-
-  if (method != "spline" && (from < min(x) || to > max(x)))
+  
+  if (from < x[1L] || to > x[length(x)])
     stop("'from' and 'to' must lie within the range of 'x'")
-
-  # inserts the zero-crossings of the polyline so that sign changes are
-  # split into separate, individually positive pieces
-  .addZeroCrossings <- function(x, y) {
-    idx <- which(diff(y >= 0) != 0)
-    if (length(idx) == 0L)
-      return(list(x = x, y = y))
-    cross <- x[idx] - y[idx] * (x[idx + 1L] - x[idx]) / (y[idx + 1L] - y[idx])
-    list(x = c(x, cross), y = c(y, rep(0, length(idx))))
-  }
-
-  if (method == "trapezoid" || method == "step") {
-
-    if (absoluteArea) {
-      z <- .addZeroCrossings(x, y)
+  
+  if (from == to)
+    return(0)
+  
+  knots <- c(
+    from,
+    x[x > from & x < to],
+    to
+  )
+  
+  if (method == "step") {
+    
+    left <- knots[-length(knots)]
+    idx <- findInterval(left, x)
+    heights <- y[idx]
+    
+    if (absoluteArea)
+      heights <- abs(heights)
+    
+    res <- sum(diff(knots) * heights)
+    
+  } else if (method == "trapezoid") {
+    
+    values <- approx(x, y, xout = knots, ...)$y
+    
+    yLeft  <- values[-length(values)]
+    yRight <- values[-1L]
+    widths <- diff(knots)
+    
+    if (!absoluteArea) {
+      
+      areas <- widths * (0.5 * yLeft + 0.5 * yRight)
+      
     } else {
-      z <- list(x = x, y = y)
+      
+      a <- abs(yLeft)
+      b <- abs(yRight)
+      
+      areas <- widths * (0.5 * a + 0.5 * b)
+      
+      crossing <- (yLeft < 0 & yRight > 0) |
+        (yLeft > 0 & yRight < 0)
+      
+      if (any(crossing)) {
+        
+        ac <- a[crossing]
+        bc <- b[crossing]
+        
+        scale <- pmax(ac, bc)
+        fraction <- (ac / scale) /
+          ((ac / scale) + (bc / scale))
+        
+        areas[crossing] <-
+          0.5 * widths[crossing] *
+          (ac * fraction + bc * (1 - fraction))
+      }
     }
-
-    xout <- sort(unique(c(from, to, z$x[z$x > from & z$x < to])))
-    values <- approx(z$x, z$y, xout = xout, ...)
-
-    yv <- if (absoluteArea) abs(values$y) else values$y
-
-    res <- if (method == "trapezoid")
-      0.5 * sum(diff(values$x) * (yv[-1L] + yv[-length(yv)]))
-    else
-      sum(diff(values$x) * yv[-length(yv)])
-
+    
+    res <- sum(areas)
+    
   } else {
-
-    sf <- splinefun(x, y, method = "natural")
-    myfunction <- if (absoluteArea) function(z) abs(sf(z)) else sf
-
-    res <- integrate(myfunction, lower = from, upper = to,
-                     subdivisions = subdivisions)$value
+    
+    splineFunction <- splinefun(x, y, method = "natural")
+    
+    integrand <- if (absoluteArea) {
+      function(z) abs(splineFunction(z))
+    } else {
+      splineFunction
+    }
+    
+    res <- integrate(
+      integrand,
+      lower = from,
+      upper = to,
+      subdivisions = subdivisions
+    )$value
   }
-
+  
   return(res)
 }
+
+

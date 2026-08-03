@@ -7,8 +7,8 @@
 tschuprowT(x, y = NULL, correct = FALSE, ...)
 }
 \arguments{
-\item{x}{a vector of categorical data or a contingency table
-(matrix or \code{table})}
+\item{x}{a vector of categorical data (then \code{y} must be given) or a
+two-dimensional contingency table (matrix or \code{table})}
 
 \item{y}{optional second categorical vector. If provided, a contingency
 table is constructed from \code{x} and \code{y}.}
@@ -16,7 +16,8 @@ table is constructed from \code{x} and \code{y}.}
 \item{correct}{logical; if \code{TRUE}, applies a bias correction
 according to Bergsma (2013).}
 
-\item{...}{additional arguments passed to \code{\link[base]{table}}}
+\item{...}{additional arguments passed to \code{\link[base]{table}}. This
+refers only to the vector interface.}
 }
 \value{
 a numeric scalar containing Tschuprow's T
@@ -28,7 +29,7 @@ variables based on the chi-squared statistic.
 \details{
 If \code{y} is provided, a contingency table is created using
 \code{table(x, y, ...)}. Otherwise, \code{x} is assumed to already be
-a contingency table.
+a two-dimensional contingency table.
 
 Tschuprow's T is defined as:
 \deqn{
@@ -40,6 +41,13 @@ of the contingency table.
 
 If \code{correct = TRUE}, a bias-corrected version is computed based on
 Bergsma (2013), which adjusts the estimate especially for small samples.
+It replaces \eqn{\phi^2 = \chi^2/n} by
+\eqn{\tilde\phi^2 = \max(0, \phi^2 - (r-1)(c-1)/(n-1))} and the dimensions
+by \eqn{\tilde r = r - (r-1)^2/(n-1)} and
+\eqn{\tilde c = c - (c-1)^2/(n-1)}.
+
+For a 2x2 table T coincides with Cramer's V and with the absolute value of
+the phi coefficient; the sign of the association is not reported.
 }
 \examples{
 # Example with vectors
@@ -49,11 +57,11 @@ tschuprowT(x, y)
 
 # Example with contingency table
 tab <- matrix(c(10, 20, 30, 40), nrow = 2)
-tschuprowT(tab)
+tschuprowT(tab)               # 0.08908708
 
-# Bias-corrected version
+# Bias-corrected version: the correction exceeds the estimate here,
+# so the corrected value is 0
 tschuprowT(tab, correct = TRUE)
-
 
 }
 \references{
@@ -61,16 +69,15 @@ Tschuprow, A. A. (1939). \emph{Principles of the Mathematical Theory of
 Correlation}. W. Hodge & Co.
 
 Bergsma, W. (2013). A bias-correction for Cramer's V and Tschuprow's T.
-\emph{Journal of the Korean Statistical Society}, 42(3), 323–328.
+\emph{Journal of the Korean Statistical Society}, 42(3), 323--328.
 https://doi.org/10.1016/j.jkss.2012.10.002
 }
 \seealso{
-\code{\link{chisq.test}}
+\code{\link[stats]{chisq.test}}, \code{\link{cramerV}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},

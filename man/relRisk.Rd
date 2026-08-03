@@ -22,8 +22,9 @@ computed.}
 \item{method}{character string specifying the confidence interval method.
 One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
 
-\item{delta}{small continuity correction added to the event counts for the
-Wald interval. Only used if \code{method = "wald"}.}
+\item{delta}{small continuity correction added to the event counts in the
+\emph{standard error} of the Wald interval. Only used if
+\code{method = "wald"}; see the note below.}
 
 \item{conf.level}{confidence level for the interval estimate. If
 \code{NA} (default), only the point estimate is returned.}
@@ -52,24 +53,35 @@ columns:
 
 \preformatted{
                outcome = 1   outcome = 0
-exposed = 1        n00           n01
-exposed = 0        n10           n11
+exposed = 1        x1           n1 - x1
+exposed = 0        x2           n2 - x2
 }
 
 The relative risk is defined as:
 
 \deqn{
-RR =
-\frac{n_{00} / (n_{00} + n_{01})}
-     {n_{10} / (n_{10} + n_{11})}
+RR = \frac{x_1 / n_1}{x_2 / n_2}
 }
 
 Confidence intervals can be calculated using the score method of Koopman
 (1984), a Wald approximation, or via transformation of the odds ratio.
 
 The score interval is based on the method of Koopman (1984) and
-Miettinen and Nurminen (1985). The Wald interval is asymptotic and may
-perform poorly for small counts or extreme probabilities.
+Miettinen and Nurminen (1985). It is obtained from the closed-form
+solution of the cubic equation in the constrained maximum likelihood
+estimate; if the unexposed group has no non-events (\code{x2 == n2}) that
+cubic has a root on the parameter boundary and its roots can no longer be
+assigned to the two interval bounds by their order alone. This case is
+therefore solved directly from the score statistic
+(\code{\link[stats]{uniroot}}); both routes agree to numerical precision
+wherever the closed form applies.
+
+The Wald interval is asymptotic and may perform poorly for small counts or
+extreme probabilities. Note that \code{delta} enters the standard error
+only, not the point estimate the interval is centred on: with a zero cell
+the point estimate is \code{0} or \code{Inf} and the Wald interval
+degenerates accordingly. Use \code{method = "score"} for tables with zero
+cells.
 
 If the table orientation differs from the required structure, rows or
 columns can be reversed using \code{\link[bedrock]{revX}} or transposed
@@ -104,6 +116,9 @@ relRisk(
   conf.level = 0.95,
   method = "use-or"
 )
+
+# unexposed group without non-events: the score interval is still valid
+relRisk(matrix(c(2, 5, 3, 0), nrow = 2), conf.level = 0.95)
 
 
 }

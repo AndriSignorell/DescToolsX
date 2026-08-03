@@ -89,10 +89,8 @@
 #'
 #'
 #' @family effect.size  
-#' @concept effect-size  
+#' @concept effect-size
 #' @concept binary-outcome
-#'
-#'
 #' @export
 oddsRatio <- function(x, ...) {
   UseMethod("oddsRatio")

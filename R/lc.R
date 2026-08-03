@@ -150,10 +150,8 @@ NULL
 
 
 #' @family inequality  
-#' @concept inequality  
+#' @concept inequality
 #' @concept distribution-visualization
-#'
-#'
 #' @export
 lc <- function(x, ...)
   UseMethod("lc")

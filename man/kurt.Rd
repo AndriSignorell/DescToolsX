@@ -82,6 +82,13 @@ If not further specified the boot ci type will be chosen as \code{"bca"}.\cr
 
 This implementation is comparably fast, as the expensive sums are coded in C.
 }
+\section{Random number generation}{
+
+\code{method = "boot"} - the default - resamples and therefore advances
+R's global random number generator. Call \code{\link[base]{set.seed}}
+beforehand for reproducible intervals.
+}
+
 \examples{
 
 kurt(Pizza$price, na.rm=TRUE)
@@ -102,7 +109,7 @@ Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 kurtosis. \emph{The Statistician}, 47, 183-189.
 }
 \seealso{
-\link{meanX}, \link{sdX}, similar code in \pkg{e1071}
+\link{meanX}, \link{sdX}, \link{skew}, similar code in \pkg{e1071}
 
 Other shape:
 \code{\link[=skew]{skew()}}

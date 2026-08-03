@@ -16,8 +16,15 @@
 #' \frac{1}{n} \sum \frac{2 |ref - x|}{|x| + |ref|}
 #' }
 #'
-#' Values are bounded between 0 and 2. Division by zero is handled by
-#' returning \code{NA} for those terms.
+#' Values are bounded between 0 and 2. Note that this is a ratio, not a
+#' percentage: the factor 100 of the original definition is not applied, which
+#' is the form for which the bound of 2 holds.
+#'
+#' A term is undefined when \code{x} and \code{ref} are both zero, and is set
+#' to \code{NA}. With the default \code{na.rm = FALSE} a single such pair
+#' therefore makes the whole result \code{NA}; with \code{na.rm = TRUE} those
+#' terms are dropped along with genuinely missing ones, so the mean is taken
+#' over fewer than \code{length(x)} terms.
 #'
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
@@ -31,7 +38,6 @@
 #'
 #'
 #' @family model.metrics  
-#' @concept model-evaluation  
 #' @concept prediction-error
 #'
 #'
@@ -44,9 +50,18 @@ smape <- function(x, ...) {
 #' @rdname smape
 #' @export
 smape.lm <- function(x, ...) {
+  
+  ref <- model.response(model.frame(x))
+  
+  # glm objects inherit from lm, so this method is also reached for, say, a
+  # logistic fit, where the response is a factor or a two-column matrix and
+  # the arithmetic below would fail with an unrelated message.
+  if(!is.numeric(ref) || !is.null(dim(ref)))
+    stop("the model response must be a numeric vector to compute smape()")
+  
   smape(
     predict(x, type = "response"),
-    model.response(model.frame(x)),
+    ref,
     ...
   )
 }
@@ -54,21 +69,34 @@ smape.lm <- function(x, ...) {
 
 #' @rdname smape
 #' @param ref numeric vector of reference (true) values
-#' @param na.rm logical; whether to remove missing values
+#' @param na.rm logical; whether to remove missing and undefined terms
 #' @export
 smape.default <- function(x, ref, na.rm = FALSE, ...) {
   
+  if(!is.numeric(x) || !is.numeric(ref))
+    stop("'x' and 'ref' must be numeric")
+  
   if(length(x) != length(ref))
     stop("'x' and 'ref' must have same length")
+  
+  if(!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("'na.rm' must be a single non-missing logical value")
   
   denom <- abs(x) + abs(ref)
   num <- 2 * abs(ref - x)
   
   # avoid division by zero
   res <- num / denom
-  res[denom == 0] <- NA_real_
   
-  mean(res, na.rm = na.rm, ...)
+  # denom is zero only when both values are, in which case num is zero too and
+  # the term is 0/0. A logical index containing NA (from a missing x or ref) is
+  # allowed here because the replacement has length 1; those positions are
+  # skipped and are already NA.
+  res[!is.na(denom) & denom == 0] <- NA_real_
+  
+  # '...' is deliberately not forwarded to mean(): it would accept trim= and,
+  # worse, swallow a mistyped argument name without complaint.
+  mean(res, na.rm = na.rm)
 }
 
 
@@ -81,4 +109,3 @@ smape.default <- function(x, ref, na.rm = FALSE, ...) {
 # Armstrong intended all along, although neither has ever managed to include it correctly
 # in one of their papers or books.
 # source: http://robjhyndman.com/hyndsight/smape/
-

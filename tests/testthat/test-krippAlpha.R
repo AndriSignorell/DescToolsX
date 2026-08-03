@@ -54,3 +54,20 @@ test_that("krippAlpha conf.level returns named vector est/lci/uci", {
   expect_length(res, 3)
   expect_named(res, c("est","lci","uci"))
 })
+
+
+
+test_that("krippAlpha returns a consistent shape without an interval", {
+  
+  dat <- matrix(c(1, 2, 3, 3, 2, 1, 4, 1, 2, NA, 3, 4), nrow = 3, byrow = TRUE)
+  
+  # out = "ext" is what returns the list with $ci; the default "def"
+  # gives a bare scalar, which is why res$ci failed on an atomic vector
+  res <- krippAlpha(dat, out = "ext")
+  
+  # $ci was a bare logical NA, so res$ci[["est"]] failed
+  expect_named(res$ci, c("est", "lci", "uci"))
+  expect_type(res$ci, "double")
+  
+  expect_type(krippAlpha(dat), "double")
+})

@@ -1140,9 +1140,57 @@ bg      # symbol fill color
 
 ## 8.1 CI Functions
 
+### 8.1.1 Default confidence level
+
 Dedicated CI functions (`meanCI`, `binomCI`, etc.) use `conf.level = 0.95` as default.
 
 Functions that optionally include a CI use `conf.level = NA`.
+
+### 8.1.2 Where the interval lives
+
+An interval either lives inside the estimator (`conf.level = NA` in its
+signature) or in a dedicated sibling named `<estimator>CI`. Which of the two
+applies is not a matter of taste or of how long the estimator has grown:
+
+> **Split** the interval into a `<estimator>CI()` function when the estimator
+> admits inputs or options for which no interval is defined or implemented.
+> **Keep it inline** when every admissible call has one.
+
+Worked through the existing suite:
+
+| Estimator | admissible calls without an interval | Placement |
+|---|---|---|
+| `coefVar()` | `lm` / `aov` methods | `coefVarCI()` |
+| `varX()` | `Freq` method, weighted input | `varCI()` |
+| `meanX()` | `trim > 0` (Winsorized variance not implemented) | `meanCI()` |
+| `skew()`, `kurt()` | none — the bootstrap carries every combination | inline |
+| `tukeyBiweight()` | none | inline |
+| `uncertCoef()`, `yuleQ()` | none | inline |
+
+Rationale: an inline `conf.level` that works for some argument combinations
+and not for others is the "documented argument without effect" failure at the
+level of the API rather than of a single branch. The number of arguments an
+estimator carries is *not* the criterion — `skew()` and `tukeyBiweight()` both
+carry `method`, `R` and further bootstrap arguments and are still correctly
+inline, because there is no way to call them that leaves the interval
+undefined.
+
+Three consequences that come with a split:
+
+- The estimator must **not** silently accept `conf.level`. Otherwise the caller
+  has to guess which of the two designs a given function follows.
+- The `<estimator>CI()` function **calls** the estimator instead of
+  reimplementing it, and passes on every argument that changes the estimate
+  (`weights`, `unbiased`, ...). Recomputing the point estimate separately is
+  how `coefVarCI()` once ended up centring its interval on the plain,
+  unweighted CV.
+- Both directions carry an `@seealso` to the other. With a rule that depends on
+  whether a theory exists rather than on the function name, discoverability is
+  the only thing the user has to go on.
+
+*Status: adopted 2026-08, to be re-examined against practice — the criterion is
+new, the placements in the table above are the existing state it was derived
+from.*
 
 ## 8.2 Numerical Behavior
 

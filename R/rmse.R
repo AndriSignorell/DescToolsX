@@ -26,11 +26,10 @@
 #' fit <- lm(mpg ~ hp, data = mtcars)
 #' rmse(fit)
 #'
-#' @seealso \code{\link{mean}}, \code{\link{sqrt}}
+#' @seealso \code{\link{mse}}, \code{\link{mae}}
 #'
 #'
 #' @family model.metrics  
-#' @concept model-evaluation  
 #' @concept prediction-error
 #'
 #'
@@ -43,9 +42,17 @@ rmse <- function(x, ...) {
 #' @rdname rmse
 #' @export
 rmse.lm <- function(x, ...) {
+  
+  ref <- model.response(model.frame(x))
+  
+  # glm objects inherit from lm, so this method is also reached for, say, a
+  # logistic fit, where the response is a factor or a two-column matrix.
+  if(!is.numeric(ref) || !is.null(dim(ref)))
+    stop("the model response must be a numeric vector to compute rmse()")
+  
   rmse(
     predict(x, type = "response"),
-    model.response(model.frame(x)),
+    ref,
     ...
   )
 }
@@ -62,4 +69,3 @@ rmse.default <- function(x, ref, na.rm = FALSE, ...) {
   
   sqrt(mse(x, ref, na.rm = na.rm, ...))
 }
-

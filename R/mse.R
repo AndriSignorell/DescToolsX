@@ -29,11 +29,11 @@
 #' @seealso \code{\link{mean}}
 #'
 #'
-#' @family model.metrics  
-#' @concept model-evaluation  
+#' @seealso \code{\link{mae}}, \code{\link{mape}}, \code{\link{nmse}}
+#'
+#' @family model.metrics
+#' @concept model-evaluation
 #' @concept prediction-error
-#'
-#'
 #' @export
 mse <- function(x, ...) {
   UseMethod("mse")
@@ -60,5 +60,8 @@ mse.default <- function(x, ref, na.rm = FALSE, ...) {
   if(length(x) != length(ref))
     stop("'x' and 'ref' must have same length")
   
-  mean((ref - x)^2, na.rm = na.rm, ...)
+  # no `...` into mean(): its only other argument is `trim`, and a
+  # trimmed mean of squared errors is not an MSE. The dots stay in the
+  # signature for S3 consistency and are ignored here, as in mae().
+  mean((ref - x)^2, na.rm = na.rm)
 }

@@ -46,3 +46,20 @@ test_that("hmean CI: lci < estimate < uci (for positive data)", {
   expect_lt(res[2], res[1])
   expect_gt(res[3], res[1])
 })
+
+test_that("hmean closes the open side at 0, not at NA", {
+  
+  set.seed(2)
+  x <- rlnorm(40)
+  
+  left  <- hmean(x, conf.level = 0.95, sides = "left")
+  right <- hmean(x, conf.level = 0.95, sides = "right")
+  
+  expect_identical(unname(left[["uci"]]), Inf)
+  expect_equal(unname(right[["lci"]]), 0)
+  expect_false(is.na(right[["lci"]]))
+  
+  expect_named(left, c("est", "lci", "uci"))
+})
+
+

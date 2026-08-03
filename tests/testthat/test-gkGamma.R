@@ -44,3 +44,16 @@ test_that("gkGamma accepts two vectors directly", {
   g <- gkGamma(x, y)
   expect_length(g, 1)
 })
+
+
+
+test_that("gkGamma forwards its dots and matches ordAssocs", {
+  
+  tab <- as.table(rbind(c(26, 26, 23, 18, 9), c(6, 7, 9, 14, 23)))
+  
+  expect_equal(gkGamma(tab), unname(ordAssocs(tab, which = "gamma")$gamma))
+  
+  g <- gkGamma(tab, conf.level = 0.95)
+  expect_named(g, c("est", "lci", "uci"))
+})
+

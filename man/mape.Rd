@@ -23,7 +23,10 @@ model objects (e.g. \code{lm}).}
 \item{na.rm}{logical; whether to remove missing values}
 }
 \value{
-a numeric scalar containing the MAPE
+a numeric scalar containing the MAPE, as a \strong{fraction},
+not a percentage: a mean absolute relative error of six percent is
+returned as \code{0.06}. Multiply by 100 for the percentage form. The
+name is conventional; the definition below is the one implemented.
 }
 \description{
 Computes the mean absolute percentage error (MAPE) between predicted

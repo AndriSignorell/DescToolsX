@@ -99,6 +99,13 @@ The original internal estimator is accessible as
 \note{
 Adapted from code by Martin Maechler to conform to package standards
 }
+\section{Random number generation}{
+
+\code{method = "boot"} resamples and therefore advances R's global
+random number generator. Call \code{\link[base]{set.seed}} beforehand
+for reproducible intervals.
+}
+
 \examples{
 huberM(c(1:9, 1000))
 mad(c(1:9, 1000))

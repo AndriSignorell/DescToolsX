@@ -64,3 +64,35 @@ test_that("corPolychor warns and removes empty rows/columns", {
   # Expect warning about empty columns
   expect_warning(corPolychor(tab), "empty column")
 })
+
+
+test_that("corPolychor is not truncated at tanh(2)", {
+  
+  # two nearly identical ordinal items: the latent correlation is close
+  # to 1 and used to saturate at 0.964, the boundary of the old c(-2, 2)
+  # search interval
+  set.seed(4)
+  z <- rnorm(400)
+  a <- cut(z, breaks = c(-Inf, -0.5, 0.5, Inf))
+  b <- cut(z + rnorm(400, sd = 0.05), breaks = c(-Inf, -0.5, 0.5, Inf))
+  
+  rho <- corPolychor(a, b)
+  
+  expect_gt(rho, 0.97)
+  expect_lt(rho, 1)
+})
+
+
+test_that("standard errors require ML", {
+  set.seed(5)
+  a <- factor(sample(1:3, 100, replace = TRUE), ordered = TRUE)
+  b <- factor(sample(1:3, 100, replace = TRUE), ordered = TRUE)
+  
+  expect_error(corPolychor(a, b, method = "two-step", se = TRUE), "ML")
+  
+  res <- corPolychor(a, b, method = "ML", se = TRUE)
+  expect_s3_class(res, "Polychor")
+  expect_identical(res$method, "ML")
+})
+
+

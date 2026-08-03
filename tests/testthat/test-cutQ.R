@@ -66,3 +66,22 @@ test_that("cutQ result has roughly equal group sizes for continuous data", {
   # each quartile should be around 100; allow +-5% tolerance
   expect_true(all(counts >= 90 & counts <= 110))
 })
+
+
+
+test_that("cutQ handles degenerate and tied input", {
+  
+  expect_error(cutQ(rnorm(10), breaks = 1), "at least 2")
+  
+  # heavily tied data: the level construction used to index past the end
+  # of the bounds table, and reposition() collapsed the 0.8 and 0.9
+  # quantiles onto the same observation, which made cut() abort with
+  # "'breaks' are not unique"
+  x <- c(rep(1, 20), rep(2, 5))
+  expect_silent(res <- suppressWarnings(cutQ(x, breaks = 10)))
+  expect_false(anyNA(levels(res)))
+  expect_length(res, length(x))
+  
+  # a single distinct value leaves no interval at all
+  expect_silent(suppressWarnings(cutQ(rep(3, 10), breaks = 4)))
+})

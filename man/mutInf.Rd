@@ -84,10 +84,11 @@ Elements of Information Theory (2nd ed.).
 Wiley.
 }
 \seealso{
+\code{\link{entropy}}, \code{\link{uncertCoef}}
+
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=entropy]{entropy()}},
 \code{\link[=gkTau]{gkTau()}},
 \code{\link[=lambda]{lambda()}},
 \code{\link[=phi]{phi()}},

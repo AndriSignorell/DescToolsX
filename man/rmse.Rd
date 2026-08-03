@@ -47,7 +47,7 @@ rmse(fit)
 
 }
 \seealso{
-\code{\link{mean}}, \code{\link{sqrt}}
+\code{\link{mse}}, \code{\link{mae}}
 
 Other model.metrics:
 \code{\link[=auc]{auc()}},
@@ -59,6 +59,5 @@ Other model.metrics:
 \code{\link[=nmse]{nmse()}},
 \code{\link[=smape]{smape()}}
 }
-\concept{model-evaluation}
 \concept{model.metrics}
 \concept{prediction-error}

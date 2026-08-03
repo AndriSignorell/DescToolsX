@@ -12,8 +12,12 @@ or a single vector if \code{y} is provided}
 \item{conf.level}{confidence level for confidence intervals.
 If \code{NA}, no confidence interval is computed.}
 
-\item{sides}{alternative hypothesis:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}}
+\item{sides}{character string specifying the side of the confidence
+interval, one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. It names the side on which the \emph{finite} bound
+lies, not the direction of an alternative hypothesis - see
+\link{ConfidenceIntervals} for the full definition and for the
+difference to \pkg{DescTools}.}
 
 \item{method}{method used for inference; available methods depend on the
 measure}
@@ -61,8 +65,8 @@ For ordinal data, weighted approaches are available.
 
 Most functions support confidence intervals via \code{conf.level}.
 If \code{conf.level = NA}, no interval is computed.
-One-sided intervals can be requested via \code{sides}
-("two.sided", "left", "right").
+One-sided intervals can be requested via \code{sides}, which names the
+side carrying the finite bound; see \link{ConfidenceIntervals}.
 
 Inference methods may include classical large-sample approaches
 or bootstrap methods ("boot"). Specific measures may provide
@@ -84,8 +88,8 @@ Following agreement measures are implemented in \strong{DescToolsX}:
 \verb{  }\link{cohenKappa}       \tab Cohen's Kappa \cr
 \verb{  }\code{scottsPi}         \tab Scott's Pi \cr
 \verb{  }\code{gwetAC1}          \tab Gwet's AC1 / AC2 \cr
-\verb{  }\link{kappaM}      \tab Fleiss' Kappa \cr
-\verb{  }\link{kappaM}      \tab Light's Kappa \cr
+\verb{  }\link{cronbachAlpha}    \tab Cronbach's Alpha \cr
+\verb{  }\link{kappaM}          \tab Fleiss' and Light's Kappa \cr
 \verb{  }\link{krippAlpha}\tab Krippendorff's Alpha \cr
 \verb{  }\link{kendallW}         \tab Kendall's W \cr
 \verb{  }\link{icc}              \tab Intraclass Correlation (ICC) \cr
@@ -101,7 +105,7 @@ Psychological Bulletin.
 
 Krippendorff, K. (2004) Content Analysis.
 
-Shrout, P. E., & Fleiss, J. L. (1979) Intraclass correlations.
+Shrout, P. E. and Fleiss, J. L. (1979) Intraclass correlations.
 
 Lin, L. I.-K. (1989) A concordance correlation coefficient.
 }

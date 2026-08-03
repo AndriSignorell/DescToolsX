@@ -1,49 +1,42 @@
-test_that("phi returns a single numeric value", {
+
+test_that("phi() equals sqrt(chi2 / n)", {
+
   tab <- matrix(c(10, 20, 30, 40), nrow = 2)
-  res <- phi(tab)
-  expect_length(res, 1)
-  expect_true(is.numeric(res))
+  expect_equal(phi(tab), 200 / sqrt(40 * 60 * 30 * 70), tolerance = 1e-8)
+  expect_equal(phi(tab),
+               sqrt(suppressWarnings(
+                 chisq.test(tab, correct = FALSE)$statistic) / sum(tab)),
+               ignore_attr = TRUE)
 })
 
-test_that("phi is 0 for an independent 2x2 table", {
-  tab <- matrix(rep(25, 4), nrow = 2)
-  expect_equal(phi(tab), 0, tolerance = 1e-10)
-})
 
-test_that("phi is 1 for a perfectly associated 2x2 table", {
-  tab <- matrix(c(50, 0, 0, 50), nrow = 2)
-  expect_equal(phi(tab), 1, tolerance = 1e-10)
-})
+test_that("phi() is unsigned", {
 
-test_that("phi is non-negative", {
   tab <- matrix(c(10, 20, 30, 40), nrow = 2)
-  expect_gte(phi(tab), 0)
+  signedPhi <- (tab[1, 1] * tab[2, 2] - tab[1, 2] * tab[2, 1]) /
+    sqrt(prod(rowSums(tab), colSums(tab)))
+
+  expect_lt(signedPhi, 0)
+  expect_equal(phi(tab), abs(signedPhi), tolerance = 1e-8)
+
+  # mirroring the table leaves the reported value unchanged
+  expect_equal(phi(tab), phi(tab[, 2:1]), tolerance = 1e-8)
 })
 
-test_that("phi is symmetric: phi(x,y) == phi(y,x)", {
-  x <- factor(c("A","A","B","B"))
-  y <- factor(c("X","Y","X","Y"))
-  expect_equal(phi(x, y), phi(y, x))
+
+test_that("phi() builds the table from two vectors", {
+
+  x <- c("A", "A", "B", "B")
+  y <- c("yes", "no", "yes", "no")
+  expect_equal(phi(x, y), 0)
+  expect_equal(phi(x, y), phi(table(x, y)))
 })
 
-test_that("phi accepts two vectors", {
-  x <- c("A","A","B","B")
-  y <- c("yes","no","yes","no")
-  res <- phi(x, y)
-  expect_length(res, 1)
-})
 
-test_that("phi for larger tables can exceed 1 (not bounded by 1)", {
-  # 3x3 perfectly diagonal table
-  tab <- diag(3) * 50
-  res <- phi(tab)
-  # phi may be > 1 for non-2x2 tables
-  expect_gte(res, 0)
-})
+test_that("phi() validates its input", {
 
-test_that("phi equals sqrt(chisq/n) manually", {
-  tab <- matrix(c(10, 5, 5, 20), nrow = 2)
-  chi <- chisq.test(tab, correct = FALSE)$statistic
-  expected <- sqrt(unname(chi) / sum(tab))
-  expect_equal(phi(tab), expected, tolerance = 1e-10)
+  expect_error(phi(1:4), "two-dimensional")
+  expect_error(phi(matrix(c(1, -1, 2, 3), nrow = 2)), "non-negative")
+  expect_error(phi(matrix(c(1, NA, 2, 3), nrow = 2)), "non-negative")
+  expect_error(phi(matrix(0, nrow = 2, ncol = 2)), "at least one observation")
 })

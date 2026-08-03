@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.932
+Version: 0.0.0.933
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 

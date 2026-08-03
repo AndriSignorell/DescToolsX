@@ -68,7 +68,6 @@
 #' # with confidence interval
 #' gini(x, conf.level = 0.95, R = 499)
 #'
-
 #' @details
 #' \code{sides} names the side on which the finite bound lies: \code{"left"}
 #' yields an interval bounded below, \code{"right"} one bounded above. The

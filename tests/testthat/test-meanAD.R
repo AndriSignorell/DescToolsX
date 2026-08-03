@@ -44,3 +44,27 @@ test_that("meanAD frequency weights match replicated unweighted", {
   expect_equal(meanAD(x = x, weights = w),
                meanAD(rep(x, w)), tolerance = 1e-6)
 })
+
+
+test_that("meanAD keeps x and weights aligned under na.rm", {
+  
+  x <- c(2, 3, NA, 5, 9)
+  w <- c(1, 1, 99, 1, 1)     # the big weight sits on the missing value
+  
+  # x was filtered and weights were not, so every observation was paired
+  # with the wrong weight from here on - including inside the center
+  expect_equal(meanAD(x, weights = w, na.rm = TRUE),
+               meanAD(c(2, 3, 5, 9), weights = c(1, 1, 1, 1)))
+  
+  # unweighted behaviour is unchanged
+  expect_equal(meanAD(x, na.rm = TRUE), meanAD(c(2, 3, 5, 9)))
+  expect_equal(meanAD(c(2, 3, 5, 9)), mean(abs(c(2, 3, 5, 9) - mean(c(2, 3, 5, 9)))))
+})
+
+
+test_that("meanAD accepts a function or a fixed center", {
+  x <- c(2, 3, 5, 3, 1, 15, 23)
+  expect_equal(meanAD(x, center = mean), mean(abs(x - mean(x))))
+  expect_equal(meanAD(x, center = median), mean(abs(x - median(x))))
+  expect_equal(meanAD(x, center = 4), mean(abs(x - 4)))
+})

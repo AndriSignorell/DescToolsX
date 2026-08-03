@@ -65,3 +65,33 @@ test_that("cStat stops when x and resp have different lengths", {
 test_that("cStat stops when resp is missing in default method", {
   expect_error(cStat(1:10), "resp")
 })
+
+
+
+
+test_that("cStat returns an unnamed scalar and refuses a constant response", {
+  
+  set.seed(7)
+  x <- runif(100)
+  y <- rbinom(100, 1, 0.5)
+  
+  est <- cStat(x, resp = y)
+  expect_null(names(est))
+  expect_true(est >= 0 && est <= 1)
+  
+  expect_error(cStat(x, resp = rep(1, 100)), "both outcome classes")
+})
+
+
+test_that("cStat reports the same estimate with and without an interval", {
+  
+  set.seed(8)
+  x <- runif(200)
+  y <- rbinom(200, 1, plogis(2 * x - 1))
+  
+  plain <- cStat(x, resp = y)
+  withCi <- cStat(x, resp = y, conf.level = 0.95)
+  
+  expect_equal(unname(withCi[["est"]]), unname(plain))
+})
+

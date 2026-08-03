@@ -25,7 +25,8 @@ subjects in rows and raters in columns}
 
 \item{conf.level}{confidence level for the interval}
 
-\item{fpc}{finite population correction (default \code{0})}
+\item{fpc}{finite population correction, the sampling fraction \eqn{n/N}
+in \eqn{[0, 1)} (default \code{0})}
 
 \item{verbose}{logical; whether to return detailed output}
 
@@ -46,6 +47,17 @@ confidence interval, sample sizes, and method description.
 Computes the proportion of agreement (percent agreement) along with
 design-based standard errors and confidence intervals following
 Klein and Gwet.
+}
+\details{
+For a confusion matrix the agreement indicator of a subject is 1 on the
+diagonal and 0 elsewhere. For a ratings matrix the subject-wise agreement
+is the proportion of agreeing rater \emph{pairs},
+\deqn{p_{o,i} = \frac{\sum_j n_{ij}(n_{ij}-1)}{m_i (m_i - 1)},}
+where \eqn{n_{ij}} is the number of raters who assigned subject \eqn{i} to
+category \eqn{j} and \eqn{m_i} the number of non-missing ratings for that
+subject. Subjects with fewer than two ratings carry no information about
+agreement and are excluded (they still count towards \eqn{n} in the
+variance, following Gwet).
 }
 \seealso{
 Other assoc.agreement:

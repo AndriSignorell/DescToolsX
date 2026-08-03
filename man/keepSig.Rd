@@ -44,16 +44,19 @@ matrix with the same dimensions and dimnames as \code{m}, with
 \description{
 Replaces entries in a symmetric matrix (typically a correlation matrix)
 with \code{NA} wherever the corresponding p-value exceeds a significance
-threshold – retaining only the statistically supported associations.
+threshold - retaining only the statistically supported associations.
 Designed as a pre-processing step for \code{\link[pharos]{plotWeb}} and
 \code{\link[pharos]{plotCor}}.
 }
 \examples{
 # compute p-values on the fly from the raw data
-plotWeb(keepSig(cor(mtcars), data = mtcars))
+keepSig(cor(mtcars), data = mtcars)
 
-# stricter threshold
-plotCor(keepSig(cor(swiss), data = swiss, sig.level = 0.01))
+# stricter threshold, and drop the diagonal as well
+keepSig(cor(swiss), data = swiss, sig.level = 0.01, diag = FALSE)
+
+# the intended use is as a pre-processing step for the plots
+pharos::plotWeb(keepSig(cor(mtcars), data = mtcars))
 
 # supply a pre-computed p-value matrix
 m <- cor(mtcars)
@@ -68,6 +71,15 @@ plotWeb(keepSig(m, p = p))
 }
 \seealso{
 \link[pharos:plotWeb]{pharos::plotWeb}, \link[pharos:plotCor]{pharos::plotCor}, \link[lumen:corTest]{lumen::corTest}, \link[stats:cor.test]{stats::cor.test}
+
+Other assoc.continuous:
+\code{\link[=corPart]{corPart()}},
+\code{\link[=corPolychor]{corPolychor()}},
+\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=spearmanCor]{spearmanCor()}}
 }
+\concept{assoc.continuous}
 \concept{correlation}
 \concept{multiple-testing}

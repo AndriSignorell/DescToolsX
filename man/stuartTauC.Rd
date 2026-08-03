@@ -4,7 +4,7 @@
 \alias{stuartTauC}
 \title{Stuart's \eqn{\tau_c} (Tau-c)}
 \usage{
-stuartTauC(x, y = NULL, conf.level = NA, ...)
+stuartTauC(x, y = NULL, conf.level = NA)
 }
 \arguments{
 \item{x}{a numeric vector or a contingency table (matrix or table)}
@@ -13,8 +13,6 @@ stuartTauC(x, y = NULL, conf.level = NA, ...)
 
 \item{conf.level}{confidence level for confidence intervals. If \code{NA},
 no confidence interval is returned.}
-
-\item{\dots}{further arguments passed to \code{\link{table}} in the vector interface}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -55,6 +53,8 @@ Stuart's \eqn{\tau_c} is symmetric:
 
 # Example from SAS documentation (PROC FREQ)
 # https://support.sas.com/documentation/
+#
+# Reported value: tau-c = 0.4111
 
 tab <- as.table(rbind(
   c(26,26,23,18,9),
@@ -69,19 +69,19 @@ stuartTauC(mtcars$wt, mtcars$mpg)
 
 }
 \references{
-Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57–59.
+Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley & Sons, pp. 57-59.
 
 Brown, M. B., & Benedetti, J. K. (1977).
 Sampling behavior of tests for correlation in two-way contingency tables.
-\emph{Journal of the American Statistical Association}, 72, 309–315.
+\emph{Journal of the American Statistical Association}, 72, 309-315.
 
 Goodman, L. A., & Kruskal, W. H. (1954).
 Measures of association for cross classifications.
-\emph{Journal of the American Statistical Association}, 49, 732–764.
+\emph{Journal of the American Statistical Association}, 49, 732-764.
 
 Goodman, L. A., & Kruskal, W. H. (1963).
 Measures of association for cross classifications III.
-\emph{Journal of the American Statistical Association}, 58, 310–364.
+\emph{Journal of the American Statistical Association}, 58, 310-364.
 }
 \seealso{
 Other assoc.ordinal:

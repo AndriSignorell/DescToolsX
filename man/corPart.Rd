@@ -85,6 +85,7 @@ Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},
 \code{\link[=findCorrX]{findCorrX()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=keepSig]{keepSig()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }

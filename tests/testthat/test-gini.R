@@ -57,3 +57,42 @@ test_that("gini weighted: uniform weights give same result as unweighted", {
   x <- c(10, 20, 30, 40)
   expect_equal(gini(x, weights = rep(1, 4)), gini(x))
 })
+
+
+
+test_that("gini stays inside [0, 1] however the weights are expressed", {
+  
+  # frequency weights and the equivalent replicated vector must agree
+  weighted <- gini(c(10, 0), weights = c(2, 3))
+  replicated <- gini(c(0, 0, 0, 10, 10))
+  
+  expect_equal(weighted, replicated)
+  expect_lte(weighted, 1)
+  expect_gte(weighted, 0)
+  
+  # unweighted correction is unchanged: n/(n-1)
+  x <- c(10, 20, 30, 40)
+  expect_equal(gini(x, unbiased = TRUE),
+               gini(x, unbiased = FALSE) * length(x) / (length(x) - 1))
+})
+
+
+test_that("gini honours sides", {
+  
+  set.seed(1)
+  x <- rlnorm(60)
+  
+  two   <- gini(x, conf.level = 0.95, R = 299)
+  left  <- gini(x, conf.level = 0.95, R = 299, sides = "left")
+  right <- gini(x, conf.level = 0.95, R = 299, sides = "right")
+  
+  expect_equal(unname(left[["uci"]]), 1)
+  expect_equal(unname(right[["lci"]]), 0)
+  expect_true(is.finite(left[["lci"]]))
+  expect_true(is.finite(right[["uci"]]))
+  
+  expect_gte(unname(two[["lci"]]), 0)
+  expect_lte(unname(two[["uci"]]), 1)
+})
+
+

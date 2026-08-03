@@ -37,7 +37,7 @@
 #' 
 #' bedrock::pairApply(swiss, 
 #'            function(x, y) fmCI(pearsonCor(x, y, conf.level=0.95), 
-#'                                digits=3, ldigits=0))
+#'                                digits=3, leadDigits=0))
 #' 
 #' @seealso [lumen::fisherZ], [lumen::fisherZInv]
 #' 
@@ -88,8 +88,8 @@ pearsonCor <- function(x, y = NULL,
     # Vector interface
     if (!na.rm && (anyNA(x) || anyNA(y))) {
       r <- NA_real_
-      n <- sum(!is.na(x) & !is.na(y))  # still compute n for completeness
-    
+      n <- sum(!is.na(x) & !is.na(y))
+
     } else {
       
       if (na.rm) {
@@ -125,10 +125,14 @@ pearsonCor <- function(x, y = NULL,
 # --------------------------------------------------
 
 .pearsonCI <- function(r, n, conf.level, sides) {
-  
+
+  # NULL breaks the est/lci/uci contract that every other exit of this
+  # function keeps - pearsonCor(c(1, NA), c(2, 3), conf.level = 0.95)
+  # returned NULL rather than a named triple, and .assocsTab() consumes
+  # the result positionally.
   if (is.na(conf.level) || is.na(r))
-    return(NULL)
-  
+    return(c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+
   if (n < 4)
     return(c(est = r, lci = NA_real_, uci = NA_real_))
   

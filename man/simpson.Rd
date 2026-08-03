@@ -7,8 +7,10 @@
 simpson(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE)
 }
 \arguments{
-\item{x}{a vector of observations (factor, character, numeric), or a named
-vector of non-negative integer counts}
+\item{x}{a factor or character vector of observations, or a vector of
+non-negative counts. Note that a \emph{numeric} vector is always read as
+counts, never as observations; wrap it in \code{\link{factor}} to have it
+tabulated instead.}
 
 \item{method}{character string specifying the index to compute:
 \code{"gini"}, \code{"hunter"}, or \code{"deltas"}}
@@ -36,18 +38,27 @@ The Hunter-Gaston index is defined as
 
 The Deltas correction is defined as
 \eqn{(1 - \sum p_i^2) * k / (k - 1)}, where \eqn{k} is the number of
-observed (non-empty) categories.
+observed (non-empty) categories. The factor is the reciprocal of
+\eqn{(k-1)/k}, the largest value the Gini-Simpson index can attain with
+\eqn{k} categories, so the corrected index reaches 1 for a uniform
+distribution over the observed categories.
 
 All indices represent the probability that two randomly selected
 observations belong to different categories.
 
 The Hunter-Gaston index corrects for finite sample size, while the
-Deltas correction adjusts for a small number of observed categories.
+Deltas correction adjusts for a small number of observed categories. Note
+that the finite-sample correction \eqn{N/(N-1)} applied to the
+Gini-Simpson index reproduces the Hunter-Gaston index exactly; the two are
+the same adjustment with \eqn{N} and \eqn{k} in the correction factor.
+
+A sample concentrated in a single category is perfectly homogeneous rather
+than undefined, so \code{"gini"} and \code{"hunter"} return 0 for it. Only
+the Deltas correction requires \eqn{k \ge 2}, since \eqn{k - 1} appears in
+its denominator.
 
 When \code{x} is numeric, it is treated as a vector of counts. Non-integer
 values produce a warning; the Hunter-Gaston index requires integer counts.
-
-The Deltas correction uses the number of observed (non-empty) categories.
 }
 \examples{
 x <- c("A", "A", "B", "C", "C", "C")
@@ -59,6 +70,10 @@ simpson(x, method = "deltas")
 # Using counts directly
 counts <- c(A = 2, B = 1, C = 3)
 simpson(counts, method = "hunter")
+
+# a numeric vector of observations must be tabulated first, otherwise
+# its values are read as counts
+simpson(factor(c(1, 1, 2, 2, 3)), method = "gini")
 
 # With missing values
 x <- c("A", "A", NA, "B")
@@ -80,14 +95,9 @@ Results and implications for empirical research.
 https://doi.org/10.1162/rest.2003.85.1.226
 }
 \seealso{
-Other inequality:
-\code{\link[=atkinson]{atkinson()}},
-\code{\link[=divCoef]{divCoef()}},
-\code{\link[=gini]{gini()}},
-\code{\link[=herfindahl]{herfindahl()}},
-\code{\link[=lc]{lc()}},
-\code{\link[=rosenbluth]{rosenbluth()}},
-\code{\link[=theil]{theil()}}
+Other diversity.concentration:
+\code{\link[=entropy]{entropy()}},
+\code{\link[=herfindahl]{herfindahl()}}
 }
 \concept{concentration-index}
-\concept{inequality}
+\concept{diversity.concentration}

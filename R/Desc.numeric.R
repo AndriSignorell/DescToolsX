@@ -57,18 +57,12 @@
 #' 
 #' Other Statistical summary functions: \code{\link{abstract}()}
 #' @examples
-#' 
+#'
 #' desc(Pizza$delivery_min)             # numeric
-
-
-
-
+#'
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
-#'
-#'
-
 #' @rdname desc.numeric
 #' @method desc numeric
 #' @export
@@ -86,7 +80,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   if (is.null(main))
     main <- xname
   
-  # ── Guard: all-NA oder length == 0 ─────────────────────────────────────────
+  # Guard: all-NA or length == 0
   if (n == 0L)
     return(.descAllNA(x, xname, main, plotit, verbose))
   
@@ -118,7 +112,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   modefreq_crit <-
     binom.test(naReplace(nstat$modefreq, 0), n = n, p = 0.05, alternative = "greater")
   
-  if (modefreq_crit$p.value < 0.05 & nstat$nu > 12) {
+  if (modefreq_crit$p.value < 0.05 && nstat$nu > 12) {
     modefreq_crit <- gettextf(
       "heap(?): remarkable frequency (%s) for the mode(s) (= %s)",
       fm(modefreq_crit$estimate, fmt = "%", digits = 1),
@@ -148,7 +142,9 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   # put together the results
   res <- list(
     
-    meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
+    # xname, not a second deparse(substitute(x)): the promise is still
+    # intact here so both give the same string, but one source is enough
+    meta = .descMeta(x, xname, main, plotit, verbose),
     
     length = total_n,
     n = n,
@@ -191,7 +187,9 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
 #' @rdname desc
 #' @export
 print.Desc.numeric <- function(x, digits = NULL, ...) {
-  
+
+  orig <- x
+
   .printHeader(x$meta)
   
   nlow <- 5
@@ -301,7 +299,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     ))
   } else {
     cat("\n")
-    print(x$freq[1:min(nrow(x$freq), x$maxrows), ])
+    print(x$freq[seq_len(min(nrow(x$freq), x$maxrows)), , drop = FALSE])
     if (x$maxrows < nrow(x$freq)) {
       cat("... etc.\n [list output truncated]\n\n")
     } else {
@@ -326,10 +324,14 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     ))
   }
   
-  if(x$meta$plotit)
-    plot(x, main=x$meta$main)
-  
-  
+  # plot() gets the ORIGINAL object, not the one this function has been
+  # rewriting: the block above replaces x$n, x$length and friends with
+  # formatted strings, so plot.Desc.numeric()'s `x$n <= 1L` guard would
+  # be a string comparison.
+  if (x$meta$plotit)
+    plot(orig, main = x$meta$main)
+
+  invisible(orig)
 }
 
 
@@ -366,8 +368,12 @@ plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
   hi <- ceiling(index)
   
   x <- sort(x, partial = unique(c(lo, hi)))
-  # WHOLE x MUST be sorted in order to get the smallest and largest values,
-  # as well as the number of unique values!!!
+  # NOTE: sort(partial=) does NOT fully sort - only the elements at the
+  # given positions are guaranteed to be final, which is exactly what the
+  # quantiles below need. The former comment claimed the whole vector had
+  # to be sorted for the extremes and the unique count; it does not, and
+  # is not: n_pow_sum_cpp() builds an ordered map and derives both from
+  # that, independently of the order it receives.
   
   qs <- x[lo]
   i <- which(index > lo)
@@ -387,8 +393,11 @@ plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
   psum <- n_pow_sum_cpp(x)
   
   # this is method 3 in the usual functions Skew and Kurt
+  # b1 = m3 / m2^1.5, then the type-3 adjustment
   skewx <- ((1 / n * psum$sum3) / (psum$sum2 / n)^1.5) * ((n - 1) / n)^(3 / 2)
-  kurtx <- ((((1 / n * psum$sum4) / (psum$sum2 / n)^2) - 3) + 3) * (1 - 1 / n)^2 - 3
+  # b2 = m4 / m2^2, then the type-3 adjustment. The former version wrote
+  # (((b2) - 3) + 3), which subtracts and re-adds 3 to no effect.
+  kurtx <- ((1 / n * psum$sum4) / (psum$sum2 / n)^2) * (1 - 1 / n)^2 - 3
   
   # get std dev here
   varx <- psum$sum2 / (n - 1)

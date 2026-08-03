@@ -26,7 +26,8 @@
 #' one-sample case.
 #' @param sides character string specifying the side of the interval:
 #' \code{"two.sided"}, \code{"left"}, or \code{"right"}
-#' @param method confidence interval method
+#' @param method confidence interval method; currently only
+#' \code{"boot"} is implemented
 #' @param na.rm logical; whether to remove missing values
 #' @param ... additional arguments passed to bootstrap procedures
 #'
@@ -38,12 +39,43 @@
 #'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
-
-#' @family location  
-#' @concept location  
+#' @details
+#' \code{sides} names the side on which the finite bound lies:
+#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' \eqn{(-\infty, uci]}. The estimator is unbounded, so the open side is
+#' reported as \eqn{\pm\infty}.
+#'
+#' \code{x} and \code{y} are not modified.
+#'
+#' @section Random number generation:
+#' A confidence level triggers a bootstrap and therefore advances R's
+#' global random number generator. Call \code{\link[base]{set.seed}}
+#' beforehand for reproducible intervals. The point estimate itself is
+#' deterministic: the compiled routine picks its pivots from a local
+#' generator and does not touch R's stream.
+#'
+#' @seealso \code{\link[stats]{wilcox.test}}, \code{\link{medianX}}
+#'
+#' @examples
+#' x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+#' hodgesLehmann(x)
+#'
+#' # the input is left alone
+#' v <- c(3, 1, 2)
+#' hodgesLehmann(v)
+#' v
+#'
+#' # two-sample: median of the pairwise differences, NOT the difference
+#' # of the medians
+#' y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+#' hodgesLehmann(x, y)
+#'
+#' set.seed(1)
+#' hodgesLehmann(x, conf.level = 0.95)
+#'
+#' @family location
+#' @concept location
 #' @concept robust-statistics
-#'
-#'
 #' @export
 hodgesLehmann <- function(x,
                           y = NULL,
@@ -87,56 +119,40 @@ hodgesLehmann <- function(x,
   
   if (length(x) < 1)
     stop("'x' must contain at least one observation")
+
+  # y was never length-checked, so an empty y reached hl2qest_cpp() and was
+  # indexed at y[n - 1] with n = 0
+  if (!is.null(y) && length(y) < 1)
+    stop("'y' must contain at least one observation")
   
   method <- match.arg(method)
 
   if (is.null(y)) {
-    res <- hlqest(x)
+    res <- hlqest_cpp(x)
   } else {
-    res <- hl2qest(x, y)
+    res <- hl2qest_cpp(x, y)
   }
   
   if (is.na(conf.level)) {
+
     result <- res
     names(result) <- NULL
+
   } else {
-    
-    if (method == "boot") {
-      
-      # ToDo *******************
-      # implement here the two sample case!!
-      # ToDo *******************
-      
-      result <- .hodgesLehmann.boot(
-        x,
-        conf.level = conf.level,
-        sides = sides,
-        ...
-      )
-      
-    } else {
-      
-      # we'll do that later down the road
-      
-      # lci <- n^2/2 +
-      #   qnorm((1-conf.level)/2) *
-      #   sqrt(n^2 * (2*n+1)/12) - 0.5
-      
-      # uci <- n^2/2 -
-      #   qnorm((1-conf.level)/2) *
-      #   sqrt(n^2 * (2*n+1)/12) - 0.5
-      
-      warning(
-        "Confidence intervals not yet implemented ",
-        "for Hodges-Lehmann estimator."
-      )
-      
-      result <- c(
-        est = res,
-        lci = NA,
-        uci = NA
-      )
-    }
+
+    # match.arg() above already guarantees "boot", so the former else
+    # branch - a warning plus c(est, NA, NA) - was unreachable. The
+    # distribution-free interval from the Wilcoxon rank statistic is
+    # still worth having; it belongs in method = "exact" when it lands,
+    # not in dead code behind the only accepted value.
+    #
+    # ToDo: two-sample confidence intervals
+    result <- .hodgesLehmann.boot(
+      x,
+      conf.level = conf.level,
+      sides = sides,
+      ...
+    )
   }
   
   result
@@ -170,7 +186,7 @@ hodgesLehmann <- function(x,
     x,
     
     function(x, d)
-      hlqest(x[d]),
+      hlqest_cpp(x[d]),
     
     R        = args$R,
     parallel = args$parallel,
@@ -183,31 +199,26 @@ hodgesLehmann <- function(x,
     type = args$type
   )
   
-  if (args$type == "norm") {
-    
-    res <- c(
-      est = boot.fun$t0,
-      lci = ci[[4]][2],
-      uci = ci[[4]][3]
-    )
-    
-  } else {
-    
-    res <- c(
-      est = boot.fun$t0,
-      lci = ci[[4]][4],
-      uci = ci[[4]][5]
-    )
-  }
+  # by name, not by position: ci[[4]] happens to be the first interval
+  # component only because exactly one type is requested
+  ciMat <- ci[[switch(args$type,
+                      norm = "normal", basic = "basic", stud = "student",
+                      perc = "percent", bca = "bca")]]
+
+  bounds <- if (args$type == "norm") ciMat[2:3] else ciMat[4:5]
+
+  res <- c(
+    est = unname(boot.fun$t0),
+    lci = unname(bounds[1L]),
+    uci = unname(bounds[2L])
+  )
   
-  if (sides == "left") {
-    
-    res[3] <- Inf
-    
-  } else if (sides == "right") {
-    
-    res[2] <- -Inf
-  }
+  # sides names the side carrying the FINITE bound; the estimator is
+  # unbounded, so the open side really is infinite here
+  if (sides == "left")
+    res[["uci"]] <- Inf
+  else if (sides == "right")
+    res[["lci"]] <- -Inf
   
   res
 }

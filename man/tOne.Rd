@@ -11,7 +11,7 @@ tOne(
   colnames = NULL, vnames = NULL, total = TRUE,
   align = "\\\\l", FUN = NULL, TEST = NULL,
   intref = "high",
-  fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty", 
+  fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty",
              pval = style(fmt = "*", naForm = "   "))
 )
 
@@ -52,10 +52,13 @@ named as \code{"num"}, \code{"cat"} and \code{"dich"} and be defined as
 function with arguments \code{(x, g)}, generating something similar to a
 p-value. Use \code{TEST=NA} to suppress test. (See examples.)}
 
-\item{intref}{one out of \code{"high"} (default) or \code{"low"}, defining
-which value of a dichotomous numeric or logical variable should be reported.
-Usually this will be \code{1} or \code{TRUE}. Setting it to \code{"low"}
-will report the lower value \code{0} or \code{FALSE}.}
+\item{intref}{one out of \code{"high"} (default), \code{"low"} or
+\code{"both"}, defining which value of a dichotomous variable should be
+reported. Usually this will be \code{1} or \code{TRUE}. Setting it to
+\code{"low"} will report the lower value \code{0} or \code{FALSE},
+\code{"both"} reports the variable as a categorical one with all its
+levels. Dichotomous factors are treated the same way, \code{"high"}
+reporting the last and \code{"low"} the first level.}
 
 \item{fmt}{fm codes for absolute, numeric and percentage values, and for
 the p-values of the tests}
@@ -69,7 +72,7 @@ the p-values of the tests}
 \item{drop}{drop the structure in case of total reduction}
 }
 \value{
-a character matrix
+a character matrix of class \code{tOne}
 }
 \description{
 Create a table summarizing continuous, categorical and dichotomous
@@ -96,11 +99,11 @@ and dichotomous variables (the latter having exactly two values or levels).
 Depending on the variable type, the descriptives and the according sensible
 tests are chosen. By default mean/sd are chosen to describe numeric
 variables.
-\preformatted{ 
-  FUN = function(x) 
-          gettextf("%s / %s", 
-                   fm(mean(x, na.rm = TRUE), digits = 1), 
-                   fm(sd(x, na.rm = TRUE), digits = 3)) 
+\preformatted{
+  FUN = function(x)
+          gettextf("\%s (\%s)",
+                   fm(mean(x, na.rm = TRUE), fmt = fmt$num),
+                   fm(sd(x, na.rm = TRUE), fmt = fmt$num))
 }
 
 Their difference is tested with the Kruskal-Wallis test. For categorical
@@ -112,7 +115,7 @@ function with arguments \code{(x, g)}, returning something similar to a
 p-value.
 \preformatted{
   TEST = list( num = list(fun = function(x, g){
-      summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"), 
+      summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
     cat = list(fun = function(x, g){
       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
     dich = list(fun = function(x, g){
@@ -124,17 +127,17 @@ the table together with the significance codes, can be set with the variable
 \code{lbl}.
 
 Great importance was attached to the free definition of the number fms.
-By default, the optionally definable fm templates of \bold{DescTools}
+By default, the optionally definable fm templates of \bold{DescToolsX}
 are used. Deviations from this can be freely passed as arguments to the
 function. fms can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of the
 function \code{\link[pharos]{fm}()} are available and can be provided as a list.
 See examples which show several different implementations.
 \preformatted{
-  fmt = list(abs  = "abs.sty", 
-             num  = "num.sty", 
-             per  = "per.sty", 
-             pval = style(fmt = "*", naForm = " ")
+  fmt = list(abs  = "abs.sty",
+             num  = "num.sty",
+             per  = "per.sty",
+             pval = style(fmt = "*", naForm = "   ")
              ) }
 
 Several tables can be appended using \code{\link[bedrock]{appendX}()}.
@@ -149,14 +152,13 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.
 }
 \examples{
 
-options(scipen = 8)
-opt <- options()
+opt <- options(scipen = 8)
 
 # define some special fms for count data, percentages and numeric results
 # (those will be supported by tOne)
-abs.sty <- style(digits = 0, big.mark = "'")   # counts
+abs.sty <- style(digits = 0, bigMark = "'")   # counts
 per.sty <- style(digits = 1, fmt = "\%")        # percentages
-num.sty <- style(digits = 1, big.mark = "'")   # numeric
+num.sty <- style(digits = 1, bigMark = "'")   # numeric
 
 tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
   groups = Pizza$quality)
@@ -168,7 +170,7 @@ tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")])
 tOne(iris[, -5], iris[, 5],
   FUN = function(x) {
     gettextf("\%s / \%s",
-      fm(median(x, na.rm = TRUE), digits = 1), 
+      fm(median(x, na.rm = TRUE), digits = 1),
       fm(IQR(x, na.rm = TRUE), digits = 3))
   }
 )
@@ -178,7 +180,7 @@ tOne(iris[, -5], iris[, 5],
 tOne(x = iris[, -5], groups = iris[, 5],
      FUN = function(x) gettextf("\%s / \%s",
             fm(mean(x, na.rm = TRUE), digits = 1),
-            fm(sd(x, na.rm = TRUE), digits = 3)), 
+            fm(sd(x, na.rm = TRUE), digits = 3)),
 
      TEST = list(
        num = list(fun = function(x, g){summary(aov(x ~ g))[[1]][1, "Pr(>F)"]},
@@ -188,26 +190,26 @@ tOne(x = iris[, -5], groups = iris[, 5],
                dich = list(fun = function(x, g){fisher.test(table(x, g))$p.val},
                          lbl = "Fisher exact test")),
        fmt = list(abs = "abs.sty", num  = "num.sty", per = "per.sty",
-                pval = style(fmt = "*", naForm = "   ")) 
+                pval = style(fmt = "*", naForm = "   "))
 )
 
-t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")], 
-           groups   = Pizza$area, 
-           align = " ", 
+t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")],
+           groups   = Pizza$area,
+           align = " ",
            total = FALSE,
-            
+
            FUN = function(x) gettextf("\%s / \%s (\%s)",
                                       fm(mean(x, na.rm = TRUE), digits = 1),
                                       fm(sd(x, na.rm = TRUE), digits = 3),
                                       fm(median(x, na.rm = TRUE), digits = 1)),
-           
+
            TEST = NA,
-            
-           fmt = list(abs  = style(big.mark = " ", digits=0), 
-                      num  = style(big.mark = " ", digits=1), 
-                      per  = style(fmt=function(x) 
-                          strPad(fm(x, fmt="\%", digits=1), width=5, adj = "r")), 
-                      pval = style(fmt = "*", naForm = "   ")) 
+
+           fmt = list(abs  = style(bigMark = " ", digits=0),
+                      num  = style(bigMark = " ", digits=1),
+                      per  = style(fmt=function(x)
+                          strPad(fm(x, fmt="\%", digits=1), width=5, adj = "r")),
+                      pval = style(fmt = "*", naForm = "   "))
 )
 # add a userdefined legend
 attr(t1, "legend") <- "numeric: mean / sd (median)), factor: n (n\%)"
@@ -216,6 +218,7 @@ t1
 
 
 # dichotomous integer or logical values can be reported by the high or low value
+set.seed(1)
 x <- sample(x = c(0, 1), size = 100, prob = c(0.3, 0.7), replace = TRUE)
 y <- sample(x = c(0, 1), size = 100, prob = c(0.3, 0.7), replace = TRUE) == 1
 z <- factor(sample(x = c(0, 1), size = 100, prob = c(0.3, 0.7), replace = TRUE))
@@ -226,22 +229,20 @@ tOne(d.set[1:3], d.set$g, intref = "low")
 
 tOne(d.set[1:3], d.set$g, intref = "high")
 
-# intref would not control factors, use relevel to change reported value
-tOne(data.frame(z = relevel(z, "1")), g)
-
-tOne(data.frame(z = z), g)
+# report both levels of the factor
+tOne(data.frame(z = z), g, intref = "both")
 
 options(opt)
 
 
-\dontrun{  
-  
+\dontrun{
+
 # Send the whole stuff to Word
-wrd <- GetNewWrd()
-ToWrd(
+wrd <- getNewWrd()
+toWrd(
   tOne(x   = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
        groups = Pizza$quality,
-       fmt = list(num=Fmt("num", digits=1))
+       fmt = list(num=style(digits=1))
        ),
   font = list(name="Arial narrow", size=8),
   align = c("l","r")      # this will be recycled: left-right-left-right ...

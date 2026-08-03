@@ -43,3 +43,27 @@ test_that("impute returns unchanged vector when no NAs present", {
   x <- c(1, 2, 3)
   expect_equal(impute(x), x)
 })
+
+
+
+test_that("impute decides on na.rm from the formals, not from an error", {
+  
+  x <- c(2, 3, NA, 5, 9)
+  
+  # impute() returns the VECTOR with the holes filled, not the value it
+  # filled them with - I had asserted the latter
+  expect_equal(impute(x), replace(x, is.na(x), median(x, na.rm = TRUE)))
+  expect_equal(impute(x, mean), replace(x, is.na(x), mean(x, na.rm = TRUE)))
+  expect_equal(impute(x, 99), c(2, 3, 99, 5, 9))
+  
+  # A function that has no na.rm is called without it ...
+  noNaRm <- function(z) 42
+  expect_equal(impute(x, noNaRm), c(2, 3, 42, 5, 9))
+  
+  # ... but a function that fails for its OWN reasons must surface that
+  # error, not be silently retried without na.rm. The former tryCatch
+  # swallowed everything.
+  boom <- function(z, na.rm = TRUE) stop("deliberate failure")
+  expect_error(impute(x, boom), "deliberate failure")
+})
+

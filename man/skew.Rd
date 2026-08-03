@@ -16,8 +16,7 @@ skew(
 )
 }
 \arguments{
-\item{x}{a numeric vector. An object that is not a vector is coerced by
-\code{as.vector} if possible.}
+\item{x}{a numeric vector}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (which is the default) no confidence interval will be calculated.}
@@ -36,7 +35,9 @@ Further arguments for the bootstrap procedure (such as \code{R},
 used for calculation. See Details.}
 
 \item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}}
+giving the weights to use for elements of \code{x}. The weights are read as
+frequencies, so that their sum takes the place of the sample size in the
+estimator's bias corrections and in the standard error.}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
@@ -68,29 +69,37 @@ m_3 / m_2^(3/2) } \cr \code{2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) }\cr
 1 is the typical definition used in Stata and in many older textbooks.  \cr
 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
 
-Cramer (1997) mentions the asymptotic standard error of the skewness:
+Cramer (1997) mentions the asymptotic standard error of \code{G_1}, that is
+of \code{estimator = 2}:
 \cr \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
-used for calculating the confidence intervals.  This is implemented here
-with \code{method="classic"}. \cr However, Joanes and Gill (1998) advise
+used for calculating the confidence intervals. The standard errors of the
+other two estimators follow from it by the same factors that relate the
+estimators themselves, so that \code{est/se} does not depend on the choice
+of \code{estimator}. This is implemented here with \code{method="classic"}.
+\cr However, Joanes and Gill (1998) advise
 against this approach, pointing out that the normal assumptions would
 virtually always be violated.  They suggest using the bootstrap method.
 That's why the default method for the confidence interval type is set to
 \code{"boot"}. If not further specified the boot ci type will be chosen as
 \code{"bca"}.\cr
 
+The standard error is only defined for \code{n >= 3}; for shorter input the
+variance, and with it any \code{method="classic"} interval, is \code{NA}.
+
 This implementation of the two functions is comparably fast, as the
 expensive sums are coded in C++.
 }
 \examples{
 
-skew(Pizza$price, na.rm=TRUE)
+skew(bedrock::Pizza$price, na.rm=TRUE)
 
 # use sapply to calculate skewness for a data.frame
-sapply(Pizza[,c("temperature","price","delivery_min")], skew, na.rm=TRUE)
+sapply(bedrock::Pizza[,c("temperature","price","delivery_min")], 
+       skew, na.rm=TRUE)
 
-# or apply to do that columnwise with a matrix
-apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
-      skew, na.rm=TRUE)
+# the estimate lies inside its own confidence interval
+set.seed(1)
+skew(rlnorm(50), conf.level=0.95, method="classic")
 
 
 }
@@ -107,8 +116,5 @@ kurtosis. \emph{The Statistician}, 47, 183-189.
 Other shape:
 \code{\link[=kurt]{kurt()}}
 }
-\concept{descriptive-statistics}
 \concept{moments}
-\concept{robust-statistics}
 \concept{shape}
-\concept{topic.dispersion}

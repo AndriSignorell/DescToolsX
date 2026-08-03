@@ -334,7 +334,7 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
     P-Value [Acc > NIR] : %s
                   Kappa : %s
  McNemar's Test P-Value : %s\n\n",
-               fm(x$n,           digits = 0L, big.mark = "'"),
+               fm(x$n,           digits = 0L, bigMark = "'"),
                fm(x$acc,         digits = digits),
                fm(100 * coalesceX(x$conf.level, 0.95), digits = 0L), "%",
                fm(x$acc.lci,     digits = digits),

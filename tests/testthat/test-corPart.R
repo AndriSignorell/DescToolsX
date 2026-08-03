@@ -167,3 +167,46 @@ test_that("returns matrix with correct dimension and names", {
     
     expect_equal(res, pc, tolerance = 1e-5)
   })
+
+
+
+test_that("corPart works for a single variable of interest", {
+  
+  set.seed(1)
+  X <- matrix(rnorm(100 * 4), ncol = 4)
+  colnames(X) <- paste0("V", 1:4)
+  
+  # diag(v) with length-1 v used to build an identity matrix of size
+  # round(v) instead of a 1x1 matrix
+  pc <- corPart(cor(X), x = 1, y = 3:4)
+  
+  expect_equal(dim(pc), c(1L, 1L))
+  expect_equal(unname(pc[1, 1]), 1)
+})
+
+
+test_that("corPart agrees with the Schur complement and with cor of residuals", {
+  
+  set.seed(2)
+  X <- matrix(rnorm(200 * 4), ncol = 4)
+  colnames(X) <- paste0("V", 1:4)
+  
+  pc <- corPart(X, x = 1:2, y = 3:4)
+  
+  r1 <- residuals(lm(X[, 1] ~ X[, 3] + X[, 4]))
+  r2 <- residuals(lm(X[, 2] ~ X[, 3] + X[, 4]))
+  
+  expect_equal(unname(pc[1, 2]), unname(cor(r1, r2)), tolerance = 1e-10)
+  expect_true(isSymmetric(unname(pc)))
+})
+
+
+test_that("a square data matrix is not mistaken for a covariance matrix", {
+  
+  set.seed(3)
+  X <- matrix(rnorm(25), nrow = 5)   # 5 observations, 5 variables
+  colnames(X) <- paste0("V", 1:5)
+  
+  expect_silent(pc <- corPart(X, x = 1:2, y = 3:4))
+  expect_equal(dim(pc), c(2L, 2L))
+})

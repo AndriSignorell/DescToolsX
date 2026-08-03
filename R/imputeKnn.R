@@ -144,8 +144,30 @@ imputeKnn <- function(x,
 
   # scale() computes its constants with na.rm = TRUE, so only the missing
   # cells stay missing and the column remains usable.
-  if(scale && ncol(cont))
-    cont <- scale(cont)
+  if(scale && ncol(cont)) {
+
+    # A constant column has sd 0, and scale() then divides by it: the whole
+    # column becomes NaN, every distance becomes NaN, and order() on an
+    # all-NaN vector returns 1..n - so the "nearest" neighbours would
+    # silently be the first k rows of the pool. Such a column carries no
+    # information about distance anyway, so drop it from the scaling
+    # rather than let it poison the metric.
+    sds <- apply(cont, 2L, stats::sd, na.rm = TRUE)
+    keep <- is.finite(sds) & sds > 0
+
+    if(!all(keep))
+      warning(gettextf(
+        "%d numeric variable(s) have no variation and are ignored in the distance",
+        sum(!keep)), domain = NA)
+
+    cont <- if(any(keep))
+      scale(cont[, keep, drop = FALSE])
+    else
+      matrix(numeric(0), nrow = nrow(cont), ncol = 0L)
+
+    contIdx <- contIdx[keep]
+
+  }
 
   naRows <- which(!complete.cases(full))
   target <- naRows[naRows <= n]

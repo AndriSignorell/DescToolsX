@@ -2,8 +2,7 @@
 #' Phi Coefficient
 #'
 #' Computes the Phi coefficient as a measure of association between two
-#' categorical variables. For 2x2 contingency tables, Phi is equivalent
-#' to the Pearson correlation coefficient.
+#' categorical variables.
 #'
 #' If \code{y} is provided, a contingency table is created using
 #' \code{table(x, y, ...)}. Otherwise, \code{x} is assumed to already be
@@ -28,6 +27,13 @@
 #' where \eqn{\chi^2} is the chi-squared test statistic and \eqn{n} is
 #' the total sample size.
 #'
+#' This definition is \strong{unsigned}. For a 2x2 table the signed
+#' coefficient \eqn{(n_{11} n_{22} - n_{12} n_{21}) /
+#' \sqrt{n_{1\cdot} n_{2\cdot} n_{\cdot 1} n_{\cdot 2}}} equals the Pearson
+#' correlation of the two 0/1 indicators and lies in \eqn{[-1, 1]}; the value
+#' returned here is its absolute value, so the direction of the association
+#' is not reported. See \code{\link{pearsonCor}} if the sign is needed.
+#'
 #' For contingency tables larger than 2x2, Phi is not bounded by 1 and
 #' may exceed 1. In such cases, \code{\link{cramerV}} is usually preferred.
 #'
@@ -38,7 +44,8 @@
 #' y <- c("yes", "no", "yes", "no")
 #' phi(x, y)
 #'
-#' # Example with contingency table
+#' # Example with contingency table. Note that the signed coefficient is
+#' # -0.0891 here: phi() reports the magnitude only.
 #' tab <- matrix(c(10, 20, 30, 40), nrow = 2)
 #' phi(tab)
 #'
@@ -53,14 +60,26 @@
 #'
 #' @export
 phi  <- function (x, y = NULL, ...) {
+
   if(!is.null(y)) x <- table(x, y, ...)
+
+  if (length(dim(x)) != 2L)
+    stop("'x' must be a two-dimensional contingency table.")
+
+  if (anyNA(x) || any(x < 0))
+    stop("'x' must contain non-negative counts without missing values.")
+
+  if (sum(x) == 0)
+    stop("'x' must contain at least one observation.")
+
   # when computing phi, note that Yates' correction to chi-square must not be used.
   as.numeric( sqrt( suppressWarnings(chisq.test(x, correct=FALSE)$statistic) / sum(x) ) )
-  
-  # should we implement: ??
-  # following http://technology.msb.edu/old/training/statistics/sas/books/stat/chap26/sect19.htm#idxfrq0371
-  # (Liebetrau 1983)
-  # this makes phi -1 < phi < 1 for 2x2 tables  (same for CramerV)
-  # (prod(diag(x)) - prod(diag(Rev(x, 2)))) / sqrt(prod(colSums(x), rowSums(x)))
-  
+
+  # TODO (open, see REVIEW.md): should the 2x2 case return the SIGNED
+  # coefficient, as Liebetrau (1983) and SAS PROC FREQ do?
+  # (prod(diag(x)) - prod(diag(revX(x, 2)))) / sqrt(prod(colSums(x), rowSums(x)))
+  # That would make phi in (-1, 1) for 2x2 tables and match the documented
+  # equivalence with the Pearson correlation -- but it changes results for
+  # every existing caller, so it is left as a decision.
+
 }

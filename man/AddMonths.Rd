@@ -2,64 +2,75 @@
 % Please edit documentation in R/addMonths.R
 \name{addMonths}
 \alias{addMonths}
+\alias{addMonths.default}
 \title{Add Months to a Date}
 \usage{
 addMonths(x, n, ...)
+
+\method{addMonths}{default}(x, n, ...)
 }
 \arguments{
-\item{x}{a Date object, or an object coercible to one by
-\code{\link{as.Date}}(x, ...), to which months are added}
+\item{x}{a \code{Date} object or an object coercible to one with
+\code{\link{as.Date}}}
 
-\item{n}{number of months to add, a whole number. Negative values
-subtract months.}
+\item{n}{numeric vector containing finite whole numbers of months or
+missing values}
 
-\item{\dots}{further arguments passed to \code{\link{as.Date}}, for example
-to supply \code{origin} or \code{tz}}
+\item{\dots}{further arguments passed to \code{\link{as.Date}}, such as
+\code{origin}, \code{format}, or \code{tz}}
 }
 \value{
-a vector of class \code{Date}, of the length of the longer of
-\code{x} and \code{n}, containing the transformed dates
+a vector of class \code{Date} having the length of the longer of
+\code{x} and \code{n}
 }
 \description{
-Naively adding months to a date can produce invalid dates, for example
-when adding one month to 2012-01-30. \code{addMonths()} always returns a
-valid date: adding one month to \code{as.Date("2013-01-31")} returns
-\code{"2013-02-28"}. Negative values of \code{n} subtract months.
+Adds or subtracts whole calendar months while ensuring that the result is
+always a valid date.
 }
 \details{
-All parameters are recycled if necessary. The result is always of class
-\code{Date}, also when \code{x} is supplied as \code{POSIXct} or as a
-character string; time-of-day information is therefore dropped. Note that
-\code{\link{as.Date}} converts a \code{POSIXct} in UTC by default, which
-can shift the calendar day - pass \code{tz} through \code{\dots} to
-control this.
+Naively adding months can produce invalid dates. For example, adding one
+month to \code{as.Date("2013-01-31")} returns \code{"2013-02-28"} rather
+than a date in March. Negative values of \code{n} subtract months.
 
-Missing values in either argument propagate to \code{NA}.
+The arguments \code{x} and \code{n} are recycled to their common maximum
+length using \code{\link[bedrock:recycle]{bedrock::recycle()}}. Partial recycling does not produce a
+warning.
+
+If either argument has length zero, an empty \code{Date} vector is
+returned. Missing values in either argument produce missing values in the
+corresponding result.
+
+Inputs supplied as \code{POSIXct} are converted to \code{Date}, and their
+time-of-day information is discarded. By default, \code{as.Date.POSIXct}
+performs this conversion in UTC. Supply \code{tz} through \code{\dots} if
+another time zone should determine the calendar date.
 }
 \note{
-Based on code by Roland Rapold and Antonio, adapted to conform to package standards.
+Based on code by Roland Rapold and Antonio, adapted to conform to
+package standards.
 }
 \examples{
-
-# characters will be coerced to Date
+# character input is converted to Date
 addMonths("2013-01-31", 1)
 
-# negative n
+# negative values subtract months
 addMonths(as.Date("2013-03-31"), -1)
 
-# arguments will be recycled
-# (with warning if the longer is not a multiple of length of shorter)
-addMonths(c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"), c(1, -1))
+# x and n are recycled
+addMonths(
+  c("2013-01-31", "2013-03-31", "2013-10-31", "2013-12-31"),
+  c(1, -1)
+)
 
 # missing values propagate
 addMonths(c("2013-01-31", NA), 1)
 
-# POSIXct input is converted to Date first; supply tz to pin the day down
+# POSIXct input is converted to Date
 x <- as.POSIXct(c("2015-01-31", "2015-08-31"), tz = "UTC")
 addMonths(x, c(1, 3), tz = "UTC")
 
-# mind the origin if x supplied as numeric ...
-x <- as.numeric(as.Date(x))
+# numeric dates require an origin
+x <- as.numeric(as.Date(c("2015-01-31", "2015-08-31")))
 addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 
 }
@@ -67,8 +78,8 @@ addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 }
 \seealso{
-\code{\link{as.ym}}; Date functions: \code{\link{year}},
-\code{\link{month}}, etc.
+\code{\link[=as.ym]{as.ym()}}, \code{\link[bedrock:recycle]{bedrock::recycle()}},
+\code{\link[=year]{year()}}, \code{\link[=month]{month()}}
 
 Other date.time:
 \code{\link{as_ym}},

@@ -166,7 +166,7 @@ kendallW <- function(x, correct=FALSE, test=FALSE, na.rm=NULL) {
     else { #With correction for ties
       
       Tj <- 0
-      for (i in 1:nr) {
+      for (i in seq_len(nr)) {
         rater <- table(ratings.rank[,i])
         ties  <- rater[rater>1]
         l 	  <- as.numeric(ties)

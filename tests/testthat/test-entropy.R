@@ -236,3 +236,23 @@ is.numeric(mutInf(tab))
 length(mutInf(tab)) == 1
 is.numeric(entropy(tab))
 length(entropy(tab)) == 1
+
+
+test_that("entropy tabulates a categorical vector", {
+  
+  x <- c("A", "A", "B", "B", "C")
+  
+  # as.numeric() on a character vector used to give NA with a warning
+  expect_false(is.na(entropy(x)))
+  expect_equal(entropy(x), entropy(c(2, 2, 1)))
+  
+  # a fair coin is exactly one bit, a fair die log2(6)
+  expect_equal(entropy(c(50, 50)), 1)
+  expect_equal(entropy(rep(1, 6)), log2(6))
+  expect_equal(entropy(rep(1, 6), base = exp(1)), log(6))
+  
+  # maximum entropy normalizes to 1, a single category to 0
+  expect_equal(entropy(rep(1, 6), normalize = TRUE), 1)
+  expect_equal(entropy(c(5, 0, 0), normalize = TRUE), 0)
+})
+

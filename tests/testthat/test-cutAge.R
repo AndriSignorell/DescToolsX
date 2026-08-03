@@ -56,3 +56,27 @@ test_that("cutAge ordered_result = FALSE returns an unordered factor", {
   res <- cutAge(x, ordered_result = FALSE)
   expect_false(is.ordered(res))
 })
+
+
+
+test_that("cutAge keeps the factor ordered when trimming empty levels", {
+  
+  x <- c(42, 47, 51)
+  
+  full <- cutAge(x, labels = TRUE)
+  trimmed <- cutAge(x, labels = TRUE, full = FALSE)
+  
+  expect_true(is.ordered(full))
+  expect_true(is.ordered(trimmed))
+  expect_lt(nlevels(trimmed), nlevels(full))
+})
+
+
+test_that("cutAge pads both ends of the label", {
+  
+  lv <- levels(cutAge(0:95, labels = TRUE))
+  
+  expect_equal(lv[1], "00-09")     # was "00-9"
+  expect_equal(lv[2], "10-19")
+  expect_equal(lv[length(lv)], "90-..")
+})

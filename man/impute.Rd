@@ -18,8 +18,10 @@ summary statistic}
 \item{...}{additional arguments passed to \code{FUN}}
 }
 \value{
-vector with the same length and type as \code{x}, with missing
-values replaced
+vector of the same length as \code{x}, with missing values
+replaced. The type follows R's usual coercion rules: imputing a double
+(the median of an integer vector, say) into an integer vector returns a
+double.
 }
 \description{
 Replaces missing values (\code{NA}) in a vector by either
@@ -37,8 +39,9 @@ directly replace all missing values.
 If \code{FUN} is a function, it must return a single value.
 An error is thrown if the returned value is not scalar.
 
-If \code{FUN} does not accept an argument named \code{na.rm},
-the function is called again without it.
+Whether \code{FUN} accepts \code{na.rm} is decided from its formal
+arguments; a function taking \code{\dots} is assumed to pass it on.
+Functions without either are called without it.
 }
 \examples{
 x <- c(2, 3, NA, 5, 9)
@@ -55,13 +58,15 @@ impute(x, function(x) meanX(x, trim=0.3, na.rm = TRUE))
 # Constant replacement
 impute(x, 99)
 
+# an integer vector stays integer only if the value is one too
+impute(c(2L, 3L, NA, 5L), FUN = 4L)
+
 }
 \seealso{
 For direct value replacement see \code{\link[bedrock:naReplace]{bedrock::naReplace()}}.
 
 Other impute:
-\code{\link[=imputeKnn]{imputeKnn()}},
-\code{\link[=outlier]{outlier()}}
+\code{\link[=imputeKnn]{imputeKnn()}}
 }
 \concept{imputation}
 \concept{impute}

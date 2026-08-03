@@ -72,3 +72,23 @@ test_that("Row permutation does not change result", {
   
   expect_equal(res1, res2, tolerance = 1e-8)
 })
+
+
+test_that("divCoef reduces to Gini-Simpson without a distance matrix", {
+  
+  x <- cbind(a = c(1, 1, 1, 1), b = c(4, 0, 0, 0), d = c(2, 2, 0, 0))
+  
+  expect_equal(unname(divCoef(x)), c(1 - 4 * 0.25^2, 0, 0.5))
+})
+
+
+test_that("divCoef reports missing values instead of aborting", {
+  
+  x <- cbind(a = c(1, 1, NA), b = c(1, 1, 1))
+  
+  expect_error(divCoef(x), "missing values")
+  res <- divCoef(x, na.rm = TRUE)
+  expect_true(is.na(res[1]))
+  expect_false(is.na(res[2]))
+})
+

@@ -1,155 +1,84 @@
-# tests/testthat/test-percAgreement.R
 
-library(testthat)
+test_that("percAgreement() resolves its default input mode", {
 
-# --------------------------------------------------
-# Basic functionality
-# --------------------------------------------------
+  tab <- as.table(matrix(c(20, 5, 3, 12), nrow = 2,
+                         dimnames = list(a = c("x", "y"), b = c("x", "y"))))
 
-test_that("works with simple confusion matrix", {
-  x <- matrix(c(10, 2,
-                3, 15), nrow = 2)
-  
-  res <- percAgreement(x)
-  
-  expect_true(is.numeric(res))
-  expect_named(res, c("est", "lci", "uci"))
-  expect_true(res["est"] >= 0 && res["est"] <= 1)
+  # the default used to be reconstructed from formals()$input[[1]], which is
+  # the symbol `c`, not "auto"
+  r <- percAgreement(tab)
+  expect_named(r, c("est", "lci", "uci"))
+  expect_equal(unname(r[["est"]]), 32 / 40)
+
+  expect_equal(percAgreement(tab, input = "confusion"), r)
+  expect_equal(percAgreement(tab, input = "auto"), r)
 })
 
-# --------------------------------------------------
-# Perfect agreement
-# --------------------------------------------------
 
-test_that("returns 1 for perfect agreement", {
-  
-  x <- diag(10)
-  rownames(x) <- colnames(x) <- LETTERS[1:10]
-  res <- percAgreement(x)
-  expect_equal(res[["est"]], 1)
-  
+test_that("percAgreement() gives the same estimate for both input shapes", {
+
+  set.seed(11)
+  r1 <- sample(letters[1:3], 40, replace = TRUE)
+  r2 <- sample(letters[1:3], 40, replace = TRUE)
+
+  fromRatings <- percAgreement(cbind(r1, r2), input = "ratings")
+  fromTable   <- percAgreement(table(r1, r2), input = "confusion")
+
+  expect_equal(unname(fromRatings[["est"]]), unname(fromTable[["est"]]))
+  expect_equal(unname(fromRatings[["est"]]), mean(r1 == r2))
 })
 
-# --------------------------------------------------
-# No agreement
-# --------------------------------------------------
 
-test_that("returns near 0 for no agreement", {
-  x <- matrix(c(0, 10,
-                10, 0), nrow = 2)
-  
-  res <- percAgreement(x)
-  
-  expect_equal(res[["est"]], 0)
+test_that("percAgreement() reads data frame ratings cell-wise", {
+
+  # as.matrix() on a data frame that is not entirely numeric runs the numeric
+  # columns through format(), padding them to a common width WITHIN the
+  # column: rater r1 then codes 1 as " 1" while r2 and r3 code it as "1", and
+  # the agreement is lost.
+  df <- data.frame(r1 = c(1, 10, 2),
+                   r2 = c(1, 9, 2),
+                   r3 = c("1", "9", "2"),
+                   stringsAsFactors = FALSE)
+
+  po <- unname(percAgreement(df, input = "ratings")[["est"]])
+  expect_equal(po, (1 + 1 / 3 + 1) / 3)
+  expect_false(isTRUE(all.equal(po, 1 / 3)))
 })
 
-# --------------------------------------------------
-# Ratings matrix (multiple raters)
-# --------------------------------------------------
 
-test_that("works with rating matrix", {
-  x <- data.frame(
-    r1 = c(1, 1, 2, 2),
-    r2 = c(1, 2, 2, 2),
-    r3 = c(1, 1, 2, NA)
-  )
-  
-  res <- percAgreement(x)
-  
-  expect_true(is.numeric(res))
-  expect_true(res["est"] >= 0 && res["est"] <= 1)
+test_that("percAgreement() skips subjects with fewer than two ratings", {
+
+  x <- rbind(c("a", "a", "a"),
+             c("a", "b", NA),
+             c("b", NA, NA))
+
+  r <- percAgreement(x, input = "ratings", verbose = TRUE)
+  expect_equal(r$nPairable, 2L)
+  expect_equal(r$n, 3L)
+  expect_equal(r$estimate, (1 + 0) / 2)
 })
 
-# --------------------------------------------------
-# Handling of NA rows
-# --------------------------------------------------
 
-test_that("handles rows with insufficient ratings", {
-  x <- data.frame(
-    r1 = c(1, NA, 2),
-    r2 = c(1, NA, NA),
-    r3 = c(1, NA, 2)
-  )
-  
-  res <- percAgreement(x, verbose = TRUE)
-  
-  expect_true(res$nPairable < res$n)
+test_that("percAgreement() confidence bounds stay inside [0, 1]", {
+
+  tab <- as.table(matrix(c(39, 1, 0, 0), nrow = 2,
+                         dimnames = list(a = c("x", "y"), b = c("x", "y"))))
+  r <- percAgreement(tab)
+  expect_true(r[["lci"]] >= 0 && r[["uci"]] <= 1)
+  expect_true(r[["lci"]] <= r[["est"]] && r[["est"]] <= r[["uci"]])
 })
 
-# --------------------------------------------------
-# Confidence interval bounds
-# --------------------------------------------------
 
-test_that("CI is within [0,1]", {
-  x <- matrix(c(5, 5,
-                5, 5), nrow = 2)
-  
-  res <- percAgreement(x)
-  
-  expect_true(res["lci"] >= 0)
-  expect_true(res["uci"] <= 1)
-})
+test_that("percAgreement() validates its arguments", {
 
-# --------------------------------------------------
-# Verbose output structure
-# --------------------------------------------------
+  tab <- as.table(matrix(c(20, 5, 3, 12), nrow = 2,
+                         dimnames = list(a = c("x", "y"), b = c("x", "y"))))
 
-test_that("verbose output returns full list", {
-  x <- matrix(c(10, 0,
-                0, 10), nrow = 2)
-  
-  res <- percAgreement(x, verbose = TRUE)
-  
-  expect_true(is.list(res))
-  expect_named(res, c("estimate", "se", "conf.int", "n", "nPairable", "method"))
-})
-
-# --------------------------------------------------
-# Input via x + y
-# --------------------------------------------------
-
-test_that("x and y inputs produce same result as confusion matrix", {
-  x <- c(1,1,2,2)
-  y <- c(1,2,2,2)
-  
-  tab <- table(x, y)
-  
-  res1 <- percAgreement(x, y)
-  res2 <- percAgreement(tab)
-  
-  expect_equal(res1["est"], res2["est"])
-})
-
-# --------------------------------------------------
-# Edge case: single observation
-# --------------------------------------------------
-
-test_that("handles n = 1 gracefully", {
-  x <- matrix(1, nrow = 1)
-  
-  res <- percAgreement(x, verbose = TRUE)
-  
-  expect_true(is.na(res$se))
-})
-
-# --------------------------------------------------
-# FPC effect
-# --------------------------------------------------
-
-test_that("fpc reduces variance", {
-  x <- matrix(c(10, 2,
-                3, 15), nrow = 2)
-  
-  res1 <- percAgreement(x, verbose = TRUE, fpc = 0)
-  res2 <- percAgreement(x, verbose = TRUE, fpc = 0.5)
-  
-  expect_true(res2$se <= res1$se)
-})
-
-# --------------------------------------------------
-# Invalid input
-# --------------------------------------------------
-
-test_that("fails with invalid input", {
-  expect_error(percAgreement("not valid"))
+  expect_error(percAgreement(matrix(1:3, ncol = 1), input = "ratings"),
+               "at least two raters")
+  expect_error(percAgreement(tab, input = "nonsense"), "should be one of")
+  expect_error(percAgreement(tab, conf.level = 1), "conf.level")
+  expect_error(percAgreement(tab, fpc = 1), "fpc")
+  expect_error(percAgreement(c(1, 2, 3), input = "ratings"),
+               "matrix or data frame")
 })

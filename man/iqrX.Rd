@@ -4,7 +4,7 @@
 \alias{iqrX}
 \title{The (weighted) Interquartile Range}
 \usage{
-iqrX(x, weights = NULL, na.rm = FALSE, type = 7)
+iqrX(x, weights = NULL, na.rm = FALSE, type = NULL)
 }
 \arguments{
 \item{x}{numeric vector}

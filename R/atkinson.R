@@ -1,51 +1,85 @@
+
 #' Atkinson Index
 #'
 #' Computes the Atkinson inequality index.
 #'
-#' The Atkinson index measures income inequality based on a
-#' social welfare function and includes an inequality aversion
-#' parameter \eqn{\varepsilon \ge 0}. Larger values of
-#' \code{epsilon} imply greater sensitivity to lower incomes.
-#'
 #' @param x numeric vector of non-negative values, such as incomes
-#' @param n optional frequency weights, a vector of non-negative whole
-#'   numbers. Each element of \code{x} is replicated \code{n} times.
-#' @param epsilon inequality aversion parameter \eqn{\varepsilon}.
-#'   The case \code{epsilon = 1} is handled separately. A negative value
-#'   yields \code{NA}.
-#' @param na.rm logical. If \code{TRUE}, missing values are removed.
-#' @param tol numeric tolerance for detecting the special case
-#'   \eqn{\varepsilon \approx 1}
+#' @param n optional frequency weights; either a single non-negative whole
+#'   number or a vector having the same length as \code{x}
+#' @param epsilon single non-negative numeric value specifying the inequality
+#'   aversion parameter
+#' @param na.rm logical; whether missing values in \code{x} are removed
+#' @param tol single non-negative numeric value specifying the tolerance for
+#'   treating \code{epsilon} as equal to one
 #'
-#' @return numeric value of the Atkinson index in the interval \verb{[0, 1]}
+#' @return a numeric value in the interval \verb{[0, 1]}, or
+#'   \code{NA_real_} if the index is undefined
 #'
 #' @details
-#' The index is defined as
+#' With frequency weights \eqn{n_i}, the weighted arithmetic mean is
 #'
 #' \deqn{
-#' A(\varepsilon) = 1 - \frac{\left( \frac{1}{n} \sum x_i^{1-\varepsilon} \right)^{1/(1-\varepsilon)}}{\bar{x}}
-#' }{A(e) = 1 - (mean(x^(1-e)))^(1/(1-e)) / mean(x)}
+#' \bar{x}_n =
+#' \frac{\sum_i n_i x_i}{\sum_i n_i}.
+#' }{
+#' mean_n(x) = sum(n * x) / sum(n)
+#' }
 #'
-#' for \eqn{\varepsilon \neq 1}. For \eqn{\varepsilon = 1},
+#' For \eqn{\varepsilon \ne 1}, the Atkinson index is
 #'
 #' \deqn{
-#' A(1) = 1 - \frac{\exp\left( \frac{1}{n} \sum \log x_i \right)}{\bar{x}}
-#' }{A(1) = 1 - exp(mean(log(x))) / mean(x)}
+#' A(\varepsilon) =
+#' 1 -
+#' \frac{
+#' \left(
+#' \frac{\sum_i n_i x_i^{1-\varepsilon}}
+#'      {\sum_i n_i}
+#' \right)^{1/(1-\varepsilon)}
+#' }{\bar{x}_n}.
+#' }{
+#' A(e) =
+#' 1 - (sum(n * x^(1-e)) / sum(n))^(1/(1-e)) / mean_n(x)
+#' }
 #'
-#' The limiting case is used whenever \code{|epsilon - 1| < tol}. Without
-#' that tolerance the general branch raises a quantity very close to 1 to
-#' the power \eqn{1/(1-\varepsilon)}, which loses all precision as
-#' \code{epsilon} approaches 1.
+#' For \eqn{\varepsilon = 1},
 #'
-#' If negative values or missing values (when \code{na.rm = FALSE})
-#' are present, \code{NA} is returned.
+#' \deqn{
+#' A(1) =
+#' 1 -
+#' \frac{
+#' \exp\left(
+#' \frac{\sum_i n_i \log(x_i)}
+#'      {\sum_i n_i}
+#' \right)
+#' }{\bar{x}_n}.
+#' }{
+#' A(1) =
+#' 1 - exp(sum(n * log(x)) / sum(n)) / mean_n(x)
+#' }
+#'
+#' The calculation uses normalized frequency weights and logarithmic power
+#' means. It therefore does not construct the potentially very large vector
+#' that would result from \code{rep(x, n)}.
+#'
+#' Observations with zero frequency are ignored. If all frequencies are zero
+#' or no observations remain after removing missing values, \code{NA_real_}
+#' is returned.
+#'
+#' If all values are zero, the index is defined as zero. If at least one value
+#' is zero and \code{epsilon >= 1}, the equally distributed equivalent value
+#' is zero and the index is one.
+#'
+#' Negative values, non-finite values, and missing values when
+#' \code{na.rm = FALSE} produce \code{NA_real_}. A negative
+#' \code{epsilon} also produces \code{NA_real_}.
 #'
 #' @references
 #' Atkinson, A. B. (1970). On the measurement of inequality.
-#' Journal of Economic Theory.
+#' \emph{Journal of Economic Theory}, 2(3), 244--263.
 #'
 #' @examples
-#' x <- c(541, 1463, 2445, 3438, 4437, 5401, 6392, 8304, 11904, 22261)
+#' x <- c(541, 1463, 2445, 3438, 4437,
+#'        5401, 6392, 8304, 11904, 22261)
 #'
 #' atkinson(x)
 #' atkinson(x, epsilon = 1)
@@ -54,44 +88,121 @@
 #' # frequency weights
 #' atkinson(c(10, 20, 30), n = c(3, 1, 1))
 #'
+#' # zero incomes
+#' atkinson(c(0, 10, 20), epsilon = 1)
+#'
 #' @family inequality
 #' @concept inequality
 #' @concept concentration-index
 #' @export
-atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5, na.rm = FALSE,
-                     tol = 1e-8) {
-
-  if (!is.numeric(epsilon) || length(epsilon) != 1L || is.na(epsilon))
-    stop("'epsilon' must be a single number")
-
-  # Returns NA rather than stopping: that is the documented contract and
-  # what test-atkinson.R asserts. I had changed this to stop() on the
-  # grounds that a negative aversion parameter is a misspecified call,
-  # not a degenerate sample - that argument still stands, but it is an
-  # API decision, not a bug fix, and it is not mine to make silently.
+atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5,
+                     na.rm = FALSE, tol = 1e-8) {
+  
+  if (!is.numeric(x))
+    stop("'x' must be a numeric vector")
+  
+  if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
+    stop("'na.rm' must be TRUE or FALSE")
+  
+  if (!is.numeric(epsilon) || length(epsilon) != 1L ||
+      !is.finite(epsilon))
+    stop("'epsilon' must be a single finite number")
+  
+  if (!is.numeric(tol) || length(tol) != 1L ||
+      !is.finite(tol) || tol < 0)
+    stop("'tol' must be a single non-negative finite number")
+  
   if (epsilon < 0)
     return(NA_real_)
-
-  if (!is.numeric(n) || any(n < 0, na.rm = TRUE) ||
-      any(n %% 1 != 0, na.rm = TRUE) || anyNA(n))
-    stop("'n' must be a vector of non-negative whole numbers")
-
-  x <- rep(x, n)  # consistent handling with other measures
-  if (na.rm) x <- as.numeric(na.omit(x))
-
+  
+  if (!is.numeric(n) || anyNA(n) || any(!is.finite(n)) ||
+      any(n < 0) || any(n != floor(n)))
+    stop("'n' must contain non-negative finite whole numbers")
+  
+  if (length(n) == 1L) {
+    n <- rep(n, length(x))
+  } else if (length(n) != length(x)) {
+    stop("'n' must have length one or the same length as 'x'")
+  }
+  
   if (length(x) == 0L)
     return(NA_real_)
-
-  if (any(is.na(x)) || any(x < 0))
+  
+  # Values with zero frequency have no influence, including invalid values.
+  keep <- n > 0
+  x <- x[keep]
+  n <- n[keep]
+  
+  if (length(x) == 0L)
     return(NA_real_)
-
-  mu <- mean(x)
-  if (mu == 0)
-    return(0)
-
-  if (abs(epsilon - 1) < tol) {
-    1 - exp(mean(log(x))) / mu
-  } else {
-    1 - (mean(x^(1 - epsilon)))^(1 / (1 - epsilon)) / mu
+  
+  if (na.rm) {
+    keep <- !is.na(x)
+    x <- x[keep]
+    n <- n[keep]
+    
+  } else if (anyNA(x)) {
+    return(NA_real_)
   }
+  
+  if (length(x) == 0L)
+    return(NA_real_)
+  
+  if (any(!is.finite(x)) || any(x < 0))
+    return(NA_real_)
+  
+  # All observations are equal and the arithmetic mean is zero.
+  if (all(x == 0))
+    return(0)
+  
+  # A(0) is identically zero.
+  if (epsilon == 0)
+    return(0)
+  
+  # The index is scale invariant. Scaling avoids overflow in the mean.
+  x <- x / max(x)
+  
+  # Normalize through max(n) so that sum(n) cannot overflow.
+  weights <- n / max(n)
+  weights <- weights / sum(weights)
+  
+  arithmeticMean <- sum(weights * x)
+  
+  if (epsilon == 1 || abs(epsilon - 1) <= tol) {
+    
+    if (any(x == 0))
+      return(1)
+    
+    logEquivalent <- sum(weights * log(x))
+    
+  } else {
+    
+    power <- 1 - epsilon
+    
+    if (power < 0 && any(x == 0))
+      return(1)
+    
+    logX <- log(x)
+    
+    # Factoring out an extreme log(x) keeps the exponential arguments
+    # non-positive and prevents overflow for large epsilon.
+    anchor <- if (power > 0) max(logX) else min(logX)
+    
+    logEquivalent <-
+      anchor +
+      log(sum(weights * exp(power * (logX - anchor)))) / power
+  }
+  
+  logRatio <- logEquivalent - log(arithmeticMean)
+  res <- -expm1(logRatio)
+  
+  if (!is.finite(res))
+    return(NA_real_)
+  
+  # Remove small floating-point excursions outside the theoretical range.
+  res <- min(1, max(0, res))
+  
+  return(res)
 }
+
+

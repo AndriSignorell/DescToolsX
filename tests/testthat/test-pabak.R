@@ -130,11 +130,11 @@ test_that("pabak works correctly", {
   # sides names the side on which the finite bound lies: "left" gives
   # [lci, Inf), "right" gives (-Inf, uci]
   expect_true(is.finite(resLeft["lci"]))
-  expect_equal(unname(resLeft["uci"]), Inf)
-
-  expect_equal(unname(resRight["lci"]), -Inf)
   expect_true(is.finite(resRight["uci"]))
-
+  
+  expect_equal(unname(resLeft["uci"]), 1)     # PABAK <= 1
+  expect_equal(unname(resRight["lci"]), -1)   # PABAK >= -1
+  
   # one-sided limits are tighter than the two-sided ones
   expect_gt(resLeft["lci"], res["lci"])
   expect_lt(resRight["uci"], res["uci"])
@@ -171,3 +171,23 @@ test_that("pabak works correctly", {
   )
   
 })
+
+
+test_that("pabak reports the open side at the range boundary", {
+  
+  m <- as.table(matrix(c(40, 10, 8, 42), nrow = 2,
+                       dimnames = list(c("no", "yes"), c("no", "yes"))))
+  
+  left  <- pabak(m, conf.level = 0.95, sides = "left")
+  right <- pabak(m, conf.level = 0.95, sides = "right")
+  
+  # PABAK lies in [-1, 1] and the two-sided bounds are truncated to it
+  expect_equal(unname(left[["uci"]]), 1)
+  expect_equal(unname(right[["lci"]]), -1)
+  expect_true(is.finite(left[["lci"]]))
+  
+  # and the estimate is 2*po - 1. ignore_attr: the result carries nObs,
+  # prevalenceIndex and biasIndex, which unname() does not remove.
+  expect_equal(pabak(m), 2 * (82 / 100) - 1, ignore_attr = TRUE)
+})
+

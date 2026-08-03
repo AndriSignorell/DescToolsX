@@ -10,8 +10,8 @@ rangeX(x, trim = NULL, robust = FALSE, na.rm = FALSE, ...)
 \item{x}{a numeric vector}
 
 \item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each
-end of \code{x} before the range is computed. Values outside that
-range are taken as the nearest endpoint. Default is 0 for
+end of \code{x} before the range is computed. Values of \code{trim} outside
+that range are taken as the nearest endpoint. Default is 0 for
 \code{robust = FALSE} and 0.2 for \code{robust = TRUE}.}
 
 \item{robust}{logical; whether to return the robust or conventional range}
@@ -20,11 +20,13 @@ range are taken as the nearest endpoint. Default is 0 for
 stripped before the computation proceeds}
 
 \item{...}{further arguments passed to \code{.robRange}, including
-\code{fac}}
+\code{fac}. Only used if \code{robust = TRUE}.}
 }
 \value{
 a numeric scalar containing the range width. The corresponding
 lower and upper bounds are returned in the \code{"bounds"} attribute.
+Note that the attribute is dropped by subsetting and by
+\code{\link{as.vector}}, so read it before computing on the result.
 }
 \description{
 Determines the range of the data, which can possibly be trimmed before

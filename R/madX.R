@@ -57,11 +57,9 @@
 #' stopifnot(identical(m1, m2))
 #' 
 #'
-#' @family dispersion  
-#' @concept dispersion  
+#' @family dispersion
+#' @concept dispersion
 #' @concept robust-statistics
-#'
-#'
 #' @export
 madX <- function(x,
                 weights = NULL,
@@ -101,15 +99,37 @@ madX <- function(x,
   ## Median-Index
   n <- length(z$x)
   
-  if (medianType == "standard" || n %% 2 == 1) {
+  if (medianType == "standard") {
+
     m <- medianX(z$x, z$weights)
+
   } else {
-    k <- n %/% 2
-    o <- order(z$x)
-    m <- if (medianType == "low")
-      z$x[o[k]]
+
+    # The low/high branch used to take the plain order statistics
+    # z$x[o[k]] and z$x[o[k+1]] with k = n %/% 2, IGNORING z$weights
+    # entirely - so madX(x, weights = w, medianType = "low") silently
+    # dropped the weights it had just been given and normalized. It also
+    # keyed off n %% 2, but with weights the relevant question is not the
+    # number of observations, it is whether the cumulative weight lands
+    # exactly on half.
+    #
+    # The weighted low/high median: order by value, accumulate weight,
+    # and take the first observation whose cumulative share reaches
+    # (low) or exceeds (high) one half. With equal weights this
+    # reproduces the previous indices exactly.
+    o  <- order(z$x)
+    cw <- cumsum(z$weights[o]) / sum(z$weights)
+
+    idx <- if (medianType == "low")
+      which(cw >= 0.5)[1L]
     else
-      z$x[o[k + 1]]
+      which(cw >  0.5)[1L]
+
+    # cw ends at 1, so "low" always finds a position; "high" does not
+    # when the last observation alone tips the balance
+    if (is.na(idx)) idx <- length(o)
+
+    m <- z$x[o[idx]]
   }
   
   return(constant * m)

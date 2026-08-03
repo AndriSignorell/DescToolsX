@@ -29,11 +29,9 @@
 #' @seealso \code{\link{mean}}, \code{\link{abs}}
 #'
 #'
-#' @family model.metrics  
-#' @concept model-evaluation  
+#' @family model.metrics
+#' @concept model-evaluation
 #' @concept prediction-error
-#'
-#'
 #' @export
 mae <- function(x, ...) {
   UseMethod("mae")

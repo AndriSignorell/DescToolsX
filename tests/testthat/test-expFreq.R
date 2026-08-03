@@ -43,3 +43,19 @@ test_that("expFreq freq = 'r' is accepted as abbreviation for 'rel'", {
   rel_abbr  <- expFreq(Titanic, freq = "r")
   expect_equal(rel_full, rel_abbr)
 })
+
+
+
+
+test_that("expFreq keeps the table class and reproduces chisq.test", {
+  
+  tab <- apply(HairEyeColor, c(1, 2), sum)
+  e <- expFreq(as.table(tab))
+  
+  expect_s3_class(e, "table")
+  expect_equal(unname(as.matrix(e)),
+               unname(suppressWarnings(chisq.test(tab)$expected)),
+               tolerance = 1e-10)
+  
+  expect_equal(sum(expFreq(Titanic, freq = "rel")), 1)
+})

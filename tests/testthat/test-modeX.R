@@ -45,3 +45,18 @@ test_that("modeX stops for matrix input", {
   expect_error(modeX(matrix(1:4, 2,2)))
 })
 
+
+test_that("modeX reports no mode when every value is unique", {
+  
+  # the guard was `length(res) == 0L & attr(res, "freq") == 1L`, which
+  # cannot fire: with all values distinct the C++ returns them all
+  expect_true(is.na(modeX(0:5)))
+  expect_true(is.na(attr(modeX(0:5), "freq")))
+  
+  expect_equal(as.vector(modeX(c(0:5, 5))), 5)
+  expect_equal(attr(modeX(c(0:5, 5)), "freq"), 2L)
+  
+  # several modes are all returned, in order
+  expect_equal(as.vector(modeX(c(0:5, 4, 5, 6))), c(4, 5))
+})
+

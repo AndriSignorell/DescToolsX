@@ -53,3 +53,18 @@ test_that("cut.integer handles Inf in breaks gracefully", {
   res <- cut(x, breaks = c(0L, 10L, .Machine$integer.max))
   expect_equal(nlevels(res), 2L)
 })
+
+test_that("cut.integer labels integer ranges and falls back sensibly", {
+  
+  x <- as.integer(c(1, 5, 10, 11, 20, 21))
+  
+  expect_equal(levels(cut(x, breaks = c(0, 10, 20, Inf))),
+               c("1-10", "11-20", "21-.."))
+  
+  expect_equal(levels(cut(x, breaks = c(0, 10, 20, Inf), right = FALSE)),
+               c("0-9", "10-19", "20-.."))
+  
+  # fractional breaks cannot be described as an integer range
+  lv <- levels(cut(x, breaks = c(0, 10.5, 21)))
+  expect_true(all(grepl("^\\(", lv)))
+})

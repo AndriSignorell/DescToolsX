@@ -168,7 +168,9 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
     names(ci) <- c("est", "lci", "uci")
     
   } else {
-    ci <- NA
+    # named NA_real_ triple rather than a bare logical NA, so that
+    # callers can index $ci[["est"]] regardless of conf.level
+    ci <- setNamesX(rep(NA_real_, 3), c("est", "lci", "uci"))
   }
   
   if(out == "def"){
