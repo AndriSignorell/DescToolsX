@@ -2,6 +2,8 @@
 % Please edit documentation in R/conf.R
 \name{conf}
 \alias{conf}
+\alias{sensX}
+\alias{specX}
 \alias{conf.table}
 \alias{conf.default}
 \alias{conf.matrix}
@@ -41,6 +43,10 @@ conf(x, ...)
 \method{print}{Conf}(x, digits = max(3L, getOption("digits") - 3L), ...)
 
 \method{plot}{Conf}(x, main = "Confusion Matrix", ...)
+
+sensX(x, ...)
+
+specX(x, ...)
 }
 \arguments{
 \item{x}{object containing predictions; one of:
@@ -74,7 +80,7 @@ Default \code{0.5}.}
 \item{main}{character string specifying the plot title}
 }
 \value{
-an object of class \code{"Conf"} containing:
+\code{conf()} returns an object of class \code{"Conf"} containing:
 \describe{
 \item{\code{table}}{confusion matrix}
 \item{\code{pos}}{positive class (binary only, else \code{NULL})}
@@ -89,6 +95,9 @@ no-information rate}
 \item{\code{mcnemar.pval}}{McNemar test p-value}
 \item{\code{byclass}}{matrix of class-wise metrics}
 }
+
+\code{sensX()} and \code{specX()} return a named numeric vector containing
+the sensitivity or specificity, respectively, for each reported class.
 }
 \description{
 Computes confusion matrices and a wide range of performance metrics
@@ -98,6 +107,9 @@ for classification models or predicted vs. observed labels.
 This is a generic function with methods for tables, vectors, and several
 model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
 \code{svm}).
+
+\code{sensX()} and \code{specX()} are convenience extractors for the
+sensitivity and specificity values computed by \code{conf()}.
 
 The orientation of the table matters: rows are read as predictions and
 columns as references, so the no-information rate is taken from the
@@ -137,11 +149,6 @@ conf(table(pred, ref))
 m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 conf(m)
 
-}
-\seealso{
-Other model.classification:
-\code{\link[=sensX]{sensX()}},
-\code{\link[=specX]{specX()}}
 }
 \concept{classification}
 \concept{confusion-matrix}

@@ -25,6 +25,7 @@
 #' from a matrix. \cr
 #' 
 #' @name hmean
+#' 
 #' @param x a positive numeric vector. An object which is not a vector is
 #' coerced, if possible, by \code{as.vector()}.
 #' @param conf.level confidence level of the interval. Default is \code{NA}. 
@@ -53,7 +54,6 @@
 #'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #' 
-#' @seealso \code{\link{meanX}}, \code{\link{gmean}} 
 #' @references Snedecor, G. W., Cochran, W. G. (1989) Statistical Methods, 8th
 #' ed. Ames, \emph{IA: Iowa State University Press }
 #' @examples

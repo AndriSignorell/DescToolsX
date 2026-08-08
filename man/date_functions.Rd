@@ -264,7 +264,6 @@ diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28"), method = "us")
 
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link{date-time-predicates}},
 \code{\link[=generation]{generation()}},

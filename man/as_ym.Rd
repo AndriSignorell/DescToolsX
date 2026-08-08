@@ -76,18 +76,4 @@ addMonths(as.ym(c(201511, 201302)), c(5, -4))
 as.ym(c(201513, 999901))
 
 }
-\seealso{
-\code{\link{addMonths}}; Date functions, like \code{\link{year}},
-\code{\link{month}}, etc.
-
-Other date.time:
-\code{\link[=addMonths]{addMonths()}},
-\code{\link[=countWorkDays]{countWorkDays()}},
-\code{\link{date-time-predicates}},
-\code{\link{date_functions}},
-\code{\link[=generation]{generation()}},
-\code{\link{time-conversions}},
-\code{\link[=zodiac]{zodiac()}}
-}
 \concept{date-time}
-\concept{date.time}

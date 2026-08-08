@@ -3,7 +3,7 @@
 #'
 #' Estimates the polychoric correlation between two ordinal variables based
 #' on a contingency table. Both a two-step estimator and full maximum
-#' likelihood (ML) estimation are supported.
+#' likelihood (ml) estimation are supported.
 #'
 #' @param x a contingency table or an ordinal vector
 #' @param y optional second ordinal vector. If supplied, a contingency table
@@ -11,10 +11,10 @@
 #' @param method character string specifying the estimation method:
 #'   \describe{
 #'     \item{\code{"two-step"}}{two-step estimator (default, fast)}
-#'     \item{\code{"ML"}}{full maximum likelihood estimation}
+#'     \item{\code{"ml"}}{full maximum likelihood estimation}
 #'   }
 #' @param se logical; if \code{TRUE}, standard errors are computed via the
-#'   Hessian matrix. This requires ML estimation, so it is an error to
+#'   Hessian matrix. This requires ml estimation, so it is an error to
 #'   combine it with \code{method = "two-step"}.
 #' @param control a list of control parameters passed to \code{\link[stats]{optim}}
 #' @param maxcor numeric; maximum absolute correlation allowed (default
@@ -80,11 +80,11 @@
 #' # Two-step estimate
 #' corPolychor(x, y)
 #'
-#' # ML estimate
-#' corPolychor(x, y, method = "ML")
+#' # ml estimate
+#' corPolychor(x, y, method = "ml")
 #'
 #' # With standard errors
-#' res <- corPolychor(x, y, method = "ML", se = TRUE)
+#' res <- corPolychor(x, y, method = "ml", se = TRUE)
 #' res$rho
 #'
 #' @family assoc.continuous
@@ -93,7 +93,7 @@
 #' @concept ordinal
 #' @export
 corPolychor <- function(x, y = NULL,
-                        method = c("two-step", "ML"),
+                        method = c("two-step", "ml"),
                         se = FALSE,
                         control = list(),
                         maxcor = 0.9999,
@@ -104,12 +104,12 @@ corPolychor <- function(x, y = NULL,
   if (!is.logical(se) || length(se) != 1L || is.na(se))
     stop("'se' must be a single non-missing logical value")
 
-  # Standard errors come from the ML Hessian. The former version quietly
-  # ran the full ML optimisation for se = TRUE and then reported
+  # Standard errors come from the ml Hessian. The former version quietly
+  # ran the full ml optimisation for se = TRUE and then reported
   # method = "two-step" in the result, so the object described an
   # estimator that had not been used.
   if (se && method == "two-step")
-    stop("standard errors require method = \"ML\"")
+    stop("standard errors require method = \"ml\"")
 
   if (!is.numeric(maxcor) || length(maxcor) != 1L || !is.finite(maxcor) ||
       maxcor <= 0 || maxcor >= 1)
@@ -179,7 +179,7 @@ corPolychor <- function(x, y = NULL,
     return(max(min(tanh(rho), maxcor), -maxcor))
   }
 
-  # ML estimation
+  # ml estimation
   start <- c(0, rc, cc)
 
   fit <- optim(start,

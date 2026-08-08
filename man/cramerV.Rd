@@ -7,9 +7,10 @@
 cramerV(
   x,
   y = NULL,
-  conf.level = NA,
-  method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"),
   correct = FALSE,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"),
   ...
 )
 }
@@ -21,20 +22,24 @@ cramerV(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
+\item{correct}{logical; whether to apply the bias correction of Bergsma
+(2013); defaults to \code{FALSE}}
+
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{character string specifying the confidence interval method:
 \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
 \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
 or \code{"fisheradj"} (using the Fisher z transformation and bias correction)}
 
-\item{correct}{logical; whether to apply the bias correction of Bergsma
-(2013); defaults to \code{FALSE}}
-
-\item{...}{additional arguments passed to internal helper functions,
-such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
+\item{...}{further arguments, passed on to
+\code{\link{normalizeToConfusion}} and \code{\link{table}} for building
+the table - \code{useNA} is the usual one.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar containing Cramer's V;
@@ -58,6 +63,22 @@ estimate \emph{and} to the interval: both are put through the same
 transformation of the chi-squared statistic, so estimate and bounds
 always live on the same scale. Formerly the two noncentral chi-squared
 methods returned an uncorrected interval around a corrected estimate.
+
+All four methods are analytical; there is no bootstrap here, and none is
+needed - unlike \link{contCoef}, where no generally accepted analytical
+interval exists.
+
+For a one-sided interval the bound is computed at the adjusted level
+\eqn{2\gamma - 1} and the open side is closed at the boundary of the
+attainable range, 0 or 1, rather than at an infinity V can never reach.
+\code{sides = "left"} names the side carrying the \emph{finite} bound and
+is the analogue of \code{alternative = "greater"} in a test.
+
+The two Fisher methods rest on \eqn{\mathrm{Var}(\mathrm{atanh}(V))
+\approx 1/(n-3)}. Where that approximation has nothing to say - three
+or fewer observations, or a perfect association, where the
+transformation is infinite - the bounds are \code{NA} and a warning
+names the reason. The estimate itself is still returned.
 }
 \note{
 Based on code by  Michael Smithson (confidence intervals),
@@ -81,6 +102,10 @@ bedrock::pairApply(Pizza[, c("driver", "operator", "area")], cramerV,
 
 d.frm <- Pizza[, c("driver", "operator", "area")]
 bedrock::pairApply(d.frm[complete.cases(d.frm), ], cramerV, symmetric = TRUE)
+
+# one-sided: "left" carries the finite lower bound, the upper one opens
+# to the maximum V can attain
+cramerV(tab, conf.level = 0.95, sides = "left")
 
 
 # Bootstrap confidence intervals for Cramer's V

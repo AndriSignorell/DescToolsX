@@ -70,19 +70,9 @@ raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
 \seealso{
 \link[bedrock:resolveFormula]{bedrock::resolveFormula}
 
-Other assoc.agreement:
+Other agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},
-\code{\link[=ccc]{ccc()}},
-\code{\link[=cohenKappa]{cohenKappa()}},
-\code{\link[=cronbachAlpha]{cronbachAlpha()}},
-\code{\link[=icc]{icc()}},
-\code{\link[=kappaM]{kappaM()}},
-\code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
-\code{\link[=pabak]{pabak()}},
-\code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}}
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}}
 }
 \concept{agreement}
-\concept{assoc.agreement}
 \concept{rater-data}

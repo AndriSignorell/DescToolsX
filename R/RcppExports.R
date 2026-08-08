@@ -21,15 +21,15 @@ cstat_boot_cpp <- function(yR, xR, B = 1000L, alpha = 0.05, seed = -1L) {
     .Call(`_DescToolsX_cstat_boot_cpp`, yR, xR, B, alpha, seed)
 }
 
-contcoef_table_boot_bca_cpp <- function(tab, R, seed, correct, conf_level) {
-    .Call(`_DescToolsX_contcoef_table_boot_bca_cpp`, tab, R, seed, correct, conf_level)
+contcoef_jackknife_a_cpp <- function(tab, correct = FALSE) {
+    .Call(`_DescToolsX_contcoef_jackknife_a_cpp`, tab, correct)
 }
 
 contcoef_table_cpp <- function(tab, correct = FALSE) {
     .Call(`_DescToolsX_contcoef_table_cpp`, tab, correct)
 }
 
-contcoef_table_boot_cpp <- function(tab, R = 5000L, seed = 0L, correct = FALSE) {
+contcoef_table_boot_cpp <- function(tab, R, seed, correct = FALSE) {
     .Call(`_DescToolsX_contcoef_table_boot_cpp`, tab, R, seed, correct)
 }
 

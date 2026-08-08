@@ -10,12 +10,18 @@
        rr = relRisk)
 
 
-#' Attach Short Aliases for Selected DescToolsX Functions
+#' Attach and Remove Short Aliases for Selected DescToolsX Functions
 #'
 #' Assigns a set of convenient short-name aliases into an environment
 #' (by default the global environment).  This is an explicit opt-in: nothing
 #' is exported under these names, so no namespace conflicts arise when the
 #' package is merely attached with \code{library()}.
+#' 
+#' The short-name aliases that were previously created by
+#' \code{\link{attachAliases}()} from the given environment can be removed 
+#' by \code{\link{attachAliases}()}. Names that do
+#' not exist, or that hold something other than the aliased function, are
+#' left untouched.
 #'
 #' @details
 #' The following aliases are created:
@@ -34,6 +40,7 @@
 #' \code{overwrite = TRUE} is given, so a user's own \code{or} or
 #' \code{rr} cannot be clobbered by accident.
 #'
+#' @name attach-detach-aliases
 #' @param envir the environment into which the aliases are assigned.
 #'   Defaults to \code{.GlobalEnv}.  Supply a different environment
 #'   (e.g. the calling frame via \code{environment()}) if you want
@@ -43,7 +50,7 @@
 #'   such names are skipped with a warning.
 #'
 #' @return invisibly, a character vector of the alias names that were
-#'   created
+#'   created, resp. removed
 #'
 #' @seealso \code{\link{detachAliases}}, \code{\link{oddsRatio}},
 #'   \code{\link{relRisk}}
@@ -87,28 +94,7 @@ attachAliases <- function(envir = .GlobalEnv, overwrite = FALSE) {
 }
 
 
-#' Remove Aliases Created by attachAliases
-#'
-#' Removes the short-name aliases that were previously created by
-#' \code{\link{attachAliases}()} from the given environment.  Names that do
-#' not exist, or that hold something other than the aliased function, are
-#' left untouched.
-#'
-#' @param envir the environment from which the aliases are removed.
-#'   Must match the \code{envir} argument used in \code{attachAliases()}.
-#'   Defaults to \code{.GlobalEnv}.
-#'
-#' @return invisibly, a character vector of the alias names that were removed
-#'
-#' @seealso \code{\link{attachAliases}}
-#'
-#' @examples
-#' e <- new.env()
-#' attachAliases(envir = e)
-#' detachAliases(envir = e)
-#'
-#' @family convenience
-#' @concept convenience
+#' @rdname attach-detach-aliases
 #' @export
 detachAliases <- function(envir = .GlobalEnv) {
 

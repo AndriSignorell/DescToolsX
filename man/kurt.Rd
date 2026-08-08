@@ -20,17 +20,16 @@ kurt(
 \code{as.vector} if possible.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence interval will be calculated.}
+(the default), only the point estimate is returned.}
 
-\item{sides}{character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. The value names the side on which the finite bound
-lies. You can specify just the initial letter.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. For a one-sided interval, the value names the side with
+the finite bound. The initial letter is sufficient.}
 
-\item{method}{character string defining the type of interval required.
-The value should be one of \code{"classic"} or \code{"boot"} (default).
-Further arguments for the bootstrap procedure (such as \code{R},
-\code{type}, etc.) can be supplied via the \code{...} argument if needed.}
+\item{method}{character string specifying the interval method. Common
+choices are \code{"classic"} and \code{"boot"}; the available methods
+and their defaults depend on the function.}
 
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}
@@ -109,7 +108,7 @@ Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 kurtosis. \emph{The Statistician}, 47, 183-189.
 }
 \seealso{
-\link{meanX}, \link{sdX}, \link{skew}, similar code in \pkg{e1071}
+\link{meanX}, \link{sdX}, similar code in \pkg{e1071}
 
 Other shape:
 \code{\link[=skew]{skew()}}

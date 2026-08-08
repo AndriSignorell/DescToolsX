@@ -82,7 +82,6 @@ addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 \code{\link[=year]{year()}}, \code{\link[=month]{month()}}
 
 Other date.time:
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link{date-time-predicates}},
 \code{\link{date_functions}},

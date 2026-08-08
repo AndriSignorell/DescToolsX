@@ -21,12 +21,12 @@ pearsonCor(
 \code{x}. If \code{y} is supplied, \code{table(x, y, ...)} is calculated.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence interval will be calculated.}
+(the default), only the point estimate is returned.}
 
-\item{sides}{character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. The value names the side on which the finite bound
-lies. You can specify just the initial letter.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}. For a one-sided interval, the value names the side with
+the finite bound. The initial letter is sufficient.}
 
 \item{method}{confidence interval method; currently only \code{"fisher"} is
 implemented}

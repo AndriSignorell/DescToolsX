@@ -65,19 +65,7 @@
 #'   (together with \code{y})
 #' @param y optional second vector. If \code{x} is not a vector,
 #'   \code{y} must be \code{NULL}.
-#' @param conf.level confidence level for confidence intervals.
-#'   If \code{NA}, no confidence interval is computed.
-#' @param sides character string specifying the side of the confidence
-#'   interval, one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}. It names the side on which the \emph{finite} bound
-#'   lies, not the direction of an alternative hypothesis - see
-#'   \link{ConfidenceIntervals} for the full definition and for the
-#'   difference to \pkg{DescTools}.
-#' @param method method used for inference. Available options depend
-#'   on the selected association measure.
-#' @param ... additional arguments passed to internal helper functions,
-#'   such as bootstrap routines (\code{\link[boot]{boot}}) or 
-#'   table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})
+#'   
 #'
 #' @references 
 #' Cramer, H. (1946) \emph{Mathematical Methods of Statistics}. Princeton

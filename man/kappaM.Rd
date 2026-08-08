@@ -129,17 +129,14 @@ scale coding. \emph{Public Opinion Quarterly}, \emph{19}(3), 321-325.
 }
 \seealso{
 Other assoc.agreement:
-\code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
 \code{\link[=pabak]{pabak()}},
 \code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=randolphKappa]{randolphKappa()}},
-\code{\link[=raterFrame]{raterFrame()}}
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \concept{assoc.agreement}
 \concept{categorical-agreement}

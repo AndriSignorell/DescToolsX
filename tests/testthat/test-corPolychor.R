@@ -33,11 +33,11 @@ test_that("corPolychor is near 0 for independent ordinal data", {
   expect_lt(abs(rho), 0.2)
 })
 
-test_that("corPolychor method = 'ML' returns a numeric in [-1, 1]", {
+test_that("corPolychor method = 'ml' returns a numeric in [-1, 1]", {
   set.seed(2)
   x <- factor(sample(1:3, 80, replace = TRUE), ordered = TRUE)
   y <- factor(sample(1:3, 80, replace = TRUE), ordered = TRUE)
-  rho <- corPolychor(x, y, method = "ML")
+  rho <- corPolychor(x, y, method = "ml")
   expect_gte(rho, -1)
   expect_lte(rho,  1)
 })
@@ -46,7 +46,7 @@ test_that("corPolychor se = TRUE returns a list with expected components", {
   set.seed(3)
   x <- factor(sample(1:3, 80, replace = TRUE), ordered = TRUE)
   y <- factor(sample(1:3, 80, replace = TRUE), ordered = TRUE)
-  res <- corPolychor(x, y, method = "ML", se = TRUE)
+  res <- corPolychor(x, y, method = "ml", se = TRUE)
   expect_type(res, "list")
   expect_true(all(c("rho", "rowCuts", "colCuts", "var", "n") %in% names(res)))
 })
@@ -83,16 +83,16 @@ test_that("corPolychor is not truncated at tanh(2)", {
 })
 
 
-test_that("standard errors require ML", {
+test_that("standard errors require ml", {
   set.seed(5)
   a <- factor(sample(1:3, 100, replace = TRUE), ordered = TRUE)
   b <- factor(sample(1:3, 100, replace = TRUE), ordered = TRUE)
   
-  expect_error(corPolychor(a, b, method = "two-step", se = TRUE), "ML")
+  expect_error(corPolychor(a, b, method = "two-step", se = TRUE), "ml")
   
-  res <- corPolychor(a, b, method = "ML", se = TRUE)
+  res <- corPolychor(a, b, method = "ml", se = TRUE)
   expect_s3_class(res, "Polychor")
-  expect_identical(res$method, "ML")
+  expect_identical(res$method, "ml")
 })
 
 

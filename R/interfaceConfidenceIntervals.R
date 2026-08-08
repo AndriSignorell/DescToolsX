@@ -1,70 +1,63 @@
 
 #' Confidence Interval Interface - Common Arguments
 #'
-#' Common confidence interval interface shared by multiple functions.
+#' Common arguments for confidence interval functions.
 #'
 #' @name ConfidenceIntervals
 #'
 #' @param conf.level confidence level of the interval. If set to \code{NA}
-#'   (which is the default) no confidence interval will be calculated.
+#'   (the default), only the point estimate is returned.
 #'
-#' @param sides character string specifying the side of the confidence
-#'   interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}. The value names the side on which the finite bound
-#'   lies. You can specify just the initial letter.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}. For a one-sided interval, the value names the side with
+#'   the finite bound. The initial letter is sufficient.
 #'
-#' @param method character string defining the type of interval required.
-#'   The value should be one of \code{"classic"} or \code{"boot"} (default).
-#'   Further arguments for the bootstrap procedure (such as \code{R},
-#'   \code{type}, etc.) can be supplied via the \code{...} argument if needed.
+#' @param method character string specifying the interval method. Common
+#'   choices are \code{"classic"} and \code{"boot"}; the available methods
+#'   and their defaults depend on the function. 
+#'   
+#' @param ... Additional bootstrap arguments,
+#'   such as \code{R} and \code{type}, can be supplied via \code{...}.
 #'
 #' @details
-#' If \code{conf.level = NA}, no confidence interval is computed and only
-#' the point estimate is returned.
-#'
-#' The \code{sides} argument controls whether a two-sided or one-sided
-#' confidence interval is calculated. It names the side on which the
-#' \emph{finite} bound lies:
+#' For one-sided intervals, \code{sides} names the side with the finite bound:
 #'
 #' \describe{
-#'   \item{\code{"left"}}{\eqn{[lci, \infty)} - the left bound is finite,
-#'     the interval is unbounded to the right.}
-#'   \item{\code{"right"}}{\eqn{(-\infty, uci]} - the right bound is finite,
-#'     the interval is unbounded to the left.}
+#'   \item{\code{"left"}}{\eqn{[lci, \infty)}: the lower bound is finite.}
+#'   \item{\code{"right"}}{\eqn{(-\infty, uci]}: the upper bound is finite.}
 #' }
 #'
-#' Where the parameter is itself bounded, the unbounded side is reported at
-#' that boundary rather than as infinite: \code{ccc}, for instance, reports
-#' 1 and -1 in place of \eqn{\infty} and \eqn{-\infty}.
+#' If the parameter space is bounded, its boundary is reported instead of
+#' infinity. For example, \code{ccc} uses -1 and 1.
 #'
-#' Read this way, \code{"left"} corresponds to a hypothesis of
-#' \code{"greater"} in \code{\link[stats]{t.test}} and \code{"right"} to one
-#' of \code{"less"}. Note that this is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} names the direction of the
-#' alternative hypothesis instead. Code carrying one-sided intervals over
-#' from \pkg{DescTools} therefore needs its \code{sides} argument swapped;
-#' the change is silent, since both packages accept the same values.
-#'
-#' Partial matching of the initial letter is supported.
+#' Thus, \code{sides = "left"} corresponds to
+#' \code{alternative = "greater"} in \code{\link[stats]{t.test}}, whereas
+#' \code{sides = "right"} corresponds to \code{alternative = "less"}.
+#' This is also the convention used by the corresponding functions in
+#' \pkg{DescTools}.
 #'
 #' The available \code{method} options may vary between functions, depending
 #' on the underlying statistic and its theoretical properties.
 #' Classical intervals typically rely on asymptotic normality or analytic
-#' variance formulas. Bootstrap intervals, specified via \code{"boot"},
+#' variance formulas. 
+#' 
+#' Bootstrap intervals, specified via \code{"boot"},
 #' provide a broadly applicable alternative that can be used for a wide
 #' range of statistics without requiring closed-form variance expressions.
 #'
-#' Bootstrap confidence intervals are computed using functionality from the
+#' Bootstrap confidence intervals are partly computed using functionality from the
 #' \pkg{boot} package (see \code{\link[boot]{boot}} and
 #' \code{\link[boot]{boot.ci}}). Important parameters such as the number of
 #' resamples \code{R} and the bootstrap interval type (\code{"perc"},
 #' \code{"bca"}, etc.) can be controlled via additional arguments.
 #'
-#' See also:
-#' \itemize{
-#'   \item \code{\link[boot]{boot}}
-#'   \item \code{\link[boot]{boot.ci}}
-#'   \item \code{\link[stats]{confint}}
-#' }
+#' @section Random number generation:
+#' Requesting a bootstrap confidence interval draws a seed from R's global 
+#' random number generator and therefore advances it. 
+#' Call \code{\link[base]{set.seed}} beforehand for reproducible intervals.
+#' 
+#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
+#'   \code{\link[stats]{confint}}
 #'
 NULL

@@ -7,10 +7,10 @@
 lambda(
   x,
   y = NULL,
+  direction = c("symmetric", "row", "column"),
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("classic"),
-  direction = c("symmetric", "row", "column"),
   ...
 )
 }
@@ -22,27 +22,21 @@ lambda(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
-
-\item{sides}{character string specifying the side of the confidence
-interval, one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. It names the side on which the \emph{finite} bound
-lies, not the direction of an alternative hypothesis - see
-\link{ConfidenceIntervals} for the full definition and for the
-difference to \pkg{DescTools}.}
-
-\item{method}{character string selecting the interval method; currently
-only \code{"classic"} is implemented}
-
 \item{direction}{type of lambda. Can be one out of \code{"symmetric"}
 (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
 direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
 reported. See Details.}
 
-\item{...}{additional arguments passed to internal helper functions,
-such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+
+\item{method}{character string selecting the interval method; currently
+only \code{"classic"} is implemented. It is validated but has no
+further effect while there is a single choice.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named

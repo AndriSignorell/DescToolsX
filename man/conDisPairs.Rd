@@ -50,13 +50,8 @@ conDisPairs(tab)
 \seealso{
 Other assoc.ordinal:
 \code{\link[=cStat]{cStat()}},
-\code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=kendallTauA]{kendallTauA()}},
-\code{\link[=kendallTauB]{kendallTauB()}},
 \code{\link[=kendallW]{kendallW()}},
-\code{\link[=ordAssocs]{ordAssocs()}},
-\code{\link[=somersDelta]{somersDelta()}},
-\code{\link[=stuartTauC]{stuartTauC()}}
+\code{\link[=ordAssocs]{ordAssocs()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measure}

@@ -1,5 +1,5 @@
 
-#' Association measures for a contingency table (internal)
+#' Association Measures for a Contingency Table (Internal)
 #'
 #' Report layer for \code{desc.table()}: collects the association measures
 #' phi, contingency coefficient, Cramer's V, Goodman Kruskal's Gamma,
@@ -89,88 +89,126 @@ print.AssocsTab <- function(x, digits = 4, ...){
 }
 
 
-#' Concordance-based ordinal association measures
+#' Ordinal Association Measures
 #'
-#' Computes Goodman-Kruskal \eqn{\gamma}, Kendall's \eqn{\tau_a},
-#' \eqn{\tau_b}, \eqn{\tau_c}, Somers' \eqn{D} and the c-statistic for a
-#' pair of ordinal vectors or a contingency table, optionally with
-#' confidence intervals.
+#' Computes concordance-based association measures for two ordinal variables
+#' or a contingency table, optionally with confidence intervals.
 #'
-#' This is the shared calculation core: it counts the concordant and
-#' discordant pairs once and derives every measure from them, so requesting
-#' several measures at once is cheaper than calling the single-measure
-#' functions (\code{\link{gkGamma}}, \code{\link{kendallTauA}},
-#' \code{\link{kendallTauB}}, \code{\link{stuartTauC}},
-#' \code{\link{somersDelta}}) separately - each of those wraps this
-#' function for one measure. Use \code{ordAssocs()} directly when a model or
-#' report needs a bundle of them.
-#'
-#' \code{\link{cStat}} is a related but separate estimator: it returns the
-#' AUC of a score against a binary outcome with half-weighted ties and
-#' bootstrap intervals, which differs from the \code{(somers + 1) / 2}
-#' reported here.
-#'
-#' Two computational paths are used:
+#' @details
+#' Let \eqn{P} and \eqn{Q} denote the numbers of concordant and discordant
+#' pairs, \eqn{T_X} and \eqn{T_Y} the numbers tied on \eqn{X} and \eqn{Y},
+#' \eqn{n_0=n(n-1)/2}, and \eqn{m} the smaller table dimension.
+#' \code{\link{conDisPairs}} returns these pair counts as \code{C}, \code{D},
+#' \code{Ties_X}, and \code{Ties_Y} and describes their calculation.
+#' 
+#' The measures are defined as follows:
 #'
 #' \describe{
-#'   \item{\code{y} supplied}{A compiled C++ routine (\code{assoc_cpp})
-#'     processes the raw paired observations directly.  This is
-#'     substantially faster than the table path for large vectors.}
-#'   \item{\code{y = NULL}}{\code{x} is treated as a contingency table;
-#'     concordant and discordant pairs are counted via
-#'     \code{\link{conDisPairs}}.  Confidence intervals are obtained from
-#'     \code{.tableAssocCI}.}
+#'   \item{Goodman--Kruskal \eqn{\gamma} (\code{gkGamma}):}{
+#'     \deqn{\gamma = \frac{P-Q}{P+Q}}
+#'   }
+#'
+#'   \item{Kendall \eqn{\tau_a} (\code{kendallTauA}):}{
+#'     \deqn{\tau_a = \frac{P-Q}{n_0}}
+#'   }
+#'
+#'   \item{Kendall \eqn{\tau_b} (\code{kendallTauB}):}{
+#'     \deqn{
+#'       \tau_b =
+#'       \frac{P-Q}
+#'       {\sqrt{(n_0-T_X)(n_0-T_Y)}}
+#'     }
+#'   }
+#'
+#'   \item{Stuart \eqn{\tau_c} (\code{stuartTauC}):}{
+#'     \deqn{
+#'       \tau_c =
+#'       \frac{2m(P-Q)}
+#'       {n^2(m-1)}
+#'     }
+#'   }
+#'
+#'   \item{Somers \eqn{D_{X\mid Y}} (\code{somersDelta}):}{
+#'     \deqn{
+#'       D_{X\mid Y} =
+#'       \frac{P-Q}
+#'       {n_0-T_Y}
+#'     }
+#'   }
 #' }
+#' Gamma and Kendall's coefficients are symmetric. 
+#' 
+#' Somers' \eqn{D} is
+#' directional: for tables, \code{direction="row"} returns \eqn{D_{R|C}}
+#' and \code{direction="column"} returns \eqn{D_{C|R}}. In vector mode,
+#' \code{ordAssocs()} returns \eqn{D_{X|Y}}; reverse \code{x} and \code{y}
+#' for the other direction. \code{somersDelta()} performs this reversal when
+#' \code{direction="column"}.
 #'
-#' Both paths return the same measures - the choice is one of input
-#' format and speed, not of method.
+#' The c-statistic is used for a binary outcome and consistently ordered predictions
+#' and is related to Somers D as \eqn{C_{stat}=(D+1)/2}. 
+#' See \code{\link{cStat}} for direct estimation of the
+#' c-statistic from predicted values and a binary response.
 #'
-#' @param x either a numeric vector when \code{y} is supplied or a
-#'   matrix or table representing a contingency table when \code{y} is
-#'   \code{NULL}
-#' @param y optional numeric vector of the same length as \code{x}
-#' @param which character string selecting which measure to return. One of
-#'   \code{"all"} (default), \code{"gamma"}, \code{"tauA"},
-#'   \code{"tauB"}, \code{"tauC"}, \code{"somers"} or \code{"cstat"} -
-#'   the same spellings as the names of the returned list.
-#' @param conf.level numeric scalar in \eqn{(0, 1)}. If supplied,
-#'   confidence intervals are appended to each measure. Default \code{NA}
-#'   suppresses intervals.
-#' @param direction character string controlling the direction for Somers'
-#'   \eqn{D}: \code{"row"} (default) treats row totals as the dependent
-#'   variable, \code{"column"} the column totals. Ignored by the symmetric
-#'   measures. Only available in table mode; the vector path always
-#'   reports \code{"row"} and rejects any other value rather than
-#'   returning a differently defined estimate under the requested name.
+#' @name ordAssocs
+#' @aliases gkGamma kendallTauB kendallTauA stuartTauC somersDelta 
+#' 
+#' @param x numeric or ordinal vector, or a two-dimensional contingency table
+#' @param y optional second vector of the same length as \code{x}
+#' @param which measure returned by \code{ordAssocs()}: \code{"all"},
+#'   \code{"gamma"}, \code{"tauA"}, \code{"tauB"}, \code{"tauC"},
+#'   \code{"somers"}, or \code{"cstat"}
+#' @param conf.level confidence level of the interval; \code{NA} returns only
+#'   the estimate
+#' @param direction direction of Somers' \eqn{D}; \code{"row"} or
+#'   \code{"column"}
 #'
-#' @return a named list with one element per requested measure
-#'   (\code{gamma}, \code{tauA}, \code{tauB}, \code{tauC},
-#'   \code{somers}, \code{cstat}). Each element is an unnamed numeric
-#'   scalar containing only the point estimate, or, when
-#'   \code{conf.level} is supplied, a named numeric vector with elements:
-#' \describe{
-#'   \item{\code{est}}{point estimate.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
-#' }
+#' @return 
+#'   The extractor functions return
+#'   am unnamed numeric scalar if \code{conf.level = NA}, and otherwise a named
+#'   numeric vector with elements:
+#'   \describe{
+#'   \item{\code{est}}{point estimate}
+#'   \item{\code{lci}}{lower confidence interval bound}
+#'   \item{\code{uci}}{upper confidence interval bound}
+#'  }
+#'  
+#'  \code{ordAssocs()} returns the same structure in a named 
+#'  list containing the selected measures. 
+#'  
 #'
-#' @seealso \code{\link{gkGamma}}, \code{\link{kendallTauA}},
-#'   \code{\link{kendallTauB}}, \code{\link{stuartTauC}},
-#'   \code{\link{somersDelta}}, \code{\link{cStat}},
-#'   \code{\link{conDisPairs}}
+#' @references
+#' Agresti, A. (2002) \emph{Categorical Data Analysis}. Wiley, pp. 57--59.
+#'
+#' Brown, M. B. and Benedetti, J. K. (1977). Sampling behavior of tests for
+#' correlation in two-way contingency tables. \emph{JASA}, 72, 309--315.
+#'
+#' Goodman, L. A. and Kruskal, W. H. (1954, 1963). Measures of association
+#' for cross classifications. \emph{JASA}, 49, 732--764; 58, 310--364.
+#'
+#' Kendall, M. (1955) \emph{Rank Correlation Methods}. Charles Griffin.
+#'
+#' Somers, R. H. (1962). A new asymmetric measure of association for ordinal
+#' variables. \emph{American Sociological Review}, 27, 799--811.
 #'
 #' @examples
-#' # A bundle of measures from raw vectors, computed in one pass
-#' ord <- ordAssocs(swiss$Fertility, swiss$Agriculture, conf.level = 0.95)
-#' ord$somers
-#' ord$cstat
+#' # Table example:
+#' tab <- as.table(rbind(
+#'   c(26, 26, 23, 18,  9),
+#'   c( 6,  7,  9, 14, 23)
+#' ))
 #'
-#' # A single measure
-#' ordAssocs(swiss$Fertility, swiss$Agriculture, which = "gamma")
+#' ordAssocs(tab, conf.level = 0.95)
+#' kendallTauB(tab, conf.level = 0.95)
+#' somersDelta(tab, direction = "column")
+#' 
+#' # Vector example
+#' x <- c(1,2,2,3,3,3,4,5)
+#' y <- c(1,3,2,1,5,3,4,5)
 #'
-#' # From a contingency table
-#' tab <- table(cut(swiss$Fertility, 3), cut(swiss$Education, 3))
-#' ordAssocs(tab)
+#' kendallTauA(x, y, conf.level=0.95)
+#' somersDelta(x, y, direction = "column", conf.level=0.95)
+#' 
 #'
 #' @family assoc.ordinal
 #' @concept association-measure
@@ -277,6 +315,161 @@ ordAssocs <- function(x, y = NULL,
 
   return(resAll)
 }
+
+
+# == extractors ===============================================================
+
+.ordAssocResult <- function(res, conf.level) {
+
+  est <- unname(res[[1L]])
+
+  if(is.na(conf.level)) {
+
+    if(length(est) != 1L)
+      stop(gettextf(
+        "ordAssocs() returned %d values where a single estimate was expected.",
+        length(est)
+      ), domain = NA)
+
+    est
+
+  } else {
+
+    if(length(est) != 3L)
+      stop(gettextf(
+        "ordAssocs() returned %d values where estimate and interval were expected.",
+        length(est)
+      ), domain = NA)
+
+    setNamesX(est, c("est", "lci", "uci"))
+  }
+}
+
+
+#' @rdname ordAssocs
+#' @export
+gkGamma <- function(x, y = NULL,
+                    conf.level = NA,
+                    direction = c("row", "column")) {
+
+  direction <- match.arg(direction)
+
+  res <- ordAssocs(
+    x = x,
+    y = y,
+    which = "gamma",
+    conf.level = conf.level,
+    direction = direction
+  )
+
+  .ordAssocResult(res, conf.level)
+}
+
+
+#' @rdname ordAssocs
+#' @export
+kendallTauA <- function(x, y = NULL,
+                        conf.level = NA) {
+
+  res <- ordAssocs(
+    x = x,
+    y = y,
+    which = "tauA",
+    conf.level = conf.level
+  )
+
+  .ordAssocResult(res, conf.level)
+}
+
+
+#' @rdname ordAssocs
+#' @export
+kendallTauB <- function(x, y = NULL,
+                        conf.level = NA) {
+
+  res <- ordAssocs(
+    x = x,
+    y = y,
+    which = "tauB",
+    conf.level = conf.level
+  )
+
+  .ordAssocResult(res, conf.level)
+}
+
+
+#' @rdname ordAssocs
+#' @export
+stuartTauC <- function(x, y = NULL,
+                       conf.level = NA) {
+
+  if(length(conf.level) != 1L)
+    stop("'conf.level' must be a single value, or NA")
+
+  if(!is.na(conf.level) &&
+     (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
+    stop("'conf.level' must be a single number in (0, 1), or NA")
+
+  if(!is.null(y) && !is.null(dim(x)) && length(dim(x)) > 1L)
+    stop("'y' must not be given when 'x' is a contingency table")
+
+  res <- ordAssocs(
+    x = x,
+    y = y,
+    which = "tauC",
+    conf.level = conf.level
+  )
+
+  .ordAssocResult(res, conf.level)
+}
+
+
+#' @rdname ordAssocs
+#' @export
+somersDelta <- function(x, y = NULL,
+                        conf.level = NA,
+                        direction = c("row", "column")) {
+
+  direction <- match.arg(direction)
+
+  if(length(conf.level) != 1L)
+    stop("'conf.level' must be a single value, or NA")
+
+  if(!is.na(conf.level) &&
+     (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
+    stop("'conf.level' must be a single number in (0, 1), or NA")
+
+  if(is.null(y)) {
+
+    res <- ordAssocs(
+      x = x,
+      which = "somers",
+      conf.level = conf.level,
+      direction = direction
+    )
+
+  } else {
+
+    if(!is.null(dim(x)) && length(dim(x)) > 1L)
+      stop("'y' must not be given when 'x' is a contingency table")
+
+    if(direction == "column") {
+      tmp <- x
+      x <- y
+      y <- tmp
+    }
+
+    res <- ordAssocs(
+      x = x,
+      y = y,
+      which = "somers",
+      conf.level = conf.level
+    )
+  }
+
+  .ordAssocResult(res, conf.level)
+}
+
 
 
 # == internal helper ==========================================================

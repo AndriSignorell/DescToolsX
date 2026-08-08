@@ -54,7 +54,9 @@
 #' deterministic: the compiled routine picks its pivots from a local
 #' generator and does not touch R's stream.
 #'
-#' @seealso \code{\link[stats]{wilcox.test}}, \code{\link{medianX}}
+#' @note C++ port of Monahan’s algorithm by Cyril Flurin Moser
+#'
+#' @seealso \code{\link[stats]{wilcox.test}}
 #'
 #' @examples
 #' x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)

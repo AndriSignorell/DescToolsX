@@ -20,16 +20,6 @@ spearmanCor(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{conf.level}{confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
-
-\item{sides}{character string specifying the side of the confidence
-interval, one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. It names the side on which the \emph{finite} bound
-lies, not the direction of an alternative hypothesis - see
-\link{ConfidenceIntervals} for the full definition and for the
-difference to \pkg{DescTools}.}
-
 \item{na.rm}{logical; whether to remove incomplete pairs. Applies to the
 vector interface; a frequency table must not contain missing counts.}
 }

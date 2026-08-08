@@ -32,9 +32,6 @@
 #'
 #' @note Based on code by Roland Rapold, adapted to conform to package standards.
 #'
-#' @seealso \code{\link{addMonths}}; Date functions, like \code{\link{year}},
-#' \code{\link{month}}, etc.
-#'
 #' @examples
 #'
 #' month(as.ym(202408))
@@ -56,8 +53,7 @@
 #' # out-of-range input is flagged, not silently mangled
 #' as.ym(c(201513, 999901))
 #'
-#' @family date.time
-#' @concept date-time
+#' @family date-time
 #' @export
 as.ym <- function(x) {
   

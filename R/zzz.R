@@ -59,7 +59,7 @@
 #' 
 #' @importFrom utils readRegistry head tail capture.output object.size str combn find getAnywhere lsf.str write.table getFromNamespace stack browseURL help.search modifyList getS3method
 #'             
-#' @importFrom bedrock `%)(%` `%[]%` abind combPairs maxDigits recycle setNamesX label naIf naReplace isZero isWholeLike isDichotomous `%][%` pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg recycle
+#' @importFrom bedrock %)(% %[]% abind combPairs maxDigits setNamesX label naIf naReplace isZero isWholeLike isDichotomous %][% pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg recycle
 #'             
 #' @importFrom pharos plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addOpacity plotDensBox band canvas fade pal plotBox plotXY mar plot.Desc.qn plot.Desc.table
 #'             

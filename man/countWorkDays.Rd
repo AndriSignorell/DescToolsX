@@ -60,7 +60,6 @@ countWorkDays(as.Date("2019-01-05"), as.Date("2019-01-05"))  # Saturday: 0
 \seealso{
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link{date-time-predicates}},
 \code{\link{date_functions}},
 \code{\link[=generation]{generation()}},

@@ -16,12 +16,22 @@
 #' ranging from 0 to 1. 
 #' 
 #' @inheritParams Association
+#' 
 #' @param direction type of lambda. Can be one out of \code{"symmetric"}
 #' (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
 #' direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
 #' reported. See Details.
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#'   
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   
 #' @param method character string selecting the interval method; currently
-#' only \code{"classic"} is implemented
+#' only \code{"classic"} is implemented. It is validated but has no
+#' further effect while there is a single choice.
 #' 
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
@@ -68,16 +78,34 @@
 #' @concept association-measure
 #' @concept nominal
 #' @export
-lambda <- function(x, y = NULL,  
-                   conf.level = NA, 
-                   sides=c("two.sided", "left", "right"), 
-                   method = c("classic"), 
-                   direction = c("symmetric", "row", "column"), ...){
-  
+lambda <- function(x, y = NULL,
+                   direction = c("symmetric", "row", "column"),
+                   conf.level = NA,
+                   sides = c("two.sided", "left", "right"),
+                   method = c("classic"),
+                   ...){
+
   # good description
   # http://salises.mona.uwi.edu/sa63c/Crosstabs%20Measures%20for%20Nominal%20Data.htm
 
-  if(!is.null(y)) x <- table(x, y, ...)
+  # All three matched up front. 'sides' used to be matched only inside the
+  # interval branch, so a misspelled value was accepted whenever
+  # conf.level was NA; 'method' was never matched at all.
+  direction <- match.arg(direction)
+  sides     <- match.arg(sides)
+  method    <- match.arg(method)
+
+  # Length and type BEFORE is.na(): NA is logical, and is.na() on a vector
+  # of length != 1 makes the `if` below the error message instead of this
+  # one. conf.level = NULL aborted the same way, and NaN slipped through
+  # into the point estimate.
+  conf.level <- .checkConfLevel(conf.level)
+  
+  # normalizeToConfusion() rather than table(): the family convention, and
+  # it fixes two things at once - `...` used to reach table() only when y
+  # was given, so useNA was silently dropped for a table input, and a
+  # data.frame or a non-table x was never validated at all.
+  x <- normalizeToConfusion(x, y, mode = "association", ...)
   
   # Guttman'a lambda (1941), resp. Goodman Kruskal's lambda (1954)
   
@@ -92,23 +120,25 @@ lambda <- function(x, y = NULL,
   nr <- nrow(x)
   nc <- ncol(x)
   
-  # matched once, up front: the two switch() blocks below each called
-  # match.arg() again on the raw argument
-  direction <- match.arg(direction, choices = c("symmetric", "row", "column"))
-  
   switch( direction
           , "symmetric" = { res <- 0.5*(sum(rmax, cmax) - (max.csum +  max.rsum)) / (n - 0.5*(max.csum +  max.rsum)) }
           , "column" = { res <- (sum(rmax) - max.csum) / (n - max.csum) }
           , "row" = { res <- (sum(cmax) - max.rsum) / (n - max.rsum) }
   )
   
-  if(is.na(conf.level)){
-    res <- res
-  } else {
+  if(!is.na(conf.level)) {
     
-    sides <- match.arg(sides, choices = c("two.sided","left","right"), 
-                       several.ok = FALSE)
-    
+    # A one-sided bound at level gamma is the corresponding end of the
+    # two-sided interval at level 2*gamma - 1. At or below 0.5 that level
+    # is not positive: pr2 drops below 0.5, qnorm() turns negative and the
+    # two bounds come out in reverse order - pmin/pmax clamps them
+    # elementwise and does not notice. Same refusal as cramerV and
+    # tukeyBiweight.
+    if (sides != "two.sided" && conf.level <= 0.5)
+      stop(gettextf(
+        "a one-sided interval needs 'conf.level' above 0.5, not %g",
+        conf.level), domain = NA)
+
     if(sides!="two.sided")
       conf.level <- 1 - 2*(1-conf.level)
     
@@ -139,7 +169,9 @@ lambda <- function(x, y = NULL,
               w <- 2*n-max.csum-max.rsum
               v <- 2*n -sum(rmax,cmax)
               xx <- sum(rmax[li==l], cmax[ki==k], rmax[k], cmax[l])
-              y <- 8*n-w-v-2*xx
+              # 'yy', not 'y': the latter masks the function's own y
+              # argument, same class as the 't' fixed above
+              yy <- 8*n-w-v-2*xx
               
               # 'isPeak', not 't': the latter masks base::t(), which is
               # the fifth instance of this in the suite
@@ -148,7 +180,7 @@ lambda <- function(x, y = NULL,
                 isPeak[i] <- (ki[li[i]]==i & li[ki[li[i]]]==li[i])
               }
               
-              sigma2 <- 1/w^4*(w*v*y-2 *w^2*(n - sum(rmax[isPeak]))-2*v^2*(n-x[k,l]))
+              sigma2 <- 1/w^4*(w*v*yy-2 *w^2*(n - sum(rmax[isPeak]))-2*v^2*(n-x[k,l]))
               
             }
             , "column" = {
@@ -194,17 +226,14 @@ lambda <- function(x, y = NULL,
     
     
     pr2 <- 1 - (1 - conf.level)/2
-    ci <- pmin(1, pmax(0, qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res))
-    res <- c(est = res,  lci=ci[1], uci=ci[2])
-    
-    # Lambda lies in [0, 1] - the two-sided interval is clamped to it two
-    # lines above - so the open side belongs at that boundary, not at
-    # +/-Inf (design_rules.md 4.1, as decided for cohenKappa). An
-    # uci of Inf claimed a value the measure cannot take.
-    if(sides=="left")
-      res[["uci"]] <- 1
-    else if(sides=="right")
-      res[["lci"]] <- 0
+    ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + res
+
+    # Lambda lies in [0, 1], so the open side of a one-sided interval
+    # belongs at that boundary and not at +/-Inf (design_rules.md 4.1, as
+    # decided for cohenKappa). .applySides() also does the clamping the
+    # pmin/pmax above used to do - one implementation for the whole
+    # family instead of a hand-written copy per function.
+    res <- c(est = res, .applySides(ci, sides, lo = 0, hi = 1))
 
   }
   

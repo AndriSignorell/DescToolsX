@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.933
+Version: 0.0.0.934
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -61,4 +61,4 @@ VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/
 BugReports: https://github.com/AndriSignorell/DescToolsX/issues
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

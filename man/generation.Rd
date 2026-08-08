@@ -37,11 +37,10 @@ generation(c(1946, 1964, 1972, 2001, 2003, 2018, 2026))
 
 }
 \seealso{
-\code{\link{cutAge}}, \code{\link{zodiac}}
+\code{\link{cutAge}}
 
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link{date-time-predicates}},
 \code{\link{date_functions}},

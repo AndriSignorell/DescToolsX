@@ -1,202 +1,132 @@
-
 // [[Rcpp::depends(RcppParallel)]]
-
-// https://chatgpt.com/c/69a4c6cd-9b20-8395-8e03-3f90a97d4401
-
 
 #include <Rcpp.h>
 #include <RcppParallel.h>
 #include <vector>
 #include <random>
 #include <cmath>
+#include <limits>
+
+#include "contcoef.h"
 
 using namespace Rcpp;
 using namespace RcppParallel;
+using desctoolsx::contcoefImpl;
 
-//
-  // -------------------------------------------------------------
-  // 1) Punkt-Schätzer
-// -------------------------------------------------------------
-  //
-  
-  // [[Rcpp::export]]
-double contcoef_table_cpp(IntegerMatrix tab, bool correct = false)
+// ---------------------------------------------------------------------
+// 1) Point estimate
+// ---------------------------------------------------------------------
+
+// [[Rcpp::export]]
+double contcoef_table_cpp(NumericMatrix tab, bool correct = false)
 {
-  int r = tab.nrow();
-  int c = tab.ncol();
-  
-  double n = 0.0;
-  
-  for(int i = 0; i < r; ++i)
-    for(int j = 0; j < c; ++j)
-      n += tab(i,j);
-  
-  if(n == 0.0)
-    return NA_REAL;
-  
-  std::vector<double> rs(r, 0.0), cs(c, 0.0);
-  
-  for(int i = 0; i < r; ++i)
-    for(int j = 0; j < c; ++j) {
-      double v = tab(i,j);
-      rs[i] += v;
-      cs[j] += v;
-    }
-  
-  double chisq = 0.0;
-  
-  for(int i = 0; i < r; ++i)
-    for(int j = 0; j < c; ++j) {
-      
-      double expected = rs[i] * cs[j] / n;
-      
-      if(expected > 0.0) {
-        double diff = tab(i,j) - expected;
-        chisq += diff * diff / expected;
-      }
-    }
-  
-  double cc = std::sqrt(chisq / (chisq + n));
-  
-  if(correct) {
-    int k = std::min(r, c);
-    if(k > 1)
-      cc /= std::sqrt((k - 1.0) / k);
-  }
-  
-  return cc;
+  int r, c;
+  double n;
+  const std::vector<double> t = desctoolsx::tableToRowMajor(tab, r, c, n);
+
+  return desctoolsx::contcoefImpl(t, r, c, n, correct);
 }
 
 
+// ---------------------------------------------------------------------
+// 2) Bootstrap worker (multinomial)
+// ---------------------------------------------------------------------
 
-//
-  // -------------------------------------------------------------
-  // 2) Bootstrap Worker (Multinomial)
-// -------------------------------------------------------------
-  //
-  
-  struct BootWorkerContCoef : public Worker {
-    
-    const double* p;        // cell probabilities
-    int r;
-    int c;
-    int n;
-    int R;
-    unsigned int seed;
-    bool correct;
-    
-    RVector<double> out;
-    
-    BootWorkerContCoef(const double* p_,
-                       int r_,
-                       int c_,
-                       int n_,
-                       int R_,
-                       unsigned int seed_,
-                       bool correct_,
-                       NumericVector out_)
-    : p(p_), r(r_), c(c_), n(n_), R(R_),
-    seed(seed_), correct(correct_),
-    out(out_) {}
-    
-    void operator()(std::size_t begin,
-                    std::size_t end)
-    {
-      for(std::size_t rr = begin; rr < end; ++rr) {
-        
-        std::mt19937 rng(seed + rr);
-        std::discrete_distribution<int> dist(p, p + r*c);
-        
-        std::vector<double> tab_star(r*c, 0.0);
-        
-        for(int i = 0; i < n; ++i) {
-          int cell = dist(rng);
-          tab_star[cell] += 1.0;
-        }
-        
-        // --- compute statistic on bootstrap table ---
-          
-          std::vector<double> rs(r,0.0), cs(c,0.0);
-        
-        for(int i=0;i<r;i++)
-          for(int j=0;j<c;j++) {
-            double v = tab_star[i*c+j];
-            rs[i]+=v;
-            cs[j]+=v;
-          }
-        
-        double chisq=0.0;
-        
-        for(int i=0;i<r;i++)
-          for(int j=0;j<c;j++) {
-            double e = rs[i]*cs[j]/n;
-            if(e>0){
-              double d = tab_star[i*c+j]-e;
-              chisq += d*d/e;
-            }
-          }
-        
-        double cc = std::sqrt(chisq/(chisq+n));
-        
-        if(correct) {
-          int k = std::min(r,c);
-          if(k>1)
-            cc /= std::sqrt((k-1.0)/k);
-        }
-        
-        out[rr] = cc;
-      }
+namespace {
+
+struct BootWorkerContCoef : public Worker {
+
+  const double* p;      // cell probabilities, row-major
+  const int r;
+  const int c;
+  const int n;          // draws per replicate
+  const bool correct;
+  const unsigned int seed;
+
+  RVector<double> out;
+
+  BootWorkerContCoef(const double* p_, int r_, int c_, int n_,
+                     bool correct_, unsigned int seed_,
+                     NumericVector out_)
+    : p(p_), r(r_), c(c_), n(n_), correct(correct_), seed(seed_),
+      out(out_) {}
+
+  void operator()(std::size_t begin, std::size_t end)
+  {
+    // per-thread scratch: nothing below allocates or touches the R API
+    const std::size_t K = static_cast<std::size_t>(r) * c;
+
+    std::vector<double> tabStar(K, 0.0);
+    std::vector<double> rs(r), cs(c);
+
+    // stateless, so hoisting it out of the replicate loop draws exactly
+    // the same numbers as building it inside
+    std::discrete_distribution<int> dist(p, p + K);
+
+    for (std::size_t rr = begin; rr < end; ++rr) {
+
+      // seed + rr, unchanged on purpose: F14 (02.08.2026) decided against
+      // re-seeding schemes, because it would move every bootstrap bound
+      // in the suite for no measurable gain
+      std::mt19937 rng(seed + static_cast<unsigned int>(rr));
+
+      std::fill(tabStar.begin(), tabStar.end(), 0.0);
+
+      for (int i = 0; i < n; ++i)
+        tabStar[dist(rng)] += 1.0;
+
+      out[rr] = contcoefImpl(tabStar.data(), r, c,
+                             static_cast<double>(n), correct, rs, cs);
     }
-  };
+  }
+};
+
+}  // namespace
 
 
+// ---------------------------------------------------------------------
+// 3) Bootstrap entry point
+// ---------------------------------------------------------------------
+// Returns the replicates only. Turning them into interval bounds happens
+// in R, in one place, for every interval type - so that "perc" and "bca"
+// cannot end up with different quantile conventions, and so that no index
+// arithmetic can reach past the end of the vector.
 
-//
-  // -------------------------------------------------------------
-  // 3) Bootstrap Entry Function
-// -------------------------------------------------------------
-  //
-  
-  // [[Rcpp::export]]
-NumericVector contcoef_table_boot_cpp(
-  IntegerMatrix tab,
-  int R = 5000,
-  unsigned int seed = 0,
-  bool correct = false)
+// [[Rcpp::export]]
+NumericVector contcoef_table_boot_cpp(NumericMatrix tab,
+                                      int R,
+                                      unsigned int seed,
+                                      bool correct = false)
 {
-  int r = tab.nrow();
-  int c = tab.ncol();
-  
-  int n = 0;
-  
-  for(int i = 0; i < r; ++i)
-    for(int j = 0; j < c; ++j)
-      n += tab(i,j);
-  
-  if(n == 0)
-    return NumericVector::create(NA_REAL);
-  
-  int K = r * c;
-  
+  if (R < 1)
+    stop("'R' must be at least 1");
+
+  int r, c;
+  double n;
+  const std::vector<double> t = desctoolsx::tableToRowMajor(tab, r, c, n);
+
+  NumericVector out(R, NA_REAL);
+
+  // an empty table has no coefficient; returning a vector of the RIGHT
+  // length keeps the caller's quantile() from failing on a length-1 answer
+  if (!(n > 0.0))
+    return out;
+
+  // the resample draws n observations, so n has to BE a count - a weighted
+  // table would have been silently truncated here
+  if (n != std::floor(n) || n > static_cast<double>(std::numeric_limits<int>::max()))
+    stop("the bootstrap needs whole-number counts; the total of 'tab' is not one");
+
+  const std::size_t K = static_cast<std::size_t>(r) * c;
+
   std::vector<double> p(K);
-  
-  for(int i=0;i<r;i++)
-    for(int j=0;j<c;j++)
-      p[i*c+j] = (double)tab(i,j) / n;
-  
-  NumericVector out(R);
-  
-  BootWorkerContCoef worker(
-    p.data(),
-    r,
-    c,
-    n,
-    R,
-    seed,
-    correct,
-    out);
-  
+  for (std::size_t k = 0; k < K; ++k)
+    p[k] = t[k] / n;
+
+  BootWorkerContCoef worker(p.data(), r, c, static_cast<int>(n),
+                            correct, seed, out);
+
   parallelFor(0, R, worker);
-  
+
   return out;
 }

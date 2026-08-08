@@ -80,17 +80,14 @@ An Alternative to Fleiss’ Fixed-Marginal Multirater Kappa. Online submission.
 }
 \seealso{
 Other assoc.agreement:
-\code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
 \code{\link[=pabak]{pabak()}},
-\code{\link[=percAgreement]{percAgreement()}},
-\code{\link[=raterFrame]{raterFrame()}}
+\code{\link[=percAgreement]{percAgreement()}}
 }
 \concept{agreement}
 \concept{assoc.agreement}

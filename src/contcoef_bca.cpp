@@ -1,174 +1,96 @@
-
-
-// [[Rcpp::depends(RcppParallel)]]
-
 #include <Rcpp.h>
-#include <RcppParallel.h>
 #include <vector>
-#include <random>
 #include <cmath>
-#include <algorithm>
+
+#include "contcoef.h"
 
 using namespace Rcpp;
-using namespace RcppParallel;
 
-inline double compute_cc(
-  const std::vector<double>& tab,
-  int r, int c, double n,
-  bool correct)
-{
-  std::vector<double> rs(r,0.0), cs(c,0.0);
-  
-  for(int i=0;i<r;i++)
-    for(int j=0;j<c;j++){
-      double v = tab[i*c+j];
-      rs[i]+=v;
-      cs[j]+=v;
-    }
-  
-  double chisq=0.0;
-  
-  for(int i=0;i<r;i++)
-    for(int j=0;j<c;j++){
-      double e = rs[i]*cs[j]/n;
-      if(e>0){
-        double d = tab[i*c+j]-e;
-        chisq+=d*d/e;
-      }
-    }
-  
-  double cc = std::sqrt(chisq/(chisq+n));
-  
-  if(correct){
-    int k = std::min(r,c);
-    if(k>1)
-      cc/=std::sqrt((k-1.0)/k);
-  }
-  
-  return cc;
-}
-
+// ---------------------------------------------------------------------
+// Jackknife acceleration for the BCa interval
+// ---------------------------------------------------------------------
+// What used to live here besides this: a second bootstrap loop (identical
+// to the one in contcoef_table.cpp), a third copy of the statistic, and
+// the quantile extraction. The interval is now assembled in R from the
+// replicates the other file returns, so this is the only piece that has to
+// be compiled.
+//
+// The deleted quantile code read boot[floor(adj*R)] without clamping the
+// index, which reached past the end of the vector whenever the upper
+// adjusted probability saturated at 1, and produced an arbitrary index
+// whenever the acceleration came out NaN.
 
 // [[Rcpp::export]]
-List contcoef_table_boot_bca_cpp(
-  IntegerMatrix tab,
-  int R,
-  unsigned int seed,
-  bool correct,
-  double conf_level)
+double contcoef_jackknife_a_cpp(NumericMatrix tab, bool correct = false)
 {
-  int r = tab.nrow();
-  int c = tab.ncol();
-  
-  int n = 0;
-  for(int i=0;i<r;i++)
-    for(int j=0;j<c;j++)
-      n += tab(i,j);
-  
-  int K = r*c;
-  
-  std::vector<double> p(K);
-  std::vector<double> tab0(K);
-  
-  for(int i=0;i<r;i++)
-    for(int j=0;j<c;j++){
-      double v = tab(i,j);
-      tab0[i*c+j]=v;
-      p[i*c+j]=v/n;
-    }
-  
-  double theta_hat = compute_cc(tab0,r,c,n,correct);
-  
-  // -----------------------------
-    // Bootstrap
-  // -----------------------------
-    NumericVector boot(R);
-  
-  for(int rr=0; rr<R; rr++){
-    
-    std::mt19937 rng(seed+rr);
-    std::discrete_distribution<int> dist(p.begin(), p.end());
-    
-    std::vector<double> tab_star(K,0.0);
-    
-    for(int i=0;i<n;i++){
-      int cell = dist(rng);
-      tab_star[cell]+=1.0;
-    }
-    
-    boot[rr] = compute_cc(tab_star,r,c,n,correct);
-  }
-  
-  // -----------------------------
-    // z0
-  // -----------------------------
-    int count=0;
-  for(int i=0;i<R;i++)
-    if(boot[i]<theta_hat) count++;
-  
-  double z0 = R::qnorm((double)count/R,0,1,1,0);
-  
-  // -----------------------------
-    // Jackknife acceleration
-  // -----------------------------
-    std::vector<double> jack(n);
-  
-  int idx=0;
-  
-  for(int i=0;i<r;i++)
-    for(int j=0;j<c;j++){
-      
-      int k = tab(i,j);
-      
-      for(int m=0;m<k;m++){
-        
-        tab0[i*c+j] -= 1.0;
-        
-        jack[idx++] =
-          compute_cc(tab0,r,c,n-1,correct);
-        
-        tab0[i*c+j] += 1.0;
-      }
-    }
-  
-  double mean_j=0.0;
-  for(int i=0;i<n;i++)
-    mean_j+=jack[i];
-  mean_j/=n;
-  
-  double num=0.0, den=0.0;
-  
-  for(int i=0;i<n;i++){
-    double d = mean_j-jack[i];
-    num+=d*d*d;
-    den+=d*d;
-  }
-  
-  double a = num/(6.0*std::pow(den,1.5));
-  
-  // -----------------------------
-    // Adjusted quantiles
-  // -----------------------------
-    double alpha = 1.0-conf_level;
-  
-  double zL = R::qnorm(alpha/2,0,1,1,0);
-  double zU = R::qnorm(1-alpha/2,0,1,1,0);
-  
-  double adjL =
-    R::pnorm(z0+(z0+zL)/(1-a*(z0+zL)),0,1,1,0);
-  
-  double adjU =
-    R::pnorm(z0+(z0+zU)/(1-a*(z0+zU)),0,1,1,0);
-  
-  std::sort(boot.begin(), boot.end());
-  
-  int lo = std::floor(adjL*R);
-  int hi = std::floor(adjU*R);
-  
-  return List::create(
-    Named("estimate")=theta_hat,
-    Named("conf.low")=boot[lo],
-    Named("conf.high")=boot[hi]
-  );
-}
+  int r, c;
+  double n;
+  std::vector<double> t = desctoolsx::tableToRowMajor(tab, r, c, n);
 
+  // with one observation the leave-one-out table is empty
+  if (!(n > 1.0))
+    return NA_REAL;
+
+  const std::size_t K = static_cast<std::size_t>(r) * c;
+
+  std::vector<double> rs(r), cs(c);
+
+  // Observations inside one cell are exchangeable, so all tab[k] of them
+  // give the SAME leave-one-out value. The old loop recomputed it once per
+  // observation - O(n * r * c) work and an n-long vector, which for a
+  // table of a million observations was 8 MB and a minute of nothing.
+  // Computing it once per cell and weighting by the count is exact, not an
+  // approximation.
+  std::vector<double> jack(K, 0.0);
+
+  double origin = NA_REAL;
+  bool haveOrigin = false;
+
+  for (std::size_t k = 0; k < K; ++k) {
+    if (t[k] < 1.0) continue;
+
+    t[k] -= 1.0;
+    jack[k] = desctoolsx::contcoefImpl(t.data(), r, c, n - 1.0,
+                                       correct, rs, cs);
+    t[k] += 1.0;
+
+    if (!haveOrigin) { origin = jack[k]; haveOrigin = true; }
+  }
+
+  if (!haveOrigin || !R_finite(origin))
+    return NA_REAL;
+
+  // The deviations are of order 1/n while the values themselves are of
+  // order 0.1 to 1, so mean and value cancel to almost nothing. Summing
+  // them RELATIVE to one of the values keeps that cancellation exact:
+  // with all jackknife values equal - a symmetric table, say - every
+  // deviation is then a hard zero.
+  //
+  // Without the shift a single ulp of difference between the mean and the
+  // (identical) values survives: on matrix(c(5,5,5,5), 2) it produced
+  // den = 1e-33 and an acceleration of -0.037, which is not small, not
+  // zero, and pure rounding noise.
+  double meanU = 0.0;
+  for (std::size_t k = 0; k < K; ++k)
+    if (t[k] >= 1.0) meanU += t[k] * (jack[k] - origin);
+  meanU /= n;
+
+  double num = 0.0, den = 0.0;
+
+  for (std::size_t k = 0; k < K; ++k) {
+    if (t[k] < 1.0) continue;
+    const double d = meanU - (jack[k] - origin);
+    num += t[k] * d * d * d;
+    den += t[k] * d * d;
+  }
+
+  // A jackknife that does not move means the acceleration is genuinely
+  // zero and BCa reduces to the bias-corrected interval. The old code
+  // computed 0/0 here and let the NaN travel into an array index.
+  // The threshold is on the jackknife SD, not on den itself: C lives in
+  // [0, 1], so anything below 1e-12 is noise rather than signal.
+  if (!(std::sqrt(den / n) > 1e-12))
+    return 0.0;
+
+  return num / (6.0 * std::pow(den, 1.5));
+}

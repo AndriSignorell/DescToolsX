@@ -51,6 +51,7 @@
 #' group names. Use the argument \code{right} to define if the intervals should
 #' be closed on the right (and open on the left) or vice versa. \cr In
 #' \code{print.Freq} the dots are not used.
+#' 
 #' @return an object of class \code{"Freq"} inheriting from \code{data.frame},
 #' with columns:
 #' \describe{
@@ -89,8 +90,7 @@
 #' freq(Pizza$count, breaks = FALSE, ord = "desc")
 #' 
 #' @seealso \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
-#' \code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
-#' \code{\link{freq2D}}
+#' \code{\link{table}}, \code{\link{prop.table}}
 #' 
 #' @family frequency
 #' @concept frequency-table

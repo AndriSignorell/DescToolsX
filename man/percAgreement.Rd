@@ -61,17 +61,14 @@ variance, following Gwet).
 }
 \seealso{
 Other assoc.agreement:
-\code{\link[=blandAltmanData]{blandAltmanData()}},
 \code{\link[=ccc]{ccc()}},
 \code{\link[=cohenKappa]{cohenKappa()}},
 \code{\link[=cronbachAlpha]{cronbachAlpha()}},
 \code{\link[=icc]{icc()}},
 \code{\link[=kappaM]{kappaM()}},
 \code{\link[=krippAlpha]{krippAlpha()}},
-\code{\link[=normalizeToConfusion]{normalizeToConfusion()}},
 \code{\link[=pabak]{pabak()}},
-\code{\link[=randolphKappa]{randolphKappa()}},
-\code{\link[=raterFrame]{raterFrame()}}
+\code{\link[=randolphKappa]{randolphKappa()}}
 }
 \concept{agreement}
 \concept{assoc.agreement}

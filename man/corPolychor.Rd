@@ -7,7 +7,7 @@
 corPolychor(
   x,
   y = NULL,
-  method = c("two-step", "ML"),
+  method = c("two-step", "ml"),
   se = FALSE,
   control = list(),
   maxcor = 0.9999,
@@ -23,11 +23,11 @@ is constructed via \code{table(x, y, \dots)}.}
 \item{method}{character string specifying the estimation method:
 \describe{
 \item{\code{"two-step"}}{two-step estimator (default, fast)}
-\item{\code{"ML"}}{full maximum likelihood estimation}
+\item{\code{"ml"}}{full maximum likelihood estimation}
 }}
 
 \item{se}{logical; if \code{TRUE}, standard errors are computed via the
-Hessian matrix. This requires ML estimation, so it is an error to
+Hessian matrix. This requires ml estimation, so it is an error to
 combine it with \code{method = "two-step"}.}
 
 \item{control}{a list of control parameters passed to \code{\link[stats]{optim}}}
@@ -61,7 +61,7 @@ The returned object has class \code{"Polychor"}.
 \description{
 Estimates the polychoric correlation between two ordinal variables based
 on a contingency table. Both a two-step estimator and full maximum
-likelihood (ML) estimation are supported.
+likelihood (ml) estimation are supported.
 }
 \details{
 The polychoric correlation estimates the correlation between two latent
@@ -92,11 +92,11 @@ y <- factor(cut(z + rnorm(200, sd = 0.6), 3), ordered = TRUE)
 # Two-step estimate
 corPolychor(x, y)
 
-# ML estimate
-corPolychor(x, y, method = "ML")
+# ml estimate
+corPolychor(x, y, method = "ml")
 
 # With standard errors
-res <- corPolychor(x, y, method = "ML", se = TRUE)
+res <- corPolychor(x, y, method = "ml", se = TRUE)
 res$rho
 
 }

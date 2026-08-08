@@ -25,65 +25,67 @@ contCoef(
 \item{correct}{logical; whether Sakoda's adjusted Pearson's C should be
 returned; defaults to \code{FALSE}}
 
-\item{conf.level}{confidence level for confidence intervals.
-If \code{NA}, no confidence interval is computed.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{character string specifying the side of the confidence
-interval, one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. It names the side on which the \emph{finite} bound
-lies, not the direction of an alternative hypothesis - see
-\link{ConfidenceIntervals} for the full definition and for the
-difference to \pkg{DescTools}.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
 
-\item{method}{character string specifying the confidence interval method
-for the contingency coefficient; currently only \code{"boot"} is implemented}
+\item{method}{character string specifying the interval method (here only
+\code{"boot"}).}
 
-\item{...}{additional arguments passed to internal helper functions,
-such as bootstrap routines (\code{\link[boot]{boot}}) or
-table handling (\code{\link[base]{table}}) (e.g. \code{useNA}, \code{R})}
+\item{...}{further arguments. Named arguments known to
+\code{\link{normalizeToConfusion}} or \code{\link{table}} are used to
+build the table; \code{R} and \code{type} configure the bootstrap and
+are described under Details. Anything else is an error rather than a
+silent no-op.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar containing Pearson's
 contingency coefficient; otherwise a named numeric vector with elements:
 \describe{
-\item{\code{est}}{point estimate of the contingency coefficient.}
-\item{\code{lci}}{lower confidence interval bound.}
-\item{\code{uci}}{upper confidence interval bound.}
+\item{\code{est}}{point estimate of the contingency coefficient}
+\item{\code{lci}}{lower confidence interval bound}
+\item{\code{uci}}{upper confidence interval bound}
 }
 }
 \description{
-Calculates Pearson's contingency coefficient for a table \code{x}. If
-\code{x} and \code{y} are given, the corresponding table is built
-first (more details in \link{Association}).
-The contingency coefficient goes from 0 to
-\eqn{\sqrt(\frac{min(r, c) - 1}{min(r, c)})}. Sakoda (1977) proposed the
-corrected contingency coefficient with a range between 0 and 1.
+Computes Pearson's contingency coefficient for a contingency table. If
+\code{x} and \code{y} are supplied, the table is constructed first; see
+\code{\link{Association}}.
 }
 \details{
-Two arguments of the bootstrap are read out of \code{\dots}:
-\code{R}, the number of replicates (default 5000), and \code{type},
-the interval type, either \code{"perc"} (default) or \code{"bca"}.
+Pearson's contingency coefficient ranges from 0 to
+\eqn{\sqrt{(m-1)/m}}, where \eqn{m = \min(r, c)}. Consequently, its
+attainable maximum depends on the dimensions of the table.
 
-For Pearson's contingency coefficient
-no generally accepted analytical confidence intervals exist. If interval
-estimation is required, resampling methods such as the bootstrap may be
-applied. In applied research, effect size measures with better inferential
-properties (e.g. Cramer's V) are usually preferred.
+Sakoda's correction divides the coefficient by this maximum:
+\deqn{C_{\mathrm{S}} = \frac{C}{C_{\max}}
+      = C\sqrt{\frac{m}{m-1}}.}
+The corrected coefficient therefore ranges from 0 to 1.
 
-\code{sides} names the side on which the finite bound lies:
-\code{"left"} yields an interval bounded below and \code{"right"} one
-bounded above. The coefficient is bounded, so the open side is reported
-at the range boundary rather than as \eqn{\pm\infty} (design_rules.md
-4.1): 0 below, and above either 1 (with \code{correct = TRUE}) or
-\eqn{\sqrt{(m-1)/m}} with \eqn{m = \min(r, c)}.
+Since no generally accepted analytical interval is available,
+only bootstrap intervals are implemented. The interval is obtained from
+a multinomial bootstrap over the cells of
+the table. Two arguments configure it, both passed through \code{\dots}:
+\code{R}, the number of replicates (default 999), and \code{type}, one
+of \code{"perc"} (default) or \code{"bca"}.
+
+\code{"perc"} is the default deliberately. Under independence the
+parameter sits \emph{on} the boundary of its range, where the sampling
+distribution of \eqn{C} is not normal under any monotone
+transformation - which is precisely what BCa assumes. Both of its
+ingredients degrade there: the bias correction is read off the share of
+replicates below the estimate, which collapses when the estimate is at
+the edge of the bootstrap distribution, and the acceleration is a
+jackknife, which is not consistent for a functional that is not smooth.
+\code{"bca"} is the better choice for tables with a clearly non-zero
+association and a reasonable number of observations.
+
+Confidence intervals are restricted to the attainable range. Measures
+such as \link{cramerV} may be preferable when inference is central.
 }
-\section{Random number generation}{
-
-\code{conf.level} triggers a bootstrap, which draws a seed from R's
-global random number generator and therefore advances it. Call
-\code{\link[base]{set.seed}} beforehand for reproducible intervals.
-}
-
 \examples{
 
 tab <- apply(HairEyeColor, c(1, 2), sum)
@@ -95,14 +97,21 @@ with(bedrock::untable(tab), contCoef(Hair, Eye))
 set.seed(1)
 contCoef(tab, conf.level = 0.95)
 
+set.seed(1)
+contCoef(tab, conf.level = 0.95, type = "bca", R = 999)
+
+
 }
 \references{
 Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
 Tables, \emph{Proceedings of the Social Statistics Section of the American
 Statistical Association} (Part III), 777-780.
+
+Efron, B., Tibshirani, R.J. (1993) \emph{An Introduction to the
+Bootstrap}, Chapman & Hall, chapter 14.
 }
 \seealso{
-\code{\link[bedrock]{pairApply}}, \code{\link{cramerV}}
+\link[bedrock:pairApply]{bedrock::pairApply}
 
 Other assoc.nominal:
 \code{\link[=cramerV]{cramerV()}},

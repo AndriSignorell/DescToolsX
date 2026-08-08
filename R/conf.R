@@ -8,6 +8,12 @@
 #' model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
 #' \code{svm}).
 #'
+#' \code{sensX()} and \code{specX()} are convenience extractors for the
+#' sensitivity and specificity values computed by \code{conf()}.
+#'
+#' @name conf
+#' @aliases sensX specX
+#' 
 #' @param x object containing predictions; one of:
 #'   \itemize{
 #'     \item a factor or character vector of predicted classes
@@ -56,7 +62,7 @@
 #'   \item Matthews Correlation Coefficient (MCC)
 #' }
 #'
-#' @return an object of class \code{"Conf"} containing:
+#' @return \code{conf()} returns an object of class \code{"Conf"} containing:
 #' \describe{
 #'   \item{\code{table}}{confusion matrix}
 #'   \item{\code{pos}}{positive class (binary only, else \code{NULL})}
@@ -71,6 +77,9 @@
 #'   \item{\code{mcnemar.pval}}{McNemar test p-value}
 #'   \item{\code{byclass}}{matrix of class-wise metrics}
 #' }
+#'
+#' \code{sensX()} and \code{specX()} return a named numeric vector containing
+#' the sensitivity or specificity, respectively, for each reported class.
 #'
 #' @examples
 #' # vectors
@@ -379,24 +388,12 @@ plot.Conf <- function(x, main = "Confusion Matrix", ...) {
 
 # -- Convenience extractors -----------------------------------------------------------
 
-#' Extract Sensitivity from a Confusion Matrix
-#'
-#' @inheritParams conf
-#' @return named numeric vector of sensitivities
-#' @seealso \code{\link{conf}}, \code{\link{specX}}
-#' @family model.classification
-#' @concept classification
+#' @rdname conf
 #' @export
 sensX <- function(x, ...) conf(x, ...)[["byclass"]]["sens", ]
 
 
-#' Extract Specificity from a Confusion Matrix
-#'
-#' @inheritParams conf
-#' @return named numeric vector of specificities
-#' @seealso \code{\link{conf}}, \code{\link{sensX}}
-#' @family model.classification
-#' @concept classification
+#' @rdname conf
 #' @export
 specX <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
 

@@ -59,8 +59,7 @@
 #' ba
 #'
 #' @rdname blandAltmanData
-#' @family assoc.agreement
-#' @concept agreement
+#' @family agreement
 #' @concept method-comparison
 #' @export
 blandAltmanData <- function(

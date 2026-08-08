@@ -52,7 +52,6 @@ secToHms(c(256, 3456, 56565))
 
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},
-\code{\link{as_ym}},
 \code{\link[=countWorkDays]{countWorkDays()}},
 \code{\link{date-time-predicates}},
 \code{\link{date_functions}},

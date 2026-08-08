@@ -88,8 +88,6 @@ Snedecor, G. W., Cochran, W. G. (1989) Statistical Methods, 8th
 ed. Ames, \emph{IA: Iowa State University Press }
 }
 \seealso{
-\code{\link{meanX}}, \code{\link{gmean}}
-
 Other location:
 \code{\link[=gmean]{gmean()}},
 \code{\link[=hodgesLehmann]{hodgesLehmann()}},

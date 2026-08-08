@@ -114,12 +114,7 @@ Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the 
 Other assoc.ordinal:
 \code{\link[=cStat]{cStat()}},
 \code{\link[=conDisPairs]{conDisPairs()}},
-\code{\link[=gkGamma]{gkGamma()}},
-\code{\link[=kendallTauA]{kendallTauA()}},
-\code{\link[=kendallTauB]{kendallTauB()}},
-\code{\link[=ordAssocs]{ordAssocs()}},
-\code{\link[=somersDelta]{somersDelta()}},
-\code{\link[=stuartTauC]{stuartTauC()}}
+\code{\link[=ordAssocs]{ordAssocs()}}
 }
 \concept{assoc.ordinal}
 \concept{association-measure}

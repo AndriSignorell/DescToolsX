@@ -115,8 +115,7 @@ freq(Pizza$count, breaks = FALSE, ord = "desc")
 }
 \seealso{
 \code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
-\code{\link{table}}, \code{\link{prop.table}}, \code{\link{percTable}},
-\code{\link{freq2D}}
+\code{\link{table}}, \code{\link{prop.table}}
 
 Other frequency:
 \code{\link[=expFreq]{expFreq()}},

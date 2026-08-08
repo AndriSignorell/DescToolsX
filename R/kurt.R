@@ -68,7 +68,7 @@
 #' apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
 #'       kurt, na.rm=TRUE)
 #' 
-#' @seealso [meanX], [sdX], [skew], similar code in \pkg{e1071}
+#' @seealso [meanX], [sdX], similar code in \pkg{e1071}
 #'
 #' @section Random number generation:
 #' \code{method = "boot"} - the default - resamples and therefore advances

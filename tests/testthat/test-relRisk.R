@@ -49,31 +49,32 @@ test_that("relRisk() handles a second row without non-events (x2 == n2)", {
 
 
 test_that("relRisk() score interval always brackets the estimate", {
-
-  for (n1 in c(5L, 10L, 12L)) {
-    for (n2 in c(5L, 10L, 12L)) {
-      for (x1 in 0:n1) {
-        for (x2 in 0:n2) {
-          m <- matrix(c(x1, x2, n1 - x1, n2 - x2), nrow = 2)
-          r <- relRisk(m, conf.level = 0.95)
-          lab <- sprintf("x1=%d x2=%d n1=%d n2=%d", x1, x2, n1, n2)
-
-          # x1 == x2 == 0 leaves the estimate itself undefined (0/0)
-          if (!(x1 == 0 && x2 == 0))
-            expect_false(anyNA(r), label = paste("no NA:", lab))
-          expect_false(anyNA(r[c("lci", "uci")]),
-                       label = paste("no NA in bounds:", lab))
-          expect_true(r[["lci"]] <= r[["uci"]] + 1e-12,
-                      label = paste("lci <= uci:", lab))
-
-          if (is.finite(r[["est"]]))
-            expect_true(r[["lci"]] <= r[["est"]] + 1e-8 &&
-                          r[["est"]] <= r[["uci"]] + 1e-8,
-                        label = paste("lci <= est <= uci:", lab))
-        }
-      }
-    }
-  }
+  
+  cases <- do.call(rbind, lapply(c(5L, 10L, 12L), function(n1)
+    do.call(rbind, lapply(c(5L, 10L, 12L), function(n2)
+      expand.grid(x1 = 0:n1, x2 = 0:n2, n1 = n1, n2 = n2)))))
+  
+  lab <- sprintf("x1=%d x2=%d n1=%d n2=%d",
+                 cases$x1, cases$x2, cases$n1, cases$n2)
+  
+  r <- Map(function(x1, x2, n1, n2)
+    relRisk(matrix(c(x1, x2, n1 - x1, n2 - x2), nrow = 2), conf.level = 0.95),
+    cases$x1, cases$x2, cases$n1, cases$n2)
+  
+  est <- vapply(r, `[[`, 0, "est")
+  lci <- vapply(r, `[[`, 0, "lci")
+  uci <- vapply(r, `[[`, 0, "uci")
+  
+  # x1 == x2 == 0 lässt den Schätzer selbst undefiniert (0/0)
+  defined <- !(cases$x1 == 0 & cases$x2 == 0)
+  
+  # eine Zusicherung je EIGENSCHAFT statt je Tafel: schlägt eine fehl,
+  # nennt die Meldung ALLE betroffenen Tafeln, nicht nur die erste
+  expect_equal(lab[defined & is.na(est)],          character(0))
+  expect_equal(lab[is.na(lci) | is.na(uci)],       character(0))
+  expect_equal(lab[!(lci <= uci + 1e-12)],         character(0))
+  expect_equal(lab[is.finite(est) &
+                     !(lci <= est + 1e-8 & est <= uci + 1e-8)], character(0))
 })
 
 

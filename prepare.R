@@ -9,7 +9,6 @@ devtools::build_manual(pkg = "C:/temp/lumen")
 devtools::build_manual(pkg = "C:/temp/pharos")
 devtools::build_manual(pkg = "C:/temp/bedrock")
 devtools::build_manual(pkg = "C:/temp/alloy")
-devtools::build_manual(pkg = "C:/temp/hermes")
 devtools::build_manual(pkg = "C:/temp/pons")
 
 devtools::build_manual(pkg = "C:/temp/swissValet")
@@ -20,10 +19,20 @@ devtools::check()
 devtools::test()
 devtools::run_examples()
 
+bedrock::`%][%`()
 
+devtools::
 
 covr::package_coverage()
 goodpractice::gp()
+
+
+1:10 %[]% c(3,4)
+
+
+grep("bedrock", readLines("NAMESPACE"), value = TRUE)
+c("%[]%", "%[)%") %in% getNamespaceExports("bedrock")   # sollte TRUE TRUE geben
+
 
 
 pkgdown::build_site()
@@ -32,6 +41,19 @@ pkgdown::build_favicons()
 
 # hard CRAN check
 rhub::rhub_check()
+
+
+spdf <- function(x){
+  callr::rcmd("Rd2pdf",
+              c("--no-preview", "--force", 
+                gettextf("--output=%s.pdf", x),
+                gettextf("man/%s.Rd",x),
+              show = TRUE))
+  }
+
+spdf(x="contCoef")
+
+getwd()
 
 
 # for themes

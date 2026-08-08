@@ -257,231 +257,245 @@ export(yeoJohnsonInv)
 export(yuleQ)
 export(yuleY)
 export(zodiac)
-importFrom(bedrock,`%)(%`)
-importFrom(bedrock,`%[]%`)
-importFrom(bedrock,`%][%`)
-importFrom(bedrock,abind)
-importFrom(bedrock,appendX)
-importFrom(bedrock,callIf)
-importFrom(bedrock,coalesceX)
-importFrom(bedrock,collapseTable)
-importFrom(bedrock,columnWrap)
-importFrom(bedrock,combLevels)
-importFrom(bedrock,combPairs)
-importFrom(bedrock,dummy)
-importFrom(bedrock,extractArgs)
-importFrom(bedrock,getDotsArg)
-importFrom(bedrock,isDichotomous)
-importFrom(bedrock,isEuclid)
-importFrom(bedrock,isWholeLike)
-importFrom(bedrock,isZero)
-importFrom(bedrock,label)
-importFrom(bedrock,maxDigits)
-importFrom(bedrock,mergeArgs)
-importFrom(bedrock,moveAvg)
-importFrom(bedrock,naIf)
-importFrom(bedrock,naReplace)
-importFrom(bedrock,pairApply)
-importFrom(bedrock,printCharMatrix)
-importFrom(bedrock,recycle)
-importFrom(bedrock,removeAttr)
-importFrom(bedrock,resolveFormula)
-importFrom(bedrock,revX)
-importFrom(bedrock,sampleX)
-importFrom(bedrock,setNamesX)
-importFrom(bedrock,sortX)
-importFrom(bedrock,splitAt)
-importFrom(bedrock,untable)
-importFrom(grDevices,dev.flush)
-importFrom(grDevices,dev.hold)
-importFrom(graphics,abline)
-importFrom(graphics,arrows)
-importFrom(graphics,axis)
-importFrom(graphics,barplot)
-importFrom(graphics,box)
-importFrom(graphics,boxplot)
-importFrom(graphics,cdplot)
-importFrom(graphics,grid)
-importFrom(graphics,hist)
-importFrom(graphics,layout)
-importFrom(graphics,legend)
-importFrom(graphics,lines)
-importFrom(graphics,mosaicplot)
-importFrom(graphics,mtext)
-importFrom(graphics,par)
-importFrom(graphics,points)
-importFrom(graphics,polygon)
-importFrom(graphics,rect)
-importFrom(graphics,segments)
-importFrom(graphics,spineplot)
-importFrom(graphics,strwidth)
-importFrom(graphics,text)
-importFrom(graphics,title)
-importFrom(lumen,adfTest)
-importFrom(lumen,binomCI)
-importFrom(lumen,binomDiffCI)
-importFrom(lumen,bootCI)
-importFrom(lumen,bpTest)
-importFrom(lumen,cochranArmitageTest)
-importFrom(lumen,corCI)
-importFrom(lumen,fisherZ)
-importFrom(lumen,fisherZInv)
-importFrom(lumen,gTest)
-importFrom(lumen,kpssTest)
-importFrom(lumen,leveneTest)
-importFrom(lumen,mantelTrendTest)
-importFrom(lumen,meanCI)
-importFrom(lumen,scores)
-importFrom(lumen,varTest)
+importFrom(bedrock,
+  "%)(%",
+  "%[]%",
+  "%][%",
+  abind,
+  appendX,
+  callIf,
+  coalesceX,
+  collapseTable,
+  columnWrap,
+  combLevels,
+  combPairs,
+  dummy,
+  extractArgs,
+  getDotsArg,
+  isDichotomous,
+  isEuclid,
+  isWholeLike,
+  isZero,
+  label,
+  maxDigits,
+  mergeArgs,
+  moveAvg,
+  naIf,
+  naReplace,
+  pairApply,
+  printCharMatrix,
+  recycle,
+  removeAttr,
+  resolveFormula,
+  revX,
+  sampleX,
+  setNamesX,
+  sortX,
+  splitAt,
+  untable
+)
+importFrom(grDevices,
+  dev.flush,
+  dev.hold
+)
+importFrom(graphics,
+  abline,
+  arrows,
+  axis,
+  barplot,
+  box,
+  boxplot,
+  cdplot,
+  grid,
+  hist,
+  layout,
+  legend,
+  lines,
+  mosaicplot,
+  mtext,
+  par,
+  points,
+  polygon,
+  rect,
+  segments,
+  spineplot,
+  strwidth,
+  text,
+  title
+)
+importFrom(lumen,
+  adfTest,
+  binomCI,
+  binomDiffCI,
+  bootCI,
+  bpTest,
+  cochranArmitageTest,
+  corCI,
+  fisherZ,
+  fisherZInv,
+  gTest,
+  kpssTest,
+  leveneTest,
+  mantelTrendTest,
+  meanCI,
+  scores,
+  varTest
+)
 importFrom(mvtnorm,pmvnorm)
-importFrom(pharos,addOpacity)
-importFrom(pharos,band)
-importFrom(pharos,canvas)
-importFrom(pharos,fade)
-importFrom(pharos,fm)
-importFrom(pharos,lineSep)
-importFrom(pharos,mar)
-importFrom(pharos,pal)
-importFrom(pharos,plot.Desc.qn)
-importFrom(pharos,plot.Desc.table)
-importFrom(pharos,plotAssoc)
-importFrom(pharos,plotBag)
-importFrom(pharos,plotBox)
-importFrom(pharos,plotCatDist)
-importFrom(pharos,plotDens)
-importFrom(pharos,plotDens2D)
-importFrom(pharos,plotDensBox)
-importFrom(pharos,plotFdist)
-importFrom(pharos,plotHeatmap)
-importFrom(pharos,plotHexbin)
-importFrom(pharos,plotPropCI)
-importFrom(pharos,plotTimeSeries)
-importFrom(pharos,plotXY)
-importFrom(pharos,strAlign)
-importFrom(pharos,strPad)
-importFrom(pharos,strTrim)
-importFrom(pharos,strTrunc)
-importFrom(pharos,style)
-importFrom(stats,AIC)
-importFrom(stats,BIC)
-importFrom(stats,Box.test)
-importFrom(stats,IQR)
-importFrom(stats,acf)
-importFrom(stats,addmargins)
-importFrom(stats,aggregate)
-importFrom(stats,anova)
-importFrom(stats,aov)
-importFrom(stats,approx)
-importFrom(stats,as.formula)
-importFrom(stats,binom.test)
-importFrom(stats,chisq.test)
-importFrom(stats,coef)
-importFrom(stats,coefficients)
-importFrom(stats,complete.cases)
-importFrom(stats,confint)
-importFrom(stats,confint.default)
-importFrom(stats,contr.helmert)
-importFrom(stats,contr.poly)
-importFrom(stats,contr.sum)
-importFrom(stats,contr.treatment)
-importFrom(stats,contrasts)
-importFrom(stats,cooks.distance)
-importFrom(stats,cor)
-importFrom(stats,cor.test)
-importFrom(stats,cov)
-importFrom(stats,cov2cor)
-importFrom(stats,dbinom)
-importFrom(stats,dchisq)
-importFrom(stats,density)
-importFrom(stats,deviance)
-importFrom(stats,drop1)
-importFrom(stats,embed)
-importFrom(stats,end)
-importFrom(stats,family)
-importFrom(stats,filter)
-importFrom(stats,fisher.test)
-importFrom(stats,fitted)
-importFrom(stats,fivenum)
-importFrom(stats,formula)
-importFrom(stats,frequency)
-importFrom(stats,ftable)
-importFrom(stats,glm)
-importFrom(stats,integrate)
-importFrom(stats,is.ts)
-importFrom(stats,kruskal.test)
-importFrom(stats,lm)
-importFrom(stats,loess)
-importFrom(stats,logLik)
-importFrom(stats,mad)
-importFrom(stats,mcnemar.test)
-importFrom(stats,median)
-importFrom(stats,model.extract)
-importFrom(stats,model.frame)
-importFrom(stats,model.matrix)
-importFrom(stats,model.response)
-importFrom(stats,model.tables)
-importFrom(stats,na.exclude)
-importFrom(stats,na.fail)
-importFrom(stats,na.omit)
-importFrom(stats,na.pass)
-importFrom(stats,nlm)
-importFrom(stats,nobs)
-importFrom(stats,optim)
-importFrom(stats,optimise)
-importFrom(stats,optimize)
-importFrom(stats,p.adjust)
-importFrom(stats,pbinom)
-importFrom(stats,pchisq)
-importFrom(stats,pf)
-importFrom(stats,pnorm)
-importFrom(stats,poisson.test)
-importFrom(stats,ppoints)
-importFrom(stats,ppois)
-importFrom(stats,predict)
-importFrom(stats,pt)
-importFrom(stats,ptukey)
-importFrom(stats,qbeta)
-importFrom(stats,qbinom)
-importFrom(stats,qchisq)
-importFrom(stats,qf)
-importFrom(stats,qnorm)
-importFrom(stats,qt)
-importFrom(stats,qtukey)
-importFrom(stats,quantile)
-importFrom(stats,relevel)
-importFrom(stats,reshape)
-importFrom(stats,residuals)
-importFrom(stats,rnorm)
-importFrom(stats,runif)
-importFrom(stats,sd)
-importFrom(stats,shapiro.test)
-importFrom(stats,splinefun)
-importFrom(stats,start)
-importFrom(stats,t.test)
-importFrom(stats,terms)
-importFrom(stats,time)
-importFrom(stats,uniroot)
-importFrom(stats,var)
-importFrom(stats,var.test)
-importFrom(stats,vcov)
-importFrom(stats,weights)
-importFrom(stats,xtabs)
+importFrom(pharos,
+  addOpacity,
+  band,
+  canvas,
+  fade,
+  fm,
+  lineSep,
+  mar,
+  pal,
+  plot.Desc.qn,
+  plot.Desc.table,
+  plotAssoc,
+  plotBag,
+  plotBox,
+  plotCatDist,
+  plotDens,
+  plotDens2D,
+  plotDensBox,
+  plotFdist,
+  plotHeatmap,
+  plotHexbin,
+  plotPropCI,
+  plotTimeSeries,
+  plotXY,
+  strAlign,
+  strPad,
+  strTrim,
+  strTrunc,
+  style
+)
+importFrom(stats,
+  AIC,
+  BIC,
+  Box.test,
+  IQR,
+  acf,
+  addmargins,
+  aggregate,
+  anova,
+  aov,
+  approx,
+  as.formula,
+  binom.test,
+  chisq.test,
+  coef,
+  coefficients,
+  complete.cases,
+  confint,
+  confint.default,
+  contr.helmert,
+  contr.poly,
+  contr.sum,
+  contr.treatment,
+  contrasts,
+  cooks.distance,
+  cor,
+  cor.test,
+  cov,
+  cov2cor,
+  dbinom,
+  dchisq,
+  density,
+  deviance,
+  drop1,
+  embed,
+  end,
+  family,
+  filter,
+  fisher.test,
+  fitted,
+  fivenum,
+  formula,
+  frequency,
+  ftable,
+  glm,
+  integrate,
+  is.ts,
+  kruskal.test,
+  lm,
+  loess,
+  logLik,
+  mad,
+  mcnemar.test,
+  median,
+  model.extract,
+  model.frame,
+  model.matrix,
+  model.response,
+  model.tables,
+  na.exclude,
+  na.fail,
+  na.omit,
+  na.pass,
+  nlm,
+  nobs,
+  optim,
+  optimise,
+  optimize,
+  p.adjust,
+  pbinom,
+  pchisq,
+  pf,
+  pnorm,
+  poisson.test,
+  ppoints,
+  ppois,
+  predict,
+  pt,
+  ptukey,
+  qbeta,
+  qbinom,
+  qchisq,
+  qf,
+  qnorm,
+  qt,
+  qtukey,
+  quantile,
+  relevel,
+  reshape,
+  residuals,
+  rnorm,
+  runif,
+  sd,
+  shapiro.test,
+  splinefun,
+  start,
+  t.test,
+  terms,
+  time,
+  uniroot,
+  var,
+  var.test,
+  vcov,
+  weights,
+  xtabs
+)
 importFrom(stringi,stri_replace_all_fixed)
-importFrom(utils,browseURL)
-importFrom(utils,capture.output)
-importFrom(utils,combn)
-importFrom(utils,find)
-importFrom(utils,getAnywhere)
-importFrom(utils,getFromNamespace)
-importFrom(utils,getS3method)
-importFrom(utils,head)
-importFrom(utils,help.search)
-importFrom(utils,lsf.str)
-importFrom(utils,modifyList)
-importFrom(utils,object.size)
-importFrom(utils,readRegistry)
-importFrom(utils,stack)
-importFrom(utils,str)
-importFrom(utils,tail)
-importFrom(utils,write.table)
+importFrom(utils,
+  browseURL,
+  capture.output,
+  combn,
+  find,
+  getAnywhere,
+  getFromNamespace,
+  getS3method,
+  head,
+  help.search,
+  lsf.str,
+  modifyList,
+  object.size,
+  readRegistry,
+  stack,
+  str,
+  tail,
+  write.table
+)
 useDynLib(DescToolsX, .registration = TRUE)

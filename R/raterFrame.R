@@ -54,8 +54,7 @@
 #' # omit the subject column
 #' raterFrame(rating ~ subj | rater, data=d.long, dropSubj=TRUE)
 #'
-#' @family assoc.agreement
-#' @concept agreement
+#' @family agreement
 #' @concept rater-data
 #'
 #'

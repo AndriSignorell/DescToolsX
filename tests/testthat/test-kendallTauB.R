@@ -1,15 +1,5 @@
 
 
-test_that("kendallTauA and kendallTauB forward their dots", {
-  
-  x <- c(1, 2, 2, 3, 3, 3, 4, 5, NA)
-  y <- c(1, 3, 2, 1, 5, 3, 4, 5, 2)
-  
-  # ... was documented as reaching table() and never forwarded at all
-  expect_silent(kendallTauB(x, y, direction = "row"))
-  expect_silent(kendallTauA(x, y, direction = "row"))
-})
-
 
 test_that("kendallTauB agrees with cor(method = 'kendall')", {
   

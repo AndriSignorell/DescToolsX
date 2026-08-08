@@ -76,40 +76,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// contcoef_table_boot_bca_cpp
-List contcoef_table_boot_bca_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct, double conf_level);
-RcppExport SEXP _DescToolsX_contcoef_table_boot_bca_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP, SEXP conf_levelSEXP) {
+// contcoef_jackknife_a_cpp
+double contcoef_jackknife_a_cpp(NumericMatrix tab, bool correct);
+RcppExport SEXP _DescToolsX_contcoef_jackknife_a_cpp(SEXP tabSEXP, SEXP correctSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerMatrix >::type tab(tabSEXP);
-    Rcpp::traits::input_parameter< int >::type R(RSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type tab(tabSEXP);
     Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
-    Rcpp::traits::input_parameter< double >::type conf_level(conf_levelSEXP);
-    rcpp_result_gen = Rcpp::wrap(contcoef_table_boot_bca_cpp(tab, R, seed, correct, conf_level));
+    rcpp_result_gen = Rcpp::wrap(contcoef_jackknife_a_cpp(tab, correct));
     return rcpp_result_gen;
 END_RCPP
 }
 // contcoef_table_cpp
-double contcoef_table_cpp(IntegerMatrix tab, bool correct);
+double contcoef_table_cpp(NumericMatrix tab, bool correct);
 RcppExport SEXP _DescToolsX_contcoef_table_cpp(SEXP tabSEXP, SEXP correctSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerMatrix >::type tab(tabSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type tab(tabSEXP);
     Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
     rcpp_result_gen = Rcpp::wrap(contcoef_table_cpp(tab, correct));
     return rcpp_result_gen;
 END_RCPP
 }
 // contcoef_table_boot_cpp
-NumericVector contcoef_table_boot_cpp(IntegerMatrix tab, int R, unsigned int seed, bool correct);
+NumericVector contcoef_table_boot_cpp(NumericMatrix tab, int R, unsigned int seed, bool correct);
 RcppExport SEXP _DescToolsX_contcoef_table_boot_cpp(SEXP tabSEXP, SEXP RSEXP, SEXP seedSEXP, SEXP correctSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< IntegerMatrix >::type tab(tabSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type tab(tabSEXP);
     Rcpp::traits::input_parameter< int >::type R(RSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type seed(seedSEXP);
     Rcpp::traits::input_parameter< bool >::type correct(correctSEXP);
@@ -429,7 +426,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_condis_pairs_tab_cpp", (DL_FUNC) &_DescToolsX_condis_pairs_tab_cpp, 1},
     {"_DescToolsX_condis_pairs_xy_cpp", (DL_FUNC) &_DescToolsX_condis_pairs_xy_cpp, 2},
     {"_DescToolsX_cstat_boot_cpp", (DL_FUNC) &_DescToolsX_cstat_boot_cpp, 5},
-    {"_DescToolsX_contcoef_table_boot_bca_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_boot_bca_cpp, 5},
+    {"_DescToolsX_contcoef_jackknife_a_cpp", (DL_FUNC) &_DescToolsX_contcoef_jackknife_a_cpp, 2},
     {"_DescToolsX_contcoef_table_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_cpp, 2},
     {"_DescToolsX_contcoef_table_boot_cpp", (DL_FUNC) &_DescToolsX_contcoef_table_boot_cpp, 4},
     {"_DescToolsX_isoWeek_cpp", (DL_FUNC) &_DescToolsX_isoWeek_cpp, 1},

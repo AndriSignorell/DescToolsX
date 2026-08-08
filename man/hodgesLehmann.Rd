@@ -69,6 +69,9 @@ reported as \eqn{\pm\infty}.
 
 \code{x} and \code{y} are not modified.
 }
+\note{
+C++ port of Monahan’s algorithm by Cyril Flurin Moser
+}
 \section{Random number generation}{
 
 A confidence level triggers a bootstrap and therefore advances R's
@@ -97,7 +100,7 @@ hodgesLehmann(x, conf.level = 0.95)
 
 }
 \seealso{
-\code{\link[stats]{wilcox.test}}, \code{\link{medianX}}
+\code{\link[stats]{wilcox.test}}
 
 Other location:
 \code{\link[=gmean]{gmean()}},

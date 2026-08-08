@@ -119,8 +119,7 @@
 #' )
 #'
 #'
-#' @family assoc.agreement
-#' @concept agreement
+#' @family agreement
 #' @concept confusion-matrix
 #' @export
 normalizeToConfusion <- function(

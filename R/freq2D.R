@@ -35,16 +35,17 @@
 #' @note Based on code by Arni Magnusson, adapted to conform to package standards.
 #' 
 #' @seealso \code{\link{cut}}, \code{\link{table}}, and
-#' \code{\link{print.table}} are the basic underlying functions.\cr
-#' \code{\link{freq}}, \code{\link{percTable}}
+#' \code{\link{print.table}} are the basic underlying functions.
+#' 
 #' @examples
 #' 
 #' freq2D(quakes$long, quakes$lat, dnn="")
 #' freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 #' 
-#' @rdname freq2D
 #' @family frequency
 #' @concept frequency-table
+#' 
+#' @rdname freq2D
 #' @export
 freq2D <- function(x, ...)
 {

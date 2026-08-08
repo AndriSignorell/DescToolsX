@@ -123,9 +123,7 @@
 #' bedrock::pairApply(rating, FUN = cohenKappa, symmetric = TRUE)
 #'
 #' @family assoc.agreement
-#' @concept agreement
 #' @concept categorical-agreement
-#' @concept association-measure
 #' @export
 cohenKappa <- function(x,
                        y          = NULL,

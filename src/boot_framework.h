@@ -6,6 +6,13 @@
 //
 // Generic parallel bootstrap framework using RcppParallel.
 //
+// ACHTUNG: Diese Datei liegt in ZWEI Paketen (lumen und DescToolsX) und
+// muss dort BYTEGLEICH sein. Sie war es nicht - lumen hatte einen
+// aelteren Stand ohne die Schutzabfragen. Vor jeder Aenderung:
+//   tools::md5sum(c("../lumen/src/boot_framework.h",
+//                   "../DescToolsX/src/boot_framework.h"))
+// Dasselbe gilt fuer bca_helpers.h.
+//
 // To add a new bootstrapped statistic:
 //
 //   1. Create a new .cpp file
@@ -37,6 +44,9 @@
 
 #include <RcppArmadillo.h>
 #include <RcppParallel.h>
+
+#include "bca_helpers.h"   // bca_z0, bca_acceleration, bca_quantile_levels
+
 #include <random>
 #include <cmath>
 #include <vector>
@@ -283,77 +293,6 @@ inline NumericVector boot_percentile_ci(NumericVector stats,
 }
 
 
-// ============================================================
-// BCa helpers
-// ============================================================
-
-// bias correction z0 from bootstrap distribution
-inline double bca_z0(const NumericVector& s, double est) {
-  
-  int count_less = 0;
-  int B          = s.size();
-  
-  if (B == 0)
-    return NA_REAL;
-  
-  for (int i = 0; i < B; i++){
-    if (s[i] < est) count_less++;
-  }
-  
-  double prop = static_cast<double>(count_less) / B;
-  prop = std::max(1e-10, std::min(1.0 - 1e-10, prop));
-  
-  return R::qnorm(prop, 0.0, 1.0, 1, 0);
-}
-
-// jackknife acceleration constant from leave-one-out estimates
-inline double bca_acceleration(const NumericVector& jack) {
-  
-  std::vector<double> jv;
-  jv.reserve(jack.size());
-  for (R_xlen_t i = 0; i < jack.size(); i++)
-    if (!ISNAN(jack[i]))
-      jv.push_back(jack[i]);
-  
-  if (jv.size() < 2)
-    Rcpp::stop("Jackknife failed: too few valid leave-one-out estimates.");
-  
-  double jmean = std::accumulate(jv.begin(), jv.end(), 0.0) / jv.size();
-  double num   = 0.0;
-  double den   = 0.0;
-  
-  for (std::size_t i = 0; i < jv.size(); i++) {
-    double d  = jmean - jv[i];
-    num += d * d * d;
-    den += d * d;
-  }
-  
-  if (den == 0.0) return 0.0;
-  
-  return num / (6.0 * std::pow(den, 1.5));
-}
-
-// adjusted quantile levels from z0 and acceleration
-inline std::pair<double, double> bca_quantile_levels(double z0,
-                                                     double acc,
-                                                     double alpha) {
-  
-  double zal = R::qnorm(alpha / 2.0,       0.0, 1.0, 1, 0);
-  double zau = R::qnorm(1.0 - alpha / 2.0, 0.0, 1.0, 1, 0);
-  
-  double adjl = R::pnorm(
-    z0 + (z0 + zal) / (1.0 - acc * (z0 + zal)),
-    0.0, 1.0, 1, 0
-  );
-  
-  double adju = R::pnorm(
-    z0 + (z0 + zau) / (1.0 - acc * (z0 + zau)),
-    0.0, 1.0, 1, 0
-  );
-  
-  return { adjl, adju };
-}
-
 // jackknife leave-one-out estimates for scalar StatFn
 template <typename StatFn>
 inline NumericVector jackknife_scalar(NumericMatrix X,
@@ -535,9 +474,13 @@ NumericVector run_boot(NumericMatrix     X,
     Rcpp::stop("Unknown bootstrap method '%s'. Use 'perc' or 'bca'.",
                method.c_str());
   
-  unsigned int base_seed = (seed < 0)
-  ? std::random_device{}()
-    : static_cast<unsigned int>(seed);
+  // seed < 0 zieht aus R's RNG, nicht aus std::random_device: sonst
+  // waere dieser Pfad die einzige Stelle, an der set.seed() nachweislich
+  // wirkungslos bleibt. Laeuft auf dem Hauptthread, Rcpp haelt den
+  // RNG-Zustand.
+  unsigned int base_seed =
+    (seed < 0) ? static_cast<unsigned int>(R::unif_rand() * 4294967295.0)
+               : static_cast<unsigned int>(seed);
   
   NumericVector stats(R);
   
@@ -577,9 +520,13 @@ NumericMatrix run_boot_matrix(NumericMatrix     X,
     Rcpp::stop("Unknown bootstrap method '%s'. Use 'perc' or 'bca'.",
                method.c_str());
   
-  unsigned int base_seed = (seed < 0)
-  ? std::random_device{}()
-    : static_cast<unsigned int>(seed);
+  // seed < 0 zieht aus R's RNG, nicht aus std::random_device: sonst
+  // waere dieser Pfad die einzige Stelle, an der set.seed() nachweislich
+  // wirkungslos bleibt. Laeuft auf dem Hauptthread, Rcpp haelt den
+  // RNG-Zustand.
+  unsigned int base_seed =
+    (seed < 0) ? static_cast<unsigned int>(R::unif_rand() * 4294967295.0)
+               : static_cast<unsigned int>(seed);
   
   arma::mat Xa  = Rcpp::as<arma::mat>(X);
   arma::vec ya  = Rcpp::as<arma::vec>(y);

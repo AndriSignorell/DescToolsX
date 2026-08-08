@@ -22,7 +22,7 @@
 #' Values which fall outside the range
 #' of breaks are coded as \code{NA}, as are \code{NaN} and \code{NA} values.
 #' 
-#' @seealso \code{\link{cutAge}}, \code{\link{zodiac}}
+#' @seealso \code{\link{cutAge}}
 #' @examples
 #' 
 #' generation(c(1946, 1964, 1972, 2001, 2003, 2018, 2026))
