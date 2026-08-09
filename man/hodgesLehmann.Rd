@@ -9,7 +9,6 @@ hodgesLehmann(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("boot"),
   na.rm = FALSE,
   ...
 )
@@ -19,15 +18,12 @@ hodgesLehmann(
 
 \item{y}{optional numeric vector}
 
-\item{conf.level}{confidence level; use \code{NA} to return only the point
-estimate. Confidence intervals are currently available only for the
-one-sample case.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{character string specifying the side of the interval:
-\code{"two.sided"}, \code{"left"}, or \code{"right"}}
-
-\item{method}{confidence interval method; currently only
-\code{"boot"} is implemented}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{na.rm}{logical; whether to remove missing values}
 

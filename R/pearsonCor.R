@@ -8,12 +8,16 @@
 #' transformation now called "Fisher's z-transformation" used for the
 #' calculation of normal distributed confidence intervals.
 #' 
-#' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector, matrix, or table
 #' @param y \code{NULL} (default) or a vector with compatible dimensions to
 #' \code{x}. If \code{y} is supplied, \code{table(x, y, ...)} is calculated.
-#' @param method confidence interval method; currently only \code{"fisher"} is
-#' implemented
+
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   
 #' @param scoresType score calculation method for table input
 #' @param na.rm logical, default \code{FALSE} determining if complete cases
 #' should be respected
@@ -50,13 +54,11 @@
 pearsonCor <- function(x, y = NULL,
                        conf.level = NA,
                        sides = c("two.sided","left","right"),
-                       method = c("fisher"),
                        scoresType = "table",
                        na.rm = FALSE) {
   
   sides  <- match.arg(sides)
-  method <- match.arg(method)
-  
+
   
   # --------------------------------------------------
   # Compute correlation
@@ -161,21 +163,6 @@ pearsonCor <- function(x, y = NULL,
   return( c(est=r, lci=ci[1], uci=ci[2]) )
   
 }
-
-
-
-# old TablePearson
-# # 
-# corX <- function (d, w = rep(1, nrow(d))/nrow(d)) {
-# 
-#   # table pearson correlation, taken for boot::corr
-#   s <- sum(w)
-#   m1 <- sum(d[, 1L] * w)/s
-#   m2 <- sum(d[, 2L] * w)/s
-#   (sum(d[, 1L] * d[, 2L] * w)/s - m1 * m2) /
-#     sqrt((sum(d[, 1L]^2 * w)/s - m1^2) *
-#            (sum(d[, 2L]^2 * w)/s - m2^2))
-# }
 
 
 

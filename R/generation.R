@@ -5,7 +5,10 @@
 #' 
 #' The generations are defined as:\cr
 #' 
-#' \tabular{ll}{ \code{1946-1964} \verb{ } \tab Babyboomer\cr \code{1965-1979}
+#' \tabular{ll}{ 
+#' \bold{birth year} \verb{ } \tab \bold{label}\cr 
+#' \code{1946-1964} \verb{ } \tab Babyboomer\cr 
+#' \code{1965-1979}
 #' \tab Generation X \cr \code{1980-1995} \tab Generation Y - also known as
 #' Millennials\cr \code{1996-2010} \tab Generation Z \cr \code{2011 and later}
 #' \tab Generation Alpha\cr }
@@ -17,7 +20,8 @@
 #' 
 #' @param year year of birth
 #' 
-#' @return ordered factor with levels \code{c("Babyboomer", "Gen X",
+#' @return ordered factor with levels 
+#' \code{c("Babyboomer", "Gen X",
 #' "Millennial", "Gen Z", "Gen Alpha")}\cr
 #' Values which fall outside the range
 #' of breaks are coded as \code{NA}, as are \code{NaN} and \code{NA} values.

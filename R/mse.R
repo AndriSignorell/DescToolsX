@@ -28,9 +28,6 @@
 #'
 #' @seealso \code{\link{mean}}
 #'
-#'
-#' @seealso \code{\link{mae}}, \code{\link{mape}}, \code{\link{nmse}}
-#'
 #' @family model.metrics
 #' @concept model-evaluation
 #' @concept prediction-error

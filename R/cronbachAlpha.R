@@ -22,9 +22,7 @@
 #' bounded above. Alpha cannot exceed 1, so the open upper side is reported
 #' at that boundary rather than as \eqn{\infty} (design_rules.md 4.1),
 #' while the open lower side stays \eqn{-\infty} because alpha is
-#' unbounded below. Note that this is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-#' \code{\link[stats]{t.test}}.
+#' unbounded below. 
 #'
 #' Missing values are handled according to package conventions: if
 #' \code{na.rm = FALSE} and \code{x} contains missing values, the usual
@@ -36,11 +34,13 @@
 #' \eqn{n} subjects (in rows) and \eqn{m} items (in columns)
 #' @param returnConditional logical; if \code{TRUE}, alpha is additionally
 #' calculated for the dataset with each item left out
-#' @param conf.level a single confidence level for the returned confidence
-#' interval. Set to \code{NA} (default) to suppress confidence interval
-#' calculation.
-#' @param sides a character string specifying a two-sided or one-sided
-#' confidence interval
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param na.rm logical; if \code{TRUE}, incomplete cases are removed before
 #' the computation proceeds
 #'
@@ -107,9 +107,9 @@
 #'
 #' @export
 cronbachAlpha <- function(x,
-                          returnConditional = FALSE,
                           conf.level = NA,
                           sides = c("two.sided", "left", "right"),
+                          returnConditional = FALSE,
                           na.rm = FALSE){
 
   if(!is.matrix(x) && !is.data.frame(x))

@@ -18,12 +18,12 @@ cohenD(
 
 \item{y}{an optional non-empty numeric vector of data values}
 
-\item{conf.level}{confidence level of the interval. Set this to \code{NA}
-if no confidence interval should be calculated. This is the default.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-\code{"right"}. Partial matching is supported. See Details.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{correct}{logical; whether to apply the Hedges correction. Defaults to
 \code{FALSE}.}
@@ -60,10 +60,7 @@ degrees of freedom in the two-sample case.
 
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-\eqn{(-\infty, uci]}. This is the reverse of the convention in
-\pkg{DescTools}, where \code{sides} follows the alternative hypothesis
-of \code{\link[stats]{t.test}}; both packages accept the same values, so
-the change is silent.
+\eqn{(-\infty, uci]}.
 }
 \note{
 Based on code by William Revelle.

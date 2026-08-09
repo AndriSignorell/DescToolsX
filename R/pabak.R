@@ -42,9 +42,7 @@
 #'
 #' \code{sides} names the side on which the finite bound lies:
 #' \code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
-#' \eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-#' \code{\link[stats]{t.test}}.
+#' \eqn{(-\infty, uci]}. 
 #'
 #' Data can be passed either as a square confusion matrix (or data frame) in
 #' \code{x}, or as two vectors \code{x} and \code{y}, in which case
@@ -58,11 +56,12 @@
 #' @param y \code{NULL} (default) or a categorical vector of the same length
 #'   as \code{x}. When supplied, \code{table(x, y, \dots)} is computed
 #'   internally.
-#' @param conf.level confidence level of the interval. A single numeric value
-#'   in \eqn{(0, 1)}, or \code{NA} (default) to return only the point
-#'   estimate.
-#' @param sides a character string specifying a two-sided or one-sided
-#'   confidence interval. Ignored when \code{conf.level = NA}.
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param ... further arguments passed to \code{\link{table}} for the vector
 #'   interface, for example \code{useNA}.
 #'

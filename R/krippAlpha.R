@@ -11,19 +11,29 @@
 #' 
 #' @param x a data frame, matrix, or similar wide-format object containing
 #'   ratings (columns = raters, rows = subjects/items)
-#' @param method character string specifying the measurement level.
-#'   One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"}, 
-#'   or \code{"ratio"}.
+#' @param metric character string specifying the measurement level, i.e.
+#'   the difference function \eqn{\delta^2} used to compare two categories.
+#'   One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"},
+#'   or \code{"ratio"}. This selects \emph{which} alpha is computed and has
+#'   nothing to do with the confidence interval - the bootstrap interval
+#'   type travels as \code{type} through \code{\dots}. It is called
+#'   \code{metric} and not \code{method} because \code{method} means the
+#'   interval method everywhere else in the suite.
 #' @param levels optional vector specifying the possible categories or scale
-#'   values (required for \code{"interval"} and
-#'   \code{"ratio"} methods).
+#'   values (required for the \code{"interval"} and
+#'   \code{"ratio"} metrics).
 #'   If \code{NULL}, levels are inferred from the data.
 #' @param raters optional vector specifying which columns of \code{x}
 #'   are the raters. If \code{NULL}, all columns are assumed to be raters.
 #' @param conf.level confidence level for bootstrap confidence intervals
 #'   of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.
-#' @param out output format, either \code{"def"} (default) or \code{"ext"} for
-#'   extended results
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   Alpha lies in \eqn{[-1, 1]}, so the open side is reported at that
+#'   boundary rather than at an infinity it cannot reach.
+#' @param output output format, either \code{"def"} (default) or
+#'   \code{"ext"} for extended results
 #' 
 #' @param ... further arguments passed to \code{\link[boot]{boot}}. Supported
 #' arguments are \code{type} (\code{"norm"}, \code{"basic"},
@@ -43,8 +53,8 @@
 #'   \item \code{"ratio"}: Squared relative differences of scale values.
 #' }
 #'
-#' @return if \code{out = "def"} and \code{conf.level = NA}, a numeric scalar.
-#' If \code{out = "def"} and a confidence interval is requested, a named
+#' @return if \code{output = "def"} and \code{conf.level = NA}, a numeric
+#' scalar. If \code{output = "def"} and a confidence interval is requested, a named
 #' numeric vector with elements:
 #' \describe{
 #'   \item{\code{est}}{point estimate of Krippendorff's alpha}
@@ -52,14 +62,14 @@
 #'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
-#' If \code{out = "ext"}, a list with elements:
+#' If \code{output = "ext"}, a list with elements:
 #' \describe{
 #'   \item{\code{alpha}}{point estimate of Krippendorff's alpha}
 #'   \item{\code{Do}}{observed disagreement}
 #'   \item{\code{De}}{expected disagreement under chance}
 #'   \item{\code{O}}{coincidence matrix}
 #'   \item{\code{nV}}{category totals in coincidence space}
-#'   \item{\code{delta2}}{pairwise distance matrix for the selected method}
+#'   \item{\code{delta2}}{pairwise distance matrix for the selected metric}
 #'   \item{\code{ci}}{named numeric vector with \code{est}, \code{lci}, and
 #'     \code{uci}, or \code{NA} if no interval is requested}
 #' }
@@ -77,7 +87,7 @@
 #'   r2 = c(1, 2, 2, 3, 2),
 #'   r3 = c(1, 2, 1, 3, 1)
 #' )
-#' krippAlpha(dat, method = "nominal")
+#' krippAlpha(dat, metric = "nominal")
 #'
 #' # Interval-scaled example
 #' dat2 <- data.frame(
@@ -85,7 +95,7 @@
 #'   r2 = c(2, 5, 6, 7, 1),
 #'   r3 = c(1, 4, 6, 6, 2)
 #' )
-#' krippAlpha(dat2, method = "interval", levels = 1:7)
+#' krippAlpha(dat2, metric = "interval", levels = 1:7)
 #'
 #'
 #' @rdname krippAlpha
@@ -97,11 +107,14 @@
 #'
 #'
 #' @export
-krippAlpha <- function(x, method = c("nominal","ordinal",
-                                     "interval","ratio"),
-                       levels = NULL, 
-                       raters = NULL, 
-                       conf.level = NA, out = c("def", "ext"),
+krippAlpha <- function(x,
+                       conf.level = NA,
+                       sides      = c("two.sided", "left", "right"),
+                       metric     = c("nominal", "ordinal",
+                                      "interval", "ratio"),
+                       levels = NULL,
+                       raters = NULL,
+                       output = c("def", "ext"),
                        ...) {
 
   # Krippendorff's alpha from wide data (m raters), using O from above.
@@ -109,8 +122,21 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
   # Build Krippendorff's coincidence matrix O from wide data (m raters),
   # with per-item weighting by 1 / (m_s - 1) as in KALPHA.
   
-  method <- match.arg(method)
-  out <- match.arg(out)
+  metric <- match.arg(metric)
+  sides  <- match.arg(sides)
+  output <- match.arg(output)
+
+  conf.level <- checkConfLevel(conf.level)
+
+  if(sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+
+  # A one-sided bound at level gamma is the corresponding end of the
+  # two-sided interval at level 2*gamma - 1; the open side is closed at
+  # alpha's own range further down.
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
   
   O <- .CoincidenceFromWide(x, raters = raters, levels = levels)
   
@@ -121,11 +147,11 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
   K <- nrow(O)
   delta2 <- matrix(0, K, K, dimnames = dimnames(O))
   
-  if (method == "nominal") {
+  if (metric == "nominal") {
     delta2[] <- 1
     diag(delta2) <- 0
     
-  } else if (method == "ordinal") {
+  } else if (metric == "ordinal") {
     # mid-cumulative proportions (mu_k) based on nV:
     p  <- nV / sum(nV)
     mu <- cumsum(p) - 0.5 * p
@@ -138,7 +164,7 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
     if (length(levels) != K) stop("'levels' must have length K.")
     levels <- as.numeric(levels)
     
-    if (method == "interval") {
+    if (metric == "interval") {
       D <- outer(levels, levels, `-`)
       delta2 <- D * D
       diag(delta2) <- 0
@@ -159,13 +185,34 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
     
     calc_alpha <- function(x) 
       krippAlpha(x, 
-                 method = method,
+                 metric = metric,
                  levels = levels, 
                  raters = raters, 
                  conf.level = NA)
     
-    ci <- bootCI(x = x, FUN = calc_alpha, ...)
-    names(ci) <- c("est", "lci", "uci")
+    # conf.level was not passed on at all, so bootCI() used its own
+    # default and krippAlpha(x, conf.level = 0.99) quietly returned a 95%
+    # interval. 'sides' deliberately stays two.sided here: the level is
+    # already adjusted, and the open side is closed at alpha's range
+    # below rather than by whatever convention bootCI() applies.
+    boot <- bootCI(x = x, FUN = calc_alpha, conf.level = confAdj, ...)
+    
+    # read by name, not by position: assigning names to whatever comes
+    # back relabels a shorter or differently ordered vector instead of
+    # failing (cf. .relRiskUseOr(), .pearsonCI())
+    if(length(boot) != 3L)
+      stop("bootCI() did not return three values (est, lci, uci).")
+    
+    if(is.null(names(boot)))
+      names(boot) <- c("est", "lci", "uci")
+    
+    if(!all(c("est", "lci", "uci") %in% names(boot)))
+      stop("bootCI() did not return the expected 'est'/'lci'/'uci' vector.")
+    
+    # the estimate comes from the full sample, never from the bootstrap
+    ci <- c(est = alpha,
+            .applySides(unname(boot[c("lci", "uci")]), sides,
+                        lo = -1, hi = 1))
     
   } else {
     # named NA_real_ triple rather than a bare logical NA, so that
@@ -173,13 +220,8 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
     ci <- setNamesX(rep(NA_real_, 3), c("est", "lci", "uci"))
   }
   
-  if(out == "def"){
-    if(!is.na(conf.level)) {
-      res <- setNamesX(c(alpha, ci[2], ci[3]), 
-                      names=c("est","lci","uci"))
-    } else {
-      res <- alpha
-    }
+  if(output == "def"){
+    res <- if(is.na(conf.level)) alpha else ci
   } else {
     res <- list(alpha = alpha, Do = Do, De = De, 
                 O = O, nV = nV, delta2 = delta2, ci=ci)
@@ -251,10 +293,10 @@ krippAlpha <- function(x, method = c("nominal","ordinal",
 #            1L, 1L, 2L, NA, NA, 0L, NA, 0L, NA, NA, 2L, NA, 0L, NA, 
 #            NA, 2L, 0L, NA, 2L, NA, 2L, 2L, 2L, 2L, NA, 1L)) 
 # 
-# out <- krippAlpha(df, 
-#           method = "ordinal",
+# res <- krippAlpha(df, 
+#           metric = "ordinal",
 #           levels = 0:3, raters = paste0("obs",1:5))
 # 
-# testthat::expect_equal(out$alpha, 0.7598, tolerance = 1e-4)
+# testthat::expect_equal(res$alpha, 0.7598, tolerance = 1e-4)
 
 

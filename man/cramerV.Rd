@@ -7,10 +7,10 @@
 cramerV(
   x,
   y = NULL,
-  correct = FALSE,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"),
+  correct = FALSE,
   ...
 )
 }
@@ -22,20 +22,20 @@ cramerV(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{correct}{logical; whether to apply the bias correction of Bergsma
-(2013); defaults to \code{FALSE}}
-
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (the default), only the point estimate is returned.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{character string specifying the confidence interval method:
 \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
 \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
 or \code{"fisheradj"} (using the Fisher z transformation and bias correction)}
+
+\item{correct}{logical; whether to apply the bias correction of Bergsma
+(2013); defaults to \code{FALSE}}
 
 \item{...}{further arguments, passed on to
 \code{\link{normalizeToConfusion}} and \code{\link{table}} for building

@@ -14,10 +14,9 @@
 #'
 #' @param conf.level confidence level of the interval. If set to \code{NA}
 #'   (the default), only the point estimate is returned.
-#'
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
 #'
 #' @param method character string specifying the confidence interval method:
 #' \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
@@ -124,11 +123,11 @@
 #' @concept chi-square-based
 #' @export
 cramerV <- function(x, y = NULL, 
-                    correct = FALSE,
                     conf.level = NA,
                     sides = c("two.sided", "left", "right"),
                     method = c("ncchisq", "ncchisqadj",
                                "fisher", "fisheradj"),
+                    correct = FALSE,
                      ...){
 
   # match.arg() used to sit inside switch(), so a misspelled method was
@@ -143,7 +142,7 @@ cramerV <- function(x, y = NULL,
   # condition of length != 1 since R 4.3 - conf.level = c(0.9, 0.95) or
   # NULL used to abort with a message about the condition rather than
   # about the argument, and NaN slipped through into the point estimate.
-  conf.level <- .checkConfLevel(conf.level)
+  conf.level <- checkConfLevel(conf.level)
   
   # ... carries table() arguments such as useNA, which the documented
   # examples rely on; it was accepted and then dropped on the floor

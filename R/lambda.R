@@ -24,15 +24,14 @@
 #' 
 #' @param conf.level confidence level of the interval. If set to \code{NA}
 #'   (the default), only the point estimate is returned.
-#'   
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of \code{"two.sided"} (default), \code{"left"} or
 #'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
-#'   
-#' @param method character string selecting the interval method; currently
-#' only \code{"classic"} is implemented. It is validated but has no
-#' further effect while there is a single choice.
 #' 
+#' @param ... further arguments, passed on to
+#'   \code{\link{normalizeToConfusion}} and \code{\link{table}} for building
+#'   the table - \code{useNA} is the usual one.
+#'   
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
@@ -72,17 +71,15 @@
 #' 
 #' lambda(m, direction="row")
 #' lambda(m, direction="column")
-#' 
 #'
 #' @family assoc.nominal
 #' @concept association-measure
 #' @concept nominal
 #' @export
 lambda <- function(x, y = NULL,
-                   direction = c("symmetric", "row", "column"),
                    conf.level = NA,
                    sides = c("two.sided", "left", "right"),
-                   method = c("classic"),
+                   direction = c("symmetric", "row", "column"),
                    ...){
 
   # good description
@@ -93,13 +90,12 @@ lambda <- function(x, y = NULL,
   # conf.level was NA; 'method' was never matched at all.
   direction <- match.arg(direction)
   sides     <- match.arg(sides)
-  method    <- match.arg(method)
 
   # Length and type BEFORE is.na(): NA is logical, and is.na() on a vector
   # of length != 1 makes the `if` below the error message instead of this
   # one. conf.level = NULL aborted the same way, and NaN slipped through
   # into the point estimate.
-  conf.level <- .checkConfLevel(conf.level)
+  conf.level <- checkConfLevel(conf.level)
   
   # normalizeToConfusion() rather than table(): the family convention, and
   # it fixes two things at once - `...` used to reach table() only when y

@@ -30,27 +30,29 @@
 #' and tends to be too narrow. A bootstrap interval is preferable when the
 #' assumption is doubtful.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
-#' \eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-#' \code{\link[stats]{t.test}}.
+#' Kappa lies in \eqn{[-1, 1]}, so the interval is restricted to that range
+#' and the open side of a one-sided interval is reported at the boundary
+#' rather than at \eqn{\pm\infty}. See \code{\link{ConfidenceIntervals}}.
 #'
 #' @param x a \eqn{n \times m}{n x m} matrix or data frame, \eqn{n} subjects
 #' in rows and \eqn{m} raters in columns
-#' @param method a character string specifying the coefficient to compute.
+#' @param estimator a character string specifying the coefficient to compute.
 #' One of \code{"fleiss"} (default), \code{"conger"}, or \code{"light"}.
-#' @param conf.level a single confidence level for the returned confidence
-#' interval. Set to \code{NA} (default) to suppress confidence interval
-#' calculation.
-#' @param sides a character string specifying a two-sided or one-sided
-#' confidence interval
+#' These are three different coefficients for the same quantity, not three
+#' interval methods - hence \code{estimator} and not \code{method}.
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param use a character string giving the treatment of missing values. One
 #' of \code{"complete.obs"} (default), which drops any subject rated
 #' incompletely; \code{"everything"}, which returns \code{NA} if any value is
 #' missing; or \code{"pairwise.complete.obs"}, which uses all subjects rated
 #' by both members of each rater pair. The last is available for
-#' \code{method = "light"} only, since Fleiss' and Conger's coefficients
+#' \code{estimator = "light"} only, since Fleiss' and Conger's coefficients
 #' require a complete row per subject.
 #'
 #' @return a named numeric vector. If \code{conf.level = NA}, only
@@ -98,10 +100,10 @@
 #' kappaM(statement)
 #'
 #' # Conger's exact kappa
-#' kappaM(statement, method = "conger")
+#' kappaM(statement, estimator = "conger")
 #'
 #' # Light's kappa, the mean of the pairwise Cohen kappas
-#' kappaM(statement, method = "light")
+#' kappaM(statement, estimator = "light")
 #'
 #' # Fleiss' kappa with a confidence interval
 #' kappaM(statement, conf.level = 0.95)
@@ -112,57 +114,38 @@
 #'
 #' @export
 kappaM <- function(x,
-                   method = c("fleiss", "conger", "light"),
                    conf.level = NA,
                    sides = c("two.sided", "left", "right"),
+                   estimator = c("fleiss", "conger", "light"),
                    use = c("complete.obs", "everything",
                            "pairwise.complete.obs")) {
 
   if(!is.matrix(x) && !is.data.frame(x))
     stop("Argument 'x' must be a matrix or a data frame.")
 
-  method <- match.arg(method)
-  sides <- match.arg(sides)
-  use <- match.arg(use)
+  estimator <- match.arg(estimator)
+  sides     <- match.arg(sides)
+  use       <- match.arg(use)
 
   # Fleiss' and Conger's coefficients count, for every subject, how often
   # each category was chosen across the full set of raters. A subject
   # rated by only some of them contributes a different denominator, which
   # is the variable-rater extension of Fleiss' kappa - a different
   # estimator rather than a different missing-value rule.
-  if(use == "pairwise.complete.obs" && method != "light")
+  if(use == "pairwise.complete.obs" && estimator != "light")
     stop(gettextf(
-      "use = \"pairwise.complete.obs\" is available for method = \"light\" only, not for \"%s\".",
-      method), domain = NA)
+      "use = \"pairwise.complete.obs\" is available for estimator = \"light\" only, not for \"%s\".",
+      estimator), domain = NA)
 
-  # Checked for type and length before is.na(), which would otherwise be
-  # passed a zero-length or multi-element value and make the if() below
-  # fail with an internal condition-length error rather than a clear
-  # message.
-  if(!is.numeric(conf.level) && !is.logical(conf.level))
-    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+  # Four hand-written blocks stood here, all with the same message. The
+  # order they got right - length and type before is.na(), NaN excluded
+  # explicitly - is exactly what the shared helper encodes.
+  conf.level <- checkConfLevel(conf.level)
 
-  if(length(conf.level) != 1L)
-    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
-
-  # NaN is numeric and NA-like, but suppressing the interval on a NaN
-  # confidence level would hide a caller error rather than express an
-  # intent to omit it, so only a true NA does that.
-  if(is.nan(conf.level))
-    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
-
-  if(!is.na(conf.level)) {
-
-    if(!is.numeric(conf.level) ||
-       !is.finite(conf.level) ||
-       conf.level <= 0 ||
-       conf.level >= 1) {
-
-      stop("Argument 'conf.level' must be a single number between 0 and 1.")
-
-    }
-
-  }
+  if(sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
 
   # factor() is needed below to force a common level set across raters;
   # a matrix has no columns to convert, so it becomes a data frame first.
@@ -212,7 +195,7 @@ kappaM <- function(x,
   agreeP <- sum((rowSums(ttab^2) - nr) / (nr * (nr - 1)) / ns)
 
   res <- switch(
-    method,
+    estimator,
 
     "fleiss" = .kappaFleiss(ttab, ns, nr, agreeP),
     "conger" = .kappaConger(ttab, xx, ns, nr, levi, agreeP),
@@ -223,20 +206,26 @@ kappaM <- function(x,
   if(is.na(conf.level))
     return(.makeEstimateResult(est = res$est))
 
-  alpha <- 1 - conf.level
-
-  zCrit <- if(sides == "two.sided")
-    qnorm(1 - alpha / 2)
-  else
-    qnorm(conf.level)
+  # A one-sided bound at level gamma is the corresponding end of the
+  # two-sided interval at level 2*gamma - 1. Written this way rather than
+  # as a separate qnorm(conf.level) branch, so that every function in the
+  # suite adjusts the level in the same place and the same way; the number
+  # is identical.
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
+  zCrit   <- qnorm(1 - (1 - confAdj) / 2)
 
   # A zero or non-finite standard error leaves the Wald interval
-  # undefined; it collapses onto the estimate rather than returning
-  # limits that only look informative.
+  # undefined. It used to collapse onto the estimate, which reads like a
+  # computed interval of width zero and rules out every other value - a
+  # claim no finite sample supports. NA with a reason, as in spearmanCor
+  # and cramerV; the estimate is still returned.
   if(!is.finite(res$se) || res$se == 0) {
 
-    lci <- res$est
-    uci <- res$est
+    warning("the standard error is zero or undefined; no interval computed",
+            call. = FALSE)
+
+    lci <- NA_real_
+    uci <- NA_real_
 
   } else {
 
@@ -245,16 +234,15 @@ kappaM <- function(x,
 
   }
 
-  if(sides == "left")
-    uci <- Inf
-
-  if(sides == "right")
-    lci <- -Inf
+  # Kappa lies in [-1, 1]. The Wald interval can leave that range, and the
+  # open side of a one-sided interval belongs at the boundary rather than
+  # at an infinity kappa cannot reach - .applySides() does both.
+  ci <- .applySides(c(lci, uci), sides, lo = -1, hi = 1)
 
   .makeEstimateResult(
     est = res$est,
-    lci = lci,
-    uci = uci
+    lci = ci[["lci"]],
+    uci = ci[["uci"]]
   )
 
 }

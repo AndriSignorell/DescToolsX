@@ -19,17 +19,12 @@ glassDelta(
 
 \item{y}{numeric vector containing the control group}
 
-\item{conf.level}{confidence level of the interval. If \code{NA}
-(default), only the point estimate is returned.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"}
-or \code{"right"}. \code{sides} names the side on which the finite
-bound lies: \code{"left"} yields \eqn{[lci, \infty)} and
-\code{"right"} \eqn{(-\infty, uci]}. Note that this is the reverse of
-the convention in \pkg{DescTools}, where \code{sides} follows the
-alternative hypothesis of \code{\link[stats]{t.test}}. You can specify
-just the initial letter.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{useControlSd}{logical, if \code{TRUE} (default) the standard
 deviation of the control group \code{y} is used for standardization,

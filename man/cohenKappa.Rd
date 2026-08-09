@@ -7,9 +7,9 @@
 cohenKappa(
   x,
   y = NULL,
-  weights = c("unweighted", "equal-spacing", "fleiss-cohen"),
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
+  weights = c("unweighted", "equal-spacing", "fleiss-cohen"),
   ...
 )
 }
@@ -22,19 +22,17 @@ compatible dimensions to \code{x}. When supplied,
 \code{table(x, y, \dots)} is computed. The vector interface is
 available for unweighted kappa only (see Details).}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+
 \item{weights}{either a character string selecting a built-in weight
 scheme -- \code{"unweighted"} (default), \code{"equal-spacing"}, or
 \code{"fleiss-cohen"} -- or a numeric matrix with the same dimensions
 as \code{x} supplying user-defined weights for each cell}
-
-\item{conf.level}{confidence level of the interval. A single numeric
-value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
-point estimate.}
-
-\item{sides}{a character string specifying the side of the interval:
-\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported. Ignored when \code{conf.level = NA}.
-See Details.}
 
 \item{...}{further arguments passed to \code{\link{table}} for the
 vector interface, for example \code{useNA}}
@@ -80,9 +78,7 @@ default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
 fixed at 1, and \code{"right"} one bounded above, with the lower limit
 fixed at -1. Kappa is a bounded parameter, so the open side is reported
 at the range boundary rather than as \eqn{\pm\infty} (design_rules.md
-4.1), matching \code{\link{ccc}}. This is the reverse of the convention
-in \pkg{DescTools}, where \code{sides} follows the alternative
-hypothesis of \code{\link[stats]{t.test}}.
+4.1), matching \code{\link{ccc}}.
 }
 \note{
 Based on code by David Meyer, adapted to conform to package standards.
@@ -142,7 +138,7 @@ reliability of scoring EEG sleep recordings.
 \emph{American Journal of EEG Technology}, \emph{11}(3), 101--109.
 }
 \seealso{
-\code{\link[bedrock]{pairApply}}, \code{\link{ccc}}
+\code{\link[bedrock]{pairApply}}
 
 Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},

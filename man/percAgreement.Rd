@@ -7,10 +7,11 @@
 percAgreement(
   x,
   y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
   input = c("auto", "confusion", "ratings"),
-  conf.level = 0.95,
   fpc = 0,
-  verbose = FALSE,
+  output = c("def", "ext"),
   ...
 )
 }
@@ -20,28 +21,39 @@ subjects in rows and raters in columns}
 
 \item{y}{optional second rating vector used to construct a confusion matrix}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}. A proportion of
+agreement lies in \eqn{[0, 1]}, so the open side is reported at that
+boundary rather than at \eqn{\pm\infty}.}
+
 \item{input}{character string specifying the input format:
 \code{"auto"}, \code{"confusion"}, or \code{"ratings"}}
-
-\item{conf.level}{confidence level for the interval}
 
 \item{fpc}{finite population correction, the sampling fraction \eqn{n/N}
 in \eqn{[0, 1)} (default \code{0})}
 
-\item{verbose}{logical; whether to return detailed output}
+\item{output}{output format, either \code{"def"} (default) or
+\code{"ext"} for extended results}
 
-\item{...}{reserved for future extensions}
+\item{...}{must be empty. Named arguments are rejected rather than
+silently ignored.}
 }
 \value{
-if \code{verbose = FALSE}, a named numeric vector with elements:
+if \code{output = "def"} and \code{conf.level = NA}, a numeric
+scalar; otherwise a named numeric vector with elements:
 \describe{
 \item{\code{est}}{proportion of agreement}
 \item{\code{lci}}{lower confidence interval bound}
 \item{\code{uci}}{upper confidence interval bound}
 }
 
-if \code{verbose = TRUE}, a list with the estimate, standard error,
-confidence interval, sample sizes, and method description.
+if \code{output = "ext"}, a list with the elements \code{est},
+\code{se}, \code{ci} (the named triple above), \code{n},
+\code{nPairable} and \code{method}.
 }
 \description{
 Computes the proportion of agreement (percent agreement) along with

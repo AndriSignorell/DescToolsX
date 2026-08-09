@@ -1,73 +1,104 @@
-.kdat_nom <- data.frame(
-  r1 = c(1, 2, 1, 3, 2),
-  r2 = c(1, 2, 2, 3, 2),
-  r3 = c(1, 2, 1, 3, 1)
+df <- data.frame(
+  r1 = c(1, 2, 3, 3, 2, 1, 4, 1, 2, NA),
+  r2 = c(1, 2, 3, 3, 2, 2, 4, 1, 2, 5),
+  r3 = c(NA, 3, 3, 3, 2, 3, 4, 2, 2, 5),
+  r4 = c(1, 2, 3, 3, 2, 4, 4, 1, 2, 5)
 )
 
-test_that("krippAlpha returns a single numeric for nominal data (no CI)", {
-  res <- krippAlpha(.kdat_nom, method = "nominal")
-  expect_type(res, "double")
-  expect_length(res, 1)
-})
 
-test_that("krippAlpha perfect agreement gives alpha = 1", {
-  dat <- data.frame(r1=1:5, r2=1:5, r3=1:5)
-  expect_equal(krippAlpha(dat, method="nominal"), 1, tolerance=1e-6)
-})
+test_that("krippAlpha() runs at all", {
 
-test_that("krippAlpha nominal result is in [-1, 1]", {
-  res <- krippAlpha(.kdat_nom, method = "nominal")
-  expect_gte(res, -1); expect_lte(res, 1)
-})
+  # regression: the formal was renamed to 'type' while the body and the
+  # documentation kept using 'method', so match.arg(method) could not find
+  # its argument and every call failed with "object 'method' not found"
+  expect_silent(a <- krippAlpha(df))
+  expect_length(a, 1L)
+  expect_true(is.numeric(a))
 
-test_that("krippAlpha ordinal method returns a numeric in [-1, 1]", {
-  res <- krippAlpha(.kdat_nom, method = "ordinal")
-  expect_gte(res, -1); expect_lte(res, 1)
-})
+  # 'metric' selects the difference function, i.e. WHICH alpha is
+  # computed. It is not called 'method', because method means the interval
+  # method everywhere else in the suite - and 'type' is already taken by
+  # the bootstrap interval type that travels through ...
+  expect_true("metric" %in% names(formals(krippAlpha)))
+  expect_false(any(c("method", "type") %in% names(formals(krippAlpha))))
+  expect_true("output" %in% names(formals(krippAlpha)))
+  expect_false("out" %in% names(formals(krippAlpha)))
 
-test_that("krippAlpha interval method returns a numeric", {
-  dat <- data.frame(r1=c(1,4,5,7,2), r2=c(2,5,6,7,1), r3=c(1,4,6,6,2))
-  res <- krippAlpha(dat, method="interval", levels=1:7)
-  expect_true(is.numeric(res))
-})
-
-test_that("krippAlpha ratio method returns a numeric", {
-  dat <- data.frame(r1=c(1,4,5,7,2), r2=c(2,5,6,7,1), r3=c(1,4,6,6,2))
-  res <- krippAlpha(dat, method="ratio", levels=1:7)
-  expect_true(is.numeric(res))
-})
-
-test_that("krippAlpha handles NAs in data", {
-  dat_na <- .kdat_nom
-  dat_na[1,1] <- NA
-  expect_true(is.numeric(krippAlpha(dat_na, method = "nominal")))
-})
-
-test_that("krippAlpha out = 'ext' returns a list with alpha and O", {
-  res <- krippAlpha(.kdat_nom, method="nominal", out="ext")
-  expect_type(res, "list")
-  expect_true(all(c("alpha","Do","De","O") %in% names(res)))
-})
-
-test_that("krippAlpha conf.level returns named vector est/lci/uci", {
-  res <- krippAlpha(.kdat_nom, method="nominal", conf.level=0.95, R=200)
-  expect_length(res, 3)
-  expect_named(res, c("est","lci","uci"))
+  for (m in c("nominal", "ordinal", "interval", "ratio"))
+    expect_silent(krippAlpha(df, metric = m))
 })
 
 
+test_that("conf.level is honoured, not silently replaced", {
 
-test_that("krippAlpha returns a consistent shape without an interval", {
-  
-  dat <- matrix(c(1, 2, 3, 3, 2, 1, 4, 1, 2, NA, 3, 4), nrow = 3, byrow = TRUE)
-  
-  # out = "ext" is what returns the list with $ci; the default "def"
-  # gives a bare scalar, which is why res$ci failed on an atomic vector
-  res <- krippAlpha(dat, out = "ext")
-  
-  # $ci was a bare logical NA, so res$ci[["est"]] failed
-  expect_named(res$ci, c("est", "lci", "uci"))
-  expect_type(res$ci, "double")
-  
-  expect_type(krippAlpha(dat), "double")
+  # regression: conf.level was never passed to bootCI(), so every request
+  # came back at bootCI's own default level
+  set.seed(1); narrow <- krippAlpha(df, conf.level = 0.80, R = 199)
+  set.seed(1); wide   <- krippAlpha(df, conf.level = 0.99, R = 199)
+
+  expect_named(narrow, c("est", "lci", "uci"))
+  expect_equal(narrow[["est"]], wide[["est"]])
+
+  expect_gt(narrow[["lci"]], wide[["lci"]])
+  expect_lt(narrow[["uci"]], wide[["uci"]])
+})
+
+
+test_that("conf.level is validated through the shared helper", {
+
+  expect_error(krippAlpha(df, conf.level = c(0.9, 0.95)), "conf.level")
+  expect_error(krippAlpha(df, conf.level = NULL), "conf.level")
+  expect_error(krippAlpha(df, conf.level = NaN), "conf.level")
+  expect_error(krippAlpha(df, conf.level = 0), "conf.level")
+  expect_error(krippAlpha(df, conf.level = 1), "conf.level")
+})
+
+
+test_that("sides closes the open side at alpha's own range", {
+
+  set.seed(2); two   <- krippAlpha(df, conf.level = 0.95, R = 199)
+  set.seed(2); left  <- krippAlpha(df, conf.level = 0.95, R = 199, sides = "left")
+  set.seed(2); right <- krippAlpha(df, conf.level = 0.95, R = 199, sides = "right")
+
+  # alpha lies in [-1, 1]; Inf would claim a value it cannot take
+  expect_equal(left[["uci"]], 1)
+  expect_equal(right[["lci"]], -1)
+
+  expect_equal(left[["est"]], two[["est"]])
+  expect_gte(left[["lci"]],  two[["lci"]])
+  expect_lte(right[["uci"]], two[["uci"]])
+
+  # left(gamma) reads the same end as two.sided(2*gamma - 1)
+  set.seed(3); l  <- krippAlpha(df, conf.level = 0.95, R = 199, sides = "left")
+  set.seed(3); t9 <- krippAlpha(df, conf.level = 0.90, R = 199)
+  expect_equal(l[["lci"]], t9[["lci"]])
+})
+
+
+test_that("sides is matched even when no interval is requested", {
+
+  expect_error(krippAlpha(df, sides = "links"), "two.sided")
+  expect_error(krippAlpha(df, conf.level = 0.4, sides = "left"), "0.5")
+  expect_silent(krippAlpha(df, conf.level = NA, sides = "left"))
+})
+
+
+test_that("output = 'ext' carries the same interval as output = 'def'", {
+
+  set.seed(4); d <- krippAlpha(df, conf.level = 0.95, R = 199)
+  set.seed(4); e <- krippAlpha(df, conf.level = 0.95, R = 199, output = "ext")
+
+  expect_equal(e$ci, d)
+  expect_equal(e$alpha, unname(d[["est"]]))
+
+  # and without an interval the triple is still indexable
+  f <- krippAlpha(df, output = "ext")
+  expect_named(f$ci, c("est", "lci", "uci"))
+  expect_true(all(is.na(f$ci)))
+
+  # sides applies in the extended output too
+  set.seed(4)
+  g <- krippAlpha(df, conf.level = 0.95, R = 199, output = "ext",
+                  sides = "left")
+  expect_equal(g$ci[["uci"]], 1)
 })

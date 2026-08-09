@@ -2,7 +2,8 @@
 #' Spearman Rank Correlation 
 #' 
 #' Calculate Spearman correlation coefficient and its confidence interval. In
-#' addition to the base R function \code{\link{cor}()}, frequency tables are
+#' addition to the base R function \code{\link{cor}(x, method="spearman")}, 
+#' frequency tables are
 #' also accepted as arguments (i.e. actually weights are used).
 #' 
 #' The function calculates Spearman's rho statistic by means of \code{cor(...,
@@ -24,6 +25,12 @@
 #' 
 #' @inheritParams Association
 #' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param na.rm logical; whether to remove incomplete pairs. Applies to the
 #' vector interface; a frequency table must not contain missing counts.
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -71,12 +78,7 @@ spearmanCor <- function(x, y = NULL,
   
   sides <- match.arg(sides)
   
-  if (length(conf.level) != 1L)
-    stop("'conf.level' must be a single value, or NA")
-  
-  if (!is.na(conf.level) &&
-      (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
-    stop("'conf.level' must be a single number in (0, 1), or NA")
+  conf.level <- checkConfLevel(conf.level)
   
   if(is.null(y)) {
     # implemented following
@@ -165,20 +167,36 @@ spearmanCor <- function(x, y = NULL,
   if (is.na(conf.level))
     return(rho)
   
+  # Below 0.5 the one-sided alpha exceeds 1, qnorm() turns negative and
+  # the two bounds come out in reverse order - the clamp below is
+  # elementwise and would not notice. Refused as everywhere else.
+  if (sides != "two.sided" && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+  
   # The z-transformation is undefined at |rho| = 1 (atanh is infinite) and
-  # needs n > 3. Both cases are answered by a degenerate interval at the
-  # estimate rather than by NaN.
+  # needs n > 3. Both used to be answered with a made-up interval: (rho,
+  # rho) at |rho| = 1, which rules out every value below 1 and is a claim
+  # no finite sample supports, and (-1, 1) for n <= 3, which looks like a
+  # computed result and is merely the whole range. cramerV reports NA in
+  # exactly these two situations - see .fisherHalfWidth() there - and the
+  # estimate is still returned either way.
   if (is.na(rho)) {
     
     ci <- c(NA_real_, NA_real_)
     
   } else if (abs(rho) >= 1) {
     
-    ci <- c(rho, rho)
+    warning("the z-transformation cannot bound a perfect correlation; ",
+            "no interval computed", call. = FALSE)
+    ci <- c(NA_real_, NA_real_)
     
   } else if (is.na(n) || n <= 3) {
     
-    ci <- c(-1, 1)
+    warning("the z-transformation needs more than 3 observations; ",
+            "no interval computed", call. = FALSE)
+    ci <- c(NA_real_, NA_real_)
     
   } else {
     
@@ -188,16 +206,10 @@ spearmanCor <- function(x, y = NULL,
     se <- 1 / sqrt(n - 3)
     
     ci <- tanh(zr + c(-1, 1) * qnorm(1 - alpha / 2) * se)
-    
-    ci <- c(max(ci[1], -1), min(ci[2], 1))
   }
   
-  # rho is bounded, so the open side is reported at the range boundary.
-  if (sides == "left")
-    ci[2] <- 1
-  else if (sides == "right")
-    ci[1] <- -1
-  
-  c(est = rho, lci = ci[1], uci = ci[2])
+  # rho is bounded, so the open side is reported at the range boundary -
+  # .applySides() also does the clamping the two lines above used to do
+  c(est = rho, .applySides(ci, sides, lo = -1, hi = 1))
   
 }

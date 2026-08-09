@@ -250,17 +250,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// fastMode
-SEXP fastMode(SEXP x, bool narm);
-RcppExport SEXP _DescToolsX_fastMode(SEXP xSEXP, SEXP narmSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    Rcpp::traits::input_parameter< bool >::type narm(narmSEXP);
-    rcpp_result_gen = Rcpp::wrap(fastMode(x, narm));
-    return rcpp_result_gen;
-END_RCPP
-}
 // fast_mode_cpp
 SEXP fast_mode_cpp(SEXP x, bool narm);
 RcppExport SEXP _DescToolsX_fast_mode_cpp(SEXP xSEXP, SEXP narmSEXP) {
@@ -441,7 +430,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_bottom_n_cpp", (DL_FUNC) &_DescToolsX_bottom_n_cpp, 2},
     {"_DescToolsX_top_i_cpp", (DL_FUNC) &_DescToolsX_top_i_cpp, 2},
     {"_DescToolsX_bottom_i_cpp", (DL_FUNC) &_DescToolsX_bottom_i_cpp, 2},
-    {"_DescToolsX_fastMode", (DL_FUNC) &_DescToolsX_fastMode, 2},
     {"_DescToolsX_fast_mode_cpp", (DL_FUNC) &_DescToolsX_fast_mode_cpp, 2},
     {"_DescToolsX_hlqest_cpp", (DL_FUNC) &_DescToolsX_hlqest_cpp, 1},
     {"_DescToolsX_hl2qest_cpp", (DL_FUNC) &_DescToolsX_hl2qest_cpp, 2},

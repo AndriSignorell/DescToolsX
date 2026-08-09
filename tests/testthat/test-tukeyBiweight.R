@@ -169,14 +169,19 @@ test_that("CI: sides = 'right' sets lci = -Inf", {
 
 test_that("CI: sides = 'left' lci equals two-sided lci at adjusted level", {
   set.seed(9)
-  x        <- rnorm(200)
-  # one-sided 95% ≡ two-sided 90% — same C++ seed ensures identical resamples
-  left     <- tukeyBiweight(x, conf.level = 0.95, sides = "left",
-                            R = 999, seed = 1L)
-  twosided <- tukeyBiweight(x, conf.level = 0.90, sides = "two.sided",
-                            R = 999, seed = 1L)
+  x <- rnorm(200)
   
-  expect_equal(unname(left["lci"]), unname(twosided["lci"]), tolerance = 0.02)
+  # Der C++-Seed wird aus R's RNG gezogen, die beiden Läufe brauchen also
+  # denselben R-Seed. 'seed' ist kein Argument von tukeyBiweight - es wurde
+  # bisher stumm verworfen, weshalb hier zwei unabhängige Bootstrapläufe
+  # verglichen wurden.
+  set.seed(1)
+  left     <- tukeyBiweight(x, conf.level = 0.95, sides = "left", R = 999)
+  set.seed(1)
+  twosided <- tukeyBiweight(x, conf.level = 0.90, R = 999)
+  
+  # gleiches alpha, gleiche Resamples - die Identität ist exakt
+  expect_equal(unname(left["lci"]), unname(twosided["lci"]))
 })
 
 
@@ -339,9 +344,8 @@ test_that("tukeyBiweight() validates its arguments", {
   expect_error(tukeyBiweight(x, const = -1), "positive")
   expect_error(tukeyBiweight(x, const = c(3, 9)), "positive")
   expect_error(tukeyBiweight(x, conf.level = 1), "conf.level")
-  expect_error(tukeyBiweight(x, conf.level = 0.4, sides = "left"), "greater than 0.5")
-  expect_error(tukeyBiweight(x, conf.level = 0.95, method = "asymptotic"))
-  
+  expect_error(tukeyBiweight(x, conf.level = 0.4, sides = "left"), "0.5")
+  expect_error(tukeyBiweight(x, conf.level = 0.95, method = "asymptotic"), "method")
 })
 
 

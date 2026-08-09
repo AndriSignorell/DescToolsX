@@ -12,32 +12,68 @@
 ordAssocs(
   x,
   y = NULL,
-  which = c("all", "gamma", "tauA", "tauB", "tauC", "somers", "cstat"),
   conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  which = c("all", "gamma", "tauA", "tauB", "tauC", "somers", "cstat"),
   direction = c("row", "column")
 )
 
-gkGamma(x, y = NULL, conf.level = NA, direction = c("row", "column"))
+gkGamma(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  direction = c("row", "column")
+)
 
-kendallTauA(x, y = NULL, conf.level = NA)
+kendallTauA(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right")
+)
 
-kendallTauB(x, y = NULL, conf.level = NA)
+kendallTauB(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right")
+)
 
-stuartTauC(x, y = NULL, conf.level = NA)
+stuartTauC(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right")
+)
 
-somersDelta(x, y = NULL, conf.level = NA, direction = c("row", "column"))
+somersDelta(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  direction = c("row", "column")
+)
 }
 \arguments{
 \item{x}{numeric or ordinal vector, or a two-dimensional contingency table}
 
 \item{y}{optional second vector of the same length as \code{x}}
 
+\item{conf.level}{confidence level of the interval; \code{NA} returns only
+the estimate}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+The open side is closed at the boundary of the parameter's range -
+\eqn{\pm 1} for gamma, the tau family and Somers' \eqn{D}, and
+\eqn{[0, 1]} for the c statistic - rather than at an infinity none of
+them can reach.}
+
 \item{which}{measure returned by \code{ordAssocs()}: \code{"all"},
 \code{"gamma"}, \code{"tauA"}, \code{"tauB"}, \code{"tauC"},
 \code{"somers"}, or \code{"cstat"}}
-
-\item{conf.level}{confidence level of the interval; \code{NA} returns only
-the estimate}
 
 \item{direction}{direction of Somers' \eqn{D}; \code{"row"} or
 \code{"column"}}

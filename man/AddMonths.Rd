@@ -3,11 +3,14 @@
 \name{addMonths}
 \alias{addMonths}
 \alias{addMonths.default}
+\alias{addMonths.ym}
 \title{Add Months to a Date}
 \usage{
 addMonths(x, n, ...)
 
 \method{addMonths}{default}(x, n, ...)
+
+\method{addMonths}{ym}(x, n, ...)
 }
 \arguments{
 \item{x}{a \code{Date} object or an object coercible to one with
@@ -25,12 +28,12 @@ a vector of class \code{Date} having the length of the longer of
 }
 \description{
 Adds or subtracts whole calendar months while ensuring that the result is
-always a valid date.
+always a valid date.Negative values of \code{n} subtract months.
 }
 \details{
-Naively adding months can produce invalid dates. For example, adding one
+Naively adding months to a date can produce invalid results. For example, adding one
 month to \code{as.Date("2013-01-31")} returns \code{"2013-02-28"} rather
-than a date in March. Negative values of \code{n} subtract months.
+than a date in March.
 
 The arguments \code{x} and \code{n} are recycled to their common maximum
 length using \code{\link[bedrock:recycle]{bedrock::recycle()}}. Partial recycling does not produce a
@@ -78,8 +81,7 @@ addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 }
 \seealso{
-\code{\link[=as.ym]{as.ym()}}, \code{\link[bedrock:recycle]{bedrock::recycle()}},
-\code{\link[=year]{year()}}, \code{\link[=month]{month()}}
+\code{\link[=as.ym]{as.ym()}}, \code{\link[=year]{year()}}, \code{\link[=month]{month()}}
 
 Other date.time:
 \code{\link[=countWorkDays]{countWorkDays()}},

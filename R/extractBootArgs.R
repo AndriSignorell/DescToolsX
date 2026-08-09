@@ -3,33 +3,12 @@
 ## Argument handling utilities (centralized, reusable)
 ## ============================================================
 ##
-## ACHTUNG: Diese Datei liegt in ZWEI Paketen (lumen und DescToolsX) und
-## muss dort BYTEGLEICH sein - genau wie src/boot_framework.h und
-## src/bca_helpers.h. Vor jeder Aenderung und nach jedem Einbau:
-##   tools::md5sum(c("../lumen/R/extractBootArgs.R",
-##                   "../DescToolsX/R/extractBootArgs.R"))
+## WARNING: This file is included in TWO packages (lumen and DescToolsX) and
+## must be BYTE-FOR-BYTE identical in both—just like src/boot_framework.h and
+## src/bca_helpers.h. Before making any changes and after each integration:
+##   tools::md5sum(c(“../lumen/R/extractBootArgs.R”,
+##                   “../DescToolsX/R/extractBootArgs.R”))
 ## ============================================================
-
-
-
-#' @noRd
-.checkConfLevel <- function(conf.level) {
-  if (length(conf.level) != 1L ||
-      !(is.numeric(conf.level) || is.logical(conf.level)) ||
-      is.nan(conf.level) ||
-      (!is.na(conf.level) && (conf.level <= 0 || conf.level >= 1)))
-    stop("'conf.level' must be a single number in (0, 1), or NA",
-         call. = FALSE)
-  invisible(conf.level)
-}
-
-#' @noRd
-.checkFlag <- function(x, name) {
-  if (!is.logical(x) || length(x) != 1L || is.na(x))
-    stop(gettextf("'%s' must be a single non-missing logical value", name),
-         call. = FALSE, domain = NA)
-  invisible(x)
-}
 
 
 # The five names below are exactly the ones a caller can map onto a

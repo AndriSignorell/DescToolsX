@@ -7,10 +7,9 @@
 lambda(
   x,
   y = NULL,
-  direction = c("symmetric", "row", "column"),
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("classic"),
+  direction = c("symmetric", "row", "column"),
   ...
 )
 }
@@ -22,11 +21,6 @@ lambda(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{direction}{type of lambda. Can be one out of \code{"symmetric"}
-(default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
-direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
-reported. See Details.}
-
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (the default), only the point estimate is returned.}
 
@@ -34,9 +28,14 @@ reported. See Details.}
 interval (one of \code{"two.sided"} (default), \code{"left"} or
 \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
 
-\item{method}{character string selecting the interval method; currently
-only \code{"classic"} is implemented. It is validated but has no
-further effect while there is a single choice.}
+\item{direction}{type of lambda. Can be one out of \code{"symmetric"}
+(default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
+direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
+reported. See Details.}
+
+\item{...}{further arguments, passed on to
+\code{\link{normalizeToConfusion}} and \code{\link{table}} for building
+the table - \code{useNA} is the usual one.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -80,7 +79,6 @@ lambda(m, conf.level=0.95)
 
 lambda(m, direction="row")
 lambda(m, direction="column")
-
 
 }
 \references{

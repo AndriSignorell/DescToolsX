@@ -9,7 +9,7 @@
 #' intervals for the bias and LoA according to Bland and Altman.
 #'
 #' The returned object is of class \code{"BlandAltman"} and can be plotted
-#' using \code{plot()} when the \pkg{pharos} package is installed.
+#' using by a \code{plot()} routine residing in the \pkg{pharos} package.
 #'
 #' The limits of agreement are the conventional \code{bias +/- 1.96 * sd},
 #' independent of \code{conf.level}: the multiplier fixes the nominal

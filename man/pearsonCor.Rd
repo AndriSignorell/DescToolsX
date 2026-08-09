@@ -9,7 +9,6 @@ pearsonCor(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("fisher"),
   scoresType = "table",
   na.rm = FALSE
 )
@@ -24,12 +23,8 @@ pearsonCor(
 (the default), only the point estimate is returned.}
 
 \item{sides}{character string specifying the sidedness of the confidence
-interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. For a one-sided interval, the value names the side with
-the finite bound. The initial letter is sufficient.}
-
-\item{method}{confidence interval method; currently only \code{"fisher"} is
-implemented}
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{scoresType}{score calculation method for table input}
 

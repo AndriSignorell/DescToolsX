@@ -9,7 +9,6 @@
 #' The uncertainty coefficient is computed as \deqn{U(C|R) = \frac{H(X) + H(Y)
 #' - H(XY)}{H(Y)} } and ranges from \verb{[0, 1]}.
 #'
-#' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector, factor, matrix, or data frame
 #' @param y \code{NULL} (default) or a vector, an ordered factor, matrix or
 #' data frame with compatible dimensions to \code{x}
@@ -18,10 +17,18 @@
 #' U(R|C), and the column direction calculates U(C|R).
 #' @param pZeroCorrection small positive value used to replace zero cells
 #' before taking logarithms
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#' 
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing, for example, \code{useNA} to be set. This
 #' refers only to the
 #' vector interface.
+#' 
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
@@ -63,10 +70,12 @@
 #' @concept information-theory
 #'
 #' @export
-uncertCoef <- function(x, y = NULL, conf.level = NA,
+uncertCoef <- function(x, y = NULL,
+                       conf.level = NA,
                        sides = c("two.sided", "left", "right"),
                        direction = c("symmetric", "row", "column"),
-                       pZeroCorrection = 1/sum(x)^2, ... ) {
+                       pZeroCorrection = 1/sum(x)^2,
+                       ... ) {
 
   # Theil's UC (1970)
   # slightly nudge zero values so that their logarithm can be
@@ -76,6 +85,19 @@ uncertCoef <- function(x, y = NULL, conf.level = NA,
 
   sides     <- match.arg(sides)
   direction <- match.arg(direction)
+
+  conf.level <- checkConfLevel(conf.level)
+
+  # A one-sided bound at level gamma is the corresponding end of the
+  # two-sided interval at level 2*gamma - 1. At or below 0.5 that level is
+  # not positive and the normal quantile turns negative, which hands back
+  # the two bounds in reverse order.
+  if(sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
 
   if(length(dim(x)) != 2L)
     stop("'x' must be a two-dimensional contingency table, ",
@@ -127,23 +149,11 @@ uncertCoef <- function(x, y = NULL, conf.level = NA,
                                 (hx - hxy) * log(csum[col(x)] / n))^2) /
                      (n^2 * hy^4))
 
-  # one-sided intervals are computed as the corresponding bound of a
-  # 1-2*(1-conf.level) two-sided interval
-  conf_adj <- if(sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
-  if(conf_adj <= 0)
-    stop("For a one-sided interval 'conf.level' must be greater than 0.5.")
-
-  z  <- qnorm(1 - (1 - conf_adj)/2)
+  z  <- qnorm(1 - (1 - confAdj)/2)
   ci <- res + c(-1, 1) * z * sqrt(sigma2)
 
-  # the uncertainty coefficient lies in [0, 1]; the open side of a one-sided
-  # interval is reported at the range limit (cf. design_rules.md 4.1)
-  lci <- max(ci[1L], 0)
-  uci <- min(ci[2L], 1)
-
-  if(sides == "left")  uci <- 1
-  if(sides == "right") lci <- 0
-
-  c(est = res, lci = lci, uci = uci)
+  # the uncertainty coefficient lies in [0, 1]; .applySides() clamps to
+  # that range and closes the open side there (design_rules.md 4.1)
+  c(est = res, .applySides(ci, sides, lo = 0, hi = 1))
 
 }

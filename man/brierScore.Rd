@@ -7,10 +7,10 @@
 brierScore(
   x,
   pred = NULL,
-  scaled = FALSE,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("normal", "boot"),
+  scaled = FALSE,
   ...
 )
 }
@@ -24,21 +24,19 @@ predictions are extracted}
 \eqn{[0,1]}. Required when \code{x} is a numeric vector; ignored
 when \code{x} is a model object.}
 
-\item{scaled}{logical. Should the scaled Brier score be returned?
-Default \code{FALSE}.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{conf.level}{confidence level of the interval. A single numeric
-value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
-point estimate.}
-
-\item{sides}{a character string specifying the side of the interval:
-\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported. Ignored when \code{conf.level = NA}.
-See Details.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{confidence interval method: \code{"normal"} (delta-method
 approximation, default) or \code{"boot"} (bootstrap via
 \code{brier_boot_cpp()})}
+
+\item{scaled}{logical. Should the scaled Brier score be returned?
+Default \code{FALSE}.}
 
 \item{...}{further arguments passed to the bootstrap engine when
 \code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
@@ -71,9 +69,7 @@ perfect model and 0 for the no-skill reference.
 
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-\eqn{(-\infty, uci]}. This is the reverse of the convention in
-\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-\code{\link[stats]{t.test}}.
+\eqn{(-\infty, uci]}.
 
 \strong{Normal interval} (\code{method = "normal"})
 

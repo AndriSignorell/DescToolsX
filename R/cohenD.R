@@ -17,18 +17,17 @@
 #'
 #' \code{sides} names the side on which the finite bound lies:
 #' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-#' \eqn{(-\infty, uci]}. This is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis
-#' of \code{\link[stats]{t.test}}; both packages accept the same values, so
-#' the change is silent.
+#' \eqn{(-\infty, uci]}. 
 #'
 #' @param x a non-empty numeric vector of data values
 #' @param y an optional non-empty numeric vector of data values
-#' @param conf.level confidence level of the interval. Set this to \code{NA}
-#' if no confidence interval should be calculated. This is the default.
-#' @param sides a character string specifying the side of the confidence
-#' interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-#' \code{"right"}. Partial matching is supported. See Details.
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param correct logical; whether to apply the Hedges correction. Defaults to
 #' \code{FALSE}.
 #' @param na.rm logical. Should missing values be removed? Defaults to
@@ -79,7 +78,8 @@
 #' @export
 cohenD <- function(x, y = NULL,
                    conf.level = NA, sides = c("two.sided", "left", "right"),
-                   correct = FALSE, na.rm = FALSE) {
+                   correct = FALSE, 
+                   na.rm = FALSE) {
 
   sides <- match.arg(sides)
 

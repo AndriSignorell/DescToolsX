@@ -59,8 +59,6 @@ Hall, M., Tideman, N. (1967). Measures of concentration.
 \emph{Journal of the American Statistical Association}, 62, 162-168.
 }
 \seealso{
-\code{\link{gini}}, \code{\link{lc}}
-
 Other inequality:
 \code{\link[=atkinson]{atkinson()}},
 \code{\link[=divCoef]{divCoef()}},

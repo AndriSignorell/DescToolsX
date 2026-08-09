@@ -24,9 +24,8 @@ data frame with compatible dimensions to \code{x}}
 (the default), only the point estimate is returned.}
 
 \item{sides}{character string specifying the sidedness of the confidence
-interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. For a one-sided interval, the value names the side with
-the finite bound. The initial letter is sufficient.}
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{direction}{direction of calculation, one of \code{"symmetric"}
 (default), \code{"row"}, or \code{"column"}. The row direction calculates

@@ -29,15 +29,25 @@
 #' This implementation is comparably fast, as the expensive sums are coded in C.
 #' 
 #' @name kurt
-#' @aliases kurt
 #' 
-#' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector. An object that is not a vector is coerced by
 #' \code{as.vector} if possible.
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
 #' @param weights a numerical vector of weights the same length as \code{x}
 #' giving the weights to use for elements of \code{x}
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#' @param method character string specifying the confidence interval method.
+#'   \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
+#'   intervals unless another bootstrap type is supplied through \code{\dots};
+#'   \code{"classic"} uses a Wald interval based on the asymptotic standard
+#'   error. See Details and \code{\link{ConfidenceIntervals}}.
+#'   
 #' @param na.rm logical, indicating whether \code{NA} values should be stripped
 #' before the computation proceeds. Defaults to \code{FALSE}.
 #' @param \dots further arguments passed to \code{\link[boot]{boot}} when

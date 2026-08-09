@@ -12,14 +12,9 @@
 #'
 #' @param conf.level confidence level of the interval. If set to \code{NA}
 #'   (the default), only the point estimate is returned.
-#'
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
-#'
-#' @param method character string specifying the interval method (here only
-#' \code{"boot"}).
-#'   
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
 #'
 #' @param ... further arguments. Named arguments known to
 #'   \code{\link{normalizeToConfusion}} or \code{\link{table}} are used to
@@ -65,6 +60,8 @@
 #'
 #' Confidence intervals are restricted to the attainable range. Measures
 #' such as [cramerV] may be preferable when inference is central.
+#' 
+#' For further information see \code{\link{ConfidenceIntervals}}.
 #'
 #' @references
 #' Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
@@ -97,23 +94,23 @@
 #' @concept chi-square-based
 #' @export
 contCoef <- function(x, y = NULL,
-                     correct = FALSE,
                      conf.level = NA,
                      sides = c("two.sided", "left", "right"),
-                     method = c("boot"),
+                     correct = FALSE,
                      ...) {
 
   sides  <- match.arg(sides)
-  method <- match.arg(method)
+  conf.level <- checkConfLevel(conf.level)
 
-  # Type and length BEFORE is.na(): NA is logical, so a test that leads
-  # with !is.numeric() rejects the function's own default, and is.na() on
-  # a vector of length != 1 makes the `if` itself the error message.
-  if (length(conf.level) != 1L ||
-      !(is.numeric(conf.level) || is.logical(conf.level)) ||
-      is.nan(conf.level) ||
-      (!is.na(conf.level) && (conf.level <= 0 || conf.level >= 1)))
-    stop("'conf.level' must be a single number in (0, 1), or NA")
+  # Refused here as everywhere else in the suite. contCoef could in fact
+  # compute it - the probs switch below stays valid below 0.5 - but it was
+  # the last function that accepted what cramerV, lambda, tukeyBiweight
+  # and the whole assoc family reject, and one answer per question beats
+  # a defensible exception.
+  if (sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
 
   dots <- list(...)
   nms  <- names(dots)
@@ -166,10 +163,11 @@ contCoef <- function(x, y = NULL,
   baseSeed <- sample.int(.Machine$integer.max, 1L)
 
   # 'sides' names the side carrying the FINITE bound; the open side gets
-  # probability 0 or 1 and is closed at the range boundary below. The
-  # former version instead ran the two-sided machinery at a doubled alpha,
-  # which for conf.level <= 0.5 turned the two probabilities around and
-  # reported a bound from the wrong tail without a word.
+  # probability 0 or 1 and is closed at the range boundary by
+  # .applySides() below. This reads more directly than the doubled-alpha
+  # construction it replaced, but it computes the same thing - that
+  # construction was correct, contrary to what an earlier comment here
+  # claimed.
   alpha <- 1 - conf.level
 
   probs <- switch(sides,
@@ -194,10 +192,8 @@ contCoef <- function(x, y = NULL,
   # vector.
   ci <- stats::quantile(bootVals, probs = probs, names = FALSE)
 
-  ci <- c(max(ci[1L], 0), min(ci[2L], cMax))
-
-  if (sides == "left")  ci[2L] <- cMax
-  if (sides == "right") ci[1L] <- 0
-
-  setNamesX(c(cc, ci), names = c("est", "lci", "uci"))
+  # C runs from 0 to sqrt((m-1)/m), or to 1 after Sakoda's correction -
+  # the one range in the suite that depends on the data. .applySides()
+  # clamps to it and closes the open side there.
+  c(est = cc, .applySides(ci, sides, lo = 0, hi = cMax))
 }

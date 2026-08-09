@@ -4,7 +4,14 @@
 \alias{gkTau}
 \title{Goodman Kruskal's Tau}
 \usage{
-gkTau(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
+gkTau(
+  x,
+  y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  direction = c("row", "column"),
+  ...
+)
 }
 \arguments{
 \item{x}{numeric vector or contingency table. A matrix is treated as a table.}
@@ -12,13 +19,17 @@ gkTau(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...)
 \item{y}{\code{NULL} (default) or a vector with compatible dimensions to
 \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+
 \item{direction}{direction of the calculation. Must be \code{"row"}
 (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
 variable is the dependent one and is predicted from the column variable;
 \code{"column"} gives tau (C|R).}
-
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(which is the default) no confidence interval will be calculated.}
 
 \item{\dots}{further arguments are passed to the function
 \code{\link{table}}, allowing i.e. to set useNA. This refers only to the

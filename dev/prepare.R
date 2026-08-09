@@ -1,7 +1,7 @@
 
 
 Rcpp::compileAttributes()
-devtools::clean_dll()
+pkgbuild::clean_dll()
 devtools::check()
 devtools::install()
 devtools::build_manual(pkg = "C:/temp/DescToolsX")
@@ -29,10 +29,10 @@ goodpractice::gp()
 
 1:10 %[]% c(3,4)
 
+usethis::use_build_ignore("dev")  
 
 grep("bedrock", readLines("NAMESPACE"), value = TRUE)
 c("%[]%", "%[)%") %in% getNamespaceExports("bedrock")   # sollte TRUE TRUE geben
-
 
 
 pkgdown::build_site()

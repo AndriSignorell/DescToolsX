@@ -7,9 +7,10 @@
 relRisk(
   x,
   y = NULL,
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
   method = c("score", "wald", "use-or"),
   delta = 0.5,
-  conf.level = NA,
   ...
 )
 }
@@ -19,15 +20,19 @@ relRisk(
 \item{y}{an optional vector. If supplied, \code{table(x, y, ...)} is
 computed.}
 
+\item{conf.level}{confidence level for the interval estimate. If
+\code{NA} (default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+
 \item{method}{character string specifying the confidence interval method.
 One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
 
 \item{delta}{small continuity correction added to the event counts in the
 \emph{standard error} of the Wald interval. Only used if
 \code{method = "wald"}; see the note below.}
-
-\item{conf.level}{confidence level for the interval estimate. If
-\code{NA} (default), only the point estimate is returned.}
 
 \item{\dots}{further arguments passed to \code{\link{table}}}
 }

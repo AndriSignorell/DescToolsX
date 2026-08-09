@@ -117,28 +117,23 @@ test_that("sides names the side carrying the finite bound", {
 })
 
 
-test_that("a one-sided interval below conf.level 0.5 is not turned around", {
+test_that("a one-sided bound reads the quantile it claims", {
   
-  m <- min(dim(tab)); cMax <- sqrt((m - 1) / m)
+  # left(gamma) und two.sided(2*gamma - 1) schneiden an derselben Stelle
+  set.seed(11); left <- contCoef(tab, conf.level = 0.95, R = 400, sides = "left")
+  set.seed(11); two  <- contCoef(tab, conf.level = 0.90, R = 400)
+  expect_equal(left[["lci"]], two[["lci"]])
   
-  set.seed(4)
-  ci <- contCoef(tab, conf.level = 0.4, R = 400, sides = "left")
+  set.seed(12); right <- contCoef(tab, conf.level = 0.95, R = 400, sides = "right")
+  set.seed(12); two2  <- contCoef(tab, conf.level = 0.90, R = 400)
+  expect_equal(right[["uci"]], two2[["uci"]])
   
-  # unter 50 % liegt die Untergrenze ÜBER dem Schätzer - das ist korrekt
-  expect_true(is.finite(ci[["lci"]]))
-  expect_true(ci[["lci"]] <= ci[["uci"]])
-  expect_equal(ci[["uci"]], cMax)
-  
-  set.seed(4)
-  wide <- contCoef(tab, conf.level = 0.9, R = 400, sides = "left")
-  expect_true(ci[["lci"]] >= wide[["lci"]])
-  
-  # die Seite selbst: left(c) liest dasselbe Quantil wie two.sided(2c-1)
-  set.seed(7); l <- contCoef(tab, conf.level = 0.95, R = 400, sides = "left")
-  set.seed(7); t <- contCoef(tab, conf.level = 0.90, R = 400)
-  expect_equal(l[["lci"]], t[["lci"]])
+  # Unter 0.5 wird einseitig jetzt abgewiesen - contCoef koennte es
+  # rechnen, war aber die letzte Funktion, die es annahm
+  expect_error(contCoef(tab, conf.level = 0.4, sides = "left"), "0.5")
+  expect_error(contCoef(tab, conf.level = 0.5, sides = "right"), "0.5")
+  expect_silent(contCoef(tab, conf.level = 0.4, R = 200))
 })
-
 
 
 

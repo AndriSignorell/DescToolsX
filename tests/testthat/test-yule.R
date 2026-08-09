@@ -18,12 +18,12 @@ test_that("yuleQ and yuleY work correctly", {
   Y_expected <- (sqrt(OR) - 1)/(sqrt(OR) + 1)
   
   ## --- yuleQ estimate ---
-  resQ <- yuleQ(m)
+  resQ <- yuleQ(m, conf.level = 0.95)
   expect_named(resQ, c("est","lci","uci"))
   expect_equal(resQ[["est"]], Q_expected, tolerance = 1e-12)
   
   ## --- yuleY estimate ---
-  resY <- yuleY(m)
+  resY <- yuleY(m, conf.level = 0.95)
   expect_named(resY, c("est","lci","uci"))
   expect_equal(resY[["est"]], Y_expected, tolerance = 1e-12)
   
@@ -39,18 +39,18 @@ test_that("yuleQ and yuleY work correctly", {
   m3 <- matrix(c(8, 2,
                  1, 9), nrow = 2)
   
-  res_left <- yuleQ(m3, sides = "left")
+  res_left <- yuleQ(m3, conf.level = 0.95, sides = "left")
   expect_equal(res_left[["uci"]], 1)
   
   ## --- einseitig rechts ---
-  res_right <- yuleQ(m3, sides = "right")
+  res_right <- yuleQ(m3, conf.level = 0.95, sides = "right")
   expect_equal(res_right[["lci"]], -1)
   
   ## --- Zero-Cell mit Korrektur ---
   m4 <- matrix(c(10, 0,
                  5, 12), nrow = 2)
   
-  res_corr <- yuleQ(m4, correction = TRUE)
+  res_corr <- yuleQ(m4, correct = TRUE, conf.level = 0.95)
   expect_true(is.finite(res_corr[["est"]]))
   
   ## --- Konsistenz Q & Y via OR ---
@@ -92,7 +92,7 @@ test_that("a zero cell yields the limiting value instead of NaN", {
   expect_equal(yuleY(z0, conf.level = NA), -1)
   
   # ... and the interval does not contain NaN either
-  ci <- yuleQ(z1)
+  ci <- yuleQ(z1, conf.level = 0.95)
   expect_false(anyNA(ci))
   expect_equal(unname(ci), c(1, -1, 1))
   
@@ -122,23 +122,24 @@ test_that("the interval is the transformed log odds ratio interval", {
   lo <- log(16) - qnorm(0.975) * se
   hi <- log(16) + qnorm(0.975) * se
   
-  expect_equal(unname(yuleQ(m)[["lci"]]), tanh(lo/2))
-  expect_equal(unname(yuleQ(m)[["uci"]]), tanh(hi/2))
-  expect_equal(unname(yuleY(m)[["lci"]]), tanh(lo/4))
-  expect_equal(unname(yuleY(m)[["uci"]]), tanh(hi/4))
+  expect_equal(unname(yuleQ(m, conf.level = 0.95)[["lci"]]), tanh(lo/2))
+  expect_equal(unname(yuleQ(m, conf.level = 0.95)[["uci"]]), tanh(hi/2))
+  expect_equal(unname(yuleY(m, conf.level = 0.95)[["lci"]]), tanh(lo/4))
+  expect_equal(unname(yuleY(m, conf.level = 0.95)[["uci"]]), tanh(hi/4))
   
 })
 
 
 test_that("one-sided intervals report the open side at the range limit", {
   
-  left  <- yuleQ(m, sides = "left")
-  right <- yuleQ(m, sides = "right")
+  left  <- yuleQ(m, conf.level = 0.95, sides = "left")
+  right <- yuleQ(m, conf.level = 0.95, sides = "right")
+  two   <- yuleQ(m, conf.level = 0.95)
   
   expect_equal(left[["uci"]], 1)
   expect_equal(right[["lci"]], -1)
-  expect_gt(left[["lci"]], yuleQ(m)[["lci"]])
-  expect_lt(right[["uci"]], yuleQ(m)[["uci"]])
+  expect_gt(left[["lci"]], two[["lci"]])
+  expect_lt(right[["uci"]], two[["uci"]])
   
 })
 
@@ -146,7 +147,7 @@ test_that("one-sided intervals report the open side at the range limit", {
 test_that("the Haldane-Anscombe correction gives a finite interval", {
   
   z1 <- matrix(c(12, 5, 0, 20), nrow = 2)
-  ci <- yuleQ(z1, correction = TRUE)
+  ci <- yuleQ(z1, correct = TRUE, conf.level = 0.95)
   
   expect_lt(ci[["est"]], 1)
   expect_gt(ci[["lci"]], -1)
@@ -173,8 +174,21 @@ test_that("yule coefficients validate their input", {
   expect_error(yuleQ(1:4), "2x2")
   expect_error(yuleQ(matrix(c(1, 2, -3, 4), nrow = 2)), "non-negative")
   expect_error(yuleQ(m, conf.level = 0), "conf.level")
-  expect_error(yuleQ(m, correction = NA), "TRUE or FALSE")
-  expect_error(yuleY(m, conf.level = 0.4, sides = "right"), "greater than 0.5")
+  expect_error(yuleQ(m, correct = NA), "TRUE or FALSE")
+  expect_error(yuleY(m, conf.level = 0.4, sides = "right"), "0.5")
   
 })
 
+
+test_that("yuleQ/yuleY return a bare estimate by default", {
+
+  # The default moved from 0.95 to NA, in line with the rest of the suite.
+  # That change is SILENT for anyone reading res[["est"]] - it starts
+  # returning NA instead of failing - so it gets pinned here.
+  expect_length(yuleQ(m), 1L)
+  expect_length(yuleY(m), 1L)
+  expect_null(names(yuleQ(m)))
+
+  expect_identical(formals(yuleQ)$conf.level, NA)
+  expect_identical(formals(yuleY)$conf.level, NA)
+})

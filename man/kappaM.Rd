@@ -6,9 +6,9 @@
 \usage{
 kappaM(
   x,
-  method = c("fleiss", "conger", "light"),
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
+  estimator = c("fleiss", "conger", "light"),
   use = c("complete.obs", "everything", "pairwise.complete.obs")
 )
 }
@@ -16,22 +16,24 @@ kappaM(
 \item{x}{a \eqn{n \times m}{n x m} matrix or data frame, \eqn{n} subjects
 in rows and \eqn{m} raters in columns}
 
-\item{method}{a character string specifying the coefficient to compute.
-One of \code{"fleiss"} (default), \code{"conger"}, or \code{"light"}.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{conf.level}{a single confidence level for the returned confidence
-interval. Set to \code{NA} (default) to suppress confidence interval
-calculation.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
-\item{sides}{a character string specifying a two-sided or one-sided
-confidence interval}
+\item{estimator}{a character string specifying the coefficient to compute.
+One of \code{"fleiss"} (default), \code{"conger"}, or \code{"light"}.
+These are three different coefficients for the same quantity, not three
+interval methods - hence \code{estimator} and not \code{method}.}
 
 \item{use}{a character string giving the treatment of missing values. One
 of \code{"complete.obs"} (default), which drops any subject rated
 incompletely; \code{"everything"}, which returns \code{NA} if any value is
 missing; or \code{"pairwise.complete.obs"}, which uses all subjects rated
 by both members of each rater pair. The last is available for
-\code{method = "light"} only, since Fleiss' and Conger's coefficients
+\code{estimator = "light"} only, since Fleiss' and Conger's coefficients
 require a complete row per subject.}
 }
 \value{
@@ -74,11 +76,9 @@ which they are not - they share raters - so the interval is approximate
 and tends to be too narrow. A bootstrap interval is preferable when the
 assumption is doubtful.
 
-\code{sides} names the side on which the finite bound lies:
-\code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
-\eqn{(-\infty, uci]}. Note that this is the reverse of the convention in
-\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-\code{\link[stats]{t.test}}.
+Kappa lies in \eqn{[-1, 1]}, so the interval is restricted to that range
+and the open side of a one-sided interval is reported at the boundary
+rather than at \eqn{\pm\infty}. See \code{\link{ConfidenceIntervals}}.
 }
 \note{
 Based on code by Matthias Gamer previously published as \code{kappaM.fleiss()} in
@@ -101,10 +101,10 @@ statement <- data.frame(
 kappaM(statement)
 
 # Conger's exact kappa
-kappaM(statement, method = "conger")
+kappaM(statement, estimator = "conger")
 
 # Light's kappa, the mean of the pairwise Cohen kappas
-kappaM(statement, method = "light")
+kappaM(statement, estimator = "light")
 
 # Fleiss' kappa with a confidence interval
 kappaM(statement, conf.level = 0.95)

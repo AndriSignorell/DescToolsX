@@ -28,13 +28,19 @@
 #' @param x a numeric 2x2 matrix or table containing non-negative counts
 #' @param y an optional vector. If supplied, \code{table(x, y, ...)} is
 #'   computed.
-#' @param method character string specifying the confidence interval method.
-#'   One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.
 #' @param delta small continuity correction added to the event counts in the
 #'   \emph{standard error} of the Wald interval. Only used if
 #'   \code{method = "wald"}; see the note below.
+#'   
+#' @param method character string specifying the confidence interval method.
+#'   One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.
+#'   
 #' @param conf.level confidence level for the interval estimate. If
 #'   \code{NA} (default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'
 #' @param \dots further arguments passed to \code{\link{table}}
 #'
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -120,9 +126,10 @@
 relRisk <- function(
     x,
     y = NULL,
+    conf.level = NA,
+    sides = c("two.sided", "left", "right"),
     method = c("score", "wald", "use-or"),
     delta = 0.5,
-    conf.level = NA,
     ...
 ) {
 
@@ -150,13 +157,19 @@ relRisk <- function(
   if (any(rowSums(x) == 0))
     stop("Rows of 'x' must contain positive totals.")
 
-  # NA is LOGICAL, so !is.numeric(conf.level) must not be tested before the
-  # NA case is admitted - otherwise the function rejects its own default.
-  if (length(conf.level) != 1L ||
-      !(is.numeric(conf.level) || is.logical(conf.level)) ||
-      is.nan(conf.level) ||
-      (!is.na(conf.level) && (conf.level <= 0 || conf.level >= 1)))
-    stop("'conf.level' must be a single number in (0, 1) or NA.")
+  # NA is LOGICAL, so the type must not be tested before the NA case is
+  # admitted - otherwise the function rejects its own default. The shared
+  # helper is the single place that gets this right.
+  conf.level <- checkConfLevel(conf.level)
+
+  sides <- match.arg(sides)
+
+  if (sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+
+  confAdj <- if (sides == "two.sided") conf.level else 2 * conf.level - 1
 
   if (length(delta) != 1L || !is.numeric(delta) || is.na(delta) || delta < 0)
     stop("'delta' must be a single non-negative number.")
@@ -182,7 +195,7 @@ relRisk <- function(
       x2 = x2,
       n1 = n1,
       n2 = n2,
-      conf.level = conf.level
+      conf.level = confAdj
     ),
 
     "wald" = .relRiskWald(
@@ -192,21 +205,24 @@ relRisk <- function(
       n1 = n1,
       n2 = n2,
       delta = delta,
-      conf.level = conf.level
+      conf.level = confAdj
     ),
 
     "use-or" = .relRiskUseOr(
       x = x,
       x2 = x2,
       n2 = n2,
-      conf.level = conf.level
+      conf.level = confAdj
     )
   )
 
+  # The relative risk is a ratio of probabilities: bounded below by 0,
+  # unbounded above. This is the first measure in this round whose open
+  # side really is infinite - the same range the caller table records for
+  # oddsRatio, gmean, hmean and coefVarCI.
   c(
     est = estimate,
-    lci = ci[["lci"]],
-    uci = ci[["uci"]]
+    .applySides(c(ci[["lci"]], ci[["uci"]]), sides, lo = 0, hi = Inf)
   )
 
 }

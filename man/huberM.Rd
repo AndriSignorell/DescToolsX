@@ -19,18 +19,15 @@ huberM(
 \arguments{
 \item{x}{numeric vector of data values}
 
-\item{conf.level}{confidence level of the interval. A single numeric
-value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
-point estimate.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{character string specifying the side of the interval:
-\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported. \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}. Ignored when
-\code{conf.level = NA}.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{confidence interval method: \code{"wald"} (default) or
-\code{"boot"}}
+\code{"boot"}.}
 
 \item{k}{positive tuning constant; the algorithm winsorizes at \code{k}
 standard deviations. Default is \code{1.345}.}

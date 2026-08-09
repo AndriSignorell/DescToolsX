@@ -85,6 +85,7 @@ Some agreement measures define additional parameters such as:
 Following agreement measures are implemented in \strong{DescToolsX}:
 
 \tabular{ll}{
+\verb{  }\strong{function}       \tab \strong{description} \cr
 \verb{  }\link{cohenKappa}       \tab Cohen's Kappa \cr
 \verb{  }\code{scottsPi}         \tab Scott's Pi \cr
 \verb{  }\code{gwetAC1}          \tab Gwet's AC1 / AC2 \cr

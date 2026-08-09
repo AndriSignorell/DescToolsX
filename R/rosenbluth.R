@@ -47,8 +47,6 @@
 #' # frequency weights replicate the values
 #' rosenbluth(c(10, 1), n = c(1, 3))
 #'
-#' @seealso \code{\link{gini}}, \code{\link{lc}}
-#'
 #' @family inequality  
 #' @concept concentration-index
 #'

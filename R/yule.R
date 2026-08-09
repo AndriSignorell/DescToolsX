@@ -6,11 +6,14 @@
 #' @param x a 2x2 contingency table (matrix or table). If \code{y} is supplied,
 #'   \code{x} and \code{y} are cross-tabulated via \code{table()}.
 #' @param y optional second variable for cross-tabulation
-#' @param conf.level confidence level for the interval. Defaults to \code{0.95};
-#'   use \code{NA} to return only the point estimate.
-#' @param sides type of confidence interval, one of \code{"two.sided"},
-#'   \code{"left"}, or \code{"right"}
-#' @param correction logical; if \code{TRUE}, applies the Haldane--Anscombe
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'
+#' @param correct logical; if \code{TRUE}, applies the Haldane--Anscombe
 #'   correction by adding 0.5 to all cells
 #' @param ... further arguments passed to \code{table()}
 #'
@@ -36,7 +39,7 @@
 #' \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
 #' and then transformed to the selected coefficient. With a zero cell the
 #' standard error is infinite and the interval degenerates to
-#' \eqn{[-1, 1]}; use \code{correction = TRUE} to obtain a finite interval.
+#' \eqn{[-1, 1]}; use \code{correct = TRUE} to obtain a finite interval.
 #'
 #' For a one-sided interval the open side is reported at the range limit
 #' (-1 resp. 1), not at \eqn{\pm\infty}.
@@ -63,7 +66,7 @@
 #' yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), conf.level = NA)
 #'
 #' # ... a finite interval requires the Haldane-Anscombe correction
-#' yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), correction = TRUE)
+#' yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), correct = TRUE)
 #'
 #' @rdname yule
 #'
@@ -74,12 +77,13 @@
 #'
 #' @export
 yuleQ <- function(x, y = NULL,
-                  conf.level = 0.95,
+                  conf.level = NA,
                   sides = c("two.sided", "left", "right"),
-                  correction = FALSE, ...){
+                  correct = FALSE,
+                  ...){
 
   .yuleCoef(x, y, conf.level = conf.level, sides = match.arg(sides),
-            correction = correction, divisor = 2, ...)
+            correct = correct, divisor = 2, ...)
 
 }
 
@@ -87,12 +91,13 @@ yuleQ <- function(x, y = NULL,
 #' @rdname yule
 #' @export
 yuleY <- function(x, y = NULL,
-                  conf.level = 0.95,
+                  conf.level = NA,
                   sides = c("two.sided", "left", "right"),
-                  correction = FALSE, ...){
+                  correct = FALSE,
+                  ...){
 
   .yuleCoef(x, y, conf.level = conf.level, sides = match.arg(sides),
-            correction = correction, divisor = 4, ...)
+            correct = correct, divisor = 4, ...)
 
 }
 
@@ -101,14 +106,27 @@ yuleY <- function(x, y = NULL,
 #   Q = tanh(log(OR)/2),  Y = tanh(log(OR)/4)
 # Everything else - table construction, checks, continuity correction and the
 # confidence interval - is identical, so it lives here once.
-.yuleCoef <- function(x, y = NULL, conf.level, sides, correction,
+.yuleCoef <- function(x, y = NULL, conf.level, sides, correct,
                       divisor, ...){
 
   if(!is.null(y))
     x <- table(x, y, ...)
 
-  if(!isTRUE(correction) && !isFALSE(correction))
-    stop("Argument 'correction' must be TRUE or FALSE.")
+  if(!isTRUE(correct) && !isFALSE(correct))
+    stop("Argument 'correct' must be TRUE or FALSE.")
+
+  # Validated HERE, before the two early returns below. The old check sat
+  # after `if(is.na(conf.level)) return(est)`, so conf.level = c(.9, .95)
+  # or NULL aborted inside that `if` with a message about the condition
+  # rather than about the argument.
+  conf.level <- checkConfLevel(conf.level)
+
+  if(sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
 
   if(length(dim(x)) != 2L || !all(dim(x) == c(2L, 2L)))
     stop("'x' must be a 2x2 table, or 'y' must be supplied.")
@@ -116,7 +134,7 @@ yuleY <- function(x, y = NULL,
   if(!is.numeric(x) || anyNA(x) || any(x < 0))
     stop("'x' must contain non-negative counts without missing values.")
 
-  if(correction)
+  if(correct)
     x <- x + 0.5
 
   # note: do not name these a, b, c, d - 'c' would mask base::c()
@@ -134,25 +152,16 @@ yuleY <- function(x, y = NULL,
   if(is.na(conf.level))
     return(est)
 
-  if(!is.numeric(conf.level) || length(conf.level) != 1L ||
-     conf.level <= 0 || conf.level >= 1)
-    stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
-
   se <- sqrt(1/n11 + 1/n12 + 1/n21 + 1/n22)  # Inf if any cell is 0
 
-  conf_adj <- if(sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
-  if(conf_adj <= 0)
-    stop("For a one-sided interval 'conf.level' must be greater than 0.5.")
-  z <- qnorm(1 - (1 - conf_adj)/2)
+  z <- qnorm(1 - (1 - confAdj)/2)
 
   # logOR - z*se would be Inf - Inf = NaN for a zero cell, hence the
   # explicit limits
   lower <- if(is.finite(logOR) && is.finite(se)) tanh((logOR - z*se)/divisor) else -1
   upper <- if(is.finite(logOR) && is.finite(se)) tanh((logOR + z*se)/divisor) else  1
 
-  if(sides == "left")  upper <-  1
-  if(sides == "right") lower <- -1
-
-  c(est = est, lci = lower, uci = upper)
+  # Q and Y are tanh of something, so they live in [-1, 1]
+  c(est = est, .applySides(c(lower, upper), sides, lo = -1, hi = 1))
 
 }

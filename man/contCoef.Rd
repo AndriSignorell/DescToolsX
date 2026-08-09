@@ -7,10 +7,9 @@
 contCoef(
   x,
   y = NULL,
-  correct = FALSE,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("boot"),
+  correct = FALSE,
   ...
 )
 }
@@ -22,18 +21,15 @@ contCoef(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
-\item{correct}{logical; whether Sakoda's adjusted Pearson's C should be
-returned; defaults to \code{FALSE}}
-
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (the default), only the point estimate is returned.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
-\item{method}{character string specifying the interval method (here only
-\code{"boot"}).}
+\item{correct}{logical; whether Sakoda's adjusted Pearson's C should be
+returned; defaults to \code{FALSE}}
 
 \item{...}{further arguments. Named arguments known to
 \code{\link{normalizeToConfusion}} or \code{\link{table}} are used to
@@ -85,6 +81,8 @@ association and a reasonable number of observations.
 
 Confidence intervals are restricted to the attainable range. Measures
 such as \link{cramerV} may be preferable when inference is central.
+
+For further information see \code{\link{ConfidenceIntervals}}.
 }
 \examples{
 

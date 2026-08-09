@@ -19,12 +19,12 @@ ccc(
 
 \item{y}{a numeric vector of equal length to \code{x}}
 
-\item{conf.level}{a single confidence level for the returned confidence
-interval. Set to \code{NA} (default) to suppress confidence interval
-calculation.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{a character string specifying a two-sided or one-sided
-confidence interval}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{a character string specifying the confidence interval
 method. One of \code{"z-transform"}, \code{"boot"}, or
@@ -77,9 +77,7 @@ method, where \eqn{d\,\mathrm{atanh}(\rho)/d\rho = 1/(1 - \rho^2)}.
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields an interval bounded below, with the upper limit
 fixed at 1, and \code{"right"} one bounded above, with the lower limit
-fixed at -1. Note that this is the reverse of the convention in
-\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-\code{\link[stats]{t.test}}.
+fixed at -1.
 
 Missing values are handled according to package conventions:
 if \code{na.rm = FALSE} and either \code{x} or \code{y} contains missing

@@ -25,7 +25,7 @@ test_that("randolphKappa() uses the pairwise observed agreement", {
 
 test_that("randolphKappa() agrees with percAgreement() on Po", {
 
-  po <- unname(percAgreement(x5, input = "ratings")[["est"]])
+  po <- unname(percAgreement(x5, input = "ratings"))
   k <- 3
   expect_equal(randolphKappa(x5), (po - 1 / k) / (1 - 1 / k))
 })

@@ -6,11 +6,12 @@
 \usage{
 krippAlpha(
   x,
-  method = c("nominal", "ordinal", "interval", "ratio"),
+  conf.level = NA,
+  sides = c("two.sided", "left", "right"),
+  metric = c("nominal", "ordinal", "interval", "ratio"),
   levels = NULL,
   raters = NULL,
-  conf.level = NA,
-  out = c("def", "ext"),
+  output = c("def", "ext"),
   ...
 )
 }
@@ -18,23 +19,34 @@ krippAlpha(
 \item{x}{a data frame, matrix, or similar wide-format object containing
 ratings (columns = raters, rows = subjects/items)}
 
-\item{method}{character string specifying the measurement level.
+\item{conf.level}{confidence level for bootstrap confidence intervals
+of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+Alpha lies in \eqn{[-1, 1]}, so the open side is reported at that
+boundary rather than at an infinity it cannot reach.}
+
+\item{metric}{character string specifying the measurement level, i.e.
+the difference function \eqn{\delta^2} used to compare two categories.
 One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"},
-or \code{"ratio"}.}
+or \code{"ratio"}. This selects \emph{which} alpha is computed and has
+nothing to do with the confidence interval - the bootstrap interval
+type travels as \code{type} through \code{\dots}. It is called
+\code{metric} and not \code{method} because \code{method} means the
+interval method everywhere else in the suite.}
 
 \item{levels}{optional vector specifying the possible categories or scale
-values (required for \code{"interval"} and
-\code{"ratio"} methods).
+values (required for the \code{"interval"} and
+\code{"ratio"} metrics).
 If \code{NULL}, levels are inferred from the data.}
 
 \item{raters}{optional vector specifying which columns of \code{x}
 are the raters. If \code{NULL}, all columns are assumed to be raters.}
 
-\item{conf.level}{confidence level for bootstrap confidence intervals
-of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.}
-
-\item{out}{output format, either \code{"def"} (default) or \code{"ext"} for
-extended results}
+\item{output}{output format, either \code{"def"} (default) or
+\code{"ext"} for extended results}
 
 \item{...}{further arguments passed to \code{\link[boot]{boot}}. Supported
 arguments are \code{type} (\code{"norm"}, \code{"basic"},
@@ -44,8 +56,8 @@ of bootstrap replicates \code{R}. Defaults are \code{"basic"} for
 \code{parallel}, and \code{999} for \code{R}.}
 }
 \value{
-if \code{out = "def"} and \code{conf.level = NA}, a numeric scalar.
-If \code{out = "def"} and a confidence interval is requested, a named
+if \code{output = "def"} and \code{conf.level = NA}, a numeric
+scalar. If \code{output = "def"} and a confidence interval is requested, a named
 numeric vector with elements:
 \describe{
 \item{\code{est}}{point estimate of Krippendorff's alpha}
@@ -53,14 +65,14 @@ numeric vector with elements:
 \item{\code{uci}}{upper confidence interval bound}
 }
 
-If \code{out = "ext"}, a list with elements:
+If \code{output = "ext"}, a list with elements:
 \describe{
 \item{\code{alpha}}{point estimate of Krippendorff's alpha}
 \item{\code{Do}}{observed disagreement}
 \item{\code{De}}{expected disagreement under chance}
 \item{\code{O}}{coincidence matrix}
 \item{\code{nV}}{category totals in coincidence space}
-\item{\code{delta2}}{pairwise distance matrix for the selected method}
+\item{\code{delta2}}{pairwise distance matrix for the selected metric}
 \item{\code{ci}}{named numeric vector with \code{est}, \code{lci}, and
 \code{uci}, or \code{NA} if no interval is requested}
 }
@@ -88,7 +100,7 @@ dat <- data.frame(
   r2 = c(1, 2, 2, 3, 2),
   r3 = c(1, 2, 1, 3, 1)
 )
-krippAlpha(dat, method = "nominal")
+krippAlpha(dat, metric = "nominal")
 
 # Interval-scaled example
 dat2 <- data.frame(
@@ -96,7 +108,7 @@ dat2 <- data.frame(
   r2 = c(2, 5, 6, 7, 1),
   r3 = c(1, 4, 6, 6, 2)
 )
-krippAlpha(dat2, method = "interval", levels = 1:7)
+krippAlpha(dat2, metric = "interval", levels = 1:7)
 
 
 }

@@ -17,12 +17,12 @@ hmean(
 \item{x}{a positive numeric vector. An object which is not a vector is
 coerced, if possible, by \code{as.vector()}.}
 
-\item{conf.level}{confidence level of the interval. Default is \code{NA}.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval, must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. You can specify just the initial letter. \code{"left"} would
-be analogue to a hypothesis of \code{"greater"} in a \code{t.test}.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{a vector of character strings representing the type of
 intervals required. The value should be any subset of the values

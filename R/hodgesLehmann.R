@@ -21,13 +21,12 @@
 #'
 #' @param x numeric vector
 #' @param y optional numeric vector
-#' @param conf.level confidence level; use \code{NA} to return only the point
-#' estimate. Confidence intervals are currently available only for the
-#' one-sample case.
-#' @param sides character string specifying the side of the interval:
-#' \code{"two.sided"}, \code{"left"}, or \code{"right"}
-#' @param method confidence interval method; currently only
-#' \code{"boot"} is implemented
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param na.rm logical; whether to remove missing values
 #' @param ... additional arguments passed to bootstrap procedures
 #'
@@ -83,7 +82,6 @@ hodgesLehmann <- function(x,
                           y = NULL,
                           conf.level = NA,
                           sides = c("two.sided", "left", "right"),
-                          method = c("boot"),
                           na.rm = FALSE,
                           ...) {
   
@@ -127,8 +125,6 @@ hodgesLehmann <- function(x,
   if (!is.null(y) && length(y) < 1)
     stop("'y' must contain at least one observation")
   
-  method <- match.arg(method)
-
   if (is.null(y)) {
     res <- hlqest_cpp(x)
   } else {

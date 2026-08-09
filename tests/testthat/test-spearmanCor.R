@@ -176,5 +176,68 @@ test_that("a non-table input is refused instead of failing on dim()", {
   expect_error(spearmanCor(matrix(c(1, NA, 2, 3), 2)), "missing")
   expect_error(spearmanCor(matrix(c(1, -1, 2, 3), 2)), "negative")
   expect_error(spearmanCor(sasTab, conf.level = 0), "conf.level")
-  expect_error(spearmanCor(sasTab, conf.level = NULL), "single value")
+  expect_error(spearmanCor(sasTab, conf.level = NULL), "conf.level")
 })
+
+
+
+
+test_that("spearmanCor() reports NA where the z-transformation is undefined", {
+  
+  # atanh(1) is infinite: the interval used to collapse to (rho, rho) and
+  # rule out every value below 1
+  perfect <- data.frame(a = 1:6, b = 1:6)
+  expect_equal(unname(spearmanCor(perfect$a, perfect$b)), 1)
+  
+  expect_warning(ci <- spearmanCor(perfect$a, perfect$b, conf.level = 0.95),
+                 "perfect correlation")
+  expect_equal(unname(ci[["est"]]), 1)
+  expect_true(is.na(ci[["lci"]]))
+  expect_true(is.na(ci[["uci"]]))
+  
+  # n <= 3: Var(atanh(rho)) ~ 1/(n-3) is infinite at 3 and negative below.
+  # (-1, 1) looked like a computed answer and was merely the whole range.
+  x <- c(1, 2, 3); y <- c(2, 1, 3)
+  expect_warning(ci <- spearmanCor(x, y, conf.level = 0.95),
+                 "3 observations")
+  expect_true(is.na(ci[["lci"]]))
+  expect_equal(unname(ci[["est"]]), spearmanCor(x, y))
+})
+
+
+test_that("spearmanCor() refuses a one-sided interval below conf.level 0.5", {
+  
+  set.seed(1)
+  x <- rnorm(40); y <- x + rnorm(40)
+  
+  expect_error(spearmanCor(x, y, conf.level = 0.4, sides = "left"), "0.5")
+  expect_error(spearmanCor(x, y, conf.level = 0.5, sides = "right"), "0.5")
+  expect_silent(spearmanCor(x, y, conf.level = 0.4))
+})
+
+
+test_that("spearmanCor() closes the open side at the range boundary", {
+  
+  set.seed(2)
+  x <- rnorm(40); y <- x + rnorm(40)
+  
+  two   <- spearmanCor(x, y, conf.level = 0.95)
+  left  <- spearmanCor(x, y, conf.level = 0.95, sides = "left")
+  right <- spearmanCor(x, y, conf.level = 0.95, sides = "right")
+  
+  expect_equal(left[["uci"]], 1)
+  expect_equal(right[["lci"]], -1)
+  expect_equal(unname(left[["est"]]), unname(two[["est"]]))
+  
+  expect_gte(left[["lci"]],  two[["lci"]])
+  expect_lte(right[["uci"]], two[["uci"]])
+  
+  # NA-Grenzen ueberleben die Seitenbehandlung
+  suppressWarnings(
+    ci <- spearmanCor(c(1, 2, 3), c(2, 1, 3), conf.level = 0.95,
+                      sides = "left"))
+  expect_true(is.na(ci[["lci"]]))
+  expect_equal(ci[["uci"]], 1)
+})
+
+

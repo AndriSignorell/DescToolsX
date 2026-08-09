@@ -9,18 +9,18 @@
 yuleQ(
   x,
   y = NULL,
-  conf.level = 0.95,
+  conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  correction = FALSE,
+  correct = FALSE,
   ...
 )
 
 yuleY(
   x,
   y = NULL,
-  conf.level = 0.95,
+  conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  correction = FALSE,
+  correct = FALSE,
   ...
 )
 }
@@ -30,13 +30,14 @@ yuleY(
 
 \item{y}{optional second variable for cross-tabulation}
 
-\item{conf.level}{confidence level for the interval. Defaults to \code{0.95};
-use \code{NA} to return only the point estimate.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{type of confidence interval, one of \code{"two.sided"},
-\code{"left"}, or \code{"right"}}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
 
-\item{correction}{logical; if \code{TRUE}, applies the Haldane--Anscombe
+\item{correct}{logical; if \code{TRUE}, applies the Haldane--Anscombe
 correction by adding 0.5 to all cells}
 
 \item{...}{further arguments passed to \code{table()}}
@@ -76,7 +77,7 @@ Confidence intervals are obtained from the asymptotic normal approximation:
 \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
 and then transformed to the selected coefficient. With a zero cell the
 standard error is infinite and the interval degenerates to
-\eqn{[-1, 1]}; use \code{correction = TRUE} to obtain a finite interval.
+\eqn{[-1, 1]}; use \code{correct = TRUE} to obtain a finite interval.
 
 For a one-sided interval the open side is reported at the range limit
 (-1 resp. 1), not at \eqn{\pm\infty}.
@@ -90,7 +91,7 @@ yuleY(m, conf.level = 0.95)     # 0.6
 yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), conf.level = NA)
 
 # ... a finite interval requires the Haldane-Anscombe correction
-yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), correction = TRUE)
+yuleQ(matrix(c(12, 5, 0, 20), nrow = 2), correct = TRUE)
 
 }
 \references{

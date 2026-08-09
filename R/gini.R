@@ -17,12 +17,13 @@
 #' accelerated ("bca").
 #'
 #' @param x numeric vector of non-negative values
-#' @param conf.level confidence level in (0, 1). If \code{NA} (default),
-#'   no confidence interval is computed.
-#' @param sides character string specifying the interval type:
-#' \code{"two.sided"} (default), \code{"left"}, or \code{"right"}
-#' @param method confidence interval method; currently only \code{"boot"} is
-#' supported
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param unbiased logical; whether to apply the small-sample bias
 #' correction factor \eqn{n/(n-1)}, with \eqn{n} the effective sample size
 #' (the sum of the weights). For unweighted data this is the usual
@@ -86,7 +87,6 @@
 gini <- function(x, 
                  conf.level = NA,
                  sides = c("two.sided", "left", "right"),
-                 method = c("boot"),
                  unbiased = TRUE,
                  weights = NULL,
                  na.rm = FALSE,

@@ -23,13 +23,14 @@ kurt(
 (the default), only the point estimate is returned.}
 
 \item{sides}{character string specifying the sidedness of the confidence
-interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}. For a one-sided interval, the value names the side with
-the finite bound. The initial letter is sufficient.}
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
-\item{method}{character string specifying the interval method. Common
-choices are \code{"classic"} and \code{"boot"}; the available methods
-and their defaults depend on the function.}
+\item{method}{character string specifying the confidence interval method.
+\code{"boot"} (default) uses a nonparametric bootstrap, with BCa
+intervals unless another bootstrap type is supplied through \code{\dots};
+\code{"classic"} uses a Wald interval based on the asymptotic standard
+error. See Details and \code{\link{ConfidenceIntervals}}.}
 
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}

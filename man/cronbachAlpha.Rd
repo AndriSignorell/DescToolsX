@@ -6,9 +6,9 @@
 \usage{
 cronbachAlpha(
   x,
-  returnConditional = FALSE,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
+  returnConditional = FALSE,
   na.rm = FALSE
 )
 }
@@ -16,15 +16,15 @@ cronbachAlpha(
 \item{x}{a \eqn{n \times m} matrix or data frame with item responses,
 \eqn{n} subjects (in rows) and \eqn{m} items (in columns)}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+
 \item{returnConditional}{logical; if \code{TRUE}, alpha is additionally
 calculated for the dataset with each item left out}
-
-\item{conf.level}{a single confidence level for the returned confidence
-interval. Set to \code{NA} (default) to suppress confidence interval
-calculation.}
-
-\item{sides}{a character string specifying a two-sided or one-sided
-confidence interval}
 
 \item{na.rm}{logical; if \code{TRUE}, incomplete cases are removed before
 the computation proceeds}
@@ -77,9 +77,7 @@ are doubtful, for instance with markedly skewed or heterogeneous items.
 bounded above. Alpha cannot exceed 1, so the open upper side is reported
 at that boundary rather than as \eqn{\infty} (design_rules.md 4.1),
 while the open lower side stays \eqn{-\infty} because alpha is
-unbounded below. Note that this is the reverse of the convention in
-\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-\code{\link[stats]{t.test}}.
+unbounded below.
 
 Missing values are handled according to package conventions: if
 \code{na.rm = FALSE} and \code{x} contains missing values, the usual

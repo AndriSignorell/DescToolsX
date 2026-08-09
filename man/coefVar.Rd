@@ -18,11 +18,11 @@ coefVar(x, ...)
 
 coefVarCI(
   x,
-  weights = NULL,
-  unbiased = FALSE,
   conf.level = 0.95,
   sides = c("two.sided", "left", "right"),
   method = c("nct", "vangel", "mckay", "naive"),
+  weights = NULL,
+  unbiased = FALSE,
   na.rm = FALSE,
   ...
 )
@@ -42,11 +42,12 @@ Defaults to \code{FALSE}.}
 \item{na.rm}{logical. Should missing values be removed? Defaults to
 \code{FALSE}, in which case missing values are an error.}
 
-\item{conf.level}{confidence level of the interval; defaults to 0.95}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{a character string specifying the side of the confidence
-interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-\code{"right"}. Partial matching is supported. See Details.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{method}{character string specifying the confidence interval method:
 \code{"nct"} (default),
@@ -111,9 +112,7 @@ confidence intervals. See Smithson (2003).
 
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-\eqn{(-\infty, uci]}. This is the reverse of the convention in
-\pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-\code{\link[stats]{t.test}}.
+\eqn{(-\infty, uci]}.
 
 \bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see

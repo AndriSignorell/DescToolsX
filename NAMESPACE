@@ -257,6 +257,8 @@ export(yeoJohnsonInv)
 export(yuleQ)
 export(yuleY)
 export(zodiac)
+importFrom(Rcpp,evalCpp)
+importFrom(RcppParallel,RcppParallelLibs)
 importFrom(bedrock,
   "%)(%",
   "%[]%",
@@ -264,6 +266,8 @@ importFrom(bedrock,
   abind,
   appendX,
   callIf,
+  checkConfLevel,
+  checkFlag,
   coalesceX,
   collapseTable,
   columnWrap,

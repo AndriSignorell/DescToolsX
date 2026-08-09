@@ -699,6 +699,52 @@ Internal naming:
 .binomCI.clopper_pearson
 ```
 
+### What `method` may and may not mean
+
+`method` means **the interval method** and nothing else. It selects how the
+confidence interval is computed, never which quantity is estimated.
+
+An argument that selects the estimator gets its own name:
+
+| Selects | Name | Example |
+|---|---|---|
+| the interval method | `method` | `gmean`, `cramerV`, `medianCI` |
+| among estimators of the same quantity | `estimator` | `skew`, `kurt` |
+| the difference function, i.e. another quantity | `metric` | `krippAlpha` |
+| the bootstrap interval type, through `...` | `type` | `contCoef`, `bootCI` |
+
+`type` is reserved for the bootstrap interval type (`"perc"`, `"bca"`, ...)
+that travels through `\dots` and is validated by `.extractBootArgs()`. A
+formal named `type` shadows it and must not be introduced for anything
+else — `krippAlpha` briefly carried one for the measurement level, which
+made `type = "perc"` a `match.arg()` error about nominal and ordinal.
+
+`level` is unavailable where `levels` already holds category values.
+
+### `match.arg()` placement
+
+Every enum formal is matched **at the top of the function**, before any
+branching:
+
+```r
+# correct
+direction <- match.arg(direction)
+sides     <- match.arg(sides)
+method    <- match.arg(method)
+
+# incorrect — a misspelled value is caught only in the branch that uses it,
+# so it passes unnoticed whenever that branch is not taken
+switch(match.arg(direction), row = ..., column = ...)
+```
+
+This is not hypothetical: `gkTau` matched `direction` inside `switch()`,
+and `lambda` matched `sides` inside the interval branch, where
+`conf.level = NA` skipped it entirely. `lambda` also carried a `method`
+formal that was never matched at all.
+
+The check is one pass over the namespace — see §8.1.6.
+
+
 ## 3.6 Namespace Usage for Base-R Functions
 
 Functions from the standard attached packages (`base`, `stats`, `graphics`, `grDevices`, `utils`, `methods`) are called **without** explicit namespace qualification:
@@ -777,56 +823,148 @@ if (any(n > 2^53))
 Exported statistical functions follow this order:
 
 1. **Data** — `x`, `y`, `n`, possibly matrix or formula inputs
-2. **Estimator definition** — `estimator`, `model`, `type`, `unit`, `weights`
-3. **Inference / CI control** — `conf.level`, `sides`, `method`
-4. **Data handling** — `na.rm`, `subset`
+2. **Inference / CI control** — `conf.level`, `sides`, `method`
+3. **Estimator definition** — `estimator`, `metric`, `model`, `unit`,
+   `weights`, `correct`, tuning constants
+4. **Data handling** — `na.rm`, `subset`, `output`
 5. **`...`**
 
-Core principle: CI construction depends on the estimator, never the other way around.
+Core principle: the inference block sits at the **same position in every
+function**. Someone looking for `sides` finds it directly after the data,
+whatever the statistic. That is a property of the reader, not of the
+mathematics, and it is what makes the rule worth having — the earlier
+justification ("CI construction depends on the estimator") describes a real
+dependency but says nothing about where an argument should be typed.
+
+The rule is checkable in one line, because everything before `conf.level`
+must be a data argument and nothing else:
+
+```r
+a  <- names(formals(f))
+i  <- match("conf.level", a)
+ok <- all(a[seq_len(i - 1L)] %in% dataArgs)
+```
 
 Example `skew`:
 
 ```r
 skew(
   x,
-  # Estimator
-  estimator = 3,
-  weights   = NULL,
   # Inference
   conf.level = NA,
   sides      = c("two.sided", "left", "right"),
   method     = c("classic", "boot"),
+  # Estimator
+  estimator = 3,
+  weights   = NULL,
   # Data handling
   na.rm = FALSE,
   ...
 )
 ```
 
-**`conf.level` default:**
+### Which of the three inference arguments must be present
 
-- Functions that return a CI together with the result, e.g. `skew`, `ICC`: `conf.level = NA`, no CI by default
+- `conf.level` — in every function that can produce an interval.
+- `sides` — likewise. Wherever an interval exists, both of its ends can be
+  asked for separately.
+- `method` — **only once there are at least two methods.** A formal with a
+  single legal value cannot change the result; it is a label, and labels
+  belong in the documentation. The asymmetry decides it: adding a formal
+  later is backward compatible, removing one is not. So `method` appears
+  when the second method does, not in anticipation of it.
+
+Consequently the rule fixes the **order** of the inference arguments, not
+that all three are present.
+
+### `conf.level` default
+
+- Functions that return a CI together with the result, e.g. `skew`, `icc`:
+  `conf.level = NA`, no CI by default
 - Dedicated CI functions, e.g. `meanCI`, `binomCI`: `conf.level = 0.95`
 
-**`sides` semantics:**
+Both return an **unnamed scalar** when `conf.level = NA`, and a named
+`est`/`lci`/`uci` vector otherwise (§5.6).
+
+### `sides` semantics
 
 `sides` names the side on which the **finite** bound lies:
 
-| Value | Interval | Finite bound |
+| Value | Finite bound | Open side |
 |---|---|---|
-| `"two.sided"` | `[lci, uci]` | both |
-| `"left"` | `[lci, Inf)` | `lci` |
-| `"right"` | `(-Inf, uci]` | `uci` |
+| `"two.sided"` | both | — |
+| `"left"` | `lci` | `uci` |
+| `"right"` | `uci` | `lci` |
 
-Where the parameter is bounded, report the unbounded side at that boundary
-instead of as infinite — `ccc` uses 1 and -1 rather than `Inf` and `-Inf`.
+The open side is reported at the **boundary of the parameter space**. Most
+statistics in the suite are bounded, so this is the ordinary case rather
+than an exception: a correlation opens to ±1, an association measure in
+[0, 1] to 0 or 1, Pearson's *C* to `sqrt((m-1)/m)`. Where the parameter
+really is unbounded, ±`Inf` is used — a relative risk opens upwards to
+`Inf` but downwards only to 0, a location estimator to both infinities,
+Cronbach's alpha to `-Inf` and 1. An interval never claims a value the
+statistic cannot take.
 
-This is the **reverse** of DescTools, where `sides` names the direction of the
-alternative hypothesis, as `alternative` does in `t.test`. The rationale: the
-argument is called `sides`, not `alternative`, and describes the shape of an
-interval rather than a test, so naming the side that is actually bounded is
-read off directly instead of derived. The change is silent for code carried
-over — both packages accept the same values — so every function documents it
-in `@details`, and it belongs in NEWS.md under breaking changes.
+The implementation is `.applySides()`, never hand-written — see §8.1.4.
+
+### One-sided level
+
+A one-sided bound at level γ is the corresponding end of the two-sided
+interval at level 2γ − 1: a 95 % lower bound is the lower end of the
+two-sided 90 % interval. Two consequences, both binding:
+
+- The adjusted level goes into the machinery; `conf.level` itself stays
+  untouched, because the branches around it test for `NA`.
+- A one-sided interval requires `conf.level > 0.5` and is **refused** below
+  it, where the adjusted level would not be positive. Every function uses
+  the same message:
+
+```r
+if (sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+  stop(gettextf(
+    "a one-sided interval needs 'conf.level' above 0.5, not %g",
+    conf.level), domain = NA)
+```
+
+Without the guard the normal quantile turns negative and the two bounds
+come back in reverse order — and an elementwise clamp does not notice.
+
+### Relationship to DescTools
+
+This is the **reverse** of DescTools, where `sides` names the direction of
+the alternative hypothesis, as `alternative` does in `t.test`. The
+rationale: the argument is called `sides`, not `alternative`, and describes
+the shape of an interval rather than a test, so naming the side that is
+actually bounded is read off directly instead of derived. The change is
+silent for code carried over — both packages accept the same values — so it
+is documented in `\link{ConfidenceIntervals}` and belongs in NEWS.md under
+breaking changes.
+
+### Open: estimator arguments that name the target
+
+An estimator argument that determines *what* is estimated rather than *how*
+is a candidate for standing before `conf.level`, because an interval
+without a target is meaningless. The pressing case is
+`quantileCI(x, conf.level, ..., probs)`: both arguments are probabilities in
+(0, 1) and both are plausibly 0.95, so `quantileCI(x, 0.9)` reads as "the
+90th percentile" and means "confidence level 90 %" — and it does not fail,
+it computes something else.
+
+`ordAssocs(which)` and `meanCI(trim)` are the same shape but harmless:
+`ordAssocs` is normally reached through its wrappers, and `trim` has no
+plausible 0.95 value.
+
+*Undecided. Until then `quantileCI` keeps `probs` where it is.*
+
+### Open: `alternative` instead of `sides`
+
+`corCI`, `signTest` and `tTestA` take `alternative` and, in the latter two,
+place `conf.level` at the end. Either they join the convention or they are
+exempt as deliberate base-R look-alikes — in which case they belong on the
+exemption list in §3.4 and in the exception list of `auditCI()`.
+
+*Undecided.*
+
 
 ## 4.2 Plot Functions
 
@@ -976,15 +1114,38 @@ Example:
 - Internally, they are immediately mapped to canonical names
 - No breaking changes without an alias layer
 
+
 ## 5.6 Confidence Interval Output Convention
 
-All CI functions use the following column names:
+All CI functions use the following element names:
 
 - `est` (point estimate)
 - `lci` (lower confidence interval bound)
 - `uci` (upper confidence interval bound)
 
-This convention is binding and must not be changed without a major version bump.
+This convention is binding and must not be changed without a major version
+bump.
+
+With `conf.level = NA` the return value is the point estimate as an
+**unnamed scalar**, not a one-element named vector.
+
+**Read a returned interval by name, never by position.** A helper that
+returns a shorter or differently ordered vector must fail loudly rather
+than have its bounds shifted or relabelled:
+
+```r
+# correct
+if (!all(c("est", "lci", "uci") %in% names(ci)))
+  stop("<callee>() did not return the expected 'est'/'lci'/'uci' vector.")
+lci <- ci[["lci"]]
+
+# incorrect — relabels whatever comes back
+names(ci) <- c("est", "lci", "uci")
+```
+
+The incorrect form was live in `krippAlpha()`; `.relRiskUseOr()` and
+`.pearsonCI()` carry the check.
+
 
 ## 5.7 Pipe Operator Usage
 
@@ -1191,6 +1352,149 @@ Three consequences that come with a split:
 *Status: adopted 2026-08, to be re-examined against practice — the criterion is
 new, the placements in the table above are the existing state it was derived
 from.*
+
+
+### 8.1.3 Shared argument checks
+
+`conf.level` and logical flags are validated by the exported bedrock
+helpers, not per function:
+
+```r
+conf.level <- checkConfLevel(conf.level)
+checkFlag(correct)
+```
+
+Both live in `bedrock/R/checks.R` and are imported via
+`@importFrom bedrock checkConfLevel checkFlag`. They are in bedrock and not
+in each package because a copy per package is exactly how the suite ended
+up with three wordings for one condition — "must be a single value", "a
+single number in (0, 1)", "must lie in (0, 1)" — which then broke tests
+that matched on the message text.
+
+The order of the tests inside `checkConfLevel()` is the point of the
+helper. `NA` is *logical*, so a check that leads with `!is.numeric()`
+rejects the default most of these functions carry; and `is.na()` on a
+vector of length other than one turns the surrounding `if` into the error
+message, which then talks about the condition instead of the argument.
+Length first, then type, then range, with `NaN` excluded explicitly. All
+four failure modes were live in the suite: `relRisk` refused its own
+default, `contCoef`, `cramerV`, `lambda` and `.yuleCoef` aborted inside
+`if (is.na(conf.level))`.
+
+**Tests assert on the argument name, not on the message text:**
+
+```r
+# correct — survives a rewording of the shared message
+expect_error(f(conf.level = NULL), "conf.level")
+
+# incorrect
+expect_error(f(conf.level = NULL), "must be a single value")
+```
+
+The message wording is now a suite-wide contract; the argument name is the
+part a caller can rely on.
+
+`checkFlag(x, name = deparse(substitute(x)))` takes the name from the
+expression passed, so `checkFlag(correct)` reports `'correct'` by itself
+and name and message cannot drift apart. `checkConfLevel()` deliberately
+has **no** name argument: a second name invites back the variety the helper
+removed.
+
+### 8.1.4 Applying `sides`
+
+`.applySides(ci, sides, lo, hi)` clamps both bounds to the parameter range
+and opens the side that `sides` leaves open. It is the only implementation;
+hand-written variants produced four different defects across the suite —
+inverted in two functions, ignored after the level adjustment in a third,
+`NA` where a boundary belonged in a fourth.
+
+```r
+c(est = v, .applySides(ci, sides, lo = 0, hi = 1))
+```
+
+`NA` bounds survive it, because the ordering check is guarded with
+`!anyNA(ci)`.
+
+Parameter ranges as adopted:
+
+| Range | Statistics |
+|---|---|
+| −1 … 1 | `ccc`, `cohenKappa`, `pabak`, `kappaM`, `krippAlpha`, `icc`, `pearsonCor`, `spearmanCor`, `yuleQ`, `yuleY`, gamma, tau-a/b/c, Somers' *D* |
+| 0 … 1 | `cramerV`, `lambda`, `gkTau`, `uncertCoef`, `gini`, `percAgreement`, c statistic |
+| 0 … `sqrt((m-1)/m)` | `contCoef`, or 0 … 1 with Sakoda's correction |
+| 0 … `Inf` | `relRisk`, `oddsRatio`, `gmean`, `hmean`, `coefVarCI` |
+| −`Inf` … 1 | `cronbachAlpha` |
+| −`Inf` … `Inf` | `huberM`, `tukeyBiweight`, `hodgesLehmann`, `cohenD`, `glassDelta`, `skew` |
+| −π … π | `cohenH` |
+
+Where a function reports several measures with different ranges, the range
+is looked up per measure and a measure without a recorded range is an
+error, not an inheritance of somebody else's bounds — see
+`.ordAssocRange` / `.ordAssocApplySides()`.
+
+Where the range depends on an argument, it is derived before the call:
+`contCoef` from `correct` and `min(dim)`, `brierScore` from `scaled`
+(0 … 1 unscaled, −`Inf` … 1 scaled), `kurt` from `estimator` (excess
+kurtosis is bounded below by −2, raw kurtosis by 1), `icc` from
+`model`/`type`.
+
+### 8.1.5 Where the interval is undefined
+
+An interval that cannot be computed is reported as `NA` bounds with a
+warning that names the reason. The point estimate is still returned.
+
+```r
+warning("the z-transformation needs more than 3 observations; ",
+        "no interval computed", call. = FALSE)
+```
+
+Not as a degenerate interval at the estimate, and not as the whole range.
+Both were live and both are worse than `NA`:
+
+- `(rho, rho)` at |rho| = 1 — the Fisher transformation is infinite there,
+  and the collapsed interval rules out every value below 1, which no finite
+  sample supports.
+- `(0, 1)` or `(-1, 1)` for *n* ≤ 3 — looks like a computed result and is
+  merely the parameter range. Worse, it was inconsistent with its own
+  neighbour: at *n* = 3 the Fisher half-width is infinite and gave the full
+  range, at *n* = 2 `sqrt()` gave `NaN` plus a bare "NaNs produced".
+
+`cramerV` (`.fisherHalfWidth()`) and `spearmanCor` follow this.
+
+### 8.1.6 Machine checks
+
+Three audits, each catching a class the review found repeatedly. They
+belong in the test suite, not in a one-off script.
+
+- **`auditCI()`** — for every exported function with a `conf.level`
+  formal: is `sides` present, is `checkConfLevel` reached, is
+  `.applySides` reached, is the argument order right? It follows the
+  **call graph transitively**, because a wrapper that delegates to a
+  parent (`gkGamma` → `ordAssocs`) is correct without having either name
+  in its own body. Exception list for functions that deliberately refuse
+  an interval — `randolphKappa` documents "confidence intervals are not
+  implemented" and must not acquire a `sides` formal.
+- **`auditMatchArg()`** — every enum formal without a `match.arg()` call
+  in the body. Would have found `lambda`'s unmatched `method`.
+- **single-option enums** — every enum formal with exactly one legal
+  value, per §4.1.
+
+### 8.1.7 Shared files must stay byte-identical
+
+`boot_framework.h`, `bca_helpers.h` and `extractBootArgs.R` exist in both
+lumen and DescToolsX and must be identical. They were not: lumen carried an
+older `boot_framework.h` without the guards, and the divergence was
+invisible until the two packages produced different BCa intervals in a
+degenerate case. `syncCheck()` compares the md5 sums and belongs in the
+release checklist.
+
+A shared file carries **one** concern. `checkConfLevel()` was briefly put
+into `extractBootArgs.R`, which coupled a check used by 35 non-bootstrap
+functions to the bootstrap argument handling — every change to one forced a
+re-sync of the other. It moved to bedrock instead, which shortens the sync
+list rather than lengthening it.
+
+
 
 ## 8.2 Numerical Behavior
 
@@ -2466,9 +2770,16 @@ These checks are cheap to script and expensive to skip — do them as a matter o
 
 | Meaning | Name |
 |---|---|
-| Method | `method` |
+| Interval method | `method` |
+| Estimator among several of the same quantity | `estimator` |
+| Difference function / measurement level | `metric` |
+| Bootstrap interval type (through `...`) | `type` |
 | Internal engine | `engine` |
-| Type | `type` |
+
+`method` is reserved for the interval method — see §3.5. `type` is
+reserved for the bootstrap interval type and must not be used as a formal
+for anything else.
+
 
 ## 13.6 Simulation / Bootstrap
 

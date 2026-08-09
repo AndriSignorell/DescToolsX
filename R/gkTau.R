@@ -26,8 +26,13 @@
 #' (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
 #' variable is the dependent one and is predicted from the column variable;
 #' \code{"column"} gives tau (C|R).
+#' 
 #' @param conf.level confidence level of the interval. If set to \code{NA}
-#' (which is the default) no confidence interval will be calculated. 
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
 #' vector interface. 
@@ -111,8 +116,31 @@
 #' @concept association-measure
 #' @concept nominal
 #' @export
-gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, ...){
-  
+gkTau <- function(x, y = NULL, 
+                  conf.level = NA,
+                  sides = c("two.sided", "left", "right"), 
+                  direction = c("row", "column"),
+                  ...){
+
+  # matched up front, not inside switch(): a misspelled 'direction' used
+  # to be caught only where the branch was taken, and 'sides' did not
+  # exist at all
+  direction <- match.arg(direction)
+  sides     <- match.arg(sides)
+
+  conf.level <- checkConfLevel(conf.level)
+
+  # A one-sided bound at level gamma is the corresponding end of the
+  # two-sided interval at level 2*gamma - 1. At or below 0.5 that level is
+  # not positive and the normal quantile turns negative, which hands back
+  # the two bounds in reverse order.
+  if(sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
+
   if(!is.null(y)) x <- table(x, y, ...)
   
   x <- as.matrix(x)
@@ -122,7 +150,7 @@ gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, 
   sum.row <- rowSums(x)
   sum.col <- colSums(x)
   
-  switch( match.arg( arg = direction, choices = c("row", "column") )
+  switch( direction
           , "column" = {             # Tau Column|Row
             
             for(i in 1:nrow(x))
@@ -162,11 +190,13 @@ gkTau <- function(x, y = NULL, direction = c("row", "column"), conf.level = NA, 
   if(is.na(conf.level)){
     res <- est
   } else {
-    pr2 <- 1 - (1 - conf.level)/2
+    pr2 <- 1 - (1 - confAdj)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
     # tau is a proportional-reduction-in-error measure and lives in
-    # [0, 1]; cramerV() clamps its interval the same way
-    res <- c(est = est, lci = max(ci[1], 0), uci = min(ci[2], 1))
+    # [0, 1] - .applySides() clamps to that range and closes the open
+    # side of a one-sided interval there instead of at an infinity tau
+    # cannot reach
+    res <- c(est = est, .applySides(ci, sides, lo = 0, hi = 1))
   }
   
   return(res)

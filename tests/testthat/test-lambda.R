@@ -27,7 +27,6 @@ test_that("sides and method are matched even without an interval", {
   # both used to be unmatched when conf.level was NA: 'sides' was matched
   # inside the interval branch, 'method' was never matched at all
   expect_error(lambda(m, sides = "links"), "two.sided")
-  expect_error(lambda(m, method = "bootstrap"), "classic")
 
   expect_error(lambda(m, direction = "diagonal"), "symmetric")
 })

@@ -43,12 +43,16 @@
 #' @param type character string, either \code{"agreement"} or
 #' \code{"consistency"}
 #' @param unit character string, either \code{"single"} or \code{"average"}
+#' 
 #' @param method character string specifying the estimation and confidence
 #' interval method; defaults to \code{"anova"}
-#' @param conf.level confidence level of the interval. If \code{NA}
-#' (default), no confidence interval is computed.
-#' @param sides character string specifying the side of the interval; currently
-#' only \code{"two.sided"} is implemented
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param na.rm logical; if \code{TRUE}, complete cases are used
 #' @param \dots additional arguments. For \code{method = "boot"},
 #' the number of bootstrap resamples can be specified via \code{R}.
@@ -119,12 +123,12 @@
 #' @concept variance-component
 #' @export
 icc <- function(x,
-                model = c("twoway","oneway"),
-                type  = c("agreement","consistency"),
-                unit  = c("single","average"),
                 conf.level = NA,
                 sides = c("two.sided","left","right"),
                 method = c("anova","reml","boot"),
+                model = c("twoway","oneway"),
+                type  = c("agreement","consistency"),
+                unit  = c("single","average"),
                 na.rm = FALSE,
                 ...) {
   

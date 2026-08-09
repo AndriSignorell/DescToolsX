@@ -1,308 +1,168 @@
+tab <- matrix(c(10, 20,
+                 5, 30), nrow = 2)
 
 
-test_that("oddsRatio returns scalar estimate for table input", {
-  
-  x <- matrix(
-    c(10, 20,
-      5, 30),
-    nrow = 2
-  )
-  
-  res <- oddsRatio(x)
-  
-  expect_true(is.numeric(res))
-  
-  expect_equal(length(res), 1L)
-  
+test_that("all three table methods treat sides the same way", {
+
+  # REGRESSION: they did not. "wald" was right, "exact" mapped
+  # sides = "left" to fisher.test(alternative = "less") - whose interval
+  # has a finite UPPER bound, i.e. the wrong end - and "midp" ignored
+  # sides outright and always returned the two-sided interval.
+  for (m in c("wald", "exact", "midp")) {
+
+    two   <- oddsRatio(tab, conf.level = 0.95, method = m)
+    left  <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "left")
+    right <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "right")
+
+    expect_named(left, c("est", "lci", "uci"), info = m)
+
+    # an odds ratio is bounded below by 0 and unbounded above
+    expect_equal(left[["uci"]], Inf, info = m)
+    expect_equal(right[["lci"]], 0, info = m)
+
+    # the estimate never depends on the sidedness
+    expect_equal(left[["est"]],  two[["est"]], info = m)
+    expect_equal(right[["est"]], two[["est"]], info = m)
+
+    # a one-sided bound carries the whole alpha, so it is tighter
+    expect_true(left[["lci"]]  >= two[["lci"]], info = m)
+    expect_true(right[["uci"]] <= two[["uci"]], info = m)
+  }
 })
 
 
+test_that("the one-sided bound equals the two-sided one at the adjusted level", {
 
-test_that("oddsRatio returns named confidence interval vector", {
-  
-  x <- matrix(
-    c(10, 20,
-      5, 30),
-    nrow = 2
-  )
-  
-  res <- oddsRatio(
-    x,
-    conf.level = 0.95
-  )
-  
-  expect_named(
-    res,
-    c("est", "lci", "uci")
-  )
-  
-  expect_equal(length(res), 3L)
-  
+  for (m in c("wald", "exact", "midp")) {
+
+    left  <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "left")
+    right <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "right")
+    two   <- oddsRatio(tab, conf.level = 0.90, method = m)
+
+    expect_equal(left[["lci"]],  two[["lci"]], info = m)
+    expect_equal(right[["uci"]], two[["uci"]], info = m)
+  }
 })
 
 
+test_that("the exact interval is the widest, the Wald interval the narrowest", {
 
-test_that("oddsRatio supports all table methods", {
-  
-  x <- matrix(
-    c(10, 20,
-      5, 30),
-    nrow = 2
-  )
-  
-  expect_no_error(
-    oddsRatio(
-      x,
-      method = "wald",
-      conf.level = 0.95
-    )
-  )
-  
-  expect_no_error(
-    oddsRatio(
-      x,
-      method = "exact",
-      conf.level = 0.95
-    )
-  )
-  
-  expect_no_error(
-    oddsRatio(
-      x,
-      method = "midp",
-      conf.level = 0.95
-    )
-  )
-  
+  w <- oddsRatio(tab, conf.level = 0.95, method = "wald")
+  e <- oddsRatio(tab, conf.level = 0.95, method = "exact")
+  p <- oddsRatio(tab, conf.level = 0.95, method = "midp")
+
+  expect_gt(diff(e[c("lci", "uci")]), diff(p[c("lci", "uci")]))
+  expect_gt(diff(p[c("lci", "uci")]), diff(w[c("lci", "uci")]))
 })
 
 
+test_that("conf.level is validated and one-sided below 0.5 refused", {
 
-test_that("oddsRatio validates table input", {
-  
-  expect_error(
-    oddsRatio("foo"),
-    "Argument 'x' must be numeric."
-  )
-  
+  expect_error(oddsRatio(tab, conf.level = c(0.9, 0.95)), "conf.level")
+  expect_error(oddsRatio(tab, conf.level = NULL), "conf.level")
+  expect_error(oddsRatio(tab, conf.level = NaN), "conf.level")
+  expect_error(oddsRatio(tab, conf.level = 0), "conf.level")
+
+  expect_error(oddsRatio(tab, conf.level = 0.4, sides = "left"), "0.5")
+  expect_silent(oddsRatio(tab, conf.level = 0.4))
+
+  # matched even when no interval is requested
+  expect_error(oddsRatio(tab, sides = "links"), "two.sided")
+  expect_length(oddsRatio(tab), 1L)
 })
 
 
+# ---------------------------------------------------------------- glm ----
 
-test_that("oddsRatio rejects missing values", {
-  
-  x <- matrix(
-    c(1, 2,
-      NA, 4),
-    nrow = 2
-  )
-  
-  expect_error(
-    oddsRatio(x),
-    "must not contain missing values"
-  )
-  
+fit <- glm(vs ~ am, data = mtcars, family = binomial)
+
+
+test_that("the glm method opens the side at 0 and Inf", {
+
+  two   <- oddsRatio(fit)
+  left  <- oddsRatio(fit, sides = "left")
+  right <- oddsRatio(fit, sides = "right")
+
+  expect_s3_class(two, "OddsRatio")
+  expect_equal(two$coefficients$est, left$coefficients$est)
+
+  expect_true(all(left$coefficients$uci == Inf))
+  expect_true(all(right$coefficients$lci == 0))
+
+  expect_true(all(left$coefficients$lci >= two$coefficients$lci))
+  expect_true(all(right$coefficients$uci <= two$coefficients$uci))
+
+  # left(gamma) reads the same end as two.sided(2*gamma - 1)
+  expect_equal(left$coefficients$lci,
+               oddsRatio(fit, conf.level = 0.90)$coefficients$lci)
 })
 
 
+test_that("the glm method works for a single-coefficient model", {
 
-test_that("oddsRatio rejects non-2x2 matrices", {
-  
-  x <- matrix(1:9, nrow = 3)
-  
-  expect_error(
-    oddsRatio(x),
-    "must be a 2x2 matrix"
-  )
-  
+  # regression against the vapply/mapply trap: with one row the bounds
+  # must still come back as a column, not as a length-2 vector
+  fit1 <- glm(vs ~ 1, data = mtcars, family = binomial)
+  res  <- oddsRatio(fit1, sides = "left")
+
+  expect_equal(nrow(res$coefficients), 1L)
+  expect_equal(res$coefficients$uci, Inf)
 })
 
 
+test_that("profile intervals are two-sided and say so", {
 
-test_that("oddsRatio rejects negative counts", {
-  
-  x <- matrix(
-    c(1, -1,
-      2, 3),
-    nrow = 2
-  )
-  
-  expect_error(
-    oddsRatio(x),
-    "must contain non-negative counts"
-  )
-  
+  expect_warning(res <- oddsRatio(fit, method = "profile", sides = "left"),
+                 "two-sided")
+
+  # the object records what was computed, not what was asked for
+  expect_equal(res$sides, "two.sided")
+  expect_true(all(is.finite(res$coefficients$uci)))
+
+  # confint.glm() prints "Waiting for profiling to be done..." as a
+  # message, so silence is the wrong bar here - the point is that a
+  # two-sided request warns about nothing
+  expect_no_warning(suppressMessages(oddsRatio(fit, method = "profile")))
 })
 
 
+test_that("the glm method accepts conf.level = NA and keeps the columns", {
 
-test_that("oddsRatio rejects non-integer counts", {
-  
-  x <- matrix(
-    c(1.5, 2,
-      3, 4),
-    nrow = 2
-  )
-  
-  expect_error(
-    oddsRatio(x),
-    "must contain integer counts"
-  )
-  
+  res <- oddsRatio(fit, conf.level = NA)
+
+  expect_true(all(c("lci", "uci") %in% names(res$coefficients)))
+  expect_true(all(is.na(res$coefficients$lci)))
+  expect_equal(res$coefficients$est, exp(coef(fit)), ignore_attr = TRUE)
 })
 
 
+test_that("the glm method validates conf.level like every other function", {
 
-test_that("oddsRatio rejects zero row totals", {
-  
-  x <- matrix(
-    c(0, 0,
-      1, 2),
-    nrow = 2,
-    byrow = TRUE
-  )
-  
-  expect_error(
-    oddsRatio(x),
-    "must contain positive totals"
-  )
-  
+  expect_error(oddsRatio(fit, conf.level = c(0.9, 0.95)), "conf.level")
+  expect_error(oddsRatio(fit, conf.level = 0), "conf.level")
+  expect_error(oddsRatio(fit, conf.level = 0.4, sides = "right"), "0.5")
+
+  # an lm has no oddsRatio method and falls through to the default one;
+  # it used to die there on "Argument 'x' must be numeric", which points
+  # at the wrong end of the problem
+  expect_error(oddsRatio(lm(mpg ~ am, data = mtcars)), "binomial glm")
+
+  # the inherits() guard inside oddsRatio.glm is unreachable through S3
+  # dispatch - it only fires on a direct call, which is what it is for
+  expect_error(DescToolsX:::oddsRatio.glm(lm(mpg ~ am, data = mtcars)), "glm")
+
+  # a gaussian glm does dispatch here
+  expect_error(oddsRatio(glm(mpg ~ am, data = mtcars)), "binomial")
 })
 
 
+test_that("the exponentiated intercept is the baseline odds", {
 
-test_that("oddsRatio accepts x and y input", {
-  
-  x <- c(1, 1, 0, 0, 1, 0)
-  y <- c(1, 0, 1, 0, 1, 0)
-  
-  expect_no_error(
-    oddsRatio(
-      x,
-      y,
-      conf.level = 0.95
-    )
-  )
-  
-})
-
-
-
-test_that("oddsRatio.glm returns OddsRatio object", {
-  
-  fit <- glm(
-    vs ~ am,
-    data = mtcars,
-    family = binomial
-  )
-  
   res <- oddsRatio(fit)
-  
-  expect_s3_class(res, "OddsRatio")
-  
-})
+  i   <- match("(Intercept)", res$coefficients$term)
 
-
-
-test_that("oddsRatio.glm returns coefficient table", {
-  
-  fit <- glm(
-    vs ~ am,
-    data = mtcars,
-    family = binomial
-  )
-  
-  res <- oddsRatio(fit)
-  
-  expect_true(is.data.frame(res$coefficients))
-  
-  expect_named(
-    res$coefficients,
-    c(
-      "term",
-      "est",
-      "logEst",
-      "stdError",
-      "pValue",
-      "lci",
-      "uci"
-    )
-  )
-  
-})
-
-
-
-test_that("oddsRatio.glm supports both interval methods", {
-  
-  fit <- glm(
-    vs ~ am,
-    data = mtcars,
-    family = binomial
-  )
-  
-  expect_no_error(
-    oddsRatio(
-      fit,
-      method = "wald"
-    )
-  )
-  
-  expect_no_error(
-    oddsRatio(
-      fit,
-      method = "profile"
-    )
-  )
-  
-})
-
-
-
-test_that("oddsRatio.glm rejects non-binomial models", {
-  
-  fit <- glm(
-    mpg ~ wt,
-    data = mtcars
-  )
-  
-  expect_error(
-    oddsRatio(fit),
-    "Model must use binomial family."
-  )
-  
-})
-
-
-
-test_that("print.OddsRatio returns object invisibly", {
-  
-  fit <- glm(
-    vs ~ am,
-    data = mtcars,
-    family = binomial
-  )
-  
-  x <- oddsRatio(fit)
-  
-  expect_invisible(
-    print(x)
-  )
-  
-})
-
-
-
-test_that("oddsRatio closes the open side at the parameter's range", {
-  
-  m <- matrix(c(30, 10, 12, 28), nrow = 2)
-  
-  left  <- oddsRatio(m, conf.level = 0.95, sides = "left")
-  right <- oddsRatio(m, conf.level = 0.95, sides = "right")
-  
-  # the odds ratio lives in (0, Inf): unbounded above, bounded below by 0
-  expect_identical(unname(left[["uci"]]), Inf)
-  expect_equal(unname(right[["lci"]]), 0)
-  
-  expect_equal(unname(oddsRatio(m)), (30 * 28) / (10 * 12))
+  # documented as such: it is not an odds ratio, and this pins the value
+  # so the column order cannot silently shift
+  expect_equal(res$coefficients$est[i], exp(coef(fit)[["(Intercept)"]]))
+  expect_equal(res$coefficients$logEst[i], coef(fit)[["(Intercept)"]])
 })

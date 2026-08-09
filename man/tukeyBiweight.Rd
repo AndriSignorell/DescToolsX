@@ -8,7 +8,6 @@ tukeyBiweight(
   x,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = "boot",
   const = 9,
   na.rm = FALSE,
   ...
@@ -17,18 +16,12 @@ tukeyBiweight(
 \arguments{
 \item{x}{a non-empty numeric vector of data values}
 
-\item{conf.level}{confidence level of the interval. A single numeric
-value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
-point estimate.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{a character string specifying the side of the interval:
-\code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-Partial matching is supported.  \code{"left"} sets \code{uci = Inf};
-\code{"right"} sets \code{lci = -Inf}.  Ignored when
-\code{conf.level = NA}.}
-
-\item{method}{confidence interval method. Currently only \code{"boot"} is
-supported.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{const}{tuning constant passed to \code{tbrm_cpp()}. Defaults to \code{9}.}
 
@@ -36,7 +29,8 @@ supported.}
 Defaults to \code{FALSE}.}
 
 \item{...}{further arguments passed to the bootstrap engine when a
-confidence interval is requested, including \code{R} and \code{type}}
+confidence interval is requested, namely \code{R} and \code{type}. Any
+other name is an error rather than a silent no-op.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -60,12 +54,16 @@ values are less resistant but more efficient under normality.
 When \code{conf.level} is not \code{NA} a bootstrap confidence interval
 is returned.  The resampling is done in C++; the R random number generator
 is used only to draw the seed, so \code{set.seed()} makes the result
-reproducible.  Bootstrap arguments are passed through \code{...} and
-extracted via \code{.extractBootArgs()}:
+reproducible.  Bootstrap arguments are passed through \code{...}:
 \describe{
 \item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
 \item{\code{type}}{CI type: \code{"perc"} or \code{"bca"} (default).}
 }
+
+The biweight mean is a location estimator and therefore unbounded, so the
+open side of a one-sided interval is reported at \eqn{\pm\infty} - unlike
+the bounded measures in this package, where it is reported at the range
+limit. See \code{\link{ConfidenceIntervals}}.
 }
 \examples{
 set.seed(1)
@@ -77,6 +75,10 @@ set.seed(2)             # will yield reproducible intervals
 tukeyBiweight(x, conf.level = 0.95)
 tukeyBiweight(x, conf.level = 0.95, type = "perc", R = 499)
 tukeyBiweight(x, conf.level = 0.95, type = "bca", R = 499)
+
+# one-sided: "left" carries the finite lower bound
+set.seed(2)
+tukeyBiweight(x, conf.level = 0.95, sides = "left")
 
 
 }

@@ -7,34 +7,90 @@
 conDisPairs(x, y = NULL)
 }
 \arguments{
-\item{x}{a numeric or ordinal vector, or a contingency table}
+\item{x}{a numeric vector, an ordered factor, or a contingency table}
 
-\item{y}{optional second numeric or ordinal vector. If provided, vector mode
-is used.}
+\item{y}{optional second numeric vector or ordered factor. If provided,
+vector mode is used.
+
+An \code{\link{ordered}} factor is converted to its level codes, which is
+exactly the ordinal information the counts rest on. An \emph{unordered}
+factor is refused: its levels have no order, and converting it anyway
+would silently impose the alphabetical one and report concordances that
+are an artefact of the level names.}
 }
 \value{
 a named numeric vector with elements:
 \describe{
 \item{\code{C}}{number of concordant pairs}
 \item{\code{D}}{number of discordant pairs}
-\item{\code{Ties_X}}{number of ties in \code{x}}
-\item{\code{Ties_Y}}{number of ties in \code{y}}
-\item{\code{Ties_XY}}{number of joint ties}
+\item{\code{Ties_X}}{pairs tied in \code{x} only}
+\item{\code{Ties_Y}}{pairs tied in \code{y} only}
+\item{\code{Ties_XY}}{pairs tied in both}
 }
+If fewer than two observations remain, all five elements are \code{NA}.
 }
 \description{
-Computes the number of concordant and discordant pairs as well as ties
-for two variables or for a contingency table.
+Counts, for all \eqn{n(n-1)/2} pairs of observations, how many are
+concordant, how many discordant, and how the remaining ties are
+distributed. This is the quantity every rank-based association measure for
+ordinal data is built on.
 }
 \details{
-The function serves as a wrapper around optimized C++ implementations.
-It supports two input modes:
-\itemize{
-\item \strong{Vector mode}: \code{x} and \code{y} are numeric or ordinal vectors
-\item \strong{Table mode}: \code{x} is a contingency table (matrix or table)
+Two observations \eqn{(x_i, y_i)} and \eqn{(x_j, y_j)} are
+\strong{concordant} if they are ordered the same way in both variables -
+one is larger in \eqn{x} \emph{and} larger in \eqn{y} - and
+\strong{discordant} if the orderings disagree. If either variable ties the
+pair, it is neither, and is counted among the ties instead.
+
+The five counts partition the pairs exhaustively and without overlap:
+
+\deqn{C + D + T_X + T_Y + T_{XY} = \frac{n(n-1)}{2}}
+
+\code{Ties_X} counts pairs tied in \eqn{x} but \emph{not} in \eqn{y},
+\code{Ties_Y} the reverse, and \code{Ties_XY} the pairs tied in both. The
+counts are therefore \emph{exclusive}; the inclusive marginal counts that
+the classic tau-b formula uses are \code{Ties_X + Ties_XY} and
+\code{Ties_Y + Ties_XY}. That separation is what the ordinal measures
+need: Goodman-Kruskal's gamma
+ignores all ties, Kendall's tau-b corrects for \code{Ties_X} and
+\code{Ties_Y} separately, Somers' \eqn{D} for one of them only, and the
+\eqn{c} statistic scores half a point for a tie in \eqn{y}. All of them
+are therefore a short formula on top of this one function - see
+\code{\link{ordAssocs}}.
+
+\subsection{Two input modes}{
+\strong{Vector mode} (\code{x} and \code{y} given) works on the raw
+observations and keeps the full resolution of the data. Missing values are
+removed pairwise.
+
+\strong{Table mode} (\code{x} a matrix or table) works on a cross
+tabulation. Use it when the data are already tabulated, or when the
+variables have few distinct values: the count then depends on the table's
+dimensions rather than on the number of observations, so a million
+observations in a 4x5 table cost the same as a hundred.
+
+Both modes return the same five numbers for the same data.
 }
 
-Missing values in vector mode are removed pairwise.
+\subsection{Why this is fast}{
+Counted naively, the definition is a double loop over all pairs and costs
+\eqn{O(n^2)} - a hundred thousand observations are five billion
+comparisons, which is where a straightforward implementation stops being
+usable.
+
+Vector mode instead sweeps the observations in the order of \eqn{x} and
+keeps a two-dimensional Fenwick tree (binary indexed tree) over the ranks
+seen so far. Each new observation is answered with a range query rather
+than a scan, which brings the total to \eqn{O(n \log^2 n)}. The
+difference is not a constant factor: it is what makes six-figure sample
+sizes a matter of a moment instead of a coffee break.
+
+Table mode uses the cumulative-sum identity over the table and is
+\eqn{O(r c)} in the table's dimensions, independent of \eqn{n}.
+
+Both are implemented in C++ and return exact integer counts - no
+approximation, no sampling.
+}
 }
 \examples{
 # vector input
@@ -42,12 +98,39 @@ x <- c(1, 2, 3, 1, 2)
 y <- c(2, 1, 3, 2, 1)
 conDisPairs(x, y)
 
-# table input
+# the five counts partition all n(n-1)/2 pairs
+sum(conDisPairs(x, y)) == choose(length(x), 2)
+
+# table input gives the same answer
 tab <- table(x, y)
 conDisPairs(tab)
 
+# the ordinal measures are short formulas on top of it
+p <- conDisPairs(x, y)
+unname((p["C"] - p["D"]) / (p["C"] + p["D"]))   # Goodman-Kruskal's gamma
+gkGamma(x, y)
+
+\donttest{
+# vector mode stays usable where a pairwise double loop would not:
+# 200'000 observations are 2 * 10^10 pairs
+set.seed(1)
+n <- 2e5
+system.time(conDisPairs(rnorm(n), rnorm(n)))
+}
+
+}
+\references{
+Goodman, L. A., Kruskal, W. H. (1954) Measures of association for
+cross classifications. \emph{Journal of the American Statistical
+Association}, \bold{49}, 732-764.
+
+Agresti, A. (2010) \emph{Analysis of Ordinal Categorical Data} (2nd ed.).
+Wiley.
 }
 \seealso{
+\link{ordAssocs}, \link{gkGamma}, \link{kendallTauA}, \link{kendallTauB},
+\link{stuartTauC}, \link{somersDelta}
+
 Other assoc.ordinal:
 \code{\link[=cStat]{cStat()}},
 \code{\link[=kendallW]{kendallW()}},

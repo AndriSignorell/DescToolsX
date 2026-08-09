@@ -45,9 +45,7 @@
 #'
 #' \code{sides} names the side on which the finite bound lies:
 #' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-#' \eqn{(-\infty, uci]}. This is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-#' \code{\link[stats]{t.test}}.
+#' \eqn{(-\infty, uci]}. 
 #'
 #' \bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
 #' likelihood-based weighted variance estimation, see
@@ -61,14 +59,18 @@
 #' giving the weights to use for elements of \code{x}
 #' @param unbiased logical; whether to apply a bias correction. See Details.
 #' Defaults to \code{FALSE}.
-#' @param conf.level confidence level of the interval; defaults to 0.95
-#' @param sides a character string specifying the side of the confidence
-#' interval. Must be one of \code{"two.sided"} (default), \code{"left"}, or
-#' \code{"right"}. Partial matching is supported. See Details.
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'
 #' @param method character string specifying the confidence interval method:
 #' \code{"nct"} (default),
 #' \code{"vangel"}, \code{"mckay"}, or
 #' \code{"naive"}. Partial matching is supported. See Details.
+#' 
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' \code{FALSE}, in which case missing values are an error.
 #' @param \dots further arguments
@@ -248,10 +250,11 @@ coefVar.aov <- function (x, unbiased = FALSE, na.rm = FALSE, ...) {
 
 #' @rdname coefVar
 #' @export
-coefVarCI <- function (x, weights = NULL, unbiased = FALSE,
+coefVarCI <- function (x, 
                        conf.level = 0.95,
                        sides = c("two.sided", "left", "right"),
                        method = c("nct", "vangel", "mckay", "naive"),
+                       weights = NULL, unbiased = FALSE,
                        na.rm = FALSE, ... ) {
 
   # coefVar() is generic, so passing a model object here used to dispatch

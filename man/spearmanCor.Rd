@@ -20,6 +20,13 @@ spearmanCor(
 \item{y}{optional second vector. If \code{x} is not a vector,
 \code{y} must be \code{NULL}.}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+
 \item{na.rm}{logical; whether to remove incomplete pairs. Applies to the
 vector interface; a frequency table must not contain missing counts.}
 }
@@ -34,7 +41,8 @@ numeric vector with elements:
 }
 \description{
 Calculate Spearman correlation coefficient and its confidence interval. In
-addition to the base R function \code{\link{cor}()}, frequency tables are
+addition to the base R function \code{\link{cor}(x, method="spearman")},
+frequency tables are
 also accepted as arguments (i.e. actually weights are used).
 }
 \details{

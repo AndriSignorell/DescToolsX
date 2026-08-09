@@ -2,11 +2,11 @@
 #' Add Months to a Date
 #'
 #' Adds or subtracts whole calendar months while ensuring that the result is
-#' always a valid date.
+#' always a valid date.Negative values of \code{n} subtract months.
 #'
-#' Naively adding months can produce invalid dates. For example, adding one
+#' Naively adding months to a date can produce invalid results. For example, adding one
 #' month to \code{as.Date("2013-01-31")} returns \code{"2013-02-28"} rather
-#' than a date in March. Negative values of \code{n} subtract months.
+#' than a date in March. 
 #'
 #' @param x a \code{Date} object or an object coercible to one with
 #'   \code{\link{as.Date}}
@@ -38,8 +38,7 @@
 #' @references
 #' \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 #'
-#' @seealso [as.ym()], [bedrock::recycle()],
-#'   [year()], [month()]
+#' @seealso [as.ym()], [year()], [month()]
 #'
 #' @examples
 #' # character input is converted to Date
@@ -73,39 +72,6 @@ addMonths <- function(x, n, ...) {
 }
 
 
-.addMonthsEngine <- function(x, n) {
-  
-  if (is.na(x) || is.na(n))
-    return(NA_real_)
-  
-  if (n == 0)
-    return(unclass(x))
-  
-  originalDay <- day(x)
-  day(x) <- 1L
-  
-  by <- paste(
-    format(n, scientific = FALSE, trim = TRUE),
-    "months"
-  )
-  
-  targetMonth <- seq(
-    from = x,
-    by = by,
-    length.out = 2L
-  )[2L]
-  
-  nextMonth <- seq(
-    from = targetMonth,
-    by = "1 month",
-    length.out = 2L
-  )[2L]
-  
-  daysInTargetMonth <- as.integer(nextMonth - targetMonth)
-  targetDay <- min(originalDay, daysInTargetMonth)
-  
-  return(unclass(targetMonth + targetDay - 1L))
-}
 
 
 #' @rdname addMonths
@@ -154,4 +120,92 @@ addMonths.default <- function(x, n, ...) {
   
   return(structure(res, class = "Date"))
 }
+
+
+#' @rdname addMonths
+#' @method addMonths ym
+#' @export
+addMonths.ym <- function(x, n, ...) {
+  
+  if (!is.numeric(n) ||
+      any(!is.na(n) & (!is.finite(n) | n %% 1 != 0)))
+    stop("'n' must contain whole finite numbers or NA")
+  
+  idx <- unclass(x) %/% 100 * 12 +
+    (unclass(x) %% 100 - 1) +
+    n
+  
+  res <- idx %/% 12 * 100 + idx %% 12 + 1
+  
+  as.ym(res)
+}
+
+
+
+#' @export
+`+.ym` <- function(e1, e2) {
+  
+  if (missing(e2))
+    return(e1)
+  
+  if (inherits(e1, "ym") && inherits(e2, "ym"))
+    stop("two 'ym' objects cannot be added")
+  
+  if (inherits(e1, "ym"))
+    return(addMonths(e1, e2))
+  
+  if (inherits(e2, "ym"))
+    return(addMonths(e2, e1))
+  
+  stop("one operand must be a 'ym' object")
+}
+
+
+#' @export
+`-.ym` <- function(e1, e2) {
+  if (missing(e2))
+    stop("unary '-' is not defined for 'ym' objects")
+  if (inherits(e2, "ym"))
+    stop("use difference in months explicitly; '-' expects a number of months")
+  addMonths(e1, -e2)
+}
+
+
+
+## == internal helper functions ================================================
+
+.addMonthsEngine <- function(x, n) {
+  
+  if (is.na(x) || is.na(n))
+    return(NA_real_)
+  
+  if (n == 0)
+    return(unclass(x))
+  
+  originalDay <- day(x)
+  day(x) <- 1L
+  
+  by <- paste(
+    format(n, scientific = FALSE, trim = TRUE),
+    "months"
+  )
+  
+  targetMonth <- seq(
+    from = x,
+    by = by,
+    length.out = 2L
+  )[2L]
+  
+  nextMonth <- seq(
+    from = targetMonth,
+    by = "1 month",
+    length.out = 2L
+  )[2L]
+  
+  daysInTargetMonth <- as.integer(nextMonth - targetMonth)
+  targetDay <- min(originalDay, daysInTargetMonth)
+  
+  return(unclass(targetMonth + targetDay - 1L))
+}
+
 

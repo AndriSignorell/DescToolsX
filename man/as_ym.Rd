@@ -4,7 +4,6 @@
 \alias{as_ym}
 \alias{as.ym}
 \alias{as.Date.ym}
-\alias{addMonths.ym}
 \alias{print.ym}
 \title{A Class for Dealing with the Yearmonth Format}
 \usage{
@@ -13,8 +12,6 @@ as.ym(x)
 \method{as.Date}{ym}(x, d = 1, ...)
 
 \method{print}{ym}(x, ...)
-
-\method{addMonths}{ym}(x, n, ...)
 }
 \arguments{
 \item{x}{a vector of integers, representing the dates in the format YYYYMM,
@@ -27,9 +24,6 @@ to which a number of months has to be added. YYYY must lie in the range of
 }}
 
 \item{\dots}{further arguments; currently unused}
-
-\item{n}{the number of months to be added. If n is negative the months will
-be subtracted.}
 }
 \value{
 \describe{
@@ -43,7 +37,7 @@ be subtracted.}
 Representing year and month information as an integer in YYYYMM format is
 compact and efficient. Calendar arithmetic must nevertheless preserve the
 date structure: for example, subtracting two months from 201201 should
-return 201111 rather than 201199. \code{addMonths()} provides this
+return 201111 rather than 201199. \code{\link[=addMonths]{addMonths()}} provides this
 arithmetic for objects of class \code{"ym"}.
 }
 \details{

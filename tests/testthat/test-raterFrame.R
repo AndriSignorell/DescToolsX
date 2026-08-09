@@ -78,8 +78,13 @@ test_that("raterFrame() refuses duplicated subject/rater combinations", {
 
 
 test_that("raterFrame() feeds the agreement functions", {
-
+  
   m <- raterFrame(rating ~ subj | rater, data = d.long, dropSubj = TRUE)
-  expect_length(percAgreement(m, input = "ratings"), 3L)
+  
+  # percAgreement() liefert per Vorgabe nur noch den Schaetzer; das Tripel
+  # gibt es, wenn ein Intervall verlangt wird
+  expect_true(is.finite(percAgreement(m, input = "ratings")))
+  expect_length(percAgreement(m, input = "ratings", conf.level = 0.95), 3L)
+  
   expect_true(is.finite(randolphKappa(m)))
 })

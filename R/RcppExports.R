@@ -81,10 +81,6 @@ bottom_i_cpp <- function(v, n) {
     .Call(`_DescToolsX_bottom_i_cpp`, v, n)
 }
 
-fastMode <- function(x, narm = FALSE) {
-    .Call(`_DescToolsX_fastMode`, x, narm)
-}
-
 fast_mode_cpp <- function(x, narm = FALSE) {
     .Call(`_DescToolsX_fast_mode_cpp`, x, narm)
 }

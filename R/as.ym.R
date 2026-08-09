@@ -5,7 +5,7 @@
 #' Representing year and month information as an integer in YYYYMM format is
 #' compact and efficient. Calendar arithmetic must nevertheless preserve the
 #' date structure: for example, subtracting two months from 201201 should
-#' return 201111 rather than 201199. \code{addMonths()} provides this
+#' return 201111 rather than 201199. [addMonths()] provides this
 #' arithmetic for objects of class \code{"ym"}.
 #'
 #' All parameters are recycled if necessary, following the usual arithmetic
@@ -13,15 +13,15 @@
 #' multiple of the length of the shorter one.
 #'
 #' @name as_ym
-#' @aliases as.ym as.Date.ym addMonths.ym print.ym
+#' @aliases as.ym as.Date.ym print.ym
+#' 
 #' @param x a vector of integers, representing the dates in the format YYYYMM,
 #' to which a number of months has to be added. YYYY must lie in the range of
 #' 1000-3000, MM in 1-12. Values outside that range become \code{NA}.
 #' @param d the day to be used for converting a yearmonth to a date. Default is
 #' 1. Combinations that do not exist (e.g. 30 February) yield \code{NA}.
-#' @param n the number of months to be added. If n is negative the months will
-#' be subtracted.
 #' @param \dots further arguments; currently unused
+#' 
 #' @return
 #' \describe{
 #'   \item{\code{as.ym()}}{an integer vector of class \code{"ym"}}
@@ -118,51 +118,3 @@ print.ym <- function(x, ...) {
   invisible(x)
 }
 
-
-#' @rdname as_ym
-#' @method addMonths ym
-#' @export
-addMonths.ym <- function(x, n, ...) {
-  
-  if (!is.numeric(n) ||
-      any(!is.na(n) & (!is.finite(n) | n %% 1 != 0)))
-    stop("'n' must contain whole finite numbers or NA")
-  
-  idx <- unclass(x) %/% 100 * 12 +
-    (unclass(x) %% 100 - 1) +
-    n
-  
-  res <- idx %/% 12 * 100 + idx %% 12 + 1
-  
-  as.ym(res)
-}
-
-
-
-#' @export
-`+.ym` <- function(e1, e2) {
-  
-  if (missing(e2))
-    return(e1)
-  
-  if (inherits(e1, "ym") && inherits(e2, "ym"))
-    stop("two 'ym' objects cannot be added")
-  
-  if (inherits(e1, "ym"))
-    return(addMonths(e1, e2))
-  
-  if (inherits(e2, "ym"))
-    return(addMonths(e2, e1))
-  
-  stop("one operand must be a 'ym' object")
-}
-
-
-#' @export
-`-.ym` <- function(e1, e2) {
-  if (missing(e2))
-    stop("unary '-' is not defined for 'ym' objects")
-  if (inherits(e2, "ym"))
-    stop("use difference in months explicitly; '-' expects a number of months")
-  addMonths(e1, -e2)
-}

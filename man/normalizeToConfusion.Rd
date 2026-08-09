@@ -53,7 +53,7 @@ data frames, lists, and raw rating vectors.
 \details{
 The function handles the following input formats:
 \describe{
-\item{\code{table}}{A pre-computed 2D contingency table. Validated via
+\item{\code{table}}{A pre-computed 2D contingency table which is validated via
 \code{\link{isConfusionTable}}. For \code{mode = "agreement"}, the
 table must be square with identical row and column names.}
 \item{\code{matrix}}{Either a pre-computed contingency matrix (square,

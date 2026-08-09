@@ -8,7 +8,6 @@ gini(
   x,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("boot"),
   unbiased = TRUE,
   weights = NULL,
   na.rm = FALSE,
@@ -18,14 +17,12 @@ gini(
 \arguments{
 \item{x}{numeric vector of non-negative values}
 
-\item{conf.level}{confidence level in (0, 1). If \code{NA} (default),
-no confidence interval is computed.}
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
 
-\item{sides}{character string specifying the interval type:
-\code{"two.sided"} (default), \code{"left"}, or \code{"right"}}
-
-\item{method}{confidence interval method; currently only \code{"boot"} is
-supported}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
 
 \item{unbiased}{logical; whether to apply the small-sample bias
 correction factor \eqn{n/(n-1)}, with \eqn{n} the effective sample size

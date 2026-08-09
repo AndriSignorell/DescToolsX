@@ -16,7 +16,7 @@
 #' 
 #' Cramer (1997) mentions the asymptotic standard error of \code{G_1}, that is
 #' of \code{estimator = 2}:
-#' \cr \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
+#' \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
 #' used for calculating the confidence intervals. The standard errors of the
 #' other two estimators follow from it by the same factors that relate the
 #' estimators themselves, so that \code{est/se} does not depend on the choice
@@ -36,7 +36,6 @@
 #' 
 #' @name skew
 #' 
-#' @inheritParams ConfidenceIntervals
 #' @param x a numeric vector
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
@@ -44,6 +43,18 @@
 #' giving the weights to use for elements of \code{x}. The weights are read as
 #' frequencies, so that their sum takes the place of the sample size in the
 #' estimator's bias corrections and in the standard error.
+#' 
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#' @param method character string specifying the confidence interval method.
+#'   \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
+#'   intervals unless another bootstrap type is supplied through \code{\dots};
+#'   \code{"classic"} uses a Wald interval based on the asymptotic standard
+#'   error. See Details and \code{\link{ConfidenceIntervals}}.
+#'   
 #' @param na.rm logical, indicating whether \code{NA} values should be stripped
 #' before the computation proceeds. Defaults to \code{FALSE}.
 #' @param \dots further arguments passed to \code{\link[boot]{boot}} when

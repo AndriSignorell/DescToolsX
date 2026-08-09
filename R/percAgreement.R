@@ -19,24 +19,34 @@
 #'   subjects in rows and raters in columns
 #' @param y optional second rating vector used to construct a confusion matrix
 #'
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}. A proportion of
+#'   agreement lies in \eqn{[0, 1]}, so the open side is reported at that
+#'   boundary rather than at \eqn{\pm\infty}.
+#'
 #' @param input character string specifying the input format:
 #'   \code{"auto"}, \code{"confusion"}, or \code{"ratings"}
-#'
-#' @param conf.level confidence level for the interval
 #' @param fpc finite population correction, the sampling fraction \eqn{n/N}
 #'   in \eqn{[0, 1)} (default \code{0})
-#' @param verbose logical; whether to return detailed output
-#' @param ... reserved for future extensions
+#' @param output output format, either \code{"def"} (default) or
+#'   \code{"ext"} for extended results
+#' @param ... must be empty. Named arguments are rejected rather than
+#'   silently ignored.
 #'
-#' @return if \code{verbose = FALSE}, a named numeric vector with elements:
+#' @return if \code{output = "def"} and \code{conf.level = NA}, a numeric
+#' scalar; otherwise a named numeric vector with elements:
 #' \describe{
 #'   \item{\code{est}}{proportion of agreement}
 #'   \item{\code{lci}}{lower confidence interval bound}
 #'   \item{\code{uci}}{upper confidence interval bound}
 #' }
 #'
-#' if \code{verbose = TRUE}, a list with the estimate, standard error,
-#' confidence interval, sample sizes, and method description.
+#' if \code{output = "ext"}, a list with the elements \code{est},
+#' \code{se}, \code{ci} (the named triple above), \code{n},
+#' \code{nPairable} and \code{method}.
 #'
 #'
 #' @family assoc.agreement  
@@ -46,20 +56,35 @@
 #'
 #' @export
 percAgreement <- function(x, y = NULL,
+                          conf.level = NA,
+                          sides = c("two.sided", "left", "right"),
                           input = c("auto", "confusion", "ratings"),
-                          conf.level = 0.95,
                           fpc = 0,
-                          verbose = FALSE,
+                          output = c("def", "ext"),
                           ...) {
 
-  input <- match.arg(input)
+  input  <- match.arg(input)
+  sides  <- match.arg(sides)
+  output <- match.arg(output)
 
-  if (length(conf.level) != 1L || !is.numeric(conf.level) || is.na(conf.level) ||
-      conf.level <= 0 || conf.level >= 1)
-    stop("'conf.level' must be a single number in (0, 1).")
+  conf.level <- checkConfLevel(conf.level)
+
+  if (sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
 
   if (length(fpc) != 1L || !is.numeric(fpc) || is.na(fpc) || fpc < 0 || fpc >= 1)
     stop("'fpc' must be a single number in [0, 1).")
+
+  # '...' was documented as reserved for future extensions, which in
+  # practice means a misspelled argument disappeared without a word. There
+  # is nothing here to pass anything on to.
+  dots <- list(...)
+  if (length(dots))
+    stop(gettextf("unused argument(s): %s",
+                  paste(sQuote(names(dots)[nzchar(names(dots))], FALSE),
+                        collapse = ", ")), domain = NA)
 
   # --- resolve input ---
   tmp <- .resolveAgreementInput(x, y, input)
@@ -110,27 +135,37 @@ percAgreement <- function(x, y = NULL,
   # ===============================
   # SE + CI
   # ===============================
-  if (is.na(Po) || n <= 1) {
-    se <- NA_real_
-    ci <- c(NA_real_, NA_real_)
+  se <- if (is.na(Po) || n <= 1) NA_real_ else sqrt(var_hat)
+
+  if (is.na(conf.level) || is.na(se)) {
+
+    if (!is.na(conf.level) && !is.na(Po))
+      warning("the design-based standard error is undefined here; ",
+              "no interval computed", call. = FALSE)
+
+    ci <- c(lci = NA_real_, uci = NA_real_)
+
   } else {
-    se <- sqrt(var_hat)
-    alpha <- 1 - conf.level
-    tcrit <- qt(1 - alpha/2, df = n - 1)
-    ci <- c(
-      max(0, Po - tcrit * se),
-      min(1, Po + tcrit * se)
-    )
+
+    # A one-sided bound at level gamma is the corresponding end of the
+    # two-sided interval at level 2*gamma - 1.
+    confAdj <- if (sides == "two.sided") conf.level else 2 * conf.level - 1
+    tcrit   <- qt(1 - (1 - confAdj) / 2, df = n - 1)
+
+    # a proportion of agreement lies in [0, 1] - .applySides() clamps to
+    # that range and closes the open side there
+    ci <- .applySides(Po + c(-1, 1) * tcrit * se, sides, lo = 0, hi = 1)
   }
-  
-  if (!verbose) {
-    return(c(est = Po, lci = ci[1], uci = ci[2]))
-  }
-  
+
+  res <- c(est = Po, ci)
+
+  if (output == "def")
+    return(if (is.na(conf.level)) unname(Po) else res)
+
   list(
-    estimate = Po,
+    est = Po,
     se = se,
-    conf.int = ci,
+    ci = res,
     n = n,
     nPairable = n0,
     method = "Percent agreement (design-based; Klein/Gwet)"

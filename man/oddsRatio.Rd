@@ -22,74 +22,115 @@ oddsRatio(x, ...)
 \method{oddsRatio}{glm}(
   x,
   conf.level = 0.95,
-  method = c("wald", "profile"),
   sides = c("two.sided", "left", "right"),
+  method = c("wald", "profile"),
   ...
 )
 
 \method{print}{OddsRatio}(x, digits = 3, ...)
 }
 \arguments{
-\item{x}{an object for which odds ratios should be computed}
+\item{x}{a 2x2 contingency table, two vectors to be cross-tabulated, or a
+binomial \code{\link[stats]{glm}} object}
 
-\item{...}{further arguments passed to methods}
+\item{...}{further arguments passed to methods. For the default method
+with two vectors, these reach \code{\link{table}}, so \code{useNA} can
+be set here.}
 
 \item{y}{optional second variable. If supplied,
 \code{table(x, y, ...)} is computed.}
 
-\item{conf.level}{confidence level for interval estimation.
-If \code{NA}, only the point estimate is returned.}
+\item{conf.level}{confidence level of the interval. For the table method
+\code{NA} (the default) returns the point estimate only; the model
+method computes an interval by default.}
 
-\item{sides}{type of confidence interval. One of
-\code{"two.sided"}, \code{"left"}, or \code{"right"}.}
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}. An odds ratio
+is bounded below by 0 and unbounded above, so the open side is reported
+at 0 or \code{Inf} accordingly. Ignored, with a warning, for
+\code{method = "profile"}.}
 
-\item{method}{character string specifying the interval method.
-One of \code{"wald"} or \code{"profile"}.}
+\item{method}{character string specifying the interval method. For a
+contingency table one of \code{"wald"}, \code{"exact"} or
+\code{"midp"}; for a binomial model one of \code{"wald"} or
+\code{"profile"}. See Details.}
 
-\item{interval}{numeric vector of length two specifying the search interval
-used by the mid-p method}
+\item{interval}{numeric vector of length two giving the search interval
+for the root finding in the mid-p method. Only used by
+\code{method = "midp"}; widen it if the reported bound sits at one of
+its ends.}
 
 \item{digits}{number of digits used for printing}
 }
 \value{
-the returned value depends on the input. For contingency tables,
-\code{conf.level = NA} yields a numeric scalar; otherwise the result is a
-named numeric vector with elements:
-\describe{
-\item{\code{est}}{odds ratio estimate}
-\item{\code{lci}}{lower confidence interval bound}
-\item{\code{uci}}{upper confidence interval bound}
-}
+For a contingency table with \code{conf.level = NA} a numeric scalar,
+otherwise a named numeric vector with the elements \code{est}, \code{lci}
+and \code{uci}.
 
-For binomial generalized linear models, an object of class
-\code{"OddsRatio"} is returned.
+For a binomial model an object of class \code{"OddsRatio"}, a list with:
+\describe{
+\item{\code{coefficients}}{a data frame with one row per coefficient and
+the columns \code{term}, \code{est} (the exponentiated coefficient),
+\code{logEst} (the coefficient itself), \code{stdError} (on the log
+scale), \code{pValue}, \code{lci} and \code{uci}}
+\item{\code{source}}{\code{"glm"}}
+\item{\code{method}, \code{conf.level}, \code{sides}}{as supplied - with
+\code{sides} recording what was computed, which for
+\code{method = "profile"} is always \code{"two.sided"}}
+\item{\code{nObs}}{number of observations used in the fit}
+\item{\code{call}}{the model call}
+}
+There is a \code{print} method; the interval bounds are on the odds scale,
+the standard error on the log scale.
 }
 \description{
-Computes odds ratios for 2x2 contingency tables or binomial
-generalized linear models.
+Computes odds ratios, either from a 2x2 contingency table or from a
+binomial generalized linear model. The table method returns a single odds
+ratio, the model method one odds ratio per regression coefficient.
 }
 \details{
-For contingency tables, the function returns the odds ratio together with
-optional confidence intervals. For binomial generalized linear models,
-exponentiated regression coefficients together with confidence intervals
-are returned.
+\subsection{Contingency tables}{
+For a 2x2 table the odds ratio is
 
-For 2x2 contingency tables, the odds ratio is defined as:
+\deqn{OR = \frac{n_{11} n_{22}}{n_{12} n_{21}}}
 
-\deqn{
-OR = \frac{n_{11} n_{22}}{n_{12} n_{21}}
+Three interval methods are available. \code{"wald"} is the asymptotic
+interval on the log scale, fast and adequate for reasonably large counts.
+\code{"exact"} is the conditional interval based on the noncentral
+hypergeometric distribution (Fisher); it guarantees coverage but is
+conservative, sometimes markedly so. \code{"midp"} halves the probability
+of the observed table and lies between the two: it has coverage closer to
+the nominal level than the exact interval without the Wald interval's
+reliance on large counts. With a zero cell the point estimate is 0 or
+\code{Inf} and only \code{"exact"} and \code{"midp"} still deliver a
+finite bound on the informative side.
 }
 
-The following confidence interval methods are available:
+\subsection{Binomial models}{
+For a model fitted with \code{glm(family = binomial)}, each coefficient is
+exponentiated: \eqn{\exp(\beta_j)} is the factor by which the odds of the
+response are multiplied when the corresponding predictor increases by one
+unit, all other predictors held fixed. For a dummy variable this is the
+odds ratio between the level and its reference level.
 
-\itemize{
-\item \code{"wald"} Asymptotic Wald interval.
-\item \code{"exact"} Fisher exact interval.
-\item \code{"midp"} Median unbiased mid-p interval.
+The intercept is exponentiated along with the rest, but
+\eqn{\exp(\beta_0)} is \emph{not} an odds ratio - it is the odds of the
+response when all predictors are zero. It is reported for completeness
+and is usually not the quantity of interest.
+
+Two interval methods are available. \code{"wald"} is the symmetric
+interval on the log-odds scale, back-transformed. \code{"profile"} inverts
+the likelihood ratio test through \code{\link[stats]{confint.glm}}; it is
+asymmetric on the odds scale, generally more reliable in small samples or
+with sparse cells, and considerably slower because the model is refitted
+along each coefficient. Profile intervals are two-sided by construction,
+so \code{sides} is ignored for them and a warning is issued.
+
+Unlike the table method, the model method computes an interval by default
+(\code{conf.level = 0.95}): a coefficient table without intervals would
+be less informative than \code{summary()} itself.
 }
-
-For generalized linear models, exponentiated regression coefficients are
-reported together with Wald or profile likelihood confidence intervals.
 }
 \note{
 No short alias is exported by default to avoid conflicts with
@@ -98,29 +139,32 @@ No short alias is exported by default to avoid conflicts with
 \code{or()} available as a convenient shorthand.
 }
 \examples{
-# 2x2 contingency table
-tab <- matrix(
-  c(10, 20,
-    5, 30),
-  nrow = 2
-)
+# --- 2x2 table -------------------------------------------------
+tab <- matrix(c(10, 20,
+                 5, 30), nrow = 2)
 
 oddsRatio(tab)
+oddsRatio(tab, conf.level = 0.95)
 
-oddsRatio(
-  tab,
-  conf.level = 0.95
-)
+# the exact interval is the widest, the Wald interval the narrowest
+sapply(c("wald", "exact", "midp"),
+       function(m) oddsRatio(tab, conf.level = 0.95, method = m))
+
+# one-sided: "left" carries the finite lower bound
+oddsRatio(tab, conf.level = 0.95, sides = "left")
 
 
-# logistic regression
-fit <- glm(
-  vs ~ am,
-  data = mtcars,
-  family = binomial
-)
+# --- binomial model --------------------------------------------
+fit <- glm(vs ~ am + wt, data = mtcars, family = binomial)
 
 oddsRatio(fit)
+
+# the exponentiated intercept is the baseline odds, not an odds ratio
+res <- oddsRatio(fit)
+res$coefficients
+
+# profile likelihood intervals: asymmetric on the odds scale, slower
+oddsRatio(fit, method = "profile")
 
 
 }
@@ -137,7 +181,7 @@ Gart, J. J. (1966). Alternative analyses of contingency tables.
 \emph{28}(1), 164--179.
 }
 \seealso{
-\link{attachAliases}
+\link{attachAliases}, \link{relRisk}, \code{\link[stats]{confint.glm}}
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},

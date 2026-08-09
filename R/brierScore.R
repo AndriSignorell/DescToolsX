@@ -18,9 +18,7 @@
 #'
 #' \code{sides} names the side on which the finite bound lies:
 #' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-#' \eqn{(-\infty, uci]}. This is the reverse of the convention in
-#' \pkg{DescTools}, where \code{sides} follows the alternative hypothesis of
-#' \code{\link[stats]{t.test}}.
+#' \eqn{(-\infty, uci]}. 
 #'
 #' **Normal interval** (\code{method = "normal"})
 #'
@@ -63,13 +61,12 @@
 #'   when \code{x} is a model object.
 #' @param scaled  logical. Should the scaled Brier score be returned?
 #'   Default \code{FALSE}.
-#' @param conf.level confidence level of the interval. A single numeric
-#'   value in \eqn{(0, 1)}, or \code{NA} (default) to return only the
-#'   point estimate.
-#' @param sides   a character string specifying the side of the interval:
-#'   \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
-#'   Partial matching is supported. Ignored when \code{conf.level = NA}.
-#'   See Details.
+#'   
+#' @param conf.level confidence level of the interval. If set to \code{NA}
+#'   (the default), only the point estimate is returned.
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
 #' @param method  confidence interval method: \code{"normal"} (delta-method
 #'   approximation, default) or \code{"boot"} (bootstrap via
 #'   \code{brier_boot_cpp()})
@@ -103,10 +100,10 @@
 #' @export
 brierScore <- function(x,
                        pred       = NULL,
-                       scaled     = FALSE,
                        conf.level = NA,
                        sides      = c("two.sided", "left", "right"),
                        method     = c("normal", "boot"),
+                       scaled     = FALSE,
                        ...) {
 
   sides  <- match.arg(sides)

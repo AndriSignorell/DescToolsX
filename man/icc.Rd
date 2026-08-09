@@ -6,12 +6,12 @@
 \usage{
 icc(
   x,
-  model = c("twoway", "oneway"),
-  type = c("agreement", "consistency"),
-  unit = c("single", "average"),
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("anova", "reml", "boot"),
+  model = c("twoway", "oneway"),
+  type = c("agreement", "consistency"),
+  unit = c("single", "average"),
   na.rm = FALSE,
   ...
 )
@@ -20,21 +20,22 @@ icc(
 \item{x}{numeric matrix or data frame with subjects in rows and raters in
 columns}
 
+\item{conf.level}{confidence level of the interval. If set to \code{NA}
+(the default), only the point estimate is returned.}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+
+\item{method}{character string specifying the estimation and confidence
+interval method; defaults to \code{"anova"}}
+
 \item{model}{character string, either \code{"oneway"} or \code{"twoway"}}
 
 \item{type}{character string, either \code{"agreement"} or
 \code{"consistency"}}
 
 \item{unit}{character string, either \code{"single"} or \code{"average"}}
-
-\item{conf.level}{confidence level of the interval. If \code{NA}
-(default), no confidence interval is computed.}
-
-\item{sides}{character string specifying the side of the interval; currently
-only \code{"two.sided"} is implemented}
-
-\item{method}{character string specifying the estimation and confidence
-interval method; defaults to \code{"anova"}}
 
 \item{na.rm}{logical; if \code{TRUE}, complete cases are used}
 

@@ -153,7 +153,9 @@ test_that("uncertCoef() validates its input", {
   expect_error(uncertCoef(matrix(c(10, 20), nrow = 1)), "at least two rows")
   expect_error(uncertCoef(matrix(c(1, 2, -3, 4), nrow = 2)), "non-negative")
   expect_error(uncertCoef(gk, conf.level = 1.2), "conf.level")
-  expect_error(uncertCoef(gk, conf.level = 0.4, sides = "left"), "greater than 0.5")
+  # matched on the threshold, not on the wording: the message now comes
+  # from the shared guard and names the offending value as well
+  expect_error(uncertCoef(gk, conf.level = 0.4, sides = "left"), "0.5")
   
 })
 

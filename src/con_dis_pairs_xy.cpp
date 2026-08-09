@@ -48,8 +48,9 @@ struct BIT2D {
 struct ConcordanceResult {
   double C;
   double D;
-  double Ties_X;
-  double Ties_Y;
+  double Ties_X;   // tied in x only
+  double Ties_Y;   // tied in y only
+  double Ties_XY;  // tied in both
 };
 
 
@@ -148,11 +149,24 @@ ConcordanceResult conDisPairsXY_indexed(const vector<double>& x,
     Ties_Y += g * (g - 1) / 2;
   }
   
+  // The joint ties are subtracted from both marginal counts, so Ties_X
+  // and Ties_Y come out EXCLUSIVE - tied in x only, tied in y only. The
+  // correction is the count of pairs tied in both, and it is the fifth
+  // number of the partition:
+  //
+  //   C + D + Ties_X + Ties_Y + Ties_XY = n(n-1)/2
+  //
+  // It used to be computed here and then dropped, while the R side asked
+  // for five names - which produced a fifth element NA under the name NA,
+  // and an NA from sum() over the result of every vector-mode call.
+  long long Ties_XY = 0;
+  
   for (auto& kv : count_xy) {
     long long g = kv.second;
     long long corr = g * (g - 1) / 2;
-    Ties_X -= corr;
-    Ties_Y -= corr;
+    Ties_X  -= corr;
+    Ties_Y  -= corr;
+    Ties_XY += corr;
   }
   
   ConcordanceResult res;
@@ -160,6 +174,7 @@ ConcordanceResult conDisPairsXY_indexed(const vector<double>& x,
   res.D = D;
   res.Ties_X = Ties_X;
   res.Ties_Y = Ties_Y;
+  res.Ties_XY = Ties_XY;
   
   return res;
 }
@@ -180,13 +195,15 @@ NumericVector condis_pairs_xy_cpp(NumericVector xR,
   
   auto z = conDisPairsXY_indexed(x, y, idx);
   
-  NumericVector out(4);
+  NumericVector out(5);
   out[0] = z.C;
   out[1] = z.D;
   out[2] = z.Ties_X;
   out[3] = z.Ties_Y;
+  out[4] = z.Ties_XY;
   
-  out.attr("names") = CharacterVector::create("C","D","Ties_X","Ties_Y");
+  out.attr("names") =
+    CharacterVector::create("C","D","Ties_X","Ties_Y","Ties_XY");
   
   return out;
 }

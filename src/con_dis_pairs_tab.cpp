@@ -116,6 +116,24 @@ List condis_pairs_tab_cpp(IntegerMatrix x) {
       Ties_Y += t * (t - 1) / 2;
   }
   
+  // The marginal sums count a pair tied in BOTH variables once in Ties_X
+  // and once in Ties_Y. Subtracting the joint ties makes the two counts
+  // exclusive - tied in x only, tied in y only - which is what
+  // con_dis_pairs_xy.cpp returns and what makes the five numbers a
+  // partition:
+  //
+  //   C + D + Ties_X + Ties_Y + Ties_XY = n(n-1)/2
+  //
+  // Without this the two entry points reported DIFFERENT numbers for the
+  // same data: on a 3x3 table with two doubled cells the counts added up
+  // to 14 where there are only 10 pairs, the excess being exactly
+  // 2 * Ties_XY.
+  //
+  // The classic tau-b formula wants the INCLUSIVE marginal counts; those
+  // are Ties_X + Ties_XY and Ties_Y + Ties_XY.
+  Ties_X -= Ties_XY;
+  Ties_Y -= Ties_XY;
+  
   return List::create(
     Named("C") = C / 2.0,
     Named("D") = D / 2.0,

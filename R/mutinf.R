@@ -71,7 +71,7 @@
 #' Wiley.
 #'
 #'
-#' @seealso \code{\link{entropy}}, \code{\link{uncertCoef}}
+#' @seealso \code{\link{entropy}}
 #'
 #' @family assoc.nominal
 #' @concept association-measure

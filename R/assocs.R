@@ -162,6 +162,13 @@ print.AssocsTab <- function(x, digits = 4, ...){
 #'   the estimate
 #' @param direction direction of Somers' \eqn{D}; \code{"row"} or
 #'   \code{"column"}
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
+#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   The open side is closed at the boundary of the parameter's range -
+#'   \eqn{\pm 1} for gamma, the tau family and Somers' \eqn{D}, and
+#'   \eqn{[0, 1]} for the c statistic - rather than at an infinity none of
+#'   them can reach.
 #'
 #' @return 
 #'   The extractor functions return
@@ -215,11 +222,14 @@ print.AssocsTab <- function(x, digits = 4, ...){
 #' @concept ordinal
 #' @export
 ordAssocs <- function(x, y = NULL,
-                   which = c("all", "gamma", "tauA", "tauB", "tauC", "somers", "cstat"),
                    conf.level = NA,
-                   direction = c("row", "column")) {
+                   sides = c("two.sided", "left", "right"),
+                   which = c("all", "gamma", "tauA", "tauB", "tauC", "somers", "cstat"),
+                   direction = c("row", "column")
+                   ) {
 
   direction <- match.arg(direction)
+  sides     <- match.arg(sides)
   # 'which' uses the same spelling as the names of the returned list, so
   # no mapping between user-facing and internal names is needed. This is
   # a deliberate exception to the kebab-case rule for match.arg() enums
@@ -227,10 +237,20 @@ ordAssocs <- function(x, y = NULL,
   # result elements, and two spellings for one measure invite drift.
   which     <- match.arg(which)
 
-  if(length(conf.level) != 1L || !is.numeric(conf.level) && !is.logical(conf.level))
-    stop("'conf.level' must be a single number in (0, 1) or NA")
-  if(!is.na(conf.level) && (conf.level <= 0 || conf.level >= 1))
-    stop("'conf.level' must lie in (0, 1)")
+  conf.level <- checkConfLevel(conf.level)
+
+  # A one-sided bound at level gamma is the corresponding end of the
+  # two-sided interval at level 2*gamma - 1. At or below 0.5 that level is
+  # not positive and there is nothing to compute - the normal quantile
+  # would turn negative and hand back the two bounds in reverse order.
+  if(sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
+    stop(gettextf(
+      "a one-sided interval needs 'conf.level' above 0.5, not %g",
+      conf.level), domain = NA)
+
+  # The adjusted level goes into the machinery; 'conf.level' itself stays
+  # untouched because the branches below test it for NA.
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
 
   # ============================
   # XY MODE (use C++)
@@ -244,7 +264,7 @@ ordAssocs <- function(x, y = NULL,
       stop("direction = \"column\" is only supported in table mode; ",
            "swap 'x' and 'y', or pass a contingency table")
 
-    cl <- if(is.na(conf.level)) NA_real_ else conf.level
+    cl <- if(is.na(conf.level)) NA_real_ else confAdj
     z  <- assoc_cpp(x, y, cl)
 
     resAll <- list(
@@ -301,11 +321,17 @@ ordAssocs <- function(x, y = NULL,
       # .tableAssocCI() recomputes the point estimates alongside the
       # variances from the same pair counts, so calling conDisPairs()
       # here as well would count every pair twice.
-      resAll <- .tableAssocCI(tab, conf.level, direction)[
+      resAll <- .tableAssocCI(tab, confAdj, direction)[
         c("gamma", "tauA", "tauB", "tauC", "somers", "cstat")]
       resAll <- lapply(resAll, setNamesX, names = c("est", "lci", "uci"))
     }
   }
+
+  # 'sides' is applied here and not in .ordAssocResult(), because
+  # ordAssocs(which = "all") reports six measures with two different
+  # ranges - and the range is only known per measure.
+  if(!is.na(conf.level))
+    resAll <- .ordAssocApplySides(resAll, sides)
 
   # ============================
   # SELECT WHICH
@@ -318,6 +344,47 @@ ordAssocs <- function(x, y = NULL,
 
 
 # == extractors ===============================================================
+
+# Parameter range per measure, for .applySides(). Gamma, the tau family
+# and Somers' D are signed and live in [-1, 1]; the c statistic is a
+# concordance probability and lives in [0, 1]. An unbounded side would
+# claim a value none of them can take.
+#' @noRd
+.ordAssocRange <- list(
+  gamma  = c(-1, 1),
+  tauA   = c(-1, 1),
+  tauB   = c(-1, 1),
+  tauC   = c(-1, 1),
+  somers = c(-1, 1),
+  cstat  = c( 0, 1)
+)
+
+
+#' @noRd
+.ordAssocApplySides <- function(resAll, sides) {
+
+  nms <- names(resAll)
+
+  out <- lapply(seq_along(resAll), function(i) {
+
+    rng <- .ordAssocRange[[nms[[i]]]]
+
+    # a new measure without a recorded range must not silently inherit
+    # somebody else's bounds
+    if(is.null(rng))
+      stop(gettextf("no parameter range is recorded for measure %s",
+                    dQuote(nms[[i]], FALSE)), domain = NA)
+
+    v <- resAll[[i]]
+
+    c(est = unname(v[[1L]]),
+      .applySides(unname(v[2:3]), sides, lo = rng[[1L]], hi = rng[[2L]]))
+  })
+
+  names(out) <- nms
+  out
+}
+
 
 .ordAssocResult <- function(res, conf.level) {
 
@@ -350,16 +417,20 @@ ordAssocs <- function(x, y = NULL,
 #' @export
 gkGamma <- function(x, y = NULL,
                     conf.level = NA,
-                    direction = c("row", "column")) {
+                    sides = c("two.sided", "left", "right"),
+                    direction = c("row", "column")
+                    ) {
 
   direction <- match.arg(direction)
+  sides     <- match.arg(sides)
 
   res <- ordAssocs(
     x = x,
     y = y,
     which = "gamma",
+    direction = direction,
     conf.level = conf.level,
-    direction = direction
+    sides = sides
   )
 
   .ordAssocResult(res, conf.level)
@@ -369,13 +440,17 @@ gkGamma <- function(x, y = NULL,
 #' @rdname ordAssocs
 #' @export
 kendallTauA <- function(x, y = NULL,
-                        conf.level = NA) {
+                        conf.level = NA,
+                        sides = c("two.sided", "left", "right")) {
+
+  sides <- match.arg(sides)
 
   res <- ordAssocs(
     x = x,
     y = y,
     which = "tauA",
-    conf.level = conf.level
+    conf.level = conf.level,
+    sides = sides
   )
 
   .ordAssocResult(res, conf.level)
@@ -385,13 +460,17 @@ kendallTauA <- function(x, y = NULL,
 #' @rdname ordAssocs
 #' @export
 kendallTauB <- function(x, y = NULL,
-                        conf.level = NA) {
+                        conf.level = NA,
+                        sides = c("two.sided", "left", "right")) {
+
+  sides <- match.arg(sides)
 
   res <- ordAssocs(
     x = x,
     y = y,
     which = "tauB",
-    conf.level = conf.level
+    conf.level = conf.level,
+    sides = sides
   )
 
   .ordAssocResult(res, conf.level)
@@ -401,15 +480,15 @@ kendallTauB <- function(x, y = NULL,
 #' @rdname ordAssocs
 #' @export
 stuartTauC <- function(x, y = NULL,
-                       conf.level = NA) {
+                       conf.level = NA,
+                       sides = c("two.sided", "left", "right")) {
 
-  if(length(conf.level) != 1L)
-    stop("'conf.level' must be a single value, or NA")
+  sides <- match.arg(sides)
 
-  if(!is.na(conf.level) &&
-     (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
-    stop("'conf.level' must be a single number in (0, 1), or NA")
-
+  # conf.level is validated once, in ordAssocs() - the copy that used to
+  # stand here said "a single value" where the shared check says "a single
+  # number", so the two wrappers and the parent gave three wordings for
+  # one condition
   if(!is.null(y) && !is.null(dim(x)) && length(dim(x)) > 1L)
     stop("'y' must not be given when 'x' is a contingency table")
 
@@ -417,7 +496,8 @@ stuartTauC <- function(x, y = NULL,
     x = x,
     y = y,
     which = "tauC",
-    conf.level = conf.level
+    conf.level = conf.level,
+    sides = sides
   )
 
   .ordAssocResult(res, conf.level)
@@ -428,24 +508,23 @@ stuartTauC <- function(x, y = NULL,
 #' @export
 somersDelta <- function(x, y = NULL,
                         conf.level = NA,
-                        direction = c("row", "column")) {
+                        sides = c("two.sided", "left", "right"),
+                        direction = c("row", "column")
+                        ) {
 
   direction <- match.arg(direction)
+  sides     <- match.arg(sides)
 
-  if(length(conf.level) != 1L)
-    stop("'conf.level' must be a single value, or NA")
-
-  if(!is.na(conf.level) &&
-     (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1))
-    stop("'conf.level' must be a single number in (0, 1), or NA")
+  # conf.level is validated once, in ordAssocs()
 
   if(is.null(y)) {
 
     res <- ordAssocs(
       x = x,
       which = "somers",
+      direction = direction,
       conf.level = conf.level,
-      direction = direction
+      sides = sides
     )
 
   } else {
@@ -463,7 +542,8 @@ somersDelta <- function(x, y = NULL,
       x = x,
       y = y,
       which = "somers",
-      conf.level = conf.level
+      conf.level = conf.level,
+      sides = sides
     )
   }
 
