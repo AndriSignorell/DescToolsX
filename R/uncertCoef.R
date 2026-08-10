@@ -152,8 +152,8 @@ uncertCoef <- function(x, y = NULL,
   z  <- qnorm(1 - (1 - confAdj)/2)
   ci <- res + c(-1, 1) * z * sqrt(sigma2)
 
-  # the uncertainty coefficient lies in [0, 1]; .applySides() clamps to
+  # the uncertainty coefficient lies in [0, 1]; applySides() clamps to
   # that range and closes the open side there (design_rules.md 4.1)
-  c(est = res, .applySides(ci, sides, lo = 0, hi = 1))
+  c(est = res, applySides(ci, sides, lo = 0, hi = 1))
 
 }

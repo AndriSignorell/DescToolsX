@@ -207,10 +207,10 @@ cramerV <- function(x, y = NULL,
 
   # V lives in [0, 1], so the open side of a one-sided interval is closed
   # at the range boundary rather than at an infinity V can never reach.
-  # .applySides() also clamps the two-sided interval, which the four
+  # applySides() also clamps the two-sided interval, which the four
   # methods can overshoot.
   #    "Cram\u00E9r's association coefficient"
-  c("est" = v, .applySides(ci, sides, lo = 0, hi = 1))
+  c("est" = v, applySides(ci, sides, lo = 0, hi = 1))
 }
 
 

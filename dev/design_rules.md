@@ -905,7 +905,7 @@ really is unbounded, ±`Inf` is used — a relative risk opens upwards to
 Cronbach's alpha to `-Inf` and 1. An interval never claims a value the
 statistic cannot take.
 
-The implementation is `.applySides()`, never hand-written — see §8.1.4.
+The implementation is `applySides()`, never hand-written — see §8.1.4.
 
 ### One-sided level
 
@@ -1402,14 +1402,14 @@ removed.
 
 ### 8.1.4 Applying `sides`
 
-`.applySides(ci, sides, lo, hi)` clamps both bounds to the parameter range
+`applySides(ci, sides, lo, hi)` clamps both bounds to the parameter range
 and opens the side that `sides` leaves open. It is the only implementation;
 hand-written variants produced four different defects across the suite —
 inverted in two functions, ignored after the level adjustment in a third,
 `NA` where a boundary belonged in a fourth.
 
 ```r
-c(est = v, .applySides(ci, sides, lo = 0, hi = 1))
+c(est = v, applySides(ci, sides, lo = 0, hi = 1))
 ```
 
 `NA` bounds survive it, because the ordering check is guarded with
@@ -1468,7 +1468,7 @@ belong in the test suite, not in a one-off script.
 
 - **`auditCI()`** — for every exported function with a `conf.level`
   formal: is `sides` present, is `checkConfLevel` reached, is
-  `.applySides` reached, is the argument order right? It follows the
+  `applySides` reached, is the argument order right? It follows the
   **call graph transitively**, because a wrapper that delegates to a
   parent (`gkGamma` → `ordAssocs`) is correct without having either name
   in its own body. Exception list for functions that deliberately refuse

@@ -164,7 +164,7 @@ contCoef <- function(x, y = NULL,
 
   # 'sides' names the side carrying the FINITE bound; the open side gets
   # probability 0 or 1 and is closed at the range boundary by
-  # .applySides() below. This reads more directly than the doubled-alpha
+  # applySides() below. This reads more directly than the doubled-alpha
   # construction it replaced, but it computes the same thing - that
   # construction was correct, contrary to what an earlier comment here
   # claimed.
@@ -193,7 +193,7 @@ contCoef <- function(x, y = NULL,
   ci <- stats::quantile(bootVals, probs = probs, names = FALSE)
 
   # C runs from 0 to sqrt((m-1)/m), or to 1 after Sakoda's correction -
-  # the one range in the suite that depends on the data. .applySides()
+  # the one range in the suite that depends on the data. applySides()
   # clamps to it and closes the open side there.
-  c(est = cc, .applySides(ci, sides, lo = 0, hi = cMax))
+  c(est = cc, applySides(ci, sides, lo = 0, hi = cMax))
 }

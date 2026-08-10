@@ -250,7 +250,7 @@ oddsRatio.default <- function(
 
   # an odds ratio is bounded below by 0 and unbounded above
   c(est = unname(res[["est"]]),
-    .applySides(unname(res[c("lci", "uci")]), sides, lo = 0, hi = Inf))
+    applySides(unname(res[c("lci", "uci")]), sides, lo = 0, hi = Inf))
   
 }
 
@@ -312,7 +312,7 @@ oddsRatio.glm <- function(
     # per coefficient, so that a model with a single term does not fall
     # through to a length-2 vector
     bounds <- vapply(seq_along(lci),
-                     function(i) .applySides(c(lci[i], uci[i]), sides,
+                     function(i) applySides(c(lci[i], uci[i]), sides,
                                              lo = 0, hi = Inf),
                      numeric(2))
     lci <- bounds[1L, ]
@@ -414,7 +414,7 @@ print.OddsRatio <- function(x, digits = 3, ...) {
 
 # The helpers return a TWO-SIDED interval at the level they are given.
 # Opening the relevant side is the caller's job, in one place, via
-# .applySides() - see oddsRatio.default().
+# applySides() - see oddsRatio.default().
 .oddsRatioWald <- function(
     x,
     conf.level

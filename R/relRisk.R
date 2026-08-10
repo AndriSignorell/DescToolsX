@@ -222,7 +222,7 @@ relRisk <- function(
   # oddsRatio, gmean, hmean and coefVarCI.
   c(
     est = estimate,
-    .applySides(c(ci[["lci"]], ci[["uci"]]), sides, lo = 0, hi = Inf)
+    applySides(c(ci[["lci"]], ci[["uci"]]), sides, lo = 0, hi = Inf)
   )
 
 }

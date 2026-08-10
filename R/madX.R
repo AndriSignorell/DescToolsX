@@ -20,7 +20,7 @@
 #' \code{x} before computation takes place.  If this is not done then an
 #' \code{NA} value in \code{x} will cause \code{madX} to return \code{NA}.
 #' 
-#' \strong{Confidence intervals} \verb{    } are provided by [lumen::madCI()].
+#' Confidence intervals are provided by [lumen::madCI()].
 #' 
 #' @param x a numeric vector
 #' @param weights a numerical vector of weights the same length as \code{x}

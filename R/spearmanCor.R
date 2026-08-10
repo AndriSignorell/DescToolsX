@@ -209,7 +209,7 @@ spearmanCor <- function(x, y = NULL,
   }
   
   # rho is bounded, so the open side is reported at the range boundary -
-  # .applySides() also does the clamping the two lines above used to do
-  c(est = rho, .applySides(ci, sides, lo = -1, hi = 1))
+  # applySides() also does the clamping the two lines above used to do
+  c(est = rho, applySides(ci, sides, lo = -1, hi = 1))
   
 }

@@ -345,7 +345,7 @@ ordAssocs <- function(x, y = NULL,
 
 # == extractors ===============================================================
 
-# Parameter range per measure, for .applySides(). Gamma, the tau family
+# Parameter range per measure, for applySides(). Gamma, the tau family
 # and Somers' D are signed and live in [-1, 1]; the c statistic is a
 # concordance probability and lives in [0, 1]. An unbounded side would
 # claim a value none of them can take.
@@ -378,7 +378,7 @@ ordAssocs <- function(x, y = NULL,
     v <- resAll[[i]]
 
     c(est = unname(v[[1L]]),
-      .applySides(unname(v[2:3]), sides, lo = rng[[1L]], hi = rng[[2L]]))
+      applySides(unname(v[2:3]), sides, lo = rng[[1L]], hi = rng[[2L]]))
   })
 
   names(out) <- nms

@@ -120,7 +120,7 @@ test_that("conf.level is validated through the shared helper", {
 
 test_that("a zero cell still gives the limiting Yule bounds", {
 
-  # logOR is infinite here; the explicit limits must survive .applySides()
+  # logOR is infinite here; the explicit limits must survive applySides()
   z <- as.table(rbind(c(10, 0), c(5, 8)))
 
   q <- yuleQ(z, conf.level = 0.95)

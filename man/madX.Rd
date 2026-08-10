@@ -55,7 +55,7 @@ If \code{na.rm} is \code{TRUE} then \code{NA} values are stripped from
 \code{x} before computation takes place.  If this is not done then an
 \code{NA} value in \code{x} will cause \code{madX} to return \code{NA}.
 
-\strong{Confidence intervals} \verb{    } are provided by \code{\link[lumen:madCI]{lumen::madCI()}}.
+Confidence intervals are provided by \code{\link[lumen:madCI]{lumen::madCI()}}.
 }
 \examples{
 

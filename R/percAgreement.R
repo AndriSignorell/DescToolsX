@@ -152,9 +152,9 @@ percAgreement <- function(x, y = NULL,
     confAdj <- if (sides == "two.sided") conf.level else 2 * conf.level - 1
     tcrit   <- qt(1 - (1 - confAdj) / 2, df = n - 1)
 
-    # a proportion of agreement lies in [0, 1] - .applySides() clamps to
+    # a proportion of agreement lies in [0, 1] - applySides() clamps to
     # that range and closes the open side there
-    ci <- .applySides(Po + c(-1, 1) * tcrit * se, sides, lo = 0, hi = 1)
+    ci <- applySides(Po + c(-1, 1) * tcrit * se, sides, lo = 0, hi = 1)
   }
 
   res <- c(est = Po, ci)

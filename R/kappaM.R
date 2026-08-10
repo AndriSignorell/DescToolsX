@@ -236,8 +236,8 @@ kappaM <- function(x,
 
   # Kappa lies in [-1, 1]. The Wald interval can leave that range, and the
   # open side of a one-sided interval belongs at the boundary rather than
-  # at an infinity kappa cannot reach - .applySides() does both.
-  ci <- .applySides(c(lci, uci), sides, lo = -1, hi = 1)
+  # at an infinity kappa cannot reach - applySides() does both.
+  ci <- applySides(c(lci, uci), sides, lo = -1, hi = 1)
 
   .makeEstimateResult(
     est = res$est,

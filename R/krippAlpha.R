@@ -211,7 +211,7 @@ krippAlpha <- function(x,
     
     # the estimate comes from the full sample, never from the bootstrap
     ci <- c(est = alpha,
-            .applySides(unname(boot[c("lci", "uci")]), sides,
+            applySides(unname(boot[c("lci", "uci")]), sides,
                         lo = -1, hi = 1))
     
   } else {

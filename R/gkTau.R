@@ -193,10 +193,10 @@ gkTau <- function(x, y = NULL,
     pr2 <- 1 - (1 - confAdj)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
     # tau is a proportional-reduction-in-error measure and lives in
-    # [0, 1] - .applySides() clamps to that range and closes the open
+    # [0, 1] - applySides() clamps to that range and closes the open
     # side of a one-sided interval there instead of at an infinity tau
     # cannot reach
-    res <- c(est = est, .applySides(ci, sides, lo = 0, hi = 1))
+    res <- c(est = est, applySides(ci, sides, lo = 0, hi = 1))
   }
   
   return(res)

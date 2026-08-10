@@ -167,8 +167,8 @@ tukeyBiweight <- function(x,
     stop("tbrm_boot_cpp() did not return the expected 'est'/'lci'/'uci' vector.")
 
   # unbounded location estimator, so the open side really is infinite -
-  # .applySides() is used all the same, so that every function in the suite
+  # applySides() is used all the same, so that every function in the suite
   # opens its interval in one place
   c(est = raw[["est"]],
-    .applySides(c(raw[["lci"]], raw[["uci"]]), sides, lo = -Inf, hi = Inf))
+    applySides(c(raw[["lci"]], raw[["uci"]]), sides, lo = -Inf, hi = Inf))
 }

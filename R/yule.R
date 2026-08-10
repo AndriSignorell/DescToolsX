@@ -162,6 +162,6 @@ yuleY <- function(x, y = NULL,
   upper <- if(is.finite(logOR) && is.finite(se)) tanh((logOR + z*se)/divisor) else  1
 
   # Q and Y are tanh of something, so they live in [-1, 1]
-  c(est = est, .applySides(c(lower, upper), sides, lo = -1, hi = 1))
+  c(est = est, applySides(c(lower, upper), sides, lo = -1, hi = 1))
 
 }

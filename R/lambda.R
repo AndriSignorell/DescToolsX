@@ -226,10 +226,10 @@ lambda <- function(x, y = NULL,
 
     # Lambda lies in [0, 1], so the open side of a one-sided interval
     # belongs at that boundary and not at +/-Inf (design_rules.md 4.1, as
-    # decided for cohenKappa). .applySides() also does the clamping the
+    # decided for cohenKappa). applySides() also does the clamping the
     # pmin/pmax above used to do - one implementation for the whole
     # family instead of a hand-written copy per function.
-    res <- c(est = res, .applySides(ci, sides, lo = 0, hi = 1))
+    res <- c(est = res, applySides(ci, sides, lo = 0, hi = 1))
 
   }
   
