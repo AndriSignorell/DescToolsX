@@ -405,22 +405,16 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
                cat("\n")
              },
              "2" = {
-               cat(sprintf(
-                 "\nContingency Coeff.     %.3f\nCramer's V             %.3f\nKendall Tau-b          %.3f\n",
-                 x$assocs[1, 1],
-                 x$assocs[2, 1],
-                 x$assocs[3, 1]
-               ))
                cat("\n")
+               printCharMatrix(fm(x$assocs[1:3, 1], 3))
+               cat("\n")
+               
              },
              "3" = {
                cat("\n")
-               txt <- capture.output(
-                        x$assocs |> fm(fmt="num.sty", naForm="-  ") |> 
-                          as.data.frame() |> print(print.gap=2)
-                      )
-               txt[1] <- paste(txt[1], footnote, sep = "")
-               cat(txt, sep = "\n")
+                 print(fm(as.data.frame(x$assocs),
+                          fmt="num.sty", naForm = "-  "),
+                       print.gap=3)
              }
       )
       

@@ -2,14 +2,31 @@
 % Please edit documentation in R/hoeffdingD.R
 \name{hoeffdingD}
 \alias{hoeffdingD}
-\title{Hoeffding's D Statistic (Fast Computation)}
+\title{Hoeffding's D Statistic}
 \usage{
-hoeffdingD(x, y, jitter = FALSE, eps = NULL, seed = NULL)
+hoeffdingD(
+  x,
+  y,
+  engine = c("fast", "exact"),
+  R = 999,
+  jitter = FALSE,
+  eps = NULL,
+  seed = NULL,
+  output = c("def", "test")
+)
 }
 \arguments{
 \item{x}{numeric vector}
 
 \item{y}{numeric vector with the same length as \code{x}}
+
+\item{engine}{character string selecting the algorithm:
+\code{"fast"} (default) or \code{"exact"}. Both compute the same
+quantity; on data without ties they agree to floating point accuracy.
+With ties they differ - see Details.}
+
+\item{R}{number of permutations used for the test of independence. Only
+used when \code{output = "test"}; defaults to 999.}
 
 \item{jitter}{logical. If \code{TRUE}, small random noise is added to
 \strong{both} \code{x} and \code{y} to break ties. This is useful when
@@ -24,6 +41,11 @@ variance cannot be jittered and raises an error.}
 \code{jitter = TRUE}. The state of R's random number generator is
 restored afterwards, so passing a seed does not disturb the calling
 session.}
+
+\item{output}{output format, either \code{"def"} (default), which returns
+the statistic, or \code{"test"}, which returns an object of class
+\code{"htest"} with a permutation P value for the hypothesis of
+independence.}
 }
 \value{
 numeric scalar containing Hoeffding's D statistic on the
@@ -38,29 +60,87 @@ is the scale \code{Hmisc::hoeffd()} reports. The two differ by exactly
 the factor 30, so results are comparable only after accounting for it.
 }
 \description{
-Computes Hoeffding's D statistic for testing independence between two variables
-using an efficient \eqn{O(n \log n)} algorithm based on rank statistics and
-Fenwick trees (Even-Zohar & Leng, 2020).
+Computes Hoeffding's D statistic for testing independence between two
+variables. Two algorithms are available: an \eqn{O(n \log n)} one based on
+rank statistics and Fenwick trees (Even-Zohar & Leng, 2020), and the
+classical \eqn{O(n^2)} one, which is slower but handles ties exactly.
 }
 \details{
-This implementation is substantially faster than classical \eqn{O(n^2)} approaches
-and yields results numerically identical to those from \code{Hmisc::hoeffd()}
-for continuous data without ties.
+\subsection{Choice of engine}{
+\code{engine = "fast"} runs in \eqn{O(n \log n)} and is what makes six-figure
+sample sizes practical. It needs a strict ordering and therefore assumes no
+ties; with tied values it is biased, and the size of the bias grows with the
+number of ties.
 
-The algorithm requires a strict ordering of the data and therefore assumes
-no ties. If ties are present and \code{jitter = FALSE}, a warning is issued
-and results may be biased.
+\code{engine = "exact"} is the classical formulation of Hollander and Wolfe.
+It resolves ties through midranks and the fractional counts \eqn{Q_i}, so it
+is exact for tied data - the same quantity \code{Hmisc::hoeffd()} reports.
+It costs \eqn{O(n^2)} time, which is a few milliseconds at \eqn{n = 1000}
+and roughly a second at \eqn{n = 10000}.
+
+On data without ties the two agree to floating point accuracy, so the
+choice only matters when ties are present. Then there are three options,
+in descending order of preference: \code{engine = "exact"} answers the
+question exactly, \code{jitter = TRUE} answers it approximately but
+quickly, and doing neither answers a slightly different question. Only the
+last one is a mistake.
+}
+
+\subsection{Ties and jittering}{
+\code{jitter = TRUE} breaks ties by adding small random noise, which makes
+the fast engine applicable at the cost of a small random perturbation of
+the result. It applies to the fast engine only; with
+\code{engine = "exact"} it is unnecessary and is refused rather than
+silently ignored.
+}
+
+\subsection{Test of independence}{
+\code{output = "test"} returns an \code{"htest"} object carrying a
+permutation P value for the null hypothesis that \eqn{x} and \eqn{y} are
+independent. Under that hypothesis every pairing of the two samples is
+equally likely, so the null distribution is obtained by recomputing the
+statistic on \code{R} random pairings. The P value is
+\eqn{(1 + \#\{D^* \ge D\}) / (R + 1)}, which is never exactly zero - with
+\code{R} permutations no evidence stronger than \eqn{1/(R+1)} has been
+gathered, and reporting 0 would claim otherwise.
+
+The permutation route was chosen over the tabulated asymptotic
+distribution on purpose: it needs neither a table nor a scaling constant,
+it is exact by construction, and it costs \code{R} evaluations of a
+statistic that is fast - which is the whole point of the fast engine.
+With \code{engine = "exact"} the permutations are applied to \code{y}
+itself, so the tie structure of both variables is preserved and the null
+distribution belongs to the same tied data.
+}
+
+\subsection{Why there is no confidence interval}{
+D is a U-statistic whose kernel is degenerate exactly under independence
+and non-degenerate otherwise. Away from independence
+\eqn{\sqrt{n}(\hat{D} - D)} is asymptotically normal and an interval is in
+principle available. At \eqn{D = 0} the limit is not a normal
+distribution but a weighted sum of chi-squares (Blum, Kiefer and
+Rosenblatt, 1961), and the variance of the first-order projection
+vanishes - so an interval built on the non-degenerate asymptotics
+collapses precisely where most data sit.
+
+The obvious escape does not work either. For a degenerate U-statistic the
+ordinary bootstrap is not consistent; a valid resampling scheme has to be
+built on the second-order term of the Hoeffding decomposition (Arcones
+and Gine, 1992). A percentile or BCa interval from the usual machinery
+would therefore be serviceable for strongly dependent data and wrong
+exactly at independence, which is the one place a reader would look.
+
+What is well founded here is the test, and that is what
+\code{output = "test"} provides. An interval over the first-order
+projection could be constructed for data that are clearly far from
+independence, but it is deliberately not offered: its coverage cannot be
+relied on in the situation the statistic is most often used for.
+}
 
 Missing values are an error rather than a silent approximation:
 \code{\link{order}} and \code{\link{rank}} place \code{NA}s at the end
 by default, which yields a formally valid permutation and hence a number
 that looks like an answer. Remove or impute them before calling.
-
-Setting \code{jitter = TRUE} resolves ties by adding small random noise,
-yielding a fast and practical approximation.
-
-In contrast, \code{Hmisc::hoeffd()} handles ties via midranks but uses a
-slower algorithm.
 }
 \section{Random number generation}{
 
@@ -79,11 +159,23 @@ hoeffdingD(x, y)
 
 # with ties
 y2 <- round(y, 1)
-hoeffdingD(x, y2)                # warning
-hoeffdingD(x, y2, jitter = TRUE) # recommended
+hoeffdingD(x, y2)                        # warning: the fast engine is biased
+hoeffdingD(x, y2, engine = "exact")      # exact, and the recommended answer
+hoeffdingD(x, y2, jitter = TRUE)         # fast approximation
 
-# perfect monotone dependence is 1 on this scale
+# without ties the two engines agree
+all.equal(hoeffdingD(x, y),
+          hoeffdingD(x, y, engine = "exact"))
+
+# perfect monotone dependence is 1 on this scale, antitone likewise
 hoeffdingD(1:50, (1:50)^3)
+hoeffdingD(1:50, 50:1)
+
+# test of independence - the quadratic relation is invisible to
+# correlation but not to D
+set.seed(3)
+hoeffdingD(x, y, output = "test")
+cor.test(x, y)$p.value
 
 }
 \references{
@@ -92,6 +184,14 @@ Fast computation of Hoeffding's D statistic.
 
 Hollander, M., Wolfe, D. A. and Chicken, E. (2013).
 Nonparametric Statistical Methods (3rd ed.).
+
+Blum, J. R., Kiefer, J. and Rosenblatt, M. (1961).
+Distribution free tests of independence based on the sample distribution
+function. \emph{Annals of Mathematical Statistics} \bold{32}, 485-498.
+
+Arcones, M. A. and Gine, E. (1992).
+On the bootstrap of U and V statistics.
+\emph{Annals of Statistics} \bold{20}, 655-674.
 }
 \seealso{
 \code{\link{spearmanCor}}, \code{\link{kendallTauB}}

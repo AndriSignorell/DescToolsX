@@ -85,15 +85,6 @@ values, \code{NA} is returned. If \code{na.rm = TRUE}, complete cases are
 used. Infinite values carry no comparable convention - they leave the
 moments undefined and are rejected with an error.
 }
-\section{Random number generation}{
-
-\code{method = "boot"} draws bootstrap resamples and therefore depends on
-the state of R's global random number generator. No seed is set
-internally; the global RNG state advances normally as resamples are
-drawn. Call \code{\link[base]{set.seed}} beforehand for reproducible
-results.
-}
-
 \examples{
 set.seed(123)
 
