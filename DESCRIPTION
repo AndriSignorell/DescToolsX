@@ -1,12 +1,12 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.939
+Version: 0.0.0.940
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
          role = c("aut", "cre"),
          comment = c(ORCID = "0000-0003-4311-1969")),
-  person("R-Core"                          , role = c("ctb")),
+  person("R Core Team"                     , role = c("ctb")),
   person("Andreas"       , "Alfons"        , role = c("ctb")),
   person("Nanina"        , "Anderegg"      , role = c("ctb")),
   person("Antonio"                         , role = c("ctb")),
@@ -64,7 +64,7 @@ Suggests:
     MASS, rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
     survival, pons, dbscan, prettyunits
 Remotes:  
-    AndriSignorell/bedrock, AndriSignorell/pharos, AndriSignorell/lumen
+    AndriSignorell/bedrock, AndriSignorell/pharos, AndriSignorell/lumen, AndriSignorell/pons
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/
