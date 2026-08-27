@@ -10,3 +10,4 @@
 Rplots.pdf
 desktop\.ini$
 ^dev$
+^\.github$

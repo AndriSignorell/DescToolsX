@@ -970,10 +970,12 @@ exemption list in §3.4 and in the exception list of `auditCI()`.
 
 Plot functions follow this order:
 
+
 ```text
 DATA
 LABELS
 AXES
+STATISTICS
 STRUCTURE
 STYLE
 FEATURES
@@ -986,12 +988,23 @@ FRAMEWORK
 | DATA | `x`, possibly `y` |
 | LABELS | `main`, `xlab`, `ylab` |
 | AXES | `xlim`, `ylim` |
+| STATISTICS | `nBins`, `conf.level`, `method`, `metric`, `threshold` |
 | STRUCTURE | `cluster`, `order`, `groups`, `gap`, `items` |
-| STYLE | `col`, `lwd`, `pch`, `bg`, `grid`, `box` |
-| FEATURES | `legend`, `text`, `connlines`, `labels` |
+| STYLE | `col`, `lwd`, `pch`, `bg`, `border`, `grid`, `box` |
+| FEATURES | `legend`, `text`, `labels`, `smooth`, `rug` |
 | FRAMEWORK | `stamp` |
 
-STRUCTURE arguments must never contain graphical style parameters. Colors always belong to STYLE.
+STATISTICS-Argumente bestimmen, **was gerechnet wird**, bevor irgendetwas
+gezeichnet wird. Sie stehen vor STRUCTURE, weil ein Plot ohne die Rechnung
+keine Struktur hat, die man ordnen könnte. Innerhalb der Gruppe gilt die
+Reihenfolge aus §4.1: erst was die Grösse definiert (`nBins`, `metric`),
+dann die Inferenz (`conf.level`, `method`).
+
+Die Regel aus §4.1, dass `method` erst mit dem zweiten Verfahren
+erscheint, gilt hier unverändert. `plotBinnedResid()` hat zwei Bandtypen
+und trägt deshalb `method = c("model", "empirical")`; `plotCalibration()`
+hat einen und trägt keins.
+
 
 
 ## 4.3 General Utility Functions
@@ -1495,6 +1508,43 @@ re-sync of the other. It moved to bedrock instead, which shortens the sync
 list rather than lengthening it.
 
 
+### 8.1.8 Bands in plot functions
+
+A plot function may take `conf.level` **without** `sides`. This is the one
+place where §4.1's "wherever an interval exists, both of its ends can be
+asked for separately" does not apply, and the reason is that the object on
+screen is not an interval for a parameter:
+
+- `plotBinnedResid()` draws a band around **zero**, the reference value
+  under the model. It is symmetric by construction; a one-sided version
+  would have no reading, because a mean residual is evidence against the
+  model in either direction.
+- `plotQQ()`'s `cband` and `lines.loess()`'s `bandArgs` are the same shape:
+  a pointwise band around a curve, consumed as a level and nothing else.
+
+The distinction is not "plot vs. statistic". A plot function that reports
+an interval for a parameter — a forest plot of odds ratios, say — takes
+`sides` like any other. What decides it is whether the drawn band is an
+interval for something estimated, or a reference region for something
+assumed.
+
+Consequences, both binding:
+
+- `conf.level` still goes through `checkConfLevel()` (§8.1.3). The
+  validation is shared even where `sides` is not.
+- `auditCI()` collects every exported function with a `conf.level` formal
+  and asserts that `sides` is present. These functions belong on its
+  exception list, together with the reason, in the same place as the
+  `alternative` cases of §4.1:
+
+```r
+.auditCIExceptions <- c(
+  # bands around a reference value, not intervals for a parameter (§8.1.8)
+  "plotBinnedResid", "plotCalibration", "plotQQ",
+  ...
+)
+```
+
 
 ## 8.2 Numerical Behavior
 
@@ -1804,17 +1854,24 @@ ignores `par()`.
 
 ## 9.7 Dispatching `plot.Desc.*` Methods
 
-`plot.Desc.*` S3 methods (one per `Desc` subclass) typically live in
-`pharos`, not in `DescToolsX` where the `Desc` classes themselves are
-constructed, because they require `pharos`'s internal plotting helpers
-(9.2) which cannot be used from outside `pharos`'s namespace. See
-3.1.1.1 for the resulting export requirements - this is the most common
-case where the `@rawNamespace export()` pattern is needed.
+`plot.Desc.*` S3 methods (one per `Desc` subclass) live in `pharos`,
+not in `DescToolsX` where the `Desc` classes themselves are constructed.
+The original reason was technical — the framework helpers of 9.2 were
+internal to `pharos` and unusable from outside. They are exported as of
+2026-08 (see `?graphics-framework`), so the constraint is gone and the
+placement is now a deliberate choice: `pharos` owns the graphics layer,
+and a plot method belongs to the layer that draws it rather than to the
+one that computes the object. See 3.1.1.1 for the resulting export
+requirements — this is the most common case where the
+`@rawNamespace export()` pattern is needed.
 
-Selecting multiple panels via `which = c(...)` never implies an internal
-layout decision (no `mfrow` is ever set by the function itself).
-Arranging multiple panels on one device (`par(mfrow = c(2, 1))` or
-similar) is left entirely to the caller.
+The same reasoning places the model diagnostics of `alloy` in `alloy`:
+they need a fitted model far more specifically than they need a canvas.
+A plot function outside `pharos` uses the exported helpers and is bound
+by 9.1-9.5 exactly as an internal one is.
+
+
+
 
 ---
 
@@ -2528,6 +2585,16 @@ Superseded a flat, pre-redesign taxonomy (`data.manipulation`, `data.inspection`
 | `roc` | roc, bestCut, confint.roc |
 | `tree` | bestTree, cParam, leafRates, node, rules, splits, plot.rpart |
 | `data.split` | splitTrainTest |
+
+
+**alloy**
+
+| Family | Contents |
+|---|---|
+| `modelling` | `fitMod`, `predict.FitMod`, `print.FitMod`, `plot.FitMod` |
+| `model.metrics` | `auc`, `brierScore`, `cStat`, prediction error |
+| `roc` | `roc`, `confint.roc`, `bestCut` |
+| `model.selection` | `drop1`-Varianten, `vif`, stepwise helpers |
 
 
 ## 12.3 `@concept`

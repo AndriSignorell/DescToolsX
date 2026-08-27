@@ -178,6 +178,7 @@ Other contributors:
   \item Harold C. Doran [contributor]
   \item Romain Francois [contributor]
   \item Matthias Gamer [contributor]
+  \item Vilmantas Gegzna [contributor]
   \item Rob J. Hyndman [contributor]
   \item Max Kuhn [contributor]
   \item Jim Lemon [contributor]
@@ -204,8 +205,6 @@ Other contributors:
   \item Daniel Wollschlaeger [contributor]
   \item Joseph Wood [contributor]
   \item Achim Zeileis [contributor]
-  \item OpenAI Codex (AI-assisted code and documentation review; all suggestions reviewed by the maintainer) [contributor]
-  \item Anthropic Claude (AI-assisted code and documentation review; all suggestions reviewed by the maintainer) [contributor]
 }
 
 }

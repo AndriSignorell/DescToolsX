@@ -37,7 +37,16 @@ c("%[]%", "%[)%") %in% getNamespaceExports("bedrock")   # sollte TRUE TRUE geben
 
 pkgdown::build_site()
 pkgdown::build_reference_index()
-pkgdown::build_favicons()
+pkgdown::build_favicons(overwrite=TRUE)
+
+pkgdown::build_home()
+pkgdown::build_site()
+usethis::use_pkgdown_github_pages()
+
+
+
+
+
 
 # hard CRAN check
 rhub::rhub_check()
@@ -47,7 +56,7 @@ spdf <- function(x){
   callr::rcmd("Rd2pdf",
               c("--no-preview", "--force", 
                 gettextf("--output=%s.pdf", x),
-                gettextf("man/%s.Rd",x),
+                gettextf("%s/man/%s.Rd", getwd(), x),
               show = TRUE))
   }
 

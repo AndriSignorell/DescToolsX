@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.938
+Version: 0.0.0.939
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -44,11 +44,7 @@ Authors@R: c(
   person("Gregory R."    , "Warnes"        , role = c("ctb")),
   person("Daniel"        , "Wollschlaeger" , role = c("ctb")),
   person("Joseph"        , "Wood"          , role = c("ctb")),
-  person("Achim"         , "Zeileis"       , role = c("ctb")),
-  person("OpenAI Codex",  role = c("ctb"), 
-    comment = "AI-assisted code and documentation review; all suggestions reviewed by the maintainer"),
-  person("Anthropic Claude", role = c("ctb"),
-    comment = "AI-assisted code and documentation review; all suggestions reviewed by the maintainer")
+  person("Achim"         , "Zeileis"       , role = c("ctb"))
  )
 Description: Provides a collection of functions for descriptive statistics, 
     data analysis, and statistical testing. The package is a redesigned and 
@@ -67,6 +63,8 @@ Suggests:
     goftest, testthat (>= 3.0.0), R.rsp, readr, vegan, VGAM, nnet,
     MASS, rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
     survival, pons, dbscan, prettyunits
+Remotes:  
+    AndriSignorell/bedrock, AndriSignorell/pharos, AndriSignorell/lumen
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/
