@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.940
+Version: 0.0.0.941
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -46,10 +46,18 @@ Authors@R: c(
   person("Joseph"        , "Wood"          , role = c("ctb")),
   person("Achim"         , "Zeileis"       , role = c("ctb"))
  )
-Description: Provides a collection of functions for descriptive statistics, 
-    data analysis, and statistical testing. The package is a redesigned and 
-    streamlined successor to DescTools, with a focus on improved consistency, 
-    performance, and maintainability.
+Description: Offers a broad toolkit for describing, summarising and
+    exploring data: frequency and contingency tables, measures of
+    location, dispersion, shape and concentration, association and
+    agreement coefficients, effect sizes, and metrics for evaluating
+    classifiers. A single desc() generic dispatches on the type of the
+    input, so univariate, bivariate and whole-data-frame descriptions
+    are reached through one consistent entry point. The package is a
+    redesigned successor to 'DescTools', with a uniform lowerCamelCase
+    API, stricter argument conventions and performance critical parts
+    written in C++. It builds on 'bedrock', 'pharos' and 'lumen', which
+    supply the base utilities, the graphics and the inferential
+    machinery respectively.
 Encoding: UTF-8
 Depends: R (>= 4.6.0),
     pharos, lumen, bedrock

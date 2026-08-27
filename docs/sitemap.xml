@@ -9,7 +9,7 @@
 <url><loc>/reference/Association.html</loc></url>
 <url><loc>/reference/as_ym.html</loc></url>
 <url><loc>/reference/atkinson.html</loc></url>
-<url><loc>/reference/attachAliases.html</loc></url>
+<url><loc>/reference/attach-detach-aliases.html</loc></url>
 <url><loc>/reference/auc.html</loc></url>
 <url><loc>/reference/blandAltmanData.html</loc></url>
 <url><loc>/reference/boxCox.html</loc></url>
@@ -32,6 +32,7 @@
 <url><loc>/reference/cramerV.html</loc></url>
 <url><loc>/reference/cronbachAlpha.html</loc></url>
 <url><loc>/reference/cStat.html</loc></url>
+<url><loc>/reference/cut.integer.html</loc></url>
 <url><loc>/reference/cutAge.html</loc></url>
 <url><loc>/reference/cutQ.html</loc></url>
 <url><loc>/reference/date-time-predicates.html</loc></url>
@@ -47,7 +48,6 @@
 <url><loc>/reference/desc.table.html</loc></url>
 <url><loc>/reference/desc.ts.html</loc></url>
 <url><loc>/reference/DescToolsX.html</loc></url>
-<url><loc>/reference/detachAliases.html</loc></url>
 <url><loc>/reference/divCoef.html</loc></url>
 <url><loc>/reference/entropy.html</loc></url>
 <url><loc>/reference/etaSq.html</loc></url>
@@ -59,7 +59,6 @@
 <url><loc>/reference/freq2D.html</loc></url>
 <url><loc>/reference/generation.html</loc></url>
 <url><loc>/reference/gini.html</loc></url>
-<url><loc>/reference/gkGamma.html</loc></url>
 <url><loc>/reference/gkTau.html</loc></url>
 <url><loc>/reference/glassDelta.html</loc></url>
 <url><loc>/reference/gmean.html</loc></url>
@@ -76,8 +75,6 @@
 <url><loc>/reference/isConfusionTable.html</loc></url>
 <url><loc>/reference/kappaM.html</loc></url>
 <url><loc>/reference/keepSig.html</loc></url>
-<url><loc>/reference/kendallTauA.html</loc></url>
-<url><loc>/reference/kendallTauB.html</loc></url>
 <url><loc>/reference/kendallW.html</loc></url>
 <url><loc>/reference/krippAlpha.html</loc></url>
 <url><loc>/reference/kurt.html</loc></url>
@@ -99,6 +96,7 @@
 <url><loc>/reference/nmse.html</loc></url>
 <url><loc>/reference/normalizeToConfusion.html</loc></url>
 <url><loc>/reference/oddsRatio.html</loc></url>
+<url><loc>/reference/ordAssocs.html</loc></url>
 <url><loc>/reference/outlier.html</loc></url>
 <url><loc>/reference/pabak.html</loc></url>
 <url><loc>/reference/pearsonCor.html</loc></url>
@@ -115,15 +113,11 @@
 <url><loc>/reference/rmse.html</loc></url>
 <url><loc>/reference/rosenbluth.html</loc></url>
 <url><loc>/reference/scaleX.html</loc></url>
-<url><loc>/reference/sensX.html</loc></url>
 <url><loc>/reference/setDescToolsXOption.html</loc></url>
 <url><loc>/reference/simpson.html</loc></url>
 <url><loc>/reference/skew.html</loc></url>
 <url><loc>/reference/smape.html</loc></url>
-<url><loc>/reference/somersDelta.html</loc></url>
 <url><loc>/reference/spearmanCor.html</loc></url>
-<url><loc>/reference/specX.html</loc></url>
-<url><loc>/reference/stuartTauC.html</loc></url>
 <url><loc>/reference/theil.html</loc></url>
 <url><loc>/reference/time-conversions.html</loc></url>
 <url><loc>/reference/tOne.html</loc></url>

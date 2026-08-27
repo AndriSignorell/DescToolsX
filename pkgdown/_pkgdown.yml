@@ -1,4 +1,241 @@
-url: https://andrisignorell.github.io/DescToolsX/
-template:
-  bootstrap: 5
+home:
+  title: DescToolsX
+  description: Descriptive statistics and exploratory data analysis for the DescToolsX ecosystem
 
+destination: docs
+
+development:
+  mode: auto
+
+template:
+  default_assets: true
+  bootstrap: 5
+  bootswatch: flatly
+
+navbar:
+  structure:
+    left:  [version, home, reference, articles, news]
+    right: [github]
+  components:
+    version:
+      icon: fa-book
+      menu:
+      - text: "Documentation for version of package:"
+      - text: Released
+        href: https://andrisignorell.github.io/DescToolsX/
+      - text: In-development
+        href: https://andrisignorell.github.io/DescToolsX/dev/
+    articles:
+      text: Tutorials
+      menu:
+      - text: "PDF:"
+      - text: Tables in R
+        href: https://github.com/AndriSignorell/DescToolsX/blob/main/vignettes/TablesInR.pdf
+
+# About package ==============================================================
+reference:
+- title: Package Overview & Interfaces
+  desc: >
+    Package overview, shared interfaces, constants, options, and documentation tools.
+  contents:
+  # package.overview -- Package entry point and convenience aliases
+  - DescToolsX
+  - attach-detach-aliases
+  # package.interfaces -- Shared function interfaces
+  - Agreement
+  - Association
+  - ConfidenceIntervals
+  - Formulas
+  # package.utilities -- Constants, concepts, and options
+  - concepts
+  - constants
+  - setDescToolsXOption
+
+- title: Describing Data & Tables
+  desc: >
+    Compact inspection, descriptive summaries, and one- and two-dimensional tables.
+  contents:
+  # data.inspect -- Compact inspection and general description
+  - abstract
+  - desc
+  # data.describe -- Type-specific and bivariate descriptions
+  - desc.Date
+  - desc.factor
+  - desc.nn
+  - desc.nq
+  - desc.numeric
+  - desc.qn
+  - desc.qq
+  - desc.ts
+  # data.print -- Specialized print methods
+  - print.Desc.Date
+  - print.Desc.qq
+  # tables.frequency -- Frequency and percentage tables
+  - expFreq
+  - freq
+  - freq2D
+  - percTable
+  - tOne
+
+- title: Location, Dispersion & Shape
+  desc: >
+    Classical, weighted, robust, and nonlinear descriptive statistics.
+  contents:
+  # location -- Measures of location
+  - gmean
+  - hmean
+  - hodgesLehmann
+  - huberM
+  - meanX
+  - medianX
+  - modeX
+  - tukeyBiweight
+  # dispersion -- Measures of spread and uncertainty
+  - coefVar
+  - iqrX
+  - madX
+  - meanAD
+  - meanSE
+  - rangeX
+  - varX
+  # distribution.shape -- Quantiles, extremes, skewness, and kurtosis
+  - extremes
+  - kurt
+  - quantileX
+  - skew
+
+- title: Association & Correlation
+  desc: >
+    Nominal, ordinal, and continuous association measures and supporting tools.
+  contents:
+  # assoc.nominal -- Nominal association
+  - contCoef
+  - cramerV
+  - gkTau
+  - lambda
+  - mutInf
+  - phi
+  - tschuprowT
+  - uncertCoef
+  - yule
+  # assoc.ordinal -- Ordinal association and concordance
+  - conDisPairs
+  - kendallW
+  - ordAssocs
+  # assoc.continuous -- Correlation and general dependence
+  - corPart
+  - corPolychor
+  - findCorrX
+  - hoeffdingD
+  - keepSig
+  - pearsonCor
+  - spearmanCor
+
+- title: Agreement & Reliability
+  desc: >
+    Agreement measures, reliability coefficients, rater data, and supporting tools.
+  contents:
+  # agreement.method -- Method comparison and concordance
+  - blandAltmanData
+  - ccc
+  - print.BlandAltman
+  # agreement.categorical -- Categorical and multirater agreement
+  - cohenKappa
+  - kappaM
+  - krippAlpha
+  - pabak
+  - percAgreement
+  - randolphKappa
+  # agreement.reliability -- Reliability and internal consistency
+  - cronbachAlpha
+  - icc
+  # agreement.data -- Rater and coincidence-table helpers
+  - isConfusionTable
+  - normalizeToConfusion
+  - raterFrame
+
+- title: Effect Sizes & Binary Outcomes
+  desc: >
+    Standardized effects, ANOVA effects, odds ratios, and relative risks.
+  contents:
+  # effect.size -- Continuous and ANOVA effect sizes
+  - cohenD
+  - etaSq
+  - glassDelta
+  # binary.outcome -- Binary effect measures
+  - cohenH
+  - oddsRatio
+  - relRisk
+
+- title: Inequality, Diversity & Concentration
+  desc: >
+    Inequality curves and indices, diversity, entropy, and concentration measures.
+  contents:
+  # inequality -- Inequality and concentration indices
+  - atkinson
+  - gini
+  - herfindahl
+  - lc
+  - rosenbluth
+  - theil
+  # diversity -- Diversity and information measures
+  - divCoef
+  - entropy
+  - simpson
+
+- title: Classification & Model Evaluation
+  desc: >
+    Classification metrics, calibration, discrimination, and prediction-error measures.
+  contents:
+  # model.classification -- Confusion matrices and discrimination
+  - auc
+  - conf
+  - cStat
+  # model.calibration -- Probabilistic calibration
+  - brierScore
+  # model.error -- Prediction-error measures
+  - mae
+  - mape
+  - mse
+  - nmae
+  - nmse
+  - rmse
+  - smape
+
+- title: Transformations, Missing Data & Outliers
+  desc: >
+    Binning, transformations, imputation, scaling, and outlier detection.
+  contents:
+  # data.binning -- Cutting and categorizing variables
+  - cut.integer
+  - cutAge
+  - cutQ
+  # data.transform -- Power transforms and scaling
+  - boxCox
+  - boxCoxLambda
+  - logSt
+  - scaleX
+  - yeoJohnson
+  # data.impute -- Missing-value imputation
+  - impute
+  - imputeKnn
+  # data.outlier -- Outlier detection
+  - lof
+  - outlier
+
+- title: Dates & Time
+  desc: >
+    Date classes, calendar arithmetic, extraction, conversion, and categorization.
+  contents:
+  # date.classes -- Date classes and predicates
+  - as_ym
+  - date-time-predicates
+  # date.arithmetic -- Calendar arithmetic and work days
+  - addMonths
+  - countWorkDays
+  # date.components -- Date-time components and conversions
+  - date_functions
+  - time-conversions
+  # date.categories -- Calendar-based categorization
+  - generation
+  - zodiac

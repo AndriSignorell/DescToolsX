@@ -1,398 +1,150 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
-# 📊 DescToolsX
-
-**Version:** 0.0.0.912\
-**Title:** Tools for Descriptive Statistics -- New Generation\
-**License:** GPL (≥ 2)
+# 📦 DescToolsX <img src="man/figures/logo.png" align="right" height="139" alt="DescToolsX logo" />
 
 <!-- badges: start -->
-
-[![R-CMD-check](https://github.com/AndriSignorell/DescToolsX/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AndriSignorell/DescToolsX/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/DescToolsX)](https://CRAN.R-project.org/package=DescToolsX)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 <!-- badges: end -->
 
-# Tools for Descriptive Statistics and Exploratory Data Analysis
-
-[DescTools](https://cran.r-project.org/web/packages/DescTools/) has been
-available on CRAN for more than 12 years and has undergone a large
-number of changes and additions during that time. In this timespan the
-package gained impressive popularity and was downloaded a million times
-in 2025. However its historical development has led to inconsistencies
-that could no longer be resolved through an evolutionary process. It was
-time to redesign the package to establish a clean new foundation.
-
-![](man/figures/timeToMove.png)
-
-**DescToolsX** is the successor to DescTools, completely redesigned,
-decluttered, simplified, bugfixed, unified and substantially
-accelerated.
-
-The DescTools collection of functions has been reviewed, reorganised and
-grouped into logical units, with particular attention paid to
-consistency in operation and user interface design. The new approach
-moves away from the monolithic design of DescTools, which had recently
-made maintenance so difficult. The functions are now distributed across
-several packages, which are, however, loaded directly alongside the main
-package, so the user does not need to do anything further.
-
-## 📦 The DescToolsX ecosystem consists of:
-
-**DescToolsX** is the front-end package that automatically loads:
-
-- 🪨 **[bedrock](https://github.com/AndriSignorell/bedrock/)**  
-  → Core utility functions used across all packages
-
-- 🌌 **[pharos](https://github.com/AndriSignorell/pharos/)**  
-  → Plotting, colour handling, and formatting tools
-
-- 💡 **[lumen](https://github.com/AndriSignorell/lumen/)**  
-  → Inferential statistics (tests, confidence intervals, distributions)
-
-- 📨 **[pons](https://github.com/AndriSignorell/pons/)**  
-  → MS Office interface and reporting tools
-
+**Title:** Tools for Descriptive Statistics — New Generation\
+**License:** GPL (≥ 2)
 
 ## 🧩 Overview
 
-`DescToolsX` provides a modern, redesigned framework for:
+`DescToolsX` is the descriptive-statistics layer of the **DescToolsX
+ecosystem** and the redesigned successor to `DescTools`. It collects the
+routines needed to describe, summarise and explore data before any model
+is fitted: frequency and contingency tables, measures of location,
+dispersion, shape and concentration, association and agreement
+coefficients, effect sizes, and metrics for evaluating classifiers.
 
--   descriptive statistics
--   effect sizes
--   agreement measures
--   association statistics
--   transformations
--   model diagnostics
--   inequality metrics
--   epidemiological utilities
--   robust statistics
--   date/time utilities
+A single `desc()` generic dispatches on the type of the input, so a
+numeric vector, a factor, a pair of variables or a whole data frame are
+all described through the same entry point.
 
-The package emphasizes:
-
--   improved consistency
--   cleaner APIs
--   better performance
--   maintainability
--   modern R infrastructure
-
-It depends on the companion ecosystem packages:
-
--   `pharos`
--   `lumen`
--   `bedrock`
--   `pons`
-
-fileciteturn4file0
-
-------------------------------------------------------------------------
+📖 **Documentation:** <https://andrisignorell.github.io/DescToolsX/>
 
 ## ⚙️ Installation
+
+``` r
+install.packages("DescToolsX")
+```
+
+Or the development version from GitHub:
 
 ``` r
 remotes::install_github("AndriSignorell/DescToolsX")
 ```
 
-------------------------------------------------------------------------
+## 📚 Core Features
 
-# 📚 Main Function Categories
+### 🔹 Describing Data
 
-------------------------------------------------------------------------
+-   `desc()` — one generic, dispatching on vector, factor, date,
+    numeric pair, table or data frame
+-   `abstract()` — compact structure of a data frame including labels
+-   `freq()`, `freq2D()`, `percTable()`, `expFreq()` — frequency and
+    contingency tables
+-   `tOne()` — "table one" style summaries
 
-## 📈 Descriptive Statistics
+### 🔹 Location, Dispersion and Shape
 
-Core descriptive statistics utilities:
+-   `meanX()`, `medianX()`, `modeX()`, `quantileX()`, `rangeX()`
+-   `gmean()`, `hmean()`, `huberM()`, `tukeyBiweight()`,
+    `hodgesLehmann()`
+-   `varX()`, `madX()`, `iqrX()`, `meanAD()`, `meanSE()`, `coefVar()`
+-   `skew()`, `kurt()`
 
--   `desc()`
--   `abstract()`
--   `freq()`
--   `freq2D()`
--   `percTable()`
--   `quantileX()`
--   `meanX()`
--   `medianX()`
--   `modeX()`
--   `varX()`
--   `skew()`
--   `kurt()`
+### 🔹 Association and Correlation
 
-Example:
+-   Nominal: `cramerV()`, `contCoef()`, `phi()`, `tschuprowT()`,
+    `lambda()`, `uncertCoef()`, `gkTau()`, `yule()`
+-   Ordinal: `ordAssocs()`, `conDisPairs()`, `kendallW()`
+-   Continuous: `pearsonCor()`, `spearmanCor()`, `corPart()`,
+    `corPolychor()`, `hoeffdingD()`, `findCorrX()`
+-   `Association()` — common interface across the measures
 
-``` r
-desc(mtcars)
-abstract(mtcars)
-```
+### 🔹 Agreement and Reliability
 
-------------------------------------------------------------------------
+-   `cohenKappa()`, `kappaM()`, `randolphKappa()`, `krippAlpha()`
+-   `icc()`, `ccc()`, `percAgreement()`, `pabak()`, `raterFrame()`
+-   `cronbachAlpha()`, `blandAltmanData()`
+-   `Agreement()` — common interface across the measures
 
-## 📊 Effect Sizes
+### 🔹 Effect Sizes
 
-Includes classical effect size statistics:
+-   `cohenD()`, `cohenH()`, `glassDelta()`, `etaSq()`
 
--   `cohenD()`
--   `glassDelta()`
--   `etaSq()`
+### 🔹 Model and Classifier Metrics
 
-Example:
+-   `auc()`, `cStat()`, `brierScore()`
+-   `mae()`, `mape()`, `mse()`, `rmse()`, `nmae()`, `nmse()`, `smape()`
+-   `isConfusionTable()`, `normalizeToConfusion()`
+-   `oddsRatio()`, `relRisk()`
 
-``` r
-cohenD(x, y, conf.level = 0.95)
-```
+### 🔹 Inequality and Diversity
 
-------------------------------------------------------------------------
+-   `gini()`, `atkinson()`, `theil()`, `lc()` (Lorenz curve)
+-   `herfindahl()`, `rosenbluth()`, `simpson()`, `divCoef()`
+-   `entropy()`, `mutInf()`
 
-## 🤝 Agreement & Reliability
+### 🔹 Dates and Time
 
-Advanced inter-rater and reliability statistics:
+-   `addMonths()`, `as_ym()`, `countWorkDays()`, `generation()`,
+    `zodiac()`
+-   date predicates and conversions, `cutAge()`
 
--   `cohenKappa()`
--   `ccc()` -- concordance correlation coefficient
--   `cronbachAlpha()`
--   `icc()`
--   `kendallW()`
--   `krippAlpha()`
--   `randolphKappa()`
+### 🔹 Transformation, Binning and Missing Values
 
-Useful for:
+-   `boxCox()`, `boxCoxLambda()`, `yeoJohnson()`, `logSt()`, `scaleX()`
+-   `cutQ()`, `cut.integer()`
+-   `impute()`, `imputeKnn()`
+-   `outlier()`, `extremes()`, `lof()`
 
--   clinical agreement studies
--   reliability analysis
--   psychometrics
--   medical validation studies
+## 🚀 Design Principles
 
-------------------------------------------------------------------------
+-   **Consistent** — lowerCamelCase API and uniform argument
+    conventions across the whole DescToolsX suite
+-   **Fast** — performance-critical routines implemented in Rcpp and
+    RcppArmadillo
+-   **Generic** — S3 generics with methods for vectors, factors,
+    matrices, tables, and data frames
+-   **Robust** — validated inputs, informative errors, extensive
+    testthat coverage
 
-## 🔗 Association Measures
-
-Nominal and ordinal association metrics:
-
--   `cramerV()`
--   `phi()`
--   `lambda()`
--   `somersDelta()`
--   `gkGamma()`
--   `kendallTauA()`
--   `kendallTauB()`
--   `stuartTauC()`
--   `tschuprowT()`
--   `uncertCoef()`
--   `mutInf()`
-
-Wrapper function:
-
-``` r
-assocs(table_data)
-```
-
-------------------------------------------------------------------------
-
-## 📉 Inequality & Diversity Metrics
-
-Includes metrics from economics and ecology:
-
--   `gini()`
--   `atkinson()`
--   `theil()`
--   `simpson()`
--   `entropy()`
--   `herfindahl()`
--   `rosenbluth()`
-
-Example:
-
-``` r
-gini(income)
-atkinson(income, epsilon = 0.5)
-```
-
-------------------------------------------------------------------------
-
-## 🔄 Transformations
-
-Data transformation tools:
-
--   `boxCox()`
--   `boxCoxLambda()`
--   `yeoJohnson()`
--   `scaleX()`
--   `logSt()`
-
-Example:
-
-``` r
-lambda <- boxCoxLambda(x)
-x_bc <- boxCox(x, lambda)
-```
-
-------------------------------------------------------------------------
-
-## 🧪 Model Diagnostics & Performance
-
-Regression and predictive diagnostics:
-
--   `auc()`
--   `brierScore()`
--   `pseudoR2()`
--   `vif()`
-
-Error metrics:
-
--   `mae()`
--   `mse()`
--   `rmse()`
--   `mape()`
--   `smape()`
-
-------------------------------------------------------------------------
-
-## 📅 Date & Time Utilities
-
-Convenient helpers:
-
--   `addMonths()`
--   `as_ym()`
--   `countWorkDays()`
--   `cutAge()`
--   `generation()`
--   `zodiac()`
-
-Example:
-
-``` r
-addMonths("2025-01-31", 1)
-```
-
-------------------------------------------------------------------------
-
-## 🧠 Robust Statistics
-
-Robust estimators and resistant methods:
-
--   `huberM()`
--   `tukeyBiweight()`
--   `hodgesLehmann()`
--   `madX()`
--   `meanAD()`
-
-------------------------------------------------------------------------
-
-## 🧰 Utility Functions
-
-Additional utilities include:
-
--   imputation tools (`impute()`, `imputeKnn()`)
--   confusion matrix utilities
--   correlation tools
--   contingency analysis
--   weighted statistics
--   scaling helpers
--   date conversions
-
-------------------------------------------------------------------------
-
-# 🚀 Design Philosophy
-
-DescToolsX was designed to modernize the original DescTools package
-while preserving:
-
--   statistical breadth
--   practical workflows
--   lightweight usage
--   compatibility with base R
-
-Key improvements include:
-
--   consistent naming conventions
--   modular architecture
--   improved documentation
--   vectorized implementations
--   cleaner confidence interval handling
--   modern package ecosystem integration
-
-------------------------------------------------------------------------
-
-# 📦 Dependencies
-
-Core dependencies include:
-
--   `Rcpp`
--   `RcppParallel`
--   `RcppArmadillo`
--   `stats`
--   `boot`
--   `cli`
--   `stringi`
-
-Companion ecosystem:
-
--   `pharos`
--   `bedrock`
--   `lumen`
--   `pons`
-
-------------------------------------------------------------------------
-
-# 🧪 Example Workflow
+## 🧪 Example
 
 ``` r
 library(DescToolsX)
 
-# descriptive statistics
+# one generic for very different inputs
+desc(iris$Sepal.Length)
+desc(iris$Species)
 desc(iris)
 
-# effect size
-cohenD(
-  iris$Sepal.Length[iris$Species == "setosa"],
-  iris$Sepal.Length[iris$Species == "virginica"]
-)
+# frequency table with cumulative columns
+freq(iris$Species)
 
-# agreement
-cohenKappa(matrix(c(50,5,4,40), nrow=2))
+# association between two factors
+cramerV(table(mtcars$cyl, mtcars$gear))
 
-# inequality
-gini(c(1,2,3,10))
-
-# transformations
-lambda <- boxCoxLambda(AirPassengers)
+# effect size and confidence interval
+cohenD(mpg ~ am, data = mtcars)
 ```
 
-------------------------------------------------------------------------
+## 🧱 The Suite
 
-# 🌐 Documentation
+`DescToolsX` builds on `bedrock` (base utilities), `pharos` (graphics)
+and `lumen` (tests, confidence intervals, distributions). `alloy`
+(modelling), `pons` (MS-Office) and `swissValet` (RStudio addins)
+complete the family.
 
--   Website:\
-    https://andrisignorell.github.io/DescToolsX/
+## 🙏 Acknowledgements
 
--   GitHub:\
-    https://github.com/AndriSignorell/DescToolsX
+Parts of the code and documentation were reviewed with the help of large
+language models (OpenAI Codex, Anthropic Claude). Every suggestion was
+assessed, edited and verified by the maintainer, who remains solely
+responsible for the content of this package.
 
--   Issues:\
-    https://github.com/AndriSignorell/DescToolsX/issues
-
-------------------------------------------------------------------------
-
-# 📖 Notes
-
-`DescToolsX` is not merely a direct port of `DescTools`.\
-It is a structural redesign emphasizing:
-
--   clearer statistical APIs
--   long-term maintainability
--   separation into ecosystem modules
--   improved computational performance
--   better consistency across functions
-
-------------------------------------------------------------------------
-
-# 📜 License
+## 📜 License
 
 GPL (≥ 2)
-
-------------------------------------------------------------------------
-
-# 📎 Source
-
-Based on package documentation from the uploaded
-`DescToolsX_0.0.0.912.pdf`. 
-

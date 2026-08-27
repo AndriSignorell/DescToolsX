@@ -166,7 +166,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item R-Core [contributor]
+  \item R Core Team [contributor]
   \item Andreas Alfons [contributor]
   \item Nanina Anderegg [contributor]
   \item Antonio [contributor]
