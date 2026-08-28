@@ -59,7 +59,7 @@
 #'             
 #' @importFrom grDevices dev.flush dev.hold
 #' 
-#' @importFrom utils readRegistry head tail capture.output object.size str combn find getAnywhere lsf.str write.table getFromNamespace stack browseURL help.search modifyList getS3method
+#' @importFrom utils head tail capture.output object.size str combn find getAnywhere lsf.str write.table getFromNamespace stack browseURL help.search modifyList getS3method
 #'             
 #' @importFrom bedrock %)(% %[]% abind combPairs maxDigits setNamesX label naIf naReplace isZero isWholeLike isDichotomous %][% pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg recycle checkConfLevel checkFlag applySides
 #'             
