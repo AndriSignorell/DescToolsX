@@ -1,0 +1,235 @@
+# Hoeffding's D Statistic
+
+Computes Hoeffding's D statistic for testing independence between two
+variables. Two algorithms are available: an \\O(n \log n)\\ one based on
+rank statistics and Fenwick trees (Even-Zohar & Leng, 2020), and the
+classical \\O(n^2)\\ one, which is slower but handles ties exactly.
+
+## Usage
+
+``` r
+hoeffdingD(
+  x,
+  y,
+  engine = c("fast", "exact"),
+  R = 999,
+  jitter = FALSE,
+  eps = NULL,
+  seed = NULL,
+  output = c("def", "test")
+)
+```
+
+## Arguments
+
+- x:
+
+  numeric vector
+
+- y:
+
+  numeric vector with the same length as `x`
+
+- engine:
+
+  character string selecting the algorithm: `"fast"` (default) or
+  `"exact"`. Both compute the same quantity; on data without ties they
+  agree to floating point accuracy. With ties they differ - see Details.
+
+- R:
+
+  number of permutations used for the test of independence. Only used
+  when `output = "test"`; defaults to 999.
+
+- jitter:
+
+  logical. If `TRUE`, small random noise is added to **both** `x` and
+  `y` to break ties. This is useful when the data contain ties, since
+  the fast algorithm assumes continuous data.
+
+- eps:
+
+  optional numeric half-width of the uniform jitter noise, which is
+  drawn from \\U(-eps, eps)\\. Defaults to `1e-10` times the standard
+  deviation of the affected variable. A variable with zero variance
+  cannot be jittered and raises an error.
+
+- seed:
+
+  optional integer random seed for reproducibility when `jitter = TRUE`.
+  The state of R's random number generator is restored afterwards, so
+  passing a seed does not disturb the calling session.
+
+- output:
+
+  output format, either `"def"` (default), which returns the statistic,
+  or `"test"`, which returns an object of class `"htest"` with a
+  permutation P value for the hypothesis of independence.
+
+## Value
+
+numeric scalar containing Hoeffding's D statistic on the conventional
+scale: 1 under perfect monotone or antitone dependence, 0 under
+independence, with a lower bound that approaches \\-0.5\\ for large
+\\n\\ (for \\n = 7\\ the minimum over all permutations is \\-0.26\\).
+
+Note that the raw statistic of Hollander and Wolfe lies in \\\[-1/60,
+1/30\]\\; this function returns 30 times that value, which is the scale
+`Hmisc::hoeffd()` reports. The two differ by exactly the factor 30, so
+results are comparable only after accounting for it.
+
+## Details
+
+### Choice of engine
+
+`engine = "fast"` runs in \\O(n \log n)\\ and is what makes six-figure
+sample sizes practical. It needs a strict ordering and therefore assumes
+no ties; with tied values it is biased, and the size of the bias grows
+with the number of ties.
+
+`engine = "exact"` is the classical formulation of Hollander and Wolfe.
+It resolves ties through midranks and the fractional counts \\Q_i\\, so
+it is exact for tied data - the same quantity `Hmisc::hoeffd()` reports.
+It costs \\O(n^2)\\ time, which is a few milliseconds at \\n = 1000\\
+and roughly a second at \\n = 10000\\.
+
+On data without ties the two agree to floating point accuracy, so the
+choice only matters when ties are present. Then there are three options,
+in descending order of preference: `engine = "exact"` answers the
+question exactly, `jitter = TRUE` answers it approximately but quickly,
+and doing neither answers a slightly different question. Only the last
+one is a mistake.
+
+### Ties and jittering
+
+`jitter = TRUE` breaks ties by adding small random noise, which makes
+the fast engine applicable at the cost of a small random perturbation of
+the result. It applies to the fast engine only; with `engine = "exact"`
+it is unnecessary and is refused rather than silently ignored.
+
+### Test of independence
+
+`output = "test"` returns an `"htest"` object carrying a permutation P
+value for the null hypothesis that \\x\\ and \\y\\ are independent.
+Under that hypothesis every pairing of the two samples is equally
+likely, so the null distribution is obtained by recomputing the
+statistic on `R` random pairings. The P value is \\(1 + \\\\D^\* \ge
+D\\) / (R + 1)\\, which is never exactly zero - with `R` permutations no
+evidence stronger than \\1/(R+1)\\ has been gathered, and reporting 0
+would claim otherwise.
+
+The permutation route was chosen over the tabulated asymptotic
+distribution on purpose: it needs neither a table nor a scaling
+constant, it is exact by construction, and it costs `R` evaluations of a
+statistic that is fast - which is the whole point of the fast engine.
+With `engine = "exact"` the permutations are applied to `y` itself, so
+the tie structure of both variables is preserved and the null
+distribution belongs to the same tied data.
+
+### Why there is no confidence interval
+
+D is a U-statistic whose kernel is degenerate exactly under independence
+and non-degenerate otherwise. Away from independence
+\\\sqrt{n}(\hat{D} - D)\\ is asymptotically normal and an interval is in
+principle available. At \\D = 0\\ the limit is not a normal distribution
+but a weighted sum of chi-squares (Blum, Kiefer and Rosenblatt, 1961),
+and the variance of the first-order projection vanishes - so an interval
+built on the non-degenerate asymptotics collapses precisely where most
+data sit.
+
+The obvious escape does not work either. For a degenerate U-statistic
+the ordinary bootstrap is not consistent; a valid resampling scheme has
+to be built on the second-order term of the Hoeffding decomposition
+(Arcones and Gine, 1992). A percentile or BCa interval from the usual
+machinery would therefore be serviceable for strongly dependent data and
+wrong exactly at independence, which is the one place a reader would
+look.
+
+What is well founded here is the test, and that is what
+`output = "test"` provides. An interval over the first-order projection
+could be constructed for data that are clearly far from independence,
+but it is deliberately not offered: its coverage cannot be relied on in
+the situation the statistic is most often used for.
+
+Missing values are an error rather than a silent approximation:
+[`order`](https://rdrr.io/r/base/order.html) and
+[`rank`](https://rdrr.io/r/base/rank.html) place `NA`s at the end by
+default, which yields a formally valid permutation and hence a number
+that looks like an answer. Remove or impute them before calling.
+
+## Random number generation
+
+`jitter = TRUE` draws from R's random number generator and therefore
+advances it, unless `seed` is supplied - in which case the previous
+state is restored.
+
+## References
+
+Even-Zohar, C. and Leng, C. (2020). Fast computation of Hoeffding's D
+statistic.
+
+Hollander, M., Wolfe, D. A. and Chicken, E. (2013). Nonparametric
+Statistical Methods (3rd ed.).
+
+Blum, J. R., Kiefer, J. and Rosenblatt, M. (1961). Distribution free
+tests of independence based on the sample distribution function. *Annals
+of Mathematical Statistics* **32**, 485-498.
+
+Arcones, M. A. and Gine, E. (1992). On the bootstrap of U and V
+statistics. *Annals of Statistics* **20**, 655-674.
+
+## See also
+
+[`spearmanCor`](spearmanCor.md), [`kendallTauB`](ordAssocs.md)
+
+Other assoc.continuous: [`corPart()`](corPart.md),
+[`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),
+[`keepSig()`](keepSig.md), [`pearsonCor()`](pearsonCor.md),
+[`spearmanCor()`](spearmanCor.md)
+
+## Examples
+
+``` r
+set.seed(1)
+x <- rnorm(200)
+y <- x^2 + rnorm(200)
+
+# fast computation
+hoeffdingD(x, y)
+#> [1] 0.04085651
+
+# with ties
+y2 <- round(y, 1)
+hoeffdingD(x, y2)                        # warning: the fast engine is biased
+#> Warning: Ties detected. The fast algorithm assumes continuous data.
+#> Use engine = "exact" for the exact answer, or jitter = TRUE for a fast approximation; otherwise expect bias.
+#> [1] 0.04011628
+hoeffdingD(x, y2, engine = "exact")      # exact, and the recommended answer
+#> [1] 0.03990635
+hoeffdingD(x, y2, jitter = TRUE)         # fast approximation
+#> [1] 0.04034609
+
+# without ties the two engines agree
+all.equal(hoeffdingD(x, y),
+          hoeffdingD(x, y, engine = "exact"))
+#> [1] TRUE
+
+# perfect monotone dependence is 1 on this scale, antitone likewise
+hoeffdingD(1:50, (1:50)^3)
+#> [1] 1
+hoeffdingD(1:50, 50:1)
+#> [1] 1
+
+# test of independence - the quadratic relation is invisible to
+# correlation but not to D
+set.seed(3)
+hoeffdingD(x, y, output = "test")
+#> 
+#>  Hoeffding's test of independence (fast, permutation, R = 999)
+#> 
+#> data:  x and y
+#> D = 0.040857, n = 200, R = 999, p-value = 0.001
+#> 
+cor.test(x, y)$p.value
+#> [1] 0.05920861
+```

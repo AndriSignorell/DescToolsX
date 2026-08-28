@@ -1,0 +1,91 @@
+# Local Outlier Factor
+
+Computes the local outlier factor (LOF) of Breunig et al. (2000) for
+each observation. The LOF compares the local density around an
+observation with the densities around its `k` nearest neighbours, so
+that an observation in a sparse region surrounded by dense ones scores
+high even when it is not globally extreme.
+
+## Usage
+
+``` r
+lof(x, k)
+```
+
+## Arguments
+
+- x:
+
+  a numeric matrix or data frame, observations in rows.
+
+- k:
+
+  the number of neighbours defining the local neighbourhood, not
+  counting the observation itself.
+
+## Value
+
+a numeric vector with the local outlier factor of each observation, in
+the order of the rows of `x`.
+
+## Details
+
+Scores near 1 indicate that the density around the observation matches
+that of its neighbours. Substantially larger values indicate a locally
+sparse neighbourhood and thus an outlier; the user decides on the
+threshold, as its scale depends on the data. Values below 1 arise in
+unusually dense regions and are not normally of interest.
+
+The computation uses [`lof`](https://rdrr.io/pkg/dbscan/man/lof.html)
+from the dbscan package, which builds a kd-tree and therefore scales to
+large data. Note that its `minPts` counts the observation itself,
+whereas `k` here counts neighbours only, following Breunig et al.; the
+translation `minPts = k + 1` is applied internally.
+
+Duplicated observations need care. Where an observation has more than
+`k` exact duplicates, every neighbour distance is zero, the local
+reachability density is infinite and the LOF is formally \\0/0\\. dbscan
+reports 1 in that case, on the grounds that the coincident points
+already supply enough density for the observation not to be an outlier.
+Breunig et al. instead assume genuine duplicates have been removed
+beforehand; do that if you need results matching the paper exactly.
+
+Note that the infinite density is not confined to the duplicates
+themselves. Any observation that has one of them among its own `k`
+neighbours inherits an infinite score, so a block of duplicates lying
+inside the data can render its whole surroundings `Inf`. This follows
+from the definition rather than from the implementation, and is a
+further reason to remove exact duplicates first.
+
+Only complete observations can be scored, since the distances are
+otherwise undefined.
+
+## References
+
+Breunig, M. M., Kriegel, H.-P., Ng, R. T., & Sander, J. (2000). LOF:
+Identifying density-based local outliers. *Proceedings of the ACM SIGMOD
+International Conference on Management of Data*, 93-104.
+[doi:10.1145/335191.335388](https://doi.org/10.1145/335191.335388)
+
+## See also
+
+[`lof`](https://rdrr.io/pkg/dbscan/man/lof.html)
+
+## Examples
+
+``` r
+# \donttest{
+if(requireNamespace("dbscan", quietly = TRUE)) {
+
+  res <- lof(iris[, -5], k = 10)
+
+  # the ten most outlying observations
+  head(order(res, decreasing = TRUE), 10)
+
+  # scores near 1 are unremarkable, large ones are not
+  summary(res)
+}
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>  0.9539  0.9904  1.0325  1.0978  1.1454  2.1783 
+# }
+```
