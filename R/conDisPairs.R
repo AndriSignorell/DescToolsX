@@ -89,12 +89,13 @@
 #' comparisons, which is where a straightforward implementation stops being
 #' usable.
 #'
-#' Vector mode instead sweeps the observations in the order of \eqn{x} and
-#' keeps a two-dimensional Fenwick tree (binary indexed tree) over the ranks
-#' seen so far. Each new observation is answered with a range query rather
-#' than a scan, which brings the total to \eqn{O(n \log^2 n)}. The
-#' difference is not a constant factor: it is what makes six-figure sample
-#' sizes a matter of a moment instead of a coffee break.
+#' Vector mode sorts the observations by \eqn{x} and processes equal
+#' \eqn{x} values in blocks. A one-dimensional Fenwick tree (binary indexed
+#' tree) over the compressed ranks of \eqn{y} counts smaller and larger
+#' preceding values in \eqn{O(\log n)} time per observation. The resulting
+#' complexity is \eqn{O(n \log n)} time and \eqn{O(n)} memory. The difference
+#' is not a constant factor: it is what makes six-figure sample sizes a matter
+#' of a moment instead of a coffee break.
 #'
 #' Table mode uses the cumulative-sum identity over the table and is
 #' \eqn{O(r c)} in the table's dimensions, independent of \eqn{n}.
@@ -263,4 +264,3 @@ conDisPairs <- function(x, y = NULL){
   
   return(res)
 }
-

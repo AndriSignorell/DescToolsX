@@ -13,7 +13,7 @@ ordinal data is built on."><meta property="og:image" content="/logo.png"></head>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.941</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.944</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,12 +136,13 @@ observations in a 4x5 table cost the same as a hundred.</p>
 \(O(n^2)\) - a hundred thousand observations are five billion
 comparisons, which is where a straightforward implementation stops being
 usable.</p>
-<p>Vector mode instead sweeps the observations in the order of \(x\) and
-keeps a two-dimensional Fenwick tree (binary indexed tree) over the ranks
-seen so far. Each new observation is answered with a range query rather
-than a scan, which brings the total to \(O(n \log^2 n)\). The
-difference is not a constant factor: it is what makes six-figure sample
-sizes a matter of a moment instead of a coffee break.</p>
+<p>Vector mode sorts the observations by \(x\) and processes equal
+\(x\) values in blocks. A one-dimensional Fenwick tree (binary indexed
+tree) over the compressed ranks of \(y\) counts smaller and larger
+preceding values in \(O(\log n)\) time per observation. The resulting
+complexity is \(O(n \log n)\) time and \(O(n)\) memory. The difference
+is not a constant factor: it is what makes six-figure sample sizes a matter
+of a moment instead of a coffee break.</p>
 <p>Table mode uses the cumulative-sum identity over the table and is
 \(O(r c)\) in the table's dimensions, independent of \(n\).</p>
 <p>Both are implemented in C++ and return exact integer counts - no
@@ -200,7 +201,7 @@ Wiley.</p>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">2e5</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu">conDisPairs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    user  system elapsed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   17.81   61.34   83.64 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   17.38   62.28   84.88 </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

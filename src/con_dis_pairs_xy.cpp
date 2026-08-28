@@ -3,8 +3,6 @@
 
 #include <Rcpp.h>
 #include <vector>
-#include <unordered_map>
-#include <set>
 #include <algorithm>
 #include <cmath>
 #include <random>
@@ -14,32 +12,24 @@ using namespace std;
 
 
 
-// 2D Binary Indexed Tree (Fenwick Tree)
-struct BIT2D {
-  int size_x, size_y;
-  vector<vector<int>> tree;
-  
-  BIT2D(int sx, int sy) : size_x(sx), size_y(sy), tree(sx + 2, vector<int>(sy + 2, 0)) {}
-  
-  void update(int x, int y, int val) {
-    for (int i = x + 1; i <= size_x + 1; i += i & -i)
-      for (int j = y + 1; j <= size_y + 1; j += j & -j)
-        tree[i][j] += val;
+// 1D Binary Indexed Tree (Fenwick tree) over compressed y ranks.
+struct BIT1D {
+  int n;
+  vector<int> tree;
+
+  explicit BIT1D(int n_) : n(n_), tree(n_ + 1, 0) {}
+
+  void add(int i) {
+    for (++i; i <= n; i += i & -i)
+      ++tree[i];
   }
-  
-  int query(int x, int y) const {
-    int sum = 0;
-    for (int i = x + 1; i > 0; i -= i & -i){
-      for (int j = y + 1; j > 0; j -= j & -j){
-        sum += tree[i][j];
-      }
-    }  
-    return sum;
-  }
-  
-  int query_range(int x1, int y1, int x2, int y2) const {
-    return query(x2, y2) - query(x1 - 1, y2)
-    - query(x2, y1 - 1) + query(x1 - 1, y1 - 1);
+
+  // Number of inserted points with rank <= i. For i = -1 this is zero.
+  int sum(int i) const {
+    int res = 0;
+    for (++i; i > 0; i -= i & -i)
+      res += tree[i];
+    return res;
   }
 };
 
@@ -56,126 +46,132 @@ struct ConcordanceResult {
 
 
 // =============================================================
-// Pure indexed concordance - 
-//          special version working for parallel calculations
+// Pure indexed concordance.
+// This version also accepts repeated indices from parallel bootstraps.
 // =============================================================
 
 ConcordanceResult conDisPairsXY_indexed(const vector<double>& x,
                                         const vector<double>& y,
                                         const vector<int>& idx) {
-  
-  int n = idx.size();
-  
+
+  const int n = (int)idx.size();
+
   vector<pair<double,double>> valid_pairs;
   valid_pairs.reserve(n);
-  
+
   for (int i = 0; i < n; ++i) {
-    double xi = x[idx[i]];
-    double yi = y[idx[i]];
-    
-    if (!std::isnan(xi) && !std::isnan(yi)) {
+    const double xi = x[idx[i]];
+    const double yi = y[idx[i]];
+
+    if (!std::isnan(xi) && !std::isnan(yi))
       valid_pairs.emplace_back(xi, yi);
-    }
   }
-  
-  set<double> x_set, y_set;
+
+  // Coordinate compression using contiguous vectors instead of trees and
+  // hash maps. Only the ranks are needed by the sweep below.
+  vector<double> xs, ys;
+  xs.reserve(valid_pairs.size());
+  ys.reserve(valid_pairs.size());
+
   for (auto& p : valid_pairs) {
-    x_set.insert(p.first);
-    y_set.insert(p.second);
+    xs.push_back(p.first);
+    ys.push_back(p.second);
   }
-  
-  unordered_map<double, int> x_map, y_map;
-  
-  int idxc = 0;
-  for (double v : x_set) x_map[v] = idxc++;
-  int x_size = idxc;
-  
-  idxc = 0;
-  for (double v : y_set) y_map[v] = idxc++;
-  int y_size = idxc;
-  
+
+  sort(xs.begin(), xs.end());
+  xs.erase(unique(xs.begin(), xs.end()), xs.end());
+
+  sort(ys.begin(), ys.end());
+  ys.erase(unique(ys.begin(), ys.end()), ys.end());
+
+  const int y_size = (int)ys.size();
+
   vector<pair<int,int>> points;
   points.reserve(valid_pairs.size());
-  
-  unordered_map<int,int> count_x;
-  unordered_map<int,int> count_y;
-  unordered_map<long long,int> count_xy;
-  
+
+  vector<long long> count_y(y_size, 0);
+
   for (auto& p : valid_pairs) {
-    int xi = x_map[p.first];
-    int yi = y_map[p.second];
-    
+    const int xi = (int)(lower_bound(xs.begin(), xs.end(), p.first) -
+                         xs.begin());
+    const int yi = (int)(lower_bound(ys.begin(), ys.end(), p.second) -
+                         ys.begin());
+
     points.emplace_back(xi, yi);
-    
-    count_x[xi]++;
-    count_y[yi]++;
-    long long key = ((long long)xi << 32) | yi;
-    count_xy[key]++;
+    ++count_y[yi];
   }
-  
+
   sort(points.begin(), points.end());
-  
-  BIT2D bit(x_size, y_size);
-  
+
+  // Sweep in x order. Equal x values are queried as one block and inserted
+  // only afterwards, so every point already in the tree has strictly smaller
+  // x. A smaller y is concordant and a larger y is discordant.
+  BIT1D bit(y_size);
+
   long long C = 0, D = 0;
-  
-  for (size_t i = 0; i < points.size(); ++i) {
-    int xi = points[i].first;
-    int yi = points[i].second;
-    
-    int concordant =
-      bit.query_range(0, 0, xi - 1, yi - 1) +
-      bit.query_range(xi + 1, yi + 1, x_size - 1, y_size - 1);
-    
-    int discordant =
-      bit.query_range(0, yi + 1, xi - 1, y_size - 1) +
-      bit.query_range(xi + 1, 0, x_size - 1, yi - 1);
-    
-    C += concordant;
-    D += discordant;
-    
-    bit.update(xi, yi, 1);
+  size_t i = 0;
+
+  while (i < points.size()) {
+    size_t j = i;
+    while (j < points.size() && points[j].first == points[i].first)
+      ++j;
+
+    const long long inserted = (long long)bit.sum(y_size - 1);
+
+    for (size_t k = i; k < j; ++k) {
+      const int yi = points[k].second;
+      C += (long long)bit.sum(yi - 1);
+      D += inserted - (long long)bit.sum(yi);
+    }
+
+    for (size_t k = i; k < j; ++k)
+      bit.add(points[k].second);
+
+    i = j;
   }
-  
-  long long Ties_X = 0, Ties_Y = 0;
-  
-  for (auto& kv : count_x) {
-    long long g = kv.second;
-    Ties_X += g * (g - 1) / 2;
-  }
-  
-  for (auto& kv : count_y) {
-    long long g = kv.second;
-    Ties_Y += g * (g - 1) / 2;
-  }
-  
-  // The joint ties are subtracted from both marginal counts, so Ties_X
-  // and Ties_Y come out EXCLUSIVE - tied in x only, tied in y only. The
-  // correction is the count of pairs tied in both, and it is the fifth
-  // number of the partition:
+
+  // Marginal tie counts are inclusive. Subtracting the joint ties makes
+  // Ties_X and Ties_Y exclusive, as required by the five-part partition:
   //
   //   C + D + Ties_X + Ties_Y + Ties_XY = n(n-1)/2
-  //
-  // It used to be computed here and then dropped, while the R side asked
-  // for five names - which produced a fifth element NA under the name NA,
-  // and an NA from sum() over the result of every vector-mode call.
-  long long Ties_XY = 0;
-  
-  for (auto& kv : count_xy) {
-    long long g = kv.second;
-    long long corr = g * (g - 1) / 2;
-    Ties_X  -= corr;
-    Ties_Y  -= corr;
-    Ties_XY += corr;
+
+  long long ties_x_inclusive = 0;
+  long long ties_y_inclusive = 0;
+  long long ties_xy = 0;
+
+  i = 0;
+  while (i < points.size()) {
+    size_t j = i;
+    while (j < points.size() && points[j].first == points[i].first)
+      ++j;
+
+    const long long nx = (long long)(j - i);
+    ties_x_inclusive += nx * (nx - 1) / 2;
+
+    size_t k = i;
+    while (k < j) {
+      size_t l = k;
+      while (l < j && points[l].second == points[k].second)
+        ++l;
+
+      const long long nxy = (long long)(l - k);
+      ties_xy += nxy * (nxy - 1) / 2;
+      k = l;
+    }
+
+    i = j;
   }
-  
+
+  for (long long ny : count_y)
+    ties_y_inclusive += ny * (ny - 1) / 2;
+
   ConcordanceResult res;
-  res.C = C;
-  res.D = D;
-  res.Ties_X = Ties_X;
-  res.Ties_Y = Ties_Y;
-  res.Ties_XY = Ties_XY;
-  
+  res.C = (double)C;
+  res.D = (double)D;
+  res.Ties_X = (double)(ties_x_inclusive - ties_xy);
+  res.Ties_Y = (double)(ties_y_inclusive - ties_xy);
+  res.Ties_XY = (double)ties_xy;
+
   return res;
 }
 
