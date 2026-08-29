@@ -11,6 +11,7 @@ template:
   default_assets: true
   bootstrap: 5
   bootswatch: flatly
+  math-rendering: mathjax
 
 navbar:
   structure:

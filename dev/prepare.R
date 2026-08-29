@@ -44,6 +44,8 @@ pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
 
 
+devtools::check(args = "--as-cran")
+devtools::check_mac_release()
 
 
 
