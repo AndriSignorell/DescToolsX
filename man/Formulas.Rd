@@ -2,39 +2,42 @@
 % Please edit documentation in R/interfaceFormula.R
 \name{Formulas}
 \alias{Formulas}
-\title{Formula Interface - Common Arguments}
+\title{Formula Interfaces - Common Arguments}
 \arguments{
-\item{formula}{formula of the form \code{lhs ~ rhs}, where \code{lhs}
-gives the response values and \code{rhs} the corresponding groups
-or explanatory variables}
+\item{formula}{formula describing the design. Depending on the function,
+supported forms include \code{y ~ 1}, \code{Pair(x, y) ~ 1},
+\code{y ~ group}, \code{y ~ predictor}, and
+\code{y ~ treatment | block}}
 
 \item{data}{optional matrix or data frame (or similar; see
 \code{\link[stats]{model.frame}}) containing the variables in the
-formula. By default the variables are taken from
-\code{environment(formula)}.}
+formula. If omitted, variables are taken from
+\code{environment(formula)}}
 
-\item{subset}{optional vector specifying a subset of observations
+\item{subset}{optional expression specifying a subset of observations
 to be used in the analysis}
 
-\item{na.action}{function indicating what should happen when
-the data contain \code{NA}s. Defaults to
-\code{getOption("na.action")}.}
+\item{na.action}{function specifying how missing values are handled;
+passed to \code{\link[bedrock]{resolveFormula}}}
 }
 \description{
-Common formula-based interface shared by multiple functions.
+Common arguments and conventions for formula interfaces in DescToolsX.
 }
 \details{
-Formula interfaces are evaluated using \code{\link[stats]{model.frame}},
-following standard R conventions.
-The left-hand side of the formula must contain the response variable.
-The right-hand side typically specifies a grouping or explanatory variable.
-Only formulas with a single response and at least one explanatory
-variable are supported.
+Formula interfaces in DescToolsX are resolved consistently by
+\code{\link[bedrock]{resolveFormula}}. The resolver constructs the
+\code{\link[stats]{model.frame}} and classifies the resulting design as
+one-sample, two-sample independent, two-sample dependent, n-sample
+independent, n-sample dependent, or numeric-numeric.
 
-See also:
-\itemize{
-\item \code{\link[stats]{formula}}
-\item \code{\link[stats]{model.frame}}
-\item \code{\link[stats]{terms}}
+Individual functions may support only a subset of these designs. The
+accepted forms are documented on the corresponding function's help page.
+Data lookup, subsetting, and missing-value handling are delegated to
+\code{resolveFormula()}.
 }
+\seealso{
+\code{\link[bedrock]{resolveFormula}},
+\code{\link[stats]{formula}},
+\code{\link[stats]{model.frame}},
+\code{\link[stats]{Pair}}
 }

@@ -8,13 +8,22 @@
 #' @details
 #' **Wald interval** (\code{method = "wald"})
 #'
-#' Uses the \eqn{\tau} correction factor of Ruckstuhl following
+#' Uses an empirical sandwich standard error for the Huber M-estimator:
 #' \deqn{
-#'   \hat\mu \;\pm\; t_{\alpha/2,\,n-1}
-#'   \sqrt{\hat\tau(x,\hat\mu)} \;\frac{\hat s}{\sqrt{n}}
+#'   \hat\mu \;\pm\; t_{1-\alpha/2,\,n-1}
+#'   \hat s \sqrt{\frac{\hat\tau}{n}},
 #' }
-#' No finite-sample correction is applied beyond the t-quantile.
-#'
+#' where
+#' \deqn{
+#'   \hat\tau =
+#'   \frac{n \sum_{i=1}^n \psi_k(r_i)^2}
+#'        {\left\{\sum_{i=1}^n I(|r_i| \leq k)\right\}^2},
+#'   \qquad
+#'   r_i = \frac{x_i-\hat\mu}{\hat s}.
+#' }
+#' Here, \eqn{\psi_k} denotes the Huber score function. No additional
+#' small-sample adjustment is applied beyond use of the t-quantile.
+#' 
 #' **Bootstrap interval** (\code{method = "boot"})
 #'
 #' The statistic \eqn{\hat\mu} is resampled \eqn{R} times.  Note that
@@ -73,8 +82,9 @@
 #' @note Adapted from code by Martin Maechler to conform to package standards
 #'
 #' @references
-#' Huber, P. J. (1981). \emph{Robust Statistics}. Wiley.
-#'
+#' Huber, P. J. and Ronchetti, E. M. (2009).
+#' \emph{Robust Statistics}, 2nd ed. Wiley.
+#' 
 #' @seealso \code{\link[MASS]{huber}}, \code{\link{mad}},
 #'   \code{\link{tukeyBiweight}}
 #'

@@ -74,21 +74,21 @@ vector}
 
 \item{...}{further arguments passed to methods}
 
-\item{formula}{formula of the form \code{lhs ~ rhs}, where \code{lhs}
-gives the response values and \code{rhs} the corresponding groups
-or explanatory variables}
+\item{formula}{formula describing the design. Depending on the function,
+supported forms include \code{y ~ 1}, \code{Pair(x, y) ~ 1},
+\code{y ~ group}, \code{y ~ predictor}, and
+\code{y ~ treatment | block}}
 
 \item{data}{optional matrix or data frame (or similar; see
 \code{\link[stats]{model.frame}}) containing the variables in the
-formula. By default the variables are taken from
-\code{environment(formula)}.}
+formula. If omitted, variables are taken from
+\code{environment(formula)}}
 
-\item{subset}{optional vector specifying a subset of observations
+\item{subset}{optional expression specifying a subset of observations
 to be used in the analysis}
 
-\item{na.action}{function indicating what should happen when
-the data contain \code{NA}s. Defaults to
-\code{getOption("na.action")}.}
+\item{na.action}{function specifying how missing values are handled;
+passed to \code{\link[bedrock]{resolveFormula}}}
 
 \item{main}{character string, \code{NULL}, or \code{NA}, defining the main
 title. By default (\code{main = NULL}) the title will
