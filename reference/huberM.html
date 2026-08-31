@@ -17,7 +17,7 @@ huber() would return an error."><meta property="og:image" content="/logo.png"></
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.947</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,12 +140,21 @@ numeric vector with elements:</p><dl><dt><code>est</code></dt>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><strong>Wald interval</strong> (<code>method = "wald"</code>)</p>
-<p>Uses the \(\tau\) correction factor of Ruckstuhl following
+<p>Uses an empirical sandwich standard error for the Huber M-estimator:
 $$
-  \hat\mu \;\pm\; t_{\alpha/2,\,n-1}
-  \sqrt{\hat\tau(x,\hat\mu)} \;\frac{\hat s}{\sqrt{n}}
+  \hat\mu \;\pm\; t_{1-\alpha/2,\,n-1}
+  \hat s \sqrt{\frac{\hat\tau}{n}},
 $$
-No finite-sample correction is applied beyond the t-quantile.</p>
+where
+$$
+  \hat\tau =
+  \frac{n \sum_{i=1}^n \psi_k(r_i)^2}
+       {\left\{\sum_{i=1}^n I(|r_i| \leq k)\right\}^2},
+  \qquad
+  r_i = \frac{x_i-\hat\mu}{\hat s}.
+$$
+Here, \(\psi_k\) denotes the Huber score function. No additional
+small-sample adjustment is applied beyond use of the t-quantile.</p>
 <p><strong>Bootstrap interval</strong> (<code>method = "boot"</code>)</p>
 <p>The statistic \(\hat\mu\) is resampled \(R\) times.  Note that
 <code>mu</code> and <code>s</code> are fixed at their initial values (computed from
@@ -187,7 +196,8 @@ for reproducible intervals.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Huber, P. J. (1981). <em>Robust Statistics</em>. Wiley.</p>
+    <p>Huber, P. J. and Ronchetti, E. M. (2009).
+<em>Robust Statistics</em>, 2nd ed. Wiley.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

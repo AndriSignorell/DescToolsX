@@ -214,7 +214,7 @@ documentation tools.
   Interface
 - [`ConfidenceIntervals`](ConfidenceIntervals.md) : Confidence Interval
   Interface - Common Arguments
-- [`Formulas`](Formulas.md) : Formula Interface - Common Arguments
+- [`Formulas`](Formulas.md) : Formula Interfaces - Common Arguments
 - [`getConcepts()`](concepts.md) [`conceptMap()`](concepts.md)
   [`conceptAudit()`](concepts.md) : Concept Utilities for Package
   Documentation

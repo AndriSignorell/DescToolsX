@@ -1,44 +1,49 @@
-# Formula Interface - Common Arguments
+# Formula Interfaces - Common Arguments
 
-Common formula-based interface shared by multiple functions.
+Common arguments and conventions for formula interfaces in DescToolsX.
 
 ## Arguments
 
 - formula:
 
-  formula of the form `lhs ~ rhs`, where `lhs` gives the response values
-  and `rhs` the corresponding groups or explanatory variables
+  formula describing the design. Depending on the function, supported
+  forms include `y ~ 1`, `Pair(x, y) ~ 1`, `y ~ group`, `y ~ predictor`,
+  and `y ~ treatment | block`
 
 - data:
 
   optional matrix or data frame (or similar; see
   [`model.frame`](https://rdrr.io/r/stats/model.frame.html)) containing
-  the variables in the formula. By default the variables are taken from
-  `environment(formula)`.
+  the variables in the formula. If omitted, variables are taken from
+  `environment(formula)`
 
 - subset:
 
-  optional vector specifying a subset of observations to be used in the
-  analysis
+  optional expression specifying a subset of observations to be used in
+  the analysis
 
 - na.action:
 
-  function indicating what should happen when the data contain `NA`s.
-  Defaults to `getOption("na.action")`.
+  function specifying how missing values are handled; passed to
+  [`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
 
 ## Details
 
-Formula interfaces are evaluated using
-[`model.frame`](https://rdrr.io/r/stats/model.frame.html), following
-standard R conventions. The left-hand side of the formula must contain
-the response variable. The right-hand side typically specifies a
-grouping or explanatory variable. Only formulas with a single response
-and at least one explanatory variable are supported.
+Formula interfaces in DescToolsX are resolved consistently by
+[`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html).
+The resolver constructs the
+[`model.frame`](https://rdrr.io/r/stats/model.frame.html) and classifies
+the resulting design as one-sample, two-sample independent, two-sample
+dependent, n-sample independent, n-sample dependent, or numeric-numeric.
 
-See also:
+Individual functions may support only a subset of these designs. The
+accepted forms are documented on the corresponding function's help page.
+Data lookup, subsetting, and missing-value handling are delegated to
+[`resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html).
 
-- [`formula`](https://rdrr.io/r/stats/formula.html)
+## See also
 
-- [`model.frame`](https://rdrr.io/r/stats/model.frame.html)
-
-- [`terms`](https://rdrr.io/r/stats/terms.html)
+[`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html),
+[`formula`](https://rdrr.io/r/stats/formula.html),
+[`model.frame`](https://rdrr.io/r/stats/model.frame.html),
+[`Pair`](https://rdrr.io/r/stats/Pair.html)

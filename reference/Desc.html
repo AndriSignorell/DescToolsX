@@ -21,7 +21,7 @@ displays absolute and relative frequencies in horizontal bar plots."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.947</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,27 +143,27 @@ vector</p></dd>
 
 
 <dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
-<dd><p>formula of the form <code>lhs ~ rhs</code>, where <code>lhs</code>
-gives the response values and <code>rhs</code> the corresponding groups
-or explanatory variables</p></dd>
+<dd><p>formula describing the design. Depending on the function,
+supported forms include <code>y ~ 1</code>, <code>Pair(x, y) ~ 1</code>,
+<code>y ~ group</code>, <code>y ~ predictor</code>, and
+<code>y ~ treatment | block</code></p></dd>
 
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>optional matrix or data frame (or similar; see
 <code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame</a></code>) containing the variables in the
-formula. By default the variables are taken from
-<code>environment(formula)</code>.</p></dd>
+formula. If omitted, variables are taken from
+<code>environment(formula)</code></p></dd>
 
 
 <dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
-<dd><p>optional vector specifying a subset of observations
+<dd><p>optional expression specifying a subset of observations
 to be used in the analysis</p></dd>
 
 
 <dt id="arg-na-action">na.action<a class="anchor" aria-label="anchor" href="#arg-na-action"></a></dt>
-<dd><p>function indicating what should happen when
-the data contain <code>NA</code>s. Defaults to
-<code>getOption("na.action")</code>.</p></dd>
+<dd><p>function specifying how missing values are handled;
+passed to <code><a href="https://andrisignorell.github.io/bedrock/reference/resolveFormula.html" class="external-link">resolveFormula</a></code></p></dd>
 
 
 <dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>

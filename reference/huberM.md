@@ -88,10 +88,13 @@ with elements:
 
 **Wald interval** (`method = "wald"`)
 
-Uses the \\\tau\\ correction factor of Ruckstuhl following \$\$ \hat\mu
-\\\pm\\ t\_{\alpha/2,\\n-1} \sqrt{\hat\tau(x,\hat\mu)} \\\frac{\hat
-s}{\sqrt{n}} \$\$ No finite-sample correction is applied beyond the
-t-quantile.
+Uses an empirical sandwich standard error for the Huber M-estimator:
+\$\$ \hat\mu \\\pm\\ t\_{1-\alpha/2,\\n-1} \hat s
+\sqrt{\frac{\hat\tau}{n}}, \$\$ where \$\$ \hat\tau = \frac{n
+\sum\_{i=1}^n \psi_k(r_i)^2} {\left\\\sum\_{i=1}^n I(\|r_i\| \leq
+k)\right\\^2}, \qquad r_i = \frac{x_i-\hat\mu}{\hat s}. \$\$ Here,
+\\\psi_k\\ denotes the Huber score function. No additional small-sample
+adjustment is applied beyond use of the t-quantile.
 
 **Bootstrap interval** (`method = "boot"`)
 
@@ -135,7 +138,8 @@ beforehand for reproducible intervals.
 
 ## References
 
-Huber, P. J. (1981). *Robust Statistics*. Wiley.
+Huber, P. J. and Ronchetti, E. M. (2009). *Robust Statistics*, 2nd ed.
+Wiley.
 
 ## See also
 

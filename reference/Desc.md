@@ -87,25 +87,26 @@ plot(x, main = x$meta$main, ...)
 
 - formula:
 
-  formula of the form `lhs ~ rhs`, where `lhs` gives the response values
-  and `rhs` the corresponding groups or explanatory variables
+  formula describing the design. Depending on the function, supported
+  forms include `y ~ 1`, `Pair(x, y) ~ 1`, `y ~ group`, `y ~ predictor`,
+  and `y ~ treatment | block`
 
 - data:
 
   optional matrix or data frame (or similar; see
   [`model.frame`](https://rdrr.io/r/stats/model.frame.html)) containing
-  the variables in the formula. By default the variables are taken from
-  `environment(formula)`.
+  the variables in the formula. If omitted, variables are taken from
+  `environment(formula)`
 
 - subset:
 
-  optional vector specifying a subset of observations to be used in the
-  analysis
+  optional expression specifying a subset of observations to be used in
+  the analysis
 
 - na.action:
 
-  function indicating what should happen when the data contain `NA`s.
-  Defaults to `getOption("na.action")`.
+  function specifying how missing values are handled; passed to
+  [`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
 
 - main:
 
