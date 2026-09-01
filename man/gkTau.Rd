@@ -33,7 +33,7 @@ variable is the dependent one and is predicted from the column variable;
 
 \item{\dots}{further arguments are passed to the function
 \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-vector interface.}
+vector interface; supplying them without \code{y} is an error.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -62,6 +62,22 @@ probabilities specified by marginal or conditional proportion.
 
 Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{phi}}) in the
 2x2-table case.\cr
+
+The measure lies in \eqn{[0, 1]} by construction. Both ends are reached by
+cancellation, so an estimate within a few machine epsilons of a bound is
+reported as that bound. Tau is undefined when the dependent variable has
+fewer than two non-empty categories (the denominator is then zero), which is
+signalled with an error.
+
+The confidence interval uses the asymptotic standard error of Liebetrau
+(1983). That variance vanishes at both ends of the range: under exact
+independence (\eqn{\tau = 0}, where the limiting distribution is a weighted
+sum of chi-square variables rather than normal) and under perfect
+prediction (\eqn{\tau = 1}). Where the estimated standard error is zero the
+interval would collapse to a single point and thus exclude every other
+value, which no sample supports; the bounds are returned as \code{NA} with a
+warning instead. Close to either end the normal approximation is poor and
+the interval is too narrow.
 }
 \note{
 Based on code by Antti Arppe, adapted to conform to package standards.
@@ -105,8 +121,8 @@ ttt <- matrix(c(225,53,206,3,1,12), nrow=3,
               dimnames=list(rownames=c("right","center", "left"), 
                             colnames=c("us","ussr")))
 
-round(gkTau(ttt, direction = "r", con=0.95), d=3)
-round(gkTau(ttt, direction = "c"), d=3)
+round(gkTau(ttt, direction = "row", conf.level = 0.95), digits = 3)
+round(gkTau(ttt, direction = "column"), digits = 3)
 
 }
 \references{
@@ -116,9 +132,6 @@ Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
 Goodman, L. A., & Kruskal, W. H. (1954) Measures of association for cross
 classifications. \emph{Journal of the American Statistical Association}, 49,
 732-764.
-
-Somers, R. H. (1962) A New Asymmetric Measure of Association for Ordinal
-Variables, \emph{American Sociological Review}, 27, 799-811.
 
 Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
 classifications III: Approximate sampling theory. \emph{Journal of the

@@ -18,24 +18,40 @@
 #' Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{phi}}) in the
 #' 2x2-table case.\cr
 #' 
+#' The measure lies in \eqn{[0, 1]} by construction. Both ends are reached by
+#' cancellation, so an estimate within a few machine epsilons of a bound is
+#' reported as that bound. Tau is undefined when the dependent variable has
+#' fewer than two non-empty categories (the denominator is then zero), which is
+#' signalled with an error.
+#' 
+#' The confidence interval uses the asymptotic standard error of Liebetrau
+#' (1983). That variance vanishes at both ends of the range: under exact
+#' independence (\eqn{\tau = 0}, where the limiting distribution is a weighted
+#' sum of chi-square variables rather than normal) and under perfect
+#' prediction (\eqn{\tau = 1}). Where the estimated standard error is zero the
+#' interval would collapse to a single point and thus exclude every other
+#' value, which no sample supports; the bounds are returned as \code{NA} with a
+#' warning instead. Close to either end the normal approximation is poor and
+#' the interval is too narrow.
+#' 
 #' @name gkTau
-#' @param x numeric vector or contingency table. A matrix is treated as a table.
+#' @param x a vector (typically a factor, character, or numeric vector)
+#'        containing categorical data, or a contingency table.
 #' @param y \code{NULL} (default) or a vector with compatible dimensions to
 #' \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.
-#' @param direction direction of the calculation. Must be \code{"row"}
-#' (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
-#' variable is the dependent one and is predicted from the column variable;
-#' \code{"column"} gives tau (C|R).
-#' 
 #' @param conf.level confidence level of the interval. If set to \code{NA}
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of \code{"two.sided"} (default), \code{"left"} or
 #'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#' @param direction direction of the calculation. Must be \code{"row"}
+#' (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
+#' variable is the dependent one and is predicted from the column variable;
+#' \code{"column"} gives tau (C|R).
 #'
 #' @param \dots further arguments are passed to the function
 #' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-#' vector interface. 
+#' vector interface; supplying them without \code{y} is an error.
 #' 
 #' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
@@ -53,9 +69,6 @@
 #' Goodman, L. A., & Kruskal, W. H. (1954) Measures of association for cross
 #' classifications. \emph{Journal of the American Statistical Association}, 49,
 #' 732-764.
-#' 
-#' Somers, R. H. (1962) A New Asymmetric Measure of Association for Ordinal
-#' Variables, \emph{American Sociological Review}, 27, 799-811.
 #' 
 #' Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
 #' classifications III: Approximate sampling theory. \emph{Journal of the
@@ -107,11 +120,9 @@
 #'               dimnames=list(rownames=c("right","center", "left"), 
 #'                             colnames=c("us","ussr")))
 #' 
-#' round(gkTau(ttt, direction = "r", con=0.95), d=3)
-#' round(gkTau(ttt, direction = "c"), d=3)
+#' round(gkTau(ttt, direction = "row", conf.level = 0.95), digits = 3)
+#' round(gkTau(ttt, direction = "column"), digits = 3)
 #' 
-
-#' @rdname gkTau
 #' @family assoc.nominal
 #' @concept association-measure
 #' @concept nominal
@@ -141,54 +152,100 @@ gkTau <- function(x, y = NULL,
 
   confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
 
-  if(!is.null(y)) x <- table(x, y, ...)
-  
+  if(!is.null(y)){
+    x <- table(x, y, ...)
+
+  } else {
+    # the dots reach table() only on the vector interface - silently
+    # dropping them would hide both a typo and a useNA that never took
+    # effect
+    if(...length() > 0L)
+      stop("'...' is passed on to table() and requires 'y' to be supplied")
+
+    # is.table() is TRUE for any number of dimensions, and as.matrix()
+    # would fold a 3d array into a single column instead of complaining
+    if(length(dim(x)) != 2L)
+      stop("'x' must be a two-dimensional table or matrix when 'y' is NULL")
+  }
+
   x <- as.matrix(x)
-  
+
+  if(!is.numeric(x))
+    stop("'x' must be numeric, i.e. a table of counts")
+  if(anyNA(x))
+    stop("'x' must not contain NA")
+  if(any(!is.finite(x)))
+    stop("'x' must contain only finite counts")
+  if(any(x < 0))
+    stop("'x' must not contain negative counts")
+
+  # Perform all subsequent calculations in double precision.
+  storage.mode(x) <- "double"
+
+  # Use tau C|R as the canonical orientation. Tau R|C is the same
+  # calculation after transposing the table.
+  if(direction == "row") x <- t(x)
+
+  # Unused factor levels can produce empty margins and hence divisions by
+  # zero. They contain no information and can safely be removed.
+  x <- x[rowSums(x) > 0, colSums(x) > 0, drop = FALSE]
+
+  # the denominator below is 1 - sum(p_.j^2), which is zero as soon as the
+  # dependent variable has a single category left - tau is then 0/0
+  if(ncol(x) < 2L)
+    stop(gettextf(
+      "tau is not defined: the %s variable has fewer than two non-empty categories",
+      direction), domain = NA)
+
   n <- sum(x)
-  n.err.unconditional <- n^2
-  sum.row <- rowSums(x)
   sum.col <- colSums(x)
-  
-  switch( direction
-          , "column" = {             # Tau Column|Row
-            
-            for(i in 1:nrow(x))
-              n.err.unconditional <- n.err.unconditional-n*sum(x[i,]^2/sum.row[i])
-            n.err.conditional <- n^2-sum(sum.col^2)
-            tau.CR <- 1-(n.err.unconditional/n.err.conditional)
-            v <- n.err.unconditional/(n^2)
-            d <- n.err.conditional/(n^2)
-            f <- d*(v+1)-2*v
-            var.tau.CR <- 0
-            for(i in 1:nrow(x))
-              for(j in 1:ncol(x))
-                var.tau.CR <- var.tau.CR + x[i,j]*(-2*v*(sum.col[j]/n)+d*((2*x[i,j]/sum.row[i])-sum((x[i,]/sum.row[i])^2))-f)^2/(n^2*d^4)
-            ASE.tau.CR <- sqrt(var.tau.CR)
-            est <- tau.CR
-            sigma2 <- ASE.tau.CR^2
-          }
-          , "row" = {             # Tau Row|Column
-            
-            for(j in 1:ncol(x))
-              n.err.unconditional <- n.err.unconditional-n*sum(x[,j]^2/sum.col[j])
-            n.err.conditional <- n^2-sum(sum.row^2)
-            tau.RC <- 1-(n.err.unconditional/n.err.conditional)
-            v <- n.err.unconditional/(n^2)
-            d <- n.err.conditional/(n^2)
-            f <- d*(v+1)-2*v
-            var.tau.RC <- 0
-            for(i in 1:nrow(x))
-              for(j in 1:ncol(x))
-                var.tau.RC <- var.tau.RC + x[i,j]*(-2*v*(sum.row[i]/n)+d*((2*x[i,j]/sum.col[j])-sum((x[,j]/sum.col[j])^2))-f)^2/(n^2*d^4)
-            ASE.tau.RC <- sqrt(var.tau.RC)
-            est <- tau.RC
-            sigma2 <- ASE.tau.RC^2
-          }
-  )
-  
+  p.row <- x / rowSums(x)               # recycles by row: p.row[i, j] = n_ij / n_i.
+  sum.p2.row <- rowSums(p.row^2)
+
+  # naming follows the prediction rule, not the error: err.marginal is the
+  # error of assignment from the column margin alone, err.rowwise the error
+  # of assignment from the conditional row distributions
+  err.rowwise  <- n^2 - n * sum(x * p.row)
+  err.marginal <- n^2 - sum(sum.col^2)
+
+  est <- 1 - err.rowwise / err.marginal
+
+  # tau is a proportional reduction in error and cannot leave [0, 1], but
+  # both ends are reached by cancellation: an exactly independent table such
+  # as outer(c(850, 783), c(198, 71)) comes out as +-2 * eps, not as 0. Snap
+  # to the bound, so that the reported estimate and the degeneracy check
+  # below both see the value the table actually carries.
+  tol <- 100 * .Machine$double.eps
+  if(est <= tol)
+    est <- 0
+  else if(est >= 1 - tol)
+    est <- 1
+
+  v <- err.rowwise / n^2
+  d <- err.marginal / n^2
+  f <- d * (v + 1) - 2 * v
+
+  # Liebetrau (1983), eq. 3.11. Vectorised: the double loop evaluated the
+  # same expression cell by cell, which is O(r*c) interpreted calls on a
+  # table that R can handle in one pass.
+  # The column margin has to be recycled explicitly (byrow = TRUE), the row
+  # quantities p.row and sum.p2.row align with R's own recycling.
+  colP <- matrix(sum.col / n, nrow = nrow(x), ncol = ncol(x), byrow = TRUE)
+  psi <- -2 * v * colP + d * (2 * p.row - sum.p2.row) - f
+  sigma2 <- sum(x * psi^2) / (n^2 * d^4)
+
   if(is.na(conf.level)){
     res <- est
+
+  } else if(est <= 0 || est >= 1 || !is.finite(sigma2) || sigma2 <= 0){
+    # The variance vanishes at both ends of the range. It is tested through
+    # the estimate, which has a known scale of [0, 1]: sigma2 itself comes
+    # out as rounding noise there (1e-36, not 0), and a threshold on it
+    # would have to be pulled out of thin air.
+    warning("the asymptotic standard error of tau is zero or undefined here, ",
+            "the confidence bounds are reported as NA")
+    res <- c(est = est, lci = NA_real_, uci = NA_real_)
+
   } else {
     pr2 <- 1 - (1 - confAdj)/2
     ci <- qnorm(pr2) * sqrt(sigma2) * c(-1, 1) + est
@@ -198,6 +255,6 @@ gkTau <- function(x, y = NULL,
     # cannot reach
     res <- c(est = est, applySides(ci, sides, lo = 0, hi = 1))
   }
-  
+
   return(res)
 }
