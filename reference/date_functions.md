@@ -215,18 +215,18 @@ quarter(x)
 
 # month: numeric, abbreviated, full name
 month(x)
-#> [1] 8
+#> [1] 9
 month(x, fmt = "mm",  lang = "en")
-#> [1] Aug
+#> [1] Sep
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 month(x, fmt = "mm",  lang = "local")
-#> [1] Aug
+#> [1] Sep
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 month(x, fmt = "mmm", lang = "en")
-#> [1] August
+#> [1] September
 #> 12 Levels: January < February < March < April < May < June < ... < December
 month(x, fmt = "mmm", lang = "local")
-#> [1] August
+#> [1] September
 #> 12 Levels: January < February < March < April < May < June < ... < December
 
 week(x)
@@ -236,30 +236,30 @@ week(x, method = "us")
 
 # day is both readable and writable
 day(x)
-#> [1] 31
+#> [1] 1
 day(x) <- 20
 x
-#> [1] "2026-08-20"
+#> [1] "2026-09-20"
 
 # weekday: numeric, abbreviated, full name
 weekday(x)
-#> [1] 4
+#> [1] 7
 weekday(x, fmt = "dd",  lang = "en")
-#> [1] Thu
+#> [1] Sun
 #> Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun
 weekday(x, fmt = "ddd", lang = "local")
-#> [1] Thursday
+#> [1] Sunday
 #> 7 Levels: Monday < Tuesday < Wednesday < Thursday < Friday < ... < Sunday
 
 yearDay(x)
-#> [1] 232
+#> [1] 263
 yearWeek(x)
-#> [1] 202634
+#> [1] 202638
 yearMonth(x)
-#> [1] 202608
+#> [1] 202609
 
 isWeekend(x)
-#> [1] FALSE
+#> [1] TRUE
 isLeapYear(x)
 #> [1] FALSE
 isLeapYear(2000L)
@@ -267,7 +267,7 @@ isLeapYear(2000L)
 
 # month names for a weekly time sequence
 month(seq(Sys.Date(), Sys.Date() + 150, by = "weeks"), fmt = "mm")
-#>  [1] Aug Sep Sep Sep Sep Oct Oct Oct Oct Nov Nov Nov Nov Nov Dec Dec Dec Dec Jan
+#>  [1] Sep Sep Sep Sep Sep Oct Oct Oct Oct Nov Nov Nov Nov Dec Dec Dec Dec Dec Jan
 #> [20] Jan Jan Jan
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 
@@ -277,7 +277,7 @@ lastDayOfMonth(as.Date(c("2014-10-12", "2013-01-31", "2011-12-05")))
 
 # days in month / year
 monthDays(x)
-#> [1] 31
+#> [1] 30
 yearDays(x)
 #> [1] 365
 

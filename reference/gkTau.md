@@ -50,7 +50,8 @@ gkTau(
 
   further arguments are passed to the function
   [`table`](https://rdrr.io/r/base/table.html), allowing i.e. to set
-  useNA. This refers only to the vector interface.
+  useNA. This refers only to the vector interface; supplying them
+  without `y` is an error.
 
 ## Value
 
@@ -85,6 +86,22 @@ conditional proportion.
 Goodman Kruskal tau reduces to \\\phi^2\\ (see: [`phi`](phi.md)) in the
 2x2-table case.  
 
+The measure lies in \\\[0, 1\]\\ by construction. Both ends are reached
+by cancellation, so an estimate within a few machine epsilons of a bound
+is reported as that bound. Tau is undefined when the dependent variable
+has fewer than two non-empty categories (the denominator is then zero),
+which is signalled with an error.
+
+The confidence interval uses the asymptotic standard error of Liebetrau
+(1983). That variance vanishes at both ends of the range: under exact
+independence (\\\tau = 0\\, where the limiting distribution is a
+weighted sum of chi-square variables rather than normal) and under
+perfect prediction (\\\tau = 1\\). Where the estimated standard error is
+zero the interval would collapse to a single point and thus exclude
+every other value, which no sample supports; the bounds are returned as
+`NA` with a warning instead. Close to either end the normal
+approximation is poor and the interval is too narrow.
+
 ## Note
 
 Based on code by Antti Arppe, adapted to conform to package standards.
@@ -97,9 +114,6 @@ Agresti, A. (2002) *Categorical Data Analysis*. John Wiley & Sons, pp.
 Goodman, L. A., & Kruskal, W. H. (1954) Measures of association for
 cross classifications. *Journal of the American Statistical
 Association*, 49, 732-764.
-
-Somers, R. H. (1962) A New Asymmetric Measure of Association for Ordinal
-Variables, *American Sociological Review*, 27, 799-811.
 
 Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for
 cross classifications III: Approximate sampling theory. *Journal of the
@@ -174,9 +188,9 @@ ttt <- matrix(c(225,53,206,3,1,12), nrow=3,
               dimnames=list(rownames=c("right","center", "left"), 
                             colnames=c("us","ussr")))
 
-round(gkTau(ttt, direction = "r", con=0.95), d=3)
+round(gkTau(ttt, direction = "row", conf.level = 0.95), digits = 3)
 #>   est   lci   uci 
 #> 0.010 0.000 0.023 
-round(gkTau(ttt, direction = "c"), d=3)
+round(gkTau(ttt, direction = "column"), digits = 3)
 #> [1] 0.013
 ```

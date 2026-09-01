@@ -17,7 +17,7 @@ and its cryptic format codes."><meta property="og:image" content="/logo.png"></h
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.947</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -249,18 +249,18 @@ option is absent, <code>"local"</code> is used as default.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># month: numeric, abbreviated, full name</span></span></span>
 <span class="r-in"><span><span class="fu">month</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9</span>
 <span class="r-in"><span><span class="fu">month</span><span class="op">(</span><span class="va">x</span>, fmt <span class="op">=</span> <span class="st">"mm"</span>,  lang <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Aug</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Sep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</span>
 <span class="r-in"><span><span class="fu">month</span><span class="op">(</span><span class="va">x</span>, fmt <span class="op">=</span> <span class="st">"mm"</span>,  lang <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Aug</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Sep</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</span>
 <span class="r-in"><span><span class="fu">month</span><span class="op">(</span><span class="va">x</span>, fmt <span class="op">=</span> <span class="st">"mmm"</span>, lang <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] August</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] September</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 Levels: January &lt; February &lt; March &lt; April &lt; May &lt; June &lt; ... &lt; December</span>
 <span class="r-in"><span><span class="fu">month</span><span class="op">(</span><span class="va">x</span>, fmt <span class="op">=</span> <span class="st">"mmm"</span>, lang <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] August</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] September</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 Levels: January &lt; February &lt; March &lt; April &lt; May &lt; June &lt; ... &lt; December</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">week</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
@@ -270,30 +270,30 @@ option is absent, <code>"local"</code> is used as default.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># day is both readable and writable</span></span></span>
 <span class="r-in"><span><span class="fu">day</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-in"><span><span class="fu">day</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">20</span></span></span>
 <span class="r-in"><span><span class="va">x</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2026-08-20"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2026-09-20"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># weekday: numeric, abbreviated, full name</span></span></span>
 <span class="r-in"><span><span class="fu">weekday</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7</span>
 <span class="r-in"><span><span class="fu">weekday</span><span class="op">(</span><span class="va">x</span>, fmt <span class="op">=</span> <span class="st">"dd"</span>,  lang <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Thu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Sun</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat &lt; Sun</span>
 <span class="r-in"><span><span class="fu">weekday</span><span class="op">(</span><span class="va">x</span>, fmt <span class="op">=</span> <span class="st">"ddd"</span>, lang <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Thursday</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] Sunday</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7 Levels: Monday &lt; Tuesday &lt; Wednesday &lt; Thursday &lt; Friday &lt; ... &lt; Sunday</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">yearDay</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 263</span>
 <span class="r-in"><span><span class="fu">yearWeek</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 202634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 202638</span>
 <span class="r-in"><span><span class="fu">yearMonth</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 202608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 202609</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">isWeekend</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu">isLeapYear</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"><span><span class="fu">isLeapYear</span><span class="op">(</span><span class="fl">2000L</span><span class="op">)</span></span></span>
@@ -301,7 +301,7 @@ option is absent, <code>"local"</code> is used as default.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># month names for a weekly time sequence</span></span></span>
 <span class="r-in"><span><span class="fu">month</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">150</span>, by <span class="op">=</span> <span class="st">"weeks"</span><span class="op">)</span>, fmt <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] Aug Sep Sep Sep Sep Oct Oct Oct Oct Nov Nov Nov Nov Nov Dec Dec Dec Dec Jan</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] Sep Sep Sep Sep Sep Oct Oct Oct Oct Nov Nov Nov Nov Dec Dec Dec Dec Dec Jan</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20] Jan Jan Jan</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</span>
 <span class="r-in"><span></span></span>
@@ -311,7 +311,7 @@ option is absent, <code>"local"</code> is used as default.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># days in month / year</span></span></span>
 <span class="r-in"><span><span class="fu">monthDays</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
 <span class="r-in"><span><span class="fu">yearDays</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 365</span>
 <span class="r-in"><span></span></span>
