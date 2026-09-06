@@ -1,35 +1,35 @@
 
 #' Skewness
 #' 
-#' \code{skew} computes the skewness, \code{kurt} the excess kurtosis of the
+#' `skew` computes the skewness, `kurt` the excess kurtosis of the
 #' values in x.
 #' 
-#' If \code{na.rm} is \code{TRUE} then missing values are removed before
+#' If `na.rm` is `TRUE` then missing values are removed before
 #' computation proceeds. \cr
 #' 
-#' The estimator for calculating the skewness can either be:\cr \code{1: g_1 =
-#' m_3 / m_2^(3/2) } \cr \code{2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) }\cr
-#' \code{3: b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) } \cr
+#' The estimator for calculating the skewness can either be:\cr `1: g_1 =
+#' m_3 / m_2^(3/2) ` \cr `2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) `\cr
+#' `3: b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) ` \cr
 #' 
 #' 1 is the typical definition used in Stata and in many older textbooks.  \cr
 #' 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
 #' 
-#' Cramer (1997) mentions the asymptotic standard error of \code{G_1}, that is
-#' of \code{estimator = 2}:
+#' Cramer (1997) mentions the asymptotic standard error of `G_1`, that is
+#' of `estimator = 2`:
 #' \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
 #' used for calculating the confidence intervals. The standard errors of the
 #' other two estimators follow from it by the same factors that relate the
-#' estimators themselves, so that \code{est/se} does not depend on the choice
-#' of \code{estimator}. This is implemented here with \code{method="classic"}.
+#' estimators themselves, so that `est/se` does not depend on the choice
+#' of `estimator`. This is implemented here with `method="classic"`.
 #' \cr However, Joanes and Gill (1998) advise
 #' against this approach, pointing out that the normal assumptions would
 #' virtually always be violated.  They suggest using the bootstrap method.
 #' That's why the default method for the confidence interval type is set to
-#' \code{"boot"}. If not further specified the boot ci type will be chosen as
-#' \code{"bca"}.\cr
+#' `"boot"`. If not further specified the boot ci type will be chosen as
+#' `"bca"`.\cr
 #' 
-#' The standard error is only defined for \code{n >= 3}; for shorter input the
-#' variance, and with it any \code{method="classic"} interval, is \code{NA}.
+#' The standard error is only defined for `n >= 3`; for shorter input the
+#' variance, and with it any `method="classic"` interval, is `NA`.
 #' 
 #' This implementation of the two functions is comparably fast, as the
 #' expensive sums are coded in C++.
@@ -39,41 +39,41 @@
 #' @param x a numeric vector
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
-#' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}. The weights are read as
+#' @param weights a numerical vector of weights the same length as `x`
+#' giving the weights to use for elements of `x`. The weights are read as
 #' frequencies, so that their sum takes the place of the sample size in the
 #' estimator's bias corrections and in the standard error.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #' @param method character string specifying the confidence interval method.
-#'   \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
-#'   intervals unless another bootstrap type is supplied through \code{\dots};
-#'   \code{"classic"} uses a Wald interval based on the asymptotic standard
-#'   error. See Details and \code{\link{ConfidenceIntervals}}.
+#'   `"boot"` (default) uses a nonparametric bootstrap, with BCa
+#'   intervals unless another bootstrap type is supplied through `\dots`;
+#'   `"classic"` uses a Wald interval based on the asymptotic standard
+#'   error. See Details and [ConfidenceIntervals()].
 #'   
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. Defaults to \code{FALSE}.
-#' @param \dots further arguments passed to \code{\link[boot]{boot}} when
+#' @param na.rm logical, indicating whether `NA` values should be stripped
+#' before the computation proceeds. Defaults to `FALSE`.
+#' @param \dots further arguments passed to [boot::boot()] when
 #' confidence intervals are calculated
 #' 
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{skewness estimate}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{skewness estimate}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
 #' @references 
-#' Cramer, D. (1997): \emph{Basic Statistics for Social Research}
+#' Cramer, D. (1997): *Basic Statistics for Social Research*
 #' Routledge.
 #' 
 #' Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
-#' kurtosis. \emph{The Statistician}, 47, 183-189.
+#' kurtosis. *The Statistician*, 47, 183-189.
 #' 
 #' @family shape
 #' @concept moments

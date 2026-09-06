@@ -21,7 +21,7 @@ tukeyBiweight(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{const}{tuning constant passed to \code{tbrm_cpp()}. Defaults to \code{9}.}
 
@@ -63,7 +63,7 @@ reproducible.  Bootstrap arguments are passed through \code{...}:
 The biweight mean is a location estimator and therefore unbounded, so the
 open side of a one-sided interval is reported at \eqn{\pm\infty} - unlike
 the bounded measures in this package, where it is reported at the range
-limit. See \code{\link{ConfidenceIntervals}}.
+limit. See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.
 }
 \examples{
 set.seed(1)

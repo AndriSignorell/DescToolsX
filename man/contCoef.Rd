@@ -26,13 +26,13 @@ contCoef(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{correct}{logical; whether Sakoda's adjusted Pearson's C should be
 returned; defaults to \code{FALSE}}
 
 \item{...}{further arguments. Named arguments known to
-\code{\link{normalizeToConfusion}} or \code{\link{table}} are used to
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}} or \code{\link[=table]{table()}} are used to
 build the table; \code{R} and \code{type} configure the bootstrap and
 are described under Details. Anything else is an error rather than a
 silent no-op.}
@@ -49,7 +49,7 @@ contingency coefficient; otherwise a named numeric vector with elements:
 \description{
 Computes Pearson's contingency coefficient for a contingency table. If
 \code{x} and \code{y} are supplied, the table is constructed first; see
-\code{\link{Association}}.
+\code{\link[=Association]{Association()}}.
 }
 \details{
 Pearson's contingency coefficient ranges from 0 to
@@ -64,7 +64,7 @@ The corrected coefficient therefore ranges from 0 to 1.
 Since no generally accepted analytical interval is available,
 only bootstrap intervals are implemented. The interval is obtained from
 a multinomial bootstrap over the cells of
-the table. Two arguments configure it, both passed through \code{\dots}:
+the table. Two arguments configure it, both passed through \verb{\\dots}:
 \code{R}, the number of replicates (default 999), and \code{type}, one
 of \code{"perc"} (default) or \code{"bca"}.
 
@@ -82,7 +82,7 @@ association and a reasonable number of observations.
 Confidence intervals are restricted to the attainable range. Measures
 such as \link{cramerV} may be preferable when inference is central.
 
-For further information see \code{\link{ConfidenceIntervals}}.
+For further information see \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.
 }
 \examples{
 

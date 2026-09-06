@@ -25,16 +25,16 @@ coerced, if possible, by \code{as.vector()}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{a vector of character strings representing the type of
 intervals required. The value should be any subset of the values
-\code{"classic"}, \code{"boot"}.  See \code{\link[boot]{boot.ci}}.}
+\code{"classic"}, \code{"boot"}.  See \code{\link[boot:boot.ci]{boot::boot.ci()}}.}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{...}{further arguments are passed to the \code{\link[boot]{boot}}
+\item{...}{further arguments are passed to the \code{\link[boot:boot]{boot::boot()}}
 function. Supported arguments are \code{type} (\code{"norm"},
 \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel}
 and the number of bootstrap replicates \code{R}. If not defined those will
@@ -68,7 +68,7 @@ If any argument is zero, then the geometric mean is zero.\cr For strict
 positive values the geometric mean is computed as
 \code{exp(meanCI(log(x)))}.
 
-\bold{Considerations (Roenfeldt 2018)} \verb{ } "The calculation of the
+\strong{Considerations (Roenfeldt 2018)} \verb{ } "The calculation of the
 geometric mean requires that all values are non-zero and positive. So what
 should you do if you have data that do not meet this requirement? If you
 have values that equal zero, you have a few options: \itemize{ \item Adjust
@@ -116,7 +116,7 @@ gmean(z[!is.na(z) & z > 0], conf.level = 0.95)
 }
 \references{
 Snedecor, G. W., Cochran, W. G. Cochran (1989) Statistical
-Methods, 8th ed. Ames, \emph{IA: Iowa State University Press }
+Methods, 8th ed. Ames, *IA: Iowa State University Press *
 
 Roenfeldt K. (2018) Better than Average: Calculating Geometric Means Using
 SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,

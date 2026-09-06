@@ -4,61 +4,61 @@
 #' Calculates the harmonic mean and its confidence interval of a vector x. 
 #' 
 #' 
-#' To compute the harmonic mean, \code{1/x} is first calculated, before the
+#' To compute the harmonic mean, `1/x` is first calculated, before the
 #' arithmetic mean and its confidence interval are computed by
-#' \code{\link[lumen]{meanCI}}. The harmonic mean is then the reciprocal of the
+#' [lumen::meanCI()]. The harmonic mean is then the reciprocal of the
 #' arithmetic mean of the reciprocals of the values. The same applies to the
 #' confidence interval.
 #' 
 #' The harmonic mean is restricted to strictly positive inputs. Non-positive
-#' values are turned into \code{NA} and therefore make the result \code{NA}
-#' unless \code{na.rm = TRUE}, in which case they are dropped. If the lower
+#' values are turned into `NA` and therefore make the result `NA`
+#' unless `na.rm = TRUE`, in which case they are dropped. If the lower
 #' bound of the confidence interval is not greater than zero, then the
-#' confidence interval is not defined, and thus \code{NA} will be reported.
+#' confidence interval is not defined, and thus `NA` will be reported.
 #'
-#' \code{sides} names the side on which the finite bound lies: \code{"left"}
-#' yields an interval bounded below, \code{"right"} one bounded above. The
+#' `sides` names the side on which the finite bound lies: `"left"`
+#' yields an interval bounded below, `"right"` one bounded above. The
 #' harmonic mean of positive values is itself positive, so the open lower
-#' side is reported as 0 rather than as \code{NA} or \eqn{-\infty}.
+#' side is reported as 0 rather than as `NA` or \eqn{-\infty}.
 #' 
-#' Use \code{\link{sapply}} to calculate the measures from data frame, resp.
+#' Use [sapply()] to calculate the measures from data frame, resp.
 #' from a matrix. \cr
 #' 
 #' @name hmean
 #' 
 #' @param x a positive numeric vector. An object which is not a vector is
-#' coerced, if possible, by \code{as.vector()}.
+#' coerced, if possible, by `as.vector()`.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param method a vector of character strings representing the type of
 #' intervals required. The value should be any subset of the values
-#' \code{"classic"}, \code{"boot"}.  See \code{\link[boot]{boot.ci}}. 
+#' `"classic"`, `"boot"`.  See [boot::boot.ci()]. 
 #' 
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. Defaults to \code{FALSE}. 
-#' @param ... further arguments are passed to the \code{\link[boot]{boot}}
-#' function. Supported arguments are \code{type} (\code{"norm"},
-#' \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel}
-#' and the number of bootstrap replicates \code{R}. If not defined those will
-#' be set to their defaults, being \code{"basic"} for \code{type}, option
-#' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
-#' \code{parallel} and \code{999} for \code{R}.
+#' @param na.rm logical, indicating whether `NA` values should be stripped
+#' before the computation proceeds. Defaults to `FALSE`. 
+#' @param ... further arguments are passed to the [boot::boot()]
+#' function. Supported arguments are `type` (`"norm"`,
+#' `"basic"`, `"stud"`, `"perc"`, `"bca"`), `parallel`
+#' and the number of bootstrap replicates `R`. If not defined those will
+#' be set to their defaults, being `"basic"` for `type`, option
+#' `"boot.parallel"` (and if that is not set, `"no"`) for
+#' `parallel` and `999` for `R`.
 #' 
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the harmonic mean}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of the harmonic mean}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
 #' @references Snedecor, G. W., Cochran, W. G. (1989) Statistical Methods, 8th
-#' ed. Ames, \emph{IA: Iowa State University Press }
+#' ed. Ames, *IA: Iowa State University Press *
 #' @examples
 #' 
 #' x <- runif(5)

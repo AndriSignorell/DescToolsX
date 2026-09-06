@@ -63,7 +63,7 @@ hypothesis of a unit root (p < 0.05) and the KPSS test does not reject
 the null hypothesis of stationarity (p > 0.05).
 
 The Box-Cox transformation parameter is estimated using
-\code{\link{boxCoxLambda}()}.
+\code{\link[=boxCoxLambda]{boxCoxLambda()}}.
 }
 \examples{
 desc(AirPassengers)

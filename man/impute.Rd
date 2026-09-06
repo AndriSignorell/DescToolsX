@@ -40,7 +40,7 @@ If \code{FUN} is a function, it must return a single value.
 An error is thrown if the returned value is not scalar.
 
 Whether \code{FUN} accepts \code{na.rm} is decided from its formal
-arguments; a function taking \code{\dots} is assumed to pass it on.
+arguments; a function taking \verb{\\dots} is assumed to pass it on.
 Functions without either are called without it.
 }
 \examples{

@@ -45,14 +45,14 @@ non-seasonal data, a linear time trend is fitted while for seasonal data, a
 linear time trend with seasonal dummy variables is used.
 }
 \details{
-Seasonality is taken from \code{x} itself: a \code{\link[stats]{ts}} object
+Seasonality is taken from \code{x} itself: a \code{\link[stats:ts]{stats::ts()}} object
 with \code{frequency(x) > 1} is treated as seasonal, anything else
 (including a plain numeric vector) as non-seasonal. For method
 \code{"loglik"} the profile log likelihood is therefore computed from
 \code{lm(x ~ trend)} for non-seasonal data and from
 \code{lm(x ~ trend + factor(cycle(x)))} for seasonal data. Both methods
-optimise lambda continuously over \code{[lower, upper]} via
-\code{\link[stats]{optimize}}.
+optimise lambda continuously over \verb{[lower, upper]} via
+\code{\link[stats:optimize]{stats::optimize()}}.
 
 Both methods need enough data to identify their criterion, and signal an
 error rather than falling back silently when they do not have it:
@@ -82,10 +82,10 @@ boxCoxLambda(rlnorm(100), method = "loglik")
 }
 \references{
 Box, G. E. P. and Cox, D. R. (1964) An analysis of
-transformations. \emph{JRSS B} \bold{26} 211--246.
+transformations. \emph{JRSS B} \strong{26} 211--246.
 
 Guerrero, V.M. (1993) Time-series analysis supported by power
-transformations. \emph{Journal of Forecasting}, \bold{12}, 37--48.
+transformations. \emph{Journal of Forecasting}, \strong{12}, 37--48.
 }
 \seealso{
 Other transform:

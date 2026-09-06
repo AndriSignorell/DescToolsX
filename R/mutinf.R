@@ -20,14 +20,14 @@
 #' @param x a contingency table, matrix, or vector that can be coerced into a
 #'   contingency table
 #' @param y an optional second variable used together with
-#'   \code{x} to create a contingency table via
-#'   \code{table(x, y, ...)}
+#'   `x` to create a contingency table via
+#'   `table(x, y, ...)`
 #' @param base logarithm base.
-#'   Defaults to \code{2} (bits).
+#'   Defaults to `2` (bits).
 #' @param normalize logical.
-#'   If \code{TRUE}, returns normalized mutual information
+#'   If `TRUE`, returns normalized mutual information
 #'   (NMI).
-#' @param ... additional arguments passed to \code{table()}
+#' @param ... additional arguments passed to `table()`
 #'
 #' @return a numeric scalar containing the mutual information
 #'
@@ -40,7 +40,7 @@
 #'
 #' Larger values indicate stronger dependence.
 #'
-#' If \code{normalize = TRUE}, the returned value is:
+#' If `normalize = TRUE`, the returned value is:
 #'
 #' \deqn{
 #' \frac{I(X;Y)}
@@ -71,7 +71,7 @@
 #' Wiley.
 #'
 #'
-#' @seealso \code{\link{entropy}}
+#' @seealso [entropy()]
 #'
 #' @family assoc.nominal
 #' @concept association-measure

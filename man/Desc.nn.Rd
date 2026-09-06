@@ -19,7 +19,7 @@
 
 \item{verbose}{integer controlling the amount of output (1, 2, or 3).
 \code{NULL} (default) falls back to
-\code{x$meta$verbose \%||\% getOption("DescTools.verbose", 2)}.}
+\verb{x$meta$verbose \\\%||\\\% getOption("DescTools.verbose", 2)}.}
 
 \item{abs.sty}{format style for counts. \code{NULL} falls back to
 \code{getOption("DescTools.abs.sty")}.}
@@ -126,12 +126,12 @@ heteroscedasticity and random coefficient variation.
 \emph{Econometrica}, 47, 1287--1294.
 }
 \seealso{
-\code{\link{desc}} for the generic entry point,
-\code{\link{desc.nq}} for numeric ~ categorical,
-\code{\link{desc.qn}} for categorical ~ numeric,
-\code{\link{desc.qq}} for categorical ~ categorical,
-\code{\link[lumen]{corCI}}, \code{\link[lumen]{bpTest}},
-\code{\link[stats]{lm}}, \code{\link[stats]{cor.test}}
+\code{\link[=desc]{desc()}} for the generic entry point,
+\code{\link[=desc.nq]{desc.nq()}} for numeric ~ categorical,
+\code{\link[=desc.qn]{desc.qn()}} for categorical ~ numeric,
+\code{\link[=desc.qq]{desc.qq()}} for categorical ~ categorical,
+\code{\link[lumen:corCI]{lumen::corCI()}}, \code{\link[lumen:bpTest]{lumen::bpTest()}},
+\code{\link[stats:lm]{stats::lm()}}, \code{\link[stats:cor.test]{stats::cor.test()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},

@@ -3,7 +3,7 @@
 #'
 #' Computes the local outlier factor (LOF) of Breunig et al. (2000) for each
 #' observation. The LOF compares the local density around an observation with
-#' the densities around its \code{k} nearest neighbours, so that an
+#' the densities around its `k` nearest neighbours, so that an
 #' observation in a sparse region surrounded by dense ones scores high even
 #' when it is not globally extreme.
 #'
@@ -14,14 +14,14 @@
 #' threshold, as its scale depends on the data. Values below 1 arise in
 #' unusually dense regions and are not normally of interest.
 #'
-#' The computation uses \code{\link[dbscan]{lof}} from the \pkg{dbscan}
+#' The computation uses [dbscan::lof()] from the \pkg{dbscan}
 #' package, which builds a kd-tree and therefore scales to large data.
-#' Note that its \code{minPts} counts the observation itself, whereas
-#' \code{k} here counts neighbours only, following Breunig et al.; the
-#' translation \code{minPts = k + 1} is applied internally.
+#' Note that its `minPts` counts the observation itself, whereas
+#' `k` here counts neighbours only, following Breunig et al.; the
+#' translation `minPts = k + 1` is applied internally.
 #'
 #' Duplicated observations need care. Where an observation has more than
-#' \code{k} exact duplicates, every neighbour distance is zero, the local
+#' `k` exact duplicates, every neighbour distance is zero, the local
 #' reachability density is infinite and the LOF is formally \eqn{0/0}.
 #' \pkg{dbscan} reports 1 in that case, on the grounds that the coincident
 #' points already supply enough density for the observation not to be an
@@ -30,9 +30,9 @@
 #' exactly.
 #'
 #' Note that the infinite density is not confined to the duplicates
-#' themselves. Any observation that has one of them among its own \code{k}
+#' themselves. Any observation that has one of them among its own `k`
 #' neighbours inherits an infinite score, so a block of duplicates lying
-#' inside the data can render its whole surroundings \code{Inf}. This
+#' inside the data can render its whole surroundings `Inf`. This
 #' follows from the definition rather than from the implementation, and is a
 #' further reason to remove exact duplicates first.
 #'
@@ -44,15 +44,15 @@
 #'   counting the observation itself.
 #'
 #' @return a numeric vector with the local outlier factor of each
-#'   observation, in the order of the rows of \code{x}.
+#'   observation, in the order of the rows of `x`.
 #'
 #' @references
 #' Breunig, M. M., Kriegel, H.-P., Ng, R. T., & Sander, J. (2000). LOF:
-#'   Identifying density-based local outliers. \emph{Proceedings of the ACM
-#'   SIGMOD International Conference on Management of Data}, 93-104.
+#'   Identifying density-based local outliers. *Proceedings of the ACM
+#'   SIGMOD International Conference on Management of Data*, 93-104.
 #'   \doi{10.1145/335191.335388}
 #'
-#' @seealso \code{\link[dbscan]{lof}}
+#' @seealso [dbscan::lof()]
 #'
 #' @examples
 #' \donttest{

@@ -7,26 +7,26 @@
 #' classical \eqn{O(n^2)} one, which is slower but handles ties exactly.
 #'
 #' @param x numeric vector
-#' @param y numeric vector with the same length as \code{x}
+#' @param y numeric vector with the same length as `x`
 #' @param engine character string selecting the algorithm:
-#'   \code{"fast"} (default) or \code{"exact"}. Both compute the same
+#'   `"fast"` (default) or `"exact"`. Both compute the same
 #'   quantity; on data without ties they agree to floating point accuracy.
 #'   With ties they differ - see Details.
 #' @param R number of permutations used for the test of independence. Only
-#'   used when \code{output = "test"}; defaults to 999.
-#' @param output output format, either \code{"def"} (default), which returns
-#'   the statistic, or \code{"test"}, which returns an object of class
-#'   \code{"htest"} with a permutation P value for the hypothesis of
+#'   used when `output = "test"`; defaults to 999.
+#' @param output output format, either `"def"` (default), which returns
+#'   the statistic, or `"test"`, which returns an object of class
+#'   `"htest"` with a permutation P value for the hypothesis of
 #'   independence.
-#' @param jitter logical. If \code{TRUE}, small random noise is added to
-#'   \strong{both} \code{x} and \code{y} to break ties. This is useful when
+#' @param jitter logical. If `TRUE`, small random noise is added to
+#'   **both** `x` and `y` to break ties. This is useful when
 #'   the data contain ties, since the fast algorithm assumes continuous data.
 #' @param eps optional numeric half-width of the uniform jitter noise, which
-#'   is drawn from \eqn{U(-eps, eps)}. Defaults to \code{1e-10} times the
+#'   is drawn from \eqn{U(-eps, eps)}. Defaults to `1e-10` times the
 #'   standard deviation of the affected variable. A variable with zero
 #'   variance cannot be jittered and raises an error.
 #' @param seed optional integer random seed for reproducibility when
-#'   \code{jitter = TRUE}. The state of R's random number generator is
+#'   `jitter = TRUE`. The state of R's random number generator is
 #'   restored afterwards, so passing a seed does not disturb the calling
 #'   session.
 #'
@@ -38,53 +38,53 @@
 #'
 #' Note that the raw statistic of Hollander and Wolfe lies in
 #' \eqn{[-1/60, 1/30]}; this function returns 30 times that value, which
-#' is the scale \code{Hmisc::hoeffd()} reports. The two differ by exactly
+#' is the scale `Hmisc::hoeffd()` reports. The two differ by exactly
 #' the factor 30, so results are comparable only after accounting for it.
 #'
 #' @details
 #' \subsection{Choice of engine}{
-#' \code{engine = "fast"} runs in \eqn{O(n \log n)} and is what makes six-figure
+#' `engine = "fast"` runs in \eqn{O(n \log n)} and is what makes six-figure
 #' sample sizes practical. It needs a strict ordering and therefore assumes no
 #' ties; with tied values it is biased, and the size of the bias grows with the
 #' number of ties.
 #'
-#' \code{engine = "exact"} is the classical formulation of Hollander and Wolfe.
+#' `engine = "exact"` is the classical formulation of Hollander and Wolfe.
 #' It resolves ties through midranks and the fractional counts \eqn{Q_i}, so it
-#' is exact for tied data - the same quantity \code{Hmisc::hoeffd()} reports.
+#' is exact for tied data - the same quantity `Hmisc::hoeffd()` reports.
 #' It costs \eqn{O(n^2)} time, which is a few milliseconds at \eqn{n = 1000}
 #' and roughly a second at \eqn{n = 10000}.
 #'
 #' On data without ties the two agree to floating point accuracy, so the
 #' choice only matters when ties are present. Then there are three options,
-#' in descending order of preference: \code{engine = "exact"} answers the
-#' question exactly, \code{jitter = TRUE} answers it approximately but
+#' in descending order of preference: `engine = "exact"` answers the
+#' question exactly, `jitter = TRUE` answers it approximately but
 #' quickly, and doing neither answers a slightly different question. Only the
 #' last one is a mistake.
 #' }
 #'
 #' \subsection{Ties and jittering}{
-#' \code{jitter = TRUE} breaks ties by adding small random noise, which makes
+#' `jitter = TRUE` breaks ties by adding small random noise, which makes
 #' the fast engine applicable at the cost of a small random perturbation of
 #' the result. It applies to the fast engine only; with
-#' \code{engine = "exact"} it is unnecessary and is refused rather than
+#' `engine = "exact"` it is unnecessary and is refused rather than
 #' silently ignored.
 #' }
 #'
 #' \subsection{Test of independence}{
-#' \code{output = "test"} returns an \code{"htest"} object carrying a
+#' `output = "test"` returns an `"htest"` object carrying a
 #' permutation P value for the null hypothesis that \eqn{x} and \eqn{y} are
 #' independent. Under that hypothesis every pairing of the two samples is
 #' equally likely, so the null distribution is obtained by recomputing the
-#' statistic on \code{R} random pairings. The P value is
+#' statistic on `R` random pairings. The P value is
 #' \eqn{(1 + \#\{D^* \ge D\}) / (R + 1)}, which is never exactly zero - with
-#' \code{R} permutations no evidence stronger than \eqn{1/(R+1)} has been
+#' `R` permutations no evidence stronger than \eqn{1/(R+1)} has been
 #' gathered, and reporting 0 would claim otherwise.
 #'
 #' The permutation route was chosen over the tabulated asymptotic
 #' distribution on purpose: it needs neither a table nor a scaling constant,
-#' it is exact by construction, and it costs \code{R} evaluations of a
+#' it is exact by construction, and it costs `R` evaluations of a
 #' statistic that is fast - which is the whole point of the fast engine.
-#' With \code{engine = "exact"} the permutations are applied to \code{y}
+#' With `engine = "exact"` the permutations are applied to `y`
 #' itself, so the tie structure of both variables is preserved and the null
 #' distribution belongs to the same tied data.
 #' }
@@ -107,14 +107,14 @@
 #' exactly at independence, which is the one place a reader would look.
 #'
 #' What is well founded here is the test, and that is what
-#' \code{output = "test"} provides. An interval over the first-order
+#' `output = "test"` provides. An interval over the first-order
 #' projection could be constructed for data that are clearly far from
 #' independence, but it is deliberately not offered: its coverage cannot be
 #' relied on in the situation the statistic is most often used for.
 #' }
 #'
 #' Missing values are an error rather than a silent approximation:
-#' \code{\link{order}} and \code{\link{rank}} place \code{NA}s at the end
+#' [order()] and [rank()] place `NA`s at the end
 #' by default, which yields a formally valid permutation and hence a number
 #' that looks like an answer. Remove or impute them before calling.
 #'
@@ -127,11 +127,11 @@
 #'
 #' Blum, J. R., Kiefer, J. and Rosenblatt, M. (1961).
 #' Distribution free tests of independence based on the sample distribution
-#' function. \emph{Annals of Mathematical Statistics} \bold{32}, 485-498.
+#' function. *Annals of Mathematical Statistics* **32**, 485-498.
 #'
 #' Arcones, M. A. and Gine, E. (1992).
 #' On the bootstrap of U and V statistics.
-#' \emph{Annals of Statistics} \bold{20}, 655-674.
+#' *Annals of Statistics* **20**, 655-674.
 #'
 #' @examples
 #' set.seed(1)
@@ -161,11 +161,11 @@
 #' hoeffdingD(x, y, output = "test")
 #' cor.test(x, y)$p.value
 #'
-#' @seealso \code{\link{spearmanCor}}, \code{\link{kendallTauB}}
+#' @seealso [spearmanCor()], [kendallTauB()]
 #'
 #' @section Random number generation:
-#' \code{jitter = TRUE} draws from R's random number generator and
-#' therefore advances it, unless \code{seed} is supplied - in which case
+#' `jitter = TRUE` draws from R's random number generator and
+#' therefore advances it, unless `seed` is supplied - in which case
 #' the previous state is restored.
 #'
 #' @family assoc.continuous

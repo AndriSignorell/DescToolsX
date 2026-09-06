@@ -2,8 +2,8 @@
 #'
 #' Computes the empirical Lorenz curve for a numeric vector, optionally with
 #' weights and grouped via formula interface.  Returns an object of class
-#' \code{"Lc"} (or \code{"LcList"} for grouped data) that can be visualized
-#' with \code{plot()}, \code{lines()}, and \code{points()} from the
+#' `"Lc"` (or `"LcList"` for grouped data) that can be visualized
+#' with `plot()`, `lines()`, and `points()` from the
 #' \pkg{pharos} package.
 #'
 #' @details
@@ -19,66 +19,66 @@
 #'
 #' \deqn{L_{\text{general}}(p) = L(p) \cdot \mu}
 #'
-#' For formula input of the form \code{y ~ group}, the data are split by
+#' For formula input of the form `y ~ group`, the data are split by
 #' group and a separate Lorenz curve is computed for each level.  A single
-#' \code{"Lc"} object is returned when there is only one group; otherwise
-#' an \code{"LcList"}.
+#' `"Lc"` object is returned when there is only one group; otherwise
+#' an `"LcList"`.
 #'
-#' Bootstrap confidence intervals in \code{predict.Lc()} are based on
+#' Bootstrap confidence intervals in `predict.Lc()` are based on
 #' resampling with replacement from the (weighted) empirical distribution,
 #' followed by pointwise quantiles across bootstrap replicates.  The number
-#' of replications is controlled by \code{R} passed via \code{...} and
-#' extracted by \code{.extractBootArgs()} (default \code{R = 999}).
+#' of replications is controlled by `R` passed via `...` and
+#' extracted by `.extractBootArgs()` (default `R = 999`).
 #'
 #' @param x numeric vector of non-negative values
 #' @param n numeric vector of non-negative weights of the same length as
-#'   \code{x}. Defaults to equal weights (\code{rep(1, length(x))}).
-#' @param na.rm logical. If \code{TRUE}, observations with \code{NA} in
-#'   \code{x} or \code{n} are removed before computation.  Default is
-#'   \code{FALSE}.
-#' @param formula a formula of the form \code{y ~ group} specifying the
+#'   `x`. Defaults to equal weights (`rep(1, length(x))`).
+#' @param na.rm logical. If `TRUE`, observations with `NA` in
+#'   `x` or `n` are removed before computation.  Default is
+#'   `FALSE`.
+#' @param formula a formula of the form `y ~ group` specifying the
 #'   response and grouping variable
-#' @param data optional data frame in which to evaluate \code{formula}
-#' @param subset optional expression indicating which rows of \code{data}
+#' @param data optional data frame in which to evaluate `formula`
+#' @param subset optional expression indicating which rows of `data`
 #'   to use
 #' @param na.action function for handling missing values in the model frame.
-#'   Default is \code{\link[stats]{na.pass}}.
-#' @param object object of class \code{"Lc"} as returned by \code{lc()}
+#'   Default is [stats::na.pass()].
+#' @param object object of class `"Lc"` as returned by `lc()`
 #' @param newdata optional numeric vector of values in \eqn{[0, 1]} at
 #'   which to evaluate the Lorenz curve via linear interpolation.  If
 #'   omitted, the original grid points are returned.
 #' @param conf.level numeric scalar in \eqn{(0, 1)}. If supplied,
-#'   bootstrap confidence intervals at level \code{conf.level} are added
-#'   as columns \code{lci} and \code{uci}.  Set to \code{NA} (default)
+#'   bootstrap confidence intervals at level `conf.level` are added
+#'   as columns `lci` and `uci`.  Set to `NA` (default)
 #'   to suppress intervals.
-#' @param general logical. If \code{TRUE}, the generalized Lorenz curve
-#'   is used.  Default is \code{FALSE}.
-#' @param ... further arguments passed to \code{lc.default()} from
-#'   \code{lc.formula()}. In \code{predict.Lc()}, the argument \code{R}
-#'   (positive integer, default \code{999}) controls the number of bootstrap
-#'   replications when \code{conf.level} is supplied; it is extracted via
-#'   \code{.extractBootArgs()} and ignored otherwise.
+#' @param general logical. If `TRUE`, the generalized Lorenz curve
+#'   is used.  Default is `FALSE`.
+#' @param ... further arguments passed to `lc.default()` from
+#'   `lc.formula()`. In `predict.Lc()`, the argument `R`
+#'   (positive integer, default `999`) controls the number of bootstrap
+#'   replications when `conf.level` is supplied; it is extracted via
+#'   `.extractBootArgs()` and ignored otherwise.
 #'
 #' @return
 #' \describe{
-#'   \item{\code{lc.default()}}{an object of class \code{"Lc"}, a list
+#'   \item{`lc.default()`}{an object of class `"Lc"`, a list
 #'     with components:
 #'     \describe{
-#'       \item{\code{p}}{numeric vector of cumulative population shares
+#'       \item{`p`}{numeric vector of cumulative population shares
 #'         starting at 0}
-#'       \item{\code{L}}{numeric vector of Lorenz curve values at \code{p}}
-#'       \item{\code{L.general}}{generalized Lorenz curve values}
-#'       \item{\code{Gini}}{estimated Gini coefficient}
-#'       \item{\code{x}}{original unsorted data vector}
-#'       \item{\code{n}}{original weight vector}
+#'       \item{`L`}{numeric vector of Lorenz curve values at `p`}
+#'       \item{`L.general`}{generalized Lorenz curve values}
+#'       \item{`Gini`}{estimated Gini coefficient}
+#'       \item{`x`}{original unsorted data vector}
+#'       \item{`n`}{original weight vector}
 #'     }
 #'   }
-#'   \item{\code{lc.formula()}}{a single \code{"Lc"} object if the formula
-#'     specifies one group, otherwise an object of class \code{"LcList"}
-#'     (a named list of \code{"Lc"} objects, one per group level)}
-#'   \item{\code{predict.Lc()}}{a data frame with columns \code{p} and
-#'     \code{L} (interpolated curve values at \code{newdata}).  If
-#'     \code{conf.level} is supplied, columns \code{lci} and \code{uci}
+#'   \item{`lc.formula()`}{a single `"Lc"` object if the formula
+#'     specifies one group, otherwise an object of class `"LcList"`
+#'     (a named list of `"Lc"` objects, one per group level)}
+#'   \item{`predict.Lc()`}{a data frame with columns `p` and
+#'     `L` (interpolated curve values at `newdata`).  If
+#'     `conf.level` is supplied, columns `lci` and `uci`
 #'     are appended.}
 #' }
 #'
@@ -134,7 +134,7 @@
 #'
 #' @references
 #' Lorenz, M. O. (1905). Methods of measuring the concentration of wealth.
-#' \emph{Publications of the American Statistical Association}, \bold{9},
+#' *Publications of the American Statistical Association*, **9**,
 #' 209--219.
 #'
 #' @seealso  [pharos::plot.Lc] for visualization.

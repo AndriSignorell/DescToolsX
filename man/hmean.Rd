@@ -22,16 +22,16 @@ coerced, if possible, by \code{as.vector()}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{a vector of character strings representing the type of
 intervals required. The value should be any subset of the values
-\code{"classic"}, \code{"boot"}.  See \code{\link[boot]{boot.ci}}.}
+\code{"classic"}, \code{"boot"}.  See \code{\link[boot:boot.ci]{boot::boot.ci()}}.}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{...}{further arguments are passed to the \code{\link[boot]{boot}}
+\item{...}{further arguments are passed to the \code{\link[boot:boot]{boot::boot()}}
 function. Supported arguments are \code{type} (\code{"norm"},
 \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel}
 and the number of bootstrap replicates \code{R}. If not defined those will
@@ -54,7 +54,7 @@ Calculates the harmonic mean and its confidence interval of a vector x.
 \details{
 To compute the harmonic mean, \code{1/x} is first calculated, before the
 arithmetic mean and its confidence interval are computed by
-\code{\link[lumen]{meanCI}}. The harmonic mean is then the reciprocal of the
+\code{\link[lumen:meanCI]{lumen::meanCI()}}. The harmonic mean is then the reciprocal of the
 arithmetic mean of the reciprocals of the values. The same applies to the
 confidence interval.
 
@@ -69,7 +69,7 @@ yields an interval bounded below, \code{"right"} one bounded above. The
 harmonic mean of positive values is itself positive, so the open lower
 side is reported as 0 rather than as \code{NA} or \eqn{-\infty}.
 
-Use \code{\link{sapply}} to calculate the measures from data frame, resp.
+Use \code{\link[=sapply]{sapply()}} to calculate the measures from data frame, resp.
 from a matrix. \cr
 }
 \examples{
@@ -85,7 +85,7 @@ sapply(as.data.frame(m), hmean)
 }
 \references{
 Snedecor, G. W., Cochran, W. G. (1989) Statistical Methods, 8th
-ed. Ames, \emph{IA: Iowa State University Press }
+ed. Ames, *IA: Iowa State University Press *
 }
 \seealso{
 Other location:

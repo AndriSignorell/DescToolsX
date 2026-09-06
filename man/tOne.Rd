@@ -36,11 +36,11 @@ instead of the real names}
 should also be displayed for the whole, ungrouped variable}
 
 \item{align}{the character on whose position the strings will be aligned.
-Left alignment can be requested by setting \code{sep = "\\l"}, right
-alignment by \code{"\\r"} and center alignment by \code{"\\c"}. Mind the
+Left alignment can be requested by setting \code{sep = "\\\\l"}, right
+alignment by \code{"\\\\r"} and center alignment by \code{"\\\\c"}. Mind the
 backslashes, as if they are omitted, strings would be aligned to the
-\bold{character} \bold{l}, \bold{r} or \bold{c} respectively. Default value
-is \code{"\\l"}, thus left alignment.}
+\strong{character} \strong{l}, \strong{r} or \strong{c} respectively. Default value
+is \code{"\\\\l"}, thus left alignment.}
 
 \item{FUN}{the function to be used as location and dispersion measure for
 numeric (including integer) variables (\code{mean}/\code{sd} is default,
@@ -49,7 +49,7 @@ function). See examples.}
 
 \item{TEST}{a list of functions to be used to test the variables. Must be
 named as \code{"num"}, \code{"cat"} and \code{"dich"} and be defined as
-function with arguments \code{(x, g)}, generating something similar to a
+function with arguments \verb{(x, g)}, generating something similar to a
 p-value. Use \code{TEST=NA} to suppress test. (See examples.)}
 
 \item{intref}{one out of \code{"high"} (default), \code{"low"} or
@@ -111,7 +111,7 @@ variables the absolute and relative frequencies are calculated and tested
 with a chi-square test. \cr The tests can be changed with the argument
 \code{TEST}. These must be organised as list containing elements named
 \code{"num"}, \code{"cat"} and \code{"dich"}. Each of them must be a
-function with arguments \code{(x, g)}, returning something similar to a
+function with arguments \verb{(x, g)}, returning something similar to a
 p-value.
 \preformatted{
   TEST = list( num = list(fun = function(x, g){
@@ -127,11 +127,11 @@ the table together with the significance codes, can be set with the variable
 \code{lbl}.
 
 Great importance was attached to the free definition of the number fms.
-By default, the optionally definable fm templates of \bold{DescToolsX}
+By default, the optionally definable fm templates of \strong{DescToolsX}
 are used. Deviations from this can be freely passed as arguments to the
 function. fms can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of the
-function \code{\link[pharos]{fm}()} are available and can be provided as a list.
+function \code{\link[pharos:fm]{pharos::fm()}} are available and can be provided as a list.
 See examples which show several different implementations.
 \preformatted{
   fmt = list(abs  = "abs.sty",
@@ -140,7 +140,7 @@ See examples which show several different implementations.
              pval = style(fmt = "*", naForm = "   ")
              ) }
 
-Several tables can be appended using \code{\link[bedrock]{appendX}()}.
+Several tables can be appended using \code{\link[bedrock:appendX]{bedrock::appendX()}}.
 This can be useful,
 if e.g. the \code{mean/sd} AND \code{median/IQR} should be displayed together.
 Another use case is to introduce a delimiter row.
@@ -253,7 +253,7 @@ toWrd(
 
 }
 \seealso{
-\code{\link[bedrock]{appendX}()}
+\code{\link[bedrock:appendX]{bedrock::appendX()}}
 
 Other frequency:
 \code{\link[=expFreq]{expFreq()}},

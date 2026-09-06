@@ -64,7 +64,7 @@ Hall, M., Tidemann, N. (1967) \emph{Measures of Concentration}, JASA 62,
 Hirschman, A. O. (1964). The paternity of an index.
 }
 \seealso{
-\code{\link{gini}}, \code{\link{atkinson}}
+\code{\link[=gini]{gini()}}, \code{\link[=atkinson]{atkinson()}}
 
 Other diversity.concentration:
 \code{\link[=entropy]{entropy()}},

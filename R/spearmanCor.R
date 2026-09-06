@@ -2,47 +2,47 @@
 #' Spearman Rank Correlation 
 #' 
 #' Calculate Spearman correlation coefficient and its confidence interval. In
-#' addition to the base R function \code{\link{cor}(x, method="spearman")}, 
+#' addition to the base R function `[cor](x, method="spearman")`, 
 #' frequency tables are
 #' also accepted as arguments (i.e. actually weights are used).
 #' 
-#' The function calculates Spearman's rho statistic by means of \code{cor(...,
-#' method="spearman")} when two variables \code{x} and \code{y} are supplied.
+#' The function calculates Spearman's rho statistic by means of `cor(...,
+#' method="spearman")` when two variables `x` and `y` are supplied.
 #' If a frequency table is provided an implementation based on SAS
 #' documentation is used. Both routes use midranks for ties and agree exactly;
 #' see the examples.\cr The confidence intervals are calculated via
 #' z-Transformation.\cr
 #' 
 #' The number of observations entering the z-transformation is
-#' \code{length(x)} in the vector interface and \code{sum(x)}, the table total,
+#' `length(x)` in the vector interface and `sum(x)`, the table total,
 #' in the table interface. At least four observations are needed for an
 #' interval.
 #' 
-#' \code{sides} names the side of the interval that carries the finite bound,
-#' so \code{"left"} returns \code{[lci, 1]} and \code{"right"} returns
-#' \code{[-1, uci]}. Since rho is bounded, the open side is reported at the
+#' `sides` names the side of the interval that carries the finite bound,
+#' so `"left"` returns `[lci, 1]` and `"right"` returns
+#' `[-1, uci]`. Since rho is bounded, the open side is reported at the
 #' range boundary rather than as infinite.
 #' 
 #' @inheritParams Association
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param na.rm logical; whether to remove incomplete pairs. Applies to the
 #' vector interface; a frequency table must not contain missing counts.
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Spearman's rank correlation}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Spearman's rank correlation}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
-#' @references Conover W. J. (1999) \emph{Practical Nonparametric Statistics
-#' (3rd edition)}. Wiley 
+#' @references Conover W. J. (1999) *Practical Nonparametric Statistics
+#' (3rd edition)*. Wiley 
 #' 
 #' @examples
 #' 
@@ -63,7 +63,7 @@
 #'        ordered), 
 #'      spearmanCor(adverse, dose, conf.level=0.95))
 #' 
-#' @seealso \code{\link{Association}} 
+#' @seealso [Association()] 
 #' 
 #' @family assoc.continuous  
 #' @concept correlation  

@@ -6,7 +6,7 @@
 #' compact and efficient. Calendar arithmetic must nevertheless preserve the
 #' date structure: for example, subtracting two months from 201201 should
 #' return 201111 rather than 201199. [addMonths()] provides this
-#' arithmetic for objects of class \code{"ym"}.
+#' arithmetic for objects of class `"ym"`.
 #'
 #' All parameters are recycled if necessary, following the usual arithmetic
 #' recycling rules; a warning is issued when the longer argument is not a
@@ -17,17 +17,17 @@
 #' 
 #' @param x a vector of integers, representing the dates in the format YYYYMM,
 #' to which a number of months has to be added. YYYY must lie in the range of
-#' 1000-3000, MM in 1-12. Values outside that range become \code{NA}.
+#' 1000-3000, MM in 1-12. Values outside that range become `NA`.
 #' @param d the day to be used for converting a yearmonth to a date. Default is
-#' 1. Combinations that do not exist (e.g. 30 February) yield \code{NA}.
+#' 1. Combinations that do not exist (e.g. 30 February) yield `NA`.
 #' @param \dots further arguments; currently unused
 #' 
 #' @return
 #' \describe{
-#'   \item{\code{as.ym()}}{an integer vector of class \code{"ym"}}
-#'   \item{\code{as.Date.ym()}}{a vector of class \code{"Date"}}
-#'   \item{\code{addMonths.ym()}}{an integer vector of class \code{"ym"}}
-#'   \item{\code{print.ym()}}{invisibly, \code{x}}
+#'   \item{`as.ym()`}{an integer vector of class `"ym"`}
+#'   \item{`as.Date.ym()`}{a vector of class `"Date"`}
+#'   \item{`addMonths.ym()`}{an integer vector of class `"ym"`}
+#'   \item{`print.ym()`}{invisibly, `x`}
 #' }
 #'
 #' @note Based on code by Roland Rapold, adapted to conform to package standards.

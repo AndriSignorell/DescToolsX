@@ -4,7 +4,7 @@
 #'
 #' @details
 #' For a single sample, \eqn{d = \bar{x} / s}; for two samples,
-#' \eqn{d = (\bar{x} - \bar{y}) / s_{pooled}}. With \code{correct = TRUE}
+#' \eqn{d = (\bar{x} - \bar{y}) / s_{pooled}}. With `correct = TRUE`
 #' Hedges' bias correction \eqn{J = 1 - 3/(4\nu - 1)}, with \eqn{\nu} the
 #' residual degrees of freedom, is applied to the estimate and, where
 #' computed, to the interval.
@@ -15,49 +15,49 @@
 #' case, and \eqn{d / \sqrt{1/n_x + 1/n_y}} with \eqn{n_x + n_y - 2}
 #' degrees of freedom in the two-sample case.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
 #' \eqn{(-\infty, uci]}. 
 #'
 #' @param x a non-empty numeric vector of data values
 #' @param y an optional non-empty numeric vector of data values
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param correct logical; whether to apply the Hedges correction. Defaults to
-#' \code{FALSE}.
+#' `FALSE`.
 #' @param na.rm logical. Should missing values be removed? Defaults to
-#' \code{FALSE}.
+#' `FALSE`.
 #'
 #' @name cohenD
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar containing the effect
+#' @return if `conf.level = NA`, a numeric scalar containing the effect
 #' size; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Cohen's \eqn{d} or Hedges' \eqn{g}.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of Cohen's \eqn{d} or Hedges' \eqn{g}.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #' The magnitude category and pooled standard deviation are stored in the
-#' attributes \code{magnitude} and \code{sdPooled}, respectively.
+#' attributes `magnitude` and `sdPooled`, respectively.
 #'
 #' @note
 #' Based on code by William Revelle.
 #'
-#' @seealso \code{\link{glassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
+#' @seealso [glassDelta()], [meanX()], [varX()]
 #'
-#' @references Cohen, J. (1988) \emph{Statistical power analysis for the
-#' behavioral sciences (2nd ed.)} Academic Press, New York.
+#' @references Cohen, J. (1988) *Statistical power analysis for the
+#' behavioral sciences (2nd ed.)* Academic Press, New York.
 #'
-#' Hedges, L. V. & Olkin, I. (1985) \emph{Statistical methods for
-#' meta-analysis} Academic Press, Orlando, FL
+#' Hedges, L. V. & Olkin, I. (1985) *Statistical methods for
+#' meta-analysis* Academic Press, Orlando, FL
 #'
-#' Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications
-#' in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
+#' Smithson, M.J. (2003) *Confidence Intervals, Quantitative Applications
+#' in the Social Sciences Series*, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
 #'
 #' @examples
 #'

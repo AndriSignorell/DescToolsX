@@ -2,21 +2,21 @@
 #' Set DescToolsX Options
 #'
 #' Set one or more package options. Each supplied name is stored with the
-#' \code{"DescToolsX."} prefix and can be read with \code{\link{getOption}()}.
+#' `"DescToolsX."` prefix and can be read with [getOption()].
 #'
 #' Options used by descriptive methods include:
 #' \describe{
-#'   \item{\code{plotit}}{whether descriptive functions create plots by
+#'   \item{`plotit`}{whether descriptive functions create plots by
 #'     default}
-#'   \item{\code{footnote}}{characters used as footnote markers}
-#'   \item{\code{lang}}{language used for month and weekday names}
+#'   \item{`footnote`}{characters used as footnote markers}
+#'   \item{`lang`}{language used for month and weekday names}
 #' }
 #'
 #' @param \dots named option values
 #'
 #' @return a named list containing the previous values, invisibly
 #'
-#' @seealso \code{\link{options}}, \code{\link{getOption}}
+#' @seealso [options()], [getOption()]
 #'
 #' @examples
 #' old <- getOption("DescToolsX.plotit")

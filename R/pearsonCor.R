@@ -9,24 +9,24 @@
 #' calculation of normal distributed confidence intervals.
 #' 
 #' @param x a numeric vector, matrix, or table
-#' @param y \code{NULL} (default) or a vector with compatible dimensions to
-#' \code{x}. If \code{y} is supplied, \code{table(x, y, ...)} is calculated.
+#' @param y `NULL` (default) or a vector with compatible dimensions to
+#' `x`. If `y` is supplied, `table(x, y, ...)` is calculated.
 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'   
 #' @param scoresType score calculation method for table input
-#' @param na.rm logical, default \code{FALSE} determining if complete cases
+#' @param na.rm logical, default `FALSE` determining if complete cases
 #' should be respected
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Pearson's correlation coefficient}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Pearson's correlation coefficient}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
 #' @note Based on code by William Revelle, adapted to conform to package standards.

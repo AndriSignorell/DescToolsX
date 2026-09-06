@@ -9,10 +9,10 @@
 #' @param x a matrix of size \eqn{N \times m} with subjects in rows and raters
 #'   in columns; cells contain the assigned categories
 #' @param categories the categories a rater could have chosen from, or a single
-#'   number giving how many there were. Defaults to \code{NULL}, i.e. the
-#'   categories actually observed in \code{x}. See Details.
+#'   number giving how many there were. Defaults to `NULL`, i.e. the
+#'   categories actually observed in `x`. See Details.
 #' @param conf.level reserved for future confidence intervals; must be
-#'   \code{NA}
+#'   `NA`
 #' @param ... reserved for future bootstrap options and currently ignored
 #'
 #' @details
@@ -20,22 +20,22 @@
 #' \eqn{N} the number of subjects. Randolph's kappa is
 #' \deqn{\kappa = \frac{P_o - 1/k}{1 - 1/k},}
 #' where the observed agreement \eqn{P_o} is the proportion of agreeing rater
-#' \emph{pairs},
+#' *pairs*,
 #' \deqn{P_o = \frac{1}{N} \sum_{i=1}^{N}
 #'       \frac{\sum_{j} n_{ij}(n_{ij}-1)}{m(m-1)}.}
 #' Here, \eqn{n_{ij}} denotes the number of raters who assigned subject \eqn{i}
 #' to category \eqn{j}. This is the same observed agreement as in Fleiss'
-#' kappa (and as computed by \code{\link{percAgreement}}); Randolph's
+#' kappa (and as computed by [percAgreement()]); Randolph's
 #' coefficient differs from Fleiss' only in the chance agreement \eqn{P_e},
 #' which is fixed at \eqn{1/k} instead of being estimated from the marginals.
 #'
-#' \eqn{P_e = 1/k} refers to the categories a rater could have \emph{chosen},
+#' \eqn{P_e = 1/k} refers to the categories a rater could have *chosen*,
 #' not to those that happen to occur in the data. If a category was available
-#' but never used, the default \code{categories = NULL} understates \eqn{k}
+#' but never used, the default `categories = NULL` understates \eqn{k}
 #' and thus overstates chance agreement, which biases \eqn{\kappa} downwards.
-#' Supply \code{categories} whenever the coding scheme is known.
+#' Supply `categories` whenever the coding scheme is known.
 #'
-#' Long-format ratings can first be reshaped with \code{\link{raterFrame}}.
+#' Long-format ratings can first be reshaped with [raterFrame()].
 #'
 #' @return a numeric scalar containing Randolph's kappa
 #'

@@ -4,8 +4,8 @@
 #' Creates a factor variable using the quantiles of a continuous variable.
 #' 
 #' 
-#' This function uses \code{\link{quantile}} to obtain the specified quantiles
-#' of \code{x}, then calls \code{\link{cut}} to create a factor variable using
+#' This function uses [quantile()] to obtain the specified quantiles
+#' of `x`, then calls [cut()] to create a factor variable using
 #' the intervals specified by these quantiles.
 #' 
 #' It properly handles cases where more than one quantile obtains the same
@@ -15,26 +15,26 @@
 #' 
 #' @param x continuous variable
 #' @param breaks cut points used to create groups. By default, quartiles are
-#' used. See \code{\link{quantile}} for details. A single integer specifies
-#' the intended number of groups; for example, \code{breaks = 10} creates
+#' used. See [quantile()] for details. A single integer specifies
+#' the intended number of groups; for example, `breaks = 10` creates
 #' deciles.
 #' @param labels labels for the levels of the resulting category. By default,
-#' labels are defined as \code{Q1}, \code{Q2}, and so on. The argument is
-#' passed to \code{\link{cut}}, so \code{labels = FALSE} returns integer codes
+#' labels are defined as `Q1`, `Q2`, and so on. The argument is
+#' passed to [cut()], so `labels = FALSE` returns integer codes
 #' instead of a factor. When quantiles are tied, the levels are built from
-#' the observed interval bounds instead and \code{labels} is ignored - a
+#' the observed interval bounds instead and `labels` is ignored - a
 #' warning is issued in that case.
 #' @param na.rm logical. Should missing values be removed before the
-#' quantiles are computed? Defaults to \code{FALSE}. Note that the
-#' quantiles themselves are always taken with \code{na.rm = TRUE}; this
+#' quantiles are computed? Defaults to `FALSE`. Note that the
+#' quantiles themselves are always taken with `na.rm = TRUE`; this
 #' argument decides whether the missing values are dropped from the
 #' returned factor as well.
-#' @param \dots optional arguments passed to \code{\link{cut}}
+#' @param \dots optional arguments passed to [cut()]
 #' @return a factor with one level for each quantile interval, or an integer
-#' vector when \code{labels = FALSE}
+#' vector when `labels = FALSE`
 #' @note Based on code by Gregory R. Warnes, adapted to conform to package standards.
 #' 
-#' @seealso \code{\link{cut}}, \code{\link{quantile}}
+#' @seealso [cut()], [quantile()]
 #' 
 #' @examples
 #' 

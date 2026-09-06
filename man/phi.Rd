@@ -13,7 +13,7 @@ phi(x, y = NULL, ...)
 \item{y}{optional second categorical vector. If provided, a contingency
 table is constructed from \code{x} and \code{y}.}
 
-\item{...}{additional arguments passed to \code{\link[base]{table}}}
+\item{...}{additional arguments passed to \code{\link[base:table]{base::table()}}}
 }
 \value{
 a numeric scalar containing the Phi coefficient
@@ -42,10 +42,10 @@ coefficient \eqn{(n_{11} n_{22} - n_{12} n_{21}) /
 \sqrt{n_{1\cdot} n_{2\cdot} n_{\cdot 1} n_{\cdot 2}}} equals the Pearson
 correlation of the two 0/1 indicators and lies in \eqn{[-1, 1]}; the value
 returned here is its absolute value, so the direction of the association
-is not reported. See \code{\link{pearsonCor}} if the sign is needed.
+is not reported. See \code{\link[=pearsonCor]{pearsonCor()}} if the sign is needed.
 
 For contingency tables larger than 2x2, Phi is not bounded by 1 and
-may exceed 1. In such cases, \code{\link{cramerV}} is usually preferred.
+may exceed 1. In such cases, \code{\link[=cramerV]{cramerV()}} is usually preferred.
 }
 \examples{
 # Example with vectors
@@ -61,7 +61,7 @@ phi(tab)
 
 }
 \seealso{
-\code{\link{chisq.test}}
+\code{\link[=chisq.test]{chisq.test()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},

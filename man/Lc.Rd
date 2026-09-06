@@ -23,7 +23,7 @@ response and grouping variable}
 to use}
 
 \item{na.action}{function for handling missing values in the model frame.
-Default is \code{\link[stats]{na.pass}}.}
+Default is \code{\link[stats:na.pass]{stats::na.pass()}}.}
 
 \item{...}{further arguments passed to \code{lc.default()} from
 \code{lc.formula()}. In \code{predict.Lc()}, the argument \code{R}
@@ -161,7 +161,7 @@ points(lc_grp, pch = 16)
 }
 \references{
 Lorenz, M. O. (1905). Methods of measuring the concentration of wealth.
-\emph{Publications of the American Statistical Association}, \bold{9},
+\emph{Publications of the American Statistical Association}, \strong{9},
 209--219.
 }
 \seealso{

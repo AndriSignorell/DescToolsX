@@ -4,31 +4,31 @@
 #' Check whether an object contains a date component, a time component, or
 #' both, and determine whether its observed times of day vary.
 #'
-#' The predicates inspect the class of \code{x}; character strings are not
-#' parsed or converted. In addition to the base R classes \code{"Date"},
-#' \code{"POSIXct"}, and \code{"POSIXlt"}, the legacy classes
-#' \code{"dates"}, \code{"times"}, and \code{"chron"} are supported.
+#' The predicates inspect the class of `x`; character strings are not
+#' parsed or converted. In addition to the base R classes `"Date"`,
+#' `"POSIXct"`, and `"POSIXlt"`, the legacy classes
+#' `"dates"`, `"times"`, and `"chron"` are supported.
 #'
-#' \code{isDate} returns \code{TRUE} for objects containing a date component,
-#' including date-time objects. \code{isTime} returns \code{TRUE} for objects
+#' `isDate` returns `TRUE` for objects containing a date component,
+#' including date-time objects. `isTime` returns `TRUE` for objects
 #' containing a time component, including date-time objects.
-#' \code{isDateTime} identifies classes containing both components, and is
-#' by construction equivalent to \code{isDate(x) && isTime(x)}.
+#' `isDateTime` identifies classes containing both components, and is
+#' by construction equivalent to `isDate(x) && isTime(x)`.
 #'
-#' The \pkg{chron} classes need care, because \code{"dates"} inherits from
-#' \code{"times"}: a pure date object therefore carries the \code{"times"}
-#' class without having a time component. \code{isTime} accounts for this,
-#' so that \code{"dates"} counts as date-only, \code{"times"} as time-only,
-#' and \code{"chron"} as both.
+#' The \pkg{chron} classes need care, because `"dates"` inherits from
+#' `"times"`: a pure date object therefore carries the `"times"`
+#' class without having a time component. `isTime` accounts for this,
+#' so that `"dates"` counts as date-only, `"times"` as time-only,
+#' and `"chron"` as both.
 #'
-#' \code{hasVaryingTime} compares the observed times of day while ignoring
-#' differences in the date component. It returns \code{FALSE} for objects
+#' `hasVaryingTime` compares the observed times of day while ignoring
+#' differences in the date component. It returns `FALSE` for objects
 #' without a time component and when fewer than two non-missing times are
 #' available.
 #'
 #' For date-time objects the comparison uses local clock time, which is
 #' usually what matters when deciding whether times need to be displayed at
-#' all. Where a daylight saving transition falls inside \code{x}, clock time
+#' all. Where a daylight saving transition falls inside `x`, clock time
 #' and elapsed time come apart: two instants an hour apart can share the same
 #' clock time in the repeated hour of an autumn transition, and are then
 #' reported as not varying.
@@ -36,16 +36,16 @@
 #' @name date-time-predicates
 #'
 #' @param x an object to examine
-#' @param na.rm logical; if \code{TRUE}, missing values are removed before
-#' the time components are compared (\code{hasVaryingTime} only)
+#' @param na.rm logical; if `TRUE`, missing values are removed before
+#' the time components are compared (`hasVaryingTime` only)
 #'
 #' @return
-#' for \code{isDate}, \code{isTime}, and \code{isDateTime}, a single logical
-#' value. \code{hasVaryingTime} likewise returns a single logical value, or
-#' \code{NA} if \code{x} contains missing values and \code{na.rm = FALSE}.
+#' for `isDate`, `isTime`, and `isDateTime`, a single logical
+#' value. `hasVaryingTime` likewise returns a single logical value, or
+#' `NA` if `x` contains missing values and `na.rm = FALSE`.
 #'
 #' @seealso
-#' \code{\link[base]{inherits}}, \code{\link[base]{DateTimeClasses}}
+#' [base::inherits()], [base::DateTimeClasses()]
 #'
 #' @family date.time
 #' @concept date-time

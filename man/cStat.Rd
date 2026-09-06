@@ -64,7 +64,7 @@ The number of bootstrap samples can be supplied through \code{...} as
 
 A confidence level triggers a bootstrap, which draws a seed from R's
 global random number generator and therefore advances it. Call
-\code{\link[base]{set.seed}} beforehand for reproducible intervals.
+\code{\link[base:set.seed]{base::set.seed()}} beforehand for reproducible intervals.
 }
 
 \examples{

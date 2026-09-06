@@ -15,7 +15,7 @@
 #' Misclassification probabilities are based on random category assignment with
 #' probabilities specified by marginal or conditional proportion.
 #' 
-#' Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{phi}}) in the
+#' Goodman Kruskal tau reduces to \eqn{\phi^2} (see: [phi()]) in the
 #' 2x2-table case.\cr
 #' 
 #' The measure lies in \eqn{[0, 1]} by construction. Both ends are reached by
@@ -30,56 +30,56 @@
 #' sum of chi-square variables rather than normal) and under perfect
 #' prediction (\eqn{\tau = 1}). Where the estimated standard error is zero the
 #' interval would collapse to a single point and thus exclude every other
-#' value, which no sample supports; the bounds are returned as \code{NA} with a
+#' value, which no sample supports; the bounds are returned as `NA` with a
 #' warning instead. Close to either end the normal approximation is poor and
 #' the interval is too narrow.
 #' 
 #' @name gkTau
 #' @param x a vector (typically a factor, character, or numeric vector)
 #'        containing categorical data, or a contingency table.
-#' @param y \code{NULL} (default) or a vector with compatible dimensions to
-#' \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param y `NULL` (default) or a vector with compatible dimensions to
+#' `x`. If supplied, `table(x, y, \dots)` is calculated.
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
-#' @param direction direction of the calculation. Must be \code{"row"}
-#' (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
+#' @param direction direction of the calculation. Must be `"row"`
+#' (default) or `"column"`. `"row"` gives tau (R|C), i.e. the row
 #' variable is the dependent one and is predicted from the column variable;
-#' \code{"column"} gives tau (C|R).
+#' `"column"` gives tau (C|R).
 #'
 #' @param \dots further arguments are passed to the function
-#' \code{\link{table}}, allowing i.e. to set useNA. This refers only to the
-#' vector interface; supplying them without \code{y} is an error.
+#' [table()], allowing i.e. to set useNA. This refers only to the
+#' vector interface; supplying them without `y` is an error.
 #' 
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Goodman-Kruskal's tau}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Goodman-Kruskal's tau}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
 #' @note Based on code by Antti Arppe, adapted to conform to package standards.
 #' 
-#' @references Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
+#' @references Agresti, A. (2002) *Categorical Data Analysis*. John Wiley
 #' & Sons, pp. 57-59.
 #' 
 #' Goodman, L. A., & Kruskal, W. H. (1954) Measures of association for cross
-#' classifications. \emph{Journal of the American Statistical Association}, 49,
+#' classifications. *Journal of the American Statistical Association*, 49,
 #' 732-764.
 #' 
 #' Goodman, L. A., & Kruskal, W. H. (1963) Measures of association for cross
-#' classifications III: Approximate sampling theory. \emph{Journal of the
-#' American Statistical Association}, 58, 310-364.
+#' classifications III: Approximate sampling theory. *Journal of the
+#' American Statistical Association*, 58, 310-364.
 #' 
-#' Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University
+#' Liebetrau, A. M. (1983) *Measures of Association*, Sage University
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 24--30
 #' 
-#' @seealso \code{\link{lambda}}, \code{\link{cramerV}},
-#' \code{\link{Association}}
+#' @seealso [lambda()], [cramerV()],
+#' [Association()]
 #' 
 #' @examples
 #' # example in:

@@ -61,7 +61,7 @@ the other hand already calculates some basic statistics.
 }
 \details{
 The levels of a factor and describing variable labels (as created by
-\code{\link[bedrock]{label}()}) will be wrapped within the columns.
+\code{\link[bedrock:label]{bedrock::label()}}) will be wrapped within the columns.
 
 The first 4 columns are printed with the needed fix width, the last 2
 (Levels and Labels) are wrapped within the column. The width is calculated

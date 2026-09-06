@@ -104,7 +104,7 @@ supported forms include \code{y ~ 1}, \code{Pair(x, y) ~ 1},
 \code{y ~ treatment | block}}
 
 \item{data}{optional matrix or data frame (or similar; see
-\code{\link[stats]{model.frame}}) containing the variables in the
+\code{\link[stats:model.frame]{stats::model.frame()}}) containing the variables in the
 formula. If omitted, variables are taken from
 \code{environment(formula)}}
 
@@ -112,7 +112,7 @@ formula. If omitted, variables are taken from
 to be used in the analysis}
 
 \item{na.action}{function specifying how missing values are handled;
-passed to \code{\link[bedrock]{resolveFormula}}}
+passed to \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}}
 }
 \value{
 an object of class \code{"Desc"} with a subclass determined by the
@@ -156,35 +156,35 @@ You usually call \code{desc(x)}, but direct calls like
 
 \strong{Univariate descriptions}
 \itemize{
-\item Numeric variables: \code{\link{desc.numeric}}
-\item Factors and character vectors: \code{\link{desc.factor}}
-\item Boolean variables: \code{\link{desc.logical}}
-\item Contingency tables: \code{\link{desc.table}}
-\item Dates: \code{\link{desc.Date}}
-\item Time series: \code{\link{desc.ts}}
+\item Numeric variables: \code{\link[=desc.numeric]{desc.numeric()}}
+\item Factors and character vectors: \code{\link[=desc.factor]{desc.factor()}}
+\item Boolean variables: \code{\link[=desc.logical]{desc.logical()}}
+\item Contingency tables: \code{\link[=desc.table]{desc.table()}}
+\item Dates: \code{\link[=desc.Date]{desc.Date()}}
+\item Time series: \code{\link[=desc.ts]{desc.ts()}}
 }
 
 \strong{Bivariate descriptions}
 \itemize{
-\item numeric ~ numeric: \code{\link{desc.nn}}
-\item numeric ~ qualitative: \code{\link{desc.nq}}
-\item qualitative ~ numeric: \code{\link{desc.qn}}
-\item qualitative ~ qualitative: \code{\link{desc.qq}}
-(wrapper around \code{\link{desc.table}})
+\item numeric ~ numeric: \code{\link[=desc.nn]{desc.nn()}}
+\item numeric ~ qualitative: \code{\link[=desc.nq]{desc.nq()}}
+\item qualitative ~ numeric: \code{\link[=desc.qn]{desc.qn()}}
+\item qualitative ~ qualitative: \code{\link[=desc.qq]{desc.qq()}}
+(wrapper around \code{\link[=desc.table]{desc.table()}})
 }
 
 \strong{Design}
 The \code{desc} system separates:
 \itemize{
-\item computation (internal \code{.desc_*} functions)
-\item printing (\code{print.Desc.*})
-\item visualization (\code{plot.Desc.*})
+\item computation (internal \verb{.desc_*} functions)
+\item printing (\verb{print.Desc.*})
+\item visualization (\verb{plot.Desc.*})
 }
 
 Description of a \strong{dichotomous variable}. This can either be a logical
 vector, a factor with two levels or a numeric variable with only two unique
 values. The confidence levels for the relative frequencies are calculated by
-\code{\link[lumen]{binomCI}()}, method \code{"Wilson"} on a confidence
+\code{\link[lumen:binomCI]{lumen::binomCI()}}, method \code{"Wilson"} on a confidence
 level defined by \code{conf.level}.
 
 Dichotomous variables can be condensed into a compact graphical
@@ -192,9 +192,9 @@ representation. The method calculates frequencies and binomial confidence
 intervals and can display them as a dot plot with error bars.
 }
 \seealso{
-\code{\link{summary}}, \code{\link{plot}}
+\code{\link[=summary]{summary()}}, \code{\link[=plot]{plot()}}
 
-\code{\link[pharos]{plotPropCI}} for graphical display
+\code{\link[pharos:plotPropCI]{pharos::plotPropCI()}} for graphical display
 
 Other desc:
 \code{\link[=desc.Date]{desc.Date()}},

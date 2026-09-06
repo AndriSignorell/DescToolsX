@@ -24,7 +24,7 @@ pearsonCor(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{scoresType}{score calculation method for table input}
 

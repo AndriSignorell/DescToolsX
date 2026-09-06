@@ -22,7 +22,7 @@ gini(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{unbiased}{logical; whether to apply the small-sample bias
 correction factor \eqn{n/(n-1)}, with \eqn{n} the effective sample size
@@ -87,7 +87,7 @@ boundary (0 or 1) rather than as \eqn{\pm\infty} (design_rules.md 4.1).
 \section{Random number generation}{
 
 A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call \code{\link[base]{set.seed}}
+global random number generator. Call \code{\link[base:set.seed]{base::set.seed()}}
 beforehand for reproducible intervals.
 }
 

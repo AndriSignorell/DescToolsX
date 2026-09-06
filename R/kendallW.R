@@ -6,14 +6,14 @@
 #' coefficient could be corrected for ties within raters.
 #' 
 #' The test for Kendall's W is completely equivalent to
-#' \code{\link[stats]{friedman.test}}. The only advantage of this test over
+#' [stats::friedman.test()]. The only advantage of this test over
 #' Friedman's is that Kendall's W has an interpretation as the coefficient of
 #' concordance. The test itself is only valid for large samples.\cr Kendall's W
 #' should be corrected for ties, if raters did not use a true ranking order for
 #' the subjects. 
 #' The function warns if ties are present and no correction has been required.
 #' 
-#' In the presence of \code{NAs} the algorithm is switched to a generalized form for 
+#' In the presence of `NAs` the algorithm is switched to a generalized form for 
 #' randomly incomplete datasets introduced in Brueckl (2011).
 #' This approach uses the mean Spearman \eqn{\rho}{rho} of all pairwise comparisons 
 #' (see Kendall, 1962):\cr
@@ -33,26 +33,26 @@
 #' @param x \eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m
 #' raters (in columns)
 #' @param correct a logical indicating whether the coefficient should be
-#' corrected for ties within raters (default \code{FALSE})
+#' corrected for ties within raters (default `FALSE`)
 #' @param test a logical indicating whether the test statistic and p-value
-#' should be reported (default \code{FALSE})
+#' should be reported (default `FALSE`)
 #' @param na.rm deprecated and ignored
 #'
-#' @return if \code{test = FALSE}, a numeric scalar containing Kendall's W.
-#' Otherwise an object of class \code{"htest"} with components:
+#' @return if `test = FALSE`, a numeric scalar containing Kendall's W.
+#' Otherwise an object of class `"htest"` with components:
 #' \describe{
-#'   \item{\code{statistic}}{chi-squared test statistic}
-#'   \item{\code{p.value}}{p-value for the test}
-#'   \item{\code{method}}{description of the test and coefficient variant}
-#'   \item{\code{data.name}}{name of the data}
-#'   \item{\code{estimate}}{coefficient of concordance W}
-#'   \item{\code{parameter}}{degrees of freedom and numbers of subjects and raters}
+#'   \item{`statistic`}{chi-squared test statistic}
+#'   \item{`p.value`}{p-value for the test}
+#'   \item{`method`}{description of the test and coefficient variant}
+#'   \item{`data.name`}{name of the data}
+#'   \item{`estimate`}{coefficient of concordance W}
+#'   \item{`parameter`}{degrees of freedom and numbers of subjects and raters}
 #' }
 #' 
 #' @note Based on code by Matthias Gamer and Markus Brueckl, 
 #' adapted to conform to package standards.
 #' 
-#' @references Kendall, M.G. (1948) \emph{Rank correlation methods}. London:
+#' @references Kendall, M.G. (1948) *Rank correlation methods*. London:
 #' Griffin.
 #' 
 #' Kendall, M.G. (1962). Rank correlation methods (3rd ed.). London: Griffin.
@@ -61,7 +61,7 @@
 #' Urteileruebereinstimmung. in: Altersbedingte Veraenderungen der 
 #' Stimme und Sprechweise von Frauen, Berlin: Logos, 88-103.
 #' 
-#' Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. \emph{Biometrics}, 43, 409-416.
+#' Taylor, J.M.G. (1987). Kendall's and Spearman's correlation coefficients in the presence of a blocking variable. *Biometrics*, 43, 409-416.
 #' 
 #' @examples
 #' 

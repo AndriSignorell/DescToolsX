@@ -6,11 +6,11 @@
 #' 
 #' @aliases desc.logical
 #' @details
-#' Description of a \strong{dichotomous variable}. This can either be a logical
+#' Description of a **dichotomous variable**. This can either be a logical
 #' vector, a factor with two levels or a numeric variable with only two unique
 #' values. The confidence levels for the relative frequencies are calculated by
-#' \code{\link[lumen]{binomCI}()}, method \code{"Wilson"} on a confidence
-#' level defined by \code{conf.level}. 
+#' [lumen::binomCI()], method `"Wilson"` on a confidence
+#' level defined by `conf.level`. 
 #' 
 #' Dichotomous variables can be condensed into a compact graphical
 #' representation. The method calculates frequencies and binomial confidence
@@ -22,24 +22,24 @@
 #' @param ... further arguments passed to methods
 #'   
 #' @param digits number of digits used to format relative frequencies; the
-#' default can be set with \code{setDescToolsXOption(digits = x)}
+#' default can be set with `setDescToolsXOption(digits = x)`
 #' @param ord order of the levels
-#' @param include_x logical; if \code{TRUE}, the original vector is retained
+#' @param include_x logical; if `TRUE`, the original vector is retained
 #' in the result
 #'
-#' @return an object of class \code{c("Desc.logical", "Desc")} with components:
+#' @return an object of class `c("Desc.logical", "Desc")` with components:
 #' \describe{
-#'   \item{\code{afrq}}{absolute frequencies}
-#'   \item{\code{rfrq}}{matrix of binomial estimates with columns:
+#'   \item{`afrq`}{absolute frequencies}
+#'   \item{`rfrq`}{matrix of binomial estimates with columns:
 #'     \describe{
-#'       \item{\code{est}}{point estimate of the binomial proportion}
-#'       \item{\code{lci}}{lower confidence interval bound}
-#'       \item{\code{uci}}{upper confidence interval bound}
+#'       \item{`est`}{point estimate of the binomial proportion}
+#'       \item{`lci`}{lower confidence interval bound}
+#'       \item{`uci`}{upper confidence interval bound}
 #'     }}
 #' }
 #' 
 #' 
-#' @seealso \code{\link[pharos]{plotPropCI}} for graphical display
+#' @seealso [pharos::plotPropCI()] for graphical display
 
 
 #' @family desc

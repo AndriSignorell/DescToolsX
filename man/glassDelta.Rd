@@ -24,7 +24,7 @@ glassDelta(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{useControlSd}{logical, if \code{TRUE} (default) the standard
 deviation of the control group \code{y} is used for standardization,
@@ -119,7 +119,7 @@ Theory, application, and implementation. \emph{Journal of Statistical
 Software}, 20(8), 1-24.
 }
 \seealso{
-\code{\link{cohenD}}
+\code{\link[=cohenD]{cohenD()}}
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},

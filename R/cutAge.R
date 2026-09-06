@@ -1,9 +1,9 @@
 
 #' Create a Factor Variable by Cutting an Age Variable
 #'
-#' Dividing the range of an age variable \code{x} into intervals is a frequent
-#' task in data analysis. The commonly used function \code{\link{cut}} has
-#' unfavourable default values for this. \code{cutAge()} is a convenient
+#' Dividing the range of an age variable `x` into intervals is a frequent
+#' task in data analysis. The commonly used function [cut()] has
+#' unfavourable default values for this. `cutAge()` is a convenient
 #' wrapper for cutting age variables in groups of e.g. 10 years with more
 #' suitable defaults.
 #'
@@ -13,23 +13,23 @@
 #' single number (greater than or equal to 2) giving the number of intervals
 #' into which x is to be cut. Default is 10-year intervals from 0 to 90.
 #' @param right logical, indicating if the intervals should be closed on the
-#' right (and open on the left) or vice versa.  Default is \code{FALSE} -
-#' unlike in \code{\link{cut}}!
+#' right (and open on the left) or vice versa.  Default is `FALSE` -
+#' unlike in [cut()]!
 #' @param ordered_result logical: should the result be an ordered factor?
-#' Default is \code{TRUE} - unlike in \code{\link{cut}}!
+#' Default is `TRUE` - unlike in [cut()]!
 #' @param full logical; whether to retain empty levels at the
 #' edges of the distribution
-#' @param labels labels for the levels. When set to \code{TRUE} the age ranges
+#' @param labels labels for the levels. When set to `TRUE` the age ranges
 #' will be 00-09, 10-19, 20-29, etc.
-#' @param \dots further arguments passed to \code{\link{cut}()}, for example
+#' @param \dots further arguments passed to [cut()], for example
 #' to change the labels
 #' @return a factor, or an integer vector of level codes when
-#' \code{labels = FALSE}
+#' `labels = FALSE`
 #'
-#' Values which fall outside the range of breaks are coded as \code{NA}, as are
-#' \code{NaN} and \code{NA} values.
+#' Values which fall outside the range of breaks are coded as `NA`, as are
+#' `NaN` and `NA` values.
 #'
-#' @seealso \code{\link{cut}}, \code{\link{seq}}
+#' @seealso [cut()], [seq()]
 #'
 #' @examples
 #'

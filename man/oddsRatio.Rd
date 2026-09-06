@@ -31,10 +31,10 @@ oddsRatio(x, ...)
 }
 \arguments{
 \item{x}{a 2x2 contingency table, two vectors to be cross-tabulated, or a
-binomial \code{\link[stats]{glm}} object}
+binomial \code{\link[stats:glm]{stats::glm()}} object}
 
 \item{...}{further arguments passed to methods. For the default method
-with two vectors, these reach \code{\link{table}}, so \code{useNA} can
+with two vectors, these reach \code{\link[=table]{table()}}, so \code{useNA} can
 be set here.}
 
 \item{y}{optional second variable. If supplied,
@@ -46,7 +46,7 @@ method computes an interval by default.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}. An odds ratio
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}. An odds ratio
 is bounded below by 0 and unbounded above, so the open side is reported
 at 0 or \code{Inf} accordingly. Ignored, with a warning, for
 \code{method = "profile"}.}
@@ -121,7 +121,7 @@ and is usually not the quantity of interest.
 
 Two interval methods are available. \code{"wald"} is the symmetric
 interval on the log-odds scale, back-transformed. \code{"profile"} inverts
-the likelihood ratio test through \code{\link[stats]{confint.glm}}; it is
+the likelihood ratio test through \code{\link[stats:confint.glm]{stats::confint.glm()}}; it is
 asymmetric on the odds scale, generally more reliable in small samples or
 with sparse cells, and considerably slower because the model is refitted
 along each coefficient. Profile intervals are two-sided by construction,
@@ -135,7 +135,7 @@ be less informative than \code{summary()} itself.
 \note{
 No short alias is exported by default to avoid conflicts with
 \pkg{rlang} and base R naming conventions.  Call
-\code{\link{attachAliases}()} once per session (or script) to make
+\code{\link[=attachAliases]{attachAliases()}} once per session (or script) to make
 \code{or()} available as a convenient shorthand.
 }
 \examples{
@@ -181,7 +181,7 @@ Gart, J. J. (1966). Alternative analyses of contingency tables.
 \emph{28}(1), 164--179.
 }
 \seealso{
-\link{attachAliases}, \link{relRisk}, \code{\link[stats]{confint.glm}}
+\link{attachAliases}, \link{relRisk}, \code{\link[stats:confint.glm]{stats::confint.glm()}}
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},

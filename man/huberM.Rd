@@ -24,7 +24,7 @@ huberM(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{confidence interval method: \code{"wald"} (default) or
 \code{"boot"}.}
@@ -58,7 +58,7 @@ numeric vector with elements:
 \description{
 A (generalized) Huber M-estimator of location with MAD scale that handles
 the degenerate case of zero scale gracefully, where
-\code{\link[MASS]{huber}()} would return an error.
+\code{\link[MASS:huber]{MASS::huber()}} would return an error.
 }
 \details{
 \strong{Wald interval} (\code{method = "wald"})
@@ -108,7 +108,7 @@ Adapted from code by Martin Maechler to conform to package standards
 \section{Random number generation}{
 
 \code{method = "boot"} resamples and therefore advances R's global
-random number generator. Call \code{\link[base]{set.seed}} beforehand
+random number generator. Call \code{\link[base:set.seed]{base::set.seed()}} beforehand
 for reproducible intervals.
 }
 
@@ -131,8 +131,8 @@ Huber, P. J. and Ronchetti, E. M. (2009).
 \emph{Robust Statistics}, 2nd ed. Wiley.
 }
 \seealso{
-\code{\link[MASS]{huber}}, \code{\link{mad}},
-\code{\link{tukeyBiweight}}
+\code{\link[MASS:huber]{MASS::huber()}}, \code{\link[=mad]{mad()}},
+\code{\link[=tukeyBiweight]{tukeyBiweight()}}
 
 Other location:
 \code{\link[=gmean]{gmean()}},

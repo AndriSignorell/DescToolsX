@@ -14,22 +14,22 @@
 #'
 #' @param x atomic vector
 #' @param FUN function used to compute the imputation value, or a scalar value;
-#' default is \code{median}
+#' default is `median`
 #' @param na.rm logical; whether to remove missing values before computing the
 #' summary statistic
-#' @param ... additional arguments passed to \code{FUN}
+#' @param ... additional arguments passed to `FUN`
 #'
-#' @return vector of the same length as \code{x}, with missing values
+#' @return vector of the same length as `x`, with missing values
 #' replaced. The type follows R's usual coercion rules: imputing a double
 #' (the median of an integer vector, say) into an integer vector returns a
 #' double.
 #'
 #' @details
-#' If \code{FUN} is a function, it must return a single value.
+#' If `FUN` is a function, it must return a single value.
 #' An error is thrown if the returned value is not scalar.
 #'
-#' Whether \code{FUN} accepts \code{na.rm} is decided from its formal
-#' arguments; a function taking \code{\dots} is assumed to pass it on.
+#' Whether `FUN` accepts `na.rm` is decided from its formal
+#' arguments; a function taking `\dots` is assumed to pass it on.
 #' Functions without either are called without it.
 #'
 #' @seealso For direct value replacement see [bedrock::naReplace()].

@@ -11,19 +11,19 @@
 #'
 #' Computes, prints and plots a comprehensive bivariate description for two
 #' quantitative variables. The function is dispatched automatically by
-#' \code{desc(y ~ x, data)} when both \code{y} and \code{x} are numeric.
+#' `desc(y ~ x, data)` when both `y` and `x` are numeric.
 #'
-#' @param x numeric predictor for \code{.descNN()}, or an object of class
-#' \code{"Desc.nn"} for the print and plot methods
+#' @param x numeric predictor for `.descNN()`, or an object of class
+#' `"Desc.nn"` for the print and plot methods
 #' @param verbose integer controlling the amount of output (1, 2, or 3).
-#'   \code{NULL} (default) falls back to
-#'   \code{x$meta$verbose \%||\% getOption("DescTools.verbose", 2)}.
+#'   `NULL` (default) falls back to
+#'   `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`.
 #' @param which integer vector selecting which plots to draw. See Details.
-#'   \code{NULL} (default) selects plots automatically based on \code{verbose}.
-#' @param abs.sty format style for counts. \code{NULL} falls back to
-#'   \code{getOption("DescTools.abs.sty")}.
-#' @param per.sty format style for proportions. \code{NULL} falls back to
-#'   \code{getOption("DescTools.per.sty")}.
+#'   `NULL` (default) selects plots automatically based on `verbose`.
+#' @param abs.sty format style for counts. `NULL` falls back to
+#'   `getOption("DescTools.abs.sty")`.
+#' @param per.sty format style for proportions. `NULL` falls back to
+#'   `getOption("DescTools.per.sty")`.
 #' @param \dots further arguments passed to the underlying plot functions
 #' 
 #' @param y numeric response variable
@@ -33,76 +33,76 @@
 #' @aliases .descNN
 #' 
 #' @details
-#' \strong{Print output by verbose level:}
+#' **Print output by verbose level:**
 #'
 #' \describe{
-#'   \item{\code{verbose = 1}}{
+#'   \item{`verbose = 1`}{
 #'     Summary (n, missings), Pearson r and Spearman r each with confidence
 #'     interval and effect size label, linear regression coefficients
 #'     (estimate, CI, significance) and R².}
-#'   \item{\code{verbose = 2} (default)}{
+#'   \item{`verbose = 2` (default)}{
 #'     All of the above, plus residual standard error and Shapiro-Wilk test
 #'     on residuals.}
-#'   \item{\code{verbose = 3}}{
+#'   \item{`verbose = 3`}{
 #'     All of the above, plus Breusch-Pagan test for heteroscedasticity
 #'     and Cook's distance summary.}
 #' }
 #'
-#' \strong{Confidence intervals} are reported throughout instead of standard
-#' errors and t-values, using \code{confint()} for regression coefficients
-#' and \code{corCI()} (Fisher z-transform) for correlations.
+#' **Confidence intervals** are reported throughout instead of standard
+#' errors and t-values, using `confint()` for regression coefficients
+#' and `corCI()` (Fisher z-transform) for correlations.
 #'
-#' \strong{Effect size labels} for correlations follow Cohen (1988):
+#' **Effect size labels** for correlations follow Cohen (1988):
 #' \tabular{ll}{
-#'   \code{negligible} \tab |r| < 0.10 \cr
-#'   \code{small}      \tab 0.10 \eqn{\le} |r| < 0.30 \cr
-#'   \code{moderate}   \tab 0.30 \eqn{\le} |r| < 0.50 \cr
-#'   \code{large}      \tab |r| \eqn{\ge} 0.50 \cr
+#'   `negligible` \tab |r| < 0.10 \cr
+#'   `small`      \tab 0.10 \eqn{\le} |r| < 0.30 \cr
+#'   `moderate`   \tab 0.30 \eqn{\le} |r| < 0.50 \cr
+#'   `large`      \tab |r| \eqn{\ge} 0.50 \cr
 #' }
 #'
-#' \strong{Plot options via \code{which}:}
+#' **Plot options via `which`:**
 #' \describe{
-#'   \item{\code{which = 1}}{Scatterplot with linear regression line and
+#'   \item{`which = 1`}{Scatterplot with linear regression line and
 #'     confidence band.}
-#'   \item{\code{which = 2}}{Scatterplot with Loess smoother and confidence
-#'     band (via \code{lines.loess()}).}
-#'   \item{\code{which = 3}}{Residual plot: residuals vs. fitted values.}
-#'   \item{\code{which = 4}}{Q-Q plot of residuals.}
+#'   \item{`which = 2`}{Scatterplot with Loess smoother and confidence
+#'     band (via `lines.loess()`).}
+#'   \item{`which = 3`}{Residual plot: residuals vs. fitted values.}
+#'   \item{`which = 4`}{Q-Q plot of residuals.}
 #' }
 #'
-#' Default \code{which} by verbose level:
+#' Default `which` by verbose level:
 #' \itemize{
-#'   \item \code{verbose = 1}: \code{which = 1}
-#'   \item \code{verbose = 2}: \code{which = 1:2}
-#'   \item \code{verbose = 3}: \code{which = 1:4}
+#'   \item `verbose = 1`: `which = 1`
+#'   \item `verbose = 2`: `which = 1:2`
+#'   \item `verbose = 3`: `which = 1:4`
 #' }
 #'
-#' @return \code{.descNN()} returns an object of class
-#' \code{c("Desc.nn", "Desc")}. Its \code{lm$intercept} and \code{lm$slope}
+#' @return `.descNN()` returns an object of class
+#' `c("Desc.nn", "Desc")`. Its `lm$intercept` and `lm$slope`
 #' components contain:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the coefficient}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
-#'   \item{\code{p}}{p-value}
+#'   \item{`est`}{point estimate of the coefficient}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
+#'   \item{`p`}{p-value}
 #' }
-#' The print and plot methods return \code{x} invisibly.
+#' The print and plot methods return `x` invisibly.
 #'
 #' @references
-#'   Cohen, J. (1988). \emph{Statistical Power Analysis for the Behavioral
-#'   Sciences} (2nd ed.). Lawrence Erlbaum Associates.
+#'   Cohen, J. (1988). *Statistical Power Analysis for the Behavioral
+#'   Sciences* (2nd ed.). Lawrence Erlbaum Associates.
 #'
 #'   Breusch, T.S. and Pagan, A.R. (1979). A simple test for
 #'   heteroscedasticity and random coefficient variation.
-#'   \emph{Econometrica}, 47, 1287--1294.
+#'   *Econometrica*, 47, 1287--1294.
 #'
 #' @seealso
-#'   \code{\link{desc}} for the generic entry point,
-#'   \code{\link{desc.nq}} for numeric ~ categorical,
-#'   \code{\link{desc.qn}} for categorical ~ numeric,
-#'   \code{\link{desc.qq}} for categorical ~ categorical,
-#'   \code{\link[lumen]{corCI}}, \code{\link[lumen]{bpTest}},
-#'   \code{\link[stats]{lm}}, \code{\link[stats]{cor.test}}
+#'   [desc()] for the generic entry point,
+#'   [desc.nq()] for numeric ~ categorical,
+#'   [desc.qn()] for categorical ~ numeric,
+#'   [desc.qq()] for categorical ~ categorical,
+#'   [lumen::corCI()], [lumen::bpTest()],
+#'   [stats::lm()], [stats::cor.test()]
 #'
 #' @family desc
 #' @concept bivariate numeric regression correlation scatterplot
@@ -334,7 +334,7 @@ print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
 
 #' @exportS3Method
 #' @param main main title for the plot. Defaults to the title stored in
-#'   \code{x$meta$main}.
+#'   `x$meta$main`.
 #' @rdname desc.nn
 plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) {
   

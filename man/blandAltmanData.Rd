@@ -55,7 +55,7 @@ intervals for the bias and LoA according to Bland and Altman.
 The returned object is of class \code{"BlandAltman"} and can be plotted
 using by a \code{plot()} routine residing in the \pkg{pharos} package.
 
-The limits of agreement are the conventional \code{bias +/- 1.96 * sd},
+The limits of agreement are the conventional \verb{bias +/- 1.96 * sd},
 independent of \code{conf.level}: the multiplier fixes the nominal
 coverage of the interval of \emph{differences}, whereas \code{conf.level}
 governs the confidence intervals reported for the bias and for the two

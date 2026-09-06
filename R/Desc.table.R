@@ -3,23 +3,23 @@
 #'
 #' Computes and displays a comprehensive set of descriptive statistics and
 #' association measures for a contingency table (r x c or 2 x 2). The function
-#' is also dispatched for \code{matrix} and cross-classified factor pairs via
-#' \code{Desc.qq} and \code{Desc.matrix}.
+#' is also dispatched for `matrix` and cross-classified factor pairs via
+#' `Desc.qq` and `Desc.matrix`.
 #'
-#' @param x a \code{table} or \code{matrix} object. For the formula interface,
-#'   use \code{desc(y ~ x, data)} which dispatches to this function
+#' @param x a `table` or `matrix` object. For the formula interface,
+#'   use `desc(y ~ x, data)` which dispatches to this function
 #'   automatically.
 #' @param prop character string controlling which proportions are shown in the
-#'   cross-tabulation. One of \code{"rows"} (default), \code{"cols"},
-#'   \code{"total"}, or \code{"no"} (frequencies only). At \code{verbose = 3}
+#'   cross-tabulation. One of `"rows"` (default), `"cols"`,
+#'   `"total"`, or `"no"` (frequencies only). At `verbose = 3`
 #'   all three proportions are shown regardless of this argument.
 #' @param verbose integer controlling the amount of output (1, 2, or 3).
-#'   \code{NULL} (default) falls back to
-#'   \code{getOption("DescTools.verbose", 2)}. If set explicitly in the
+#'   `NULL` (default) falls back to
+#'   `getOption("DescTools.verbose", 2)`. If set explicitly in the
 #'   function call, that value takes priority over the global option.
 #'   See Details for what each level produces.
 #' @param conf.level numeric, confidence level for all confidence intervals.
-#'   Default is \code{0.95}.
+#'   Default is `0.95`.
 #' @param \dots further arguments passed to or from other methods
 #' @param which plots to produce
 #' @param main main title for the plot
@@ -29,37 +29,37 @@
 #'   
 #' @name desc.table
 #' @details
-#' The \code{verbose} argument controls which statistics are computed and
+#' The `verbose` argument controls which statistics are computed and
 #' displayed. The following table gives an overview; items marked with
-#' \emph{2x2} are only shown for 2 x 2 tables.
+#' *2x2* are only shown for 2 x 2 tables.
 #'
-#' \strong{verbose = 1 — essential output:}
+#' **verbose = 1 — essential output:**
 #' \itemize{
 #'   \item Summary: n, rows, columns, missings
 #'   \item Cross-tabulation: frequencies
 #'   \item Pearson chi-squared test
-#'   \item Chi-squared with Yates continuity correction \emph{(2x2)}
-#'   \item Fisher's exact test \emph{(2x2)}
-#'   \item McNemar's test \emph{(2x2)}
+#'   \item Chi-squared with Yates continuity correction *(2x2)*
+#'   \item Fisher's exact test *(2x2)*
+#'   \item McNemar's test *(2x2)*
 #'   \item Cramér's V with confidence interval and effect size label
-#'   \item Odds ratio with confidence interval \emph{(2x2)}
+#'   \item Odds ratio with confidence interval *(2x2)*
 #' }
 #'
-#' \strong{verbose = 2 — standard output (default):}
+#' **verbose = 2 — standard output (default):**
 #'
 #' All of the above, plus:
 #' \itemize{
-#'   \item Cross-tabulation: row proportions (or as set by \code{prop})
+#'   \item Cross-tabulation: row proportions (or as set by `prop`)
 #'   \item G-test (log likelihood ratio test of independence)
 #'   \item Mantel-Haenszel chi-squared test
 #'   \item Contingency coefficient
 #'   \item Kendall's tau-b with confidence interval
 #'   \item Relative risk col1/col2 and row1/row2 with confidence intervals
-#'     \emph{(2x2)}
-#'   \item Proportions difference with confidence interval \emph{(2x2)}
+#'     *(2x2)*
+#'   \item Proportions difference with confidence interval *(2x2)*
 #' }
 #'
-#' \strong{verbose = 3 — full output:}
+#' **verbose = 3 — full output:**
 #'
 #' All of the above, plus:
 #' \itemize{
@@ -73,25 +73,25 @@
 #'   \item Pearson and Spearman correlation with confidence intervals
 #' }
 #'
-#' \strong{Table types:}
+#' **Table types:**
 #'
-#' For \strong{r x c tables} (arbitrary number of rows and columns) all
+#' For **r x c tables** (arbitrary number of rows and columns) all
 #' nominal and ordinal association measures listed above are available.
-#' For \strong{2 x 2 tables} the output additionally includes tests and
+#' For **2 x 2 tables** the output additionally includes tests and
 #' measures specific to the 2 x 2 case (Fisher's exact, McNemar, odds ratio,
 #' relative risk, proportions difference).
 #'
-#' \strong{Dispatching:}
+#' **Dispatching:**
 #'
-#' \code{desc.matrix} and \code{desc.qq} both redirect to \code{desc.table}.
-#' When called via the formula interface \code{desc(y ~ x, data)}, the type
-#' of \code{y} and \code{x} is known and ordinal-specific measures
+#' `desc.matrix` and `desc.qq` both redirect to `desc.table`.
+#' When called via the formula interface `desc(y ~ x, data)`, the type
+#' of `y` and `x` is known and ordinal-specific measures
 #' (tau-b and above) are activated automatically when both variables are
-#' \code{ordered} factors.
+#' `ordered` factors.
 #'
-#' @return an object of class \code{c("Desc.table", "Desc")}.
+#' @return an object of class `c("Desc.table", "Desc")`.
 #'   The object is a list containing all computed statistics and is intended
-#'   to be used via its \code{print} and \code{plot} methods.
+#'   to be used via its `print` and `plot` methods.
 #'
 #' @seealso
 #'   [desc] for the generic function and formula interface,

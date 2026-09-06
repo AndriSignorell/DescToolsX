@@ -93,7 +93,7 @@ large future dates or implausibly early calendar dates. It is meant
 as a diagnostic aid rather than a formal validation procedure.
 }
 \seealso{
-\code{\link{desc}}, \code{\link{print.Desc.Date}}
+\code{\link[=desc]{desc()}}, \code{\link[=print.Desc.Date]{print.Desc.Date()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},

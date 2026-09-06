@@ -47,7 +47,7 @@ mse(fit)
 
 }
 \seealso{
-\code{\link{mean}}
+\code{\link[=mean]{mean()}}
 
 Other model.metrics:
 \code{\link[=auc]{auc()}},

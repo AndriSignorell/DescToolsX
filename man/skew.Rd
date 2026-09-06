@@ -23,13 +23,13 @@ skew(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{character string specifying the confidence interval method.
 \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
-intervals unless another bootstrap type is supplied through \code{\dots};
+intervals unless another bootstrap type is supplied through \verb{\\dots};
 \code{"classic"} uses a Wald interval based on the asymptotic standard
-error. See Details and \code{\link{ConfidenceIntervals}}.}
+error. See Details and \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}
@@ -42,7 +42,7 @@ estimator's bias corrections and in the standard error.}
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{\dots}{further arguments passed to \code{\link[boot]{boot}} when
+\item{\dots}{further arguments passed to \code{\link[boot:boot]{boot::boot()}} when
 confidence intervals are calculated}
 }
 \value{
@@ -62,8 +62,7 @@ values in x.
 If \code{na.rm} is \code{TRUE} then missing values are removed before
 computation proceeds. \cr
 
-The estimator for calculating the skewness can either be:\cr \code{1: g_1 =
-m_3 / m_2^(3/2) } \cr \code{2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) }\cr
+The estimator for calculating the skewness can either be:\cr \code{1: g_1 = m_3 / m_2^(3/2) } \cr \code{2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) }\cr
 \code{3: b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) } \cr
 
 1 is the typical definition used in Stata and in many older textbooks.  \cr

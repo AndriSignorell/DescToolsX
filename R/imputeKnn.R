@@ -1,14 +1,14 @@
 
 #' K-Nearest Neighbors Imputation
 #'
-#' Imputes missing values from the \code{k} nearest complete observations.
+#' Imputes missing values from the `k` nearest complete observations.
 #' Numeric and factor variables are both supported.
 #'
 #' @details
 #' Distance is Gower-style: numeric variables contribute their squared
 #' differences and factor variables a 0/1 mismatch penalty, summed and
 #' square-rooted. Numeric variables are standardized beforehand when
-#' \code{scale = TRUE}, so that no variable dominates through its unit
+#' `scale = TRUE`, so that no variable dominates through its unit
 #' alone. The standardization affects distances only; imputed values are
 #' always taken from the original data.
 #'
@@ -22,10 +22,10 @@
 #' different distances. Observations are therefore grouped by their pattern
 #' of missingness and each pattern is solved in one pass.
 #'
-#' With \code{method = "weighted"} the neighbours are weighted by
+#' With `method = "weighted"` the neighbours are weighted by
 #' \eqn{\exp(-d)}. Because that decays on the scale of the distances
 #' themselves, it is meaningful only when those are of moderate size, which
-#' is another reason to keep \code{scale = TRUE}. Weights are normalized
+#' is another reason to keep `scale = TRUE`. Weights are normalized
 #' against their maximum before exponentiation, so that widely separated
 #' neighbours cannot all underflow to zero.
 #'
@@ -35,19 +35,19 @@
 #'
 #' @param x a data frame with missing values.
 #' @param k positive integer, the number of nearest neighbours to draw on.
-#' @param scale logical; if \code{TRUE} (default), numeric variables are
+#' @param scale logical; if `TRUE` (default), numeric variables are
 #'   standardized before distances are computed. This affects the distances
 #'   only, not the imputed values.
 #' @param method the aggregation applied to the neighbours' values, either
-#'   \code{"weighted"} for a distance-weighted mean (numeric) or weighted
-#'   mode (factor), or \code{"median"} for a median (numeric) or mode
+#'   `"weighted"` for a distance-weighted mean (numeric) or weighted
+#'   mode (factor), or `"median"` for a median (numeric) or mode
 #'   (factor).
 #' @param distData optional data frame supplying the pool of potential
-#'   neighbours. If given, neighbours are drawn from \code{distData} only,
-#'   while \code{x} alone is imputed. It must have the same variables as
-#'   \code{x}.
+#'   neighbours. If given, neighbours are drawn from `distData` only,
+#'   while `x` alone is imputed. It must have the same variables as
+#'   `x`.
 #'
-#' @return a data frame of the same shape as \code{x}, with missing values
+#' @return a data frame of the same shape as `x`, with missing values
 #'   replaced.
 #'
 #' @examples

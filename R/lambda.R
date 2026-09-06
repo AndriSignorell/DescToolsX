@@ -17,44 +17,44 @@
 #' 
 #' @inheritParams Association
 #' 
-#' @param direction type of lambda. Can be one out of \code{"symmetric"}
-#' (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
-#' direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
+#' @param direction type of lambda. Can be one out of `"symmetric"`
+#' (default), `"row"`, `"column"` (abbreviations are allowed).  If
+#' direction is set to `"row"` then lambda(R|C) (column dependent) will be
 #' reported. See Details.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See details in [ConfidenceIntervals()].
 #' 
 #' @param ... further arguments, passed on to
-#'   \code{\link{normalizeToConfusion}} and \code{\link{table}} for building
-#'   the table - \code{useNA} is the usual one.
+#'   [normalizeToConfusion()] and [table()] for building
+#'   the table - `useNA` is the usual one.
 #'   
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Goodman--Kruskal lambda}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Goodman--Kruskal lambda}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
 #' @note Based on code by Antti Arppe and Nanina Anderegg (confidence 
 #' interval symmetric lambda), adapted to conform to package standards.
 #' 
 #' @seealso 
-#' \code{\link{Association}}
-#' @references Agresti, A. (2002) \emph{Categorical Data Analysis}. John Wiley
+#' [Association()]
+#' @references Agresti, A. (2002) *Categorical Data Analysis*. John Wiley
 #' & Sons
 #' 
 #' Goodman, L. A., Kruskal W. H. (1979) Measures of Association for Cross
 #' Classifications. New York: Springer-Verlag (contains articles appearing in
-#' \emph{J. Amer. Statist. Assoc.} in 1954, 1959, 1963, 1972).\cr
+#' *J. Amer. Statist. Assoc.* in 1954, 1959, 1963, 1972).\cr
 #' http://www.nssl.noaa.gov/users/brooks/public_html/feda/papers/goodmankruskal1.pdf
 #' (might be outdated)
 #' 
-#' Liebetrau, A. M. (1983) \emph{Measures of Association}, Sage University
+#' Liebetrau, A. M. (1983) *Measures of Association*, Sage University
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 17--24 
 #' 

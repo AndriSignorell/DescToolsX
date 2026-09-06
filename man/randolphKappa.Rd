@@ -37,7 +37,7 @@ where the observed agreement \eqn{P_o} is the proportion of agreeing rater
       \frac{\sum_{j} n_{ij}(n_{ij}-1)}{m(m-1)}.}
 Here, \eqn{n_{ij}} denotes the number of raters who assigned subject \eqn{i}
 to category \eqn{j}. This is the same observed agreement as in Fleiss'
-kappa (and as computed by \code{\link{percAgreement}}); Randolph's
+kappa (and as computed by \code{\link[=percAgreement]{percAgreement()}}); Randolph's
 coefficient differs from Fleiss' only in the chance agreement \eqn{P_e},
 which is fixed at \eqn{1/k} instead of being estimated from the marginals.
 
@@ -47,7 +47,7 @@ but never used, the default \code{categories = NULL} understates \eqn{k}
 and thus overstates chance agreement, which biases \eqn{\kappa} downwards.
 Supply \code{categories} whenever the coding scheme is known.
 
-Long-format ratings can first be reshaped with \code{\link{raterFrame}}.
+Long-format ratings can first be reshaped with \code{\link[=raterFrame]{raterFrame()}}.
 }
 \examples{
 ## Matrix (subjects x raters), 5 subjects, 3 raters

@@ -1,7 +1,7 @@
 #' Descriptive statistics for calendar date variables
 #'
 #' Computes a structured descriptive summary for objects of class
-#' \code{"Date"}. The description focuses on time-axis characteristics
+#' `"Date"`. The description focuses on time-axis characteristics
 #' (range, span, coverage, quantiles) and distributional structure over
 #' weekdays and months.
 #'
@@ -16,10 +16,10 @@
 #'
 #' @param wprobs numeric vector of length 7 specifying expected
 #' probabilities for weekdays (Monday to Sunday). The default is a
-#' uniform distribution \code{rep(1/7, 7)}.
+#' uniform distribution `rep(1/7, 7)`.
 #'
 #' @param mprobs numeric vector of length 12 specifying expected
-#' probabilities for months (January to December). If \code{NULL}
+#' probabilities for months (January to December). If `NULL`
 #' (default), probabilities proportional to the number of days per month
 #' in a non-leap year are used.
 #'
@@ -28,7 +28,7 @@
 #' \itemize{
 #'   \item Number of observations and missing values
 #'   \item Minimum and maximum date
-#'   \item Span in days (\code{max - min})
+#'   \item Span in days (`max - min`)
 #'   \item Number of unique observed days
 #'   \item Coverage: proportion of observed days relative to the total
 #'         number of calendar days within the observed range
@@ -48,18 +48,18 @@
 #' large future dates or implausibly early calendar dates. It is meant
 #' as a diagnostic aid rather than a formal validation procedure.
 #'
-#' @return an object of class \code{c("Desc.Date", "Desc")} with components:
+#' @return an object of class `c("Desc.Date", "Desc")` with components:
 #' \describe{
-#'   \item{\code{core}}{time-axis statistics}
-#'   \item{\code{weekday}}{observed and expected weekday counts, standardized
+#'   \item{`core`}{time-axis statistics}
+#'   \item{`weekday`}{observed and expected weekday counts, standardized
 #'     residuals, and p-value}
-#'   \item{\code{month}}{observed and expected month counts, standardized
+#'   \item{`month`}{observed and expected month counts, standardized
 #'     residuals, and p-value}
-#'   \item{\code{sentinel}}{heuristic data-quality diagnostics}
-#'   \item{\code{meta}}{metadata}
+#'   \item{`sentinel`}{heuristic data-quality diagnostics}
+#'   \item{`meta`}{metadata}
 #' }
 #'
-#' @seealso \code{\link{desc}}, \code{\link{print.Desc.Date}}
+#' @seealso [desc()], [print.Desc.Date()]
 #'
 #' @method desc Date
 #' @family desc
@@ -215,10 +215,10 @@ desc.Date <- function(x,
 }
 
 
-#' Print method for \code{"Desc.Date"} objects
+#' Print method for `"Desc.Date"` objects
 #'
-#' Prints a structured summary of a \code{"Desc.Date"} object as created
-#' by \code{\link{desc}}. The output includes core time-axis statistics
+#' Prints a structured summary of a `"Desc.Date"` object as created
+#' by [desc()]. The output includes core time-axis statistics
 #' such as range, span, coverage and fundamental quantiles.
 #'
 #' Depending on the selected verbosity level, weekday and month
@@ -230,10 +230,10 @@ desc.Date <- function(x,
 #' the magnitude and direction of deviation from expectation but do not
 #' represent separate hypothesis tests.
 #'
-#' @param x an object of class \code{"Desc.Date"}
+#' @param x an object of class `"Desc.Date"`
 #'
 #' @param verbose integer controlling the amount of printed detail.
-#' If \code{NULL}, the verbosity stored in the object metadata is used.
+#' If `NULL`, the verbosity stored in the object metadata is used.
 #'
 #' \describe{
 #'   \item{0--1}{core statistics only (range, span, coverage,
@@ -248,7 +248,7 @@ desc.Date <- function(x,
 #'
 #' @details
 #' Weekday and month distributions are compared to their expected
-#' probabilities as defined in \code{\link{desc}}.
+#' probabilities as defined in [desc()].
 #'
 #' Standardized residuals are computed as
 #' \deqn{(Observed - Expected) / sqrt(Expected)}.

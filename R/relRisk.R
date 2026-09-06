@@ -26,62 +26,62 @@
 #' (1984), a Wald approximation, or via transformation of the odds ratio.
 #'
 #' @param x a numeric 2x2 matrix or table containing non-negative counts
-#' @param y an optional vector. If supplied, \code{table(x, y, ...)} is
+#' @param y an optional vector. If supplied, `table(x, y, ...)` is
 #'   computed.
 #' @param delta small continuity correction added to the event counts in the
-#'   \emph{standard error} of the Wald interval. Only used if
-#'   \code{method = "wald"}; see the note below.
+#'   *standard error* of the Wald interval. Only used if
+#'   `method = "wald"`; see the note below.
 #'   
 #' @param method character string specifying the confidence interval method.
-#'   One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.
+#'   One of `"score"`, `"wald"`, or `"use-or"`.
 #'   
 #' @param conf.level confidence level for the interval estimate. If
-#'   \code{NA} (default), only the point estimate is returned.
+#'   `NA` (default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See details in [ConfidenceIntervals()].
 #'
-#' @param \dots further arguments passed to \code{\link{table}}
+#' @param \dots further arguments passed to [table()]
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{relative risk estimate}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{relative risk estimate}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @details
 #' The score interval is based on the method of Koopman (1984) and
 #' Miettinen and Nurminen (1985). It is obtained from the closed-form
 #' solution of the cubic equation in the constrained maximum likelihood
-#' estimate; if the unexposed group has no non-events (\code{x2 == n2}) that
+#' estimate; if the unexposed group has no non-events (`x2 == n2`) that
 #' cubic has a root on the parameter boundary and its roots can no longer be
 #' assigned to the two interval bounds by their order alone. This case is
 #' therefore solved directly from the score statistic
-#' (\code{\link[stats]{uniroot}}); both routes agree to numerical precision
+#' ([stats::uniroot()]); both routes agree to numerical precision
 #' wherever the closed form applies.
 #'
 #' The Wald interval is asymptotic and may perform poorly for small counts or
-#' extreme probabilities. Note that \code{delta} enters the standard error
+#' extreme probabilities. Note that `delta` enters the standard error
 #' only, not the point estimate the interval is centred on: with a zero cell
-#' the point estimate is \code{0} or \code{Inf} and the Wald interval
-#' degenerates accordingly. Use \code{method = "score"} for tables with zero
+#' the point estimate is `0` or `Inf` and the Wald interval
+#' degenerates accordingly. Use `method = "score"` for tables with zero
 #' cells.
 #'
 #' If the table orientation differs from the required structure, rows or
-#' columns can be reversed using \code{\link[bedrock]{revX}} or transposed
-#' with \code{\link{t}}.
+#' columns can be reversed using [bedrock::revX()] or transposed
+#' with [t()].
 #'
 #' @references
 #' Koopman, P. A. R. (1984). Confidence intervals for the ratio of two
-#' binomial proportions. \emph{Biometrics}, \emph{40}(2), 513--517.
+#' binomial proportions. *Biometrics*, *40*(2), 513--517.
 #'
 #' Miettinen, O., & Nurminen, M. (1985). Comparative analysis of two rates.
-#' \emph{Statistics in Medicine}, \emph{4}(2), 213--226.
+#' *Statistics in Medicine*, *4*(2), 213--226.
 #'
 #' Rothman, K. J., Greenland, S., & Lash, T. L. (2008).
-#' \emph{Modern Epidemiology} (3rd ed.). Lippincott Williams & Wilkins.
+#' *Modern Epidemiology* (3rd ed.). Lippincott Williams & Wilkins.
 #'
 #' @examples
 #' m <- matrix(

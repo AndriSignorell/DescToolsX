@@ -2,31 +2,31 @@
 #' Keep Only Significant Values in a Symmetric Matrix
 #'
 #' Replaces entries in a symmetric matrix (typically a correlation matrix)
-#' with \code{NA} wherever the corresponding p-value exceeds a significance
+#' with `NA` wherever the corresponding p-value exceeds a significance
 #' threshold - retaining only the statistically supported associations.
-#' Designed as a pre-processing step for \code{\link[pharos]{plotWeb}} and
-#' \code{\link[pharos]{plotCor}}.
+#' Designed as a pre-processing step for [pharos::plotWeb()] and
+#' [pharos::plotCor()].
 #'
 #' @param m a symmetric numeric matrix. Typically the output of
-#'   \code{\link[stats]{cor}}, but any symmetric matrix of effect sizes or
+#'   [stats::cor()], but any symmetric matrix of effect sizes or
 #'   association measures is accepted.
-#' @param p a matrix of p-values of the same dimension as \code{m}. If
-#'   \code{NULL} (default), p-values are computed from pairwise correlation
-#'   tests on the columns of \code{data} (requires \code{data}).
+#' @param p a matrix of p-values of the same dimension as `m`. If
+#'   `NULL` (default), p-values are computed from pairwise correlation
+#'   tests on the columns of `data` (requires `data`).
 #' @param data an optional numeric data frame or matrix. Used to compute
-#'   \code{p} when \code{p = NULL}. Ignored if \code{p} is supplied.
+#'   `p` when `p = NULL`. Ignored if `p` is supplied.
 #' @param sig.level numeric; significance threshold. Entries where
-#'   \code{p > sig.level} are replaced by \code{NA}. Default \code{0.05}.
+#'   `p > sig.level` are replaced by `NA`. Default `0.05`.
 #' @param method character; the correlation test method passed to
-#'   \code{\link[stats]{cor.test}} when computing p-values from \code{data}.
-#'   One of \code{"pearson"} (default), \code{"spearman"}, or
-#'   \code{"kendall"}.
-#' @param diag logical; if \code{TRUE} (default), the diagonal is kept
-#'   as-is (typically 1 for correlation matrices). If \code{FALSE}, the
-#'   diagonal is also set to \code{NA}.
+#'   [stats::cor.test()] when computing p-values from `data`.
+#'   One of `"pearson"` (default), `"spearman"`, or
+#'   `"kendall"`.
+#' @param diag logical; if `TRUE` (default), the diagonal is kept
+#'   as-is (typically 1 for correlation matrices). If `FALSE`, the
+#'   diagonal is also set to `NA`.
 #'
-#' @return matrix with the same dimensions and dimnames as \code{m}, with
-#' \code{NA} wherever \code{p > sig.level}
+#' @return matrix with the same dimensions and dimnames as `m`, with
+#' `NA` wherever `p > sig.level`
 #'
 #' @examples
 #' # compute p-values on the fly from the raw data

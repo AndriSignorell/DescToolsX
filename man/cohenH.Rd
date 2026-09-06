@@ -24,7 +24,7 @@ to create a contingency table via \code{table(x, y, ...)}}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{...}{additional arguments passed to \code{table()}}
 }

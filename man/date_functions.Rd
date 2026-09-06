@@ -131,7 +131,7 @@ whose levels follow calendar order}
 and \code{yearWeek()} either \code{"iso"} (ISO 8601, default) or
 \code{"us"}. The two sets are not interchangeable.}
 
-\item{value}{replacement value for the \code{day<-} assignment function}
+\item{value}{replacement value for the \verb{day<-} assignment function}
 
 \item{startDate, endDate}{start and end dates for \code{diffDays360()}}
 }
@@ -144,13 +144,13 @@ integer-valued components, an ordered factor or character vector when
 }
 \description{
 Convenience wrappers for extracting date/time components and performing
-common date calculations - a readable alternative to \code{\link{format}()}
+common date calculations - a readable alternative to \code{\link[=format]{format()}}
 and its cryptic format codes.
 }
 \section{Date component extractors}{
 
 \tabular{lll}{
-\bold{Function}    \tab \bold{Returns}                                          \tab \bold{Range / Notes} \cr
+\strong{Function}    \tab \strong{Returns}                                          \tab \strong{Range / Notes} \cr
 \code{year}        \tab Year of a date or \code{ym} object                     \tab \code{yyyy} \cr
 \code{quarter}     \tab Quarter of the year                                    \tab 1-4 \cr
 \code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for \code{ym} \cr
@@ -166,7 +166,7 @@ and its cryptic format codes.
 \section{Time component extractors (POSIXct/POSIXlt)}{
 
 \tabular{ll}{
-\bold{Function}  \tab \bold{Returns} \cr
+\strong{Function}  \tab \strong{Returns} \cr
 \code{hour}      \tab Hour (0-23) \cr
 \code{minute}    \tab Minute (0-59) \cr
 \code{second}    \tab Second (0-60) \cr
@@ -179,7 +179,7 @@ and its cryptic format codes.
 \section{Logical tests}{
 
 \tabular{ll}{
-\bold{Function}    \tab \bold{Returns} \cr
+\strong{Function}    \tab \strong{Returns} \cr
 \code{isWeekend}   \tab \code{TRUE} if \code{x} falls on Saturday or Sunday \cr
 \code{isLeapYear}  \tab \code{TRUE} if the year of \code{x} is a leap year \cr
 }
@@ -188,7 +188,7 @@ and its cryptic format codes.
 \section{Date arithmetic}{
 
 \tabular{ll}{
-\bold{Function}        \tab \bold{Description} \cr
+\strong{Function}        \tab \strong{Description} \cr
 \code{diffDays360}     \tab Days between two dates using the 360-day calendar convention \cr
 \code{lastDayOfMonth}  \tab Last calendar day of the month of \code{x} \cr
 \code{yearDays}        \tab Total number of days in the year of \code{x} (365 or 366) \cr
@@ -259,8 +259,8 @@ diffDays360(as.Date("2023-01-31"), as.Date("2023-02-28"), method = "us")
 
 }
 \seealso{
-\code{\link{strptime}}, \code{\link{DateTimeClasses}},
-\code{\link{as.POSIXlt}}, \code{\link{countWorkDays}}
+\code{\link[=strptime]{strptime()}}, \code{\link[=DateTimeClasses]{DateTimeClasses()}},
+\code{\link[=as.POSIXlt]{as.POSIXlt()}}, \code{\link[=countWorkDays]{countWorkDays()}}
 
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},

@@ -6,20 +6,20 @@
 #'
 #' @description
 #' Computes descriptive statistics for the relationship between two
-#' categorical variables \code{x} and \code{y}.
+#' categorical variables `x` and `y`.
 #'
 #' @param x a categorical variable
 #' @param y a categorical variable
 #' @param ... further arguments, currently unused
 #'
 #' @details
-#' This function is a wrapper around \code{\link{desc.table}} applied to
-#' the contingency table \code{table(x, y)}.
+#' This function is a wrapper around [desc.table()] applied to
+#' the contingency table `table(x, y)`.
 #'
 #' It summarizes the joint distribution of two categorical variables and
 #' provides association measures and visualizations.
 #'
-#' \strong{Computed statistics}
+#' **Computed statistics**
 #' \itemize{
 #'   \item Contingency table
 #'   \item Row and column percentages
@@ -27,13 +27,13 @@
 #'   \item Optional statistical tests depending on configuration
 #' }
 #'
-#' \strong{Implementation note}
-#' Internally, \code{desc.qq(x, y)} is equivalent to:
+#' **Implementation note**
+#' Internally, `desc.qq(x, y)` is equivalent to:
 #' \preformatted{
 #' desc(table(x, y))
 #' }
 #'
-#' @return an object of class \code{c("Desc.qq", "Desc")}
+#' @return an object of class `c("Desc.qq", "Desc")`
 #'
 #' @seealso
 #' [desc], [desc.table],
@@ -68,7 +68,7 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
 
 
 #' @param main main title for the plot; defaults to the title stored in
-#' \code{x$meta$main}
+#' `x$meta$main`
 #' @exportS3Method
 #' @rdname desc.table
 plot.Desc.qq <- function(x, main = x$meta$main, which = 1, ...) {

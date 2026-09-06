@@ -13,72 +13,72 @@
 #'   ratings (columns = raters, rows = subjects/items)
 #' @param metric character string specifying the measurement level, i.e.
 #'   the difference function \eqn{\delta^2} used to compare two categories.
-#'   One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"},
-#'   or \code{"ratio"}. This selects \emph{which} alpha is computed and has
+#'   One of `"nominal"`, `"ordinal"`, `"interval"`,
+#'   or `"ratio"`. This selects *which* alpha is computed and has
 #'   nothing to do with the confidence interval - the bootstrap interval
-#'   type travels as \code{type} through \code{\dots}. It is called
-#'   \code{metric} and not \code{method} because \code{method} means the
+#'   type travels as `type` through `\dots`. It is called
+#'   `metric` and not `method` because `method` means the
 #'   interval method everywhere else in the suite.
 #' @param levels optional vector specifying the possible categories or scale
-#'   values (required for the \code{"interval"} and
-#'   \code{"ratio"} metrics).
-#'   If \code{NULL}, levels are inferred from the data.
-#' @param raters optional vector specifying which columns of \code{x}
-#'   are the raters. If \code{NULL}, all columns are assumed to be raters.
+#'   values (required for the `"interval"` and
+#'   `"ratio"` metrics).
+#'   If `NULL`, levels are inferred from the data.
+#' @param raters optional vector specifying which columns of `x`
+#'   are the raters. If `NULL`, all columns are assumed to be raters.
 #' @param conf.level confidence level for bootstrap confidence intervals
-#'   of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.
+#'   of Krippendorff's alpha. If `NA` (default), no bootstrap is computed.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See details in [ConfidenceIntervals()].
 #'   Alpha lies in \eqn{[-1, 1]}, so the open side is reported at that
 #'   boundary rather than at an infinity it cannot reach.
-#' @param output output format, either \code{"def"} (default) or
-#'   \code{"ext"} for extended results
+#' @param output output format, either `"def"` (default) or
+#'   `"ext"` for extended results
 #' 
-#' @param ... further arguments passed to \code{\link[boot]{boot}}. Supported
-#' arguments are \code{type} (\code{"norm"}, \code{"basic"},
-#' \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
-#' of bootstrap replicates \code{R}. Defaults are \code{"basic"} for
-#' \code{type}, option \code{"boot.parallel"} (or \code{"no"} if unset) for
-#' \code{parallel}, and \code{999} for \code{R}.
+#' @param ... further arguments passed to [boot::boot()]. Supported
+#' arguments are `type` (`"norm"`, `"basic"`,
+#' `"stud"`, `"perc"`, `"bca"`), `parallel` and the number
+#' of bootstrap replicates `R`. Defaults are `"basic"` for
+#' `type`, option `"boot.parallel"` (or `"no"` if unset) for
+#' `parallel`, and `999` for `R`.
 #'
 #' @details
 #' The function constructs the coincidence matrix from the wide-format data 
-#' using \code{CoincidenceFromWide} and then calculates 
+#' using `CoincidenceFromWide` and then calculates 
 #' Krippendorff's alpha based on the chosen distance metric:
 #' \itemize{
-#'   \item \code{"nominal"}: Disagreement is 0 if equal, 1 otherwise.
-#'   \item \code{"ordinal"}: Squared difference of cumulative proportions.
-#'   \item \code{"interval"}: Squared Euclidean distances of scale values.
-#'   \item \code{"ratio"}: Squared relative differences of scale values.
+#'   \item `"nominal"`: Disagreement is 0 if equal, 1 otherwise.
+#'   \item `"ordinal"`: Squared difference of cumulative proportions.
+#'   \item `"interval"`: Squared Euclidean distances of scale values.
+#'   \item `"ratio"`: Squared relative differences of scale values.
 #' }
 #'
-#' @return if \code{output = "def"} and \code{conf.level = NA}, a numeric
-#' scalar. If \code{output = "def"} and a confidence interval is requested, a named
+#' @return if `output = "def"` and `conf.level = NA`, a numeric
+#' scalar. If `output = "def"` and a confidence interval is requested, a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Krippendorff's alpha}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Krippendorff's alpha}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
-#' If \code{output = "ext"}, a list with elements:
+#' If `output = "ext"`, a list with elements:
 #' \describe{
-#'   \item{\code{alpha}}{point estimate of Krippendorff's alpha}
-#'   \item{\code{Do}}{observed disagreement}
-#'   \item{\code{De}}{expected disagreement under chance}
-#'   \item{\code{O}}{coincidence matrix}
-#'   \item{\code{nV}}{category totals in coincidence space}
-#'   \item{\code{delta2}}{pairwise distance matrix for the selected metric}
-#'   \item{\code{ci}}{named numeric vector with \code{est}, \code{lci}, and
-#'     \code{uci}, or \code{NA} if no interval is requested}
+#'   \item{`alpha`}{point estimate of Krippendorff's alpha}
+#'   \item{`Do`}{observed disagreement}
+#'   \item{`De`}{expected disagreement under chance}
+#'   \item{`O`}{coincidence matrix}
+#'   \item{`nV`}{category totals in coincidence space}
+#'   \item{`delta2`}{pairwise distance matrix for the selected metric}
+#'   \item{`ci`}{named numeric vector with `est`, `lci`, and
+#'     `uci`, or `NA` if no interval is requested}
 #' }
 #'
 #' @references
-#' Krippendorff, K. (2018). \emph{Content Analysis: An Introduction to Its Methodology}.
+#' Krippendorff, K. (2018). *Content Analysis: An Introduction to Its Methodology*.
 #' Sage Publications.  
 #'
-#' @seealso \code{\link[lumen]{bootCI}}
+#' @seealso [lumen::bootCI()]
 #'
 #' @examples
 #' # Example with nominal data (3 raters, 5 subjects)

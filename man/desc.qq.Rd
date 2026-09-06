@@ -22,7 +22,7 @@ Computes descriptive statistics for the relationship between two
 categorical variables \code{x} and \code{y}.
 }
 \details{
-This function is a wrapper around \code{\link{desc.table}} applied to
+This function is a wrapper around \code{\link[=desc.table]{desc.table()}} applied to
 the contingency table \code{table(x, y)}.
 
 It summarizes the joint distribution of two categorical variables and

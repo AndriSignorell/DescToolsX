@@ -2,42 +2,42 @@
 #' Cramer's V
 #'
 #' Measures the strength of association between two categorical variables. These
-#' can be provided as two data vectors \code{x} and \code{y}, or as
-#' a contingency table (see \link{Association}).
+#' can be provided as two data vectors `x` and `y`, or as
+#' a contingency table (see [Association]).
 #'
 #' Cramer's V ranges from 0 to 1, with 0 indicating statistical independence.
 #'
 #' @inheritParams Association
 #'
 #' @param correct logical; whether to apply the bias correction of Bergsma
-#' (2013); defaults to \code{FALSE}
+#' (2013); defaults to `FALSE`
 #'
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param method character string specifying the confidence interval method:
-#' \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
-#' \code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
-#' or \code{"fisheradj"} (using the Fisher z transformation and bias correction)
+#' `"ncchisq"` (default, using the noncentral chi-squared distribution),
+#' `"ncchisqadj"`, `"fisher"` (using fisher z transformation),
+#' or `"fisheradj"` (using the Fisher z transformation and bias correction)
 #'
 #' @param ... further arguments, passed on to
-#'   \code{\link{normalizeToConfusion}} and \code{\link{table}} for building
-#'   the table - \code{useNA} is the usual one.
+#'   [normalizeToConfusion()] and [table()] for building
+#'   the table - `useNA` is the usual one.
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar containing Cramer's V;
+#' @return if `conf.level = NA`, a numeric scalar containing Cramer's V;
 #' otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Cramer's V.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of Cramer's V.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
 #' @details
-#' \code{correct = TRUE} applies Bergsma's bias correction to the point
-#' estimate \emph{and} to the interval: both are put through the same
+#' `correct = TRUE` applies Bergsma's bias correction to the point
+#' estimate *and* to the interval: both are put through the same
 #' transformation of the chi-squared statistic, so estimate and bounds
 #' always live on the same scale. Formerly the two noncentral chi-squared
 #' methods returned an uncorrected interval around a corrected estimate.
@@ -49,13 +49,13 @@
 #' For a one-sided interval the bound is computed at the adjusted level
 #' \eqn{2\gamma - 1} and the open side is closed at the boundary of the
 #' attainable range, 0 or 1, rather than at an infinity V can never reach.
-#' \code{sides = "left"} names the side carrying the \emph{finite} bound and
-#' is the analogue of \code{alternative = "greater"} in a test.
+#' `sides = "left"` names the side carrying the *finite* bound and
+#' is the analogue of `alternative = "greater"` in a test.
 #'
 #' The two Fisher methods rest on \eqn{\mathrm{Var}(\mathrm{atanh}(V))
 #' \approx 1/(n-3)}. Where that approximation has nothing to say - three
 #' or fewer observations, or a perfect association, where the
-#' transformation is infinite - the bounds are \code{NA} and a warning
+#' transformation is infinite - the bounds are `NA` and a warning
 #' names the reason. The estimate itself is still returned.
 #'
 #' @note Based on code by  Michael Smithson (confidence intervals),
@@ -65,14 +65,14 @@
 #' [bedrock::pairApply], [Association]
 #'
 #' @references
-#' Cramer, H. (1946) \emph{Mathematical Methods of Statistics}. Princeton
+#' Cramer, H. (1946) *Mathematical Methods of Statistics*. Princeton
 #' University Press
 #'
-#' Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
+#' Agresti, Alan (1996) *Introduction to categorical data analysis*. NY:
 #' John Wiley and Sons
 #'
 #' Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
-#' \emph{Journal of the Korean Statistical Society} 42(3) DOI:
+#' *Journal of the Korean Statistical Society* 42(3) DOI:
 #' 10.1016/j.jkss.2012.10.002
 #'
 #' @examples

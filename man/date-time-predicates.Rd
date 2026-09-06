@@ -95,7 +95,7 @@ hasVaryingTime(withNA, na.rm = TRUE)
 
 }
 \seealso{
-\code{\link[base]{inherits}}, \code{\link[base]{DateTimeClasses}}
+\code{\link[base:inherits]{base::inherits()}}, \code{\link[base:DateTimeClasses]{base::DateTimeClasses()}}
 
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},

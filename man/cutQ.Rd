@@ -16,13 +16,13 @@ cutQ(
 \item{x}{continuous variable}
 
 \item{breaks}{cut points used to create groups. By default, quartiles are
-used. See \code{\link{quantile}} for details. A single integer specifies
+used. See \code{\link[=quantile]{quantile()}} for details. A single integer specifies
 the intended number of groups; for example, \code{breaks = 10} creates
 deciles.}
 
 \item{labels}{labels for the levels of the resulting category. By default,
 labels are defined as \code{Q1}, \code{Q2}, and so on. The argument is
-passed to \code{\link{cut}}, so \code{labels = FALSE} returns integer codes
+passed to \code{\link[=cut]{cut()}}, so \code{labels = FALSE} returns integer codes
 instead of a factor. When quantiles are tied, the levels are built from
 the observed interval bounds instead and \code{labels} is ignored - a
 warning is issued in that case.}
@@ -33,7 +33,7 @@ quantiles themselves are always taken with \code{na.rm = TRUE}; this
 argument decides whether the missing values are dropped from the
 returned factor as well.}
 
-\item{\dots}{optional arguments passed to \code{\link{cut}}}
+\item{\dots}{optional arguments passed to \code{\link[=cut]{cut()}}}
 }
 \value{
 a factor with one level for each quantile interval, or an integer
@@ -43,8 +43,8 @@ vector when \code{labels = FALSE}
 Creates a factor variable using the quantiles of a continuous variable.
 }
 \details{
-This function uses \code{\link{quantile}} to obtain the specified quantiles
-of \code{x}, then calls \code{\link{cut}} to create a factor variable using
+This function uses \code{\link[=quantile]{quantile()}} to obtain the specified quantiles
+of \code{x}, then calls \code{\link[=cut]{cut()}} to create a factor variable using
 the intervals specified by these quantiles.
 
 It properly handles cases where more than one quantile obtains the same
@@ -78,7 +78,7 @@ table(deciles) # note that there are only 5 groups (not 10)
                # due to duplicates
 }
 \seealso{
-\code{\link{cut}}, \code{\link{quantile}}
+\code{\link[=cut]{cut()}}, \code{\link[=quantile]{quantile()}}
 
 Other cut:
 \code{\link[=cut.integer]{cut.integer()}},

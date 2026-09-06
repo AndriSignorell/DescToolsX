@@ -7,16 +7,16 @@
 #' @param x an object for which the C-statistic should be computed; for the
 #' default method, a numeric vector of predicted values
 #' @param resp binary response vector
-#' @param conf.level confidence level for the interval; \code{NA} (default)
+#' @param conf.level confidence level for the interval; `NA` (default)
 #' suppresses interval calculation
 #' @param ... additional arguments passed to methods
 #'
-#' @return if \code{conf.level = NA}, an unnamed numeric scalar between 0
+#' @return if `conf.level = NA`, an unnamed numeric scalar between 0
 #' and 1; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the C-statistic.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of the C-statistic.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
 #' @name cStat
@@ -28,9 +28,9 @@
 #'
 #' Ties in predicted values are handled by assigning a weight of 0.5.
 #'
-#' \code{resp} is converted with \code{as.numeric(factor(resp)) - 1}, so
-#' the \strong{second} level in sort order counts as the event - \code{1}
-#' for a 0/1 coding, \code{TRUE} for a logical, and the second factor level
+#' `resp` is converted with `as.numeric(factor(resp)) - 1`, so
+#' the **second** level in sort order counts as the event - `1`
+#' for a 0/1 coding, `TRUE` for a logical, and the second factor level
 #' otherwise. Getting this backwards returns \eqn{1 - C} rather than an
 #' error, so check the level order when the response is a factor with
 #' unusual labels.
@@ -42,13 +42,13 @@
 #'   \item Efficient memory handling
 #' }
 #'
-#' The number of bootstrap samples can be supplied through \code{...} as
-#' \code{R}; the default is 1000.
+#' The number of bootstrap samples can be supplied through `...` as
+#' `R`; the default is 1000.
 #'
 #' @section Random number generation:
 #' A confidence level triggers a bootstrap, which draws a seed from R's
 #' global random number generator and therefore advances it. Call
-#' \code{\link[base]{set.seed}} beforehand for reproducible intervals.
+#' [base::set.seed()] beforehand for reproducible intervals.
 #'
 #' @examples
 #' # Default method

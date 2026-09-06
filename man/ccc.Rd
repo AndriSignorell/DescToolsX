@@ -24,7 +24,7 @@ ccc(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{a character string specifying the confidence interval
 method. One of \code{"z-transform"}, \code{"boot"}, or

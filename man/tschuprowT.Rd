@@ -16,7 +16,7 @@ table is constructed from \code{x} and \code{y}.}
 \item{correct}{logical; if \code{TRUE}, applies a bias correction
 according to Bergsma (2013).}
 
-\item{...}{additional arguments passed to \code{\link[base]{table}}. This
+\item{...}{additional arguments passed to \code{\link[base:table]{base::table()}}. This
 refers only to the vector interface.}
 }
 \value{
@@ -73,7 +73,7 @@ Bergsma, W. (2013). A bias-correction for Cramer's V and Tschuprow's T.
 https://doi.org/10.1016/j.jkss.2012.10.002
 }
 \seealso{
-\code{\link[stats]{chisq.test}}, \code{\link{cramerV}}
+\code{\link[stats:chisq.test]{stats::chisq.test()}}, \code{\link[=cramerV]{cramerV()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},

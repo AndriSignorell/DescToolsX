@@ -2,15 +2,15 @@
 #' (Weighted) Median Value
 #' 
 #' Compute the sample median. The function basically wraps the function
-#' \code{\link{quantileX}()}, which offers the option to define weights.\cr For
+#' [quantileX()], which offers the option to define weights.\cr For
 #' grouped data the median can be estimated by linear interpolation within the
 #' class containing the median, which is implemented in the interface for
-#' \code{Freq}-objects.
+#' `Freq`-objects.
 #' 
 #' This is a generic function for which methods can be written.  However, the
-#' default method makes use of \code{is.na}, \code{sort} and \code{mean} from
+#' default method makes use of `is.na`, `sort` and `mean` from
 #' package \pkg{base} all of which are generic, and so the default method will
-#' work for most classes (e.g., \code{"\link{Date}"}) for which a median is a
+#' work for most classes (e.g., `"[Date]"`) for which a median is a
 #' reasonable concept.
 #' 
 #' Calculating the median for ordered factors is not implemented in standard R,
@@ -23,32 +23,32 @@
 #' 
 #' @note 
 #' There are alternative approaches for calculating weighted median
-#' (e.g. \code{matrixstats::weightedMedian}).
+#' (e.g. `matrixstats::weightedMedian`).
 #' 
 #' @name medianX
 #' @aliases medianX medianX.Freq medianX.factor medianX.default
 #' @param x an object for which a method has been defined, or a numeric vector
 #' containing the values whose median is to be computed
-#' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}
+#' @param weights a numerical vector of weights the same length as `x`
+#' giving the weights to use for elements of `x`
 #' @param breaks breaks for calculating the mean for classified data as
-#' composed by \code{\link{freq}}
-#' @param na.rm a logical value indicating whether \code{NA} values should be
+#' composed by [freq()]
+#' @param na.rm a logical value indicating whether `NA` values should be
 #' stripped before the computation proceeds
 #' @param \dots further arguments passed to or from other methods
 #' @return the default method returns a length-one object of the same type as
-#' \code{x}, except when \code{x} is integer of even length, when the result
+#' `x`, except when `x` is integer of even length, when the result
 #' will be double.
 #' 
-#' If there are no values or if \code{na.rm = FALSE} and there are \code{NA}
-#' values the result is \code{NA} of the same type as \code{x} (or more
-#' generally the result of \code{x[FALSE][NA]}).
-#' @seealso \code{\link{quantile}} for general quantiles, \cr
-#' \href{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}{Maechler on R-help mailing list, 2003-Nov}
+#' If there are no values or if `na.rm = FALSE` and there are `NA`
+#' values the result is `NA` of the same type as `x` (or more
+#' generally the result of `x[FALSE][NA]`).
+#' @seealso [quantile()] for general quantiles, \cr
+#' [Maechler on R-help mailing list, 2003-Nov](https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html)
 #' \cr
-#' \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median} 
-#' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
-#' New S Language}.  Wadsworth & Brooks/Cole.
+#' [StackOverflow discussion on median](https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal) 
+#' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) *The
+#' New S Language*.  Wadsworth & Brooks/Cole.
 #' 
 #' @examples
 #' 

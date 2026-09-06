@@ -10,7 +10,7 @@
 #' In order to avoid \eqn{log(x) = -\infty}{log(x) = -inf} for \eqn{x=0} in
 #' log-transformations there's often a constant added to the variable before
 #' taking the \eqn{log}. This is not always a pleasable strategy. The function
-#' \code{logSt} handles this problem based on the following ideas: \itemize{
+#' `logSt` handles this problem based on the following ideas: \itemize{
 #' \item The modification should only affect the values for "small" arguments.
 #' \item What "small" is should be determined in connection with the non-zero
 #' values of the original variable, since it should behave well (be
@@ -30,10 +30,10 @@
 #' }
 #'  
 #' Small values are determined by the threshold \eqn{c}. If not given by the
-#' argument \code{threshold}, it is determined by the quartiles \eqn{q_1} and
+#' argument `threshold`, it is determined by the quartiles \eqn{q_1} and
 #' \eqn{q_3} of the non-zero data as those smaller than \eqn{c =
 #' \frac{q_1^{1+r}}{q_3^r}}{c=q_1^{1+r}/q_3^r} where \eqn{r} can be set by the
-#' argument \code{mult}. The rationale is, that, for lognormal data, this
+#' argument `mult`. The rationale is, that, for lognormal data, this
 #' constant identifies 2 percent of the data as small.\cr Beyond this limit,
 #' the transformation continues linear with the derivative of the log curve at
 #' this point. \cr
@@ -49,25 +49,25 @@
 #' @aliases logSt logStInv
 #' @param x a vector or matrix of data to transform
 #' @param base a positive or complex number: the base with respect to which
-#' logarithms are computed. Defaults to 10. Use \code{base = exp(1)} for natural log. 
+#' logarithms are computed. Defaults to 10. Use `base = exp(1)` for natural log. 
 #' @param calib a vector or matrix of data used to calibrate the
 #' transformation and determine the required constant \eqn{c}
 #' @param threshold constant \eqn{c} that determines the transformation. The
-#' inverse function \code{logStInv} will look for an attribute named
-#' \code{"threshold"} if the argument is set to \code{NULL}. 
+#' inverse function `logStInv` will look for an attribute named
+#' `"threshold"` if the argument is set to `NULL`. 
 #' @param mult a tuning constant affecting the transformation of small values,
 #' as described in Details
 #' 
 #' @return the transformed data. The value \eqn{c} used for the transformation
 #' and needed for inverse transformation is returned as
-#' \code{attr(.,"threshold")} and the used base as \code{attr(.,"base")}.
+#' `attr(.,"threshold")` and the used base as `attr(.,"base")`.
 #' 
 #' @note Based on code by Werner A. Stahel, adapted to conform to package standards.
 #' 
-#' @seealso \code{\link{log}}, \code{\link{log10}}
+#' @seealso [log()], [log10()]
 #' 
 #' @references Rocke, D M, Durbin B (2003): Approximate variance-stabilizing
-#' transformations for gene-expression microarray data, \emph{Bioinformatics}.
+#' transformations for gene-expression microarray data, *Bioinformatics*.
 #' 22;19(8):966-72.
 #' @examples
 #' 

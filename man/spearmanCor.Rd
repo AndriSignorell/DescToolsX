@@ -25,7 +25,7 @@ spearmanCor(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{na.rm}{logical; whether to remove incomplete pairs. Applies to the
 vector interface; a frequency table must not contain missing counts.}
@@ -41,13 +41,12 @@ numeric vector with elements:
 }
 \description{
 Calculate Spearman correlation coefficient and its confidence interval. In
-addition to the base R function \code{\link{cor}(x, method="spearman")},
+addition to the base R function \verb{[cor](x, method="spearman")},
 frequency tables are
 also accepted as arguments (i.e. actually weights are used).
 }
 \details{
-The function calculates Spearman's rho statistic by means of \code{cor(...,
-method="spearman")} when two variables \code{x} and \code{y} are supplied.
+The function calculates Spearman's rho statistic by means of \code{cor(..., method="spearman")} when two variables \code{x} and \code{y} are supplied.
 If a frequency table is provided an implementation based on SAS
 documentation is used. Both routes use midranks for ties and agree exactly;
 see the examples.\cr The confidence intervals are calculated via
@@ -59,8 +58,8 @@ in the table interface. At least four observations are needed for an
 interval.
 
 \code{sides} names the side of the interval that carries the finite bound,
-so \code{"left"} returns \code{[lci, 1]} and \code{"right"} returns
-\code{[-1, uci]}. Since rho is bounded, the open side is reported at the
+so \code{"left"} returns \verb{[lci, 1]} and \code{"right"} returns
+\verb{[-1, uci]}. Since rho is bounded, the open side is reported at the
 range boundary rather than as infinite.
 }
 \examples{
@@ -88,7 +87,7 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 (3rd edition)}. Wiley
 }
 \seealso{
-\code{\link{Association}}
+\code{\link[=Association]{Association()}}
 
 Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},

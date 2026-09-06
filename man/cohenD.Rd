@@ -23,7 +23,7 @@ cohenD(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{correct}{logical; whether to apply the Hedges correction. Defaults to
 \code{FALSE}.}
@@ -90,7 +90,7 @@ Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications
 in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
 }
 \seealso{
-\code{\link{glassDelta}}, \code{\link{meanX}}, \code{\link{varX}}
+\code{\link[=glassDelta]{glassDelta()}}, \code{\link[=meanX]{meanX()}}, \code{\link[=varX]{varX()}}
 
 Other effect.size:
 \code{\link[=cohenH]{cohenH()}},

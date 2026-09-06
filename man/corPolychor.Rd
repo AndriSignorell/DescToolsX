@@ -18,7 +18,7 @@ corPolychor(
 \item{x}{a contingency table or an ordinal vector}
 
 \item{y}{optional second ordinal vector. If supplied, a contingency table
-is constructed via \code{table(x, y, \dots)}.}
+is constructed via \verb{table(x, y, \\dots)}.}
 
 \item{method}{character string specifying the estimation method:
 \describe{
@@ -30,12 +30,12 @@ is constructed via \code{table(x, y, \dots)}.}
 Hessian matrix. This requires ml estimation, so it is an error to
 combine it with \code{method = "two-step"}.}
 
-\item{control}{a list of control parameters passed to \code{\link[stats]{optim}}}
+\item{control}{a list of control parameters passed to \code{\link[stats:optim]{stats::optim()}}}
 
 \item{maxcor}{numeric; maximum absolute correlation allowed (default
 \code{0.9999}) to avoid numerical issues near the boundary}
 
-\item{...}{further arguments passed to \code{\link{table}} when \code{y}
+\item{...}{further arguments passed to \code{\link[=table]{table()}} when \code{y}
 is supplied, for example \code{useNA}}
 }
 \value{
@@ -68,7 +68,7 @@ The polychoric correlation estimates the correlation between two latent
 normally distributed variables underlying observed ordinal variables.
 
 The likelihood is based on a discretized bivariate normal distribution,
-evaluated via \code{\link[mvtnorm]{pmvnorm}}.
+evaluated via \code{\link[mvtnorm:pmvnorm]{mvtnorm::pmvnorm()}}.
 
 For numerical stability:
 \itemize{
@@ -107,7 +107,7 @@ correlation coefficient. \emph{Psychometrika}, 44(4), 443--460.
 Fox, J. (2016). \emph{Applied Regression Analysis and Generalized Linear Models}.
 }
 \seealso{
-\code{\link[mvtnorm]{pmvnorm}}, \code{\link[stats]{optim}}
+\code{\link[mvtnorm:pmvnorm]{mvtnorm::pmvnorm()}}, \code{\link[stats:optim]{stats::optim()}}
 
 Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},

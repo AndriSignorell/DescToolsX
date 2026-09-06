@@ -5,61 +5,61 @@
 #' version uses mean and standard deviation, the robust one median and MAD
 #' (see Details).
 #'
-#' The R base function \code{\link[base]{scale}} centers each column by its
+#' The R base function [base::scale()] centers each column by its
 #' mean and divides by the root mean square of the centered column, which
 #' for centered data is the standard deviation. Both are sensitive to
 #' outliers: a single extreme value moves the mean and inflates the standard
 #' deviation, so the remaining observations are compressed towards zero.
 #'
-#' If \code{robust} is set to \code{TRUE} the column median takes the place
+#' If `robust` is set to `TRUE` the column median takes the place
 #' of the mean and the median absolute deviation
-#' (\code{\link[stats]{mad}}) that of the standard deviation. Both have a
+#' ([stats::mad()]) that of the standard deviation. Both have a
 #' breakdown point of 50 percent, so the standardization reflects the bulk
 #' of the data rather than its extremes, and genuine outliers keep large
 #' scores instead of being pulled in.
 #'
-#' Whichever is chosen, \code{center} and \code{scale} accept either a
+#' Whichever is chosen, `center` and `scale` accept either a
 #' logical flag or a numeric vector of values to use directly, in which case
-#' that vector must have one entry per column of \code{x}, as in
-#' \code{\link[base]{scale}}.
+#' that vector must have one entry per column of `x`, as in
+#' [base::scale()].
 #'
 #' The two versions differ in one further respect. The MAD is invariant to
-#' location shifts, so for \code{robust = TRUE} the returned
-#' \code{"scaled:scale"} is the same whether or not the columns were
-#' centered first, and does not depend on \code{center}. The root mean
-#' square is not invariant; for \code{robust = FALSE} it is computed after
-#' centering, matching \code{\link[base]{scale}}, which is what makes it
-#' equal the standard deviation when \code{center} is \code{TRUE} and not
+#' location shifts, so for `robust = TRUE` the returned
+#' `"scaled:scale"` is the same whether or not the columns were
+#' centered first, and does not depend on `center`. The root mean
+#' square is not invariant; for `robust = FALSE` it is computed after
+#' centering, matching [base::scale()], which is what makes it
+#' equal the standard deviation when `center` is `TRUE` and not
 #' otherwise.
 #'
 #' A zero or non-finite scaling factor can produce undefined or non-finite
-#' results. \code{scaleX} emits a warning naming the affected columns rather
+#' results. `scaleX` emits a warning naming the affected columns rather
 #' than failing, since the result may still be usable when those columns are
 #' subsequently dropped.
 #'
 #' @param x a numeric matrix-like object
-#' @param center logical scalar or numeric vector. If \code{TRUE}, the column
-#' means (or medians, for \code{robust = TRUE}) are subtracted; if
-#' \code{FALSE}, no centering is performed. Alternatively, a numeric vector
-#' of length \code{ncol(x)} supplies the values to subtract directly.
-#' @param scale logical scalar or numeric vector. If \code{TRUE}, the
+#' @param center logical scalar or numeric vector. If `TRUE`, the column
+#' means (or medians, for `robust = TRUE`) are subtracted; if
+#' `FALSE`, no centering is performed. Alternatively, a numeric vector
+#' of length `ncol(x)` supplies the values to subtract directly.
+#' @param scale logical scalar or numeric vector. If `TRUE`, the
 #' columns are divided by their standard deviation (or MAD, for
-#' \code{robust = TRUE}); if \code{FALSE}, no scaling is performed.
-#' Alternatively, a numeric vector of length \code{ncol(x)} supplies the
+#' `robust = TRUE`); if `FALSE`, no scaling is performed.
+#' Alternatively, a numeric vector of length `ncol(x)` supplies the
 #' divisors directly.
 #' @param robust logical; whether to standardize by median and MAD rather
 #' than by mean and standard deviation
-#' @param na.rm logical; if \code{TRUE} (default), missing values are omitted
+#' @param na.rm logical; if `TRUE` (default), missing values are omitted
 #' when the column centers and scales are computed. Ignored for whichever of
-#' \code{center} and \code{scale} is given as a numeric vector. Missing
-#' entries of \code{x} itself always remain missing in the result.
+#' `center` and `scale` is given as a numeric vector. Missing
+#' entries of `x` itself always remain missing in the result.
 #'
 #' @return the centered and scaled matrix. The numeric centerings and
 #' scalings used (if any) are returned as attributes
-#' \code{"scaled:center"} and \code{"scaled:scale"}.
+#' `"scaled:center"` and `"scaled:scale"`.
 #'
-#' @seealso \code{\link[base]{scale}}, \code{\link[base]{sweep}},
-#' \code{\link[stats]{mad}}, \code{\link{rangeX}}, [bedrock::linScale()] 
+#' @seealso [base::scale()], [base::sweep()],
+#' [stats::mad()], [rangeX()], [bedrock::linScale()] 
 #'
 #' @family transform
 #' @concept robust-statistic

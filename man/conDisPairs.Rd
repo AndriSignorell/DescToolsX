@@ -12,7 +12,7 @@ conDisPairs(x, y = NULL)
 \item{y}{optional second numeric vector or ordered factor. If provided,
 vector mode is used.
 
-An \code{\link{ordered}} factor is converted to its level codes, which is
+An \code{\link[=ordered]{ordered()}} factor is converted to its level codes, which is
 exactly the ordinal information the counts rest on. An \emph{unordered}
 factor is refused: its levels have no order, and converting it anyway
 would silently impose the alphabetical one and report concordances that
@@ -56,7 +56,7 @@ ignores all ties, Kendall's tau-b corrects for \code{Ties_X} and
 \code{Ties_Y} separately, Somers' \eqn{D} for one of them only, and the
 \eqn{c} statistic scores half a point for a tie in \eqn{y}. All of them
 are therefore a short formula on top of this one function - see
-\code{\link{ordAssocs}}.
+\code{\link[=ordAssocs]{ordAssocs()}}.
 
 \subsection{Two input modes}{
 \strong{Vector mode} (\code{x} and \code{y} given) works on the raw
@@ -123,7 +123,7 @@ system.time(conDisPairs(rnorm(n), rnorm(n)))
 \references{
 Goodman, L. A., Kruskal, W. H. (1954) Measures of association for
 cross classifications. \emph{Journal of the American Statistical
-Association}, \bold{49}, 732-764.
+Association}, \strong{49}, 732-764.
 
 Agresti, A. (2010) \emph{Analysis of Ordinal Categorical Data} (2nd ed.).
 Wiley.

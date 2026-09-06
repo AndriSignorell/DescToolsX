@@ -15,45 +15,45 @@
 #' Assigns a set of convenient short-name aliases into an environment
 #' (by default the global environment).  This is an explicit opt-in: nothing
 #' is exported under these names, so no namespace conflicts arise when the
-#' package is merely attached with \code{library()}.
+#' package is merely attached with `library()`.
 #' 
 #' The short-name aliases that were previously created by
-#' \code{\link{attachAliases}()} from the given environment can be removed 
-#' by \code{\link{attachAliases}()}. Names that do
+#' [attachAliases()] from the given environment can be removed 
+#' by [attachAliases()]. Names that do
 #' not exist, or that hold something other than the aliased function, are
 #' left untouched.
 #'
 #' @details
 #' The following aliases are created:
 #' \tabular{ll}{
-#'   \bold{Alias} \tab \bold{Function}     \cr
-#'   \code{or}    \tab \code{oddsRatio()}  \cr
-#'   \code{rr}    \tab \code{relRisk()}    \cr
+#'   **Alias** \tab **Function**     \cr
+#'   `or`    \tab `oddsRatio()`  \cr
+#'   `rr`    \tab `relRisk()`    \cr
 #' }
 #'
-#' Aliases are plain function objects assigned with \code{\link{assign}()};
+#' Aliases are plain function objects assigned with [assign()];
 #' they are indistinguishable from calling the original function directly.
-#' To remove them, call \code{\link{detachAliases}()} or simply
-#' \code{rm(or, rr, envir = .GlobalEnv)}.
+#' To remove them, call [detachAliases()] or simply
+#' `rm(or, rr, envir = .GlobalEnv)`.
 #'
 #' An existing object of the same name is not overwritten unless
-#' \code{overwrite = TRUE} is given, so a user's own \code{or} or
-#' \code{rr} cannot be clobbered by accident.
+#' `overwrite = TRUE` is given, so a user's own `or` or
+#' `rr` cannot be clobbered by accident.
 #'
 #' @name attach-detach-aliases
 #' @param envir the environment into which the aliases are assigned.
-#'   Defaults to \code{.GlobalEnv}.  Supply a different environment
-#'   (e.g. the calling frame via \code{environment()}) if you want
+#'   Defaults to `.GlobalEnv`.  Supply a different environment
+#'   (e.g. the calling frame via `environment()`) if you want
 #'   script-local aliases.
-#' @param overwrite logical; if \code{TRUE}, objects already present under
-#'   an alias name are replaced. Default is \code{FALSE}, in which case
+#' @param overwrite logical; if `TRUE`, objects already present under
+#'   an alias name are replaced. Default is `FALSE`, in which case
 #'   such names are skipped with a warning.
 #'
 #' @return invisibly, a character vector of the alias names that were
 #'   created, resp. removed
 #'
-#' @seealso \code{\link{detachAliases}}, \code{\link{oddsRatio}},
-#'   \code{\link{relRisk}}
+#' @seealso [detachAliases()], [oddsRatio()],
+#'   [relRisk()]
 #'
 #' @examples
 #' # aliases are written into an environment; use a local one in scripts

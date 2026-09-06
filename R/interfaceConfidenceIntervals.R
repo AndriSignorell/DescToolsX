@@ -7,12 +7,12 @@
 #'
 #' @name ConfidenceIntervals
 #'
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #'
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}. For a one-sided interval, the value names the side with
+#'   interval. Must be one of `"two.sided"` (default), `"left"` or
+#'   `"right"`. For a one-sided interval, the value names the side with
 #'   the finite bound. The initial letter is sufficient.
 #'
 #' @param method character string specifying the interval method. The
@@ -20,28 +20,28 @@
 #'   individual help page for the choices.
 #'
 #' @param ... additional arguments for the bootstrap, such as the number of
-#'   resamples \code{R} and the interval type \code{type}.
+#'   resamples `R` and the interval type `type`.
 #'
 #' @details
 #' \subsection{Return value}{
-#' With \code{conf.level = NA} the functions return the point estimate as an
+#' With `conf.level = NA` the functions return the point estimate as an
 #' unnamed scalar. With a confidence level they return a named numeric vector
-#' with the elements \code{est}, \code{lci} and \code{uci}, in that order.
+#' with the elements `est`, `lci` and `uci`, in that order.
 #' Reading the result by name rather than by position is the safer habit,
 #' since some functions return further elements.
 #' }
 #'
 #' \subsection{One-sided intervals}{
-#' \code{sides} names the side carrying the \emph{finite} bound:
+#' `sides` names the side carrying the *finite* bound:
 #'
 #' \describe{
-#'   \item{\code{"left"}}{the lower bound is finite, the upper one is open.}
-#'   \item{\code{"right"}}{the upper bound is finite, the lower one is open.}
+#'   \item{`"left"`}{the lower bound is finite, the upper one is open.}
+#'   \item{`"right"`}{the upper bound is finite, the lower one is open.}
 #' }
 #'
-#' Thus \code{sides = "left"} corresponds to \code{alternative = "greater"}
-#' in \code{\link[stats]{t.test}}, and \code{sides = "right"} to
-#' \code{alternative = "less"}. This is also the convention used by the
+#' Thus `sides = "left"` corresponds to `alternative = "greater"`
+#' in [stats::t.test()], and `sides = "right"` to
+#' `alternative = "less"`. This is also the convention used by the
 #' corresponding functions in \pkg{DescTools}.
 #'
 #' The open side is reported at the boundary of the parameter space, not at
@@ -50,14 +50,14 @@
 #' an association measure in \eqn{[0, 1]} to 0 or 1, Cramer's \eqn{V} to 1,
 #' Pearson's \eqn{C} to \eqn{\sqrt{(m-1)/m}}. Where the parameter really is
 #' unbounded, \eqn{\pm\infty} is reported: a relative risk opens upwards to
-#' \code{Inf} but downwards only to 0, a location estimator opens to
-#' \code{-Inf} and \code{Inf}, Cronbach's \eqn{\alpha} to \code{-Inf} and 1.
+#' `Inf` but downwards only to 0, a location estimator opens to
+#' `-Inf` and `Inf`, Cronbach's \eqn{\alpha} to `-Inf` and 1.
 #' An interval never claims a value the statistic cannot take.
 #'
 #' A one-sided bound at level \eqn{\gamma} is the corresponding end of the
 #' two-sided interval at level \eqn{2\gamma - 1}: a 95\% lower bound is the
 #' lower end of the two-sided 90\% interval. Consequently a one-sided
-#' interval requires \code{conf.level} above 0.5 and is refused below it,
+#' interval requires `conf.level` above 0.5 and is refused below it,
 #' where the adjusted level would not be positive.
 #' }
 #'
@@ -65,31 +65,31 @@
 #' The available options depend on the statistic and on what is known about
 #' its distribution. Classical intervals rely on asymptotic normality or on
 #' an analytic variance formula, and are fast and deterministic where such a
-#' formula exists. Bootstrap intervals, requested with \code{"boot"}, need no
+#' formula exists. Bootstrap intervals, requested with `"boot"`, need no
 #' closed-form variance and are therefore available for statistics that have
 #' none - at the price of being random and slower.
 #'
 #' Bootstrap intervals are partly computed with the \pkg{boot} package (see
-#' \code{\link[boot]{boot}} and \code{\link[boot]{boot.ci}}). The number of
-#' resamples \code{R} and the interval type - \code{"perc"}, \code{"bca"} and
-#' others - are passed through \code{\dots}.
+#' [boot::boot()] and [boot::boot.ci()]). The number of
+#' resamples `R` and the interval type - `"perc"`, `"bca"` and
+#' others - are passed through `\dots`.
 #'
-#' \code{"bca"} corrects for bias and skewness and is the better choice for a
+#' `"bca"` corrects for bias and skewness and is the better choice for a
 #' smooth statistic whose parameter lies well inside its range. It is the
 #' weaker choice near a boundary: both of its ingredients degrade where the
 #' parameter sits at the edge of the parameter space, which for an
 #' association measure under independence is the ordinary situation rather
-#' than a pathology. \code{"perc"} is the more robust default there.
+#' than a pathology. `"perc"` is the more robust default there.
 #' }
 #'
 #' @section Random number generation:
 #' Requesting a bootstrap confidence interval draws a seed from R's global
 #' random number generator and therefore advances it. Call
-#' \code{\link[base]{set.seed}} beforehand for reproducible intervals. This
+#' [base::set.seed()] beforehand for reproducible intervals. This
 #' applies to the bootstrap methods only; classical intervals are
 #' deterministic.
 #'
-#' @seealso \code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
-#'   \code{\link[stats]{confint}}
+#' @seealso [boot::boot()], [boot::boot.ci()],
+#'   [stats::confint()]
 #'
 NULL

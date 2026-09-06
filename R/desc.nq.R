@@ -5,21 +5,21 @@
 #' @title Describe Relationship: Numeric x by Categorical g
 #'
 #' @description
-#' Computes descriptive statistics for a numeric variable \code{x}
-#' grouped by a categorical variable \code{g}.
+#' Computes descriptive statistics for a numeric variable `x`
+#' grouped by a categorical variable `g`.
 #'
 #' @param x a numeric variable
 #' @param g a categorical grouping variable (factor or coercible to factor)
 #' @param ... further arguments, currently unused
 #' @param which integer vector selecting which plots to draw. See Details.
-#'   \code{NULL} (default) selects plots automatically based on \code{verbose}.
+#'   `NULL` (default) selects plots automatically based on `verbose`.
 #' @param digits number of digits used to format relative frequencies
 #'
 #' @details
-#' The function summarizes the distribution of \code{x} across levels of
-#' \code{g} and performs nonparametric tests of group differences.
+#' The function summarizes the distribution of `x` across levels of
+#' `g` and performs nonparametric tests of group differences.
 #'
-#' \strong{Computed statistics}
+#' **Computed statistics**
 #' \itemize{
 #'   \item Group-wise descriptive statistics (mean, median, SD, IQR, counts)
 #'   \item Kruskal-Wallis test
@@ -27,17 +27,17 @@
 #'   \item Levene's test for homogeneity of variance
 #' }
 #'
-#' \strong{Interpretation}
-#' The Kruskal-Wallis test evaluates whether the distribution of \code{x}
-#' differs between groups defined by \code{g}. The effect size \eqn{\eta^2}
+#' **Interpretation**
+#' The Kruskal-Wallis test evaluates whether the distribution of `x`
+#' differs between groups defined by `g`. The effect size \eqn{\eta^2}
 #' provides a standardized measure of group differences.
 #'
-#' @return an object of class \code{c("Desc.nq", "Desc")} with components:
+#' @return an object of class `c("Desc.nq", "Desc")` with components:
 #' \describe{
-#'   \item{\code{tab}}{group-wise summary table}
-#'   \item{\code{test}}{result of the Kruskal-Wallis test}
-#'   \item{\code{vtest}}{result of Levene's test}
-#'   \item{\code{eta}}{effect size}
+#'   \item{`tab`}{group-wise summary table}
+#'   \item{`test`}{result of the Kruskal-Wallis test}
+#'   \item{`vtest`}{result of Levene's test}
+#'   \item{`eta`}{effect size}
 #' }
 #'
 #' @seealso
@@ -102,7 +102,7 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 
 
 #' @param main main title for the plot; defaults to the title stored in
-#' \code{x$meta$main}
+#' `x$meta$main`
 #' @rdname desc.nq
 #' @export
 plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {

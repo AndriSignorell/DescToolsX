@@ -1,79 +1,79 @@
 #' Describe Data
 #'
 #' Produce summaries of various types of variables. Descriptive statistics
-#' and plots are chosen automatically depending on the class of \code{x}.
+#' and plots are chosen automatically depending on the class of `x`.
 #' The intention is to provide a fast but rich summary with minimal typing.
 #'
-#' \code{desc()} is an S3 generic that computes basic descriptive statistics
+#' `desc()` is an S3 generic that computes basic descriptive statistics
 #' depending on the class of its input. The result is an object of class
-#' \code{"desc"} with a more specific subclass such as
-#' \code{"desc.numeric"}, \code{"desc.factor"} or \code{"desc.data.frame"}.
+#' `"desc"` with a more specific subclass such as
+#' `"desc.numeric"`, `"desc.factor"` or `"desc.data.frame"`.
 #'
 #' For numeric vectors, summary statistics such as mean and standard deviation
 #' are computed. For factors, frequency tables are returned. For data frames,
-#' \code{desc()} is applied column-wise.
+#' `desc()` is applied column-wise.
 #'
 #' @name desc
 #' @aliases desc desc.data.frame desc.list
 #' 
 #' @param x object to be described
 #' 
-#' @param main character string, \code{NULL}, or \code{NA}, defining the main
-#' title. By default (\code{main = NULL}) the title will
+#' @param main character string, `NULL`, or `NA`, defining the main
+#' title. By default (`main = NULL`) the title will
 #' be composed as: <variable name> (<class(es)>). 
-#' If \code{NA}, no title is printed.
+#' If `NA`, no title is printed.
 #'
 #' @param plotit logical. Should a plot be created? The plot type depends 
 #' on the classes of the variables. Default can be defined by 
-#' the option \code{plotit}, if it does not exist then it's set to \code{TRUE}.
+#' the option `plotit`, if it does not exist then it's set to `TRUE`.
 #' 
 #' @param verbose
 #' integer controlling verbosity of table output.
-#' One of \code{1} (minimal), \code{2} (default), \code{3} (extensive).
+#' One of `1` (minimal), `2` (default), `3` (extensive).
 #' Applies to tables only.
 #' 
 #' @param conf.level confidence level of the interval (default 0.95).
-#' If set to \code{NA}, no confidence interval is calculated.
+#' If set to `NA`, no confidence interval is calculated.
 #'
 #' @details
-#' \code{desc} is a \strong{generic function}. It dispatches to the
+#' `desc` is a **generic function**. It dispatches to the
 #' method of the class of its first argument.
 #'
-#' Typing \code{?desc} + TAB at the prompt lists all available methods.
-#' You usually call \code{desc(x)}, but direct calls like
-#' \code{desc.numeric(x)} are also possible.
+#' Typing `?desc` + TAB at the prompt lists all available methods.
+#' You usually call `desc(x)`, but direct calls like
+#' `desc.numeric(x)` are also possible.
 #'
-#' \strong{Univariate descriptions}
+#' **Univariate descriptions**
 #' \itemize{
-#'   \item Numeric variables: \code{\link{desc.numeric}}
-#'   \item Factors and character vectors: \code{\link{desc.factor}}
-#'   \item Boolean variables: \code{\link{desc.logical}}
-#'   \item Contingency tables: \code{\link{desc.table}}
-#'   \item Dates: \code{\link{desc.Date}}
-#'   \item Time series: \code{\link{desc.ts}}
+#'   \item Numeric variables: [desc.numeric()]
+#'   \item Factors and character vectors: [desc.factor()]
+#'   \item Boolean variables: [desc.logical()]
+#'   \item Contingency tables: [desc.table()]
+#'   \item Dates: [desc.Date()]
+#'   \item Time series: [desc.ts()]
 #' }
 #'
-#' \strong{Bivariate descriptions}
+#' **Bivariate descriptions**
 #' \itemize{
-#'   \item numeric ~ numeric: \code{\link{desc.nn}}
-#'   \item numeric ~ qualitative: \code{\link{desc.nq}}
-#'   \item qualitative ~ numeric: \code{\link{desc.qn}}
-#'   \item qualitative ~ qualitative: \code{\link{desc.qq}} 
-#'      (wrapper around \code{\link{desc.table}})
+#'   \item numeric ~ numeric: [desc.nn()]
+#'   \item numeric ~ qualitative: [desc.nq()]
+#'   \item qualitative ~ numeric: [desc.qn()]
+#'   \item qualitative ~ qualitative: [desc.qq()] 
+#'      (wrapper around [desc.table()])
 #' }
 #' 
-#' \strong{Design}
-#' The \code{desc} system separates:
+#' **Design**
+#' The `desc` system separates:
 #' \itemize{
-#'   \item computation (internal \code{.desc_*} functions)
-#'   \item printing (\code{print.Desc.*})
-#'   \item visualization (\code{plot.Desc.*})
+#'   \item computation (internal `.desc_*` functions)
+#'   \item printing (`print.Desc.*`)
+#'   \item visualization (`plot.Desc.*`)
 #' }
 #'  
-#' @return an object of class \code{"Desc"} with a subclass determined by the
-#' input, such as \code{"Desc.numeric"} or \code{"Desc.qn"}
+#' @return an object of class `"Desc"` with a subclass determined by the
+#' input, such as `"Desc.numeric"` or `"Desc.qn"`
 #'
-#' @seealso \code{\link{summary}}, \code{\link{plot}}
+#' @seealso [summary()], [plot()]
 
 #' @rdname desc
 

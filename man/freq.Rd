@@ -43,10 +43,10 @@ This is ignored if x is numeric or a date and classed
 
 \item{useNA}{one of \code{"no"}, \code{"ifany"}, or \code{"always"}.
 Defines whether to include extra \code{NA} levels in the table.  Defaults to
-\code{"no"} which is the \code{\link{table}()} default too.}
+\code{"no"} which is the \code{\link[=table]{table()}} default too.}
 
 \item{\dots}{further arguments are passed to the function
-\code{\link{cut}()}. Use \code{dig.lab} to control the format of numeric
+\code{\link[=cut]{cut()}}. Use \code{dig.lab} to control the format of numeric
 group names. Use the argument \code{right} to define if the intervals should
 be closed on the right (and open on the left) or vice versa. \cr In
 \code{print.Freq} the dots are not used.}
@@ -67,8 +67,8 @@ with columns:
 \description{
 Calculates absolute and relative frequencies of a vector \code{x}.
 Continuous (numeric) variables will be cut using the same logic as used by
-the function \code{\link{hist}}. Categorical variables will be aggregated by
-\code{\link{table}}. The result will contain single and cumulative
+the function \code{\link[=hist]{hist()}}. Categorical variables will be aggregated by
+\code{\link[=table]{table()}}. The result will contain single and cumulative
 frequencies for both, absolute values and percentages.
 }
 \details{
@@ -83,7 +83,7 @@ range of the data is divided into breaks pieces of equal length, and then
 the outer limits are moved away by 0.1\\% of the range to ensure that the
 extreme values both fall within the break intervals. (If \code{x} is a
 constant vector, equal-length intervals are created that cover the single
-value.) See \code{\link{cut}}.
+value.) See \code{\link[=cut]{cut()}}.
 
 With \code{breaks = FALSE} no classing takes place and the distinct values
 of a numeric or date \code{x} are tabulated directly (in ascending order of
@@ -122,8 +122,8 @@ freq(as.Date("2025-01-01") + 0:99)
 
 }
 \seealso{
-\code{\link{cut}}, \code{\link{hist}}, \code{\link{cumsum}},
-\code{\link{table}}, \code{\link{prop.table}}
+\code{\link[=cut]{cut()}}, \code{\link[=hist]{hist()}}, \code{\link[=cumsum]{cumsum()}},
+\code{\link[=table]{table()}}, \code{\link[=prop.table]{prop.table()}}
 
 Other frequency:
 \code{\link[=expFreq]{expFreq()}},

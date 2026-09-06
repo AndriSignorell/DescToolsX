@@ -1,11 +1,11 @@
 
 #' Box-Cox Transformation
 #'
-#' \code{boxCox()} applies the Box-Cox transformation to a numeric vector.
-#' \cr \code{boxCoxInv()} reverses the transformation.
+#' `boxCox()` applies the Box-Cox transformation to a numeric vector.
+#' \cr `boxCoxInv()` reverses the transformation.
 #'
 #' The Box-Cox transformation is defined for strictly positive values of
-#' \code{x} and is given by
+#' `x` and is given by
 #'
 #' \deqn{
 #' f_\lambda(x) = \left\{ \begin{array}{ll}
@@ -18,29 +18,29 @@
 #' @aliases boxCox boxCoxInv
 #'
 #' @param x a numeric vector. Must contain strictly positive values
-#'   (except \code{NA}s).
+#'   (except `NA`s).
 #' @param lambda a single numeric transformation parameter
 #' @param tol numeric tolerance for detecting the special case
 #'   \eqn{\lambda \approx 0}
 #'
-#' @return a numeric vector of the same length as \code{x}. An input
-#'   consisting only of \code{NA} is an error.
+#' @return a numeric vector of the same length as `x`. An input
+#'   consisting only of `NA` is an error.
 #'
 #' @details
 #' The transformation requires strictly positive input values. If
-#' \code{|lambda| < tol}, the logarithmic transformation is used instead
+#' `|lambda| < tol`, the logarithmic transformation is used instead
 #' for numerical stability.
 #'
 #' The inverse transformation recovers the original data (up to numerical
-#' precision) when the same \code{lambda} and \code{tol} are used.
+#' precision) when the same `lambda` and `tol` are used.
 #'
 #' @references
 #' Box, G. E. P. and Cox, D. R. (1964).
 #' An analysis of transformations.
-#' \emph{Journal of the Royal Statistical Society, Series B},
-#' \bold{26}(2), 211--252.
+#' *Journal of the Royal Statistical Society, Series B*,
+#' **26**(2), 211--252.
 #'
-#' @seealso \code{\link{boxCoxLambda}}
+#' @seealso [boxCoxLambda()]
 #'
 #' @examples
 #' set.seed(1)

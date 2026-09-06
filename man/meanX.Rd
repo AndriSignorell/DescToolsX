@@ -20,7 +20,7 @@ Complex vectors are allowed for \code{trim = 0} only.}
 \item{\dots}{further arguments passed to or from other methods}
 
 \item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link{freq}}}
+composed by \code{\link[=freq]{freq()}}}
 
 \item{weights}{non-negative numeric vector of weights of the same length as
 \code{x}, interpreted as frequency (replication) weights. Observations with
@@ -53,7 +53,7 @@ weights. Conceptually, this corresponds to computing the statistic
 on a reweighted empirical distribution, where observations with larger
 weights represent a higher frequency in the population.
 
-\bold{Note:}\verb{    }
+**Note:**\verb{    }
 Analytic (precision) weights, which assume observation-specific error
 variances or likelihood-based weighting, are deliberately not supported.
 This design ensures that all weighted statistics remain well-defined
@@ -76,8 +76,8 @@ Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
-\code{\link{weighted.mean}}, \code{\link{mean.POSIXct}},
-\code{\link{colMeans}} for row and column means.
+\code{\link[=weighted.mean]{weighted.mean()}}, \code{\link[=mean.POSIXct]{mean.POSIXct()}},
+\code{\link[=colMeans]{colMeans()}} for row and column means.
 
 Other location:
 \code{\link[=gmean]{gmean()}},

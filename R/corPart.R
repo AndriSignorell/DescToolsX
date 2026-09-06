@@ -1,8 +1,8 @@
 
 #' Partial Correlation Matrix
 #'
-#' Computes the partial correlation matrix of a set of variables \code{x}
-#' while controlling for another set of variables \code{y}, based on a
+#' Computes the partial correlation matrix of a set of variables `x`
+#' while controlling for another set of variables `y`, based on a
 #' covariance/correlation matrix or on raw data.
 #'
 #' @param m a numeric matrix, either:
@@ -19,8 +19,8 @@
 #'   (conditioning set)
 #'
 #' @return a symmetric numeric matrix containing the partial correlations
-#'   among variables in \code{x}, adjusted for variables in \code{y}.
-#'   Row and column names correspond to \code{colnames(m)[x]}.
+#'   among variables in `x`, adjusted for variables in `y`.
+#'   Row and column names correspond to `colnames(m)[x]`.
 #'
 #' @details
 #' Partial correlations are read off the precision matrix. Let \eqn{K} be
@@ -35,16 +35,16 @@
 #' it to unit diagonal, but needs a single inversion instead of two.
 #'
 #' Because the result is scaled to unit diagonal, it makes no difference
-#' whether \code{m} is a covariance or a correlation matrix.
+#' whether `m` is a covariance or a correlation matrix.
 #'
 #' @section Numerical considerations:
 #' \itemize{
-#'   \item The joint submatrix of \code{x} and \code{y} must be invertible.
+#'   \item The joint submatrix of `x` and `y` must be invertible.
 #'     Near-singularity from collinearity among the control variables is
 #'     detected via the reciprocal condition number, not merely by a
-#'     failure of \code{\link[base]{solve}}, which succeeds and returns
+#'     failure of [base::solve()], which succeeds and returns
 #'     nonsense well before the matrix is numerically singular.
-#'   \item \code{x} and \code{y} must not overlap.
+#'   \item `x` and `y` must not overlap.
 #'   \item For raw data, correlations are computed pairwise, which can
 #'     produce a non-positive-definite matrix when values are missing.
 #' }
@@ -65,7 +65,7 @@
 #' # a single variable of interest is allowed and returns a 1x1 matrix
 #' corPart(C, x = 1, y = 3:4)
 #'
-#' @seealso \code{\link[stats]{cor}}, \code{\link[stats]{cov}}
+#' @seealso [stats::cor()], [stats::cov()]
 #'
 #' @family assoc.continuous
 #' @concept correlation

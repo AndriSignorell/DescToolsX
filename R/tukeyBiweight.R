@@ -6,44 +6,44 @@
 #' @details
 #' The biweight mean is a robust location estimator that downweights
 #' observations far from the median.  It is defined via the tuning constant
-#' \code{const} (default 9), which controls the breakdown point: larger
+#' `const` (default 9), which controls the breakdown point: larger
 #' values are less resistant but more efficient under normality.
 #'
-#' When \code{conf.level} is not \code{NA} a bootstrap confidence interval
+#' When `conf.level` is not `NA` a bootstrap confidence interval
 #' is returned.  The resampling is done in C++; the R random number generator
-#' is used only to draw the seed, so \code{set.seed()} makes the result
-#' reproducible.  Bootstrap arguments are passed through \code{...}:
+#' is used only to draw the seed, so `set.seed()` makes the result
+#' reproducible.  Bootstrap arguments are passed through `...`:
 #' \describe{
-#'   \item{\code{R}}{Number of bootstrap replicates (default \code{999}).}
-#'   \item{\code{type}}{CI type: \code{"perc"} or \code{"bca"} (default).}
+#'   \item{`R`}{Number of bootstrap replicates (default `999`).}
+#'   \item{`type`}{CI type: `"perc"` or `"bca"` (default).}
 #' }
 #'
 #' The biweight mean is a location estimator and therefore unbounded, so the
 #' open side of a one-sided interval is reported at \eqn{\pm\infty} - unlike
 #' the bounded measures in this package, where it is reported at the range
-#' limit. See \code{\link{ConfidenceIntervals}}.
+#' limit. See [ConfidenceIntervals()].
 #'
 #' @param x a non-empty numeric vector of data values
 #'
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param const tuning constant passed to \code{tbrm_cpp()}. Defaults to \code{9}.
+#' @param const tuning constant passed to `tbrm_cpp()`. Defaults to `9`.
 #' @param na.rm logical. Should missing values be removed before computation?
-#' Defaults to \code{FALSE}.
+#' Defaults to `FALSE`.
 #' @param ... further arguments passed to the bootstrap engine when a
-#' confidence interval is requested, namely \code{R} and \code{type}. Any
+#' confidence interval is requested, namely `R` and `type`. Any
 #' other name is an error rather than a silent no-op.
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Tukey's biweight mean}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Tukey's biweight mean}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @examples

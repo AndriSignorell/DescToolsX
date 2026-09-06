@@ -20,19 +20,19 @@ provided to the calculation functions in different ways.
 If only \code{x} is passed, this can either be a matrix, which
 is then interpreted as a contingency table (this seems in the case of frequency
 data the natural interpretation and is by the way also what
-\code{\link{chisq.test}} expects). However, it can also be a data.frame or
+\code{\link[=chisq.test]{chisq.test()}} expects). However, it can also be a data.frame or
 a list, which must then contain exactly 2 elements containing the data.
 Alternatively, two single data vectors \code{x} and \code{y} can be passed.
 The two element arguments are typically processed by forming a contingency
-table with \code{\link{table}(x, y, ...)}. \code{NAs} are by default handled the same
+table with \verb{[table](x, y, ...)}. \code{NAs} are by default handled the same
 way as the function does, so \code{NAs} omitted.
 
 If the measure should be calculated pairwise for a set of variables
-\code{\link[bedrock]{pairApply}} can be used. This easily allows to create matrices
+\code{\link[bedrock:pairApply]{bedrock::pairApply()}} can be used. This easily allows to create matrices
 of association measures (the same way as the \code{cor} does). \code{NAs}
 again are by default omitted pairwise, which corresponds to the
-\code{pairwise.complete} option of \code{\link{cor}}.
-Use \code{\link{complete.cases}}, if only the complete
+\code{pairwise.complete} option of \code{\link[=cor]{cor()}}.
+Use \code{\link[=complete.cases]{complete.cases()}}, if only the complete
 cases of a \code{data.frame} are to be used. (see examples)
 
 Most functions support calculation of confidence intervals.

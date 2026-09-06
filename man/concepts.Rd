@@ -41,7 +41,7 @@ inside a package.
 \item \code{conceptAudit()} - Returns a summary table of concept usage.
 }
 
-The functions use \code{\link[tools]{Rd_db}} to parse Rd files and
+The functions use \code{\link[tools:Rd_db]{tools::Rd_db()}} to parse Rd files and
 extract \verb{\\\\concept} tags programmatically.
 
 These tools are intended for package development,

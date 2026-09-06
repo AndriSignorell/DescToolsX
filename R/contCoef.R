@@ -2,32 +2,32 @@
 #' Pearson's Contingency Coefficient
 #'
 #' Computes Pearson's contingency coefficient for a contingency table. If
-#' \code{x} and \code{y} are supplied, the table is constructed first; see
-#' \code{\link{Association}}.
+#' `x` and `y` are supplied, the table is constructed first; see
+#' [Association()].
 #'
 #' @inheritParams Association
 #'
 #' @param correct logical; whether Sakoda's adjusted Pearson's C should be
-#' returned; defaults to \code{FALSE}
+#' returned; defaults to `FALSE`
 #'
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param ... further arguments. Named arguments known to
-#'   \code{\link{normalizeToConfusion}} or \code{\link{table}} are used to
-#'   build the table; \code{R} and \code{type} configure the bootstrap and
+#'   [normalizeToConfusion()] or [table()] are used to
+#'   build the table; `R` and `type` configure the bootstrap and
 #'   are described under Details. Anything else is an error rather than a
 #'   silent no-op.
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar containing Pearson's
+#' @return if `conf.level = NA`, a numeric scalar containing Pearson's
 #' contingency coefficient; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the contingency coefficient}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of the contingency coefficient}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @details
@@ -43,33 +43,33 @@
 #' Since no generally accepted analytical interval is available,
 #' only bootstrap intervals are implemented. The interval is obtained from 
 #' a multinomial bootstrap over the cells of
-#' the table. Two arguments configure it, both passed through \code{\dots}:
-#' \code{R}, the number of replicates (default 999), and \code{type}, one
-#' of \code{"perc"} (default) or \code{"bca"}.
+#' the table. Two arguments configure it, both passed through `\dots`:
+#' `R`, the number of replicates (default 999), and `type`, one
+#' of `"perc"` (default) or `"bca"`.
 #'
-#' \code{"perc"} is the default deliberately. Under independence the
-#' parameter sits \emph{on} the boundary of its range, where the sampling
+#' `"perc"` is the default deliberately. Under independence the
+#' parameter sits *on* the boundary of its range, where the sampling
 #' distribution of \eqn{C} is not normal under any monotone
 #' transformation - which is precisely what BCa assumes. Both of its
 #' ingredients degrade there: the bias correction is read off the share of
 #' replicates below the estimate, which collapses when the estimate is at
 #' the edge of the bootstrap distribution, and the acceleration is a
 #' jackknife, which is not consistent for a functional that is not smooth.
-#' \code{"bca"} is the better choice for tables with a clearly non-zero
+#' `"bca"` is the better choice for tables with a clearly non-zero
 #' association and a reasonable number of observations.
 #'
 #' Confidence intervals are restricted to the attainable range. Measures
 #' such as [cramerV] may be preferable when inference is central.
 #' 
-#' For further information see \code{\link{ConfidenceIntervals}}.
+#' For further information see [ConfidenceIntervals()].
 #'
 #' @references
 #' Sakoda, J.M. (1977) Measures of Association for Multivariate Contingency
-#' Tables, \emph{Proceedings of the Social Statistics Section of the American
-#' Statistical Association} (Part III), 777-780.
+#' Tables, *Proceedings of the Social Statistics Section of the American
+#' Statistical Association* (Part III), 777-780.
 #'
-#' Efron, B., Tibshirani, R.J. (1993) \emph{An Introduction to the
-#' Bootstrap}, Chapman & Hall, chapter 14.
+#' Efron, B., Tibshirani, R.J. (1993) *An Introduction to the
+#' Bootstrap*, Chapman & Hall, chapter 14.
 #'
 #' @examples
 #'

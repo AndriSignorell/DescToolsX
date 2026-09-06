@@ -5,7 +5,7 @@
 #' predicted and reference values.
 #'
 #' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. \code{lm}).
+#'   model objects (e.g. `lm`).
 #' @param ... additional arguments passed to methods
 #'
 #' @return a numeric scalar containing the SMAPE
@@ -20,11 +20,11 @@
 #' percentage: the factor 100 of the original definition is not applied, which
 #' is the form for which the bound of 2 holds.
 #'
-#' A term is undefined when \code{x} and \code{ref} are both zero, and is set
-#' to \code{NA}. With the default \code{na.rm = FALSE} a single such pair
-#' therefore makes the whole result \code{NA}; with \code{na.rm = TRUE} those
+#' A term is undefined when `x` and `ref` are both zero, and is set
+#' to `NA`. With the default `na.rm = FALSE` a single such pair
+#' therefore makes the whole result `NA`; with `na.rm = TRUE` those
 #' terms are dropped along with genuinely missing ones, so the mean is taken
-#' over fewer than \code{length(x)} terms.
+#' over fewer than `length(x)` terms.
 #'
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)

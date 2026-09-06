@@ -7,7 +7,7 @@
 #' the other hand already calculates some basic statistics.
 #'
 #' The levels of a factor and describing variable labels (as created by
-#' \code{\link[bedrock]{label}()}) will be wrapped within the columns.
+#' [bedrock::label()]) will be wrapped within the columns.
 #'
 #' The first 4 columns are printed with the needed fix width, the last 2
 #' (Levels and Labels) are wrapped within the column. The width is calculated
@@ -30,12 +30,12 @@
 #' @return a data frame of class `Abstract` with columns:
 #'
 #' \describe{
-#'   \item{\code{Nr}}{column number}
-#'   \item{\code{Class}}{column class}
-#'   \item{\code{ColName}}{column name}
-#'   \item{\code{NAs}}{number of missing values}
-#'   \item{\code{Levels}}{factor levels, if applicable}
-#'   \item{\code{Label}}{descriptive column label}
+#'   \item{`Nr`}{column number}
+#'   \item{`Class`}{column class}
+#'   \item{`ColName`}{column name}
+#'   \item{`NAs`}{number of missing values}
+#'   \item{`Levels`}{factor levels, if applicable}
+#'   \item{`Label`}{descriptive column label}
 #' }
 #'
 #' When printing, the `Label` column is hidden if no labels are set.

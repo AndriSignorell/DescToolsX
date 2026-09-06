@@ -21,7 +21,7 @@ cronbachAlpha(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{returnConditional}{logical; if \code{TRUE}, alpha is additionally
 calculated for the dataset with each item left out}

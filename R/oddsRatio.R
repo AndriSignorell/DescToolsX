@@ -11,89 +11,89 @@
 #'
 #' \deqn{OR = \frac{n_{11} n_{22}}{n_{12} n_{21}}}
 #'
-#' Three interval methods are available. \code{"wald"} is the asymptotic
+#' Three interval methods are available. `"wald"` is the asymptotic
 #' interval on the log scale, fast and adequate for reasonably large counts.
-#' \code{"exact"} is the conditional interval based on the noncentral
+#' `"exact"` is the conditional interval based on the noncentral
 #' hypergeometric distribution (Fisher); it guarantees coverage but is
-#' conservative, sometimes markedly so. \code{"midp"} halves the probability
+#' conservative, sometimes markedly so. `"midp"` halves the probability
 #' of the observed table and lies between the two: it has coverage closer to
 #' the nominal level than the exact interval without the Wald interval's
 #' reliance on large counts. With a zero cell the point estimate is 0 or
-#' \code{Inf} and only \code{"exact"} and \code{"midp"} still deliver a
+#' `Inf` and only `"exact"` and `"midp"` still deliver a
 #' finite bound on the informative side.
 #' }
 #'
 #' \subsection{Binomial models}{
-#' For a model fitted with \code{glm(family = binomial)}, each coefficient is
+#' For a model fitted with `glm(family = binomial)`, each coefficient is
 #' exponentiated: \eqn{\exp(\beta_j)} is the factor by which the odds of the
 #' response are multiplied when the corresponding predictor increases by one
 #' unit, all other predictors held fixed. For a dummy variable this is the
 #' odds ratio between the level and its reference level.
 #'
 #' The intercept is exponentiated along with the rest, but
-#' \eqn{\exp(\beta_0)} is \emph{not} an odds ratio - it is the odds of the
+#' \eqn{\exp(\beta_0)} is *not* an odds ratio - it is the odds of the
 #' response when all predictors are zero. It is reported for completeness
 #' and is usually not the quantity of interest.
 #'
-#' Two interval methods are available. \code{"wald"} is the symmetric
-#' interval on the log-odds scale, back-transformed. \code{"profile"} inverts
-#' the likelihood ratio test through \code{\link[stats]{confint.glm}}; it is
+#' Two interval methods are available. `"wald"` is the symmetric
+#' interval on the log-odds scale, back-transformed. `"profile"` inverts
+#' the likelihood ratio test through [stats::confint.glm()]; it is
 #' asymmetric on the odds scale, generally more reliable in small samples or
 #' with sparse cells, and considerably slower because the model is refitted
 #' along each coefficient. Profile intervals are two-sided by construction,
-#' so \code{sides} is ignored for them and a warning is issued.
+#' so `sides` is ignored for them and a warning is issued.
 #'
 #' Unlike the table method, the model method computes an interval by default
-#' (\code{conf.level = 0.95}): a coefficient table without intervals would
-#' be less informative than \code{summary()} itself.
+#' (`conf.level = 0.95`): a coefficient table without intervals would
+#' be less informative than `summary()` itself.
 #' }
 #'
 #' @param x a 2x2 contingency table, two vectors to be cross-tabulated, or a
-#'   binomial \code{\link[stats]{glm}} object
+#'   binomial [stats::glm()] object
 #' @param ... further arguments passed to methods. For the default method
-#'   with two vectors, these reach \code{\link{table}}, so \code{useNA} can
+#'   with two vectors, these reach [table()], so `useNA` can
 #'   be set here.
 #'
 #' @return
-#' For a contingency table with \code{conf.level = NA} a numeric scalar,
-#' otherwise a named numeric vector with the elements \code{est}, \code{lci}
-#' and \code{uci}.
+#' For a contingency table with `conf.level = NA` a numeric scalar,
+#' otherwise a named numeric vector with the elements `est`, `lci`
+#' and `uci`.
 #'
-#' For a binomial model an object of class \code{"OddsRatio"}, a list with:
+#' For a binomial model an object of class `"OddsRatio"`, a list with:
 #' \describe{
-#'   \item{\code{coefficients}}{a data frame with one row per coefficient and
-#'     the columns \code{term}, \code{est} (the exponentiated coefficient),
-#'     \code{logEst} (the coefficient itself), \code{stdError} (on the log
-#'     scale), \code{pValue}, \code{lci} and \code{uci}}
-#'   \item{\code{source}}{\code{"glm"}}
-#'   \item{\code{method}, \code{conf.level}, \code{sides}}{as supplied - with
-#'     \code{sides} recording what was computed, which for
-#'     \code{method = "profile"} is always \code{"two.sided"}}
-#'   \item{\code{nObs}}{number of observations used in the fit}
-#'   \item{\code{call}}{the model call}
+#'   \item{`coefficients`}{a data frame with one row per coefficient and
+#'     the columns `term`, `est` (the exponentiated coefficient),
+#'     `logEst` (the coefficient itself), `stdError` (on the log
+#'     scale), `pValue`, `lci` and `uci`}
+#'   \item{`source`}{`"glm"`}
+#'   \item{`method`, `conf.level`, `sides`}{as supplied - with
+#'     `sides` recording what was computed, which for
+#'     `method = "profile"` is always `"two.sided"`}
+#'   \item{`nObs`}{number of observations used in the fit}
+#'   \item{`call`}{the model call}
 #' }
-#' There is a \code{print} method; the interval bounds are on the odds scale,
+#' There is a `print` method; the interval bounds are on the odds scale,
 #' the standard error on the log scale.
 #'
 #' @references
-#' Agresti, A. (2013). \emph{Categorical Data Analysis} (3rd ed.).
+#' Agresti, A. (2013). *Categorical Data Analysis* (3rd ed.).
 #' Wiley.
 #'
 #' Fisher, R. A. (1935). The logic of inductive inference.
-#' \emph{Journal of the Royal Statistical Society},
-#' \emph{98}(1), 39--82.
+#' *Journal of the Royal Statistical Society*,
+#' *98*(1), 39--82.
 #'
 #' Gart, J. J. (1966). Alternative analyses of contingency tables.
-#' \emph{Journal of the Royal Statistical Society Series B},
-#' \emph{28}(1), 164--179.
+#' *Journal of the Royal Statistical Society Series B*,
+#' *28*(1), 164--179.
 #'
 #' @note
 #' No short alias is exported by default to avoid conflicts with
 #' \pkg{rlang} and base R naming conventions.  Call
-#' \code{\link{attachAliases}()} once per session (or script) to make
-#' \code{or()} available as a convenient shorthand.
+#' [attachAliases()] once per session (or script) to make
+#' `or()` available as a convenient shorthand.
 #'
-#' @seealso [attachAliases], [relRisk], \code{\link[stats]{confint.glm}}
+#' @seealso [attachAliases], [relRisk], [stats::confint.glm()]
 #'
 #' @examples
 #' # --- 2x2 table -------------------------------------------------
@@ -135,23 +135,23 @@ oddsRatio <- function(x, ...) {
 
 
 #' @param y optional second variable. If supplied,
-#'   \code{table(x, y, ...)} is computed.
+#'   `table(x, y, ...)` is computed.
 #' @param conf.level confidence level of the interval. For the table method
-#'   \code{NA} (the default) returns the point estimate only; the model
+#'   `NA` (the default) returns the point estimate only; the model
 #'   method computes an interval by default.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}. An odds ratio
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()]. An odds ratio
 #'   is bounded below by 0 and unbounded above, so the open side is reported
-#'   at 0 or \code{Inf} accordingly. Ignored, with a warning, for
-#'   \code{method = "profile"}.
+#'   at 0 or `Inf` accordingly. Ignored, with a warning, for
+#'   `method = "profile"`.
 #' @param method character string specifying the interval method. For a
-#'   contingency table one of \code{"wald"}, \code{"exact"} or
-#'   \code{"midp"}; for a binomial model one of \code{"wald"} or
-#'   \code{"profile"}. See Details.
+#'   contingency table one of `"wald"`, `"exact"` or
+#'   `"midp"`; for a binomial model one of `"wald"` or
+#'   `"profile"`. See Details.
 #' @param interval numeric vector of length two giving the search interval
 #'   for the root finding in the mid-p method. Only used by
-#'   \code{method = "midp"}; widen it if the reported bound sits at one of
+#'   `method = "midp"`; widen it if the reported bound sits at one of
 #'   its ends.
 #'
 #' @rdname oddsRatio

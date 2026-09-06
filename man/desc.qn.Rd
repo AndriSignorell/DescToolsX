@@ -80,8 +80,8 @@ The numeric variable \code{x} is optionally discretized using
 \code{breaks}. By default, quartiles are used.
 }
 \seealso{
-\code{\link{desc}}, \code{\link{desc.nn}}, \code{\link{desc.nq}},
-\code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
+\code{\link[=desc]{desc()}}, \code{\link[=desc.nn]{desc.nn()}}, \code{\link[=desc.nq]{desc.nq()}},
+\code{\link[=kruskal.test]{kruskal.test()}}, \code{\link[lumen:leveneTest]{lumen::leveneTest()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},

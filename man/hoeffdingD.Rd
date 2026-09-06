@@ -138,7 +138,7 @@ relied on in the situation the statistic is most often used for.
 }
 
 Missing values are an error rather than a silent approximation:
-\code{\link{order}} and \code{\link{rank}} place \code{NA}s at the end
+\code{\link[=order]{order()}} and \code{\link[=rank]{rank()}} place \code{NA}s at the end
 by default, which yields a formally valid permutation and hence a number
 that looks like an answer. Remove or impute them before calling.
 }
@@ -187,14 +187,14 @@ Nonparametric Statistical Methods (3rd ed.).
 
 Blum, J. R., Kiefer, J. and Rosenblatt, M. (1961).
 Distribution free tests of independence based on the sample distribution
-function. \emph{Annals of Mathematical Statistics} \bold{32}, 485-498.
+function. \emph{Annals of Mathematical Statistics} \strong{32}, 485-498.
 
 Arcones, M. A. and Gine, E. (1992).
 On the bootstrap of U and V statistics.
-\emph{Annals of Statistics} \bold{20}, 655-674.
+\emph{Annals of Statistics} \strong{20}, 655-674.
 }
 \seealso{
-\code{\link{spearmanCor}}, \code{\link{kendallTauB}}
+\code{\link[=spearmanCor]{spearmanCor()}}, \code{\link[=kendallTauB]{kendallTauB()}}
 
 Other assoc.continuous:
 \code{\link[=corPart]{corPart()}},

@@ -37,7 +37,7 @@ coefficient could be corrected for ties within raters.
 }
 \details{
 The test for Kendall's W is completely equivalent to
-\code{\link[stats]{friedman.test}}. The only advantage of this test over
+\code{\link[stats:friedman.test]{stats::friedman.test()}}. The only advantage of this test over
 Friedman's is that Kendall's W has an interpretation as the coefficient of
 concordance. The test itself is only valid for large samples.\cr Kendall's W
 should be corrected for ties, if raters did not use a true ranking order for

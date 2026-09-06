@@ -26,7 +26,7 @@ lambda(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See details in \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{direction}{type of lambda. Can be one out of \code{"symmetric"}
 (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
@@ -34,7 +34,7 @@ direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
 reported. See Details.}
 
 \item{...}{further arguments, passed on to
-\code{\link{normalizeToConfusion}} and \code{\link{table}} for building
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}} and \code{\link[=table]{table()}} for building
 the table - \code{useNA} is the usual one.}
 }
 \value{
@@ -96,7 +96,7 @@ Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 Newbury Park, CA: Sage, pp. 17--24
 }
 \seealso{
-\code{\link{Association}}
+\code{\link[=Association]{Association()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},

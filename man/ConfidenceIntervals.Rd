@@ -42,7 +42,7 @@ since some functions return further elements.
 }
 
 Thus \code{sides = "left"} corresponds to \code{alternative = "greater"}
-in \code{\link[stats]{t.test}}, and \code{sides = "right"} to
+in \code{\link[stats:t.test]{stats::t.test()}}, and \code{sides = "right"} to
 \code{alternative = "less"}. This is also the convention used by the
 corresponding functions in \pkg{DescTools}.
 
@@ -72,9 +72,9 @@ closed-form variance and are therefore available for statistics that have
 none - at the price of being random and slower.
 
 Bootstrap intervals are partly computed with the \pkg{boot} package (see
-\code{\link[boot]{boot}} and \code{\link[boot]{boot.ci}}). The number of
+\code{\link[boot:boot]{boot::boot()}} and \code{\link[boot:boot.ci]{boot::boot.ci()}}). The number of
 resamples \code{R} and the interval type - \code{"perc"}, \code{"bca"} and
-others - are passed through \code{\dots}.
+others - are passed through \verb{\\dots}.
 
 \code{"bca"} corrects for bias and skewness and is the better choice for a
 smooth statistic whose parameter lies well inside its range. It is the
@@ -88,12 +88,12 @@ than a pathology. \code{"perc"} is the more robust default there.
 
 Requesting a bootstrap confidence interval draws a seed from R's global
 random number generator and therefore advances it. Call
-\code{\link[base]{set.seed}} beforehand for reproducible intervals. This
+\code{\link[base:set.seed]{base::set.seed()}} beforehand for reproducible intervals. This
 applies to the bootstrap methods only; classical intervals are
 deterministic.
 }
 
 \seealso{
-\code{\link[boot]{boot}}, \code{\link[boot]{boot.ci}},
-\code{\link[stats]{confint}}
+\code{\link[boot:boot]{boot::boot()}}, \code{\link[boot:boot.ci]{boot::boot.ci()}},
+\code{\link[stats:confint]{stats::confint()}}
 }

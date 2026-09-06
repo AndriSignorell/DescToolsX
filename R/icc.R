@@ -9,9 +9,9 @@
 #' decisions:
 #'
 #' \itemize{
-#'   \item \strong{model}: one-way or two-way ANOVA design
-#'   \item \strong{type}: agreement or consistency
-#'   \item \strong{unit}: single rating or average of k ratings
+#'   \item **model**: one-way or two-way ANOVA design
+#'   \item **type**: agreement or consistency
+#'   \item **unit**: single rating or average of k ratings
 #' }
 #'
 #' The six classical Shrout--Fleiss cases are:
@@ -26,48 +26,48 @@
 #' twoway  \tab consistency \tab average  (ICC3k) \cr
 #' }
 #'
-#' For \code{model = "oneway"} only \code{type = "agreement"} is meaningful.
+#' For `model = "oneway"` only `type = "agreement"` is meaningful.
 #'
 #' Confidence intervals can be computed using different inference methods:
 #'
 #' \itemize{
-#'   \item \code{"anova"}: exact F-based intervals following Shrout and Fleiss (1979)
-#'   \item \code{"reml"}: variance components estimated via REML. Point
+#'   \item `"anova"`: exact F-based intervals following Shrout and Fleiss (1979)
+#'   \item `"reml"`: variance components estimated via REML. Point
 #'     estimate only; no confidence interval is available for this method.
-#'   \item \code{"boot"}: nonparametric percentile bootstrap
+#'   \item `"boot"`: nonparametric percentile bootstrap
 #' }
 #'
 #' @param x numeric matrix or data frame with subjects in rows and raters in
 #' columns
-#' @param model character string, either \code{"oneway"} or \code{"twoway"}
-#' @param type character string, either \code{"agreement"} or
-#' \code{"consistency"}
-#' @param unit character string, either \code{"single"} or \code{"average"}
+#' @param model character string, either `"oneway"` or `"twoway"`
+#' @param type character string, either `"agreement"` or
+#' `"consistency"`
+#' @param unit character string, either `"single"` or `"average"`
 #' 
 #' @param method character string specifying the estimation and confidence
-#' interval method; defaults to \code{"anova"}
+#' interval method; defaults to `"anova"`
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param na.rm logical; if \code{TRUE}, complete cases are used
-#' @param \dots additional arguments. For \code{method = "boot"},
-#' the number of bootstrap resamples can be specified via \code{R}.
+#' @param na.rm logical; if `TRUE`, complete cases are used
+#' @param \dots additional arguments. For `method = "boot"`,
+#' the number of bootstrap resamples can be specified via `R`.
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the intraclass correlation}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of the intraclass correlation}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @section Random number generation:
-#' \code{method = "boot"} resamples subjects and therefore advances R's
-#' global random number generator. Call \code{\link[base]{set.seed}}
+#' `method = "boot"` resamples subjects and therefore advances R's
+#' global random number generator. Call [base::set.seed()]
 #' beforehand for reproducible intervals.
 #'
 #' @details
@@ -85,11 +85,11 @@
 #' @references
 #' Shrout, P. E., Fleiss, J. L. (1979).
 #' Intraclass correlations: uses in assessing rater reliability.
-#' \emph{Psychological Bulletin}, 86, 420--428.
+#' *Psychological Bulletin*, 86, 420--428.
 #'
 #' McGraw, K. O., Wong, S. P. (1996).
 #' Forming inferences about some intraclass correlation coefficients.
-#' \emph{Psychological Methods}, 1, 30--46.
+#' *Psychological Methods*, 1, 30--46.
 #'
 #' @examples
 #' #example from Shrout and Fleiss (1979)

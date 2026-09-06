@@ -29,7 +29,7 @@ when \code{x} is a model object.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{confidence interval method: \code{"normal"} (delta-method
 approximation, default) or \code{"boot"} (bootstrap via
@@ -115,7 +115,7 @@ brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
 
 }
 \seealso{
-\code{\link[stats]{predict}}
+\code{\link[stats:predict]{stats::predict()}}
 
 Other model.metrics:
 \code{\link[=auc]{auc()}},

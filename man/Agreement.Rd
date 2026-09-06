@@ -53,7 +53,7 @@ of equal length can be supplied.
 Missing values (\code{NA}) are by default omitted pairwise,
 i.e. only subjects rated by all involved raters are used.
 If complete-case analysis across all raters is required,
-use \code{\link{complete.cases}} beforehand.
+use \code{\link[=complete.cases]{complete.cases()}} beforehand.
 
 Agreement measures depend on:
 \itemize{

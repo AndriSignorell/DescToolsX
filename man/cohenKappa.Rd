@@ -19,7 +19,7 @@ categorical vector when \code{y} is provided}
 
 \item{y}{\code{NULL} (default) or a categorical vector with
 compatible dimensions to \code{x}. When supplied,
-\code{table(x, y, \dots)} is computed. The vector interface is
+\verb{table(x, y, \\dots)} is computed. The vector interface is
 available for unweighted kappa only (see Details).}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
@@ -27,14 +27,14 @@ available for unweighted kappa only (see Details).}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{weights}{either a character string selecting a built-in weight
 scheme -- \code{"unweighted"} (default), \code{"equal-spacing"}, or
 \code{"fleiss-cohen"} -- or a numeric matrix with the same dimensions
 as \code{x} supplying user-defined weights for each cell}
 
-\item{...}{further arguments passed to \code{\link{table}} for the
+\item{...}{further arguments passed to \code{\link[=table]{table()}} for the
 vector interface, for example \code{useNA}}
 }
 \value{
@@ -64,13 +64,13 @@ attach greater importance to closer disagreements.
 
 Data can be passed either as a square confusion matrix (or data frame)
 in \code{x}, or as two vectors \code{x} and \code{y}, in which case
-\code{table(x, y, \dots)} is computed internally.  Note that the vector
+\verb{table(x, y, \\dots)} is computed internally.  Note that the vector
 interface supports \strong{unweighted kappa only}: the function raises
 an error if \code{weights} is not \code{"unweighted"} and \code{y} is
 supplied, because the level ordering of two independent factors cannot
 be guaranteed to be consistent when constructing the confusion table.
 
-Missing values are handled as \code{\link{table}} does -- excluded by
+Missing values are handled as \code{\link[=table]{table()}} does -- excluded by
 default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
 
 \code{sides} names the side on which the finite bound lies:
@@ -78,7 +78,7 @@ default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
 fixed at 1, and \code{"right"} one bounded above, with the lower limit
 fixed at -1. Kappa is a bounded parameter, so the open side is reported
 at the range boundary rather than as \eqn{\pm\infty} (design_rules.md
-4.1), matching \code{\link{ccc}}.
+4.1), matching \code{\link[=ccc]{ccc()}}.
 }
 \note{
 Based on code by David Meyer, adapted to conform to package standards.
@@ -138,7 +138,7 @@ reliability of scoring EEG sleep recordings.
 \emph{American Journal of EEG Technology}, \emph{11}(3), 101--109.
 }
 \seealso{
-\code{\link[bedrock]{pairApply}}
+\code{\link[bedrock:pairApply]{bedrock::pairApply()}}
 
 Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},

@@ -3,17 +3,17 @@
 #' Computes Tschuprow's T, a measure of association between two categorical
 #' variables based on the chi-squared statistic.
 #'
-#' If \code{y} is provided, a contingency table is created using
-#' \code{table(x, y, ...)}. Otherwise, \code{x} is assumed to already be
+#' If `y` is provided, a contingency table is created using
+#' `table(x, y, ...)`. Otherwise, `x` is assumed to already be
 #' a two-dimensional contingency table.
 #'
-#' @param x a vector of categorical data (then \code{y} must be given) or a
-#'   two-dimensional contingency table (matrix or \code{table})
+#' @param x a vector of categorical data (then `y` must be given) or a
+#'   two-dimensional contingency table (matrix or `table`)
 #' @param y optional second categorical vector. If provided, a contingency
-#'   table is constructed from \code{x} and \code{y}.
-#' @param correct logical; if \code{TRUE}, applies a bias correction
+#'   table is constructed from `x` and `y`.
+#' @param correct logical; if `TRUE`, applies a bias correction
 #'   according to Bergsma (2013).
-#' @param ... additional arguments passed to \code{\link[base]{table}}. This
+#' @param ... additional arguments passed to [base::table()]. This
 #'   refers only to the vector interface.
 #'
 #' @return a numeric scalar containing Tschuprow's T
@@ -27,7 +27,7 @@
 #' sample size, and \eqn{r} and \eqn{c} are the number of rows and columns
 #' of the contingency table.
 #'
-#' If \code{correct = TRUE}, a bias-corrected version is computed based on
+#' If `correct = TRUE`, a bias-corrected version is computed based on
 #' Bergsma (2013), which adjusts the estimate especially for small samples.
 #' It replaces \eqn{\phi^2 = \chi^2/n} by
 #' \eqn{\tilde\phi^2 = \max(0, \phi^2 - (r-1)(c-1)/(n-1))} and the dimensions
@@ -38,14 +38,14 @@
 #' the phi coefficient; the sign of the association is not reported.
 #'
 #' @references
-#' Tschuprow, A. A. (1939). \emph{Principles of the Mathematical Theory of
-#' Correlation}. W. Hodge & Co.
+#' Tschuprow, A. A. (1939). *Principles of the Mathematical Theory of
+#' Correlation*. W. Hodge & Co.
 #'
 #' Bergsma, W. (2013). A bias-correction for Cramer's V and Tschuprow's T.
-#' \emph{Journal of the Korean Statistical Society}, 42(3), 323--328.
+#' *Journal of the Korean Statistical Society*, 42(3), 323--328.
 #' https://doi.org/10.1016/j.jkss.2012.10.002
 #'
-#' @seealso \code{\link[stats]{chisq.test}}, \code{\link{cramerV}}
+#' @seealso [stats::chisq.test()], [cramerV()]
 #'
 #' @examples
 #' # Example with vectors

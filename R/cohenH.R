@@ -17,24 +17,24 @@
 #' is computed.
 #'
 #' @param x a 2x2 contingency table or matrix, or a categorical vector
-#'   when \code{y} is supplied
-#' @param y an optional second variable used together with \code{x}
-#'   to create a contingency table via \code{table(x, y, ...)}
+#'   when `y` is supplied
+#' @param y an optional second variable used together with `x`
+#'   to create a contingency table via `table(x, y, ...)`
 #'   
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'   
-#' @param ... additional arguments passed to \code{table()}
+#' @param ... additional arguments passed to `table()`
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar containing Cohen's
+#' @return if `conf.level = NA`, a numeric scalar containing Cohen's
 #' \eqn{h}; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Cohen's \eqn{h}.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of Cohen's \eqn{h}.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
 #' @details
@@ -56,8 +56,8 @@
 #' SE(h) = \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}
 #' }{SE(h) = sqrt(1/n1 + 1/n2)}
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
 #' \eqn{(-\infty, uci]}. 
 #'
 #' @examples

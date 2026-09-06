@@ -4,16 +4,16 @@
 #' Computes the quantities required for a Bland-Altman agreement analysis.
 #'
 #' For each observation pair, the arithmetic mean and the difference
-#' (\code{y - x}) are calculated. The function further computes the mean
+#' (`y - x`) are calculated. The function further computes the mean
 #' difference (bias), limits of agreement (LoA), and approximate confidence
 #' intervals for the bias and LoA according to Bland and Altman.
 #'
-#' The returned object is of class \code{"BlandAltman"} and can be plotted
-#' using by a \code{plot()} routine residing in the \pkg{pharos} package.
+#' The returned object is of class `"BlandAltman"` and can be plotted
+#' using by a `plot()` routine residing in the \pkg{pharos} package.
 #'
-#' The limits of agreement are the conventional \code{bias +/- 1.96 * sd},
-#' independent of \code{conf.level}: the multiplier fixes the nominal
-#' coverage of the interval of \emph{differences}, whereas \code{conf.level}
+#' The limits of agreement are the conventional `bias +/- 1.96 * sd`,
+#' independent of `conf.level`: the multiplier fixes the nominal
+#' coverage of the interval of *differences*, whereas `conf.level`
 #' governs the confidence intervals reported for the bias and for the two
 #' limits. The standard error of a limit uses the approximation
 #' \eqn{\sqrt{3 s_d^2 / n}} given by Bland and Altman.
@@ -24,31 +24,31 @@
 #' @param data optional data frame used with the formula interface
 #' @param conf.level confidence level for the intervals reported for the
 #'   bias and the limits of agreement
-#' @param na.rm logical; if \code{TRUE}, incomplete observation pairs are
+#' @param na.rm logical; if `TRUE`, incomplete observation pairs are
 #' removed before computation
 #' @param ... further arguments passed to or from other methods
 #'
 #' @return
-#' an object of class \code{"BlandAltman"} with components:
+#' an object of class `"BlandAltman"` with components:
 #'
 #' \describe{
-#'   \item{\code{mean}}{pairwise means}
-#'   \item{\code{diff}}{pairwise differences (\code{y - x})}
-#'   \item{\code{bias}}{mean difference}
-#'   \item{\code{loaLower}}{lower limit of agreement}
-#'   \item{\code{loaUpper}}{upper limit of agreement}
-#'   \item{\code{biasCI}}{confidence interval for the bias}
-#'   \item{\code{loaLowerCI}}{confidence interval for the lower LoA}
-#'   \item{\code{loaUpperCI}}{confidence interval for the upper LoA}
-#'   \item{\code{nObs}}{number of observations used}
-#'   \item{\code{conf.level}}{the confidence level used}
+#'   \item{`mean`}{pairwise means}
+#'   \item{`diff`}{pairwise differences (`y - x`)}
+#'   \item{`bias`}{mean difference}
+#'   \item{`loaLower`}{lower limit of agreement}
+#'   \item{`loaUpper`}{upper limit of agreement}
+#'   \item{`biasCI`}{confidence interval for the bias}
+#'   \item{`loaLowerCI`}{confidence interval for the lower LoA}
+#'   \item{`loaUpperCI`}{confidence interval for the upper LoA}
+#'   \item{`nObs`}{number of observations used}
+#'   \item{`conf.level`}{the confidence level used}
 #' }
 #'
 #' @references
 #' Bland JM, Altman DG (1986).
 #' Statistical methods for assessing agreement between two methods of
 #' clinical measurement.
-#' \emph{Lancet}, 327, 307-310.
+#' *Lancet*, 327, 307-310.
 #'
 #' @examples
 #' set.seed(1)
@@ -222,13 +222,13 @@ blandAltmanData.formula <- function(
 #' the estimated bias, limits of agreement, corresponding confidence
 #' intervals, and the number of observations.
 #'
-#' @param x an object of class \code{"BlandAltman"} as returned by
-#' \code{\link{blandAltmanData}}
+#' @param x an object of class `"BlandAltman"` as returned by
+#' [blandAltmanData()]
 #' @param digits number of decimal places to display
 #' @param ... further arguments passed to or from other methods
 #'
 #' @return
-#' invisibly, \code{x}
+#' invisibly, `x`
 #'
 #' @method print BlandAltman
 #' @export

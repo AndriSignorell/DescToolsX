@@ -10,31 +10,31 @@
 #' - H(XY)}{H(Y)} } and ranges from \verb{[0, 1]}.
 #'
 #' @param x a numeric vector, factor, matrix, or data frame
-#' @param y \code{NULL} (default) or a vector, an ordered factor, matrix or
-#' data frame with compatible dimensions to \code{x}
-#' @param direction direction of calculation, one of \code{"symmetric"}
-#' (default), \code{"row"}, or \code{"column"}. The row direction calculates
+#' @param y `NULL` (default) or a vector, an ordered factor, matrix or
+#' data frame with compatible dimensions to `x`
+#' @param direction direction of calculation, one of `"symmetric"`
+#' (default), `"row"`, or `"column"`. The row direction calculates
 #' U(R|C), and the column direction calculates U(C|R).
 #' @param pZeroCorrection small positive value used to replace zero cells
 #' before taking logarithms
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #' 
 #' @param \dots further arguments are passed to the function
-#' \code{\link{table}}, allowing, for example, \code{useNA} to be set. This
+#' [table()], allowing, for example, `useNA` to be set. This
 #' refers only to the
 #' vector interface.
 #' 
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{uncertainty coefficient estimate}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{uncertainty coefficient estimate}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @note Based on code from Antti Arppe
@@ -42,11 +42,11 @@
 #' @section Confidence interval:
 #' The interval is based on the asymptotic standard error (Goodman & Kruskal)
 #' and is truncated to the parameter range \eqn{[0, 1]}. For a one-sided
-#' interval (\code{sides = "left"} or \code{"right"}) the open side is reported
+#' interval (`sides = "left"` or `"right"`) the open side is reported
 #' at the corresponding range limit, not at \eqn{\pm\infty}.
 #'
-#' @seealso \code{\link{Association}}
-#' @references Theil, H. (1972), \emph{Statistical Decomposition Analysis},
+#' @seealso [Association()]
+#' @references Theil, H. (1972), *Statistical Decomposition Analysis*,
 #' Amsterdam: North-Holland Publishing Company.
 #'
 #' @examples

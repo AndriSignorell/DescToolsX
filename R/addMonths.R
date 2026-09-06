@@ -2,41 +2,41 @@
 #' Add Months to a Date
 #'
 #' Adds or subtracts whole calendar months while ensuring that the result is
-#' always a valid date.Negative values of \code{n} subtract months.
+#' always a valid date.Negative values of `n` subtract months.
 #'
 #' Naively adding months to a date can produce invalid results. For example, adding one
-#' month to \code{as.Date("2013-01-31")} returns \code{"2013-02-28"} rather
+#' month to `as.Date("2013-01-31")` returns `"2013-02-28"` rather
 #' than a date in March. 
 #'
-#' @param x a \code{Date} object or an object coercible to one with
-#'   \code{\link{as.Date}}
+#' @param x a `Date` object or an object coercible to one with
+#'   [as.Date()]
 #' @param n numeric vector containing finite whole numbers of months or
 #'   missing values
-#' @param \dots further arguments passed to \code{\link{as.Date}}, such as
-#'   \code{origin}, \code{format}, or \code{tz}
+#' @param \dots further arguments passed to [as.Date()], such as
+#'   `origin`, `format`, or `tz`
 #'
-#' @return a vector of class \code{Date} having the length of the longer of
-#'   \code{x} and \code{n}
+#' @return a vector of class `Date` having the length of the longer of
+#'   `x` and `n`
 #'
 #' @details
-#' The arguments \code{x} and \code{n} are recycled to their common maximum
+#' The arguments `x` and `n` are recycled to their common maximum
 #' length using [bedrock::recycle()]. Partial recycling does not produce a
 #' warning.
 #'
-#' If either argument has length zero, an empty \code{Date} vector is
+#' If either argument has length zero, an empty `Date` vector is
 #' returned. Missing values in either argument produce missing values in the
 #' corresponding result.
 #'
-#' Inputs supplied as \code{POSIXct} are converted to \code{Date}, and their
-#' time-of-day information is discarded. By default, \code{as.Date.POSIXct}
-#' performs this conversion in UTC. Supply \code{tz} through \code{\dots} if
+#' Inputs supplied as `POSIXct` are converted to `Date`, and their
+#' time-of-day information is discarded. By default, `as.Date.POSIXct`
+#' performs this conversion in UTC. Supply `tz` through `\dots` if
 #' another time zone should determine the calendar date.
 #'
 #' @note Based on code by Roland Rapold and Antonio, adapted to conform to
 #'   package standards.
 #'
 #' @references
-#' \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
+#' <https://stackoverflow.com/questions/14169620/add-a-month-to-a-date>
 #'
 #' @seealso [as.ym()], [year()], [month()]
 #'

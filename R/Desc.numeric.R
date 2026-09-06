@@ -10,52 +10,52 @@
 #' @inheritParams desc 
 #' 
 #' @param x numeric vector to describe, or an object of class
-#' \code{"Desc.numeric"} for the print and plot methods
+#' `"Desc.numeric"` for the print and plot methods
 #' 
 #' @param ... further arguments passed to methods
 #'   
 #' @param maxrows numeric; defines the maximum number of rows in a frequency
 #' table to be reported. For factors with many levels it is often not
 #' interesting to see all of them. Default is set to 12 most frequent ones
-#' (resp. the first ones if \code{ord} is set to \code{"levels"} or
-#' \code{"names"}).
+#' (resp. the first ones if `ord` is set to `"levels"` or
+#' `"names"`).
 #' 
 #' @param digits number of digits used to format numeric values
 #' 
-#' @param include_x logical; if \code{TRUE}, the original vector is retained
+#' @param include_x logical; if `TRUE`, the original vector is retained
 #' in the result
 #' @param conf.level confidence level for interval estimates (default 0.95)
 #' 
 #' @details
-#' This function is an S3 method for \code{\link[graphics]{plot}}.
-#' It is automatically dispatched when calling \code{plot(x)} on a
-#' \code{Desc.numeric} object.
+#' This function is an S3 method for [graphics::plot()].
+#' It is automatically dispatched when calling `plot(x)` on a
+#' `Desc.numeric` object.
 #' 
-#' For a numeric argument x \code{maxrows} is the minimum number of unique
+#' For a numeric argument x `maxrows` is the minimum number of unique
 #' values needed for a numeric variable to be treated as continuous. If left to
-#' its default \code{NULL}, x will be regarded as continuous if it has more
+#' its default `NULL`, x will be regarded as continuous if it has more
 #' than 12 single values. In this case the list of extreme values will be
 #' displayed and the frequency table else.
 #' 
-#' If \code{maxrows} is < 1 it will be interpreted as percentage. In this case
-#' just as many rows, as the \code{maxrows} most frequent levels will be shown.
-#' Say, if \code{maxrows} is set to \code{0.8}, then the number of rows is
+#' If `maxrows` is < 1 it will be interpreted as percentage. In this case
+#' just as many rows, as the `maxrows` most frequent levels will be shown.
+#' Say, if `maxrows` is set to `0.8`, then the number of rows is
 #' fixed so, that the highest cumulative relative frequency is the first one
 #' going beyond 0.8.
 #' 
-#' Setting \code{maxrows} to \code{Inf} will unconditionally report all values
+#' Setting `maxrows` to `Inf` will unconditionally report all values
 #' and also produce a plot with type "h" instead of a histogram.
 #'
-#' Named colors defined by \code{DescToolsX} (e.g. \code{"hred"},
-#' \code{"hblue"}) can be used directly.
+#' Named colors defined by `DescToolsX` (e.g. `"hred"`,
+#' `"hblue"`) can be used directly.
 #'
-#' @return an object of class \code{c("Desc.numeric", "Desc")} containing
+#' @return an object of class `c("Desc.numeric", "Desc")` containing
 #' descriptive statistics, frequency information, and metadata
 #'
-#' @seealso \code{\link[base:summary]{base::summary()}},
-#' \code{\link[base:plot]{base::plot()}}
+#' @seealso [base::summary()],
+#' [base::plot()]
 #' 
-#' Other Statistical summary functions: \code{\link{abstract}()}
+#' Other Statistical summary functions: [abstract()]
 #' @examples
 #'
 #' desc(Pizza$delivery_min)             # numeric

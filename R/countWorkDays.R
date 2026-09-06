@@ -8,8 +8,8 @@
 #' supplied. The date vectors are recycled if their lengths differ.
 #'
 #' @details
-#' Both endpoints are counted, so \code{countWorkDays(d, d)} is 1 for a
-#' working day and 0 otherwise. A \code{to} that lies before \code{from}
+#' Both endpoints are counted, so `countWorkDays(d, d)` is 1 for a
+#' working day and 0 otherwise. A `to` that lies before `from`
 #' yields 0.
 #'
 #' Holidays outside the interval are ignored, as are holidays falling on a
@@ -18,11 +18,11 @@
 #' @param from initial dates
 #' @param to final dates
 #' @param holiday a vector of dates (or strings coercible with
-#' \code{\link{as.Date}}) to exclude
+#' [as.Date()]) to exclude
 #' @param nonworkdays a character vector containing the English three-letter
 #' weekday abbreviations to be treated as non-work days, i.e. a subset of
-#' \code{c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")}. Default is
-#' \code{c("Sat", "Sun")}.
+#' `c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")`. Default is
+#' `c("Sat", "Sun")`.
 #'
 #' @return an integer vector
 #'

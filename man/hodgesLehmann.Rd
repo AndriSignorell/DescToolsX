@@ -23,7 +23,7 @@ hodgesLehmann(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{na.rm}{logical; whether to remove missing values}
 
@@ -48,7 +48,7 @@ The Hodges-Lehmann estimator is the median of the combined
 data points and Walsh averages.
 
 It is the same as the pseudo median returned as a by-product
-of \code{\link{wilcox.test}}
+of \code{\link[=wilcox.test]{wilcox.test()}}
 (which however does not calculate correctly as soon as ties
 are present).
 
@@ -71,7 +71,7 @@ C++ port of Monahan’s algorithm by Cyril Flurin Moser
 \section{Random number generation}{
 
 A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call \code{\link[base]{set.seed}}
+global random number generator. Call \code{\link[base:set.seed]{base::set.seed()}}
 beforehand for reproducible intervals. The point estimate itself is
 deterministic: the compiled routine picks its pivots from a local
 generator and does not touch R's stream.
@@ -96,7 +96,7 @@ hodgesLehmann(x, conf.level = 0.95)
 
 }
 \seealso{
-\code{\link[stats]{wilcox.test}}
+\code{\link[stats:wilcox.test]{stats::wilcox.test()}}
 
 Other location:
 \code{\link[=gmean]{gmean()}},

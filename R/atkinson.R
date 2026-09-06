@@ -5,15 +5,15 @@
 #'
 #' @param x numeric vector of non-negative values, such as incomes
 #' @param n optional frequency weights; either a single non-negative whole
-#'   number or a vector having the same length as \code{x}
+#'   number or a vector having the same length as `x`
 #' @param epsilon single non-negative numeric value specifying the inequality
 #'   aversion parameter
-#' @param na.rm logical; whether missing values in \code{x} are removed
+#' @param na.rm logical; whether missing values in `x` are removed
 #' @param tol single non-negative numeric value specifying the tolerance for
-#'   treating \code{epsilon} as equal to one
+#'   treating `epsilon` as equal to one
 #'
 #' @return a numeric value in the interval \verb{[0, 1]}, or
-#'   \code{NA_real_} if the index is undefined
+#'   `NA_real_` if the index is undefined
 #'
 #' @details
 #' With frequency weights \eqn{n_i}, the weighted arithmetic mean is
@@ -59,23 +59,23 @@
 #'
 #' The calculation uses normalized frequency weights and logarithmic power
 #' means. It therefore does not construct the potentially very large vector
-#' that would result from \code{rep(x, n)}.
+#' that would result from `rep(x, n)`.
 #'
 #' Observations with zero frequency are ignored. If all frequencies are zero
-#' or no observations remain after removing missing values, \code{NA_real_}
+#' or no observations remain after removing missing values, `NA_real_`
 #' is returned.
 #'
 #' If all values are zero, the index is defined as zero. If at least one value
-#' is zero and \code{epsilon >= 1}, the equally distributed equivalent value
+#' is zero and `epsilon >= 1`, the equally distributed equivalent value
 #' is zero and the index is one.
 #'
 #' Negative values, non-finite values, and missing values when
-#' \code{na.rm = FALSE} produce \code{NA_real_}. A negative
-#' \code{epsilon} also produces \code{NA_real_}.
+#' `na.rm = FALSE` produce `NA_real_`. A negative
+#' `epsilon` also produces `NA_real_`.
 #'
 #' @references
 #' Atkinson, A. B. (1970). On the measurement of inequality.
-#' \emph{Journal of Economic Theory}, 2(3), 244--263.
+#' *Journal of Economic Theory*, 2(3), 244--263.
 #'
 #' @examples
 #' x <- c(541, 1463, 2445, 3438, 4437,

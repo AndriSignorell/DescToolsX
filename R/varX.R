@@ -1,53 +1,53 @@
 #' (Weighted) Variance and Standard Deviation
 #'
-#' \code{varX()} computes the variance of \code{x}, allowing the definition of
-#' weights (unlike base R's \code{\link{var}()} function). Using the estimator
-#' \code{ml} returns the uncorrected sample variance (which is a biased
-#' estimator for the sample variance). \cr\code{sdX} yields the standard
+#' `varX()` computes the variance of `x`, allowing the definition of
+#' weights (unlike base R's [var()] function). Using the estimator
+#' `ml` returns the uncorrected sample variance (which is a biased
+#' estimator for the sample variance). \cr`sdX` yields the standard
 #' deviation following the same logic.
 #'
-#' Using estimator \code{"unbiased"} the denominator \eqn{n - 1} is used (known
+#' Using estimator `"unbiased"` the denominator \eqn{n - 1} is used (known
 #' as "Bessel's correction") which gives an unbiased estimator of the
-#' (co)variance for i.i.d. observations.\cr \code{"ml"} yields the biased
+#' (co)variance for i.i.d. observations.\cr `"ml"` yields the biased
 #' version using the denominator \eqn{n}. With frequency weights \eqn{n} is the
 #' sum of the weights.
 #'
-#' These functions return \code{\link{NA}} when there is only one observation
-#' and \code{NA} when \code{x} has length zero.
+#' These functions return [NA()] when there is only one observation
+#' and `NA` when `x` has length zero.
 #'
-#' \bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
+#' **Note:**\verb{ } Analytic (precision) weights are not supported. For
 #' likelihood-based weighted variance estimation, see
-#' \code{\link[stats]{cov.wt}}.
+#' [stats::cov.wt()].
 #'
 #' @name varX
 #' @aliases varX varX.default varX.Freq sdX
 #'
 #' @param x a numeric vector, matrix, or data frame
-#' @param estimator determines the estimator type; if \code{"unbiased"} (the
+#' @param estimator determines the estimator type; if `"unbiased"` (the
 #' default) then the usual unbiased estimate (using \eqn{n - 1} as denominator)
-#' is returned, if \code{"ml"} then it is the maximum likelihood estimate for a
+#' is returned, if `"ml"` then it is the maximum likelihood estimate for a
 #' Gaussian distribution (denominator \eqn{n}).
 #' @param weights non-negative numeric vector of weights the same length as
-#' \code{x}, interpreted as frequency (replication) weights. Observations with
+#' `x`, interpreted as frequency (replication) weights. Observations with
 #' larger weights contribute more strongly to the empirical distribution.
 #' Weights are supported for vector input only.
 #' @param na.rm logical. Should missing values be removed?
 #' @param breaks breaks for calculating the variance for classified data as
-#' composed by \code{\link{freq}}
+#' composed by [freq()]
 #' @param \dots further arguments passed to or from other methods
 #'
 #' @return
 #' \describe{
-#'   \item{\code{varX()}}{a numeric scalar for vector input or a covariance
+#'   \item{`varX()`}{a numeric scalar for vector input or a covariance
 #'     matrix for a matrix or data frame}
-#'   \item{\code{sdX()}}{a numeric scalar containing the standard deviation}
+#'   \item{`sdX()`}{a numeric scalar containing the standard deviation}
 #' }
-#' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
-#' New S Language}.  Wadsworth & Brooks/Cole.
+#' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) *The
+#' New S Language*.  Wadsworth & Brooks/Cole.
 #'
-#' @seealso \code{\link[lumen]{varCI}} for confidence intervals,
-#' \code{\link[lumen]{varTest}} for tests and base R's implementations
-#' \code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
+#' @seealso [lumen::varCI()] for confidence intervals,
+#' [lumen::varTest()] for tests and base R's implementations
+#' [var()], [sd()], [cov()]
 #'
 #' @examples
 #'

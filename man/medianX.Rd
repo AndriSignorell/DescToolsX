@@ -28,7 +28,7 @@ giving the weights to use for elements of \code{x}}
 stripped before the computation proceeds}
 
 \item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link{freq}}}
+composed by \code{\link[=freq]{freq()}}}
 }
 \value{
 the default method returns a length-one object of the same type as
@@ -41,7 +41,7 @@ generally the result of \code{x[FALSE][NA]}).
 }
 \description{
 Compute the sample median. The function basically wraps the function
-\code{\link{quantileX}()}, which offers the option to define weights.\cr For
+\code{\link[=quantileX]{quantileX()}}, which offers the option to define weights.\cr For
 grouped data the median can be estimated by linear interpolation within the
 class containing the median, which is implemented in the interface for
 \code{Freq}-objects.
@@ -50,7 +50,7 @@ class containing the median, which is implemented in the interface for
 This is a generic function for which methods can be written.  However, the
 default method makes use of \code{is.na}, \code{sort} and \code{mean} from
 package \pkg{base} all of which are generic, and so the default method will
-work for most classes (e.g., \code{"\link{Date}"}) for which a median is a
+work for most classes (e.g., \code{"[Date]"}) for which a median is a
 reasonable concept.
 
 Calculating the median for ordered factors is not implemented in standard R,
@@ -110,7 +110,7 @@ Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
-\code{\link{quantile}} for general quantiles, \cr
+\code{\link[=quantile]{quantile()}} for general quantiles, \cr
 \href{https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html}{Maechler on R-help mailing list, 2003-Nov}
 \cr
 \href{https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal}{StackOverflow discussion on median}

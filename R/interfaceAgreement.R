@@ -7,19 +7,19 @@
 #' Agreement is defined between two or more raters evaluating the same
 #' subjects. The data can be provided in different formats.
 #'
-#' If only \code{x} is passed, it must be a matrix or data.frame where:
+#' If only `x` is passed, it must be a matrix or data.frame where:
 #' \itemize{
 #'   \item rows represent subjects
 #'   \item columns represent raters
 #' }
 #'
-#' Alternatively, for two raters only, two vectors \code{x} and \code{y}
+#' Alternatively, for two raters only, two vectors `x` and `y`
 #' of equal length can be supplied.
 #'
-#' Missing values (\code{NA}) are by default omitted pairwise,
+#' Missing values (`NA`) are by default omitted pairwise,
 #' i.e. only subjects rated by all involved raters are used.
 #' If complete-case analysis across all raters is required,
-#' use \code{\link{complete.cases}} beforehand.
+#' use [complete.cases()] beforehand.
 #'
 #' Agreement measures depend on:
 #' \itemize{
@@ -29,10 +29,10 @@
 #'
 #' For ordinal data, weighted approaches are available.
 #'
-#' Most functions support confidence intervals via \code{conf.level}.
-#' If \code{conf.level = NA}, no interval is computed.
-#' One-sided intervals can be requested via \code{sides}, which names the
-#' side carrying the finite bound; see \link{ConfidenceIntervals}.
+#' Most functions support confidence intervals via `conf.level`.
+#' If `conf.level = NA`, no interval is computed.
+#' One-sided intervals can be requested via `sides`, which names the
+#' side carrying the finite bound; see [ConfidenceIntervals].
 #'
 #' Inference methods may include classical large-sample approaches
 #' or bootstrap methods ("boot"). Specific measures may provide
@@ -40,48 +40,48 @@
 #'
 #' Some agreement measures define additional parameters such as:
 #' \itemize{
-#'   \item \code{weights} (for ordinal agreement)
-#'   \item \code{model} (for ICC variants)
-#'   \item \code{type} (consistency vs. absolute agreement)
-#'   \item \code{unit} (single vs. average rating)
+#'   \item `weights` (for ordinal agreement)
+#'   \item `model` (for ICC variants)
+#'   \item `type` (consistency vs. absolute agreement)
+#'   \item `unit` (single vs. average rating)
 #' }
 #'
 #'
-#' \strong{Function List}
+#' **Function List**
 #'
-#' Following agreement measures are implemented in \strong{DescToolsX}:
+#' Following agreement measures are implemented in **DescToolsX**:
 #'
 #' \tabular{ll}{
-#'   \verb{  }\strong{function}       \tab \strong{description} \cr
-#'   \verb{  }\link{cohenKappa}       \tab Cohen's Kappa \cr
-#'   \verb{  }\code{scottsPi}         \tab Scott's Pi \cr
-#'   \verb{  }\code{gwetAC1}          \tab Gwet's AC1 / AC2 \cr
-#'   \verb{  }\link{cronbachAlpha}    \tab Cronbach's Alpha \cr
-#'   \verb{  }\link{kappaM}          \tab Fleiss' and Light's Kappa \cr
-#'   \verb{  }\link{krippAlpha}\tab Krippendorff's Alpha \cr
-#'   \verb{  }\link{kendallW}         \tab Kendall's W \cr
-#'   \verb{  }\link{icc}              \tab Intraclass Correlation (ICC) \cr
-#'   \verb{  }\link{ccc}           \tab Lin's Concordance Correlation \cr
+#'   \verb{  }**function**       \tab **description** \cr
+#'   \verb{  }[cohenKappa]       \tab Cohen's Kappa \cr
+#'   \verb{  }`scottsPi`         \tab Scott's Pi \cr
+#'   \verb{  }`gwetAC1`          \tab Gwet's AC1 / AC2 \cr
+#'   \verb{  }[cronbachAlpha]    \tab Cronbach's Alpha \cr
+#'   \verb{  }[kappaM]          \tab Fleiss' and Light's Kappa \cr
+#'   \verb{  }[krippAlpha]\tab Krippendorff's Alpha \cr
+#'   \verb{  }[kendallW]         \tab Kendall's W \cr
+#'   \verb{  }[icc]              \tab Intraclass Correlation (ICC) \cr
+#'   \verb{  }[ccc]           \tab Lin's Concordance Correlation \cr
 #' }
 #'
 #' @param x matrix or data frame of ratings (subjects x raters),
-#'   or a single vector if \code{y} is provided
+#'   or a single vector if `y` is provided
 #' @param y optional second vector for two raters
 #' @param conf.level confidence level for confidence intervals.
-#'   If \code{NA}, no confidence interval is computed.
+#'   If `NA`, no confidence interval is computed.
 #' @param sides character string specifying the side of the confidence
-#'   interval, one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}. It names the side on which the \emph{finite} bound
+#'   interval, one of `"two.sided"` (default), `"left"` or
+#'   `"right"`. It names the side on which the *finite* bound
 #'   lies, not the direction of an alternative hypothesis - see
-#'   \link{ConfidenceIntervals} for the full definition and for the
+#'   [ConfidenceIntervals] for the full definition and for the
 #'   difference to \pkg{DescTools}.
 #' @param method method used for inference; available methods depend on the
 #' measure
 #' @param weights optional weighting scheme for ordinal data
 #'   (e.g. "linear", "quadratic")
-#' @param model model for the ICC, \code{"oneway"} or \code{"twoway"}
-#' @param type type of ICC, \code{"consistency"} or \code{"agreement"}
-#' @param unit unit of the ICC, \code{"single"} or \code{"average"}
+#' @param model model for the ICC, `"oneway"` or `"twoway"`
+#' @param type type of ICC, `"consistency"` or `"agreement"`
+#' @param unit unit of the ICC, `"single"` or `"average"`
 #' @param ... additional arguments passed to helper functions
 #'   (e.g. bootstrap routines)
 #'

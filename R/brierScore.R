@@ -12,77 +12,77 @@
 #' where \eqn{y_i \in \{0,1\}} and \eqn{\hat p_i} is the predicted
 #' probability.  Lower is better; a perfect model scores 0.
 #'
-#' The scaled Brier score (\code{scaled = TRUE}) expresses skill relative
+#' The scaled Brier score (`scaled = TRUE`) expresses skill relative
 #' to the climatological baseline \eqn{BS_{\max}}, yielding 1 for a
 #' perfect model and 0 for the no-skill reference.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
 #' \eqn{(-\infty, uci]}. 
 #'
-#' **Normal interval** (\code{method = "normal"})
+#' **Normal interval** (`method = "normal"`)
 #'
 #' A delta-method normal approximation based on the variance of the
 #' per-observation Brier losses.  Fast and deterministic; reliable for
-#' moderate to large samples.  With \code{scaled = TRUE} the standard error
+#' moderate to large samples.  With `scaled = TRUE` the standard error
 #' is carried onto the skill scale by dividing through \eqn{BS_{\max}},
 #' which is treated as fixed; the interval therefore ignores the sampling
 #' variability of the baseline and is mildly anti-conservative. Prefer
-#' \code{method = "boot"} for scaled scores.
+#' `method = "boot"` for scaled scores.
 #'
-#' **Bootstrap interval** (\code{method = "boot"})
+#' **Bootstrap interval** (`method = "boot"`)
 #'
-#' Case-resampling bootstrap via \code{brier_boot_cpp()}.  The bootstrap
-#' type is controlled by the \code{type} argument (passed through
-#' \code{...}):
+#' Case-resampling bootstrap via `brier_boot_cpp()`.  The bootstrap
+#' type is controlled by the `type` argument (passed through
+#' `...`):
 #' \describe{
-#'   \item{\code{"bca"}}{bias-corrected and accelerated (default).
+#'   \item{`"bca"`}{bias-corrected and accelerated (default).
 #'     Most accurate; requires \eqn{R \geq 200}.}
-#'   \item{\code{"perc"}}{percentile interval}
-#'   \item{\code{"norm"}}{normal approximation using the bootstrap standard
+#'   \item{`"perc"`}{percentile interval}
+#'   \item{`"norm"`}{normal approximation using the bootstrap standard
 #'     error}
 #' }
-#' Further bootstrap arguments passed through \code{...} via
-#' \code{.extractBootArgs()}:
+#' Further bootstrap arguments passed through `...` via
+#' `.extractBootArgs()`:
 #' \describe{
-#'   \item{\code{R}}{number of bootstrap replicates (default \code{999})}
-#'   \item{\code{parallel}}{parallelisation: \code{"no"},
-#'     \code{"multicore"}, or \code{"snow"} (default \code{"no"})}
-#'   \item{\code{ncpus}}{number of CPUs (default
-#'     \code{getOption("boot.ncpus", 1L)})}
+#'   \item{`R`}{number of bootstrap replicates (default `999`)}
+#'   \item{`parallel`}{parallelisation: `"no"`,
+#'     `"multicore"`, or `"snow"` (default `"no"`)}
+#'   \item{`ncpus`}{number of CPUs (default
+#'     `getOption("boot.ncpus", 1L)`)}
 #' }
 #'
 #' @param x       either a numeric vector of observed binary outcomes
-#'   (\eqn{0}/\eqn{1}) when \code{pred} is supplied, or a fitted model
-#'   object (\code{glm} or similar) from which both response and
+#'   (\eqn{0}/\eqn{1}) when `pred` is supplied, or a fitted model
+#'   object (`glm` or similar) from which both response and
 #'   predictions are extracted
 #' @param pred    a numeric vector of predicted probabilities in
-#'   \eqn{[0,1]}. Required when \code{x} is a numeric vector; ignored
-#'   when \code{x} is a model object.
+#'   \eqn{[0,1]}. Required when `x` is a numeric vector; ignored
+#'   when `x` is a model object.
 #' @param scaled  logical. Should the scaled Brier score be returned?
-#'   Default \code{FALSE}.
+#'   Default `FALSE`.
 #'   
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
-#' @param method  confidence interval method: \code{"normal"} (delta-method
-#'   approximation, default) or \code{"boot"} (bootstrap via
-#'   \code{brier_boot_cpp()})
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
+#' @param method  confidence interval method: `"normal"` (delta-method
+#'   approximation, default) or `"boot"` (bootstrap via
+#'   `brier_boot_cpp()`)
 #' @param ...     further arguments passed to the bootstrap engine when
-#'   \code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
-#'   \code{ncpus}. See Details.
+#'   `method = "boot"`: `R`, `type`, `parallel`,
+#'   `ncpus`. See Details.
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar containing the Brier
+#' @return if `conf.level = NA`, a numeric scalar containing the Brier
 #' score; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the Brier score.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of the Brier score.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
-#' @seealso \code{\link[stats]{predict}}
+#' @seealso [stats::predict()]
 #'
 #' @examples
 #' set.seed(1)

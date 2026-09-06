@@ -92,8 +92,8 @@ cat(highLow(bedrock::Pizza$temperature, na.last=NA))
 \href{https://gallery.rcpp.org/articles/top-elements-from-vectors-using-priority-queue/}{Rcpp Gallery article}
 }
 \seealso{
-\code{\link{max}}, \code{\link{min}}, \code{\link{sort}},
-\code{\link{rank}}
+\code{\link[=max]{max()}}, \code{\link[=min]{min()}}, \code{\link[=sort]{sort()}},
+\code{\link[=rank]{rank()}}
 
 Other quantile:
 \code{\link[=quantileX]{quantileX()}}

@@ -57,7 +57,7 @@ Compute descriptive statistics for a numeric vector. The plot method may
 display a histogram, density curve, box plot, and empirical distribution.
 }
 \details{
-This function is an S3 method for \code{\link[graphics]{plot}}.
+This function is an S3 method for \code{\link[graphics:plot]{graphics::plot()}}.
 It is automatically dispatched when calling \code{plot(x)} on a
 \code{Desc.numeric} object.
 
@@ -88,7 +88,7 @@ desc(Pizza$delivery_min)             # numeric
 \code{\link[base:summary]{base::summary()}},
 \code{\link[base:plot]{base::plot()}}
 
-Other Statistical summary functions: \code{\link{abstract}()}
+Other Statistical summary functions: \code{\link[=abstract]{abstract()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},

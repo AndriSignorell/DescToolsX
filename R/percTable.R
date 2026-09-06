@@ -6,67 +6,67 @@
 #' table. 
 #' 
 #' PercTable prints a 2-dimensional table. The absolute and relative
-#' frequencies are nested into one flat table by means of \code{ftable}.
-#' \code{row.vars}, resp. \code{col.vars} can be used to define the structure
-#' of the table. \code{row.vars} can either be the names of the dimensions
-#' (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is
+#' frequencies are nested into one flat table by means of `ftable`.
+#' `row.vars`, resp. `col.vars` can be used to define the structure
+#' of the table. `row.vars` can either be the names of the dimensions
+#' (included percentages are named `"idx"`) or numbers (1:3, where 1 is
 #' the first dimension of the table, 2 the second and 3 the percentages). \cr
-#' Use \code{sortX()} if you want to have your table sorted by rows.\cr\cr The
-#' style in which numbers are formatted is selected by \code{\link[pharos]{style}()} from
-#' the DescToolsX options. Absolute frequencies will use \code{style("abs.sty")} and
-#' \code{style("per.sty")} will do it for the percentages. The options can be changed
-#' with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
-#' containing any format information used in \code{\link[pharos]{fm}}.
+#' Use `sortX()` if you want to have your table sorted by rows.\cr\cr The
+#' style in which numbers are formatted is selected by [pharos::style()] from
+#' the DescToolsX options. Absolute frequencies will use `style("abs.sty")` and
+#' `style("per.sty")` will do it for the percentages. The options can be changed
+#' with `style(abs, digits=5)` which is basically a `"style"`-object
+#' containing any format information used in [pharos::fm()].
 #' 
-#' \code{margins} adds the marginal distributions. In the frequency table
+#' `margins` adds the marginal distributions. In the frequency table
 #' these are the usual row/column sums; in the percentage tables the margin
-#' holds the \emph{marginal distribution}, i.e. the row resp. column sums of
+#' holds the *marginal distribution*, i.e. the row resp. column sums of
 #' the frequency table divided by the grand total. A margin is only shown
 #' where it carries information: the sum column of the row percentages is
 #' \eqn{100\%} by construction and the sum row of the row percentages is not a
 #' distribution at all, so whichever of the two is uninformative is printed as
-#' \code{"."}.
+#' `"."`.
 #' 
 #' @name percTable
 #' @aliases percTable percTable.default percTable.table percTable.formula percTable.matrix print.PercTable
 #' 
 #' @param x a table, a matrix, or a vector to be tabulated
-#' @param y an optional second vector to be tabulated against \code{x}
+#' @param y an optional second vector to be tabulated against `x`
 #' @param row.vars a vector of row variables (see Details)
 #' @param col.vars a vector of column variables (see Details). If this is left
-#' to \code{NULL} the table structure will be preserved. 
-#' @param justify either \code{"left"} or \code{"right"} for defining the
+#' to `NULL` the table structure will be preserved. 
+#' @param justify either `"left"` or `"right"` for defining the
 #' alignment of the table cells
 #' @param freq logical. Should absolute frequencies be included? Defaults to
-#' \code{TRUE}.
+#' `TRUE`.
 #' @param prop character vector specifying the proportions to display, using
-#' \code{"rows"}, \code{"cols"}, \code{"total"}, or \code{"none"}
+#' `"rows"`, `"cols"`, `"total"`, or `"none"`
 #' @param expected logical; whether to include expected counts under independence
-#' @param margins vector specifying the margins to include. Use \code{1} or
-#' \code{"rows"} for row margins, \code{2} or \code{"cols"} for column
-#' margins, or both; \code{NULL} includes none.
-#' @param formula a formula of the form \code{lhs ~ rhs} where \code{lhs} will
-#' be tabled versus rhs (\code{table(lhs, rhs)})
+#' @param margins vector specifying the margins to include. Use `1` or
+#' `"rows"` for row margins, `2` or `"cols"` for column
+#' margins, or both; `NULL` includes none.
+#' @param formula a formula of the form `lhs ~ rhs` where `lhs` will
+#' be tabled versus rhs (`table(lhs, rhs)`)
 #' @param data an optional matrix or data frame (or similar: see
-#' \code{\link{model.frame}}) containing the variables in the formula
-#' \code{formula}.  By default the variables are taken from
-#' \code{environment(formula)}.
+#' [model.frame()]) containing the variables in the formula
+#' `formula`.  By default the variables are taken from
+#' `environment(formula)`.
 #' @param subset an optional vector specifying a subset of observations to be
 #' used
 #' @param na.action a function which indicates what should happen when the data
-#' contain NAs. Defaults to \code{getOption("na.action")}.
+#' contain NAs. Defaults to `getOption("na.action")`.
 #' @param blockSep logical, defining if an empty row should be introduced between
 #' the table rows. Default is FALSE, if only a table with one single
 #' description (either frequencies or percents) should be returned and
-#' \code{TRUE} in any other case. 
-#' @param \dots further arguments passed to \code{print.PercTable()}
+#' `TRUE` in any other case. 
+#' @param \dots further arguments passed to `print.PercTable()`
 #' 
-#' @return an object of class \code{"PercTable"} containing the requested
+#' @return an object of class `"PercTable"` containing the requested
 #' frequency and percentage tables
 #' 
 #' 
-#' @references Agresti, Alan (2007) \emph{Introduction to categorical data
-#' analysis}. NY: John Wiley and Sons, Section 2.4.5\cr
+#' @references Agresti, Alan (2007) *Introduction to categorical data
+#' analysis*. NY: John Wiley and Sons, Section 2.4.5\cr
 #' 
 #' @examples
 #' 

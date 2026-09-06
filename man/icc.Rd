@@ -25,7 +25,7 @@ columns}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{character string specifying the estimation and confidence
 interval method; defaults to \code{"anova"}}
@@ -103,7 +103,7 @@ for ICC(2).
 \section{Random number generation}{
 
 \code{method = "boot"} resamples subjects and therefore advances R's
-global random number generator. Call \code{\link[base]{set.seed}}
+global random number generator. Call \code{\link[base:set.seed]{base::set.seed()}}
 beforehand for reproducible intervals.
 }
 

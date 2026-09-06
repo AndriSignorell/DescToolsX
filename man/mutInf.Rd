@@ -84,7 +84,7 @@ Elements of Information Theory (2nd ed.).
 Wiley.
 }
 \seealso{
-\code{\link{entropy}}
+\code{\link[=entropy]{entropy()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},

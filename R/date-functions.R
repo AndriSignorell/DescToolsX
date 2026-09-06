@@ -2,93 +2,93 @@
 #' Basic Date Functions
 #'
 #' Convenience wrappers for extracting date/time components and performing
-#' common date calculations - a readable alternative to \code{\link{format}()}
+#' common date calculations - a readable alternative to [format()]
 #' and its cryptic format codes.
 #'
 #' @section Date component extractors:
 #' \tabular{lll}{
-#'   \bold{Function}    \tab \bold{Returns}                                          \tab \bold{Range / Notes} \cr
-#'   \code{year}        \tab Year of a date or \code{ym} object                     \tab \code{yyyy} \cr
-#'   \code{quarter}     \tab Quarter of the year                                    \tab 1-4 \cr
-#'   \code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for \code{ym} \cr
-#'   \code{week}        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
-#'   \code{day}         \tab Day of the month (readable/writable)                   \tab 1-31 \cr
-#'   \code{weekday}     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon ... 7 = Sun \cr
-#'   \code{yearDay}     \tab Day of the year                                        \tab 1-366 \cr
-#'   \code{yearWeek}    \tab Compact year-week integer                              \tab \code{yyyyww} (ISO or US) \cr
-#'   \code{yearMonth}   \tab Compact year-month integer                             \tab \code{yyyymm} \cr
+#'   **Function**    \tab **Returns**                                          \tab **Range / Notes** \cr
+#'   `year`        \tab Year of a date or `ym` object                     \tab `yyyy` \cr
+#'   `quarter`     \tab Quarter of the year                                    \tab 1-4 \cr
+#'   `month`       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for `ym` \cr
+#'   `week`        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
+#'   `day`         \tab Day of the month (readable/writable)                   \tab 1-31 \cr
+#'   `weekday`     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon ... 7 = Sun \cr
+#'   `yearDay`     \tab Day of the year                                        \tab 1-366 \cr
+#'   `yearWeek`    \tab Compact year-week integer                              \tab `yyyyww` (ISO or US) \cr
+#'   `yearMonth`   \tab Compact year-month integer                             \tab `yyyymm` \cr
 #' }
 #'
 #' @section Time component extractors (POSIXct/POSIXlt):
 #' \tabular{ll}{
-#'   \bold{Function}  \tab \bold{Returns} \cr
-#'   \code{hour}      \tab Hour (0-23) \cr
-#'   \code{minute}    \tab Minute (0-59) \cr
-#'   \code{second}    \tab Second (0-60) \cr
-#'   \code{timezone}  \tab Time zone string \cr
-#'   \code{now}       \tab Current date and time (\code{Sys.time()}) \cr
-#'   \code{today}     \tab Current date (\code{Sys.Date()}) \cr
+#'   **Function**  \tab **Returns** \cr
+#'   `hour`      \tab Hour (0-23) \cr
+#'   `minute`    \tab Minute (0-59) \cr
+#'   `second`    \tab Second (0-60) \cr
+#'   `timezone`  \tab Time zone string \cr
+#'   `now`       \tab Current date and time (`Sys.time()`) \cr
+#'   `today`     \tab Current date (`Sys.Date()`) \cr
 #' }
 #'
 #' @section Logical tests:
 #' \tabular{ll}{
-#'   \bold{Function}    \tab \bold{Returns} \cr
-#'   \code{isWeekend}   \tab \code{TRUE} if \code{x} falls on Saturday or Sunday \cr
-#'   \code{isLeapYear}  \tab \code{TRUE} if the year of \code{x} is a leap year \cr
+#'   **Function**    \tab **Returns** \cr
+#'   `isWeekend`   \tab `TRUE` if `x` falls on Saturday or Sunday \cr
+#'   `isLeapYear`  \tab `TRUE` if the year of `x` is a leap year \cr
 #' }
 #'
 #' @section Date arithmetic:
 #' \tabular{ll}{
-#'   \bold{Function}        \tab \bold{Description} \cr
-#'   \code{diffDays360}     \tab Days between two dates using the 360-day calendar convention \cr
-#'   \code{lastDayOfMonth}  \tab Last calendar day of the month of \code{x} \cr
-#'   \code{yearDays}        \tab Total number of days in the year of \code{x} (365 or 366) \cr
-#'   \code{monthDays}       \tab Number of days in the month of \code{x} (28-31) \cr
+#'   **Function**        \tab **Description** \cr
+#'   `diffDays360`     \tab Days between two dates using the 360-day calendar convention \cr
+#'   `lastDayOfMonth`  \tab Last calendar day of the month of `x` \cr
+#'   `yearDays`        \tab Total number of days in the year of `x` (365 or 366) \cr
+#'   `monthDays`       \tab Number of days in the month of `x` (28-31) \cr
 #' }
 #'
 #' @section Language for month and weekday names:
-#' \code{month()} and \code{weekday()} respect the \code{"lang"} option.  Set
-#' \code{options(lang = "en")} to always get English names, or
-#' \code{options(lang = "local")} for the current system locale.  When the
-#' option is absent, \code{"local"} is used as default.
+#' `month()` and `weekday()` respect the `"lang"` option.  Set
+#' `options(lang = "en")` to always get English names, or
+#' `options(lang = "local")` for the current system locale.  When the
+#' option is absent, `"local"` is used as default.
 #'
 #' @name date_functions
 #'
 #' @aliases year quarter month week day day<- weekday yearDay yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone yearDays monthDays month.ym year.ym
 #' 
-#' @param x a \code{Date}, \code{POSIXct}, \code{POSIXlt}, or \code{ym} object
+#' @param x a `Date`, `POSIXct`, `POSIXlt`, or `ym` object
 #' to evaluate
-#' @param fmt format code controlling the output of \code{month()} and
-#'   \code{weekday()}.\cr
-#'   For \code{month()}: \code{"m"} = integer (default), \code{"mm"} =
-#'   abbreviated name, \code{"mmm"} = full name.\cr
-#'   For \code{weekday()}: \code{"d"} = integer (default), \code{"dd"} =
-#'   abbreviated name, \code{"ddd"} = full name.
-#' @param lang language for names returned by \code{month()} and
-#'   \code{weekday()}.  Either \code{"local"} (current system locale, the
-#'   default) or \code{"en"} (English).  Falls back to the \code{"lang"}
-#'   option if set; otherwise \code{"local"} is used.
-#' @param ... further arguments passed to methods. \code{year()} is generic
+#' @param fmt format code controlling the output of `month()` and
+#'   `weekday()`.\cr
+#'   For `month()`: `"m"` = integer (default), `"mm"` =
+#'   abbreviated name, `"mmm"` = full name.\cr
+#'   For `weekday()`: `"d"` = integer (default), `"dd"` =
+#'   abbreviated name, `"ddd"` = full name.
+#' @param lang language for names returned by `month()` and
+#'   `weekday()`.  Either `"local"` (current system locale, the
+#'   default) or `"en"` (English).  Falls back to the `"lang"`
+#'   option if set; otherwise `"local"` is used.
+#' @param ... further arguments passed to methods. `year()` is generic
 #'   and carries them for the sake of S3 consistency; none of the methods
 #'   currently uses them.
-#' @param stringsAsFactors logical; if \code{TRUE} (default), character results
-#'   from \code{month()} and \code{weekday()} are returned as ordered factors
+#' @param stringsAsFactors logical; if `TRUE` (default), character results
+#'   from `month()` and `weekday()` are returned as ordered factors
 #'   whose levels follow calendar order
-#' @param value replacement value for the \code{day<-} assignment function
-#' @param startDate,endDate start and end dates for \code{diffDays360()}
-#' @param method calculation convention. For \code{diffDays360()} either
-#'   \code{"eu"} (European, default) or \code{"us"} (US); for \code{week()}
-#'   and \code{yearWeek()} either \code{"iso"} (ISO 8601, default) or
-#'   \code{"us"}. The two sets are not interchangeable.
+#' @param value replacement value for the `day<-` assignment function
+#' @param startDate,endDate start and end dates for `diffDays360()`
+#' @param method calculation convention. For `diffDays360()` either
+#'   `"eu"` (European, default) or `"us"` (US); for `week()`
+#'   and `yearWeek()` either `"iso"` (ISO 8601, default) or
+#'   `"us"`. The two sets are not interchangeable.
 #'
 #' @return a vector whose type depends on the function: numeric for
 #' integer-valued components, an ordered factor or character vector when
-#' \code{fmt} requests names, logical for \code{isWeekend()} and
-#' \code{isLeapYear()}, \code{Date} for \code{today()} and
-#' \code{lastDayOfMonth()}, and \code{POSIXct} for \code{now()}
+#' `fmt` requests names, logical for `isWeekend()` and
+#' `isLeapYear()`, `Date` for `today()` and
+#' `lastDayOfMonth()`, and `POSIXct` for `now()`
 #'
-#' @seealso \code{\link{strptime}}, \code{\link{DateTimeClasses}},
-#'   \code{\link{as.POSIXlt}}, \code{\link{countWorkDays}}
+#' @seealso [strptime()], [DateTimeClasses()],
+#'   [as.POSIXlt()], [countWorkDays()]
 #'
 #'
 #' @examples

@@ -16,16 +16,16 @@
 #' @param x a table, matrix or array of counts, or a categorical vector
 #'   (factor, character or logical), which is tabulated first
 #' @param y an optional second variable used together with
-#'   \code{x} to create a contingency table via
-#'   \code{table(x, y, ...)}
-#' @param base logarithm base; defaults to \code{2} (bits)
+#'   `x` to create a contingency table via
+#'   `table(x, y, ...)`
+#' @param base logarithm base; defaults to `2` (bits)
 #' @param normalize logical.
-#'   If \code{TRUE}, entropy is normalized to the interval
+#'   If `TRUE`, entropy is normalized to the interval
 #'   \eqn{[0,1]}.
-#' @param na.rm logical; if \code{TRUE}, missing counts are dropped. A
-#'   categorical \code{x} is tabulated with \code{\link{table}}, which
-#'   excludes \code{NA} by default in any case.
-#' @param ... additional arguments passed to \code{table()}
+#' @param na.rm logical; if `TRUE`, missing counts are dropped. A
+#'   categorical `x` is tabulated with [table()], which
+#'   excludes `NA` by default in any case.
+#' @param ... additional arguments passed to `table()`
 #'
 #' @return a numeric scalar containing the entropy
 #'
@@ -40,8 +40,8 @@
 #'
 #' Zero probabilities are ignored in the summation.
 #'
-#' \code{normalize = TRUE} divides by \eqn{\log_b k}, with \eqn{k} the
-#' number of \emph{occupied} categories rather than the number of possible
+#' `normalize = TRUE` divides by \eqn{\log_b k}, with \eqn{k} the
+#' number of *occupied* categories rather than the number of possible
 #' ones. The maximum of 1 is therefore reached whenever the observed
 #' categories are equally frequent, independently of how many empty levels
 #' the input carries. With a single occupied category the normalized value

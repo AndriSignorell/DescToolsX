@@ -7,68 +7,68 @@
 #'
 #' @param x a contingency table or an ordinal vector
 #' @param y optional second ordinal vector. If supplied, a contingency table
-#'   is constructed via \code{table(x, y, \dots)}.
+#'   is constructed via `table(x, y, \dots)`.
 #' @param method character string specifying the estimation method:
 #'   \describe{
-#'     \item{\code{"two-step"}}{two-step estimator (default, fast)}
-#'     \item{\code{"ml"}}{full maximum likelihood estimation}
+#'     \item{`"two-step"`}{two-step estimator (default, fast)}
+#'     \item{`"ml"`}{full maximum likelihood estimation}
 #'   }
-#' @param se logical; if \code{TRUE}, standard errors are computed via the
+#' @param se logical; if `TRUE`, standard errors are computed via the
 #'   Hessian matrix. This requires ml estimation, so it is an error to
-#'   combine it with \code{method = "two-step"}.
-#' @param control a list of control parameters passed to \code{\link[stats]{optim}}
+#'   combine it with `method = "two-step"`.
+#' @param control a list of control parameters passed to [stats::optim()]
 #' @param maxcor numeric; maximum absolute correlation allowed (default
-#'   \code{0.9999}) to avoid numerical issues near the boundary
-#' @param ... further arguments passed to \code{\link{table}} when \code{y}
-#'   is supplied, for example \code{useNA}
+#'   `0.9999`) to avoid numerical issues near the boundary
+#' @param ... further arguments passed to [table()] when `y`
+#'   is supplied, for example `useNA`
 #'
 #' @details
 #' The polychoric correlation estimates the correlation between two latent
 #' normally distributed variables underlying observed ordinal variables.
 #'
 #' The likelihood is based on a discretized bivariate normal distribution,
-#' evaluated via \code{\link[mvtnorm]{pmvnorm}}.
+#' evaluated via [mvtnorm::pmvnorm()].
 #'
 #' For numerical stability:
 #' \itemize{
 #'   \item The correlation parameter is internally transformed using
-#'   \code{tanh()} to enforce \eqn{|\rho| < 1}. The search range on that
-#'   scale is derived from \code{maxcor}, so the estimate is free to
+#'   `tanh()` to enforce \eqn{|\rho| < 1}. The search range on that
+#'   scale is derived from `maxcor`, so the estimate is free to
 #'   approach the documented boundary.
 #'   \item Cell probabilities are bounded away from zero to avoid
-#'   \code{log(0)}.
+#'   `log(0)`.
 #' }
 #'
 #' Empty rows or columns in the contingency table are removed with a warning.
 #'
 #' @return
-#' if \code{se = FALSE}, a numeric value giving the estimated correlation.
+#' if `se = FALSE`, a numeric value giving the estimated correlation.
 #'
-#' If \code{se = TRUE}, a list with components:
+#' If `se = TRUE`, a list with components:
 #' \describe{
-#'   \item{\code{type}}{type of correlation}
-#'   \item{\code{rho}}{estimated polychoric correlation}
-#'   \item{\code{rowCuts}}{estimated row thresholds}
-#'   \item{\code{colCuts}}{estimated column thresholds}
-#'   \item{\code{var}}{variance-covariance matrix of the estimates, on the
-#'     scale of \code{rho} and the thresholds. The optimiser works on
-#'     \code{atanh(rho)}, so the leading row and column are transformed
+#'   \item{`type`}{type of correlation}
+#'   \item{`rho`}{estimated polychoric correlation}
+#'   \item{`rowCuts`}{estimated row thresholds}
+#'   \item{`colCuts`}{estimated column thresholds}
+#'   \item{`var`}{variance-covariance matrix of the estimates, on the
+#'     scale of `rho` and the thresholds. The optimiser works on
+#'     `atanh(rho)`, so the leading row and column are transformed
 #'     back with the delta method, factor \eqn{(1 - \rho^2)}.}
-#'   \item{\code{n}}{total sample size}
-#'   \item{\code{chisq}}{likelihood-ratio test statistic}
-#'   \item{\code{df}}{degrees of freedom}
-#'   \item{\code{method}}{estimation method actually used}
+#'   \item{`n`}{total sample size}
+#'   \item{`chisq`}{likelihood-ratio test statistic}
+#'   \item{`df`}{degrees of freedom}
+#'   \item{`method`}{estimation method actually used}
 #' }
-#' The returned object has class \code{"Polychor"}.
+#' The returned object has class `"Polychor"`.
 #'
 #' @references
 #' Olsson, U. (1979). Maximum likelihood estimation of the polychoric
-#' correlation coefficient. \emph{Psychometrika}, 44(4), 443--460.
+#' correlation coefficient. *Psychometrika*, 44(4), 443--460.
 #'
-#' Fox, J. (2016). \emph{Applied Regression Analysis and Generalized Linear Models}.
+#' Fox, J. (2016). *Applied Regression Analysis and Generalized Linear Models*.
 #'
 #' @seealso
-#' \code{\link[mvtnorm]{pmvnorm}}, \code{\link[stats]{optim}}
+#' [mvtnorm::pmvnorm()], [stats::optim()]
 #'
 #' @examples
 #' # Example with ordinal variables

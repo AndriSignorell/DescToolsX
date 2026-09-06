@@ -47,7 +47,7 @@ rmse(fit)
 
 }
 \seealso{
-\code{\link{mse}}, \code{\link{mae}}
+\code{\link[=mse]{mse()}}, \code{\link[=mae]{mae()}}
 
 Other model.metrics:
 \code{\link[=auc]{auc()}},

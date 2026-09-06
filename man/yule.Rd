@@ -35,7 +35,7 @@ yuleY(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See details in \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{correct}{logical; if \code{TRUE}, applies the Haldane--Anscombe
 correction by adding 0.5 to all cells}

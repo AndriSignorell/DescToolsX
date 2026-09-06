@@ -8,27 +8,27 @@
 #' object. Here we return the span of a (possibly trimmed) numeric vector, say
 #' the difference of maximum and minimum value.
 #' 
-#' If robust is set to \code{TRUE} the function determines the trimmed mean m
+#' If robust is set to `TRUE` the function determines the trimmed mean m
 #' and then the "upper trimmed mean" s of absolute deviations from m,
-#' multiplied by \code{fac} (fac is 3 by default). The robust minimum is then
+#' multiplied by `fac` (fac is 3 by default). The robust minimum is then
 #' defined as m-fac*s or min(x), whichever is larger, and similarly for the
 #' maximum.
 #' 
 #' @param x a numeric vector
 #' @param trim the fraction (0 to 0.5) of observations to be trimmed from each
-#' end of \code{x} before the range is computed. Values of \code{trim} outside
+#' end of `x` before the range is computed. Values of `trim` outside
 #' that range are taken as the nearest endpoint. Default is 0 for
-#' \code{robust = FALSE} and 0.2 for \code{robust = TRUE}.
+#' `robust = FALSE` and 0.2 for `robust = TRUE`.
 #' @param robust logical; whether to return the robust or conventional range
-#' @param na.rm a logical value indicating whether \code{NA} values should be
+#' @param na.rm a logical value indicating whether `NA` values should be
 #' stripped before the computation proceeds
-#' @param ... further arguments passed to \code{.robRange}, including
-#' \code{fac}. Only used if \code{robust = TRUE}.
+#' @param ... further arguments passed to `.robRange`, including
+#' `fac`. Only used if `robust = TRUE`.
 #' 
 #' @return a numeric scalar containing the range width. The corresponding
-#' lower and upper bounds are returned in the \code{"bounds"} attribute.
+#' lower and upper bounds are returned in the `"bounds"` attribute.
 #' Note that the attribute is dropped by subsetting and by
-#' \code{\link{as.vector}}, so read it before computing on the result.
+#' [as.vector()], so read it before computing on the result.
 #' 
 #' @note Robust range contributed by Werner Stahel.
 #' 
@@ -44,7 +44,7 @@
 #' # compared to
 #' rangeX(x)
 #' 
-#' @seealso \code{\link{range}}, \code{\link{min}}, \code{\link{max}} 
+#' @seealso [range()], [min()], [max()] 
 #' 
 #' @family dispersion  
 #' @concept dispersion

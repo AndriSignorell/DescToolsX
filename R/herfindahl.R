@@ -5,15 +5,15 @@
 #' of concentration or inequality.
 #'
 #' The index is defined as the power mean of order \eqn{m+1} of the
-#' relative shares. For \code{parameter = 1}, the classical
+#' relative shares. For `parameter = 1`, the classical
 #' Herfindahl-Hirschman Index (HHI) is obtained.
 #'
 #' @param x numeric vector of non-negative values, such as market shares,
 #' incomes, or frequencies
-#' @param n optional frequency weights. Each element of \code{x}
-#'   is replicated \code{n} times.
+#' @param n optional frequency weights. Each element of `x`
+#'   is replicated `n` times.
 #' @param parameter parameter \eqn{m} controlling sensitivity to concentration;
-#' must be strictly positive, default is \code{1}. \code{m = 0} is rejected:
+#' must be strictly positive, default is `1`. `m = 0` is rejected:
 #' it degenerates to a constant 1 for every input.
 #' @param na.rm logical; whether to remove missing values
 #'
@@ -21,18 +21,18 @@
 #'
 #' @details
 #' Larger values indicate higher concentration.
-#' If negative values or missing values (when \code{na.rm = FALSE})
-#' are present, \code{NA} is returned.
+#' If negative values or missing values (when `na.rm = FALSE`)
+#' are present, `NA` is returned.
 #'
 #' @note Based on code by Achim Zeileis, rewritten to conform to package standards.
 #' 
 #' @references Cowell, F. A. (2000) Measurement of Inequality, in Atkinson, A.
-#' B., Bourguignon, F.  \emph{Handbook of Income Distribution}. (Eds) Amsterdam
+#' B., Bourguignon, F.  *Handbook of Income Distribution*. (Eds) Amsterdam
 #' 
-#' Cowell, F. A. (1995) \emph{Measuring Inequality}. Prentice Hall/Harvester
+#' Cowell, F. A. (1995) *Measuring Inequality*. Prentice Hall/Harvester
 #' Wheatshef
 #' 
-#' Hall, M., Tidemann, N. (1967) \emph{Measures of Concentration}, JASA 62,
+#' Hall, M., Tidemann, N. (1967) *Measures of Concentration*, JASA 62,
 #' 162-168.
 #'
 #' Hirschman, A. O. (1964). The paternity of an index.
@@ -49,7 +49,7 @@
 #' herfindahl(c(783,121,112,70,201,153,425,19,37,126,325,51,442,193,41))
 #'  
 #' 
-#' @seealso \code{\link{gini}}, \code{\link{atkinson}}
+#' @seealso [gini()], [atkinson()]
 #' 
 #' @family diversity.concentration
 #' @concept inequality

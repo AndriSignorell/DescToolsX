@@ -24,7 +24,7 @@ of Krippendorff's alpha. If \code{NA} (default), no bootstrap is computed.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+\code{"right"}). See details in \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.
 Alpha lies in \eqn{[-1, 1]}, so the open side is reported at that
 boundary rather than at an infinity it cannot reach.}
 
@@ -33,7 +33,7 @@ the difference function \eqn{\delta^2} used to compare two categories.
 One of \code{"nominal"}, \code{"ordinal"}, \code{"interval"},
 or \code{"ratio"}. This selects \emph{which} alpha is computed and has
 nothing to do with the confidence interval - the bootstrap interval
-type travels as \code{type} through \code{\dots}. It is called
+type travels as \code{type} through \verb{\\dots}. It is called
 \code{metric} and not \code{method} because \code{method} means the
 interval method everywhere else in the suite.}
 
@@ -48,7 +48,7 @@ are the raters. If \code{NULL}, all columns are assumed to be raters.}
 \item{output}{output format, either \code{"def"} (default) or
 \code{"ext"} for extended results}
 
-\item{...}{further arguments passed to \code{\link[boot]{boot}}. Supported
+\item{...}{further arguments passed to \code{\link[boot:boot]{boot::boot()}}. Supported
 arguments are \code{type} (\code{"norm"}, \code{"basic"},
 \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
 of bootstrap replicates \code{R}. Defaults are \code{"basic"} for
@@ -117,7 +117,7 @@ Krippendorff, K. (2018). \emph{Content Analysis: An Introduction to Its Methodol
 Sage Publications.
 }
 \seealso{
-\code{\link[lumen]{bootCI}}
+\code{\link[lumen:bootCI]{lumen::bootCI()}}
 
 Other assoc.agreement:
 \code{\link[=ccc]{ccc()}},

@@ -13,7 +13,7 @@
 #' \figure{tOne.png}{Table 1}
 #'
 #' Creating such a table can be very time consuming and there's a need for a
-#' flexible function that helps us to solve the task. \code{tOne()} is designed
+#' flexible function that helps us to solve the task. `tOne()` is designed
 #' to be easily used with sensible defaults, and yet flexible enough to allow
 #' free definition of the essential design elements.
 #'
@@ -33,9 +33,9 @@
 #' Their difference is tested with the Kruskal-Wallis test. For categorical
 #' variables the absolute and relative frequencies are calculated and tested
 #' with a chi-square test. \cr The tests can be changed with the argument
-#' \code{TEST}. These must be organised as list containing elements named
-#' \code{"num"}, \code{"cat"} and \code{"dich"}. Each of them must be a
-#' function with arguments \code{(x, g)}, returning something similar to a
+#' `TEST`. These must be organised as list containing elements named
+#' `"num"`, `"cat"` and `"dich"`. Each of them must be a
+#' function with arguments `(x, g)`, returning something similar to a
 #' p-value.
 #' \preformatted{
 #'   TEST = list( num = list(fun = function(x, g){
@@ -48,14 +48,14 @@
 #'
 #' The legend text of the test, which is appended to
 #' the table together with the significance codes, can be set with the variable
-#' \code{lbl}.
+#' `lbl`.
 #'
 #' Great importance was attached to the free definition of the number fms.
-#' By default, the optionally definable fm templates of \bold{DescToolsX}
+#' By default, the optionally definable fm templates of **DescToolsX**
 #' are used. Deviations from this can be freely passed as arguments to the
 #' function. fms can be defined for integers, floating point numbers,
 #' percentages and for the p-values of statistical tests. All options of the
-#' function \code{\link[pharos]{fm}()} are available and can be provided as a list.
+#' function [pharos::fm()] are available and can be provided as a list.
 #' See examples which show several different implementations.
 #' \preformatted{
 #'   fmt = list(abs  = "abs.sty",
@@ -64,14 +64,14 @@
 #'              pval = style(fmt = "*", naForm = "   ")
 #'              ) }
 #'
-#' Several tables can be appended using \code{\link[bedrock]{appendX}()}.
+#' Several tables can be appended using [bedrock::appendX()].
 #' This can be useful,
-#' if e.g. the \code{mean/sd} AND \code{median/IQR} should be displayed together.
+#' if e.g. the `mean/sd` AND `median/IQR` should be displayed together.
 #' Another use case is to introduce a delimiter row.
 #'
 #' The function returns a character matrix as result, which can easily be
 #' subset or combined with other matrices. An interface for
-#' \code{toWrd()} is available such that the matrix can be transferred
+#' `toWrd()` is available such that the matrix can be transferred
 #' to MS-Word. Both font and alignment are freely selectable in the Word table.
 #'
 #' @usage tOne(
@@ -86,45 +86,45 @@
 #' @name tOne
 #'
 #' @param x a data.frame containing all the variables to be included in the
-#' table. \code{NA} inserts a title row containing \code{vnames} only.
+#' table. `NA` inserts a title row containing `vnames` only.
 #' @param groups the grouping variable
-#' @param add.length logical. If set to \code{TRUE} (default), a row with the
+#' @param add.length logical. If set to `TRUE` (default), a row with the
 #' group sizes will be inserted as first row of the table.
 #' @param colnames a vector of column names for the result table
 #' @param vnames a vector of variable names to be placed in the first column
 #' instead of the real names
-#' @param total logical (default \code{TRUE}), defines whether the results
+#' @param total logical (default `TRUE`), defines whether the results
 #' should also be displayed for the whole, ungrouped variable
 #' @param align the character on whose position the strings will be aligned.
-#' Left alignment can be requested by setting \code{sep = "\\l"}, right
-#' alignment by \code{"\\r"} and center alignment by \code{"\\c"}. Mind the
+#' Left alignment can be requested by setting `sep = "\\l"`, right
+#' alignment by `"\\r"` and center alignment by `"\\c"`. Mind the
 #' backslashes, as if they are omitted, strings would be aligned to the
-#' \bold{character} \bold{l}, \bold{r} or \bold{c} respectively. Default value
-#' is \code{"\\l"}, thus left alignment.
+#' **character** **l**, **r** or **c** respectively. Default value
+#' is `"\\l"`, thus left alignment.
 #' @param FUN the function to be used as location and dispersion measure for
-#' numeric (including integer) variables (\code{mean}/\code{sd} is default,
-#' alternatives as \code{median}/\code{IQR} are possible by defining a
+#' numeric (including integer) variables (`mean`/`sd` is default,
+#' alternatives as `median`/`IQR` are possible by defining a
 #' function). See examples.
 #'
 #' @param TEST a list of functions to be used to test the variables. Must be
-#' named as \code{"num"}, \code{"cat"} and \code{"dich"} and be defined as
-#' function with arguments \code{(x, g)}, generating something similar to a
-#' p-value. Use \code{TEST=NA} to suppress test. (See examples.)
+#' named as `"num"`, `"cat"` and `"dich"` and be defined as
+#' function with arguments `(x, g)`, generating something similar to a
+#' p-value. Use `TEST=NA` to suppress test. (See examples.)
 #'
-#' @param intref one out of \code{"high"} (default), \code{"low"} or
-#' \code{"both"}, defining which value of a dichotomous variable should be
-#' reported. Usually this will be \code{1} or \code{TRUE}. Setting it to
-#' \code{"low"} will report the lower value \code{0} or \code{FALSE},
-#' \code{"both"} reports the variable as a categorical one with all its
-#' levels. Dichotomous factors are treated the same way, \code{"high"}
-#' reporting the last and \code{"low"} the first level.
+#' @param intref one out of `"high"` (default), `"low"` or
+#' `"both"`, defining which value of a dichotomous variable should be
+#' reported. Usually this will be `1` or `TRUE`. Setting it to
+#' `"low"` will report the lower value `0` or `FALSE`,
+#' `"both"` reports the variable as a categorical one with all its
+#' levels. Dichotomous factors are treated the same way, `"high"`
+#' reporting the last and `"low"` the first level.
 #'
 #' @param fmt fm codes for absolute, numeric and percentage values, and for
 #' the p-values of the tests
 #'
-#' @return a character matrix of class \code{tOne}
+#' @return a character matrix of class `tOne`
 #'
-#' @seealso \code{\link[bedrock]{appendX}()}
+#' @seealso [bedrock::appendX()]
 #'
 #'
 #' @examples

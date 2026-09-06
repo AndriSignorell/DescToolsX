@@ -2,26 +2,26 @@
 
 #' Detect Whether an Object Looks Like a Confusion/Coincidence Matrix
 #'
-#' Checks if \code{x} behaves like a rater-by-rater contingency table:
+#' Checks if `x` behaves like a rater-by-rater contingency table:
 #' square 2D numeric (integer-like) counts (or, optionally, proportions), non-negative,
 #' finite, and (optionally) with matching row/column names.
 #'
-#' @param x object to check, typically a \code{table}, \code{matrix}, or
-#' numeric \code{data.frame}
-#' @param requireDimnames logical; if \code{TRUE}, both row and column names
-#'   must be present. Defaults to \code{TRUE}.
-#' @param requireSameLevels logical; if \code{TRUE} and dimnames are present,
-#'   row and column names must be the same set (order ignored). Defaults to \code{TRUE}.
+#' @param x object to check, typically a `table`, `matrix`, or
+#' numeric `data.frame`
+#' @param requireDimnames logical; if `TRUE`, both row and column names
+#'   must be present. Defaults to `TRUE`.
+#' @param requireSameLevels logical; if `TRUE` and dimnames are present,
+#'   row and column names must be the same set (order ignored). Defaults to `TRUE`.
 #' @param integerTol numeric tolerance for integer-like counts; defaults to
-#'   \code{sqrt(.Machine$double.eps)}
-#' @param acceptProportions logical; if \code{TRUE}, proportion tables are
+#'   `sqrt(.Machine$double.eps)`
+#' @param acceptProportions logical; if `TRUE`, proportion tables are
 #' accepted when all entries are in \eqn{[0, 1]} and their sum is approximately
-#' 1. Defaults to \code{TRUE}.
+#' 1. Defaults to `TRUE`.
 #' @param requireSquare logical; whether to require a square table; defaults to
-#' \code{TRUE}
+#' `TRUE`
 #'
-#' @return \code{TRUE} if \code{x} looks like a confusion or coincidence
-#' matrix, otherwise \code{FALSE}
+#' @return `TRUE` if `x` looks like a confusion or coincidence
+#' matrix, otherwise `FALSE`
 #'
 #' @examples
 #' tab <- table(sample(letters[1:3], 100, TRUE),

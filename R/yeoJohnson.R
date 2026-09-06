@@ -1,7 +1,7 @@
 #' Yeo-Johnson Transformation
 #'
-#' \code{yeoJohnson()} applies the Yeo-Johnson transformation to a numeric
-#' vector. \cr \code{yeoJohnsonInv()} reverses the transformation.
+#' `yeoJohnson()` applies the Yeo-Johnson transformation to a numeric
+#' vector. \cr `yeoJohnsonInv()` reverses the transformation.
 #'
 #' The Yeo-Johnson transformation extends the Box-Cox transformation to allow
 #' for zero and negative values. It is defined piecewise:
@@ -28,8 +28,8 @@
 #' @param tol numeric tolerance for detecting the special cases
 #'   \eqn{\lambda \approx 0} and \eqn{\lambda \approx 2}
 #'
-#' @return a numeric vector of the same length as \code{x}. Names and
-#'   dimensions of \code{x} are preserved.
+#' @return a numeric vector of the same length as `x`. Names and
+#'   dimensions of `x` are preserved.
 #'
 #' @details
 #' The transformation is defined for all real-valued inputs and is continuous
@@ -40,7 +40,7 @@
 #' the transformed value identifies the branch to be inverted.
 #'
 #' The inverse transformation recovers the original data (up to numerical
-#' precision) when the same \code{lambda} and \code{tol} are used. For
+#' precision) when the same `lambda` and `tol` are used. For
 #' \eqn{\lambda < 0} the image of the transformation is bounded above by
 #' \eqn{-1/\lambda} (and correspondingly for \eqn{\lambda > 2} below); values
 #' outside that range have no preimage and are reported as an error.
@@ -48,7 +48,7 @@
 #' @references
 #' Yeo, I.-K. and Johnson, R. A. (2000).
 #' A new family of power transformations to improve normality or symmetry.
-#' \emph{Biometrika}, \bold{87}(4), 954--959.
+#' *Biometrika*, **87**(4), 954--959.
 #'
 #' @examples
 #' set.seed(1)

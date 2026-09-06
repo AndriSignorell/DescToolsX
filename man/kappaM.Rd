@@ -21,7 +21,7 @@ in rows and \eqn{m} raters in columns}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{estimator}{a character string specifying the coefficient to compute.
 One of \code{"fleiss"} (default), \code{"conger"}, or \code{"light"}.
@@ -78,7 +78,7 @@ assumption is doubtful.
 
 Kappa lies in \eqn{[-1, 1]}, so the interval is restricted to that range
 and the open side of a one-sided interval is reported at the boundary
-rather than at \eqn{\pm\infty}. See \code{\link{ConfidenceIntervals}}.
+rather than at \eqn{\pm\infty}. See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.
 }
 \note{
 Based on code by Matthias Gamer previously published as \code{kappaM.fleiss()} in

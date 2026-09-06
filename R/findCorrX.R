@@ -3,28 +3,28 @@
 #'
 #' Identifies variables in a correlation matrix that should be removed due to
 #' high pairwise correlations above a specified cutoff. The algorithm uses a
-#' greedy approach similar to \code{caret::findCorrelation()}, but extends it
+#' greedy approach similar to `caret::findCorrelation()`, but extends it
 #' with flexible scoring methods and multiple output formats.
 #'
 #' @param x a symmetric correlation matrix
 #' @param cutoff numeric threshold in (0, 1). Pairs with absolute correlation
 #'   above this value are considered too highly correlated.
 #' @param method character string specifying how variable importance is scored.
-#'   One of \code{"mean"}, \code{"max"}, or \code{"median"}. Default is \code{"mean"}.
+#'   One of `"mean"`, `"max"`, or `"median"`. Default is `"mean"`.
 #' @param output character string specifying the return format:
 #'   \itemize{
-#'     \item \code{"index"} for indices of variables to remove (default)
-#'     \item \code{"names"} for column names of variables to remove
-#'     \item \code{"logical"} for a logical vector indicating removed variables
-#'     \item \code{"report"} for a detailed list of removed and retained
+#'     \item `"index"` for indices of variables to remove (default)
+#'     \item `"names"` for column names of variables to remove
+#'     \item `"logical"` for a logical vector indicating removed variables
+#'     \item `"report"` for a detailed list of removed and retained
 #'       variables and the decision log
 #'   }
-#' @param verbose logical; if \code{TRUE}, progress information is printed
+#' @param verbose logical; if `TRUE`, progress information is printed
 #'
 #' @details
 #' The function iteratively examines pairs of variables with correlations above
-#' \code{cutoff}. For each such pair, the variable with the higher overall
-#' correlation (based on \code{method}) is removed.
+#' `cutoff`. For each such pair, the variable with the higher overall
+#' correlation (based on `method`) is removed.
 #'
 #' The scoring is computed once at the beginning and kept fixed throughout,
 #' ensuring deterministic and efficient behavior. Because the columns are
@@ -33,13 +33,13 @@
 #'
 #' This is a greedy heuristic and does not guarantee a globally optimal solution.
 #'
-#' @return depending on \code{output}:
+#' @return depending on `output`:
 #' \describe{
-#'   \item{\code{"index"}}{integer vector of column indices to remove}
-#'   \item{\code{"names"}}{character vector of column names}
-#'   \item{\code{"logical"}}{logical vector with one element per column}
-#'   \item{\code{"report"}}{list with elements \code{removed}, \code{kept},
-#'     and \code{log}}
+#'   \item{`"index"`}{integer vector of column indices to remove}
+#'   \item{`"names"`}{character vector of column names}
+#'   \item{`"logical"`}{logical vector with one element per column}
+#'   \item{`"report"`}{list with elements `removed`, `kept`,
+#'     and `log`}
 #' }
 #'
 #' @examples

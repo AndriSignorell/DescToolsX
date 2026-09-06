@@ -4,18 +4,18 @@
 #' Computes the Phi coefficient as a measure of association between two
 #' categorical variables.
 #'
-#' If \code{y} is provided, a contingency table is created using
-#' \code{table(x, y, ...)}. Otherwise, \code{x} is assumed to already be
+#' If `y` is provided, a contingency table is created using
+#' `table(x, y, ...)`. Otherwise, `x` is assumed to already be
 #' a contingency table.
 #'
 #' Note: Yates' continuity correction is **not applied** when computing
 #' the chi-squared statistic.
 #'
 #' @param x a vector of categorical data or a contingency table
-#'   (matrix or \code{table})
+#'   (matrix or `table`)
 #' @param y optional second categorical vector. If provided, a contingency
-#'   table is constructed from \code{x} and \code{y}.
-#' @param ... additional arguments passed to \code{\link[base]{table}}
+#'   table is constructed from `x` and `y`.
+#' @param ... additional arguments passed to [base::table()]
 #'
 #' @return a numeric scalar containing the Phi coefficient
 #'
@@ -27,15 +27,15 @@
 #' where \eqn{\chi^2} is the chi-squared test statistic and \eqn{n} is
 #' the total sample size.
 #'
-#' This definition is \strong{unsigned}. For a 2x2 table the signed
+#' This definition is **unsigned**. For a 2x2 table the signed
 #' coefficient \eqn{(n_{11} n_{22} - n_{12} n_{21}) /
 #' \sqrt{n_{1\cdot} n_{2\cdot} n_{\cdot 1} n_{\cdot 2}}} equals the Pearson
 #' correlation of the two 0/1 indicators and lies in \eqn{[-1, 1]}; the value
 #' returned here is its absolute value, so the direction of the association
-#' is not reported. See \code{\link{pearsonCor}} if the sign is needed.
+#' is not reported. See [pearsonCor()] if the sign is needed.
 #'
 #' For contingency tables larger than 2x2, Phi is not bounded by 1 and
-#' may exceed 1. In such cases, \code{\link{cramerV}} is usually preferred.
+#' may exceed 1. In such cases, [cramerV()] is usually preferred.
 #'
 #'
 #' @examples
@@ -50,7 +50,7 @@
 #' phi(tab)
 #'
 #'
-#' @seealso \code{\link{chisq.test}}
+#' @seealso [chisq.test()]
 #'
 #' @family assoc.nominal  
 #' @concept association-measure  

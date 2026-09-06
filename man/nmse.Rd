@@ -44,7 +44,7 @@ nmse(x, ref, trainY)
 
 }
 \seealso{
-\code{\link{mean}}, \code{\link{sum}}
+\code{\link[=mean]{mean()}}, \code{\link[=sum]{sum()}}
 
 Other model.metrics:
 \code{\link[=auc]{auc()}},

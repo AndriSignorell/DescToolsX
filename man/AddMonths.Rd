@@ -14,12 +14,12 @@ addMonths(x, n, ...)
 }
 \arguments{
 \item{x}{a \code{Date} object or an object coercible to one with
-\code{\link{as.Date}}}
+\code{\link[=as.Date]{as.Date()}}}
 
 \item{n}{numeric vector containing finite whole numbers of months or
 missing values}
 
-\item{\dots}{further arguments passed to \code{\link{as.Date}}, such as
+\item{\dots}{further arguments passed to \code{\link[=as.Date]{as.Date()}}, such as
 \code{origin}, \code{format}, or \code{tz}}
 }
 \value{
@@ -45,7 +45,7 @@ corresponding result.
 
 Inputs supplied as \code{POSIXct} are converted to \code{Date}, and their
 time-of-day information is discarded. By default, \code{as.Date.POSIXct}
-performs this conversion in UTC. Supply \code{tz} through \code{\dots} if
+performs this conversion in UTC. Supply \code{tz} through \verb{\\dots} if
 another time zone should determine the calendar date.
 }
 \note{

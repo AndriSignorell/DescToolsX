@@ -53,7 +53,7 @@ whether \code{m} is a covariance or a correlation matrix.
 \item The joint submatrix of \code{x} and \code{y} must be invertible.
 Near-singularity from collinearity among the control variables is
 detected via the reciprocal condition number, not merely by a
-failure of \code{\link[base]{solve}}, which succeeds and returns
+failure of \code{\link[base:solve]{base::solve()}}, which succeeds and returns
 nonsense well before the matrix is numerically singular.
 \item \code{x} and \code{y} must not overlap.
 \item For raw data, correlations are computed pairwise, which can
@@ -79,7 +79,7 @@ corPart(C, x = 1, y = 3:4)
 
 }
 \seealso{
-\code{\link[stats]{cor}}, \code{\link[stats]{cov}}
+\code{\link[stats:cor]{stats::cor()}}, \code{\link[stats:cov]{stats::cov()}}
 
 Other assoc.continuous:
 \code{\link[=corPolychor]{corPolychor()}},

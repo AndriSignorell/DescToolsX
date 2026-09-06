@@ -9,12 +9,12 @@
 #' 
 #' The geometric mean and geometric standard deviation are restricted to
 #' positive inputs (because otherwise the answer can have an imaginary
-#' component). Hence if any argument is negative, the result will be \code{NA}.
+#' component). Hence if any argument is negative, the result will be `NA`.
 #' If any argument is zero, then the geometric mean is zero.\cr For strict
 #' positive values the geometric mean is computed as
-#' \code{exp(meanCI(log(x)))}.
+#' `exp(meanCI(log(x)))`.
 #' 
-#' \bold{Considerations (Roenfeldt 2018)} \verb{ } "The calculation of the
+#' **Considerations (Roenfeldt 2018)** \verb{ } "The calculation of the
 #' geometric mean requires that all values are non-zero and positive. So what
 #' should you do if you have data that do not meet this requirement? If you
 #' have values that equal zero, you have a few options: \itemize{ \item Adjust
@@ -39,44 +39,44 @@
 #' @aliases gmean gsd
 #' 
 #' @param x a positive numeric vector. An object which is not a vector is
-#' coerced, if possible, by \code{as.vector()}.
+#' coerced, if possible, by `as.vector()`.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param method a vector of character strings representing the type of
 #' intervals required. The value should be any subset of the values
-#' \code{"classic"}, \code{"boot"}.  See \code{\link[boot]{boot.ci}}. 
+#' `"classic"`, `"boot"`.  See [boot::boot.ci()]. 
 #' 
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. Defaults to \code{FALSE}. 
-#' @param ... further arguments are passed to the \code{\link[boot]{boot}}
-#' function. Supported arguments are \code{type} (\code{"norm"},
-#' \code{"basic"}, \code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel}
-#' and the number of bootstrap replicates \code{R}. If not defined those will
-#' be set to their defaults, being \code{"basic"} for \code{type}, option
-#' \code{"boot.parallel"} (and if that is not set, \code{"no"}) for
-#' \code{parallel} and \code{999} for \code{R}.
+#' @param na.rm logical, indicating whether `NA` values should be stripped
+#' before the computation proceeds. Defaults to `FALSE`. 
+#' @param ... further arguments are passed to the [boot::boot()]
+#' function. Supported arguments are `type` (`"norm"`,
+#' `"basic"`, `"stud"`, `"perc"`, `"bca"`), `parallel`
+#' and the number of bootstrap replicates `R`. If not defined those will
+#' be set to their defaults, being `"basic"` for `type`, option
+#' `"boot.parallel"` (and if that is not set, `"no"`) for
+#' `parallel` and `999` for `R`.
 #' 
-#' @return for \code{gsd()}, a numeric scalar (\code{NA} if fewer than two
-#' strictly positive values remain). For \code{gmean()}, a numeric
-#' scalar if \code{conf.level = NA}; otherwise a named numeric vector with
+#' @return for `gsd()`, a numeric scalar (`NA` if fewer than two
+#' strictly positive values remain). For `gmean()`, a numeric
+#' scalar if `conf.level = NA`; otherwise a named numeric vector with
 #' elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the geometric mean}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of the geometric mean}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
 #' @references Snedecor, G. W., Cochran, W. G. Cochran (1989) Statistical
-#' Methods, 8th ed. Ames, \emph{IA: Iowa State University Press }
+#' Methods, 8th ed. Ames, *IA: Iowa State University Press *
 #' 
 #' Roenfeldt K. (2018) Better than Average: Calculating Geometric Means Using
 #' SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
-#' \cr\url{https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf}
+#' \cr<https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf>
 #' 
 #' @examples
 #' set.seed(1)

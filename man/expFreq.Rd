@@ -21,7 +21,7 @@ Calculate the expected frequencies of an n-way table assuming independence.
 }
 \details{
 Expected values for a 2-dimensional table can be easily calculated with
-res <- \code{\link{chisq.test}(x)} and accessed by \code{res$expected}.
+res <- \verb{[chisq.test](x)} and accessed by \code{res$expected}.
 This approach fails for higher dimensional tables, for which there is no support.
 \code{expFreq()} also returns expected frequencies for higher dimensional
 tables.
@@ -39,7 +39,7 @@ expFreq(UCBAdmissions, freq="r")
 
 }
 \seealso{
-\code{\link{chisq.test}}
+\code{\link[=chisq.test]{chisq.test()}}
 
 Other frequency:
 \code{\link[=freq]{freq()}},

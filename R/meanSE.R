@@ -3,16 +3,16 @@
 #' 
 #' Calculates the standard error of mean. 
 #' 
-#' \code{meanSE()} calculates the standard error of the mean defined as:
+#' `meanSE()` calculates the standard error of the mean defined as:
 #' \deqn{\frac{\sigma}{\sqrt{n}}} \eqn{\sigma} being standard deviation of
-#' \code{x} and n the length of \code{x}.
+#' `x` and n the length of `x`.
 #' 
 #' @param x a non-empty numeric vector of data values
-#' @param sd the standard deviation of \code{x}. If supplied, it is interpreted
-#' as the population standard deviation. If \code{NULL} (default), the sample
-#' standard deviation \code{sd(x)} is used.
+#' @param sd the standard deviation of `x`. If supplied, it is interpreted
+#' as the population standard deviation. If `NULL` (default), the sample
+#' standard deviation `sd(x)` is used.
 #' @param na.rm logical. Should missing values be removed? Defaults to
-#' \code{FALSE}. 
+#' `FALSE`. 
 #' 
 #' @return the standard error as a numeric scalar
 #' 

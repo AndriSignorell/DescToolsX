@@ -7,7 +7,7 @@
 #'
 #' For a confusion matrix the agreement indicator of a subject is 1 on the
 #' diagonal and 0 elsewhere. For a ratings matrix the subject-wise agreement
-#' is the proportion of agreeing rater \emph{pairs},
+#' is the proportion of agreeing rater *pairs*,
 #' \deqn{p_{o,i} = \frac{\sum_j n_{ij}(n_{ij}-1)}{m_i (m_i - 1)},}
 #' where \eqn{n_{ij}} is the number of raters who assigned subject \eqn{i} to
 #' category \eqn{j} and \eqn{m_i} the number of non-missing ratings for that
@@ -19,34 +19,34 @@
 #'   subjects in rows and raters in columns
 #' @param y optional second rating vector used to construct a confusion matrix
 #'
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}. A proportion of
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()]. A proportion of
 #'   agreement lies in \eqn{[0, 1]}, so the open side is reported at that
 #'   boundary rather than at \eqn{\pm\infty}.
 #'
 #' @param input character string specifying the input format:
-#'   \code{"auto"}, \code{"confusion"}, or \code{"ratings"}
+#'   `"auto"`, `"confusion"`, or `"ratings"`
 #' @param fpc finite population correction, the sampling fraction \eqn{n/N}
-#'   in \eqn{[0, 1)} (default \code{0})
-#' @param output output format, either \code{"def"} (default) or
-#'   \code{"ext"} for extended results
+#'   in \eqn{[0, 1)} (default `0`)
+#' @param output output format, either `"def"` (default) or
+#'   `"ext"` for extended results
 #' @param ... must be empty. Named arguments are rejected rather than
 #'   silently ignored.
 #'
-#' @return if \code{output = "def"} and \code{conf.level = NA}, a numeric
+#' @return if `output = "def"` and `conf.level = NA`, a numeric
 #' scalar; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{proportion of agreement}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{proportion of agreement}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
-#' if \code{output = "ext"}, a list with the elements \code{est},
-#' \code{se}, \code{ci} (the named triple above), \code{n},
-#' \code{nPairable} and \code{method}.
+#' if `output = "ext"`, a list with the elements `est`,
+#' `se`, `ci` (the named triple above), `n`,
+#' `nPairable` and `method`.
 #'
 #'
 #' @family assoc.agreement  

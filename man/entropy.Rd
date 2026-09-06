@@ -21,7 +21,7 @@ If \code{TRUE}, entropy is normalized to the interval
 \eqn{[0,1]}.}
 
 \item{na.rm}{logical; if \code{TRUE}, missing counts are dropped. A
-categorical \code{x} is tabulated with \code{\link{table}}, which
+categorical \code{x} is tabulated with \code{\link[=table]{table()}}, which
 excludes \code{NA} by default in any case.}
 
 \item{...}{additional arguments passed to \code{table()}}

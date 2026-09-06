@@ -17,49 +17,49 @@
 #' attach greater importance to closer disagreements.
 #'
 #' Data can be passed either as a square confusion matrix (or data frame)
-#' in \code{x}, or as two vectors \code{x} and \code{y}, in which case
-#' \code{table(x, y, \dots)} is computed internally.  Note that the vector
-#' interface supports \strong{unweighted kappa only}: the function raises
-#' an error if \code{weights} is not \code{"unweighted"} and \code{y} is
+#' in `x`, or as two vectors `x` and `y`, in which case
+#' `table(x, y, \dots)` is computed internally.  Note that the vector
+#' interface supports **unweighted kappa only**: the function raises
+#' an error if `weights` is not `"unweighted"` and `y` is
 #' supplied, because the level ordering of two independent factors cannot
 #' be guaranteed to be consistent when constructing the confusion table.
 #'
-#' Missing values are handled as \code{\link{table}} does -- excluded by
-#' default.  Pass \code{useNA = "ifany"} via \code{...} to include them.
+#' Missing values are handled as [table()] does -- excluded by
+#' default.  Pass `useNA = "ifany"` via `...` to include them.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields an interval bounded below, with the upper limit
-#' fixed at 1, and \code{"right"} one bounded above, with the lower limit
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields an interval bounded below, with the upper limit
+#' fixed at 1, and `"right"` one bounded above, with the lower limit
 #' fixed at -1. Kappa is a bounded parameter, so the open side is reported
 #' at the range boundary rather than as \eqn{\pm\infty} (design_rules.md
-#' 4.1), matching \code{\link{ccc}}. 
+#' 4.1), matching [ccc()]. 
 #'
 #' @param x        a square confusion matrix (or data frame), or a
-#'   categorical vector when \code{y} is provided
-#' @param y        \code{NULL} (default) or a categorical vector with
-#'   compatible dimensions to \code{x}. When supplied,
-#'   \code{table(x, y, \dots)} is computed. The vector interface is
+#'   categorical vector when `y` is provided
+#' @param y        `NULL` (default) or a categorical vector with
+#'   compatible dimensions to `x`. When supplied,
+#'   `table(x, y, \dots)` is computed. The vector interface is
 #'   available for unweighted kappa only (see Details).
 #' @param weights  either a character string selecting a built-in weight
-#'   scheme -- \code{"unweighted"} (default), \code{"equal-spacing"}, or
-#'   \code{"fleiss-cohen"} -- or a numeric matrix with the same dimensions
-#'   as \code{x} supplying user-defined weights for each cell
+#'   scheme -- `"unweighted"` (default), `"equal-spacing"`, or
+#'   `"fleiss-cohen"` -- or a numeric matrix with the same dimensions
+#'   as `x` supplying user-defined weights for each cell
 #'   
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'   
-#' @param ...      further arguments passed to \code{\link{table}} for the
-#'   vector interface, for example \code{useNA}
+#' @param ...      further arguments passed to [table()] for the
+#'   vector interface, for example `useNA`
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar containing kappa;
+#' @return if `conf.level = NA`, a numeric scalar containing kappa;
 #' otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of kappa.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of kappa.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
 #' @note
@@ -67,22 +67,22 @@
 #'
 #' @references
 #' Cohen, J. (1960). A coefficient of agreement for nominal scales.
-#'   \emph{Educational and Psychological Measurement}, \emph{20}(1),
+#'   *Educational and Psychological Measurement*, *20*(1),
 #'   37--46.
 #'
 #' Everitt, B. S. (1968). Moments of statistics kappa and weighted kappa.
-#'   \emph{The British Journal of Mathematical and Statistical Psychology},
-#'   \emph{21}(1), 97--103.
+#'   *The British Journal of Mathematical and Statistical Psychology*,
+#'   *21*(1), 97--103.
 #'
 #' Fleiss, J. L., Cohen, J., & Everitt, B. S. (1969). Large sample
 #'   standard errors of kappa and weighted kappa.
-#'   \emph{Psychological Bulletin}, \emph{72}(5), 323--327.
+#'   *Psychological Bulletin*, *72*(5), 323--327.
 #'
 #' Cicchetti, D. V., & Allison, T. (1971). A new procedure for assessing
 #'   reliability of scoring EEG sleep recordings.
-#'   \emph{American Journal of EEG Technology}, \emph{11}(3), 101--109.
+#'   *American Journal of EEG Technology*, *11*(3), 101--109.
 #'
-#' @seealso \code{\link[bedrock]{pairApply}}
+#' @seealso [bedrock::pairApply()]
 #'
 #' @examples
 #' # from Bortz et al. (1990), p. 459

@@ -8,22 +8,22 @@
 #' @param x numeric vector containing the treatment group
 #' @param y numeric vector containing the control group
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param useControlSd logical, if \code{TRUE} (default) the standard
-#'   deviation of the control group \code{y} is used for standardization,
-#'   otherwise the one of \code{x}
-#' @param correct logical, if \code{TRUE} the exact small-sample bias
+#' @param useControlSd logical, if `TRUE` (default) the standard
+#'   deviation of the control group `y` is used for standardization,
+#'   otherwise the one of `x`
+#' @param correct logical, if `TRUE` the exact small-sample bias
 #'   correction (Hedges' correction with \eqn{df = n_C - 1}) is applied.
 #'   Requires at least 3 observations in the standardizing group.
-#'   Default is \code{FALSE}.
+#'   Default is `FALSE`.
 #' @param na.rm logical, should missing values be removed? Default is
-#'   \code{FALSE}. If \code{FALSE} and any of the groups contains missing
-#'   values, \code{NA} is returned.
+#'   `FALSE`. If `FALSE` and any of the groups contains missing
+#'   values, `NA` is returned.
 #'
 #' @details
 #' Glass' delta is defined as:
@@ -41,23 +41,23 @@
 #' precisely when the variances are expected to differ, the interval
 #' should be regarded as approximate under heteroscedasticity.
 #'
-#' With \code{correct = TRUE} the exact correction factor
+#' With `correct = TRUE` the exact correction factor
 #' \deqn{ J(df) = \frac{\Gamma(df/2)}{\sqrt{df/2}\,\Gamma((df-1)/2)} }
 #' is applied to the estimate and both confidence limits.
 #'
-#' @return a named numeric vector. If \code{conf.level = NA}, only
-#' \code{est} is returned; otherwise the vector has elements:
+#' @return a named numeric vector. If `conf.level = NA`, only
+#' `est` is returned; otherwise the vector has elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Glass' delta}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Glass' delta}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
-#' In both cases the result carries the attribute \code{"magnitude"} with
+#' In both cases the result carries the attribute `"magnitude"` with
 #' the conventional interpretation of the estimate's absolute size
-#' (\code{"negligible"} < 0.2 \eqn{\le} \code{"small"} < 0.5 \eqn{\le}
-#' \code{"medium"} < 0.8 \eqn{\le} \code{"large"}), analogous to
-#' \code{cohenD()}.
+#' (`"negligible"` < 0.2 \eqn{\le} `"small"` < 0.5 \eqn{\le}
+#' `"medium"` < 0.8 \eqn{\le} `"large"`), analogous to
+#' `cohenD()`.
 #'
 #' @note The confidence interval method follows Ken Kelley's approach
 #' previously published in the \pkg{MBESS} package, reimplemented to
@@ -65,14 +65,14 @@
 #'
 #' @references
 #' Glass, G. V. (1976) Primary, secondary, and meta-analysis of research.
-#' \emph{Educational Researcher}, 5(10), 3-8.
+#' *Educational Researcher*, 5(10), 3-8.
 #'
-#' Hedges, L. V., Olkin, I. (1985) \emph{Statistical Methods for
-#' Meta-Analysis}. Orlando: Academic Press.
+#' Hedges, L. V., Olkin, I. (1985) *Statistical Methods for
+#' Meta-Analysis*. Orlando: Academic Press.
 #'
 #' Kelley, K. (2007) Confidence intervals for standardized effect sizes:
-#' Theory, application, and implementation. \emph{Journal of Statistical
-#' Software}, 20(8), 1-24.
+#' Theory, application, and implementation. *Journal of Statistical
+#' Software*, 20(8), 1-24.
 #'
 #'
 #' @examples
@@ -97,7 +97,7 @@
 #' glassDelta(x, y, useControlSd = FALSE)
 #'
 #'
-#' @seealso \code{\link{cohenD}}
+#' @seealso [cohenD()]
 #'
 #' @family effect.size
 #' @concept effect-size

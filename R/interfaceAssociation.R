@@ -7,71 +7,71 @@
 #' @details
 #' The association is defined between two variables that can be 
 #' provided to the calculation functions in different ways. 
-#' If only \code{x} is passed, this can either be a matrix, which 
+#' If only `x` is passed, this can either be a matrix, which 
 #' is then interpreted as a contingency table (this seems in the case of frequency
 #' data the natural interpretation and is by the way also what
-#' \code{\link{chisq.test}} expects). However, it can also be a data.frame or  
+#' [chisq.test()] expects). However, it can also be a data.frame or  
 #' a list, which must then contain exactly 2 elements containing the data. 
-#' Alternatively, two single data vectors \code{x} and \code{y} can be passed. 
+#' Alternatively, two single data vectors `x` and `y` can be passed. 
 #' The two element arguments are typically processed by forming a contingency 
-#' table with \code{\link{table}(x, y, ...)}. \code{NAs} are by default handled the same 
-#' way as the function does, so \code{NAs} omitted. 
+#' table with `[table](x, y, ...)`. `NAs` are by default handled the same 
+#' way as the function does, so `NAs` omitted. 
 #' 
 #' If the measure should be calculated pairwise for a set of variables 
-#' \code{\link[bedrock]{pairApply}} can be used. This easily allows to create matrices 
-#' of association measures (the same way as the \code{cor} does). \code{NAs} 
+#' [bedrock::pairApply()] can be used. This easily allows to create matrices 
+#' of association measures (the same way as the `cor` does). `NAs` 
 #' again are by default omitted pairwise, which corresponds to the 
-#' \code{pairwise.complete} option of \code{\link{cor}}. 
-#' Use \code{\link{complete.cases}}, if only the complete
-#' cases of a \code{data.frame} are to be used. (see examples)
+#' `pairwise.complete` option of [cor()]. 
+#' Use [complete.cases()], if only the complete
+#' cases of a `data.frame` are to be used. (see examples)
 #' 
 #' Most functions support calculation of confidence intervals.
-#' These can be requested by setting \code{conf.level} to the desired value (usually 0.95). 
-#' If it is set to \code{NA}, no confidence interval is computed. 
+#' These can be requested by setting `conf.level` to the desired value (usually 0.95). 
+#' If it is set to `NA`, no confidence interval is computed. 
 #' One-sided confidence intervals
-#' can be controlled using the \code{sides} argument. It names the side on
-#' which the \emph{finite} bound lies, which is NOT the convention used for
-#' the alternative hypothesis of a test: \code{"left"} yields an interval
-#' bounded below and corresponds to an alternative of \code{"greater"}.
-#' See \link{ConfidenceIntervals}. Frequently there is a classic and 
-#' a bootstrap approach (\code{"classic"}, \code{"boot"}). 
+#' can be controlled using the `sides` argument. It names the side on
+#' which the *finite* bound lies, which is NOT the convention used for
+#' the alternative hypothesis of a test: `"left"` yields an interval
+#' bounded below and corresponds to an alternative of `"greater"`.
+#' See [ConfidenceIntervals]. Frequently there is a classic and 
+#' a bootstrap approach (`"classic"`, `"boot"`). 
 #' However most measures have their own specific confidence intervals methods.
 #' 
-#' Some association measures define additional parameters such as \code{direction},
-#' \code{base}, or \code{correct}. Those are documented with the respective
+#' Some association measures define additional parameters such as `direction`,
+#' `base`, or `correct`. Those are documented with the respective
 #' functions.
 #' 
 #' 
-#' \strong{Function List}
+#' **Function List**
 #' 
-#' Following association measures are implemented in \strong{DescToolsX}:
+#' Following association measures are implemented in **DescToolsX**:
 #'  \tabular{ll}{
-#'    \verb{  }\link{cramerV}          \tab Cramer's V \cr
-#'    \verb{  }\link{contCoef}         \tab Pearson's Contingency Coefficient \cr
-#'    \verb{  }\link{lambda}           \tab Goodman's Lambda \cr
-#'    \verb{  }\link{gkTau}            \tab Goodman Kruskal's Tau \cr
-#'    \verb{  }\link{gkGamma}          \tab Goodman Kruskal's Gamma \cr
-#'    \verb{  }\link{kendallTauB}      \tab Kendall's Tau-b \cr
-#'    \verb{  }\link{stuartTauC}       \tab Stuart's Tau-c \cr
-#'    \verb{  }\link{somersDelta}      \tab Somers' Delta \cr
-#'    \verb{  }\link{uncertCoef}       \tab Theil's Uncertainty Coefficient \cr
-#'    \verb{  }\link{mutInf}           \tab Mutual Information \cr
-#'    \verb{  }\link{hoeffdingD}       \tab Hoeffding's D \cr
-#'    \verb{  }\link{corPolychor}      \tab Polychoric Correlation \cr
+#'    \verb{  }[cramerV]          \tab Cramer's V \cr
+#'    \verb{  }[contCoef]         \tab Pearson's Contingency Coefficient \cr
+#'    \verb{  }[lambda]           \tab Goodman's Lambda \cr
+#'    \verb{  }[gkTau]            \tab Goodman Kruskal's Tau \cr
+#'    \verb{  }[gkGamma]          \tab Goodman Kruskal's Gamma \cr
+#'    \verb{  }[kendallTauB]      \tab Kendall's Tau-b \cr
+#'    \verb{  }[stuartTauC]       \tab Stuart's Tau-c \cr
+#'    \verb{  }[somersDelta]      \tab Somers' Delta \cr
+#'    \verb{  }[uncertCoef]       \tab Theil's Uncertainty Coefficient \cr
+#'    \verb{  }[mutInf]           \tab Mutual Information \cr
+#'    \verb{  }[hoeffdingD]       \tab Hoeffding's D \cr
+#'    \verb{  }[corPolychor]      \tab Polychoric Correlation \cr
 #'    }
 #'
 #' @param x either a contingency table, a two-column object
 #'   (matrix, data.frame or list), or a vector of observations 
-#'   (together with \code{y})
-#' @param y optional second vector. If \code{x} is not a vector,
-#'   \code{y} must be \code{NULL}.
+#'   (together with `y`)
+#' @param y optional second vector. If `x` is not a vector,
+#'   `y` must be `NULL`.
 #'   
 #'
 #' @references 
-#' Cramer, H. (1946) \emph{Mathematical Methods of Statistics}. Princeton
+#' Cramer, H. (1946) *Mathematical Methods of Statistics*. Princeton
 #' University Press
 #' 
-#' Agresti, Alan (1996) \emph{Introduction to categorical data analysis}. NY:
+#' Agresti, Alan (1996) *Introduction to categorical data analysis*. NY:
 #' John Wiley and Sons
 #' 
 #' @concept association-measure

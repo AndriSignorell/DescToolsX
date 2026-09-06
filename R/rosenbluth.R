@@ -9,9 +9,9 @@
 #'
 #' @param x numeric vector of non-negative values, such as market shares or
 #' frequencies
-#' @param n optional frequency weights. Each element of \code{x}
-#'   is replicated \code{n} times.
-#' @param na.rm logical. If \code{TRUE}, missing values are removed.
+#' @param n optional frequency weights. Each element of `x`
+#'   is replicated `n` times.
+#' @param na.rm logical. If `TRUE`, missing values are removed.
 #'
 #' @return a numeric scalar containing the Rosenbluth index
 #'
@@ -23,16 +23,16 @@
 #' unit holding everything, so it is read on the same scale as the Herfindahl
 #' index rather than as an inequality measure.
 #'
-#' If negative values or missing values (when \code{na.rm = FALSE})
-#' are present, \code{NA} is returned. The index is undefined when all values
-#' are zero, and \code{NA} is returned in that case as well.
+#' If negative values or missing values (when `na.rm = FALSE`)
+#' are present, `NA` is returned. The index is undefined when all values
+#' are zero, and `NA` is returned in that case as well.
 #'
 #' @references
-#' Rosenbluth, G. (1955). Measures of concentration. In: \emph{Business
-#' Concentration and Price Policy}. Princeton University Press, 57-99.
+#' Rosenbluth, G. (1955). Measures of concentration. In: *Business
+#' Concentration and Price Policy*. Princeton University Press, 57-99.
 #'
 #' Hall, M., Tideman, N. (1967). Measures of concentration.
-#' \emph{Journal of the American Statistical Association}, 62, 162-168.
+#' *Journal of the American Statistical Association*, 62, 162-168.
 #'
 #' @examples
 #' # four units of equal size: the index takes its minimum 1/4

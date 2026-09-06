@@ -11,7 +11,7 @@
 #' with base R and other packages.
 #'
 #' Statistical summary functions that would otherwise mask base R functions are
-#' suffixed with \code{X} (e.g. \code{meanX()}, \code{sdX()}, \code{medianX()}).
+#' suffixed with `X` (e.g. `meanX()`, `sdX()`, `medianX()`).
 #' So functions ending in X are extended versions (typically supporting weights 
 #' or implementing confidence intervals) provided by DescToolsX and are 
 #' designed to coexist with base R functions without masking them.
@@ -25,61 +25,61 @@
 #' @aliases DescToolsX-package
 #' 
 #' @section Further principles:
-#' Following section explain further principles valid throughout \bold{DescToolsX}:
+#' Following section explain further principles valid throughout **DescToolsX**:
 #'  \tabular{ll}{
-#'    \verb{  }\link{Formulas}             \tab Handling formulas \cr
-#'    \verb{  }\link{Association}\verb{  } \tab Association  \cr
-#'    \verb{  }\link{Agreement}\verb{  } \tab Interrater agreement  \cr
-#'    \verb{  }\link{ConfidenceIntervals}\verb{  } \tab Confidence intervals  \cr
-#'    \verb{  }\link{Association}\verb{  } \tab Measures  \cr
-#'    \verb{  }\link{Association}\verb{  } \tab Plots  \cr
+#'    \verb{  }[Formulas]             \tab Handling formulas \cr
+#'    \verb{  }[Association]\verb{  } \tab Association  \cr
+#'    \verb{  }[Agreement]\verb{  } \tab Interrater agreement  \cr
+#'    \verb{  }[ConfidenceIntervals]\verb{  } \tab Confidence intervals  \cr
+#'    \verb{  }[Association]\verb{  } \tab Measures  \cr
+#'    \verb{  }[Association]\verb{  } \tab Plots  \cr
 #'    }
 #'
 #' @section Function names:
-#' All functions use \strong{lower camelCase}.
+#' All functions use **lower camelCase**.
 #'
 #' @section Statistical summary functions:
 #' Statistical functions that would otherwise mask base R functions are suffixed
-#' with \code{X}. This explicitly signals an extended or modified implementation.
+#' with `X`. This explicitly signals an extended or modified implementation.
 #'
 #' Examples:
-#' \code{meanX()}, \code{medianX()}, \code{sdX()}, \code{madX()}, \code{iqrX()},
-#' \code{varX()}, \code{quantileX()}, \code{skew()}, \code{kurt()}
+#' `meanX()`, `medianX()`, `sdX()`, `madX()`, `iqrX()`,
+#' `varX()`, `quantileX()`, `skew()`, `kurt()`
 #'
 #' @section Confidence interval functions:
-#' Functions computing confidence intervals use the suffix \code{CI}, following
+#' Functions computing confidence intervals use the suffix `CI`, following
 #' established R conventions.
 #'
 #' Examples:
-#' \code{meanCI()}, \code{medianCI()}, \code{sdCI()}, \code{varCI()},
-#' \code{quantileCI()}
+#' `meanCI()`, `medianCI()`, `sdCI()`, `varCI()`,
+#' `quantileCI()`
 #'
 #' @section Statistical tests:
-#' Statistical tests use lower camelCase and end with \code{Test}.
+#' Statistical tests use lower camelCase and end with `Test`.
 #'
 #' Examples:
-#' \code{shapiroFranciaTest()}, \code{andersonDarlingTest()},
-#' \code{leveneTest()}, \code{jarqueBeraTest()}
+#' `shapiroFranciaTest()`, `andersonDarlingTest()`,
+#' `leveneTest()`, `jarqueBeraTest()`
 #'
 #' @section Plot functions:
-#' Plotting functions start with the prefix \code{plot} and use lower camelCase.
+#' Plotting functions start with the prefix `plot` and use lower camelCase.
 #'
 #' Examples:
-#' \code{plotQQ()}, \code{plotECDF()}, \code{plotCor()}, \code{plotViolin()}
+#' `plotQQ()`, `plotECDF()`, `plotCor()`, `plotViolin()`
 #'
 #' @section Classes and S3 methods:
-#' Classes use \strong{UpperCamelCase}. S3 methods follow standard R conventions.
+#' Classes use **UpperCamelCase**. S3 methods follow standard R conventions.
 #'
 #' Examples:
-#' \code{desc.numeric}, \code{percTable}, \code{print.PercTable},
-#' \code{plot.Desc.numeric}
+#' `desc.numeric`, `percTable`, `print.PercTable`,
+#' `plot.Desc.numeric`
 #'
 #' @details
 #' Consistency and predictability take precedence over historical base R naming
 #' conventions. This design choice is a key difference between DescToolsX and
 #' DescTools.
 #' 
-#' \strong{Design principles}
+#' **Design principles**
 #'
 #' DescToolsX follows a set of strict design principles to ensure consistency,
 #' usability, and performance across the entire package.
@@ -87,11 +87,11 @@
 #' @section Argument order:
 #' Function arguments follow a consistent and predictable order:
 #' \enumerate{
-#'   \item \code{x} (primary data object)
+#'   \item `x` (primary data object)
 #'   \item method-specific parameters
-#'   \item confidence-related parameters (e.g. \code{conf.level})
+#'   \item confidence-related parameters (e.g. `conf.level`)
 #'   \item formatting and display options
-#'   \item \code{...} (additional arguments)
+#'   \item `...` (additional arguments)
 #' }
 #'
 #' This ordering is applied uniformly across statistical summary functions,
@@ -99,13 +99,13 @@
 #'
 #' @section Confidence interval functions:
 #' Confidence interval functions follow the same argument order as their
-#' corresponding point estimators. In particular, \code{conf.level} is always
+#' corresponding point estimators. In particular, `conf.level` is always
 #' used to specify the confidence level and appears explicitly as a named
 #' argument.
 #'
 #' Examples:
-#' \code{meanCI(x, conf.level = 0.95)},
-#' \code{medianCI(x, conf.level = 0.95)}
+#' `meanCI(x, conf.level = 0.95)`,
+#' `medianCI(x, conf.level = 0.95)`
 #'
 #' @section Plot functions:
 #' Plotting functions follow the same data-first argument convention. The data
@@ -114,7 +114,7 @@
 #' across different plot types.
 #'
 #' Examples:
-#' \code{plotQQ(x)}, \code{plotECDF(x)}, \code{plotCor(x, method = "spearman")}
+#' `plotQQ(x)`, `plotECDF(x)`, `plotCor(x, method = "spearman")`
 #'
 #' @section Performance and implementation:
 #' Computationally intensive functionality is systematically reimplemented

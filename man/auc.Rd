@@ -30,16 +30,16 @@ by default, the range of \code{x}}
 \item{subdivisions}{positive whole number specifying the maximum number of
 subdivisions used for spline integration}
 
-\item{na.rm}{logical; whether incomplete \code{(x, y)} pairs are removed}
+\item{na.rm}{logical; whether incomplete \verb{(x, y)} pairs are removed}
 
-\item{...}{additional arguments passed to \code{\link[stats]{approx}} for
+\item{...}{additional arguments passed to \code{\link[stats:approx]{stats::approx()}} for
 trapezoidal interpolation}
 }
 \value{
 a numeric value representing the computed area
 }
 \description{
-Calculates the area under a curve defined by points \code{(x, y)} using
+Calculates the area under a curve defined by points \verb{(x, y)} using
 different numerical integration methods.
 }
 \details{
@@ -92,8 +92,8 @@ auc(
 
 }
 \seealso{
-\code{\link[stats]{approx}}, \code{\link[stats]{splinefun}},
-\code{\link[stats]{integrate}}
+\code{\link[stats:approx]{stats::approx()}}, \code{\link[stats:splinefun]{stats::splinefun()}},
+\code{\link[stats:integrate]{stats::integrate()}}
 
 Other model.metrics:
 \code{\link[=averagePrecision]{averagePrecision()}},

@@ -25,7 +25,7 @@ data frame with compatible dimensions to \code{x}}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{direction}{direction of calculation, one of \code{"symmetric"}
 (default), \code{"row"}, or \code{"column"}. The row direction calculates
@@ -35,7 +35,7 @@ U(R|C), and the column direction calculates U(C|R).}
 before taking logarithms}
 
 \item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing, for example, \code{useNA} to be set. This
+\code{\link[=table]{table()}}, allowing, for example, \code{useNA} to be set. This
 refers only to the
 vector interface.}
 }
@@ -91,7 +91,7 @@ Theil, H. (1972), \emph{Statistical Decomposition Analysis},
 Amsterdam: North-Holland Publishing Company.
 }
 \seealso{
-\code{\link{Association}}
+\code{\link[=Association]{Association()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},

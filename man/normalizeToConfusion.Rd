@@ -13,7 +13,7 @@ normalizeToConfusion(
 )
 }
 \arguments{
-\item{x}{input object. Accepted formats: a \code{\link{table}} representing
+\item{x}{input object. Accepted formats: a \code{\link[=table]{table()}} representing
 a pre-computed contingency table; a square numeric \code{matrix}
 representing a pre-computed contingency table; a numeric \code{matrix}
 with exactly 2 columns (one per rater); a \code{list} or
@@ -31,7 +31,7 @@ an atomic vector of common levels shared by both raters; for
 \code{mode = "association"}, use a list of length 2,
 \code{list(x_levels, y_levels)}.}
 
-\item{useNA}{passed to \code{\link{table}}. Controls whether \code{NA}
+\item{useNA}{passed to \code{\link[=table]{table()}}. Controls whether \code{NA}
 values appear as a level. One of \code{"no"} (default), \code{"ifany"},
 or \code{"always"}.}
 
@@ -54,14 +54,14 @@ data frames, lists, and raw rating vectors.
 The function handles the following input formats:
 \describe{
 \item{\code{table}}{A pre-computed 2D contingency table which is validated via
-\code{\link{isConfusionTable}}. For \code{mode = "agreement"}, the
+\code{\link[=isConfusionTable]{isConfusionTable()}}. For \code{mode = "agreement"}, the
 table must be square with identical row and column names.}
 \item{\code{matrix}}{Either a pre-computed contingency matrix (square,
-passing \code{\link{isConfusionTable}} validation) or a two-rater
+passing \code{\link[=isConfusionTable]{isConfusionTable()}} validation) or a two-rater
 matrix with exactly 2 columns. A 2-column non-square matrix is always
 treated as a rater matrix; each column is one rater's ratings.}
 \item{two vectors}{If both \code{x} and \code{y} are supplied, they are
-tabulated via \code{\link{table}} after coercing to factors.}
+tabulated via \code{\link[=table]{table()}} after coercing to factors.}
 \item{\code{list} or \code{data.frame} with 2 elements}{Each element is
 treated as one rater's ratings.}
 }
@@ -136,7 +136,7 @@ normalizeToConfusion(
 
 }
 \seealso{
-\code{\link{isConfusionTable}()}, \code{\link{raterFrame}()}, \code{\link[bedrock:pairApply]{pairApply()}}
+\code{\link[=isConfusionTable]{isConfusionTable()}}, \code{\link[=raterFrame]{raterFrame()}}, \code{\link[bedrock:pairApply]{pairApply()}}
 
 Other agreement:
 \code{\link[=blandAltmanData]{blandAltmanData()}},

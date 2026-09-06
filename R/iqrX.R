@@ -3,14 +3,14 @@
 #' 
 #' computes interquartile range of the x values. Weights are supported. 
 #' 
-#' This implementation is based on \code{\link{quantileX}()} function, which
+#' This implementation is based on [quantileX()] function, which
 #' allows to define weights. 
 #' 
 #' @param x numeric vector
 #' @param weights optional numeric vector giving the sample weights
 #' @param na.rm logical; whether to remove missing values
 #' @param type an integer selecting one of the many quantile algorithms, see
-#' \code{\link{quantileX}()}
+#' [quantileX()]
 #'
 #' @return numeric scalar containing the interquartile range
 #' 

@@ -16,11 +16,11 @@
 #' The boundaries are fixed calendar dates; the astronomical dates of the sun's
 #' entry into a sign shift by up to a day from year to year.
 #'
-#' @param x the date to transform, a \code{Date} or anything that
-#' \code{month()} and \code{day()} accept
-#' @param lang language of the zodiac names, either English (\code{"en"}) or
-#' German (\code{"de"})
-#' @param stringsAsFactors logical. If set to \code{TRUE} (default) the result
+#' @param x the date to transform, a `Date` or anything that
+#' `month()` and `day()` accept
+#' @param lang language of the zodiac names, either English (`"en"`) or
+#' German (`"de"`)
+#' @param stringsAsFactors logical. If set to `TRUE` (default) the result
 #' will consist of a factor with zodiac signs as levels.
 #'
 #' @return a character vector or factor containing the zodiac signs

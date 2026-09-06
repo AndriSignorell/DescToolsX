@@ -47,7 +47,7 @@ Defaults to \code{FALSE}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{character string specifying the confidence interval method:
 \code{"nct"} (default),
@@ -76,15 +76,15 @@ true population value, the coefficient of variation is corrected as: \deqn{
 CV_{korr} = CV \cdot \left( 1 - \frac{1}{4\cdot(n-1)} + \frac{1}{n} \cdot
 CV^2 + \frac{1}{2 \cdot (n-1)^2} \right) }
 
-For determining\verb{ }\bold{the confidence intervals}\verb{ } for the
+For determining\verb{ }\strong{the confidence intervals}\verb{ } for the
 coefficient of variation a number of methods have been proposed.
 \code{coefVarCI()} currently supports four different methods. The details
 for the methods are given in the specific references.
 
-The \bold{"naive" method} \verb{ } is based on dividing the standard
+The \strong{"naive" method} \verb{ } is based on dividing the standard
 confidence limit for the standard deviation by the sample mean.
 
-\bold{McKay's} \verb{ } approximation is asymptotically exact as n goes to
+\strong{McKay's} \verb{ } approximation is asymptotically exact as n goes to
 infinity. McKay recommends this approximation only if the coefficient of
 variation is less than 0.33. Note that if the coefficient of variation is
 greater than 0.33, either the normality of the data is suspect or the
@@ -93,7 +93,7 @@ McKay's approximation may not be valid. Also, it is generally recommended
 that the sample size should be at least 10 before using McKay's
 approximation.
 
-\bold{Vangel's modified McKay method} \verb{ } is more accurate than the
+\strong{Vangel's modified McKay method} \verb{ } is more accurate than the
 McKay method in most cases, particularly for small samples. According to Vangel,
 the unmodified McKay is only more accurate when both the coefficient of
 variation and alpha are large. However, if the coefficient of variation is
@@ -107,16 +107,16 @@ the coefficient of variation is less than 0.33.
 See also:
 https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
 
-\bold{nct} \verb{ }uses the noncentral t-distribution to calculate the
+\strong{nct} \verb{ }uses the noncentral t-distribution to calculate the
 confidence intervals. See Smithson (2003).
 
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
 \eqn{(-\infty, uci]}.
 
-\bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
+**Note:**\verb{ } Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
-\code{\link[stats]{cov.wt}}.
+\code{\link[stats:cov.wt]{stats::cov.wt()}}.
 }
 \note{
 Parts of the code contributed by Michael Smithson.
@@ -185,7 +185,7 @@ for Normal Distribution Coefficients of Variation, \emph{Communications in
 Statistics Theory and Methods}, Volume 36, No. 12, pp 2187-2206.
 }
 \seealso{
-\code{\link{meanX}}, \code{\link{sdX}}, (both supporting weights)
+\code{\link[=meanX]{meanX()}}, \code{\link[=sdX]{sdX()}}, (both supporting weights)
 
 Other dispersion:
 \code{\link[=iqrX]{iqrX()}},

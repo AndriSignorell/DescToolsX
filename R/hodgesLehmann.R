@@ -9,7 +9,7 @@
 #' data points and Walsh averages.
 #'
 #' It is the same as the pseudo median returned as a by-product
-#' of \code{\link{wilcox.test}}
+#' of [wilcox.test()]
 #' (which however does not calculate correctly as soon as ties
 #' are present).
 #'
@@ -21,41 +21,41 @@
 #'
 #' @param x numeric vector
 #' @param y optional numeric vector
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param na.rm logical; whether to remove missing values
 #' @param ... additional arguments passed to bootstrap procedures
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the Hodges-Lehmann location}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of the Hodges-Lehmann location}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @details
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
 #' \eqn{(-\infty, uci]}. The estimator is unbounded, so the open side is
 #' reported as \eqn{\pm\infty}.
 #'
-#' \code{x} and \code{y} are not modified.
+#' `x` and `y` are not modified.
 #'
 #' @section Random number generation:
 #' A confidence level triggers a bootstrap and therefore advances R's
-#' global random number generator. Call \code{\link[base]{set.seed}}
+#' global random number generator. Call [base::set.seed()]
 #' beforehand for reproducible intervals. The point estimate itself is
 #' deterministic: the compiled routine picks its pivots from a local
 #' generator and does not touch R's stream.
 #'
 #' @note C++ port of Monahan’s algorithm by Cyril Flurin Moser
 #'
-#' @seealso \code{\link[stats]{wilcox.test}}
+#' @seealso [stats::wilcox.test()]
 #'
 #' @examples
 #' x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)

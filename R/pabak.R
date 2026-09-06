@@ -23,7 +23,7 @@
 #' Two diagnostic indices quantify the prevalence and bias effects that can
 #' cause Cohen's kappa to differ from PABAK. They are defined only for
 #' \eqn{2 \times 2} tables following Byrt et al. (1993); for larger tables
-#' they are \code{NA}:
+#' they are `NA`:
 #' \describe{
 #'   \item{Prevalence index}{
 #'     \eqn{|p_{11} - p_{22}|}. A high value indicates that one outcome
@@ -35,64 +35,64 @@
 #' When both indices are near zero, PABAK and Cohen's kappa will be nearly
 #' identical. Both are returned as attributes rather than as elements of the
 #' result, since they are separate diagnostics rather than further views of
-#' the estimate, and they do not depend on \code{conf.level}.
+#' the estimate, and they do not depend on `conf.level`.
 #'
 #' The Wald confidence interval is truncated to the admissible range
 #' \eqn{[-1, 1]}.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)} and \code{"right"}
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields \eqn{[lci, \infty)} and `"right"`
 #' \eqn{(-\infty, uci]}. 
 #'
 #' Data can be passed either as a square confusion matrix (or data frame) in
-#' \code{x}, or as two vectors \code{x} and \code{y}, in which case
-#' \code{table(x, y, \dots)} is computed internally.
+#' `x`, or as two vectors `x` and `y`, in which case
+#' `table(x, y, \dots)` is computed internally.
 #'
-#' Missing values are handled as \code{\link{table}} does - excluded by
-#' default. Pass \code{useNA = "ifany"} via \code{...} to include them.
+#' Missing values are handled as [table()] does - excluded by
+#' default. Pass `useNA = "ifany"` via `...` to include them.
 #'
 #' @param x a square confusion matrix (or data frame), or a categorical vector
-#'   when \code{y} is provided.
-#' @param y \code{NULL} (default) or a categorical vector of the same length
-#'   as \code{x}. When supplied, \code{table(x, y, \dots)} is computed
+#'   when `y` is provided.
+#' @param y `NULL` (default) or a categorical vector of the same length
+#'   as `x`. When supplied, `table(x, y, \dots)` is computed
 #'   internally.
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param ... further arguments passed to \code{\link{table}} for the vector
-#'   interface, for example \code{useNA}.
+#' @param ... further arguments passed to [table()] for the vector
+#'   interface, for example `useNA`.
 #'
 #' @return
 #' a named numeric vector.
 #'
-#' If \code{conf.level = NA}, a single element \code{est}; otherwise the
+#' If `conf.level = NA`, a single element `est`; otherwise the
 #' elements:
 #'
 #' \describe{
-#'   \item{\code{est}}{point estimate of PABAK.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of PABAK.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
 #' In both cases the diagnostics are attached as attributes:
 #'
 #' \describe{
 #'   \item{nObs}{number of observations in the table.}
-#'   \item{prevalenceIndex}{prevalence index, or \code{NA} for \eqn{k > 2}.}
-#'   \item{biasIndex}{bias index, or \code{NA} for \eqn{k > 2}.}
+#'   \item{prevalenceIndex}{prevalence index, or `NA` for \eqn{k > 2}.}
+#'   \item{biasIndex}{bias index, or `NA` for \eqn{k > 2}.}
 #' }
 #'
 #' @references
 #' Byrt, T., Bishop, J., & Carlin, J. B. (1993). Bias, prevalence and kappa.
-#'   \emph{Journal of Clinical Epidemiology}, \emph{46}(5), 423-429.
+#'   *Journal of Clinical Epidemiology*, *46*(5), 423-429.
 #'   \doi{10.1016/0895-4356(93)90018-V}
 #'
 #' Hoehler, F. K. (2000). Bias and prevalence effects on kappa viewed in
 #'   terms of sensitivity and specificity.
-#'   \emph{Journal of Clinical Epidemiology}, \emph{53}(5), 499-503.
+#'   *Journal of Clinical Epidemiology*, *53*(5), 499-503.
 #'   \doi{10.1016/S0895-4356(99)00174-2}
 #'
 #' @examples

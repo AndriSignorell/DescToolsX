@@ -103,7 +103,7 @@ the factor method. Ordered factors use their intrinsic level order rather
 than descending frequency order.
 }
 \seealso{
-\code{\link[pharos]{plotCatDist}} for graphical display
+\code{\link[pharos:plotCatDist]{pharos::plotCatDist()}} for graphical display
 
 Other desc:
 \code{\link[=desc]{desc()}},

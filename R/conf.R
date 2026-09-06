@@ -5,11 +5,11 @@
 #' for classification models or predicted vs. observed labels.
 #'
 #' This is a generic function with methods for tables, vectors, and several
-#' model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
-#' \code{svm}).
+#' model objects (e.g., `glm`, `rpart`, `randomForest`,
+#' `svm`).
 #'
-#' \code{sensX()} and \code{specX()} are convenience extractors for the
-#' sensitivity and specificity values computed by \code{conf()}.
+#' `sensX()` and `specX()` are convenience extractors for the
+#' sensitivity and specificity values computed by `conf()`.
 #'
 #' @name conf
 #' @aliases sensX specX
@@ -17,21 +17,21 @@
 #' @param x object containing predictions; one of:
 #'   \itemize{
 #'     \item a factor or character vector of predicted classes
-#'     \item a confusion matrix (\code{table} or \code{matrix}) with
-#'       \strong{predictions in the rows and references in the columns}
-#'     \item a fitted model object (e.g., \code{glm}, \code{rpart})
+#'     \item a confusion matrix (`table` or `matrix`) with
+#'       **predictions in the rows and references in the columns**
+#'     \item a fitted model object (e.g., `glm`, `rpart`)
 #'   }
 #' @param ref optional reference (true labels). Required for the default
 #'   method.
 #' @param pos optional character specifying the positive class (binary
-#'   classification only). If \code{NULL}, the second level is used and
+#'   classification only). If `NULL`, the second level is used and
 #'   a message is issued.
-#' @param cutoff numeric cutoff for probabilistic models (e.g., \code{glm}).
-#'   Default \code{0.5}.
+#' @param cutoff numeric cutoff for probabilistic models (e.g., `glm`).
+#'   Default `0.5`.
 #' @param conf.level confidence level for the accuracy interval; defaults
 #'   to 0.95
 #' @param na.rm logical; remove missing values before computation.
-#'   Default \code{TRUE}.
+#'   Default `TRUE`.
 #' @param digits integer; number of decimal places for printing
 #' @param main character string specifying the plot title
 #' @param \dots further arguments passed to specific methods
@@ -39,9 +39,9 @@
 #' @details
 #' The orientation of the table matters: rows are read as predictions and
 #' columns as references, so the no-information rate is taken from the
-#' column margin. \code{conf.default()} builds the table accordingly.
+#' column margin. `conf.default()` builds the table accordingly.
 #'
-#' \strong{Overall statistics:}
+#' **Overall statistics:**
 #' \itemize{
 #'   \item Accuracy with confidence interval
 #'   \item No Information Rate (NIR) and p-value (Accuracy > NIR)
@@ -49,7 +49,7 @@
 #'   \item McNemar test p-value
 #' }
 #'
-#' \strong{Class-wise statistics} (computed one-vs-all for multiclass):
+#' **Class-wise statistics** (computed one-vs-all for multiclass):
 #' \itemize{
 #'   \item Sensitivity (Recall)
 #'   \item Specificity
@@ -62,23 +62,23 @@
 #'   \item Matthews Correlation Coefficient (MCC)
 #' }
 #'
-#' @return \code{conf()} returns an object of class \code{"Conf"} containing:
+#' @return `conf()` returns an object of class `"Conf"` containing:
 #' \describe{
-#'   \item{\code{table}}{confusion matrix}
-#'   \item{\code{pos}}{positive class (binary only, else \code{NULL})}
-#'   \item{\code{diag}}{number of correct predictions}
-#'   \item{\code{n}}{total number of observations}
-#'   \item{\code{acc}, \code{acc.lci}, \code{acc.uci}}{accuracy and CI}
-#'   \item{\code{conf.level}}{confidence level used for the accuracy CI}
-#'   \item{\code{nir}}{no-information rate}
-#'   \item{\code{acc.pval}}{p-value for accuracy greater than the
+#'   \item{`table`}{confusion matrix}
+#'   \item{`pos`}{positive class (binary only, else `NULL`)}
+#'   \item{`diag`}{number of correct predictions}
+#'   \item{`n`}{total number of observations}
+#'   \item{`acc`, `acc.lci`, `acc.uci`}{accuracy and CI}
+#'   \item{`conf.level`}{confidence level used for the accuracy CI}
+#'   \item{`nir`}{no-information rate}
+#'   \item{`acc.pval`}{p-value for accuracy greater than the
 #'     no-information rate}
-#'   \item{\code{kappa}}{Cohen's kappa}
-#'   \item{\code{mcnemar.pval}}{McNemar test p-value}
-#'   \item{\code{byclass}}{matrix of class-wise metrics}
+#'   \item{`kappa`}{Cohen's kappa}
+#'   \item{`mcnemar.pval`}{McNemar test p-value}
+#'   \item{`byclass`}{matrix of class-wise metrics}
 #' }
 #'
-#' \code{sensX()} and \code{specX()} return a named numeric vector containing
+#' `sensX()` and `specX()` return a named numeric vector containing
 #' the sensitivity or specificity, respectively, for each reported class.
 #'
 #' @examples

@@ -6,20 +6,20 @@
 #' 
 #' @param x a table
 #' @param freq whether absolute or relative frequencies are computed. Must be
-#' \code{"abs"} or \code{"rel"}; partial matching is supported.
+#' `"abs"` or `"rel"`; partial matching is supported.
 #' @details
 #' Expected values for a 2-dimensional table can be easily calculated with
-#' res <- \code{\link{chisq.test}(x)} and accessed by \code{res$expected}.
+#' res <- `[chisq.test](x)` and accessed by `res$expected`.
 #' This approach fails for higher dimensional tables, for which there is no support.
-#' \code{expFreq()} also returns expected frequencies for higher dimensional
+#' `expFreq()` also returns expected frequencies for higher dimensional
 #' tables.
 #' 
 #' @return a table with either the absolute or the relative expected
-#' frequencies, of the same dimension and dimnames as \code{x}
+#' frequencies, of the same dimension and dimnames as `x`
 #' @note Based on code by David Meyer previously published as 
-#' \code{independence_table} in \pkg{vcd}, adapted to conform to package standards.
+#' `independence_table` in \pkg{vcd}, adapted to conform to package standards.
 #' 
-#' @seealso \code{\link{chisq.test}} 
+#' @seealso [chisq.test()] 
 #' 
 #' @examples
 #' 

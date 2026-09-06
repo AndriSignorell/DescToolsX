@@ -6,30 +6,30 @@
 #' sample mean or the median. 
 #' 
 #' 
-#' The \code{meanAD} function calculates the mean absolute deviation from the mean
+#' The `meanAD` function calculates the mean absolute deviation from the mean
 #' value (or from another supplied center point) of x, after having removed
-#' \code{NA} values (if requested): \deqn{\frac{1}{n} \cdot \sum_{i=1}^{n}\left
+#' `NA` values (if requested): \deqn{\frac{1}{n} \cdot \sum_{i=1}^{n}\left
 #' | x_{i}-c \right | \; \; \; \textup{where} \; c=mean(x) \; \textup{or} \;
 #' c=med(x)}{1/n sum(|x_i - c|) where c=mean(x) or c=med(x)} \cr The function
 #' supports the use of weights. The default function for the center value
-#' \code{\link{meanX}()} has a weights arguments, too. If a user defined
+#' [meanX()] has a weights arguments, too. If a user defined
 #' function is used it must be assured that it has a weights argument. 
 #' 
 #' @param x a vector containing the observations
 #' 
-#' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}
+#' @param weights a numerical vector of weights the same length as `x`
+#' giving the weights to use for elements of `x`
 #' 
-#' @param center a numeric center or a function applied to \code{x}.
-#' User-defined functions must accept \code{weights} when weights are supplied.
-#' Defaults to \code{\link{meanX}()}.
+#' @param center a numeric center or a function applied to `x`.
+#' User-defined functions must accept `weights` when weights are supplied.
+#' Defaults to [meanX()].
 #' 
 #' @param na.rm logical; whether to remove missing values. Defaults to
-#' \code{FALSE}.
+#' `FALSE`.
 #' 
 #' @return a numeric scalar containing the mean absolute deviation
 #' 
-#' @note Rewritten following an idea of Danielle Navarro (\code{aad} in the \pkg{lsr} package).
+#' @note Rewritten following an idea of Danielle Navarro (`aad` in the \pkg{lsr} package).
 #' 
 #' 
 #' @examples
@@ -54,7 +54,7 @@
 #' # use of weights
 #' meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 #' 
-#' @seealso \code{\link{mad}}
+#' @seealso [mad()]
 #' 
 #' @family dispersion
 #' @concept dispersion

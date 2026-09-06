@@ -10,7 +10,7 @@ supported forms include \code{y ~ 1}, \code{Pair(x, y) ~ 1},
 \code{y ~ treatment | block}}
 
 \item{data}{optional matrix or data frame (or similar; see
-\code{\link[stats]{model.frame}}) containing the variables in the
+\code{\link[stats:model.frame]{stats::model.frame()}}) containing the variables in the
 formula. If omitted, variables are taken from
 \code{environment(formula)}}
 
@@ -18,15 +18,15 @@ formula. If omitted, variables are taken from
 to be used in the analysis}
 
 \item{na.action}{function specifying how missing values are handled;
-passed to \code{\link[bedrock]{resolveFormula}}}
+passed to \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}}
 }
 \description{
 Common arguments and conventions for formula interfaces in DescToolsX.
 }
 \details{
 Formula interfaces in DescToolsX are resolved consistently by
-\code{\link[bedrock]{resolveFormula}}. The resolver constructs the
-\code{\link[stats]{model.frame}} and classifies the resulting design as
+\code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}. The resolver constructs the
+\code{\link[stats:model.frame]{stats::model.frame()}} and classifies the resulting design as
 one-sample, two-sample independent, two-sample dependent, n-sample
 independent, n-sample dependent, or numeric-numeric.
 
@@ -36,8 +36,8 @@ Data lookup, subsetting, and missing-value handling are delegated to
 \code{resolveFormula()}.
 }
 \seealso{
-\code{\link[bedrock]{resolveFormula}},
-\code{\link[stats]{formula}},
-\code{\link[stats]{model.frame}},
-\code{\link[stats]{Pair}}
+\code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}},
+\code{\link[stats:formula]{stats::formula()}},
+\code{\link[stats:model.frame]{stats::model.frame()}},
+\code{\link[stats:Pair]{stats::Pair()}}
 }

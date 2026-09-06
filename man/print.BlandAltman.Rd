@@ -8,7 +8,7 @@
 }
 \arguments{
 \item{x}{an object of class \code{"BlandAltman"} as returned by
-\code{\link{blandAltmanData}}}
+\code{\link[=blandAltmanData]{blandAltmanData()}}}
 
 \item{digits}{number of decimal places to display}
 

@@ -26,7 +26,7 @@ subjects in rows and raters in columns}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}. A proportion of
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}. A proportion of
 agreement lies in \eqn{[0, 1]}, so the open side is reported at that
 boundary rather than at \eqn{\pm\infty}.}
 

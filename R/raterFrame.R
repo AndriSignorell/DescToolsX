@@ -1,7 +1,7 @@
 
 #' Create a Data.frame for Interrater Agreement
 #'
-#' Creates a \code{data.frame} for a formula \code{rating ~ subjects | raters}
+#' Creates a `data.frame` for a formula `rating ~ subjects | raters`
 #' with the subjects in rows and the raters in columns as base structure for
 #' interrater agreement (IRA) functions.
 #'
@@ -14,24 +14,24 @@
 #' requires a sequential join.\cr The present function supports this process by
 #' converting long-format data into a wide format that can be used by
 #' subsequent inter-rater agreement functions. Missing values are marked as
-#' \code{NA}s.
+#' `NA`s.
 #'
-#' \code{na.action} is applied to the \emph{wide} frame, i.e. per subject:
-#' \code{na.omit} removes subjects with at least one missing rating. The
-#' \code{"na.action"} attribute of the result carries a \code{"values"}
+#' `na.action` is applied to the *wide* frame, i.e. per subject:
+#' `na.omit` removes subjects with at least one missing rating. The
+#' `"na.action"` attribute of the result carries a `"values"`
 #' attribute with the identifiers of the omitted subjects; it is absent if
 #' nothing was omitted.
 #'
-#' @param formula something like \code{rating ~ subjects | raters}
+#' @param formula something like `rating ~ subjects | raters`
 #' @param data the data
 #' @param subset potential subset, evaluated in the long-format data
 #' @param na.action what should happen with missings, applied per subject
 #'   (i.e. to the rows of the wide result)
 #' @param dropSubj logical; whether to drop the subject column (default
-#'   \code{FALSE})
-#' @return a \code{data.frame} of class \code{"raterFrame"} with subjects in rows and
+#'   `FALSE`)
+#' @return a `data.frame` of class `"raterFrame"` with subjects in rows and
 #'   raters in columns. The name of the subject column is kept in the
-#'   \code{"subject"} attribute (\code{NA} if it was dropped).
+#'   `"subject"` attribute (`NA` if it was dropped).
 #'   
 #' @seealso [bedrock::resolveFormula]
 #' 

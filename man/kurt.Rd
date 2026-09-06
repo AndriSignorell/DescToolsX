@@ -24,13 +24,13 @@ kurt(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{character string specifying the confidence interval method.
 \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
-intervals unless another bootstrap type is supplied through \code{\dots};
+intervals unless another bootstrap type is supplied through \verb{\\dots};
 \code{"classic"} uses a Wald interval based on the asymptotic standard
-error. See Details and \code{\link{ConfidenceIntervals}}.}
+error. See Details and \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}
@@ -41,7 +41,7 @@ giving the weights to use for elements of \code{x}}
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{\dots}{further arguments passed to \code{\link[boot]{boot}} when
+\item{\dots}{further arguments passed to \code{\link[boot:boot]{boot::boot()}} when
 confidence intervals are calculated}
 }
 \value{
@@ -63,7 +63,7 @@ computation proceeds. \cr
 
 The estimator for calculating kurtosis can either be:\cr
 \code{1: g_2 = m_4 / m_2^2 - 3 } \cr
-\code{2: G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) } \cr
+\verb{2: G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) } \cr
 \code{3: b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 } \cr
 
 1 is the typical definition used in Stata and in many older textbooks.  \cr
@@ -85,7 +85,7 @@ This implementation is comparably fast, as the expensive sums are coded in C.
 \section{Random number generation}{
 
 \code{method = "boot"} - the default - resamples and therefore advances
-R's global random number generator. Call \code{\link[base]{set.seed}}
+R's global random number generator. Call \code{\link[base:set.seed]{base::set.seed()}}
 beforehand for reproducible intervals.
 }
 

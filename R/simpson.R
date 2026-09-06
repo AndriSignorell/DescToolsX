@@ -20,16 +20,16 @@
 #' distribution over the observed categories.
 #'
 #' @param x a factor or character vector of observations, or a vector of
-#'   non-negative counts. Note that a \emph{numeric} vector is always read as
-#'   counts, never as observations; wrap it in \code{\link{factor}} to have it
+#'   non-negative counts. Note that a *numeric* vector is always read as
+#'   counts, never as observations; wrap it in [factor()] to have it
 #'   tabulated instead.
 #' @param method character string specifying the index to compute:
-#'   \code{"gini"}, \code{"hunter"}, or \code{"deltas"}
-#' @param na.rm logical. If \code{TRUE}, missing values are removed before
-#'   computation. If \code{FALSE} and \code{x} contains \code{NA}, the result
-#'   will be \code{NA_real_}.
+#'   `"gini"`, `"hunter"`, or `"deltas"`
+#' @param na.rm logical. If `TRUE`, missing values are removed before
+#'   computation. If `FALSE` and `x` contains `NA`, the result
+#'   will be `NA_real_`.
 #'
-#' @return a numeric scalar between 0 and 1. Returns \code{NA_real_} if input
+#' @return a numeric scalar between 0 and 1. Returns `NA_real_` if input
 #'   is invalid or empty.
 #'
 #' @details
@@ -43,11 +43,11 @@
 #' the same adjustment with \eqn{N} and \eqn{k} in the correction factor.
 #'
 #' A sample concentrated in a single category is perfectly homogeneous rather
-#' than undefined, so \code{"gini"} and \code{"hunter"} return 0 for it. Only
+#' than undefined, so `"gini"` and `"hunter"` return 0 for it. Only
 #' the Deltas correction requires \eqn{k \ge 2}, since \eqn{k - 1} appears in
 #' its denominator.
 #'
-#' When \code{x} is numeric, it is treated as a vector of counts. Non-integer
+#' When `x` is numeric, it is treated as a vector of counts. Non-integer
 #' values produce a warning; the Hunter-Gaston index requires integer counts.
 #'
 #' @examples
@@ -70,17 +70,17 @@
 #' simpson(x, method = "gini", na.rm = TRUE)
 #'
 #' @references
-#' Sachs, L. (1997). \emph{Angewandte Statistik}. Springer.
+#' Sachs, L. (1997). *Angewandte Statistik*. Springer.
 #'
 #' Hunter, P. R., & Gaston, M. A. (1988).
 #' Numerical index of the discriminatory ability of typing systems.
-#' \emph{Journal of Clinical Microbiology}, 26(11), 2465-2466.
+#' *Journal of Clinical Microbiology*, 26(11), 2465-2466.
 #' https://doi.org/10.1128/jcm.26.11.2465-2466.1988
 #'
 #' Deltas, G. (2003).
 #' The small-sample bias of the Gini coefficient:
 #' Results and implications for empirical research.
-#' \emph{Review of Economics and Statistics}, 85(1), 226-234.
+#' *Review of Economics and Statistics*, 85(1), 226-234.
 #' https://doi.org/10.1162/rest.2003.85.1.226
 #'
 #'

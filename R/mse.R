@@ -5,7 +5,7 @@
 #' and reference values.
 #'
 #' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. \code{lm}).
+#'   model objects (e.g. `lm`).
 #' @param ... additional arguments passed to methods
 #'
 #' @return a numeric scalar containing the MSE
@@ -26,7 +26,7 @@
 #' fit <- lm(mpg ~ hp, data = mtcars)
 #' mse(fit)
 #'
-#' @seealso \code{\link{mean}}
+#' @seealso [mean()]
 #'
 #' @family model.metrics
 #' @concept model-evaluation

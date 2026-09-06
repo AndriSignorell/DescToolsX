@@ -48,33 +48,33 @@
 #'
 #' @details
 #' Two observations \eqn{(x_i, y_i)} and \eqn{(x_j, y_j)} are
-#' \strong{concordant} if they are ordered the same way in both variables -
-#' one is larger in \eqn{x} \emph{and} larger in \eqn{y} - and
-#' \strong{discordant} if the orderings disagree. If either variable ties the
+#' **concordant** if they are ordered the same way in both variables -
+#' one is larger in \eqn{x} *and* larger in \eqn{y} - and
+#' **discordant** if the orderings disagree. If either variable ties the
 #' pair, it is neither, and is counted among the ties instead.
 #'
 #' The five counts partition the pairs exhaustively and without overlap:
 #'
 #' \deqn{C + D + T_X + T_Y + T_{XY} = \frac{n(n-1)}{2}}
 #'
-#' \code{Ties_X} counts pairs tied in \eqn{x} but \emph{not} in \eqn{y},
-#' \code{Ties_Y} the reverse, and \code{Ties_XY} the pairs tied in both. The
-#' counts are therefore \emph{exclusive}; the inclusive marginal counts that
-#' the classic tau-b formula uses are \code{Ties_X + Ties_XY} and
-#' \code{Ties_Y + Ties_XY}. That separation is what the ordinal measures
+#' `Ties_X` counts pairs tied in \eqn{x} but *not* in \eqn{y},
+#' `Ties_Y` the reverse, and `Ties_XY` the pairs tied in both. The
+#' counts are therefore *exclusive*; the inclusive marginal counts that
+#' the classic tau-b formula uses are `Ties_X + Ties_XY` and
+#' `Ties_Y + Ties_XY`. That separation is what the ordinal measures
 #' need: Goodman-Kruskal's gamma
-#' ignores all ties, Kendall's tau-b corrects for \code{Ties_X} and
-#' \code{Ties_Y} separately, Somers' \eqn{D} for one of them only, and the
+#' ignores all ties, Kendall's tau-b corrects for `Ties_X` and
+#' `Ties_Y` separately, Somers' \eqn{D} for one of them only, and the
 #' \eqn{c} statistic scores half a point for a tie in \eqn{y}. All of them
 #' are therefore a short formula on top of this one function - see
-#' \code{\link{ordAssocs}}.
+#' [ordAssocs()].
 #'
 #' \subsection{Two input modes}{
-#' \strong{Vector mode} (\code{x} and \code{y} given) works on the raw
+#' **Vector mode** (`x` and `y` given) works on the raw
 #' observations and keeps the full resolution of the data. Missing values are
 #' removed pairwise.
 #'
-#' \strong{Table mode} (\code{x} a matrix or table) works on a cross
+#' **Table mode** (`x` a matrix or table) works on a cross
 #' tabulation. Use it when the data are already tabulated, or when the
 #' variables have few distinct values: the count then depends on the table's
 #' dimensions rather than on the number of observations, so a million
@@ -108,31 +108,31 @@
 #' @param y optional second numeric vector or ordered factor. If provided,
 #'   vector mode is used.
 #'
-#'   An \code{\link{ordered}} factor is converted to its level codes, which is
-#'   exactly the ordinal information the counts rest on. An \emph{unordered}
+#'   An [ordered()] factor is converted to its level codes, which is
+#'   exactly the ordinal information the counts rest on. An *unordered*
 #'   factor is refused: its levels have no order, and converting it anyway
 #'   would silently impose the alphabetical one and report concordances that
 #'   are an artefact of the level names.
 #'
 #' @return a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{C}}{number of concordant pairs}
-#'   \item{\code{D}}{number of discordant pairs}
-#'   \item{\code{Ties_X}}{pairs tied in \code{x} only}
-#'   \item{\code{Ties_Y}}{pairs tied in \code{y} only}
-#'   \item{\code{Ties_XY}}{pairs tied in both}
+#'   \item{`C`}{number of concordant pairs}
+#'   \item{`D`}{number of discordant pairs}
+#'   \item{`Ties_X`}{pairs tied in `x` only}
+#'   \item{`Ties_Y`}{pairs tied in `y` only}
+#'   \item{`Ties_XY`}{pairs tied in both}
 #' }
-#' If fewer than two observations remain, all five elements are \code{NA}.
+#' If fewer than two observations remain, all five elements are `NA`.
 #'
 #' @seealso [ordAssocs], [gkGamma], [kendallTauA], [kendallTauB],
 #'   [stuartTauC], [somersDelta]
 #'
 #' @references
 #' Goodman, L. A., Kruskal, W. H. (1954) Measures of association for
-#' cross classifications. \emph{Journal of the American Statistical
-#' Association}, \bold{49}, 732-764.
+#' cross classifications. *Journal of the American Statistical
+#' Association*, **49**, 732-764.
 #'
-#' Agresti, A. (2010) \emph{Analysis of Ordinal Categorical Data} (2nd ed.).
+#' Agresti, A. (2010) *Analysis of Ordinal Categorical Data* (2nd ed.).
 #' Wiley.
 #'
 #' @examples

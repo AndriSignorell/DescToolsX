@@ -48,7 +48,7 @@ secToHms(c(256, 3456, 56565))
 
 }
 \seealso{
-\code{\link[chron]{times}}
+\code{\link[chron:times]{chron::times()}}
 
 Other date.time:
 \code{\link[=addMonths]{addMonths()}},

@@ -38,7 +38,7 @@ f_\lambda(x) = \left\{ \begin{array}{ll}
 }{f(x) = (x^lambda - 1)/lambda for lambda != 0, and log(x) for lambda = 0}
 
 The transformation requires strictly positive input values. If
-\code{|lambda| < tol}, the logarithmic transformation is used instead
+\verb{|lambda| < tol}, the logarithmic transformation is used instead
 for numerical stability.
 
 The inverse transformation recovers the original data (up to numerical
@@ -62,10 +62,10 @@ y0 <- boxCox(x, lambda = 0)
 Box, G. E. P. and Cox, D. R. (1964).
 An analysis of transformations.
 \emph{Journal of the Royal Statistical Society, Series B},
-\bold{26}(2), 211--252.
+\strong{26}(2), 211--252.
 }
 \seealso{
-\code{\link{boxCoxLambda}}
+\code{\link[=boxCoxLambda]{boxCoxLambda()}}
 
 Other transform:
 \code{\link[=boxCoxLambda]{boxCoxLambda()}},

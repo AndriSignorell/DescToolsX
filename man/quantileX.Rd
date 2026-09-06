@@ -24,11 +24,11 @@ quantileX(
 \item{na.rm}{a logical indicating whether missing values in \code{x} should
 be omitted}
 
-\item{names}{logical; if true, the result has a \code{\link{names}}
+\item{names}{logical; if true, the result has a \code{\link[=names]{names()}}
 attribute.  Set to \code{FALSE} for speedup with many \code{probs}.}
 
 \item{type}{an integer between 1 and 9 selecting one of the nine quantile
-algorithms of \code{\link[stats]{quantile}}. All nine are available for
+algorithms of \code{\link[stats:quantile]{stats::quantile()}}. All nine are available for
 unweighted data. With \code{weights} only 5 and 7 (default) exist; any
 other value is an error. See Details for how the two differ in their
 reading of the weights.}
@@ -45,7 +45,7 @@ probabilities \code{probs}, named when \code{names = TRUE}
 Compute sample quantiles, with optional weights.
 }
 \details{
-Without \code{weights} the call is handed to \code{\link[stats]{quantile}}
+Without \code{weights} the call is handed to \code{\link[stats:quantile]{stats::quantile()}}
 unchanged, so all nine types are available and the results are identical
 to base R.
 
@@ -95,8 +95,8 @@ Working group on Statistics on Income and Living Conditions
 gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
 }
 \seealso{
-\code{\link{medianX}}, \code{\link[stats]{quantile}},
-\code{\link[lumen]{quantileCI}}
+\code{\link[=medianX]{medianX()}}, \code{\link[stats:quantile]{stats::quantile()}},
+\code{\link[lumen:quantileCI]{lumen::quantileCI()}}
 
 Other quantile:
 \code{\link{extremes}}

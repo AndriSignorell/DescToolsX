@@ -1,24 +1,24 @@
 
 #' Convert h:m:s To/From seconds
 #' 
-#' \code{hmsToSec} - Converts a vector of h:m:s to seconds.
+#' `hmsToSec` - Converts a vector of h:m:s to seconds.
 #' 
-#' \code{secToHms} - Converts a vector of seconds to h:m:s.
+#' `secToHms` - Converts a vector of seconds to h:m:s.
 #' 
 #' 
 #' @name time-conversions
 #' @aliases hmsToMinute hmsToSec secToHms
 #' 
-#' @param x date-time object for \code{hmsToMinute()}, vector of times in
-#' h:m:s format for \code{hmsToSec()}, or numeric vector of seconds for
-#' \code{secToHms()}
+#' @param x date-time object for `hmsToMinute()`, vector of times in
+#' h:m:s format for `hmsToSec()`, or numeric vector of seconds for
+#' `secToHms()`
 #' @param digits the number of digits to use for potential fractions of
 #' seconds
 #' @return depending on the function:
 #' \describe{
-#'   \item{\code{hmsToMinute()}}{numeric vector of times in minutes}
-#'   \item{\code{hmsToSec()}}{numeric vector of times in seconds}
-#'   \item{\code{secToHms()}}{character vector of times in h:m:s format}
+#'   \item{`hmsToMinute()`}{numeric vector of times in minutes}
+#'   \item{`hmsToSec()`}{numeric vector of times in seconds}
+#'   \item{`secToHms()`}{character vector of times in h:m:s format}
 #' }
 #' #' 
 #' @note Based on code by Tyler Rinker, adapted to conform to package standards. 
@@ -30,7 +30,7 @@
 #' secToHms(c(256, 3456, 56565))
 #' 
 #' 
-#' @seealso \code{\link[chron]{times}}
+#' @seealso [chron::times()]
 #' 
 #' @family date.time  
 #' @concept date-time

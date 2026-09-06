@@ -5,12 +5,12 @@
 #' and reference values.
 #'
 #' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. \code{lm}).
+#'   model objects (e.g. `lm`).
 #' @param ... additional arguments passed to methods
 #'
-#' @return a numeric scalar containing the MAPE, as a \strong{fraction},
+#' @return a numeric scalar containing the MAPE, as a **fraction**,
 #' not a percentage: a mean absolute relative error of six percent is
-#' returned as \code{0.06}. Multiply by 100 for the percentage form. The
+#' returned as `0.06`. Multiply by 100 for the percentage form. The
 #' name is conventional; the definition below is the one implemented.
 #'
 #' @details
@@ -19,8 +19,8 @@
 #' \frac{1}{n} \sum \left| \frac{ref - x}{ref} \right|
 #' }
 #'
-#' Note that values where \code{ref = 0} lead to division by zero and
-#' result in \code{NA}.
+#' Note that values where `ref = 0` lead to division by zero and
+#' result in `NA`.
 #'
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)

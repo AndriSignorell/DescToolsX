@@ -9,20 +9,20 @@
 #' derived.
 #'
 #' \describe{
-#'   \item{\code{"fleiss"}}{Fleiss (1971) bases chance agreement on the
+#'   \item{`"fleiss"`}{Fleiss (1971) bases chance agreement on the
 #'     category proportions pooled across all raters. It generalises Scott's
 #'     pi (Scott, 1955), and for \eqn{m = 2} it equals Scott's pi - not
 #'     Cohen's kappa.}
-#'   \item{\code{"conger"}}{Conger (1980) derives chance agreement from each
+#'   \item{`"conger"`}{Conger (1980) derives chance agreement from each
 #'     rater's own marginal distribution, and reduces exactly to Cohen's
 #'     kappa when \eqn{m = 2}.}
-#'   \item{\code{"light"}}{Light (1971) is the unweighted mean of all
+#'   \item{`"light"`}{Light (1971) is the unweighted mean of all
 #'     \eqn{\binom{m}{2}} pairwise Cohen kappas.}
 #' }
 #'
-#' Confidence intervals are of Wald type. For \code{"fleiss"} and
-#' \code{"conger"} the standard error is the analytic one given by the
-#' respective author. For \code{"light"} no closed-form variance exists;
+#' Confidence intervals are of Wald type. For `"fleiss"` and
+#' `"conger"` the standard error is the analytic one given by the
+#' respective author. For `"light"` no closed-form variance exists;
 #' since the estimate is the mean of the pairwise kappas, its standard error
 #' is estimated as their standard deviation divided by
 #' \eqn{\sqrt{\binom{m}{2}}}. This treats the pairwise kappas as independent,
@@ -32,56 +32,56 @@
 #'
 #' Kappa lies in \eqn{[-1, 1]}, so the interval is restricted to that range
 #' and the open side of a one-sided interval is reported at the boundary
-#' rather than at \eqn{\pm\infty}. See \code{\link{ConfidenceIntervals}}.
+#' rather than at \eqn{\pm\infty}. See [ConfidenceIntervals()].
 #'
 #' @param x a \eqn{n \times m}{n x m} matrix or data frame, \eqn{n} subjects
 #' in rows and \eqn{m} raters in columns
 #' @param estimator a character string specifying the coefficient to compute.
-#' One of \code{"fleiss"} (default), \code{"conger"}, or \code{"light"}.
+#' One of `"fleiss"` (default), `"conger"`, or `"light"`.
 #' These are three different coefficients for the same quantity, not three
-#' interval methods - hence \code{estimator} and not \code{method}.
+#' interval methods - hence `estimator` and not `method`.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param use a character string giving the treatment of missing values. One
-#' of \code{"complete.obs"} (default), which drops any subject rated
-#' incompletely; \code{"everything"}, which returns \code{NA} if any value is
-#' missing; or \code{"pairwise.complete.obs"}, which uses all subjects rated
+#' of `"complete.obs"` (default), which drops any subject rated
+#' incompletely; `"everything"`, which returns `NA` if any value is
+#' missing; or `"pairwise.complete.obs"`, which uses all subjects rated
 #' by both members of each rater pair. The last is available for
-#' \code{estimator = "light"} only, since Fleiss' and Conger's coefficients
+#' `estimator = "light"` only, since Fleiss' and Conger's coefficients
 #' require a complete row per subject.
 #'
-#' @return a named numeric vector. If \code{conf.level = NA}, only
-#' \code{est} is returned; otherwise the vector has elements:
+#' @return a named numeric vector. If `conf.level = NA`, only
+#' `est` is returned; otherwise the vector has elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the selected kappa coefficient}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of the selected kappa coefficient}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
-#' @note Based on code by Matthias Gamer previously published as \code{kappaM.fleiss()} in
+#' @note Based on code by Matthias Gamer previously published as `kappaM.fleiss()` in
 #' the \pkg{irr} package, rewritten to conform to package standards.
 #'
 #' @references
 #' Conger, A. J. (1980). Integration and generalisation of Kappas for
-#'   multiple raters. \emph{Psychological Bulletin}, \emph{88}(2), 322-328.
+#'   multiple raters. *Psychological Bulletin*, *88*(2), 322-328.
 #'
 #' Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
-#'   \emph{Psychological Bulletin}, \emph{76}(5), 378-382.
+#'   *Psychological Bulletin*, *76*(5), 378-382.
 #'
-#' Fleiss, J. L., Levin, B., & Paik, M. C. (2003). \emph{Statistical Methods
-#'   for Rates and Proportions} (3rd ed.). New York: John Wiley & Sons.
+#' Fleiss, J. L., Levin, B., & Paik, M. C. (2003). *Statistical Methods
+#'   for Rates and Proportions* (3rd ed.). New York: John Wiley & Sons.
 #'
 #' Light, R. J. (1971). Measures of response agreement for qualitative data:
-#'   Some generalizations and alternatives. \emph{Psychological Bulletin},
-#'   \emph{76}(5), 365-377.
+#'   Some generalizations and alternatives. *Psychological Bulletin*,
+#'   *76*(5), 365-377.
 #'
 #' Scott, W. A. (1955). Reliability of content analysis: The case of nominal
-#'   scale coding. \emph{Public Opinion Quarterly}, \emph{19}(3), 321-325.
+#'   scale coding. *Public Opinion Quarterly*, *19*(3), 321-325.
 #'
 #' @examples
 #' statement <- data.frame(

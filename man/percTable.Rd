@@ -52,7 +52,7 @@ percTable(...)
 be tabled versus rhs (\code{table(lhs, rhs)})}
 
 \item{data}{an optional matrix or data frame (or similar: see
-\code{\link{model.frame}}) containing the variables in the formula
+\code{\link[=model.frame]{model.frame()}}) containing the variables in the formula
 \code{formula}.  By default the variables are taken from
 \code{environment(formula)}.}
 
@@ -104,11 +104,11 @@ of the table. \code{row.vars} can either be the names of the dimensions
 (included percentages are named \code{"idx"}) or numbers (1:3, where 1 is
 the first dimension of the table, 2 the second and 3 the percentages). \cr
 Use \code{sortX()} if you want to have your table sorted by rows.\cr\cr The
-style in which numbers are formatted is selected by \code{\link[pharos]{style}()} from
+style in which numbers are formatted is selected by \code{\link[pharos:style]{pharos::style()}} from
 the DescToolsX options. Absolute frequencies will use \code{style("abs.sty")} and
 \code{style("per.sty")} will do it for the percentages. The options can be changed
 with \code{style(abs, digits=5)} which is basically a \code{"style"}-object
-containing any format information used in \code{\link[pharos]{fm}}.
+containing any format information used in \code{\link[pharos:fm]{pharos::fm()}}.
 
 \code{margins} adds the marginal distributions. In the frequency table
 these are the usual row/column sums; in the percentage tables the margin

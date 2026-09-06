@@ -17,24 +17,24 @@
 #' Before taking logarithms the predictions are clipped into the closed
 #' interval \eqn{[\epsilon, 1-\epsilon]}, so that a prediction of exactly 0
 #' or 1 contributes a finite penalty of at most \eqn{-\log(\epsilon)}
-#' (about 36.0 for the default \code{eps}) instead of \code{Inf}.
+#' (about 36.0 for the default `eps`) instead of `Inf`.
 #'
 #' Being the negative Bernoulli log-likelihood per observation, log loss is
-#' extracted automatically only from a \code{glm} with family
-#' \code{"binomial"} fitted to ungrouped data (all prior weights equal to
-#' one); for such a fit \code{logLoss(x)} equals \code{deviance(x) / (2 * n)}.
+#' extracted automatically only from a `glm` with family
+#' `"binomial"` fitted to ungrouped data (all prior weights equal to
+#' one); for such a fit `logLoss(x)` equals `deviance(x) / (2 * n)`.
 #' For every other model class, pass response and predicted probabilities
 #' explicitly.
 #'
 #' @param x Either a numeric or logical vector containing the observed binary
-#'   outcomes (0/1) when \code{pred} is supplied, or a fitted binomial
-#'   \code{glm} from which response and fitted probabilities are extracted.
+#'   outcomes (0/1) when `pred` is supplied, or a fitted binomial
+#'   `glm` from which response and fitted probabilities are extracted.
 #'   Factors are not accepted, as the choice of the positive level would have
 #'   to be guessed.
 #' @param pred Numeric vector containing predicted probabilities in
-#'   \eqn{[0,1]}. Required when \code{x} is a response vector.
+#'   \eqn{[0,1]}. Required when `x` is a response vector.
 #' @param eps Numeric scalar in \eqn{(0, 0.5)} used to clip probabilities
-#'   away from 0 and 1. Defaults to \code{.Machine$double.eps}.
+#'   away from 0 and 1. Defaults to `.Machine$double.eps`.
 #'
 #' @return A numeric scalar containing the log loss.
 #'

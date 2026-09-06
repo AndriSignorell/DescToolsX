@@ -9,13 +9,13 @@
 #'
 #' For numeric vectors, the interest lies less in central tendency than in
 #' conspicuous accumulation points, which can indicate data errors.
-#' \code{desc()} therefore reports it within the numeric description once the
+#' `desc()` therefore reports it within the numeric description once the
 #' frequency of a single value exceeds a threshold, since ties are generally
 #' unexpected in numeric data unless the generating process explains them.
 #'
-#' \code{NA} handling follows the package standard: a single \code{NA} yields
-#' \code{NA}. This is conservative, as the mode is sometimes determined
-#' unambiguously despite missing values. For \code{x = c(1,1,1,1,2,2,NA)} the
+#' `NA` handling follows the package standard: a single `NA` yields
+#' `NA`. This is conservative, as the mode is sometimes determined
+#' unambiguously despite missing values. For `x = c(1,1,1,1,2,2,NA)` the
 #' mode is 1 whatever the missing value is, and the modal frequency lies
 #' between 4 and 5. Exploiting this is left to the user.
 #'
@@ -25,9 +25,9 @@
 #' of magnitude faster, especially for large numeric vectors with many
 #' distinct values.
 #'  
-#' \strong{Note:} \verb{     }There are other approaches for determining the mode, e.g. one might use\cr
-#' \code{density(x)$x[which.max(density(x)$y)]} \cr for quantitative data, resp. 
-#' \code{hist()}.\cr Another interesting idea for a more
+#' **Note:** \verb{     }There are other approaches for determining the mode, e.g. one might use\cr
+#' `density(x)$x[which.max(density(x)$y)]` \cr for quantitative data, resp. 
+#' `hist()`.\cr Another interesting idea for a more
 #' robust estimation of the mode: 
 #' \preformatted{ peak <- optimize(function(x, model) 
 #'   predict(model, data.frame(x = x)), 
@@ -37,16 +37,16 @@
 #' 
 #' @param x a non-empty numeric vector of data values
 #' @param na.rm logical. Should missing values be removed? Defaults to
-#' \code{FALSE}.
+#' `FALSE`.
 #' @return the most frequent value as a number or character, depending on
-#' \code{class(x)}. If there is more than one, all are returned in a vector.\cr
-#' The modal frequency is attached as attribute named \code{"freq"}.
+#' `class(x)`. If there is more than one, all are returned in a vector.\cr
+#' The modal frequency is attached as attribute named `"freq"`.
 #' 
 #' @note Great Rcpp part contributed by Joseph Wood and Ralf Stubner.
 #' 
 #' 
 #' @references
-#' \href{https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/}{rcpp-fast-statistical-mode}
+#' [rcpp-fast-statistical-mode](https://stackoverflow.com/questions/55212746/rcpp-fast-statistical-mode-function-with-vector-input-of-any-type/)
 #' 
 #' @examples
 #' 

@@ -4,40 +4,40 @@
 #' Compute the median absolute deviation, i.e., the (lo-/hi-) median of the
 #' absolute deviations from the median, and (by default) adjust by a factor for
 #' asymptotically normal consistency. This function wraps the specific base R
-#' function \code{\link{mad}} and extends it for the use of weights.
+#' function [mad()] and extends it for the use of weights.
 #' 
-#' The actual value calculated is \code{constant * cMedian(abs(x - center))}
-#' with the default value of \code{center} being \code{median(x)}, and
-#' \code{cMedian} being the usual, the \sQuote{low} or \sQuote{high} median,
-#' see the arguments description for \code{low} and \code{high} above.
+#' The actual value calculated is `constant * cMedian(abs(x - center))`
+#' with the default value of `center` being `median(x)`, and
+#' `cMedian` being the usual, the \sQuote{low} or \sQuote{high} median,
+#' see the arguments description for `low` and `high` above.
 #' 
-#' The default \code{constant = 1.4826} (approximately \eqn{1/\Phi^{-1}(\frac 3
-#' 4)}{1/ \Phi^(-1)(3/4)} = \code{1/qnorm(3/4)}) ensures consistency, i.e.,
+#' The default `constant = 1.4826` (approximately \eqn{1/\Phi^{-1}(\frac 3
+#' 4)}{1/ \Phi^(-1)(3/4)} = `1/qnorm(3/4)`) ensures consistency, i.e.,
 #' \deqn{E[mad(X_1,\dots,X_n)] = \sigma} for \eqn{X_i} distributed as
 #' \eqn{N(\mu, \sigma^2)} and large \eqn{n}.
 #' 
-#' If \code{na.rm} is \code{TRUE} then \code{NA} values are stripped from
-#' \code{x} before computation takes place.  If this is not done then an
-#' \code{NA} value in \code{x} will cause \code{madX} to return \code{NA}.
+#' If `na.rm` is `TRUE` then `NA` values are stripped from
+#' `x` before computation takes place.  If this is not done then an
+#' `NA` value in `x` will cause `madX` to return `NA`.
 #' 
 #' Confidence intervals are provided by [lumen::madCI()].
 #' 
 #' @param x a numeric vector
-#' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}
-#' @param center a numeric center or a function applied to \code{x}. When
-#' weights are supplied, the function must support a \code{weights} argument.
-#' Defaults to \code{medianX}.
-#' @param constant scale factor (default is \code{1.4826})
-#' @param medianType character string selecting the \code{"standard"},
-#' \code{"low"}, or \code{"high"} median for even sample sizes
-#' @param na.rm if \code{TRUE} then \code{NA} values are stripped from \code{x}
+#' @param weights a numerical vector of weights the same length as `x`
+#' giving the weights to use for elements of `x`
+#' @param center a numeric center or a function applied to `x`. When
+#' weights are supplied, the function must support a `weights` argument.
+#' Defaults to `medianX`.
+#' @param constant scale factor (default is `1.4826`)
+#' @param medianType character string selecting the `"standard"`,
+#' `"low"`, or `"high"` median for even sample sizes
+#' @param na.rm if `TRUE` then `NA` values are stripped from `x`
 #' before computation takes place
 #' @return a numeric scalar containing the scaled median absolute deviation
-#' @seealso \code{\link{IQR}} which is simpler but less robust,
-#' \code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
-#' \code{\link{median}}, \code{\link{var}} the base R equivalents
-#' \cr\code{\link[lumen]{madCI}} (confidence intervals).
+#' @seealso [IQR()] which is simpler but less robust,
+#' [iqrX()] for the same using weights,\cr [mad()],
+#' [median()], [var()] the base R equivalents
+#' \cr[lumen::madCI()] (confidence intervals).
 #' 
 #' @examples
 #' 

@@ -13,64 +13,64 @@
 #' Lin (2000). The asymptotic variance implemented here is the corrected
 #' form given by Lin (2000), superseding the expression in Lin (1989).
 #' Internally it is held on the scale of \eqn{\rho_c} itself; the
-#' \code{"z-transform"} method rescales it to the z scale via the delta
+#' `"z-transform"` method rescales it to the z scale via the delta
 #' method, where \eqn{d\,\mathrm{atanh}(\rho)/d\rho = 1/(1 - \rho^2)}.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields an interval bounded below, with the upper limit
-#' fixed at 1, and \code{"right"} one bounded above, with the lower limit
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields an interval bounded below, with the upper limit
+#' fixed at 1, and `"right"` one bounded above, with the lower limit
 #' fixed at -1. 
 #'
 #' Missing values are handled according to package conventions:
-#' if \code{na.rm = FALSE} and either \code{x} or \code{y} contains missing
-#' values, \code{NA} is returned. If \code{na.rm = TRUE}, complete cases are
+#' if `na.rm = FALSE` and either `x` or `y` contains missing
+#' values, `NA` is returned. If `na.rm = TRUE`, complete cases are
 #' used. Infinite values carry no comparable convention - they leave the
 #' moments undefined and are rejected with an error.
 #'
 #' @param x a numeric vector
-#' @param y a numeric vector of equal length to \code{x}
+#' @param y a numeric vector of equal length to `x`
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param method a character string specifying the confidence interval
-#' method. One of \code{"z-transform"}, \code{"boot"}, or
-#' \code{"asymptotic"}.
+#' method. One of `"z-transform"`, `"boot"`, or
+#' `"asymptotic"`.
 #' 
-#' @param na.rm logical; if \code{TRUE}, incomplete observation pairs are
+#' @param na.rm logical; if `TRUE`, incomplete observation pairs are
 #' removed before computation
 #' @param ... additional arguments controlling the bootstrap procedure.
-#' Currently \code{R}, \code{parallel} and \code{ncpus} are supported.
+#' Currently `R`, `parallel` and `ncpus` are supported.
 #'
-#' @return a named numeric vector containing only \code{est} when
-#' \code{conf.level = NA}; otherwise a named numeric vector with elements:
+#' @return a named numeric vector containing only `est` when
+#' `conf.level = NA`; otherwise a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
 #' Additional diagnostics are stored as attributes:
 #'
 #' \describe{
-#'   \item{\code{nObs}}{number of observations used}
-#'   \item{\code{scaleShift}}{scale shift parameter}
-#'   \item{\code{locationShift}}{location shift parameter}
-#'   \item{\code{biasCorrection}}{bias correction factor}
-#'   \item{\code{method}}{confidence interval method, if applicable}
-#'   \item{\code{confLevel}}{confidence level, if applicable}
-#'   \item{\code{sides}}{confidence interval type, if applicable}
+#'   \item{`nObs`}{number of observations used}
+#'   \item{`scaleShift`}{scale shift parameter}
+#'   \item{`locationShift`}{location shift parameter}
+#'   \item{`biasCorrection`}{bias correction factor}
+#'   \item{`method`}{confidence interval method, if applicable}
+#'   \item{`confLevel`}{confidence level, if applicable}
+#'   \item{`sides`}{confidence interval type, if applicable}
 #' }
 #'
 #' @references
 #' Lin, L. I.-K. (1989). A concordance correlation coefficient to evaluate
-#' reproducibility. \emph{Biometrics}, \emph{45}(1), 255-268.
+#' reproducibility. *Biometrics*, *45*(1), 255-268.
 #'
 #' Lin, L. I.-K. (2000). A note on the concordance correlation coefficient.
-#' \emph{Biometrics}, \emph{56}(1), 324-325.
+#' *Biometrics*, *56*(1), 324-325.
 #'
 #' @examples
 #' set.seed(123)

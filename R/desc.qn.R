@@ -6,23 +6,23 @@
 #'
 #' @description
 #' Computes descriptive statistics for the relationship between a categorical
-#' variable \code{y} and a numeric variable \code{x}.
+#' variable `y` and a numeric variable `x`.
 #'
 #' @param y a categorical variable (factor or coercible to factor)
 #' @param x a numeric variable
 #' @param conf.level confidence level for interval estimates (default 0.95)
-#' @param breaks numeric vector defining cut points for \code{x}.
-#'   If not supplied, quartiles of \code{x} are used.
-#' @param right logical; passed to \code{cut()}, defining interval closure
+#' @param breaks numeric vector defining cut points for `x`.
+#'   If not supplied, quartiles of `x` are used.
+#' @param right logical; passed to `cut()`, defining interval closure
 #' 
 #' @param ... further arguments passed to methods
 #' @param verbose amount of printed output
 #'
 #' @details
-#' The function summarizes how a numeric variable \code{x} differs across
-#' levels of a categorical variable \code{y}.
+#' The function summarizes how a numeric variable `x` differs across
+#' levels of a categorical variable `y`.
 #'
-#' \strong{Computed statistics}
+#' **Computed statistics**
 #' \itemize{
 #'   \item Group-wise descriptive statistics (median, IQR, counts)
 #'   \item Kruskal-Wallis test with effect size (\eqn{\eta^2})
@@ -31,44 +31,44 @@
 #'   \item Spearman correlation (reported for higher verbosity levels)
 #' }
 #'
-#' \strong{Binary outcomes}
-#' If \code{y} has two levels:
+#' **Binary outcomes**
+#' If `y` has two levels:
 #' \itemize{
 #'   \item Area under the curve (AUC)
-#'   \item Prevalence across quantile groups of \code{x}
+#'   \item Prevalence across quantile groups of `x`
 #'   \item Cochran-Armitage trend test
 #' }
 #'
-#' \strong{Quantile grouping}
-#' The numeric variable \code{x} is optionally discretized using
-#' \code{breaks}. By default, quartiles are used.
+#' **Quantile grouping**
+#' The numeric variable `x` is optionally discretized using
+#' `breaks`. By default, quartiles are used.
 #'
-#' @return an object of class \code{c("Desc.qn", "Desc")} with components:
+#' @return an object of class `c("Desc.qn", "Desc")` with components:
 #' \describe{
-#'   \item{\code{grpTable}}{group-wise summary table}
-#'   \item{\code{kw}}{result of the Kruskal-Wallis test}
-#'   \item{\code{eta2}}{effect size}
-#'   \item{\code{levene}}{result of Levene's test}
-#'   \item{\code{tauB}}{estimate, confidence interval, and p-value for
+#'   \item{`grpTable`}{group-wise summary table}
+#'   \item{`kw`}{result of the Kruskal-Wallis test}
+#'   \item{`eta2`}{effect size}
+#'   \item{`levene`}{result of Levene's test}
+#'   \item{`tauB`}{estimate, confidence interval, and p-value for
 #'     Kendall's tau-b}
-#'   \item{\code{spearman}}{estimate, confidence interval, and p-value for
+#'   \item{`spearman`}{estimate, confidence interval, and p-value for
 #'     Spearman's correlation}
-#'   \item{\code{auc}}{area under the curve for a binary outcome}
-#'   \item{\code{prevTable}}{prevalence table for a binary outcome with columns:
+#'   \item{`auc`}{area under the curve for a binary outcome}
+#'   \item{`prevTable`}{prevalence table for a binary outcome with columns:
 #'     \describe{
-#'       \item{\code{quantile}}{quantile group}
-#'       \item{\code{n}}{number of complete cases in the group}
-#'       \item{\code{est}}{point estimate of the prevalence}
-#'       \item{\code{lci}}{lower confidence interval bound}
-#'       \item{\code{uci}}{upper confidence interval bound}
+#'       \item{`quantile`}{quantile group}
+#'       \item{`n`}{number of complete cases in the group}
+#'       \item{`est`}{point estimate of the prevalence}
+#'       \item{`lci`}{lower confidence interval bound}
+#'       \item{`uci`}{upper confidence interval bound}
 #'     }}
-#'   \item{\code{caTest}}{result of the Cochran-Armitage test for a binary
+#'   \item{`caTest`}{result of the Cochran-Armitage test for a binary
 #'     outcome}
 #' }
 #'
 #' @seealso
-#' \code{\link{desc}}, \code{\link{desc.nn}}, \code{\link{desc.nq}},
-#' \code{\link{kruskal.test}}, \code{\link[lumen]{leveneTest}}
+#' [desc()], [desc.nn()], [desc.nq()],
+#' [kruskal.test()], [lumen::leveneTest()]
 #'
 #' @family desc
 #' @concept data-description

@@ -6,29 +6,29 @@
 #'
 #' @param x a data frame or matrix of non-negative values (e.g. abundances).
 #'   Rows correspond to entities, columns to samples.
-#' @param dis optional object of class \code{dist}. If \code{NULL}, a default
+#' @param dis optional object of class `dist`. If `NULL`, a default
 #'   Euclidean distance is used, in which case the coefficient reduces to the
 #'   Gini-Simpson index \eqn{1 - \sum p_i^2}.
-#' @param normalize logical; if \code{TRUE}, the diversity is scaled by its
+#' @param normalize logical; if `TRUE`, the diversity is scaled by its
 #'   theoretical maximum
-#' @param na.rm logical; if \code{TRUE}, columns containing missing values
-#'   yield \code{NA} instead of aborting
+#' @param na.rm logical; if `TRUE`, columns containing missing values
+#'   yield `NA` instead of aborting
 #' @param tol numeric convergence tolerance for the iterative maximisation
-#'   used by \code{normalize = TRUE}
+#'   used by `normalize = TRUE`
 #'
 #' @return a numeric vector of diversity coefficients, one per column
 #'
 #' @details
 #' The diversity coefficient is defined as
 #' \deqn{D = \frac{x^T D^2 x}{2 (\sum x)^2}}{D = t(x) \%*\% D^2 \%*\% x / (2 * sum(x)^2)}
-#' where \eqn{x} is a column of \code{x} and \eqn{D} is the distance matrix.
+#' where \eqn{x} is a column of `x` and \eqn{D} is the distance matrix.
 #'
-#' If \code{normalize = TRUE}, values are divided by the maximum achievable
+#' If `normalize = TRUE`, values are divided by the maximum achievable
 #' diversity under the given distance matrix. That maximum is found by a
 #' fixed-point iteration over the simplex, which is a heuristic: it is not
 #' guaranteed to reach the global optimum for an arbitrary distance matrix.
 #' A warning is issued when the iteration has not converged within
-#' \code{tol}.
+#' `tol`.
 #'
 #' @examples
 #' set.seed(1)

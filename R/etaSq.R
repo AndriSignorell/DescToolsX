@@ -5,45 +5,45 @@
 #' 
 #' Calculates the eta-squared, partial eta-squared, and generalized eta-squared
 #' measures of effect size that are commonly used in analysis of variance. The
-#' input \code{fit} should be the analysis of variance object itself. For
+#' input `fit` should be the analysis of variance object itself. For
 #' between-subjects designs, generalized eta-squared equals partial
 #' eta-squared. The reported generalized eta-squared for repeated-measures
 #' designs assumes that all factors are manipulated, i.e., that there are no
 #' measured factors like gender (see references).
 #' 
-#' For unbalanced designs, the default in \code{etaSq} is to compute Type II
-#' sums of squares (\code{type=2}), in keeping with the \code{Anova} function
-#' in the \code{car} package. It is possible to revert to the Type I SS values
-#' (\code{type=1}) to be consistent with \code{anova}, but this rarely tests
-#' hypotheses of interest. Type III SS values (\code{type=3}) can also be
-#' computed. \code{etaSq.aovlist} requires \code{type=1}.
+#' For unbalanced designs, the default in `etaSq` is to compute Type II
+#' sums of squares (`type=2`), in keeping with the `Anova` function
+#' in the `car` package. It is possible to revert to the Type I SS values
+#' (`type=1`) to be consistent with `anova`, but this rarely tests
+#' hypotheses of interest. Type III SS values (`type=3`) can also be
+#' computed. `etaSq.aovlist` requires `type=1`.
 #' 
 #' @name etaSq
 #' @aliases etaSq etaSq.lm etaSq.aovlist aovlDetails aovlErrorTerms
-#' @param fit an analysis of variance object of class \code{"aov"} or
-#' \code{"aovlist"}
+#' @param fit an analysis of variance object of class `"aov"` or
+#' `"aovlist"`
 #' @param type type of sums of squares to calculate.
-#' \code{etaSq.aovlist()} requires \code{type = 1}.
+#' `etaSq.aovlist()` requires `type = 1`.
 #' @param anova logical; whether to include the full ANOVA table with the
 #' effect sizes
 #' 
-#' @return for \code{etaSq.lm()}, a numeric matrix with one row per model term
-#' and columns \code{eta.sq} and \code{eta.sq.part}; for
-#' \code{etaSq.aovlist()}, a numeric matrix that additionally contains
-#' \code{eta.sq.gen}. If \code{anova = TRUE}, ANOVA statistics are included in
-#' additional columns. \code{aovlDetails()} returns a data frame of effect
-#' terms and their ANOVA statistics, while \code{aovlErrorTerms()} returns a
+#' @return for `etaSq.lm()`, a numeric matrix with one row per model term
+#' and columns `eta.sq` and `eta.sq.part`; for
+#' `etaSq.aovlist()`, a numeric matrix that additionally contains
+#' `eta.sq.gen`. If `anova = TRUE`, ANOVA statistics are included in
+#' additional columns. `aovlDetails()` returns a data frame of effect
+#' terms and their ANOVA statistics, while `aovlErrorTerms()` returns a
 #' list with components:
 #' \describe{
-#'   \item{\code{SS}}{error sums of squares}
-#'   \item{\code{MS}}{error mean squares}
-#'   \item{\code{DF}}{error degrees of freedom}
+#'   \item{`SS`}{error sums of squares}
+#'   \item{`MS`}{error mean squares}
+#'   \item{`DF`}{error degrees of freedom}
 #' }
 #' 
 #' @note
 #' Based on code by Danielle Navarro, and Daniel Wollschlaeger.
 #' 
-#' @seealso \code{\link{aov}}, \code{\link{anova}}, \code{\link[car]{Anova}}
+#' @seealso [aov()], [anova()], [car::Anova()]
 #' 
 #' @references Bakeman, R. (2005). Recommended effect size statistics for
 #' repeated measures designs. Behavior Research Methods 37(3), 379-384.

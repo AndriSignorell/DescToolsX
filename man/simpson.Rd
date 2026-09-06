@@ -9,7 +9,7 @@ simpson(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE)
 \arguments{
 \item{x}{a factor or character vector of observations, or a vector of
 non-negative counts. Note that a \emph{numeric} vector is always read as
-counts, never as observations; wrap it in \code{\link{factor}} to have it
+counts, never as observations; wrap it in \code{\link[=factor]{factor()}} to have it
 tabulated instead.}
 
 \item{method}{character string specifying the index to compute:

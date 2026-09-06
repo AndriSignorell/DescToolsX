@@ -14,10 +14,10 @@
 #' not restricted to the interval \[0, 1\].
 #'
 #' @param x either a numeric vector of observed binary outcomes (0/1) when
-#'   \code{pred} is supplied, or a fitted model object from which both response
+#'   `pred` is supplied, or a fitted model object from which both response
 #'   and predictions are extracted
 #' @param pred numeric vector of predicted probabilities or scores. Required
-#'   when \code{x} is a response vector; ignored when \code{x} is a model
+#'   when `x` is a response vector; ignored when `x` is a model
 #'   object.
 #'
 #' @return A numeric scalar containing the average precision score.

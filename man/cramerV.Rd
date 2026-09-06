@@ -27,7 +27,7 @@ cramerV(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{character string specifying the confidence interval method:
 \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
@@ -38,7 +38,7 @@ or \code{"fisheradj"} (using the Fisher z transformation and bias correction)}
 (2013); defaults to \code{FALSE}}
 
 \item{...}{further arguments, passed on to
-\code{\link{normalizeToConfusion}} and \code{\link{table}} for building
+\code{\link[=normalizeToConfusion]{normalizeToConfusion()}} and \code{\link[=table]{table()}} for building
 the table - \code{useNA} is the usual one.}
 }
 \value{

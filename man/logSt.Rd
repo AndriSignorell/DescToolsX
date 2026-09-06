@@ -99,7 +99,7 @@ transformations for gene-expression microarray data, \emph{Bioinformatics}.
 22;19(8):966-72.
 }
 \seealso{
-\code{\link{log}}, \code{\link{log10}}
+\code{\link[=log]{log()}}, \code{\link[=log10]{log10()}}
 
 Other transform:
 \code{\link[=boxCox]{boxCox()}},

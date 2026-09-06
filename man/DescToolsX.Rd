@@ -36,7 +36,7 @@ usability, and performance across the entire package.
 }
 \section{Further principles}{
 
-Following section explain further principles valid throughout \bold{DescToolsX}:
+Following section explain further principles valid throughout \strong{DescToolsX}:
 \tabular{ll}{
 \verb{  }\link{Formulas}             \tab Handling formulas \cr
 \verb{  }\link{Association}\verb{  } \tab Association  \cr

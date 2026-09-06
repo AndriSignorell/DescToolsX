@@ -123,7 +123,7 @@ Statistics: Measures of Effect Size for Some Common Research Designs.
 Psychological Methods 8(4), 434-447.
 }
 \seealso{
-\code{\link{aov}}, \code{\link{anova}}, \code{\link[car]{Anova}}
+\code{\link[=aov]{aov()}}, \code{\link[=anova]{anova()}}, \code{\link[car:Anova]{car::Anova()}}
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},

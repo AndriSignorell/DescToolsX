@@ -17,7 +17,7 @@ pabak(
 when \code{y} is provided.}
 
 \item{y}{\code{NULL} (default) or a categorical vector of the same length
-as \code{x}. When supplied, \code{table(x, y, \dots)} is computed
+as \code{x}. When supplied, \verb{table(x, y, \\dots)} is computed
 internally.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
@@ -25,9 +25,9 @@ internally.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
-\item{...}{further arguments passed to \code{\link{table}} for the vector
+\item{...}{further arguments passed to \code{\link[=table]{table()}} for the vector
 interface, for example \code{useNA}.}
 }
 \value{
@@ -96,9 +96,9 @@ The Wald confidence interval is truncated to the admissible range
 
 Data can be passed either as a square confusion matrix (or data frame) in
 \code{x}, or as two vectors \code{x} and \code{y}, in which case
-\code{table(x, y, \dots)} is computed internally.
+\verb{table(x, y, \\dots)} is computed internally.
 
-Missing values are handled as \code{\link{table}} does - excluded by
+Missing values are handled as \code{\link[=table]{table()}} does - excluded by
 default. Pass \code{useNA = "ifany"} via \code{...} to include them.
 }
 \examples{

@@ -1,7 +1,7 @@
 
 #' Kth Smallest/Largest Values 
 #' 
-#' Find the kth smallest, resp. largest values from a vector \code{x} and
+#' Find the kth smallest, resp. largest values from a vector `x` and
 #' return the values and their frequencies. 
 #' 
 #' This does not seem to be a difficult problem at first sight. We could simply
@@ -13,51 +13,51 @@
 #' solutions of this problem discussed out there. The present implementation is
 #' based on highly efficient C++ code and proved to be very fast.
 #' 
-#' \code{highLow()} combines the two upper functions and reports the k extreme values on
+#' `highLow()` combines the two upper functions and reports the k extreme values on
 #' both sides together with their frequencies in parentheses. It is used for
 #' describing univariate variables and is interesting for checking the ends of
 #' the vector, where in real data often wrong values accumulate. In
-#' essence this is nothing more than a combine printing routine for \code{large()}
-#' and \code{small()}.
+#' essence this is nothing more than a combine printing routine for `large()`
+#' and `small()`.
 #' 
 #' @name extremes
 #' @aliases large small highLow
 #' 
 #' @param x a numeric vector
 #' @param k a positive integer defining how many extreme values are returned.
-#' Default is \code{k = 5}. If \code{k > length(x)}, all values will be
+#' Default is `k = 5`. If `k > length(x)`, all values will be
 #' returned. 
 #' @param unique logical, defining if unique values should be considered or
-#' not. If this is set to \code{TRUE}, a list with the \code{k} extreme values
-#' and their frequencies is returned. Default is \code{FALSE} (as unique is a
+#' not. If this is set to `TRUE`, a list with the `k` extreme values
+#' and their frequencies is returned. Default is `FALSE` (as unique is a
 #' rather expensive function). 
-#' @param na.last for controlling the treatment of \code{NA}s.  If \code{TRUE},
-#' missing values in the data are put last; if \code{FALSE}, they are put
-#' first; if \code{NA}, they are removed.
+#' @param na.last for controlling the treatment of `NA`s.  If `TRUE`,
+#' missing values in the data are put last; if `FALSE`, they are put
+#' first; if `NA`, they are removed.
 #' @param nlow number of smallest values included in the formatted output;
 #' defaults to 5
 #' @param nhigh number of largest values included in the formatted output;
-#' defaults to \code{nlow}
+#' defaults to `nlow`
 #' 
-#' @return for \code{large()} and \code{small()}, a vector of extreme values
-#' when \code{unique = FALSE}, otherwise a list with components:
+#' @return for `large()` and `small()`, a vector of extreme values
+#' when `unique = FALSE`, otherwise a list with components:
 #' \describe{
-#'   \item{\code{value}}{extreme values}
-#'   \item{\code{frequency}}{corresponding frequencies}
+#'   \item{`value`}{extreme values}
+#'   \item{`frequency`}{corresponding frequencies}
 #' }
-#' \code{highLow()} returns a character scalar containing formatted lowest and
+#' `highLow()` returns a character scalar containing formatted lowest and
 #' highest values with frequencies.
 #' 
 #' @note Based on C++ code by Nathan Russell and Romain Francois, 
 #' adapted to conform to package standards.  
 #' 
-#' @seealso \code{\link{max}}, \code{\link{min}}, \code{\link{sort}},
-#' \code{\link{rank}}
+#' @seealso [max()], [min()], [sort()],
+#' [rank()]
 #' 
 #' @references
-#' \href{https://stackoverflow.com/questions/36993935}{StackOverflow: Largest n unique values}
+#' [StackOverflow: Largest n unique values](https://stackoverflow.com/questions/36993935)
 #' 
-#' \href{https://gallery.rcpp.org/articles/top-elements-from-vectors-using-priority-queue/}{Rcpp Gallery article}
+#' [Rcpp Gallery article](https://gallery.rcpp.org/articles/top-elements-from-vectors-using-priority-queue/)
 #' 
 #' @examples
 #' 

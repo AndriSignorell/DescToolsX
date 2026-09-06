@@ -9,51 +9,51 @@
 #' @details
 #' The function handles the following input formats:
 #' \describe{
-#'   \item{\code{table}}{A pre-computed 2D contingency table which is validated via
-#'     \code{\link{isConfusionTable}}. For \code{mode = "agreement"}, the
+#'   \item{`table`}{A pre-computed 2D contingency table which is validated via
+#'     [isConfusionTable()]. For `mode = "agreement"`, the
 #'     table must be square with identical row and column names.}
-#'   \item{\code{matrix}}{Either a pre-computed contingency matrix (square,
-#'     passing \code{\link{isConfusionTable}} validation) or a two-rater
+#'   \item{`matrix`}{Either a pre-computed contingency matrix (square,
+#'     passing [isConfusionTable()] validation) or a two-rater
 #'     matrix with exactly 2 columns. A 2-column non-square matrix is always
 #'     treated as a rater matrix; each column is one rater's ratings.}
-#'   \item{two vectors}{If both \code{x} and \code{y} are supplied, they are
-#'     tabulated via \code{\link{table}} after coercing to factors.}
-#'   \item{\code{list} or \code{data.frame} with 2 elements}{Each element is
+#'   \item{two vectors}{If both `x` and `y` are supplied, they are
+#'     tabulated via [table()] after coercing to factors.}
+#'   \item{`list` or `data.frame` with 2 elements}{Each element is
 #'     treated as one rater's ratings.}
 #' }
 #'
-#' For \code{mode = "agreement"}, levels must be shared between both raters
-#' and the resulting table is square. For \code{mode = "association"}, row and
+#' For `mode = "agreement"`, levels must be shared between both raters
+#' and the resulting table is square. For `mode = "association"`, row and
 #' column levels may differ and the table may be rectangular.
 #' 
 #' 
-#' @param x input object. Accepted formats: a \code{\link{table}} representing
-#'   a pre-computed contingency table; a square numeric \code{matrix}
-#'   representing a pre-computed contingency table; a numeric \code{matrix}
-#'   with exactly 2 columns (one per rater); a \code{list} or
-#'   \code{data.frame} with exactly 2 elements; or a vector if \code{y} is
+#' @param x input object. Accepted formats: a [table()] representing
+#'   a pre-computed contingency table; a square numeric `matrix`
+#'   representing a pre-computed contingency table; a numeric `matrix`
+#'   with exactly 2 columns (one per rater); a `list` or
+#'   `data.frame` with exactly 2 elements; or a vector if `y` is
 #'   also supplied.
-#' @param y optional second rating vector. If supplied, \code{x} and \code{y}
+#' @param y optional second rating vector. If supplied, `x` and `y`
 #'   are tabulated together.
-#' @param levels optional category levels. These \emph{rename} the
+#' @param levels optional category levels. These *rename* the
 #'   categories in place - the counts are not moved - so supplying an order
 #'   different from the one a table already carries reassigns the counts to
-#'   other labels. For \code{mode = "agreement"}, use
+#'   other labels. For `mode = "agreement"`, use
 #'   an atomic vector of common levels shared by both raters; for
-#'   \code{mode = "association"}, use a list of length 2,
-#'   \code{list(x_levels, y_levels)}.
-#' @param useNA passed to \code{\link{table}}. Controls whether \code{NA}
-#'   values appear as a level. One of \code{"no"} (default), \code{"ifany"},
-#'   or \code{"always"}.
-#' @param mode character string, either \code{"agreement"} (default) or
-#'   \code{"association"}. Agreement mode enforces a square table with
+#'   `mode = "association"`, use a list of length 2,
+#'   `list(x_levels, y_levels)`.
+#' @param useNA passed to [table()]. Controls whether `NA`
+#'   values appear as a level. One of `"no"` (default), `"ifany"`,
+#'   or `"always"`.
+#' @param mode character string, either `"agreement"` (default) or
+#'   `"association"`. Agreement mode enforces a square table with
 #'   identical row and column names. Association mode allows rectangular
 #'   tables with independent row and column levels.
 #'
 #' @return a numeric contingency matrix with dimnames set according to
-#' \code{levels}, if supplied, or derived from the input
+#' `levels`, if supplied, or derived from the input
 #'
-#' @seealso \code{\link{isConfusionTable}()}, \code{\link{raterFrame}()}, [pairApply()]
+#' @seealso [isConfusionTable()], [raterFrame()], [pairApply()]
 #'
 #' @examples
 #' A <- c("pos","neg","pos","inc")

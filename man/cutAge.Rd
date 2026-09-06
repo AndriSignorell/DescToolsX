@@ -23,10 +23,10 @@ into which x is to be cut. Default is 10-year intervals from 0 to 90.}
 
 \item{right}{logical, indicating if the intervals should be closed on the
 right (and open on the left) or vice versa.  Default is \code{FALSE} -
-unlike in \code{\link{cut}}!}
+unlike in \code{\link[=cut]{cut()}}!}
 
 \item{ordered_result}{logical: should the result be an ordered factor?
-Default is \code{TRUE} - unlike in \code{\link{cut}}!}
+Default is \code{TRUE} - unlike in \code{\link[=cut]{cut()}}!}
 
 \item{full}{logical; whether to retain empty levels at the
 edges of the distribution}
@@ -34,7 +34,7 @@ edges of the distribution}
 \item{labels}{labels for the levels. When set to \code{TRUE} the age ranges
 will be 00-09, 10-19, 20-29, etc.}
 
-\item{\dots}{further arguments passed to \code{\link{cut}()}, for example
+\item{\dots}{further arguments passed to \code{\link[=cut]{cut()}}, for example
 to change the labels}
 }
 \value{
@@ -46,7 +46,7 @@ Values which fall outside the range of breaks are coded as \code{NA}, as are
 }
 \description{
 Dividing the range of an age variable \code{x} into intervals is a frequent
-task in data analysis. The commonly used function \code{\link{cut}} has
+task in data analysis. The commonly used function \code{\link[=cut]{cut()}} has
 unfavourable default values for this. \code{cutAge()} is a convenient
 wrapper for cutting age variables in groups of e.g. 10 years with more
 suitable defaults.
@@ -64,7 +64,7 @@ table(cutAge(c(42, 47, 51), labels = TRUE, full = FALSE))
 
 }
 \seealso{
-\code{\link{cut}}, \code{\link{seq}}
+\code{\link[=cut]{cut()}}, \code{\link[=seq]{seq()}}
 
 Other cut:
 \code{\link[=cut.integer]{cut.integer()}},

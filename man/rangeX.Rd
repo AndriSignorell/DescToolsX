@@ -26,7 +26,7 @@ stripped before the computation proceeds}
 a numeric scalar containing the range width. The corresponding
 lower and upper bounds are returned in the \code{"bounds"} attribute.
 Note that the attribute is dropped by subsetting and by
-\code{\link{as.vector}}, so read it before computing on the result.
+\code{\link[=as.vector]{as.vector()}}, so read it before computing on the result.
 }
 \description{
 Determines the range of the data, which can possibly be trimmed before
@@ -61,7 +61,7 @@ rangeX(x)
 
 }
 \seealso{
-\code{\link{range}}, \code{\link{min}}, \code{\link{max}}
+\code{\link[=range]{range()}}, \code{\link[=min]{min()}}, \code{\link[=max]{max()}}
 
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},

@@ -37,7 +37,7 @@ zeros}
 
 \item{y}{a vector of y values}
 
-\item{formula}{a \code{\link{formula}}, such as \code{y ~ x}}
+\item{formula}{a \code{\link[=formula]{formula()}}, such as \code{y ~ x}}
 }
 \value{
 a frequency matrix whose rows represent the y bins in descending
@@ -47,7 +47,7 @@ order and whose columns represent the x bins
 Calculate a frequency distribution for two continuous variables.
 }
 \details{
-The exact number of bins is determined by the \code{\link{pretty}} function,
+The exact number of bins is determined by the \code{\link[=pretty]{pretty()}} function,
 based on the value of \code{n}.
 
 Padding the margins with zeros can be helpful for subsequent analysis, such
@@ -63,8 +63,8 @@ freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 
 }
 \seealso{
-\code{\link{cut}}, \code{\link{table}}, and
-\code{\link{print.table}} are the basic underlying functions.
+\code{\link[=cut]{cut()}}, \code{\link[=table]{table()}}, and
+\code{\link[=print.table]{print.table()}} are the basic underlying functions.
 
 Other frequency:
 \code{\link[=expFreq]{expFreq()}},

@@ -15,7 +15,7 @@ keepSig(
 }
 \arguments{
 \item{m}{a symmetric numeric matrix. Typically the output of
-\code{\link[stats]{cor}}, but any symmetric matrix of effect sizes or
+\code{\link[stats:cor]{stats::cor()}}, but any symmetric matrix of effect sizes or
 association measures is accepted.}
 
 \item{p}{a matrix of p-values of the same dimension as \code{m}. If
@@ -29,7 +29,7 @@ tests on the columns of \code{data} (requires \code{data}).}
 \code{p > sig.level} are replaced by \code{NA}. Default \code{0.05}.}
 
 \item{method}{character; the correlation test method passed to
-\code{\link[stats]{cor.test}} when computing p-values from \code{data}.
+\code{\link[stats:cor.test]{stats::cor.test()}} when computing p-values from \code{data}.
 One of \code{"pearson"} (default), \code{"spearman"}, or
 \code{"kendall"}.}
 
@@ -45,8 +45,8 @@ matrix with the same dimensions and dimnames as \code{m}, with
 Replaces entries in a symmetric matrix (typically a correlation matrix)
 with \code{NA} wherever the corresponding p-value exceeds a significance
 threshold - retaining only the statistically supported associations.
-Designed as a pre-processing step for \code{\link[pharos]{plotWeb}} and
-\code{\link[pharos]{plotCor}}.
+Designed as a pre-processing step for \code{\link[pharos:plotWeb]{pharos::plotWeb()}} and
+\code{\link[pharos:plotCor]{pharos::plotCor()}}.
 }
 \examples{
 # compute p-values on the fly from the raw data

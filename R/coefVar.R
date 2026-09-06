@@ -9,15 +9,15 @@
 #' CV_{korr} = CV \cdot \left( 1 - \frac{1}{4\cdot(n-1)} + \frac{1}{n} \cdot
 #' CV^2 + \frac{1}{2 \cdot (n-1)^2} \right) }
 #'
-#' For determining\verb{ }\bold{the confidence intervals}\verb{ } for the
+#' For determining\verb{ }**the confidence intervals**\verb{ } for the
 #' coefficient of variation a number of methods have been proposed.
-#' \code{coefVarCI()} currently supports four different methods. The details
+#' `coefVarCI()` currently supports four different methods. The details
 #' for the methods are given in the specific references.
 #'
-#' The \bold{"naive" method} \verb{ } is based on dividing the standard
+#' The **"naive" method** \verb{ } is based on dividing the standard
 #' confidence limit for the standard deviation by the sample mean.
 #'
-#' \bold{McKay's} \verb{ } approximation is asymptotically exact as n goes to
+#' **McKay's** \verb{ } approximation is asymptotically exact as n goes to
 #' infinity. McKay recommends this approximation only if the coefficient of
 #' variation is less than 0.33. Note that if the coefficient of variation is
 #' greater than 0.33, either the normality of the data is suspect or the
@@ -26,7 +26,7 @@
 #' that the sample size should be at least 10 before using McKay's
 #' approximation.
 #'
-#' \bold{Vangel's modified McKay method} \verb{ } is more accurate than the
+#' **Vangel's modified McKay method** \verb{ } is more accurate than the
 #' McKay method in most cases, particularly for small samples. According to Vangel,
 #' the unmodified McKay is only more accurate when both the coefficient of
 #' variation and alpha are large. However, if the coefficient of variation is
@@ -40,84 +40,84 @@
 #' See also:
 #' https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
 #'
-#' \bold{nct} \verb{ }uses the noncentral t-distribution to calculate the
+#' **nct** \verb{ }uses the noncentral t-distribution to calculate the
 #' confidence intervals. See Smithson (2003).
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
 #' \eqn{(-\infty, uci]}. 
 #'
-#' \bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
+#' **Note:**\verb{ } Analytic (precision) weights are not supported. For
 #' likelihood-based weighted variance estimation, see
-#' \code{\link[stats]{cov.wt}}.
+#' [stats::cov.wt()].
 #'
 #' @aliases coefVar coefVar.lm coefVar.aov coefVar.default coefVarCI
 #'
 #' @param x a non-empty numeric vector of data values, or a fitted model for
-#' the \code{lm}/\code{aov} methods
-#' @param weights a numeric vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}
+#' the `lm`/`aov` methods
+#' @param weights a numeric vector of weights the same length as `x`
+#' giving the weights to use for elements of `x`
 #' @param unbiased logical; whether to apply a bias correction. See Details.
-#' Defaults to \code{FALSE}.
+#' Defaults to `FALSE`.
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
 #' @param method character string specifying the confidence interval method:
-#' \code{"nct"} (default),
-#' \code{"vangel"}, \code{"mckay"}, or
-#' \code{"naive"}. Partial matching is supported. See Details.
+#' `"nct"` (default),
+#' `"vangel"`, `"mckay"`, or
+#' `"naive"`. Partial matching is supported. See Details.
 #' 
 #' @param na.rm logical. Should missing values be removed? Defaults to
-#' \code{FALSE}, in which case missing values are an error.
+#' `FALSE`, in which case missing values are an error.
 #' @param \dots further arguments
 #' @return an unnamed numeric scalar containing the coefficient of variation
-#' for \code{coefVar()}. If recycling in \code{coefVarCI()} yields a
+#' for `coefVar()`. If recycling in `coefVarCI()` yields a
 #' single case, it returns a named numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of the coefficient of variation.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate of the coefficient of variation.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
-#' Otherwise, \code{coefVarCI()} returns a numeric matrix with one row per case
-#' and the columns \code{est}, \code{lci}, and \code{uci}.
+#' Otherwise, `coefVarCI()` returns a numeric matrix with one row per case
+#' and the columns `est`, `lci`, and `uci`.
 #'
 #' @note
 #' Parts of the code contributed by Michael Smithson.
 #'
-#' @seealso \code{\link{meanX}}, \code{\link{sdX}}, (both supporting weights)
+#' @seealso [meanX()], [sdX()], (both supporting weights)
 #'
 #' @references McKay, A. T. (1932). Distribution of the coefficient of
-#' variation and the extended \emph{t} distribution, \emph{Journal of the Royal
-#' Statistical Society}, \emph{95}, 695--698.
+#' variation and the extended *t* distribution, *Journal of the Royal
+#' Statistical Society*, *95*, 695--698.
 #'
 #' Johnson, B. L., Welch, B. L. (1940). Applications of the non-central
-#' t-distribution. \emph{Biometrika}, 31, 362--389.
+#' t-distribution. *Biometrika*, 31, 362--389.
 #'
 #' Mark Vangel (1996) Confidence Intervals for a Normal Coefficient of
-#' Variation, \emph{American Statistician}, Vol. 15, No. 1, pp. 21-26.
+#' Variation, *American Statistician*, Vol. 15, No. 1, pp. 21-26.
 #'
 #' Kelley, K. (2007). Sample size planning for the coefficient of variation from
-#' the accuracy in parameter estimation approach. \emph{Behavior Research
-#' Methods, 39} (4), 755-766
+#' the accuracy in parameter estimation approach. *Behavior Research
+#' Methods, 39* (4), 755-766
 #'
 #' Kelley, K. (2007). Constructing confidence intervals for standardized effect
-#' sizes: Theory, application, and implementation. \emph{Journal of Statistical
-#' Software, 20} (8), 1-24
+#' sizes: Theory, application, and implementation. *Journal of Statistical
+#' Software, 20* (8), 1-24
 #'
-#' Smithson, M.J. (2003) \emph{Confidence Intervals, Quantitative Applications
-#' in the Social Sciences Series}, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
+#' Smithson, M.J. (2003) *Confidence Intervals, Quantitative Applications
+#' in the Social Sciences Series*, No. 140. Thousand Oaks, CA: Sage. pp. 39-41
 #'
 #' Steve Verrill (2003) Confidence Bounds for Normal and Lognormal Distribution
-#' Coefficients of Variation, \emph{Research Paper 609}, USDA Forest Products
+#' Coefficients of Variation, *Research Paper 609*, USDA Forest Products
 #' Laboratory, Madison, Wisconsin.
 #'
 #' Verrill, S. and Johnson, R.A. (2007) Confidence Bounds and Hypothesis Tests
-#' for Normal Distribution Coefficients of Variation, \emph{Communications in
-#' Statistics Theory and Methods}, Volume 36, No. 12, pp 2187-2206.
+#' for Normal Distribution Coefficients of Variation, *Communications in
+#' Statistics Theory and Methods*, Volume 36, No. 12, pp 2187-2206.
 #'
 #'
 #' @examples

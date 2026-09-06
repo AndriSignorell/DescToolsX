@@ -65,7 +65,7 @@ the estimate}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+\code{"right"}). See details in \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.
 The open side is closed at the boundary of the parameter's range -
 \eqn{\pm 1} for gamma, the tau family and Somers' \eqn{D}, and
 \eqn{[0, 1]} for the c statistic - rather than at an infinity none of
@@ -99,7 +99,7 @@ or a contingency table, optionally with confidence intervals.
 Let \eqn{P} and \eqn{Q} denote the numbers of concordant and discordant
 pairs, \eqn{T_X} and \eqn{T_Y} the numbers tied on \eqn{X} and \eqn{Y},
 \eqn{n_0=n(n-1)/2}, and \eqn{m} the smaller table dimension.
-\code{\link{conDisPairs}} returns these pair counts as \code{C}, \code{D},
+\code{\link[=conDisPairs]{conDisPairs()}} returns these pair counts as \code{C}, \code{D},
 \code{Ties_X}, and \code{Ties_Y} and describes their calculation.
 
 The measures are defined as follows:
@@ -148,7 +148,7 @@ for the other direction. \code{somersDelta()} performs this reversal when
 
 The c-statistic is used for a binary outcome and consistently ordered predictions
 and is related to Somers D as \eqn{C_{stat}=(D+1)/2}.
-See \code{\link{cStat}} for direct estimation of the
+See \code{\link[=cStat]{cStat()}} for direct estimation of the
 c-statistic from predicted values and a binary response.
 }
 \examples{

@@ -3,10 +3,10 @@
 #'
 #' A (generalized) Huber M-estimator of location with MAD scale that handles
 #' the degenerate case of zero scale gracefully, where
-#' \code{\link[MASS]{huber}()} would return an error.
+#' [MASS::huber()] would return an error.
 #'
 #' @details
-#' **Wald interval** (\code{method = "wald"})
+#' **Wald interval** (`method = "wald"`)
 #'
 #' Uses an empirical sandwich standard error for the Huber M-estimator:
 #' \deqn{
@@ -24,73 +24,73 @@
 #' Here, \eqn{\psi_k} denotes the Huber score function. No additional
 #' small-sample adjustment is applied beyond use of the t-quantile.
 #' 
-#' **Bootstrap interval** (\code{method = "boot"})
+#' **Bootstrap interval** (`method = "boot"`)
 #'
 #' The statistic \eqn{\hat\mu} is resampled \eqn{R} times.  Note that
-#' \code{mu} and \code{s} are fixed at their initial values (computed from
+#' `mu` and `s` are fixed at their initial values (computed from
 #' the full data before resampling) and are not re-estimated on each
 #' resample.  The bootstrap therefore targets the variability of the
 #' location estimator with fixed scale initialization, not a fully
 #' re-estimated robust estimator.  Bootstrap
-#' arguments are passed through \code{...} and extracted via
-#' \code{.extractBootArgs()}:
+#' arguments are passed through `...` and extracted via
+#' `.extractBootArgs()`:
 #' \describe{
-#'   \item{\code{R}}{number of bootstrap replicates (default \code{999})}
-#'   \item{\code{type}}{confidence interval type: \code{"perc"} or
-#'     \code{"bca"} (default)}
-#'   \item{\code{parallel}}{parallelization mode: \code{"no"},
-#'     \code{"multicore"}, or \code{"snow"} (default \code{"no"})}
-#'   \item{\code{ncpus}}{number of CPUs for parallel bootstrap (default
-#'     \code{getOption("boot.ncpus", 1L)})}
+#'   \item{`R`}{number of bootstrap replicates (default `999`)}
+#'   \item{`type`}{confidence interval type: `"perc"` or
+#'     `"bca"` (default)}
+#'   \item{`parallel`}{parallelization mode: `"no"`,
+#'     `"multicore"`, or `"snow"` (default `"no"`)}
+#'   \item{`ncpus`}{number of CPUs for parallel bootstrap (default
+#'     `getOption("boot.ncpus", 1L)`)}
 #' }
 #'
 #' The original internal estimator is accessible as
-#' \code{DescToolsX:::.huberM}.
+#' `DescToolsX:::.huberM`.
 #'
 #' @param x numeric vector of data values
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param method confidence interval method: \code{"wald"} (default) or
-#' \code{"boot"}.
+#' @param method confidence interval method: `"wald"` (default) or
+#' `"boot"`.
 #' 
-#' @param k positive tuning constant; the algorithm winsorizes at \code{k}
-#' standard deviations. Default is \code{1.345}.
-#' @param mu initial location estimate. \code{NULL} (default)
-#'   uses \code{median(x)}, computed after \code{na.rm} is applied.
+#' @param k positive tuning constant; the algorithm winsorizes at `k`
+#' standard deviations. Default is `1.345`.
+#' @param mu initial location estimate. `NULL` (default)
+#'   uses `median(x)`, computed after `na.rm` is applied.
 #' @param s scale estimate held constant through the iterations.
-#'   \code{NULL} (default) uses \code{mad(x, center = mu)}, computed
-#'   after \code{na.rm} is applied.
+#'   `NULL` (default) uses `mad(x, center = mu)`, computed
+#'   after `na.rm` is applied.
 #' @param na.rm logical; whether to remove missing values before computation;
-#' default is \code{FALSE}
+#' default is `FALSE`
 #' @param ... further arguments passed to the bootstrap engine when
-#'   \code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
-#'   and \code{ncpus}; see Details
+#'   `method = "boot"`: `R`, `type`, `parallel`,
+#'   and `ncpus`; see Details
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{location estimate from Huber's M-estimator}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{location estimate from Huber's M-estimator}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @note Adapted from code by Martin Maechler to conform to package standards
 #'
 #' @references
 #' Huber, P. J. and Ronchetti, E. M. (2009).
-#' \emph{Robust Statistics}, 2nd ed. Wiley.
+#' *Robust Statistics*, 2nd ed. Wiley.
 #' 
-#' @seealso \code{\link[MASS]{huber}}, \code{\link{mad}},
-#'   \code{\link{tukeyBiweight}}
+#' @seealso [MASS::huber()], [mad()],
+#'   [tukeyBiweight()]
 #'
 #' @section Random number generation:
-#' \code{method = "boot"} resamples and therefore advances R's global
-#' random number generator. Call \code{\link[base]{set.seed}} beforehand
+#' `method = "boot"` resamples and therefore advances R's global
+#' random number generator. Call [base::set.seed()] beforehand
 #' for reproducible intervals.
 #'
 #' @examples

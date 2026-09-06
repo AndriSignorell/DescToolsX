@@ -32,21 +32,21 @@ package is merely attached with \code{library()}.
 }
 \details{
 The short-name aliases that were previously created by
-\code{\link{attachAliases}()} from the given environment can be removed
-by \code{\link{attachAliases}()}. Names that do
+\code{\link[=attachAliases]{attachAliases()}} from the given environment can be removed
+by \code{\link[=attachAliases]{attachAliases()}}. Names that do
 not exist, or that hold something other than the aliased function, are
 left untouched.
 
 The following aliases are created:
 \tabular{ll}{
-\bold{Alias} \tab \bold{Function}     \cr
+\strong{Alias} \tab \strong{Function}     \cr
 \code{or}    \tab \code{oddsRatio()}  \cr
 \code{rr}    \tab \code{relRisk()}    \cr
 }
 
-Aliases are plain function objects assigned with \code{\link{assign}()};
+Aliases are plain function objects assigned with \code{\link[=assign]{assign()}};
 they are indistinguishable from calling the original function directly.
-To remove them, call \code{\link{detachAliases}()} or simply
+To remove them, call \code{\link[=detachAliases]{detachAliases()}} or simply
 \code{rm(or, rr, envir = .GlobalEnv)}.
 
 An existing object of the same name is not overwritten unless
@@ -66,7 +66,7 @@ detachAliases(envir = e)
 
 }
 \seealso{
-\code{\link{detachAliases}}, \code{\link{oddsRatio}},
-\code{\link{relRisk}}
+\code{\link[=detachAliases]{detachAliases()}}, \code{\link[=oddsRatio]{oddsRatio()}},
+\code{\link[=relRisk]{relRisk()}}
 }
 \concept{convenience}

@@ -7,10 +7,10 @@
 #' with parameter \eqn{\alpha = 1}.
 #'
 #' @param x numeric vector of non-negative values, such as incomes
-#' @param n optional frequency weights. Each element of \code{x}
-#'   is replicated \code{n} times. Must be a vector of non-negative
-#'   integers of the same length as \code{x}.
-#' @param na.rm logical. If \code{TRUE}, missing values are removed.
+#' @param n optional frequency weights. Each element of `x`
+#'   is replicated `n` times. Must be a vector of non-negative
+#'   integers of the same length as `x`.
+#' @param na.rm logical. If `TRUE`, missing values are removed.
 #'
 #' @return a numeric scalar containing the Theil index. The value is 0 under
 #'   perfect equality and increases with inequality, up to a maximum of
@@ -23,7 +23,7 @@
 #' T = \frac{1}{n} \sum \frac{x_i}{\bar{x}} \log\left(\frac{x_i}{\bar{x}}\right)
 #' }
 #'
-#' where \eqn{\bar{x}} is the mean of \code{x} and \eqn{n} the number of
+#' where \eqn{\bar{x}} is the mean of `x` and \eqn{n} the number of
 #' (replicated) observations.
 #'
 #' Zero values are admissible: following the usual convention
@@ -33,8 +33,8 @@
 #' components, which makes it particularly useful in applied
 #' inequality analysis.
 #'
-#' If negative values or missing values (when \code{na.rm = FALSE})
-#' are present, \code{NA} is returned. The same holds if no observation
+#' If negative values or missing values (when `na.rm = FALSE`)
+#' are present, `NA` is returned. The same holds if no observation
 #' remains after removing missing values.
 #'
 #' @references

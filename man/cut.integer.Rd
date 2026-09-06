@@ -24,13 +24,13 @@ the number of intervals}
 above are used when this is \code{NULL}.}
 
 \item{include.lowest, right, ordered_result, ...}{passed to
-\code{\link{cut.default}}}
+\code{\link[=cut.default]{cut.default()}}}
 }
 \value{
 a factor of the same length as \code{x}
 }
 \description{
-A \code{\link{cut}} method for integer vectors. \code{cut.default()}
+A \code{\link[=cut]{cut()}} method for integer vectors. \code{cut.default()}
 labels its intervals in the mathematical \code{"(a,b]"} notation, which
 is right for a continuous variable but reads awkwardly for counts: for
 integers, \code{"11-20"} says the same thing more plainly than
@@ -40,7 +40,7 @@ integers, \code{"11-20"} says the same thing more plainly than
 The integer labels are only constructed when \code{labels} is
 \code{NULL} \emph{and} \code{breaks} is a vector of whole numbers. A
 scalar \code{breaks} (a number of intervals) is passed straight to
-\code{\link{cut.default}}, which computes the cut points itself, and
+\code{\link[=cut.default]{cut.default()}}, which computes the cut points itself, and
 fractional break points fall back to the default interval notation as
 well - \code{"34.3-66.6"} would suggest an integer range that does not
 exist.
@@ -61,7 +61,7 @@ cut(x, breaks = 3)
 
 }
 \seealso{
-\code{\link{cut}}, \code{\link{cutAge}}, \code{\link{cutQ}}
+\code{\link[=cut]{cut()}}, \code{\link[=cutAge]{cutAge()}}, \code{\link[=cutQ]{cutQ()}}
 
 Other cut:
 \code{\link[=cutAge]{cutAge()}},

@@ -74,7 +74,7 @@ y0 <- yeoJohnson(x, lambda = 0)
 \references{
 Yeo, I.-K. and Johnson, R. A. (2000).
 A new family of power transformations to improve normality or symmetry.
-\emph{Biometrika}, \bold{87}(4), 954--959.
+\emph{Biometrika}, \strong{87}(4), 954--959.
 }
 \seealso{
 Other transform:

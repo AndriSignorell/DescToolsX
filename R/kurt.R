@@ -1,16 +1,16 @@
 
 #' Kurtosis
 #' 
-#' \code{kurt()} returns the excess kurtosis, therefore the kurtosis calculates
-#' as \code{kurt(x) + 3} if required.
+#' `kurt()` returns the excess kurtosis, therefore the kurtosis calculates
+#' as `kurt(x) + 3` if required.
 #' 
-#' If \code{na.rm} is \code{TRUE} then missing values are removed before
+#' If `na.rm` is `TRUE` then missing values are removed before
 #' computation proceeds. \cr
 #' 
 #' The estimator for calculating kurtosis can either be:\cr 
-#' \code{1: g_2 = m_4 / m_2^2 - 3 } \cr
-#' \code{2: G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) } \cr 
-#' \code{3: b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 } \cr
+#' `1: g_2 = m_4 / m_2^2 - 3 ` \cr
+#' `2: G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) ` \cr 
+#' `3: b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 ` \cr
 #' 
 #' 1 is the typical definition used in Stata and in many older textbooks.  \cr
 #' 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
@@ -18,54 +18,54 @@
 #' Cramer (1997) mentions the asymptotic standard error of the kurtosis: \cr 
 #' \preformatted{ASE.kurt = sqrt((24*n*(n - 1)^2) / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))} 
 #' to be used for calculating the confidence intervals.  
-#' This is implemented here with \code{method="classic"}. \cr 
+#' This is implemented here with `method="classic"`. \cr 
 #' However, Joanes and Gill (1998) advise
 #' against this approach, pointing out that the normal assumptions would
 #' virtually always be violated.  They suggest using the bootstrap method.
 #' That's why the default method for the confidence interval type is set to
-#' \code{"boot"}. 
-#' If not further specified the boot ci type will be chosen as \code{"bca"}.\cr
+#' `"boot"`. 
+#' If not further specified the boot ci type will be chosen as `"bca"`.\cr
 #' 
 #' This implementation is comparably fast, as the expensive sums are coded in C.
 #' 
 #' @name kurt
 #' 
 #' @param x a numeric vector. An object that is not a vector is coerced by
-#' \code{as.vector} if possible.
+#' `as.vector` if possible.
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
-#' @param weights a numerical vector of weights the same length as \code{x}
-#' giving the weights to use for elements of \code{x}
+#' @param weights a numerical vector of weights the same length as `x`
+#' giving the weights to use for elements of `x`
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #' @param method character string specifying the confidence interval method.
-#'   \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
-#'   intervals unless another bootstrap type is supplied through \code{\dots};
-#'   \code{"classic"} uses a Wald interval based on the asymptotic standard
-#'   error. See Details and \code{\link{ConfidenceIntervals}}.
+#'   `"boot"` (default) uses a nonparametric bootstrap, with BCa
+#'   intervals unless another bootstrap type is supplied through `\dots`;
+#'   `"classic"` uses a Wald interval based on the asymptotic standard
+#'   error. See Details and [ConfidenceIntervals()].
 #'   
-#' @param na.rm logical, indicating whether \code{NA} values should be stripped
-#' before the computation proceeds. Defaults to \code{FALSE}.
-#' @param \dots further arguments passed to \code{\link[boot]{boot}} when
+#' @param na.rm logical, indicating whether `NA` values should be stripped
+#' before the computation proceeds. Defaults to `FALSE`.
+#' @param \dots further arguments passed to [boot::boot()] when
 #' confidence intervals are calculated
 #' 
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{kurtosis estimate}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{kurtosis estimate}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #' 
-#' @references Cramer, D. (1997): \emph{Basic Statistics for Social Research}
+#' @references Cramer, D. (1997): *Basic Statistics for Social Research*
 #' Routledge.
 #' 
 #' Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
-#' kurtosis. \emph{The Statistician}, 47, 183-189.
+#' kurtosis. *The Statistician*, 47, 183-189.
 #' 
 #' @examples
 #' 
@@ -81,8 +81,8 @@
 #' @seealso [meanX], [sdX], similar code in \pkg{e1071}
 #'
 #' @section Random number generation:
-#' \code{method = "boot"} - the default - resamples and therefore advances
-#' R's global random number generator. Call \code{\link[base]{set.seed}}
+#' `method = "boot"` - the default - resamples and therefore advances
+#' R's global random number generator. Call [base::set.seed()]
 #' beforehand for reproducible intervals.
 #'
 #' @family shape

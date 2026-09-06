@@ -30,9 +30,9 @@ definition.
 Outlier detection is a tricky problem and should be handled with care. We
 implement Tukey's boxplot rule as a rough idea of spotting extreme values.
 The fences are built from the hinges, exactly as
-\code{\link[grDevices]{boxplot.stats}} does, so the result matches what
+\code{\link[grDevices:boxplot.stats]{grDevices::boxplot.stats()}} does, so the result matches what
 a boxplot of the same data draws. Note that the hinges are not the
-type-7 quartiles of \code{\link[stats]{quantile}} and differ from them
+type-7 quartiles of \code{\link[stats:quantile]{stats::quantile()}} and differ from them
 for many sample sizes.
 
 Hampel considers values outside of median +/- 3 * (median absolute
@@ -70,7 +70,7 @@ estimation, \emph{Journal of the American Statistical Association}, 69,
 382-393
 }
 \seealso{
-\code{\link{boxplot}}
+\code{\link[=boxplot]{boxplot()}}
 
 Other data.inspection:
 \code{\link[=abstract]{abstract()}}

@@ -14,7 +14,7 @@ giving the weights to use for elements of \code{x}}
 
 \item{center}{a numeric center or a function applied to \code{x}.
 User-defined functions must accept \code{weights} when weights are supplied.
-Defaults to \code{\link{meanX}()}.}
+Defaults to \code{\link[=meanX]{meanX()}}.}
 
 \item{na.rm}{logical; whether to remove missing values. Defaults to
 \code{FALSE}.}
@@ -33,7 +33,7 @@ value (or from another supplied center point) of x, after having removed
 | x_{i}-c \right | \; \; \; \textup{where} \; c=mean(x) \; \textup{or} \;
 c=med(x)}{1/n sum(|x_i - c|) where c=mean(x) or c=med(x)} \cr The function
 supports the use of weights. The default function for the center value
-\code{\link{meanX}()} has a weights arguments, too. If a user defined
+\code{\link[=meanX]{meanX()}} has a weights arguments, too. If a user defined
 function is used it must be assured that it has a weights argument.
 }
 \note{
@@ -63,7 +63,7 @@ meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
 
 }
 \seealso{
-\code{\link{mad}}
+\code{\link[=mad]{mad()}}
 
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},

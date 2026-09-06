@@ -38,7 +38,7 @@ a numeric scalar containing the scaled median absolute deviation
 Compute the median absolute deviation, i.e., the (lo-/hi-) median of the
 absolute deviations from the median, and (by default) adjust by a factor for
 asymptotically normal consistency. This function wraps the specific base R
-function \code{\link{mad}} and extends it for the use of weights.
+function \code{\link[=mad]{mad()}} and extends it for the use of weights.
 }
 \details{
 The actual value calculated is \code{constant * cMedian(abs(x - center))}
@@ -79,10 +79,10 @@ stopifnot(identical(m1, m2))
 
 }
 \seealso{
-\code{\link{IQR}} which is simpler but less robust,
-\code{\link{iqrX}} for the same using weights,\cr \code{\link{mad}},
-\code{\link{median}}, \code{\link{var}} the base R equivalents
-\cr\code{\link[lumen]{madCI}} (confidence intervals).
+\code{\link[=IQR]{IQR()}} which is simpler but less robust,
+\code{\link[=iqrX]{iqrX()}} for the same using weights,\cr \code{\link[=mad]{mad()}},
+\code{\link[=median]{median()}}, \code{\link[=var]{var()}} the base R equivalents
+\cr\code{\link[lumen:madCI]{lumen::madCI()}} (confidence intervals).
 
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},

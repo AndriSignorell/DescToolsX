@@ -3,19 +3,19 @@
 #' Computes Yule's Q or Y for a 2x2 contingency table, optionally with
 #' asymptotic confidence interval based on the log odds ratio.
 #'
-#' @param x a 2x2 contingency table (matrix or table). If \code{y} is supplied,
-#'   \code{x} and \code{y} are cross-tabulated via \code{table()}.
+#' @param x a 2x2 contingency table (matrix or table). If `y` is supplied,
+#'   `x` and `y` are cross-tabulated via `table()`.
 #' @param y optional second variable for cross-tabulation
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See details in \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See details in [ConfidenceIntervals()].
 #'
-#' @param correct logical; if \code{TRUE}, applies the Haldane--Anscombe
+#' @param correct logical; if `TRUE`, applies the Haldane--Anscombe
 #'   correction by adding 0.5 to all cells
-#' @param ... further arguments passed to \code{table()}
+#' @param ... further arguments passed to `table()`
 #'
 #' @details
 #' For a 2x2 table with cell counts \eqn{a, b, c, d}:
@@ -31,27 +31,27 @@
 #' \deqn{Y = \frac{\sqrt{OR} - 1}{\sqrt{OR} + 1}
 #'      = \tanh\left(\frac{1}{4}\log(OR)\right)}
 #'
-#' Both coefficients are computed from the \code{tanh} form, which stays
-#' well defined when a zero cell drives the odds ratio to 0 or \code{Inf}
+#' Both coefficients are computed from the `tanh` form, which stays
+#' well defined when a zero cell drives the odds ratio to 0 or `Inf`
 #' (the coefficient is then -1 or 1).
 #'
 #' Confidence intervals are obtained from the asymptotic normal approximation:
 #' \deqn{\log(OR) \pm z \cdot \sqrt{1/a + 1/b + 1/c + 1/d}}
 #' and then transformed to the selected coefficient. With a zero cell the
 #' standard error is infinite and the interval degenerates to
-#' \eqn{[-1, 1]}; use \code{correct = TRUE} to obtain a finite interval.
+#' \eqn{[-1, 1]}; use `correct = TRUE` to obtain a finite interval.
 #'
 #' For a one-sided interval the open side is reported at the range limit
 #' (-1 resp. 1), not at \eqn{\pm\infty}.
 #'
 #' @name yule
 #'
-#' @return if \code{conf.level = NA}, a numeric scalar. Otherwise a named
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate of Yule's Q or Y}
-#'   \item{\code{lci}}{lower confidence interval bound}
-#'   \item{\code{uci}}{upper confidence interval bound}
+#'   \item{`est`}{point estimate of Yule's Q or Y}
+#'   \item{`lci`}{lower confidence interval bound}
+#'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
 #' @references

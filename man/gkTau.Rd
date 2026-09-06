@@ -18,14 +18,14 @@ gkTau(
 containing categorical data, or a contingency table.}
 
 \item{y}{\code{NULL} (default) or a vector with compatible dimensions to
-\code{x}. If supplied, \code{table(x, y, \dots)} is calculated.}
+\code{x}. If supplied, \verb{table(x, y, \\dots)} is calculated.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (the default), only the point estimate is returned.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{direction}{direction of the calculation. Must be \code{"row"}
 (default) or \code{"column"}. \code{"row"} gives tau (R|C), i.e. the row
@@ -33,7 +33,7 @@ variable is the dependent one and is predicted from the column variable;
 \code{"column"} gives tau (C|R).}
 
 \item{\dots}{further arguments are passed to the function
-\code{\link{table}}, allowing i.e. to set useNA. This refers only to the
+\code{\link[=table]{table()}}, allowing i.e. to set useNA. This refers only to the
 vector interface; supplying them without \code{y} is an error.}
 }
 \value{
@@ -61,7 +61,7 @@ probabilities specified by marginal or conditional proportions.
 Misclassification probabilities are based on random category assignment with
 probabilities specified by marginal or conditional proportion.
 
-Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link{phi}}) in the
+Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link[=phi]{phi()}}) in the
 2x2-table case.\cr
 
 The measure lies in \eqn{[0, 1]} by construction. Both ends are reached by
@@ -143,8 +143,8 @@ Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 Newbury Park, CA: Sage, pp. 24--30
 }
 \seealso{
-\code{\link{lambda}}, \code{\link{cramerV}},
-\code{\link{Association}}
+\code{\link[=lambda]{lambda()}}, \code{\link[=cramerV]{cramerV()}},
+\code{\link[=Association]{Association()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},

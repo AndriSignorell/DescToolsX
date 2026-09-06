@@ -14,7 +14,7 @@ a named list containing the previous values, invisibly
 }
 \description{
 Set one or more package options. Each supplied name is stored with the
-\code{"DescToolsX."} prefix and can be read with \code{\link{getOption}()}.
+\code{"DescToolsX."} prefix and can be read with \code{\link[=getOption]{getOption()}}.
 }
 \details{
 Options used by descriptive methods include:
@@ -33,7 +33,7 @@ options(DescToolsX.plotit = old)
 
 }
 \seealso{
-\code{\link{options}}, \code{\link{getOption}}
+\code{\link[=options]{options()}}, \code{\link[=getOption]{getOption()}}
 }
 \concept{programming}
 \concept{utils}

@@ -8,8 +8,8 @@
 #' @param ref numeric vector of reference (true) values
 #' @param trainY numeric vector used as the normalization baseline
 #' @param na.rm logical; whether to remove incomplete cases before the
-#'   computation. Defaults to \code{FALSE}, in which case a missing value
-#'   anywhere makes the result \code{NA}.
+#'   computation. Defaults to `FALSE`, in which case a missing value
+#'   anywhere makes the result `NA`.
 #'
 #' @return a numeric scalar containing the normalized mean absolute error
 #'
@@ -22,7 +22,7 @@
 #' The denominator represents the absolute deviation from the mean of the
 #' training response, providing a baseline for comparison.
 #'
-#' If the denominator is zero, \code{NA} is returned.
+#' If the denominator is zero, `NA` is returned.
 #'
 #' @examples
 #' x <- c(2.5, 3.0, 2.8)
@@ -31,7 +31,7 @@
 #'
 #' nmae(x, ref, trainY)
 #'
-#' @seealso \code{\link{mean}}, \code{\link{abs}}
+#' @seealso [mean()], [abs()]
 #'
 #'
 #' @family model.metrics

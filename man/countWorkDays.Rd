@@ -12,7 +12,7 @@ countWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
 \item{to}{final dates}
 
 \item{holiday}{a vector of dates (or strings coercible with
-\code{\link{as.Date}}) to exclude}
+\code{\link[=as.Date]{as.Date()}}) to exclude}
 
 \item{nonworkdays}{a character vector containing the English three-letter
 weekday abbreviations to be treated as non-work days, i.e. a subset of

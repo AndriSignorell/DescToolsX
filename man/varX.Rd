@@ -33,7 +33,7 @@ Weights are supported for vector input only.}
 \item{\dots}{further arguments passed to or from other methods}
 
 \item{breaks}{breaks for calculating the variance for classified data as
-composed by \code{\link{freq}}}
+composed by \code{\link[=freq]{freq()}}}
 }
 \value{
 \describe{
@@ -44,7 +44,7 @@ matrix for a matrix or data frame}
 }
 \description{
 \code{varX()} computes the variance of \code{x}, allowing the definition of
-weights (unlike base R's \code{\link{var}()} function). Using the estimator
+weights (unlike base R's \code{\link[=var]{var()}} function). Using the estimator
 \code{ml} returns the uncorrected sample variance (which is a biased
 estimator for the sample variance). \cr\code{sdX} yields the standard
 deviation following the same logic.
@@ -56,12 +56,12 @@ as "Bessel's correction") which gives an unbiased estimator of the
 version using the denominator \eqn{n}. With frequency weights \eqn{n} is the
 sum of the weights.
 
-These functions return \code{\link{NA}} when there is only one observation
+These functions return \code{\link[=NA]{NA()}} when there is only one observation
 and \code{NA} when \code{x} has length zero.
 
-\bold{Note:}\verb{ } Analytic (precision) weights are not supported. For
+**Note:**\verb{ } Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
-\code{\link[stats]{cov.wt}}.
+\code{\link[stats:cov.wt]{stats::cov.wt()}}.
 }
 \examples{
 
@@ -94,9 +94,9 @@ Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) \emph{The
 New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
-\code{\link[lumen]{varCI}} for confidence intervals,
-\code{\link[lumen]{varTest}} for tests and base R's implementations
-\code{\link{var}}, \code{\link{sd}}, \code{\link{cov}}
+\code{\link[lumen:varCI]{lumen::varCI()}} for confidence intervals,
+\code{\link[lumen:varTest]{lumen::varTest()}} for tests and base R's implementations
+\code{\link[=var]{var()}}, \code{\link[=sd]{sd()}}, \code{\link[=cov]{cov()}}
 
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},

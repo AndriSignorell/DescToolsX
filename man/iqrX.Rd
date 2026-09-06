@@ -14,7 +14,7 @@ iqrX(x, weights = NULL, na.rm = FALSE, type = NULL)
 \item{na.rm}{logical; whether to remove missing values}
 
 \item{type}{an integer selecting one of the many quantile algorithms, see
-\code{\link{quantileX}()}}
+\code{\link[=quantileX]{quantileX()}}}
 }
 \value{
 numeric scalar containing the interquartile range
@@ -23,7 +23,7 @@ numeric scalar containing the interquartile range
 computes interquartile range of the x values. Weights are supported.
 }
 \details{
-This implementation is based on \code{\link{quantileX}()} function, which
+This implementation is based on \code{\link[=quantileX]{quantileX()}} function, which
 allows to define weights.
 }
 \examples{

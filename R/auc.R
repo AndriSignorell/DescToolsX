@@ -1,19 +1,19 @@
 
 #' Compute Area Under the Curve
 #'
-#' Calculates the area under a curve defined by points \code{(x, y)} using
+#' Calculates the area under a curve defined by points `(x, y)` using
 #' different numerical integration methods.
 #'
 #' @param x,y numeric vectors of equal length defining the curve coordinates
 #' @param from,to single numeric values specifying the integration interval;
-#'   by default, the range of \code{x}
+#'   by default, the range of `x`
 #' @param method character string specifying the integration method:
-#'   \code{"trapezoid"}, \code{"step"}, or \code{"spline"}
+#'   `"trapezoid"`, `"step"`, or `"spline"`
 #' @param absoluteArea logical; whether areas below zero are counted as positive
 #' @param subdivisions positive whole number specifying the maximum number of
 #'   subdivisions used for spline integration
-#' @param na.rm logical; whether incomplete \code{(x, y)} pairs are removed
-#' @param ... additional arguments passed to \code{\link[stats]{approx}} for
+#' @param na.rm logical; whether incomplete `(x, y)` pairs are removed
+#' @param ... additional arguments passed to [stats::approx()] for
 #'   trapezoidal interpolation
 #'
 #' @return a numeric value representing the computed area
@@ -21,22 +21,22 @@
 #' @details
 #' The available methods are:
 #' \itemize{
-#'   \item \code{"trapezoid"}: linear interpolation between successive points
-#'   \item \code{"step"}: a right-continuous step function using the value at
+#'   \item `"trapezoid"`: linear interpolation between successive points
+#'   \item `"step"`: a right-continuous step function using the value at
 #'     the left endpoint of each interval
-#'   \item \code{"spline"}: a natural cubic spline integrated numerically
+#'   \item `"spline"`: a natural cubic spline integrated numerically
 #' }
 #'
-#' For \code{method = "step"}, an integration boundary lying between two
-#' observed \code{x} values retains the value of the preceding point. No
+#' For `method = "step"`, an integration boundary lying between two
+#' observed `x` values retains the value of the preceding point. No
 #' linear interpolation is performed at the boundary.
 #'
-#' If \code{absoluteArea = TRUE}, the absolute value of the interpolated curve
+#' If `absoluteArea = TRUE`, the absolute value of the interpolated curve
 #' is integrated. Sign changes in linear segments are split at their exact
 #' zero-crossing. For the step method, the absolute values of the constant
 #' step heights are used.
 #'
-#' Both integration limits must lie inside the range of \code{x}.
+#' Both integration limits must lie inside the range of `x`.
 #' Extrapolation is not performed.
 #'
 #' @examples
@@ -66,8 +66,8 @@
 #'   absoluteArea = TRUE
 #' )
 #'
-#' @seealso \code{\link[stats]{approx}}, \code{\link[stats]{splinefun}},
-#'   \code{\link[stats]{integrate}}
+#' @seealso [stats::approx()], [stats::splinefun()],
+#'   [stats::integrate()]
 #'
 #' @family model.metrics
 #' @concept model-evaluation

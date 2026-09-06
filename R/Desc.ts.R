@@ -1,7 +1,7 @@
 
 #' Diagnostic Summary for Time Series Objects
 #'
-#' Provides a compact diagnostic summary for univariate \code{ts} objects,
+#' Provides a compact diagnostic summary for univariate `ts` objects,
 #' extending classical descriptive statistics with key time series diagnostics.
 #'
 #' The function reports:
@@ -20,7 +20,7 @@
 #' @name desc.ts
 #' 
 #' @inheritParams desc
-#' @param x a univariate object of class \code{"ts"}
+#' @param x a univariate object of class `"ts"`
 #' @param maxLag number of lags used in the Ljung-Box test; defaults to 12
 #' @param digits number of digits used to format numeric values
 #'
@@ -32,9 +32,9 @@
 #' the null hypothesis of stationarity (p > 0.05).
 #'
 #' The Box-Cox transformation parameter is estimated using
-#' \code{\link{boxCoxLambda}()}.
+#' [boxCoxLambda()].
 #'
-#' @return an object of class \code{c("Desc.ts", "Desc")} containing the
+#' @return an object of class `c("Desc.ts", "Desc")` containing the
 #' computed statistics
 #'
 #' @references

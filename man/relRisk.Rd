@@ -25,7 +25,7 @@ computed.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link{ConfidenceIntervals}}.}
+\code{"right"}). See details in \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{method}{character string specifying the confidence interval method.
 One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
@@ -34,7 +34,7 @@ One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
 \emph{standard error} of the Wald interval. Only used if
 \code{method = "wald"}; see the note below.}
 
-\item{\dots}{further arguments passed to \code{\link{table}}}
+\item{\dots}{further arguments passed to \code{\link[=table]{table()}}}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -78,7 +78,7 @@ estimate; if the unexposed group has no non-events (\code{x2 == n2}) that
 cubic has a root on the parameter boundary and its roots can no longer be
 assigned to the two interval bounds by their order alone. This case is
 therefore solved directly from the score statistic
-(\code{\link[stats]{uniroot}}); both routes agree to numerical precision
+(\code{\link[stats:uniroot]{stats::uniroot()}}); both routes agree to numerical precision
 wherever the closed form applies.
 
 The Wald interval is asymptotic and may perform poorly for small counts or
@@ -89,8 +89,8 @@ degenerates accordingly. Use \code{method = "score"} for tables with zero
 cells.
 
 If the table orientation differs from the required structure, rows or
-columns can be reversed using \code{\link[bedrock]{revX}} or transposed
-with \code{\link{t}}.
+columns can be reversed using \code{\link[bedrock:revX]{bedrock::revX()}} or transposed
+with \code{\link[=t]{t()}}.
 }
 \examples{
 m <- matrix(

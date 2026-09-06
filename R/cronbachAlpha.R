@@ -17,54 +17,54 @@
 #' and should be read with more caution than the point estimate when these
 #' are doubtful, for instance with markedly skewed or heterogeneous items.
 #'
-#' \code{sides} names the side on which the finite bound lies:
-#' \code{"left"} yields an interval bounded below and \code{"right"} one
+#' `sides` names the side on which the finite bound lies:
+#' `"left"` yields an interval bounded below and `"right"` one
 #' bounded above. Alpha cannot exceed 1, so the open upper side is reported
 #' at that boundary rather than as \eqn{\infty} (design_rules.md 4.1),
 #' while the open lower side stays \eqn{-\infty} because alpha is
 #' unbounded below. 
 #'
 #' Missing values are handled according to package conventions: if
-#' \code{na.rm = FALSE} and \code{x} contains missing values, the usual
-#' structure is returned with \code{NA_real_} in place of every estimate.
-#' If \code{na.rm = TRUE}, complete cases are used. Infinite values leave
+#' `na.rm = FALSE` and `x` contains missing values, the usual
+#' structure is returned with `NA_real_` in place of every estimate.
+#' If `na.rm = TRUE`, complete cases are used. Infinite values leave
 #' the variances undefined and are rejected with an error.
 #'
 #' @param x a \eqn{n \times m} matrix or data frame with item responses,
 #' \eqn{n} subjects (in rows) and \eqn{m} items (in columns)
-#' @param returnConditional logical; if \code{TRUE}, alpha is additionally
+#' @param returnConditional logical; if `TRUE`, alpha is additionally
 #' calculated for the dataset with each item left out
 #' 
-#' @param conf.level confidence level of the interval. If set to \code{NA}
+#' @param conf.level confidence level of the interval. If set to `NA`
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of \code{"two.sided"} (default), \code{"left"} or
-#'   \code{"right"}). See \code{\link{ConfidenceIntervals}}.
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param na.rm logical; if \code{TRUE}, incomplete cases are removed before
+#' @param na.rm logical; if `TRUE`, incomplete cases are removed before
 #' the computation proceeds
 #'
 #' @return a named numeric vector, or a list when
-#' \code{returnConditional = TRUE}.
+#' `returnConditional = TRUE`.
 #'
-#' If \code{na.rm = FALSE} and \code{x} contains missing values, the same
-#' structure is returned with \code{NA_real_} throughout.
+#' If `na.rm = FALSE` and `x` contains missing values, the same
+#' structure is returned with `NA_real_` throughout.
 #'
-#' If \code{conf.level = NA}, the numeric vector contains only \code{est};
+#' If `conf.level = NA`, the numeric vector contains only `est`;
 #' otherwise it has elements:
 #' \describe{
-#'   \item{\code{est}}{point estimate.}
-#'   \item{\code{lci}}{lower confidence interval bound.}
-#'   \item{\code{uci}}{upper confidence interval bound.}
+#'   \item{`est`}{point estimate.}
+#'   \item{`lci`}{lower confidence interval bound.}
+#'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
-#' If \code{returnConditional = TRUE}, a list with the components:
+#' If `returnConditional = TRUE`, a list with the components:
 #'
 #' \describe{
-#'   \item{\code{unconditional}}{alpha for the full set of items, as above}
-#'   \item{\code{conditional}}{a data frame with one row per item, giving the
-#'     alpha that would be realized if that item were excluded. \code{NULL}
-#'     when \code{x} has fewer than 3 items, since dropping one would leave
+#'   \item{`unconditional`}{alpha for the full set of items, as above}
+#'   \item{`conditional`}{a data frame with one row per item, giving the
+#'     alpha that would be realized if that item were excluded. `NULL`
+#'     when `x` has fewer than 3 items, since dropping one would leave
 #'     too few to compute alpha.}
 #' }
 #'
@@ -73,12 +73,12 @@
 #'
 #' @references
 #' Cronbach, L. J. (1951). Coefficient alpha and the internal structure of
-#'   tests. \emph{Psychometrika}, \emph{16}(3), 297-334.
+#'   tests. *Psychometrika*, *16*(3), 297-334.
 #'   \doi{10.1007/BF02310555}
 #'
 #' Feldt, L. S. (1965). The approximate sampling distribution of
 #'   Kuder-Richardson reliability coefficient twenty.
-#'   \emph{Psychometrika}, \emph{30}(3), 357-370.
+#'   *Psychometrika*, *30*(3), 357-370.
 #'   \doi{10.1007/BF02289499}
 #'
 #' @examples

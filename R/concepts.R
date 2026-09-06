@@ -8,18 +8,18 @@
 #' and allow structured auditing of conceptual organisation
 #' inside a package.
 #'
-#' \strong{Functions}
+#' **Functions**
 #' \itemize{
-#'   \item \code{getConcepts()} - Returns all unique concepts used in a package.
-#'   \item \code{conceptMap()} - Returns a mapping of concepts to functions.
-#'   \item \code{conceptAudit()} - Returns a summary table of concept usage.
+#'   \item `getConcepts()` - Returns all unique concepts used in a package.
+#'   \item `conceptMap()` - Returns a mapping of concepts to functions.
+#'   \item `conceptAudit()` - Returns a summary table of concept usage.
 #' }
 #'
 #' @param pkg character string. Name of the installed package.
 #'
 #' @name concepts
 #' @details
-#' The functions use \code{\link[tools]{Rd_db}} to parse Rd files and
+#' The functions use [tools::Rd_db()] to parse Rd files and
 #' extract `\\concept` tags programmatically.
 #'
 #' These tools are intended for package development,
@@ -27,11 +27,11 @@
 #'
 #' @return
 #' \describe{
-#'   \item{\code{getConcepts}}{character vector of unique concept names,
+#'   \item{`getConcepts`}{character vector of unique concept names,
 #'     sorted}
-#'   \item{\code{conceptMap}}{named list mapping concepts to topics}
-#'   \item{\code{conceptAudit}}{data frame with the columns \code{concept}
-#'     and \code{nTopics}, ordered by decreasing frequency}
+#'   \item{`conceptMap`}{named list mapping concepts to topics}
+#'   \item{`conceptAudit`}{data frame with the columns `concept`
+#'     and `nTopics`, ordered by decreasing frequency}
 #' }
 #'
 #' @examples

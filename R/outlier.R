@@ -7,9 +7,9 @@
 #' Outlier detection is a tricky problem and should be handled with care. We
 #' implement Tukey's boxplot rule as a rough idea of spotting extreme values.
 #' The fences are built from the hinges, exactly as
-#' \code{\link[grDevices]{boxplot.stats}} does, so the result matches what
+#' [grDevices::boxplot.stats()] does, so the result matches what
 #' a boxplot of the same data draws. Note that the hinges are not the
-#' type-7 quartiles of \code{\link[stats]{quantile}} and differ from them
+#' type-7 quartiles of [stats::quantile()] and differ from them
 #' for many sample sizes.
 #' 
 #' Hampel considers values outside of median +/- 3 * (median absolute
@@ -18,18 +18,18 @@
 #' @param x a non-empty numeric vector of data values
 #' @param method the method to be used. So far Tukey's boxplot and Hampel's
 #' rule are implemented.
-#' @param value logical. If \code{FALSE}, a vector containing the (integer)
-#' indices of the outliers is returned, and if \code{TRUE} (default), a vector
+#' @param value logical. If `FALSE`, a vector containing the (integer)
+#' indices of the outliers is returned, and if `TRUE` (default), a vector
 #' containing the matching elements themselves is returned.
 #' @param na.rm logical. Should missing values be removed? Defaults to
-#' \code{FALSE}.
+#' `FALSE`.
 #' 
-#' @return the outlying values if \code{value = TRUE}; otherwise their indices
+#' @return the outlying values if `value = TRUE`; otherwise their indices
 #' 
 #' @note Performance improvement by Luis Gustavo Schuck.
 #' 
 #' @references Hampel F. R. (1974) The influence curve and its role in robust
-#' estimation, \emph{Journal of the American Statistical Association}, 69,
+#' estimation, *Journal of the American Statistical Association*, 69,
 #' 382-393
 #' 
 #' @examples
@@ -54,7 +54,7 @@
 #' boxplot(temperature ~ driver, Pizza)$out
 #' 
 #' 
-#' @seealso \code{\link{boxplot}}
+#' @seealso [boxplot()]
 #' 
 #' @family data.inspection
 #' @concept outlier-detection

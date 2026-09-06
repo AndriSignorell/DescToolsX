@@ -30,7 +30,7 @@ sparse neighbourhood and thus an outlier; the user decides on the
 threshold, as its scale depends on the data. Values below 1 arise in
 unusually dense regions and are not normally of interest.
 
-The computation uses \code{\link[dbscan]{lof}} from the \pkg{dbscan}
+The computation uses \code{\link[dbscan:lof]{dbscan::lof()}} from the \pkg{dbscan}
 package, which builds a kd-tree and therefore scales to large data.
 Note that its \code{minPts} counts the observation itself, whereas
 \code{k} here counts neighbours only, following Breunig et al.; the
@@ -77,7 +77,7 @@ SIGMOD International Conference on Management of Data}, 93-104.
 \doi{10.1145/335191.335388}
 }
 \seealso{
-\code{\link[dbscan]{lof}}
+\code{\link[dbscan:lof]{dbscan::lof()}}
 }
 \concept{density-based}
 \concept{outlier}

@@ -39,7 +39,7 @@ version uses mean and standard deviation, the robust one median and MAD
 (see Details).
 }
 \details{
-The R base function \code{\link[base]{scale}} centers each column by its
+The R base function \code{\link[base:scale]{base::scale()}} centers each column by its
 mean and divides by the root mean square of the centered column, which
 for centered data is the standard deviation. Both are sensitive to
 outliers: a single extreme value moves the mean and inflates the standard
@@ -47,7 +47,7 @@ deviation, so the remaining observations are compressed towards zero.
 
 If \code{robust} is set to \code{TRUE} the column median takes the place
 of the mean and the median absolute deviation
-(\code{\link[stats]{mad}}) that of the standard deviation. Both have a
+(\code{\link[stats:mad]{stats::mad()}}) that of the standard deviation. Both have a
 breakdown point of 50 percent, so the standardization reflects the bulk
 of the data rather than its extremes, and genuine outliers keep large
 scores instead of being pulled in.
@@ -55,14 +55,14 @@ scores instead of being pulled in.
 Whichever is chosen, \code{center} and \code{scale} accept either a
 logical flag or a numeric vector of values to use directly, in which case
 that vector must have one entry per column of \code{x}, as in
-\code{\link[base]{scale}}.
+\code{\link[base:scale]{base::scale()}}.
 
 The two versions differ in one further respect. The MAD is invariant to
 location shifts, so for \code{robust = TRUE} the returned
 \code{"scaled:scale"} is the same whether or not the columns were
 centered first, and does not depend on \code{center}. The root mean
 square is not invariant; for \code{robust = FALSE} it is computed after
-centering, matching \code{\link[base]{scale}}, which is what makes it
+centering, matching \code{\link[base:scale]{base::scale()}}, which is what makes it
 equal the standard deviation when \code{center} is \code{TRUE} and not
 otherwise.
 
@@ -94,8 +94,8 @@ scaleX(matrix(1:6, ncol = 2), center = c(0, 0), scale = c(1, 2))
 
 }
 \seealso{
-\code{\link[base]{scale}}, \code{\link[base]{sweep}},
-\code{\link[stats]{mad}}, \code{\link{rangeX}}, \code{\link[bedrock:linScale]{bedrock::linScale()}}
+\code{\link[base:scale]{base::scale()}}, \code{\link[base:sweep]{base::sweep()}},
+\code{\link[stats:mad]{stats::mad()}}, \code{\link[=rangeX]{rangeX()}}, \code{\link[bedrock:linScale]{bedrock::linScale()}}
 
 Other transform:
 \code{\link[=boxCox]{boxCox()}},
