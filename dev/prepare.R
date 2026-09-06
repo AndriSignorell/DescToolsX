@@ -216,3 +216,9 @@ update_roxy_safe <- function(file, tax) {
 
 
 Sys.which("git")
+
+
+
+install.packages(c('goftest', 'vegan', 'VGAM', 'hexbin', 'ppcor', 'MuMIn', 'pons',
+                   'dbscan', 'dbscan', 'chron'))
+

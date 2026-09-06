@@ -2387,6 +2387,64 @@ Examples:
 - Parameters are italicized
 - Literature is referenced cleanly
 
+## 11.7 Cross-References in Documentation
+
+Links in roxygen text (`@param`, `@return`, `@details`, `@seealso`) follow a single criterion:
+
+> **A reference is qualified exactly when the reader cannot call the target unqualified after `library(<pkg>)`.**
+
+This is the documentation counterpart of §3.6. Unlike "how well known is the function", it is decidable, it gives the same answer in every file, and it can be checked mechanically.
+
+| Target lives in | Markup | Examples |
+|---|---|---|
+| the documenting package itself | `[fun()]` | `[strX()]`, `[resolveFormula()]` |
+| a default-attached package (`base`, `stats`, `utils`, `graphics`, `grDevices`, `methods`, `datasets`) | `[fun()]` | `[mean()]`, `[str()]`, `[head()]` |
+| any other declared dependency — suite siblings included, and base-distributed non-attached packages (§3.6a) | `[pkg::fun()]` | `[bedrock::Pizza]`, `[lumen::corCI()]`, `[MASS::ginv()]`, `[tools::Rd_db()]` |
+| a package that is not declared at all | no link, plain code text | `\code{evd::rgev()}` — see §12.5 |
+
+Since `Depends` is reserved for the R version (§2.4), no suite package is ever attached by loading another one: cross-package references inside the suite are **always** qualified.
+
+```r
+# correct
+#' @param ... additional arguments passed to [str()].
+#' @seealso [bedrock::Pizza], [MASS::ginv()]
+
+# incorrect — utils is attached in every session; the namespace is
+# rendered literally into the help text and buys no resolvability
+#' @param ... additional arguments passed to [utils::str()].
+
+# incorrect — bedrock is an Imports, not attached; the reader cannot type this
+#' @examples
+#' head(Pizza)
+```
+
+### Why unqualified is safe for the first two rows
+
+`[str()]` expands to `\code{\link[=str]{str()}}`, an unqualified **topic** link. It is resolved against the documenting package's own aliases first, and only then across the library. That is the intended behaviour for own functions, and harmless for attached packages as long as no local topic shares the name — which the `X` suffix convention (§3.2) makes unlikely by construction.
+
+**Exception:** qualify a name from the first two rows if a suite topic of the same name exists, or is planned. Otherwise the link retargets silently the day that topic is added.
+
+### A reference never justifies a dependency entry
+
+Do not add a package to `Suggests` in order to make a link resolvable. Three reasons, in order of weight:
+
+- It does not achieve the goal. `\link[pkg]{fun}` resolves at render time only if `pkg` is **installed** on the reader's machine; `Suggests` does not guarantee that. The dependency is real, the link still potentially dead.
+- It widens the check surface. `Suggests` packages are installed under `_R_CHECK_DEPENDS_ONLY_` and on the CRAN check farms. Every entry is a way for a foreign package to break, or be archived, and turn our own check red — in exchange for a piece of text decoration.
+- It misrepresents the `DESCRIPTION`. `Suggests` states what runs optionally, not what is cited.
+
+Use `\pkg{evd}` for the package name and `\code{evd::rgev()}` for the function, both unlinked. This matches the foreign-code attribution template in §11.4.
+
+### Machine check: `auditXrefs()`
+
+One pass over `man/*.Rd`, extracting every `\link[=topic]{...}` and `\link[pkg:topic]{...}`, in the same spirit as `auditCI()`/`auditMatchArg()` (§8.1.6):
+
+1. `\link[pkg:...]` where `pkg` is default-attached → must be unqualified.
+2. `\link[pkg:...]` where `pkg` is not in `Imports`/`Depends`/`Suggests` → undeclared xref, convert to plain code text.
+3. `\link[=topic]` that resolves neither to a local alias nor to a default-attached package → qualify it or drop the link.
+4. `\link[=topic]` whose name is also an alias in a sibling suite package → report as a retargeting risk, even if it currently resolves locally.
+
+Rules 1–3 are exactly the table above; rule 4 is the exception.
+
 ---
 
 # 12. Family and Concepts
@@ -2560,7 +2618,7 @@ With the threshold now at 5-6 (revised 2026-07, see §11.1d), considerably more 
 | `label.import` | dataDescription, openDataObject |
 | `math.basic` | closest, crossProd, crossProdN, dotProd, roundTo, … |
 | `math.geometry` | ptInPoly |
-| `math.precision` | frac, maxDigits, nDec, prec, precision |
+| `math.precision` | frac, maxDec, nDec, prec, precision |
 | `math.transform` | linScale, logit, logitInv, percentRank, rankX, … |
 | `number.baseconv` | baseToBase, binToDec, decToBin, decToHex, decToOct, … |
 | `number.theory` | digitSum, divisors, factorize, fibonacci, gcd_lcm, … |
@@ -2764,6 +2822,8 @@ Retained as a cross-cutting concept tag **only within `assoc.*` families**. Do n
 
 ### External packages not in `Imports`/`Suggests`
 
+The general rule for cross-references is §11.7; this section covers the one row of its table where the answer is *no link at all*.
+
 It is legitimate to point to a function in another CRAN package as an alternative or complement (e.g. a faster or more general implementation), even when that package is not a dependency. In that case, reference it as **plain code text**, not as a validated `\link[pkg]{fun}`:
 
 ```r
@@ -2776,7 +2836,7 @@ It is legitimate to point to a function in another CRAN package as an alternativ
 #' @seealso \code{\link[zoo]{rollmean}}
 ```
 
-Reserve real `\link[pkg]{fun}` markup for packages that are actually declared in `Imports`, `Suggests`, or `Depends` (where the topic is guaranteed to be resolvable), or for base-distributed packages (`base`, `stats`, `utils`, ...). A package mentioned only in prose carries no such guarantee — and CRAN packages do get orphaned or archived (check for "email to maintainer is undeliverable" on the package's CRAN page before naming it at all).
+Reserve real `\link[pkg]{fun}` markup for packages that are actually declared in `Imports`, `Suggests`, or `Depends` (where the topic is guaranteed to be resolvable), or for base-distributed packages (`base`, `stats`, `utils`, ...). A package mentioned only in prose carries no such guarantee — and CRAN packages do get orphaned or archived (check for "email to maintainer is undeliverable" on the package's CRAN page before naming it at all). Adding a `Suggests` entry to make such a link resolvable is not an option — see §11.7.
 
 ## 12.6 Family/Concept Rollout Verification
 

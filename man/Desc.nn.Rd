@@ -141,8 +141,8 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link[=desc.ts]{desc.ts()}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
 \concept{bivariate numeric regression correlation scatterplot}
 \concept{desc}

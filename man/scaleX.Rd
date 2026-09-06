@@ -95,7 +95,7 @@ scaleX(matrix(1:6, ncol = 2), center = c(0, 0), scale = c(1, 2))
 }
 \seealso{
 \code{\link[base]{scale}}, \code{\link[base]{sweep}},
-\code{\link[stats]{mad}}, \code{\link{rangeX}}
+\code{\link[stats]{mad}}, \code{\link{rangeX}}, \code{\link[bedrock:linScale]{bedrock::linScale()}}
 
 Other transform:
 \code{\link[=boxCox]{boxCox()}},

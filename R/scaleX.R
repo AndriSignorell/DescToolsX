@@ -59,7 +59,7 @@
 #' \code{"scaled:center"} and \code{"scaled:scale"}.
 #'
 #' @seealso \code{\link[base]{scale}}, \code{\link[base]{sweep}},
-#' \code{\link[stats]{mad}}, \code{\link{rangeX}}
+#' \code{\link[stats]{mad}}, \code{\link{rangeX}}, [bedrock::linScale()] 
 #'
 #' @family transform
 #' @concept robust-statistic

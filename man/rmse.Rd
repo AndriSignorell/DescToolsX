@@ -51,7 +51,9 @@ rmse(fit)
 
 Other model.metrics:
 \code{\link[=auc]{auc()}},
+\code{\link[=averagePrecision]{averagePrecision()}},
 \code{\link[=brierScore]{brierScore()}},
+\code{\link[=logLoss]{logLoss()}},
 \code{\link[=mae]{mae()}},
 \code{\link[=mape]{mape()}},
 \code{\link[=mse]{mse()}},

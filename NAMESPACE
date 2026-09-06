@@ -111,6 +111,7 @@ export(as.ym)
 export(atkinson)
 export(attachAliases)
 export(auc)
+export(averagePrecision)
 export(blandAltmanData)
 export(boxCox)
 export(boxCoxInv)
@@ -188,6 +189,7 @@ export(large)
 export(lastDayOfMonth)
 export(lc)
 export(lof)
+export(logLoss)
 export(logSt)
 export(logStInv)
 export(madX)
@@ -282,7 +284,7 @@ importFrom(bedrock,
   isWholeLike,
   isZero,
   label,
-  maxDigits,
+  maxDec,
   mergeArgs,
   moveAvg,
   naIf,

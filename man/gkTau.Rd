@@ -14,7 +14,8 @@ gkTau(
 )
 }
 \arguments{
-\item{x}{numeric vector or contingency table. A matrix is treated as a table.}
+\item{x}{a vector (typically a factor, character, or numeric vector)
+containing categorical data, or a contingency table.}
 
 \item{y}{\code{NULL} (default) or a vector with compatible dimensions to
 \code{x}. If supplied, \code{table(x, y, \dots)} is calculated.}

@@ -221,7 +221,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     # how many digits do we want to use?
     # we would use the same number as quantile does...
     out <- capture.output(x$quant)
-    digits <- max(2, maxDigits(strsplit(strTrim(out[[2]]), split = " ")[[1]][1]))
+    digits <- max(2, maxDec(strsplit(strTrim(out[[2]]), split = " ")[[1]][1]))
     # for counts the quants would tipically return 0 digits, mean and
     # sd deserve some though
     
