@@ -29,8 +29,8 @@ tschuprowT(x, y = NULL, correct = FALSE, ...)
 - ...:
 
   additional arguments passed to
-  [`table`](https://rdrr.io/r/base/table.html). This refers only to the
-  vector interface.
+  [`base::table()`](https://rdrr.io/r/base/table.html). This refers only
+  to the vector interface.
 
 ## Value
 
@@ -67,8 +67,8 @@ https://doi.org/10.1016/j.jkss.2012.10.002
 
 ## See also
 
-[`chisq.test`](https://rdrr.io/r/stats/chisq.test.html),
-[`cramerV`](cramerV.md)
+[`stats::chisq.test()`](https://rdrr.io/r/stats/chisq.test.html),
+[`cramerV()`](cramerV.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
 [`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),

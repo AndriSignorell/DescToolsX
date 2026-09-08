@@ -69,7 +69,7 @@ length can be supplied.
 Missing values (`NA`) are by default omitted pairwise, i.e. only
 subjects rated by all involved raters are used. If complete-case
 analysis across all raters is required, use
-[`complete.cases`](https://rdrr.io/r/stats/complete.cases.html)
+[`complete.cases()`](https://rdrr.io/r/stats/complete.cases.html)
 beforehand.
 
 Agreement measures depend on:

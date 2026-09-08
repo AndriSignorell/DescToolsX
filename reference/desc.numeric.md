@@ -76,8 +76,8 @@ statistics, frequency information, and metadata
 ## Details
 
 This function is an S3 method for
-[`plot`](https://rdrr.io/r/graphics/plot.default.html). It is
-automatically dispatched when calling `plot(x)` on a `Desc.numeric`
+[`graphics::plot()`](https://rdrr.io/r/graphics/plot.default.html). It
+is automatically dispatched when calling `plot(x)` on a `Desc.numeric`
 object.
 
 For a numeric argument x `maxrows` is the minimum number of unique
@@ -108,8 +108,8 @@ Other Statistical summary functions: [`abstract()`](abstract.md)
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.nq`](desc.nq.md), [`desc.qn`](desc.qn.md),
-[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
-[`print.Desc.qq()`](desc.table.md)
+[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
+[`desc.ts()`](desc.ts.md)
 
 ## Examples
 

@@ -1,8 +1,8 @@
 # Print method for `"Desc.Date"` objects
 
 Prints a structured summary of a `"Desc.Date"` object as created by
-[`desc`](Desc.md). The output includes core time-axis statistics such as
-range, span, coverage and fundamental quantiles.
+[`desc()`](Desc.md). The output includes core time-axis statistics such
+as range, span, coverage and fundamental quantiles.
 
 ## Usage
 
@@ -52,7 +52,7 @@ magnitude and direction of deviation from expectation but do not
 represent separate hypothesis tests.
 
 Weekday and month distributions are compared to their expected
-probabilities as defined in [`desc`](Desc.md).
+probabilities as defined in [`desc()`](Desc.md).
 
 Standardized residuals are computed as \$\$(Observed - Expected) /
 sqrt(Expected)\$\$. Larger absolute values indicate stronger deviations

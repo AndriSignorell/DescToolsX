@@ -35,7 +35,7 @@ krippAlpha(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See details
-  in [`ConfidenceIntervals`](ConfidenceIntervals.md). Alpha lies in
+  in [`ConfidenceIntervals()`](ConfidenceIntervals.md). Alpha lies in
   \\\[-1, 1\]\\, so the open side is reported at that boundary rather
   than at an infinity it cannot reach.
 
@@ -46,7 +46,7 @@ krippAlpha(
   `"nominal"`, `"ordinal"`, `"interval"`, or `"ratio"`. This selects
   *which* alpha is computed and has nothing to do with the confidence
   interval - the bootstrap interval type travels as `type` through
-  `...`. It is called `metric` and not `method` because `method` means
+  `\dots`. It is called `metric` and not `method` because `method` means
   the interval method everywhere else in the suite.
 
 - levels:
@@ -68,11 +68,11 @@ krippAlpha(
 - ...:
 
   further arguments passed to
-  [`boot`](https://rdrr.io/pkg/boot/man/boot.html). Supported arguments
-  are `type` (`"norm"`, `"basic"`, `"stud"`, `"perc"`, `"bca"`),
-  `parallel` and the number of bootstrap replicates `R`. Defaults are
-  `"basic"` for `type`, option `"boot.parallel"` (or `"no"` if unset)
-  for `parallel`, and `999` for `R`.
+  [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html). Supported
+  arguments are `type` (`"norm"`, `"basic"`, `"stud"`, `"perc"`,
+  `"bca"`), `parallel` and the number of bootstrap replicates `R`.
+  Defaults are `"basic"` for `type`, option `"boot.parallel"` (or `"no"`
+  if unset) for `parallel`, and `999` for `R`.
 
 ## Value
 
@@ -144,7 +144,7 @@ Methodology*. Sage Publications.
 
 ## See also
 
-[`bootCI`](https://andrisignorell.github.io/lumen/reference/bootCI.html)
+[`lumen::bootCI()`](https://andrisignorell.github.io/lumen/reference/bootCI.html)
 
 Other assoc.agreement: [`ccc()`](ccc.md),
 [`cohenKappa()`](cohenKappa.md), [`cronbachAlpha()`](cronbachAlpha.md),

@@ -27,7 +27,7 @@ plot(x, main = x$meta$main, which = 1, verbose = NULL, ...)
 
   integer controlling the amount of output (1, 2, or 3). `NULL`
   (default) falls back to
-  `x$meta$verbose %||% getOption("DescTools.verbose", 2)`.
+  `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`.
 
 - abs.sty:
 
@@ -158,19 +158,20 @@ heteroscedasticity and random coefficient variation. *Econometrica*, 47,
 
 ## See also
 
-[`desc`](Desc.md) for the generic entry point, [`desc.nq`](desc.nq.md)
-for numeric ~ categorical, [`desc.qn`](desc.qn.md) for categorical ~
-numeric, [`desc.qq`](desc.qq.md) for categorical ~ categorical,
-[`corCI`](https://andrisignorell.github.io/lumen/reference/corCI.html),
-[`bpTest`](https://andrisignorell.github.io/lumen/reference/bpTest.html),
-[`lm`](https://rdrr.io/r/stats/lm.html),
-[`cor.test`](https://rdrr.io/r/stats/cor.test.html)
+[`desc()`](Desc.md) for the generic entry point,
+[`desc.nq()`](desc.nq.md) for numeric ~ categorical,
+[`desc.qn()`](desc.qn.md) for categorical ~ numeric,
+[`desc.qq()`](desc.qq.md) for categorical ~ categorical,
+[`lumen::corCI()`](https://andrisignorell.github.io/lumen/reference/corCI.html),
+[`lumen::bpTest()`](https://andrisignorell.github.io/lumen/reference/bpTest.html),
+[`stats::lm()`](https://rdrr.io/r/stats/lm.html),
+[`stats::cor.test()`](https://rdrr.io/r/stats/cor.test.html)
 
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nq`](desc.nq.md),
 [`desc.numeric()`](desc.numeric.md), [`desc.qn`](desc.qn.md),
-[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
-[`print.Desc.qq()`](desc.table.md)
+[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
+[`desc.ts()`](desc.ts.md)
 
 ## Examples
 

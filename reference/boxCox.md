@@ -55,7 +55,7 @@ Box, G. E. P. and Cox, D. R. (1964). An analysis of transformations.
 
 ## See also
 
-[`boxCoxLambda`](boxCoxLambda.md)
+[`boxCoxLambda()`](boxCoxLambda.md)
 
 Other transform: [`boxCoxLambda()`](boxCoxLambda.md),
 [`logSt()`](logSt.md), [`scaleX()`](scaleX.md),

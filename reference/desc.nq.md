@@ -91,5 +91,5 @@ size \\\eta^2\\ provides a standardized measure of group differences.
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.numeric()`](desc.numeric.md), [`desc.qn`](desc.qn.md),
-[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
-[`print.Desc.qq()`](desc.table.md)
+[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
+[`desc.ts()`](desc.ts.md)

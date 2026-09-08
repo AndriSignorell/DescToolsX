@@ -33,15 +33,15 @@ skew(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
   character string specifying the confidence interval method. `"boot"`
   (default) uses a nonparametric bootstrap, with BCa intervals unless
-  another bootstrap type is supplied through `...`; `"classic"` uses a
+  another bootstrap type is supplied through `\dots`; `"classic"` uses a
   Wald interval based on the asymptotic standard error. See Details and
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - estimator:
 
@@ -63,8 +63,8 @@ skew(
 - ...:
 
   further arguments passed to
-  [`boot`](https://rdrr.io/pkg/boot/man/boot.html) when confidence
-  intervals are calculated
+  [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) when
+  confidence intervals are calculated
 
 ## Value
 

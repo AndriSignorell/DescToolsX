@@ -2,9 +2,9 @@
 
 Dividing the range of an age variable `x` into intervals is a frequent
 task in data analysis. The commonly used function
-[`cut`](https://rdrr.io/r/base/cut.html) has unfavourable default values
-for this. `cutAge()` is a convenient wrapper for cutting age variables
-in groups of e.g. 10 years with more suitable defaults.
+[`cut()`](https://rdrr.io/r/base/cut.html) has unfavourable default
+values for this. `cutAge()` is a convenient wrapper for cutting age
+variables in groups of e.g. 10 years with more suitable defaults.
 
 ## Usage
 
@@ -36,12 +36,12 @@ cutAge(
 
   logical, indicating if the intervals should be closed on the right
   (and open on the left) or vice versa. Default is `FALSE` - unlike in
-  [`cut`](https://rdrr.io/r/base/cut.html)!
+  [`cut()`](https://rdrr.io/r/base/cut.html)!
 
 - ordered_result:
 
   logical: should the result be an ordered factor? Default is `TRUE` -
-  unlike in [`cut`](https://rdrr.io/r/base/cut.html)!
+  unlike in [`cut()`](https://rdrr.io/r/base/cut.html)!
 
 - full:
 
@@ -68,8 +68,8 @@ Values which fall outside the range of breaks are coded as `NA`, as are
 
 ## See also
 
-[`cut`](https://rdrr.io/r/base/cut.html),
-[`seq`](https://rdrr.io/r/base/seq.html)
+[`cut()`](https://rdrr.io/r/base/cut.html),
+[`seq()`](https://rdrr.io/r/base/seq.html)
 
 Other cut: [`cut.integer()`](cut.integer.md), [`cutQ()`](cutQ.md)
 

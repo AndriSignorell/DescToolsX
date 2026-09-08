@@ -35,7 +35,7 @@ icc(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
@@ -129,7 +129,7 @@ and Fleiss (1979), including the variance approximation for ICC(2).
 
 `method = "boot"` resamples subjects and therefore advances R's global
 random number generator. Call
-[`set.seed`](https://rdrr.io/r/base/Random.html) beforehand for
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
 reproducible intervals.
 
 ## References

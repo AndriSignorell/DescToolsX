@@ -17,7 +17,7 @@ supports nominal, ordinal, interval, and ratio measurement levels."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@ of Krippendorff's alpha. If <code>NA</code> (default), no bootstrap is computed.
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.
+<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.
 Alpha lies in \([-1, 1]\), so the open side is reported at that
 boundary rather than at an infinity it cannot reach.</p></dd>
 
@@ -99,7 +99,7 @@ the difference function \(\delta^2\) used to compare two categories.
 One of <code>"nominal"</code>, <code>"ordinal"</code>, <code>"interval"</code>,
 or <code>"ratio"</code>. This selects <em>which</em> alpha is computed and has
 nothing to do with the confidence interval - the bootstrap interval
-type travels as <code>type</code> through <code>...</code>. It is called
+type travels as <code>type</code> through <code>\dots</code>. It is called
 <code>metric</code> and not <code>method</code> because <code>method</code> means the
 interval method everywhere else in the suite.</p></dd>
 
@@ -122,7 +122,7 @@ are the raters. If <code>NULL</code>, all columns are assumed to be raters.</p><
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot</a></code>. Supported
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>. Supported
 arguments are <code>type</code> (<code>"norm"</code>, <code>"basic"</code>,
 <code>"stud"</code>, <code>"perc"</code>, <code>"bca"</code>), <code>parallel</code> and the number
 of bootstrap replicates <code>R</code>. Defaults are <code>"basic"</code> for
@@ -184,7 +184,7 @@ Sage Publications.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/lumen/reference/bootCI.html" class="external-link">bootCI</a></code></p>
+    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/lumen/reference/bootCI.html" class="external-link">lumen::bootCI()</a></code></p>
 <p>Other assoc.agreement:
 <code><a href="ccc.html">ccc()</a></code>,
 <code><a href="cohenKappa.html">cohenKappa()</a></code>,

@@ -134,12 +134,13 @@ using `breaks`. By default, quartiles are used.
 
 ## See also
 
-[`desc`](Desc.md), [`desc.nn`](Desc.nn.md), [`desc.nq`](desc.nq.md),
-[`kruskal.test`](https://rdrr.io/r/stats/kruskal.test.html),
-[`leveneTest`](https://andrisignorell.github.io/lumen/reference/leveneTest.html)
+[`desc()`](Desc.md), [`desc.nn()`](Desc.nn.md),
+[`desc.nq()`](desc.nq.md),
+[`kruskal.test()`](https://rdrr.io/r/stats/kruskal.test.html),
+[`lumen::leveneTest()`](https://andrisignorell.github.io/lumen/reference/leveneTest.html)
 
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.nq`](desc.nq.md), [`desc.numeric()`](desc.numeric.md),
-[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
-[`print.Desc.qq()`](desc.table.md)
+[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
+[`desc.ts()`](desc.ts.md)

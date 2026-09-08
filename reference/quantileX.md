@@ -37,14 +37,15 @@ quantileX(
 - names:
 
   logical; if true, the result has a
-  [`names`](https://rdrr.io/r/base/names.html) attribute. Set to `FALSE`
-  for speedup with many `probs`.
+  [`names()`](https://rdrr.io/r/base/names.html) attribute. Set to
+  `FALSE` for speedup with many `probs`.
 
 - type:
 
   an integer between 1 and 9 selecting one of the nine quantile
-  algorithms of [`quantile`](https://rdrr.io/r/stats/quantile.html). All
-  nine are available for unweighted data. With `weights` only 5 and 7
+  algorithms of
+  [`stats::quantile()`](https://rdrr.io/r/stats/quantile.html). All nine
+  are available for unweighted data. With `weights` only 5 and 7
   (default) exist; any other value is an error. See Details for how the
   two differ in their reading of the weights.
 
@@ -62,8 +63,8 @@ probabilities `probs`, named when `names = TRUE`
 ## Details
 
 Without `weights` the call is handed to
-[`quantile`](https://rdrr.io/r/stats/quantile.html) unchanged, so all
-nine types are available and the results are identical to base R.
+[`stats::quantile()`](https://rdrr.io/r/stats/quantile.html) unchanged,
+so all nine types are available and the results are identical to base R.
 
 With `weights` only types 5 and 7 exist, and they interpret the weights
 **differently**:
@@ -100,9 +101,9 @@ gap. *EU-SILC 131-rev/04*, Eurostat.
 
 ## See also
 
-[`medianX`](medianX.md),
-[`quantile`](https://rdrr.io/r/stats/quantile.html),
-[`quantileCI`](https://andrisignorell.github.io/lumen/reference/quantileCI.html)
+[`medianX()`](medianX.md),
+[`stats::quantile()`](https://rdrr.io/r/stats/quantile.html),
+[`lumen::quantileCI()`](https://andrisignorell.github.io/lumen/reference/quantileCI.html)
 
 Other quantile: [`extremes`](extremes.md)
 

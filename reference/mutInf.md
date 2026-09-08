@@ -69,7 +69,7 @@ Wiley.
 
 ## See also
 
-[`entropy`](entropy.md)
+[`entropy()`](entropy.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
 [`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),

@@ -20,7 +20,7 @@ addMonths(x, n, ...)
 - x:
 
   a `Date` object or an object coercible to one with
-  [`as.Date`](https://rdrr.io/r/base/as.Date.html)
+  [`as.Date()`](https://rdrr.io/r/base/as.Date.html)
 
 - n:
 
@@ -30,7 +30,7 @@ addMonths(x, n, ...)
 - ...:
 
   further arguments passed to
-  [`as.Date`](https://rdrr.io/r/base/as.Date.html), such as `origin`,
+  [`as.Date()`](https://rdrr.io/r/base/as.Date.html), such as `origin`,
   `format`, or `tz`
 
 ## Value
@@ -54,7 +54,7 @@ corresponding result.
 
 Inputs supplied as `POSIXct` are converted to `Date`, and their
 time-of-day information is discarded. By default, `as.Date.POSIXct`
-performs this conversion in UTC. Supply `tz` through `...` if another
+performs this conversion in UTC. Supply `tz` through `\dots` if another
 time zone should determine the calendar date.
 
 ## Note

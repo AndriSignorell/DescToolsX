@@ -15,7 +15,7 @@ optionally with bootstrap confidence intervals."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@ optionally with bootstrap confidence intervals.</p>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-unbiased">unbiased<a class="anchor" aria-label="anchor" href="#arg-unbiased"></a></dt>
@@ -162,7 +162,7 @@ boundary (0 or 1) rather than as \(\pm\infty\) (design_rules.md 4.1).</p>
 
 
 <p>A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code>
+global random number generator. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code>
 beforehand for reproducible intervals.</p>
     </div>
     <div class="section level2">

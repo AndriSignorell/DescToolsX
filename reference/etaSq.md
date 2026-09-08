@@ -86,8 +86,8 @@ Psychological Methods 8(4), 434-447.
 
 ## See also
 
-[`aov`](https://rdrr.io/r/stats/aov.html),
-[`anova`](https://rdrr.io/r/stats/anova.html), `Anova`
+[`aov()`](https://rdrr.io/r/stats/aov.html),
+[`anova()`](https://rdrr.io/r/stats/anova.html), `car::Anova()`
 
 Other effect.size: [`cohenD()`](cohenD.md), [`cohenH()`](cohenH.md),
 [`glassDelta()`](glassDelta.md), [`oddsRatio()`](oddsRatio.md),

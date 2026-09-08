@@ -13,9 +13,9 @@ Common arguments and conventions for formula interfaces in DescToolsX.
 - data:
 
   optional matrix or data frame (or similar; see
-  [`model.frame`](https://rdrr.io/r/stats/model.frame.html)) containing
-  the variables in the formula. If omitted, variables are taken from
-  `environment(formula)`
+  [`stats::model.frame()`](https://rdrr.io/r/stats/model.frame.html))
+  containing the variables in the formula. If omitted, variables are
+  taken from `environment(formula)`
 
 - subset:
 
@@ -25,16 +25,17 @@ Common arguments and conventions for formula interfaces in DescToolsX.
 - na.action:
 
   function specifying how missing values are handled; passed to
-  [`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
+  [`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
 
 ## Details
 
 Formula interfaces in DescToolsX are resolved consistently by
-[`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html).
+[`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html).
 The resolver constructs the
-[`model.frame`](https://rdrr.io/r/stats/model.frame.html) and classifies
-the resulting design as one-sample, two-sample independent, two-sample
-dependent, n-sample independent, n-sample dependent, or numeric-numeric.
+[`stats::model.frame()`](https://rdrr.io/r/stats/model.frame.html) and
+classifies the resulting design as one-sample, two-sample independent,
+two-sample dependent, n-sample independent, n-sample dependent, or
+numeric-numeric.
 
 Individual functions may support only a subset of these designs. The
 accepted forms are documented on the corresponding function's help page.
@@ -43,7 +44,7 @@ Data lookup, subsetting, and missing-value handling are delegated to
 
 ## See also
 
-[`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html),
-[`formula`](https://rdrr.io/r/stats/formula.html),
-[`model.frame`](https://rdrr.io/r/stats/model.frame.html),
-[`Pair`](https://rdrr.io/r/stats/Pair.html)
+[`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html),
+[`stats::formula()`](https://rdrr.io/r/stats/formula.html),
+[`stats::model.frame()`](https://rdrr.io/r/stats/model.frame.html),
+[`stats::Pair()`](https://rdrr.io/r/stats/Pair.html)

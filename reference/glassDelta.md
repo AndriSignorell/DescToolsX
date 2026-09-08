@@ -37,7 +37,7 @@ glassDelta(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - useControlSd:
 
@@ -118,7 +118,7 @@ Software*, 20(8), 1-24.
 
 ## See also
 
-[`cohenD`](cohenD.md)
+[`cohenD()`](cohenD.md)
 
 Other effect.size: [`cohenD()`](cohenD.md), [`cohenH()`](cohenH.md),
 [`etaSq()`](etaSq.md), [`oddsRatio()`](oddsRatio.md),

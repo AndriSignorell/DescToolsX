@@ -15,7 +15,7 @@ weights."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ weights."><meta property="og:image" content="/logo.png"></head><body>
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>(Weighted) Arithmetic Mean</h1>
-      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/main/R/meanX.R" class="external-link"><code>R/meanX.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/main/R/meanX.r" class="external-link"><code>R/meanX.r</code></a></small>
       <div class="d-none name"><code>meanX.Rd</code></div>
     </div>
 
@@ -81,7 +81,7 @@ Complex vectors are allowed for <code>trim = 0</code> only.</p></dd>
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
 <dd><p>breaks for calculating the mean for classified data as
-composed by <code><a href="freq.html">freq</a></code></p></dd>
+composed by <code><a href="freq.html">freq()</a></code></p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
@@ -117,7 +117,7 @@ is computed.</p>
 weights. Conceptually, this corresponds to computing the statistic
 on a reweighted empirical distribution, where observations with larger
 weights represent a higher frequency in the population.</p>
-<p><b>Note:</b><code>    </code>
+<p>**Note:**<code>    </code>
 Analytic (precision) weights, which assume observation-specific error
 variances or likelihood-based weighting, are deliberately not supported.
 This design ensures that all weighted statistics remain well-defined
@@ -132,8 +132,8 @@ New S Language</em>.  Wadsworth &amp; Brooks/Cole.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean</a></code>, <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">mean.POSIXct</a></code>,
-<code><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></code> for row and column means.</p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean()</a></code>, <code><a href="https://rdrr.io/r/base/DateTimeClasses.html" class="external-link">mean.POSIXct()</a></code>,
+<code><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans()</a></code> for row and column means.</p>
 <p>Other location:
 <code><a href="gmean.html">gmean()</a></code>,
 <code><a href="hmean.html">hmean()</a></code>,

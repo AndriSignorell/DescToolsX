@@ -45,10 +45,12 @@ If the denominator is zero, `NA` is returned.
 
 ## See also
 
-[`mean`](https://rdrr.io/r/base/mean.html),
-[`abs`](https://rdrr.io/r/base/MathFun.html)
+[`mean()`](https://rdrr.io/r/base/mean.html),
+[`abs()`](https://rdrr.io/r/base/MathFun.html)
 
-Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
 [`mae()`](mae.md), [`mape()`](mape.md), [`mse()`](mse.md),
 [`nmse()`](nmse.md), [`rmse()`](rmse.md), [`smape()`](smape.md)
 

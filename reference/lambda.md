@@ -42,7 +42,7 @@ lambda(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See details
-  in [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  in [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - direction:
 
@@ -53,9 +53,9 @@ lambda(
 - ...:
 
   further arguments, passed on to
-  [`normalizeToConfusion`](normalizeToConfusion.md) and
-  [`table`](https://rdrr.io/r/base/table.html) for building the table -
-  `useNA` is the usual one.
+  [`normalizeToConfusion()`](normalizeToConfusion.md) and
+  [`table()`](https://rdrr.io/r/base/table.html) for building the
+  table - `useNA` is the usual one.
 
 ## Value
 
@@ -104,7 +104,7 @@ Papers Series on Quantitative Applications in the Social Sciences,
 
 ## See also
 
-[`Association`](Association.md)
+[`Association()`](Association.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
 [`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),

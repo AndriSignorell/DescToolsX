@@ -40,7 +40,7 @@ uncertCoef(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - direction:
 
@@ -56,7 +56,7 @@ uncertCoef(
 - ...:
 
   further arguments are passed to the function
-  [`table`](https://rdrr.io/r/base/table.html), allowing, for example,
+  [`table()`](https://rdrr.io/r/base/table.html), allowing, for example,
   `useNA` to be set. This refers only to the vector interface.
 
 ## Value
@@ -99,7 +99,7 @@ North-Holland Publishing Company.
 
 ## See also
 
-[`Association`](Association.md)
+[`Association()`](Association.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
 [`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),

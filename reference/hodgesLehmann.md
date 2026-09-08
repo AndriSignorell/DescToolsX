@@ -36,7 +36,7 @@ hodgesLehmann(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - na.rm:
 
@@ -69,8 +69,8 @@ The Hodges-Lehmann estimator is the median of the combined data points
 and Walsh averages.
 
 It is the same as the pseudo median returned as a by-product of
-[`wilcox.test`](https://rdrr.io/r/stats/wilcox.test.html) (which however
-does not calculate correctly as soon as ties are present).
+[`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) (which
+however does not calculate correctly as soon as ties are present).
 
 Note that in the two-sample case the estimator for the difference in
 location parameters does not estimate the difference in medians (a
@@ -91,14 +91,14 @@ C++ port of Monahan’s algorithm by Cyril Flurin Moser
 
 A confidence level triggers a bootstrap and therefore advances R's
 global random number generator. Call
-[`set.seed`](https://rdrr.io/r/base/Random.html) beforehand for
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
 reproducible intervals. The point estimate itself is deterministic: the
 compiled routine picks its pivots from a local generator and does not
 touch R's stream.
 
 ## See also
 
-[`wilcox.test`](https://rdrr.io/r/stats/wilcox.test.html)
+[`stats::wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html)
 
 Other location: [`gmean()`](gmean.md), [`hmean()`](hmean.md),
 [`huberM()`](huberM.md), [`meanX()`](meanX.md),

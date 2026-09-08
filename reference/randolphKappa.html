@@ -17,7 +17,7 @@ distributions (i.e., it is free-marginal)."><meta property="og:image" content="/
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,7 @@ $$P_o = \frac{1}{N} \sum_{i=1}^{N}
       \frac{\sum_{j} n_{ij}(n_{ij}-1)}{m(m-1)}.$$
 Here, \(n_{ij}\) denotes the number of raters who assigned subject \(i\)
 to category \(j\). This is the same observed agreement as in Fleiss'
-kappa (and as computed by <code><a href="percAgreement.html">percAgreement</a></code>); Randolph's
+kappa (and as computed by <code><a href="percAgreement.html">percAgreement()</a></code>); Randolph's
 coefficient differs from Fleiss' only in the chance agreement \(P_e\),
 which is fixed at \(1/k\) instead of being estimated from the marginals.</p>
 <p>\(P_e = 1/k\) refers to the categories a rater could have <em>chosen</em>,
@@ -109,7 +109,7 @@ not to those that happen to occur in the data. If a category was available
 but never used, the default <code>categories = NULL</code> understates \(k\)
 and thus overstates chance agreement, which biases \(\kappa\) downwards.
 Supply <code>categories</code> whenever the coding scheme is known.</p>
-<p>Long-format ratings can first be reshaped with <code><a href="raterFrame.html">raterFrame</a></code>.</p>
+<p>Long-format ratings can first be reshaped with <code><a href="raterFrame.html">raterFrame()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

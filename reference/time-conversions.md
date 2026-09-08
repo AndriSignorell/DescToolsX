@@ -51,7 +51,7 @@ Based on code by Tyler Rinker, adapted to conform to package standards.
 
 ## See also
 
-`times`
+`chron::times()`
 
 Other date.time: [`addMonths()`](AddMonths.md),
 [`countWorkDays()`](countWorkDays.md),

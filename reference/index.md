@@ -34,13 +34,13 @@ tables.
 
 - [`desc()`](Desc.md) [`print(`*`<Desc.list>`*`)`](Desc.md)
   [`print(`*`<Desc>`*`)`](Desc.md) [`plot(`*`<Desc>`*`)`](Desc.md)
-  [`print(`*`<Desc.AllNA>`*`)`](Desc.md)
-  [`plot(`*`<Desc.AllNA>`*`)`](Desc.md)
   [`plot(`*`<Desc.factor>`*`)`](Desc.md)
   [`print(`*`<Desc.logical>`*`)`](Desc.md)
   [`plot(`*`<Desc.logical>`*`)`](Desc.md)
   [`print(`*`<Desc.numeric>`*`)`](Desc.md)
-  [`plot(`*`<Desc.numeric>`*`)`](Desc.md) : Describe Data
+  [`plot(`*`<Desc.numeric>`*`)`](Desc.md)
+  [`print(`*`<Desc.AllNA>`*`)`](Desc.md)
+  [`plot(`*`<Desc.AllNA>`*`)`](Desc.md) : Describe Data
 
 - [`desc(`*`<Date>`*`)`](Desc.Date.md) : Descriptive statistics for
   calendar date variables
@@ -75,12 +75,12 @@ tables.
 
   Print method for `"Desc.Date"` objects
 
-- [`print(`*`<Desc.qq>`*`)`](desc.table.md)
-  [`plot(`*`<Desc.qq>`*`)`](desc.table.md)
-  [`desc(`*`<table>`*`)`](desc.table.md)
+- [`desc(`*`<table>`*`)`](desc.table.md)
   [`desc(`*`<matrix>`*`)`](desc.table.md)
   [`desc(`*`<array>`*`)`](desc.table.md)
-  [`print(`*`<Desc.table>`*`)`](desc.table.md) : Describe a Contingency
+  [`print(`*`<Desc.table>`*`)`](desc.table.md)
+  [`print(`*`<Desc.qq>`*`)`](desc.table.md)
+  [`plot(`*`<Desc.qq>`*`)`](desc.table.md) : Describe a Contingency
   Table
 
 - [`expFreq()`](expFreq.md) : Expected Frequencies
@@ -226,6 +226,8 @@ prediction-error measures.
   [`plot(`*`<Conf>`*`)`](conf.md) [`sensX()`](conf.md)
   [`specX()`](conf.md) : Confusion Matrix and Classification Metrics
 - [`cStat()`](cStat.md) : Concordance Statistic (C-Statistic / AUC)
+- [`averagePrecision()`](averagePrecision.md) : Average Precision Score
+- [`logLoss()`](logLoss.md) : Log Loss
 - [`brierScore()`](brierScore.md) : Brier Score
 - [`mae()`](mae.md) : Mean Absolute Error
 - [`mape()`](mape.md) : Mean Absolute Percentage Error

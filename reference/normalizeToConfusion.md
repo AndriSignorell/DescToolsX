@@ -22,7 +22,7 @@ normalizeToConfusion(
 - x:
 
   input object. Accepted formats: a
-  [`table`](https://rdrr.io/r/base/table.html) representing a
+  [`table()`](https://rdrr.io/r/base/table.html) representing a
   pre-computed contingency table; a square numeric `matrix` representing
   a pre-computed contingency table; a numeric `matrix` with exactly 2
   columns (one per rater); a `list` or `data.frame` with exactly 2
@@ -44,7 +44,7 @@ normalizeToConfusion(
 
 - useNA:
 
-  passed to [`table`](https://rdrr.io/r/base/table.html). Controls
+  passed to [`table()`](https://rdrr.io/r/base/table.html). Controls
   whether `NA` values appear as a level. One of `"no"` (default),
   `"ifany"`, or `"always"`.
 
@@ -67,20 +67,20 @@ The function handles the following input formats:
 - `table`:
 
   A pre-computed 2D contingency table which is validated via
-  [`isConfusionTable`](isConfusionTable.md). For `mode = "agreement"`,
+  [`isConfusionTable()`](isConfusionTable.md). For `mode = "agreement"`,
   the table must be square with identical row and column names.
 
 - `matrix`:
 
   Either a pre-computed contingency matrix (square, passing
-  [`isConfusionTable`](isConfusionTable.md) validation) or a two-rater
+  [`isConfusionTable()`](isConfusionTable.md) validation) or a two-rater
   matrix with exactly 2 columns. A 2-column non-square matrix is always
   treated as a rater matrix; each column is one rater's ratings.
 
 - two vectors:
 
   If both `x` and `y` are supplied, they are tabulated via
-  [`table`](https://rdrr.io/r/base/table.html) after coercing to
+  [`table()`](https://rdrr.io/r/base/table.html) after coercing to
   factors.
 
 - `list` or `data.frame` with 2 elements:

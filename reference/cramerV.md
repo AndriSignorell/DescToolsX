@@ -38,7 +38,7 @@ cramerV(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
@@ -55,9 +55,9 @@ cramerV(
 - ...:
 
   further arguments, passed on to
-  [`normalizeToConfusion`](normalizeToConfusion.md) and
-  [`table`](https://rdrr.io/r/base/table.html) for building the table -
-  `useNA` is the usual one.
+  [`normalizeToConfusion()`](normalizeToConfusion.md) and
+  [`table()`](https://rdrr.io/r/base/table.html) for building the
+  table - `useNA` is the usual one.
 
 ## Value
 

@@ -21,7 +21,7 @@ deviation following the same logic."><meta property="og:image" content="/logo.pn
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ Weights are supported for vector input only.</p></dd>
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
 <dd><p>breaks for calculating the variance for classified data as
-composed by <code><a href="freq.html">freq</a></code></p></dd>
+composed by <code><a href="freq.html">freq()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -130,11 +130,11 @@ as "Bessel's correction") which gives an unbiased estimator of the
 (co)variance for i.i.d. observations.<br><code>"ml"</code> yields the biased
 version using the denominator \(n\). With frequency weights \(n\) is the
 sum of the weights.</p>
-<p>These functions return <code><a href="https://rdrr.io/r/base/NA.html" class="external-link">NA</a></code> when there is only one observation
+<p>These functions return <code><a href="https://rdrr.io/r/base/NA.html" class="external-link">NA()</a></code> when there is only one observation
 and <code>NA</code> when <code>x</code> has length zero.</p>
-<p><b>Note:</b><code> </code> Analytic (precision) weights are not supported. For
+<p>**Note:**<code> </code> Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
-<code><a href="https://rdrr.io/r/stats/cov.wt.html" class="external-link">cov.wt</a></code>.</p>
+<code><a href="https://rdrr.io/r/stats/cov.wt.html" class="external-link">stats::cov.wt()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -143,9 +143,9 @@ New S Language</em>.  Wadsworth &amp; Brooks/Cole.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/lumen/reference/varCI.html" class="external-link">varCI</a></code> for confidence intervals,
-<code><a href="https://andrisignorell.github.io/lumen/reference/varTest.html" class="external-link">varTest</a></code> for tests and base R's implementations
-<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></code>, <code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></code>, <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></code></p>
+    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/lumen/reference/varCI.html" class="external-link">lumen::varCI()</a></code> for confidence intervals,
+<code><a href="https://andrisignorell.github.io/lumen/reference/varTest.html" class="external-link">lumen::varTest()</a></code> for tests and base R's implementations
+<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>, <code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd()</a></code>, <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov()</a></code></p>
 <p>Other dispersion:
 <code><a href="coefVar.html">coefVar()</a></code>,
 <code><a href="iqrX.html">iqrX()</a></code>,

@@ -15,7 +15,7 @@ various methods."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,7 +115,7 @@ Defaults to <code>FALSE</code>.</p></dd>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -148,13 +148,13 @@ and the columns <code>est</code>, <code>lci</code>, and <code>uci</code>.</p>
 true population value, the coefficient of variation is corrected as: $$
 CV_{korr} = CV \cdot \left( 1 - \frac{1}{4\cdot(n-1)} + \frac{1}{n} \cdot
 CV^2 + \frac{1}{2 \cdot (n-1)^2} \right) $$</p>
-<p>For determining<code> </code><b>the confidence intervals</b><code> </code> for the
+<p>For determining<code> </code><strong>the confidence intervals</strong><code> </code> for the
 coefficient of variation a number of methods have been proposed.
 <code>coefVarCI()</code> currently supports four different methods. The details
 for the methods are given in the specific references.</p>
-<p>The <b>"naive" method</b> <code> </code> is based on dividing the standard
+<p>The <strong>"naive" method</strong> <code> </code> is based on dividing the standard
 confidence limit for the standard deviation by the sample mean.</p>
-<p><b>McKay's</b> <code> </code> approximation is asymptotically exact as n goes to
+<p><strong>McKay's</strong> <code> </code> approximation is asymptotically exact as n goes to
 infinity. McKay recommends this approximation only if the coefficient of
 variation is less than 0.33. Note that if the coefficient of variation is
 greater than 0.33, either the normality of the data is suspect or the
@@ -162,7 +162,7 @@ probability of negative values in the data is non-negligible. In this case,
 McKay's approximation may not be valid. Also, it is generally recommended
 that the sample size should be at least 10 before using McKay's
 approximation.</p>
-<p><b>Vangel's modified McKay method</b> <code> </code> is more accurate than the
+<p><strong>Vangel's modified McKay method</strong> <code> </code> is more accurate than the
 McKay method in most cases, particularly for small samples. According to Vangel,
 the unmodified McKay is only more accurate when both the coefficient of
 variation and alpha are large. However, if the coefficient of variation is
@@ -174,14 +174,14 @@ provides good approximations as long as the data is approximately normal and
 the coefficient of variation is less than 0.33.</p>
 <p>See also:
 https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm</p>
-<p><b>nct</b> <code> </code>uses the noncentral t-distribution to calculate the
+<p><strong>nct</strong> <code> </code>uses the noncentral t-distribution to calculate the
 confidence intervals. See Smithson (2003).</p>
 <p><code>sides</code> names the side on which the finite bound lies:
 <code>"left"</code> yields \([lci, \infty)\), <code>"right"</code> yields
 \((-\infty, uci]\).</p>
-<p><b>Note:</b><code> </code> Analytic (precision) weights are not supported. For
+<p>**Note:**<code> </code> Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
-<code><a href="https://rdrr.io/r/stats/cov.wt.html" class="external-link">cov.wt</a></code>.</p>
+<code><a href="https://rdrr.io/r/stats/cov.wt.html" class="external-link">stats::cov.wt()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -213,7 +213,7 @@ Statistics Theory and Methods</em>, Volume 36, No. 12, pp 2187-2206.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="meanX.html">meanX</a></code>, <code><a href="varX.html">sdX</a></code>, (both supporting weights)</p>
+    <div class="dont-index"><p><code><a href="meanX.html">meanX()</a></code>, <code><a href="varX.html">sdX()</a></code>, (both supporting weights)</p>
 <p>Other dispersion:
 <code><a href="iqrX.html">iqrX()</a></code>,
 <code><a href="madX.html">madX()</a></code>,

@@ -47,8 +47,9 @@ structured auditing of conceptual organisation inside a package.
 
 - `conceptAudit()` - Returns a summary table of concept usage.
 
-The functions use [`Rd_db`](https://rdrr.io/r/tools/Rdutils.html) to
-parse Rd files and extract `\\concept` tags programmatically.
+The functions use
+[`tools::Rd_db()`](https://rdrr.io/r/tools/Rdutils.html) to parse Rd
+files and extract `\\concept` tags programmatically.
 
 These tools are intended for package development, documentation
 consistency checks, and conceptual audits.
@@ -128,27 +129,28 @@ getConcepts("DescToolsX")
 #> [69] "outlier-resistance"                                     
 #> [70] "pearson spearman r-squared residuals heteroscedasticity"
 #> [71] "pkg.introspection"                                      
-#> [72] "prediction-error"                                       
-#> [73] "programming"                                            
-#> [74] "quantile"                                               
-#> [75] "rank-correlation"                                       
-#> [76] "rater-data"                                             
-#> [77] "reliability"                                            
-#> [78] "robust-statistic"                                       
-#> [79] "robust-statistics"                                      
-#> [80] "roc"                                                    
-#> [81] "shape"                                                  
-#> [82] "standardization"                                        
-#> [83] "summary"                                                
-#> [84] "table-manipulation"                                     
-#> [85] "table-summary"                                          
-#> [86] "time-series"                                            
-#> [87] "transform"                                              
-#> [88] "transformation"                                         
-#> [89] "utils"                                                  
-#> [90] "variance-analysis"                                      
-#> [91] "variance-component"                                     
-#> [92] "variance-stabilization"                                 
+#> [72] "precision-recall"                                       
+#> [73] "prediction-error"                                       
+#> [74] "programming"                                            
+#> [75] "quantile"                                               
+#> [76] "rank-correlation"                                       
+#> [77] "rater-data"                                             
+#> [78] "reliability"                                            
+#> [79] "robust-statistic"                                       
+#> [80] "robust-statistics"                                      
+#> [81] "roc"                                                    
+#> [82] "shape"                                                  
+#> [83] "standardization"                                        
+#> [84] "summary"                                                
+#> [85] "table-manipulation"                                     
+#> [86] "table-summary"                                          
+#> [87] "time-series"                                            
+#> [88] "transform"                                              
+#> [89] "transformation"                                         
+#> [90] "utils"                                                  
+#> [91] "variance-analysis"                                      
+#> [92] "variance-component"                                     
+#> [93] "variance-stabilization"                                 
 head(conceptMap("DescToolsX"))
 #> $agreement
 #> [1] "blandAltmanData"      "icc"                  "isConfusionTable"    
@@ -178,8 +180,8 @@ head(conceptAudit("DescToolsX"))
 #>                   concept nTopics
 #> 7     association-measure      17
 #> 34 descriptive-statistics      11
+#> 59          model.metrics      11
 #> 32                   desc      10
+#> 57       model-evaluation      10
 #> 3         assoc.agreement       9
-#> 5           assoc.nominal       9
-#> 25       data-description       9
 ```

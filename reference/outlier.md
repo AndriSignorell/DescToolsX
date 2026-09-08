@@ -39,11 +39,11 @@ the outlying values if `value = TRUE`; otherwise their indices
 Outlier detection is a tricky problem and should be handled with care.
 We implement Tukey's boxplot rule as a rough idea of spotting extreme
 values. The fences are built from the hinges, exactly as
-[`boxplot.stats`](https://rdrr.io/r/grDevices/boxplot.stats.html) does,
-so the result matches what a boxplot of the same data draws. Note that
-the hinges are not the type-7 quartiles of
-[`quantile`](https://rdrr.io/r/stats/quantile.html) and differ from them
-for many sample sizes.
+[`grDevices::boxplot.stats()`](https://rdrr.io/r/grDevices/boxplot.stats.html)
+does, so the result matches what a boxplot of the same data draws. Note
+that the hinges are not the type-7 quartiles of
+[`stats::quantile()`](https://rdrr.io/r/stats/quantile.html) and differ
+from them for many sample sizes.
 
 Hampel considers values outside of median +/- 3 \* (median absolute
 deviation) to be outliers.
@@ -60,7 +60,7 @@ estimation, *Journal of the American Statistical Association*, 69,
 
 ## See also
 
-[`boxplot`](https://rdrr.io/r/graphics/boxplot.html)
+[`boxplot()`](https://rdrr.io/r/graphics/boxplot.html)
 
 Other data.inspection: [`abstract()`](abstract.md)
 

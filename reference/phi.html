@@ -15,7 +15,7 @@ categorical variables."><meta property="og:image" content="/logo.png"></head><bo
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ table is constructed from <code>x</code> and <code>y</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code></p></dd>
+<dd><p>additional arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">base::table()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -99,13 +99,13 @@ coefficient \((n_{11} n_{22} - n_{12} n_{21}) /
 \sqrt{n_{1\cdot} n_{2\cdot} n_{\cdot 1} n_{\cdot 2}}\) equals the Pearson
 correlation of the two 0/1 indicators and lies in \([-1, 1]\); the value
 returned here is its absolute value, so the direction of the association
-is not reported. See <code><a href="pearsonCor.html">pearsonCor</a></code> if the sign is needed.</p>
+is not reported. See <code><a href="pearsonCor.html">pearsonCor()</a></code> if the sign is needed.</p>
 <p>For contingency tables larger than 2x2, Phi is not bounded by 1 and
-may exceed 1. In such cases, <code><a href="cramerV.html">cramerV</a></code> is usually preferred.</p>
+may exceed 1. In such cases, <code><a href="cramerV.html">cramerV()</a></code> is usually preferred.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></code></p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code></p>
 <p>Other assoc.nominal:
 <code><a href="contCoef.html">contCoef()</a></code>,
 <code><a href="cramerV.html">cramerV()</a></code>,

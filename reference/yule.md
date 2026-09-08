@@ -46,7 +46,7 @@ yuleY(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See details
-  in [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  in [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - correct:
 

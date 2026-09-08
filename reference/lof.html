@@ -21,7 +21,7 @@ when it is not globally extreme."><meta property="og:image" content="/logo.png">
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,7 @@ that of its neighbours. Substantially larger values indicate a locally
 sparse neighbourhood and thus an outlier; the user decides on the
 threshold, as its scale depends on the data. Values below 1 arise in
 unusually dense regions and are not normally of interest.</p>
-<p>The computation uses <code><a href="https://rdrr.io/pkg/dbscan/man/lof.html" class="external-link">lof</a></code> from the <span class="pkg">dbscan</span>
+<p>The computation uses <code><a href="https://rdrr.io/pkg/dbscan/man/lof.html" class="external-link">dbscan::lof()</a></code> from the <span class="pkg">dbscan</span>
 package, which builds a kd-tree and therefore scales to large data.
 Note that its <code>minPts</code> counts the observation itself, whereas
 <code>k</code> here counts neighbours only, following Breunig et al.; the
@@ -124,7 +124,7 @@ SIGMOD International Conference on Management of Data</em>, 93-104.
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/dbscan/man/lof.html" class="external-link">lof</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/dbscan/man/lof.html" class="external-link">dbscan::lof()</a></code></p></div>
     </div>
 
     <div class="section level2">

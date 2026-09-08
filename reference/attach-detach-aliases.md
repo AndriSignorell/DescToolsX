@@ -60,7 +60,8 @@ clobbered by accident.
 
 ## See also
 
-`detachAliases`, [`oddsRatio`](oddsRatio.md), [`relRisk`](relRisk.md)
+`detachAliases()`, [`oddsRatio()`](oddsRatio.md),
+[`relRisk()`](relRisk.md)
 
 ## Examples
 

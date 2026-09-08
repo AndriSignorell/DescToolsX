@@ -45,10 +45,12 @@ The mean absolute error is defined as: \$\$ \frac{1}{n} \sum \|ref - x\|
 
 ## See also
 
-[`mean`](https://rdrr.io/r/base/mean.html),
-[`abs`](https://rdrr.io/r/base/MathFun.html)
+[`mean()`](https://rdrr.io/r/base/mean.html),
+[`abs()`](https://rdrr.io/r/base/MathFun.html)
 
-Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
 [`mape()`](mape.md), [`mse()`](mse.md), [`nmae()`](nmae.md),
 [`nmse()`](nmse.md), [`rmse()`](rmse.md), [`smape()`](smape.md)
 

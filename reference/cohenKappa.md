@@ -26,7 +26,7 @@ cohenKappa(
 - y:
 
   `NULL` (default) or a categorical vector with compatible dimensions to
-  `x`. When supplied, `table(x, y, ...)` is computed. The vector
+  `x`. When supplied, `table(x, y, \dots)` is computed. The vector
   interface is available for unweighted kappa only (see Details).
 
 - conf.level:
@@ -38,7 +38,7 @@ cohenKappa(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - weights:
 
@@ -50,8 +50,8 @@ cohenKappa(
 - ...:
 
   further arguments passed to
-  [`table`](https://rdrr.io/r/base/table.html) for the vector interface,
-  for example `useNA`
+  [`table()`](https://rdrr.io/r/base/table.html) for the vector
+  interface, for example `useNA`
 
 ## Value
 
@@ -83,23 +83,23 @@ rows/columns. The Fleiss-Cohen weights attach greater importance to
 closer disagreements.
 
 Data can be passed either as a square confusion matrix (or data frame)
-in `x`, or as two vectors `x` and `y`, in which case `table(x, y, ...)`
-is computed internally. Note that the vector interface supports
-**unweighted kappa only**: the function raises an error if `weights` is
-not `"unweighted"` and `y` is supplied, because the level ordering of
-two independent factors cannot be guaranteed to be consistent when
-constructing the confusion table.
+in `x`, or as two vectors `x` and `y`, in which case
+`table(x, y, \dots)` is computed internally. Note that the vector
+interface supports **unweighted kappa only**: the function raises an
+error if `weights` is not `"unweighted"` and `y` is supplied, because
+the level ordering of two independent factors cannot be guaranteed to be
+consistent when constructing the confusion table.
 
 Missing values are handled as
-[`table`](https://rdrr.io/r/base/table.html) does – excluded by default.
-Pass `useNA = "ifany"` via `...` to include them.
+[`table()`](https://rdrr.io/r/base/table.html) does – excluded by
+default. Pass `useNA = "ifany"` via `...` to include them.
 
 `sides` names the side on which the finite bound lies: `"left"` yields
 an interval bounded below, with the upper limit fixed at 1, and
 `"right"` one bounded above, with the lower limit fixed at -1. Kappa is
 a bounded parameter, so the open side is reported at the range boundary
 rather than as \\\pm\infty\\ (design_rules.md 4.1), matching
-[`ccc`](ccc.md).
+[`ccc()`](ccc.md).
 
 ## Note
 
@@ -124,7 +124,7 @@ Technology*, *11*(3), 101–109.
 
 ## See also
 
-[`pairApply`](https://andrisignorell.github.io/bedrock/reference/pairApply.html)
+[`bedrock::pairApply()`](https://andrisignorell.github.io/bedrock/reference/pairApply.html)
 
 Other assoc.agreement: [`ccc()`](ccc.md),
 [`cronbachAlpha()`](cronbachAlpha.md), [`icc()`](icc.md),

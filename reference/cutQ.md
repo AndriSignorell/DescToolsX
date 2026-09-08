@@ -23,7 +23,7 @@ cutQ(
 - breaks:
 
   cut points used to create groups. By default, quartiles are used. See
-  [`quantile`](https://rdrr.io/r/stats/quantile.html) for details. A
+  [`quantile()`](https://rdrr.io/r/stats/quantile.html) for details. A
   single integer specifies the intended number of groups; for example,
   `breaks = 10` creates deciles.
 
@@ -31,10 +31,10 @@ cutQ(
 
   labels for the levels of the resulting category. By default, labels
   are defined as `Q1`, `Q2`, and so on. The argument is passed to
-  [`cut`](https://rdrr.io/r/base/cut.html), so `labels = FALSE` returns
-  integer codes instead of a factor. When quantiles are tied, the levels
-  are built from the observed interval bounds instead and `labels` is
-  ignored - a warning is issued in that case.
+  [`cut()`](https://rdrr.io/r/base/cut.html), so `labels = FALSE`
+  returns integer codes instead of a factor. When quantiles are tied,
+  the levels are built from the observed interval bounds instead and
+  `labels` is ignored - a warning is issued in that case.
 
 - na.rm:
 
@@ -45,7 +45,8 @@ cutQ(
 
 - ...:
 
-  optional arguments passed to [`cut`](https://rdrr.io/r/base/cut.html)
+  optional arguments passed to
+  [`cut()`](https://rdrr.io/r/base/cut.html)
 
 ## Value
 
@@ -54,9 +55,9 @@ when `labels = FALSE`
 
 ## Details
 
-This function uses [`quantile`](https://rdrr.io/r/stats/quantile.html)
+This function uses [`quantile()`](https://rdrr.io/r/stats/quantile.html)
 to obtain the specified quantiles of `x`, then calls
-[`cut`](https://rdrr.io/r/base/cut.html) to create a factor variable
+[`cut()`](https://rdrr.io/r/base/cut.html) to create a factor variable
 using the intervals specified by these quantiles.
 
 It properly handles cases where more than one quantile obtains the same
@@ -71,8 +72,8 @@ standards.
 
 ## See also
 
-[`cut`](https://rdrr.io/r/base/cut.html),
-[`quantile`](https://rdrr.io/r/stats/quantile.html)
+[`cut()`](https://rdrr.io/r/base/cut.html),
+[`quantile()`](https://rdrr.io/r/stats/quantile.html)
 
 Other cut: [`cut.integer()`](cut.integer.md), [`cutAge()`](cutAge.md)
 

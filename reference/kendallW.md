@@ -63,9 +63,9 @@ object of class `"htest"` with components:
 ## Details
 
 The test for Kendall's W is completely equivalent to
-[`friedman.test`](https://rdrr.io/r/stats/friedman.test.html). The only
-advantage of this test over Friedman's is that Kendall's W has an
-interpretation as the coefficient of concordance. The test itself is
+[`stats::friedman.test()`](https://rdrr.io/r/stats/friedman.test.html).
+The only advantage of this test over Friedman's is that Kendall's W has
+an interpretation as the coefficient of concordance. The test itself is
 only valid for large samples.  
 Kendall's W should be corrected for ties, if raters did not use a true
 ranking order for the subjects. The function warns if ties are present

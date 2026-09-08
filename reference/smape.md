@@ -55,7 +55,9 @@ along with genuinely missing ones, so the mean is taken over fewer than
 
 ## See also
 
-Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
 [`mae()`](mae.md), [`mape()`](mape.md), [`mse()`](mse.md),
 [`nmae()`](nmae.md), [`nmse()`](nmse.md), [`rmse()`](rmse.md)
 

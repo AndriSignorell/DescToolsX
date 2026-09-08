@@ -31,7 +31,7 @@ tukeyBiweight(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - const:
 
@@ -89,7 +89,7 @@ reproducible. Bootstrap arguments are passed through `...`:
 The biweight mean is a location estimator and therefore unbounded, so
 the open side of a one-sided interval is reported at \\\pm\infty\\ -
 unlike the bounded measures in this package, where it is reported at the
-range limit. See [`ConfidenceIntervals`](ConfidenceIntervals.md).
+range limit. See [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 ## See also
 

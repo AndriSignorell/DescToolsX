@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,18 +74,18 @@ provided to the calculation functions in different ways.
 If only <code>x</code> is passed, this can either be a matrix, which
 is then interpreted as a contingency table (this seems in the case of frequency
 data the natural interpretation and is by the way also what
-<code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></code> expects). However, it can also be a data.frame or
+<code><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test()</a></code> expects). However, it can also be a data.frame or
 a list, which must then contain exactly 2 elements containing the data.
 Alternatively, two single data vectors <code>x</code> and <code>y</code> can be passed.
 The two element arguments are typically processed by forming a contingency
-table with <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a>(x, y, ...)</code>. <code>NAs</code> are by default handled the same
+table with <code>[table](x, y, ...)</code>. <code>NAs</code> are by default handled the same
 way as the function does, so <code>NAs</code> omitted.</p>
 <p>If the measure should be calculated pairwise for a set of variables
-<code><a href="https://andrisignorell.github.io/bedrock/reference/pairApply.html" class="external-link">pairApply</a></code> can be used. This easily allows to create matrices
+<code><a href="https://andrisignorell.github.io/bedrock/reference/pairApply.html" class="external-link">bedrock::pairApply()</a></code> can be used. This easily allows to create matrices
 of association measures (the same way as the <code>cor</code> does). <code>NAs</code>
 again are by default omitted pairwise, which corresponds to the
-<code>pairwise.complete</code> option of <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></code>.
-Use <code><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases</a></code>, if only the complete
+<code>pairwise.complete</code> option of <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>.
+Use <code><a href="https://rdrr.io/r/stats/complete.cases.html" class="external-link">complete.cases()</a></code>, if only the complete
 cases of a <code>data.frame</code> are to be used. (see examples)</p>
 <p>Most functions support calculation of confidence intervals.
 These can be requested by setting <code>conf.level</code> to the desired value (usually 0.95).

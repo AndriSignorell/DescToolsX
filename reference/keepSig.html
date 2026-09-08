@@ -8,12 +8,12 @@
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Keep Only Significant Values in a Symmetric Matrix — keepSig"><meta name="description" content="Replaces entries in a symmetric matrix (typically a correlation matrix)
 with NA wherever the corresponding p-value exceeds a significance
 threshold - retaining only the statistically supported associations.
-Designed as a pre-processing step for plotWeb and
-plotCor."><meta property="og:description" content="Replaces entries in a symmetric matrix (typically a correlation matrix)
+Designed as a pre-processing step for pharos::plotWeb() and
+pharos::plotCor()."><meta property="og:description" content="Replaces entries in a symmetric matrix (typically a correlation matrix)
 with NA wherever the corresponding p-value exceeds a significance
 threshold - retaining only the statistically supported associations.
-Designed as a pre-processing step for plotWeb and
-plotCor."><meta property="og:image" content="/logo.png"></head><body>
+Designed as a pre-processing step for pharos::plotWeb() and
+pharos::plotCor()."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +21,7 @@ plotCor."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,8 +59,8 @@ plotCor."><meta property="og:image" content="/logo.png"></head><body>
     <p>Replaces entries in a symmetric matrix (typically a correlation matrix)
 with <code>NA</code> wherever the corresponding p-value exceeds a significance
 threshold - retaining only the statistically supported associations.
-Designed as a pre-processing step for <code><a href="https://andrisignorell.github.io/pharos/reference/plotWeb.html" class="external-link">plotWeb</a></code> and
-<code><a href="https://andrisignorell.github.io/pharos/reference/plotCor.html" class="external-link">plotCor</a></code>.</p>
+Designed as a pre-processing step for <code><a href="https://andrisignorell.github.io/pharos/reference/plotWeb.html" class="external-link">pharos::plotWeb()</a></code> and
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotCor.html" class="external-link">pharos::plotCor()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -81,7 +81,7 @@ Designed as a pre-processing step for <code><a href="https://andrisignorell.gith
 
 <dl><dt id="arg-m">m<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
 <dd><p>a symmetric numeric matrix. Typically the output of
-<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></code>, but any symmetric matrix of effect sizes or
+<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cor()</a></code>, but any symmetric matrix of effect sizes or
 association measures is accepted.</p></dd>
 
 
@@ -103,7 +103,7 @@ tests on the columns of <code>data</code> (requires <code>data</code>).</p></dd>
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>character; the correlation test method passed to
-<code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></code> when computing p-values from <code>data</code>.
+<code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">stats::cor.test()</a></code> when computing p-values from <code>data</code>.
 One of <code>"pearson"</code> (default), <code>"spearman"</code>, or
 <code>"kendall"</code>.</p></dd>
 

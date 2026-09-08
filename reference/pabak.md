@@ -26,7 +26,7 @@ pabak(
 - y:
 
   `NULL` (default) or a categorical vector of the same length as `x`.
-  When supplied, `table(x, y, ...)` is computed internally.
+  When supplied, `table(x, y, \dots)` is computed internally.
 
 - conf.level:
 
@@ -37,13 +37,13 @@ pabak(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - ...:
 
   further arguments passed to
-  [`table`](https://rdrr.io/r/base/table.html) for the vector interface,
-  for example `useNA`.
+  [`table()`](https://rdrr.io/r/base/table.html) for the vector
+  interface, for example `useNA`.
 
 ## Value
 
@@ -118,12 +118,12 @@ The Wald confidence interval is truncated to the admissible range
 \\\[lci, \infty)\\ and `"right"` \\(-\infty, uci\]\\.
 
 Data can be passed either as a square confusion matrix (or data frame)
-in `x`, or as two vectors `x` and `y`, in which case `table(x, y, ...)`
-is computed internally.
+in `x`, or as two vectors `x` and `y`, in which case
+`table(x, y, \dots)` is computed internally.
 
 Missing values are handled as
-[`table`](https://rdrr.io/r/base/table.html) does - excluded by default.
-Pass `useNA = "ifany"` via `...` to include them.
+[`table()`](https://rdrr.io/r/base/table.html) does - excluded by
+default. Pass `useNA = "ifany"` via `...` to include them.
 
 ## References
 

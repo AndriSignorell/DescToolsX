@@ -1,8 +1,7 @@
 # Spearman Rank Correlation
 
 Calculate Spearman correlation coefficient and its confidence interval.
-In addition to the base R function
-[`cor`](https://rdrr.io/r/stats/cor.html)`(x, method="spearman")`,
+In addition to the base R function `[cor](x, method="spearman")`,
 frequency tables are also accepted as arguments (i.e. actually weights
 are used).
 
@@ -38,7 +37,7 @@ spearmanCor(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - na.rm:
 
@@ -87,7 +86,7 @@ Wiley
 
 ## See also
 
-[`Association`](Association.md)
+[`Association()`](Association.md)
 
 Other assoc.continuous: [`corPart()`](corPart.md),
 [`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),

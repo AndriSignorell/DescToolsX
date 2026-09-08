@@ -21,12 +21,13 @@ gkTau(
 
 - x:
 
-  numeric vector or contingency table. A matrix is treated as a table.
+  a vector (typically a factor, character, or numeric vector) containing
+  categorical data, or a contingency table.
 
 - y:
 
   `NULL` (default) or a vector with compatible dimensions to `x`. If
-  supplied, `table(x, y, ...)` is calculated.
+  supplied, `table(x, y, \dots)` is calculated.
 
 - conf.level:
 
@@ -37,7 +38,7 @@ gkTau(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - direction:
 
@@ -49,7 +50,7 @@ gkTau(
 - ...:
 
   further arguments are passed to the function
-  [`table`](https://rdrr.io/r/base/table.html), allowing i.e. to set
+  [`table()`](https://rdrr.io/r/base/table.html), allowing i.e. to set
   useNA. This refers only to the vector interface; supplying them
   without `y` is an error.
 
@@ -83,8 +84,8 @@ proportions. Misclassification probabilities are based on random
 category assignment with probabilities specified by marginal or
 conditional proportion.
 
-Goodman Kruskal tau reduces to \\\phi^2\\ (see: [`phi`](phi.md)) in the
-2x2-table case.  
+Goodman Kruskal tau reduces to \\\phi^2\\ (see: [`phi()`](phi.md)) in
+the 2x2-table case.  
 
 The measure lies in \\\[0, 1\]\\ by construction. Both ends are reached
 by cancellation, so an estimate within a few machine epsilons of a bound
@@ -125,8 +126,8 @@ Papers Series on Quantitative Applications in the Social Sciences,
 
 ## See also
 
-[`lambda`](lambda.md), [`cramerV`](cramerV.md),
-[`Association`](Association.md)
+[`lambda()`](lambda.md), [`cramerV()`](cramerV.md),
+[`Association()`](Association.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
 [`cramerV()`](cramerV.md), [`lambda()`](lambda.md),

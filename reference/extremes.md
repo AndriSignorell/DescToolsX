@@ -96,10 +96,10 @@ article](https://gallery.rcpp.org/articles/top-elements-from-vectors-using-prior
 
 ## See also
 
-[`max`](https://rdrr.io/r/base/Extremes.html),
-[`min`](https://rdrr.io/r/base/Extremes.html),
-[`sort`](https://rdrr.io/r/base/sort.html),
-[`rank`](https://rdrr.io/r/base/rank.html)
+[`max()`](https://rdrr.io/r/base/Extremes.html),
+[`min()`](https://rdrr.io/r/base/Extremes.html),
+[`sort()`](https://rdrr.io/r/base/sort.html),
+[`rank()`](https://rdrr.io/r/base/rank.html)
 
 Other quantile: [`quantileX()`](quantileX.md)
 

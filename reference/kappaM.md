@@ -31,7 +31,7 @@ kappaM(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - estimator:
 
@@ -101,7 +101,7 @@ interval is preferable when the assumption is doubtful.
 Kappa lies in \\\[-1, 1\]\\, so the interval is restricted to that range
 and the open side of a one-sided interval is reported at the boundary
 rather than at \\\pm\infty\\. See
-[`ConfidenceIntervals`](ConfidenceIntervals.md).
+[`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 ## Note
 

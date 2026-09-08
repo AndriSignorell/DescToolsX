@@ -49,8 +49,8 @@ If `FUN` is a function, it must return a single value. An error is
 thrown if the returned value is not scalar.
 
 Whether `FUN` accepts `na.rm` is decided from its formal arguments; a
-function taking `...` is assumed to pass it on. Functions without either
-are called without it.
+function taking `\dots` is assumed to pass it on. Functions without
+either are called without it.
 
 ## See also
 

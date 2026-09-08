@@ -2,7 +2,7 @@
 
 Computes Pearson's contingency coefficient for a contingency table. If
 `x` and `y` are supplied, the table is constructed first; see
-[`Association`](Association.md).
+[`Association()`](Association.md).
 
 ## Usage
 
@@ -37,7 +37,7 @@ contCoef(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - correct:
 
@@ -47,8 +47,8 @@ contCoef(
 - ...:
 
   further arguments. Named arguments known to
-  [`normalizeToConfusion`](normalizeToConfusion.md) or
-  [`table`](https://rdrr.io/r/base/table.html) are used to build the
+  [`normalizeToConfusion()`](normalizeToConfusion.md) or
+  [`table()`](https://rdrr.io/r/base/table.html) are used to build the
   table; `R` and `type` configure the bootstrap and are described under
   Details. Anything else is an error rather than a silent no-op.
 
@@ -82,7 +82,7 @@ The corrected coefficient therefore ranges from 0 to 1.
 Since no generally accepted analytical interval is available, only
 bootstrap intervals are implemented. The interval is obtained from a
 multinomial bootstrap over the cells of the table. Two arguments
-configure it, both passed through `...`: `R`, the number of replicates
+configure it, both passed through `\dots`: `R`, the number of replicates
 (default 999), and `type`, one of `"perc"` (default) or `"bca"`.
 
 `"perc"` is the default deliberately. Under independence the parameter
@@ -101,7 +101,7 @@ such as [cramerV](cramerV.md) may be preferable when inference is
 central.
 
 For further information see
-[`ConfidenceIntervals`](ConfidenceIntervals.md).
+[`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 ## References
 

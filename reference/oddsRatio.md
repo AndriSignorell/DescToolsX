@@ -38,13 +38,13 @@ print(x, digits = 3, ...)
 - x:
 
   a 2x2 contingency table, two vectors to be cross-tabulated, or a
-  binomial [`glm`](https://rdrr.io/r/stats/glm.html) object
+  binomial [`stats::glm()`](https://rdrr.io/r/stats/glm.html) object
 
 - ...:
 
   further arguments passed to methods. For the default method with two
-  vectors, these reach [`table`](https://rdrr.io/r/base/table.html), so
-  `useNA` can be set here.
+  vectors, these reach [`table()`](https://rdrr.io/r/base/table.html),
+  so `useNA` can be set here.
 
 - y:
 
@@ -60,7 +60,7 @@ print(x, digits = 3, ...)
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md). An odds ratio is
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md). An odds ratio is
   bounded below by 0 and unbounded above, so the open side is reported
   at 0 or `Inf` accordingly. Ignored, with a warning, for
   `method = "profile"`.
@@ -150,11 +150,11 @@ and is usually not the quantity of interest.
 Two interval methods are available. `"wald"` is the symmetric interval
 on the log-odds scale, back-transformed. `"profile"` inverts the
 likelihood ratio test through
-[`confint.glm`](https://rdrr.io/r/stats/confint.html); it is asymmetric
-on the odds scale, generally more reliable in small samples or with
-sparse cells, and considerably slower because the model is refitted
-along each coefficient. Profile intervals are two-sided by construction,
-so `sides` is ignored for them and a warning is issued.
+[`stats::confint.glm()`](https://rdrr.io/r/stats/confint.html); it is
+asymmetric on the odds scale, generally more reliable in small samples
+or with sparse cells, and considerably slower because the model is
+refitted along each coefficient. Profile intervals are two-sided by
+construction, so `sides` is ignored for them and a warning is issued.
 
 Unlike the table method, the model method computes an interval by
 default (`conf.level = 0.95`): a coefficient table without intervals
@@ -181,7 +181,7 @@ of the Royal Statistical Society Series B*, *28*(1), 164–179.
 ## See also
 
 [attachAliases](attach-detach-aliases.md), [relRisk](relRisk.md),
-[`confint.glm`](https://rdrr.io/r/stats/confint.html)
+[`stats::confint.glm()`](https://rdrr.io/r/stats/confint.html)
 
 Other effect.size: [`cohenD()`](cohenD.md), [`cohenH()`](cohenH.md),
 [`etaSq()`](etaSq.md), [`glassDelta()`](glassDelta.md),

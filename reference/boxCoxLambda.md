@@ -59,13 +59,14 @@ parameter
 ## Details
 
 Seasonality is taken from `x` itself: a
-[`ts`](https://rdrr.io/r/stats/ts.html) object with `frequency(x) > 1`
-is treated as seasonal, anything else (including a plain numeric vector)
-as non-seasonal. For method `"loglik"` the profile log likelihood is
-therefore computed from `lm(x ~ trend)` for non-seasonal data and from
-`lm(x ~ trend + factor(cycle(x)))` for seasonal data. Both methods
-optimise lambda continuously over `[lower, upper]` via
-[`optimize`](https://rdrr.io/r/stats/optimize.html).
+[`stats::ts()`](https://rdrr.io/r/stats/ts.html) object with
+`frequency(x) > 1` is treated as seasonal, anything else (including a
+plain numeric vector) as non-seasonal. For method `"loglik"` the profile
+log likelihood is therefore computed from `lm(x ~ trend)` for
+non-seasonal data and from `lm(x ~ trend + factor(cycle(x)))` for
+seasonal data. Both methods optimise lambda continuously over
+`[lower, upper]` via
+[`stats::optimize()`](https://rdrr.io/r/stats/optimize.html).
 
 Both methods need enough data to identify their criterion, and signal an
 error rather than falling back silently when they do not have it:

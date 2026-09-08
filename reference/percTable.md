@@ -67,9 +67,9 @@ percTable(
 - data:
 
   an optional matrix or data frame (or similar: see
-  [`model.frame`](https://rdrr.io/r/stats/model.frame.html)) containing
-  the variables in the formula `formula`. By default the variables are
-  taken from `environment(formula)`.
+  [`model.frame()`](https://rdrr.io/r/stats/model.frame.html))
+  containing the variables in the formula `formula`. By default the
+  variables are taken from `environment(formula)`.
 
 - subset:
 
@@ -138,13 +138,13 @@ Use
 if you want to have your table sorted by rows.  
   
 The style in which numbers are formatted is selected by
-[`style()`](https://andrisignorell.github.io/pharos/reference/style.html)
+[`pharos::style()`](https://andrisignorell.github.io/pharos/reference/style.html)
 from the DescToolsX options. Absolute frequencies will use
 `style("abs.sty")` and `style("per.sty")` will do it for the
 percentages. The options can be changed with `style(abs, digits=5)`
 which is basically a `"style"`-object containing any format information
 used in
-[`fm`](https://andrisignorell.github.io/pharos/reference/fm.html).
+[`pharos::fm()`](https://andrisignorell.github.io/pharos/reference/fm.html).
 
 `margins` adds the marginal distributions. In the frequency table these
 are the usual row/column sums; in the percentage tables the margin holds

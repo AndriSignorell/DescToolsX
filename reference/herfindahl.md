@@ -64,7 +64,7 @@ Hirschman, A. O. (1964). The paternity of an index.
 
 ## See also
 
-[`gini`](gini.md), [`atkinson`](atkinson.md)
+[`gini()`](gini.md), [`atkinson()`](atkinson.md)
 
 Other diversity.concentration: [`entropy()`](entropy.md),
 [`simpson()`](simpson.md)

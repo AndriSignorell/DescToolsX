@@ -39,7 +39,7 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
 - na.action:
 
   function for handling missing values in the model frame. Default is
-  [`na.pass`](https://rdrr.io/r/stats/na.fail.html).
+  [`stats::na.pass()`](https://rdrr.io/r/stats/na.fail.html).
 
 - ...:
 

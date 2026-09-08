@@ -17,7 +17,7 @@ adequate statistical tests."><meta property="og:image" content="/logo.png"></hea
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,11 +108,11 @@ should also be displayed for the whole, ungrouped variable</p></dd>
 
 <dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
 <dd><p>the character on whose position the strings will be aligned.
-Left alignment can be requested by setting <code>sep = "\l"</code>, right
-alignment by <code>"\r"</code> and center alignment by <code>"\c"</code>. Mind the
+Left alignment can be requested by setting <code>sep = "\\l"</code>, right
+alignment by <code>"\\r"</code> and center alignment by <code>"\\c"</code>. Mind the
 backslashes, as if they are omitted, strings would be aligned to the
-<b>character</b> <b>l</b>, <b>r</b> or <b>c</b> respectively. Default value
-is <code>"\l"</code>, thus left alignment.</p></dd>
+<strong>character</strong> <strong>l</strong>, <strong>r</strong> or <strong>c</strong> respectively. Default value
+is <code>"\\l"</code>, thus left alignment.</p></dd>
 
 
 <dt id="arg-fun">FUN<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
@@ -206,11 +206,11 @@ p-value.</p><div class="sourceCode"><pre><code>
 the table together with the significance codes, can be set with the variable
 <code>lbl</code>.</p>
 <p>Great importance was attached to the free definition of the number fms.
-By default, the optionally definable fm templates of <b>DescToolsX</b>
+By default, the optionally definable fm templates of <strong>DescToolsX</strong>
 are used. Deviations from this can be freely passed as arguments to the
 function. fms can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of the
-function <code><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm()</a></code> are available and can be provided as a list.
+function <code><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">pharos::fm()</a></code> are available and can be provided as a list.
 See examples which show several different implementations.</p><div class="sourceCode"><pre><code><span></span>
 <span>  <span class="va">fmt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>abs  <span class="op">=</span> <span class="st">"abs.sty"</span>,</span>
 <span>             num  <span class="op">=</span> <span class="st">"num.sty"</span>,</span>
@@ -218,7 +218,7 @@ See examples which show several different implementations.</p><div class="source
 <span>             pval <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"*"</span>, naForm <span class="op">=</span> <span class="st">"   "</span><span class="op">)</span></span>
 <span>             <span class="op">)</span> </span></code></pre></div>
 
-<p>Several tables can be appended using <code><a href="https://andrisignorell.github.io/bedrock/reference/appendX.html" class="external-link">appendX()</a></code>.
+<p>Several tables can be appended using <code><a href="https://andrisignorell.github.io/bedrock/reference/appendX.html" class="external-link">bedrock::appendX()</a></code>.
 This can be useful,
 if e.g. the <code>mean/sd</code> AND <code>median/IQR</code> should be displayed together.
 Another use case is to introduce a delimiter row.</p>
@@ -229,7 +229,7 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/bedrock/reference/appendX.html" class="external-link">appendX()</a></code></p>
+    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/bedrock/reference/appendX.html" class="external-link">bedrock::appendX()</a></code></p>
 <p>Other frequency:
 <code><a href="expFreq.html">expFreq()</a></code>,
 <code><a href="freq.html">freq()</a></code>,

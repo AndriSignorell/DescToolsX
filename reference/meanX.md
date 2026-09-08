@@ -32,7 +32,7 @@ meanX(x, weights = NULL, trim = 0, na.rm = FALSE, ...)
 - breaks:
 
   breaks for calculating the mean for classified data as composed by
-  [`freq`](freq.md)
+  [`freq()`](freq.md)
 
 - weights:
 
@@ -69,7 +69,7 @@ weights. Conceptually, this corresponds to computing the statistic on a
 reweighted empirical distribution, where observations with larger
 weights represent a higher frequency in the population.
 
-**Note:**` ` Analytic (precision) weights, which assume
+\*\*Note:\*\*` ` Analytic (precision) weights, which assume
 observation-specific error variances or likelihood-based weighting, are
 deliberately not supported. This design ensures that all weighted
 statistics remain well-defined for ordinal, robust, and
@@ -85,9 +85,9 @@ Language*. Wadsworth & Brooks/Cole.
 
 ## See also
 
-[`weighted.mean`](https://rdrr.io/r/stats/weighted.mean.html),
-[`mean.POSIXct`](https://rdrr.io/r/base/DateTimeClasses.html),
-[`colMeans`](https://rdrr.io/r/base/colSums.html) for row and column
+[`weighted.mean()`](https://rdrr.io/r/stats/weighted.mean.html),
+[`mean.POSIXct()`](https://rdrr.io/r/base/DateTimeClasses.html),
+[`colMeans()`](https://rdrr.io/r/base/colSums.html) for row and column
 means.
 
 Other location: [`gmean()`](gmean.md), [`hmean()`](hmean.md),

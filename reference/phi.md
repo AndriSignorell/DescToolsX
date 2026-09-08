@@ -24,7 +24,7 @@ phi(x, y = NULL, ...)
 - ...:
 
   additional arguments passed to
-  [`table`](https://rdrr.io/r/base/table.html)
+  [`base::table()`](https://rdrr.io/r/base/table.html)
 
 ## Value
 
@@ -48,14 +48,14 @@ This definition is **unsigned**. For a 2x2 table the signed coefficient
 n\_{\cdot 1} n\_{\cdot 2}}\\ equals the Pearson correlation of the two
 0/1 indicators and lies in \\\[-1, 1\]\\; the value returned here is its
 absolute value, so the direction of the association is not reported. See
-[`pearsonCor`](pearsonCor.md) if the sign is needed.
+[`pearsonCor()`](pearsonCor.md) if the sign is needed.
 
 For contingency tables larger than 2x2, Phi is not bounded by 1 and may
-exceed 1. In such cases, [`cramerV`](cramerV.md) is usually preferred.
+exceed 1. In such cases, [`cramerV()`](cramerV.md) is usually preferred.
 
 ## See also
 
-[`chisq.test`](https://rdrr.io/r/stats/chisq.test.html)
+[`chisq.test()`](https://rdrr.io/r/stats/chisq.test.html)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
 [`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),

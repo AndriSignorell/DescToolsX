@@ -64,8 +64,8 @@ reported as not varying.
 
 ## See also
 
-[`inherits`](https://rdrr.io/r/base/class.html),
-[`DateTimeClasses`](https://rdrr.io/r/base/DateTimeClasses.html)
+[`base::inherits()`](https://rdrr.io/r/base/class.html),
+[`base::DateTimeClasses()`](https://rdrr.io/r/base/DateTimeClasses.html)
 
 Other date.time: [`addMonths()`](AddMonths.md),
 [`countWorkDays()`](countWorkDays.md),

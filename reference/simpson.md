@@ -18,7 +18,7 @@ simpson(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE)
   a factor or character vector of observations, or a vector of
   non-negative counts. Note that a *numeric* vector is always read as
   counts, never as observations; wrap it in
-  [`factor`](https://rdrr.io/r/base/factor.html) to have it tabulated
+  [`factor()`](https://rdrr.io/r/base/factor.html) to have it tabulated
   instead.
 
 - method:

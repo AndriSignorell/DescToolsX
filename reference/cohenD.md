@@ -34,7 +34,7 @@ cohenD(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - correct:
 
@@ -99,7 +99,8 @@ in the Social Sciences Series*, No. 140. Thousand Oaks, CA: Sage. pp.
 
 ## See also
 
-[`glassDelta`](glassDelta.md), [`meanX`](meanX.md), [`varX`](varX.md)
+[`glassDelta()`](glassDelta.md), [`meanX()`](meanX.md),
+[`varX()`](varX.md)
 
 Other effect.size: [`cohenH()`](cohenH.md), [`etaSq()`](etaSq.md),
 [`glassDelta()`](glassDelta.md), [`oddsRatio()`](oddsRatio.md),

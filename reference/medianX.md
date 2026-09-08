@@ -46,7 +46,7 @@ medianX(x, breaks, ...)
 - breaks:
 
   breaks for calculating the mean for classified data as composed by
-  [`freq`](freq.md)
+  [`freq()`](freq.md)
 
 ## Value
 
@@ -63,8 +63,8 @@ of `x[FALSE][NA]`).
 This is a generic function for which methods can be written. However,
 the default method makes use of `is.na`, `sort` and `mean` from package
 base all of which are generic, and so the default method will work for
-most classes (e.g., `"`[`Date`](https://rdrr.io/r/base/Dates.html)`"`)
-for which a median is a reasonable concept.
+most classes (e.g., `"[Date]"`) for which a median is a reasonable
+concept.
 
 Calculating the median for ordered factors is not implemented in
 standard R, as it's not well defined (it is not clear what to do if the
@@ -87,7 +87,7 @@ Language*. Wadsworth & Brooks/Cole.
 
 ## See also
 
-[`quantile`](https://rdrr.io/r/stats/quantile.html) for general
+[`quantile()`](https://rdrr.io/r/stats/quantile.html) for general
 quantiles,  
 [Maechler on R-help mailing list,
 2003-Nov](https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html)  

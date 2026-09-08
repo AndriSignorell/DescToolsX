@@ -39,7 +39,7 @@ percAgreement(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md). A proportion of
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md). A proportion of
   agreement lies in \\\[0, 1\]\\, so the open side is reported at that
   boundary rather than at \\\pm\infty\\.
 

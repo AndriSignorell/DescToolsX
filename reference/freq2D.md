@@ -59,7 +59,7 @@ freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
 
 - formula:
 
-  a [`formula`](https://rdrr.io/r/stats/formula.html), such as `y ~ x`
+  a [`formula()`](https://rdrr.io/r/stats/formula.html), such as `y ~ x`
 
 ## Value
 
@@ -69,7 +69,7 @@ and whose columns represent the x bins
 ## Details
 
 The exact number of bins is determined by the
-[`pretty`](https://rdrr.io/r/base/pretty.html) function, based on the
+[`pretty()`](https://rdrr.io/r/base/pretty.html) function, based on the
 value of `n`.
 
 Padding the margins with zeros can be helpful for subsequent analysis,
@@ -82,9 +82,9 @@ standards.
 
 ## See also
 
-[`cut`](https://rdrr.io/r/base/cut.html),
-[`table`](https://rdrr.io/r/base/table.html), and
-[`print.table`](https://rdrr.io/r/base/print.html) are the basic
+[`cut()`](https://rdrr.io/r/base/cut.html),
+[`table()`](https://rdrr.io/r/base/table.html), and
+[`print.table()`](https://rdrr.io/r/base/print.html) are the basic
 underlying functions.
 
 Other frequency: [`expFreq()`](expFreq.md), [`freq()`](freq.md),
@@ -191,6 +191,4 @@ freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 #>   -38   0   0   0   0   0   0   1   2   0   0   0   0   0   0
 #>   -39   0   0   0   0   0   0   1   0   0   0   0   0   0   0
 #>   -40   0   0   0   0   0   0   0   0   0   0   0   0   0   0
-#> attr(,"data.name")
-#> [1] "lat ~ long"
 ```

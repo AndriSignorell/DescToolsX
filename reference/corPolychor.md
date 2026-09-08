@@ -27,7 +27,7 @@ corPolychor(
 - y:
 
   optional second ordinal vector. If supplied, a contingency table is
-  constructed via `table(x, y, ...)`.
+  constructed via `table(x, y, \dots)`.
 
 - method:
 
@@ -50,7 +50,7 @@ corPolychor(
 - control:
 
   a list of control parameters passed to
-  [`optim`](https://rdrr.io/r/stats/optim.html)
+  [`stats::optim()`](https://rdrr.io/r/stats/optim.html)
 
 - maxcor:
 
@@ -60,8 +60,8 @@ corPolychor(
 - ...:
 
   further arguments passed to
-  [`table`](https://rdrr.io/r/base/table.html) when `y` is supplied, for
-  example `useNA`
+  [`table()`](https://rdrr.io/r/base/table.html) when `y` is supplied,
+  for example `useNA`
 
 ## Value
 
@@ -116,7 +116,8 @@ The polychoric correlation estimates the correlation between two latent
 normally distributed variables underlying observed ordinal variables.
 
 The likelihood is based on a discretized bivariate normal distribution,
-evaluated via [`pmvnorm`](https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html).
+evaluated via
+[`mvtnorm::pmvnorm()`](https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html).
 
 For numerical stability:
 
@@ -140,8 +141,8 @@ Models*.
 
 ## See also
 
-[`pmvnorm`](https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html),
-[`optim`](https://rdrr.io/r/stats/optim.html)
+[`mvtnorm::pmvnorm()`](https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html),
+[`stats::optim()`](https://rdrr.io/r/stats/optim.html)
 
 Other assoc.continuous: [`corPart()`](corPart.md),
 [`findCorrX()`](findCorrX.md), [`hoeffdingD()`](hoeffdingD.md),

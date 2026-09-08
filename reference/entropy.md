@@ -32,7 +32,7 @@ entropy(x, y = NULL, base = 2, normalize = FALSE, na.rm = FALSE, ...)
 - na.rm:
 
   logical; if `TRUE`, missing counts are dropped. A categorical `x` is
-  tabulated with [`table`](https://rdrr.io/r/base/table.html), which
+  tabulated with [`table()`](https://rdrr.io/r/base/table.html), which
   excludes `NA` by default in any case.
 
 - ...:

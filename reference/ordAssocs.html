@@ -15,7 +15,7 @@ or a contingency table, optionally with confidence intervals."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,7 +123,7 @@ the estimate</p></dd>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.
+<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.
 The open side is closed at the boundary of the parameter's range -
 \(\pm 1\) for gamma, the tau family and Somers' \(D\), and
 \([0, 1]\) for the c statistic - rather than at an infinity none of
@@ -163,7 +163,7 @@ list containing the selected measures.</p>
     <p>Let \(P\) and \(Q\) denote the numbers of concordant and discordant
 pairs, \(T_X\) and \(T_Y\) the numbers tied on \(X\) and \(Y\),
 \(n_0=n(n-1)/2\), and \(m\) the smaller table dimension.
-<code><a href="conDisPairs.html">conDisPairs</a></code> returns these pair counts as <code>C</code>, <code>D</code>,
+<code><a href="conDisPairs.html">conDisPairs()</a></code> returns these pair counts as <code>C</code>, <code>D</code>,
 <code>Ties_X</code>, and <code>Ties_Y</code> and describes their calculation.</p>
 <p>The measures are defined as follows:</p>
 <dl><dt>Goodman–Kruskal \(\gamma\) (<code>gkGamma</code>):</dt>
@@ -207,7 +207,7 @@ for the other direction. <code>somersDelta()</code> performs this reversal when
 <code>direction="column"</code>.</p>
 <p>The c-statistic is used for a binary outcome and consistently ordered predictions
 and is related to Somers D as \(C_{stat}=(D+1)/2\).
-See <code><a href="cStat.html">cStat</a></code> for direct estimation of the
+See <code><a href="cStat.html">cStat()</a></code> for direct estimation of the
 c-statistic from predicted values and a binary response.</p>
     </div>
     <div class="section level2">

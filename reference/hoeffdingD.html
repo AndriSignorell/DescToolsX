@@ -19,7 +19,7 @@ classical \(O(n^2)\) one, which is slower but handles ties exactly."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -211,7 +211,7 @@ relied on in the situation the statistic is most often used for.</p>
 </div>
 
 <p>Missing values are an error rather than a silent approximation:
-<code><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></code> and <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank</a></code> place <code>NA</code>s at the end
+<code><a href="https://rdrr.io/r/base/order.html" class="external-link">order()</a></code> and <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank()</a></code> place <code>NA</code>s at the end
 by default, which yields a formally valid permutation and hence a number
 that looks like an answer. Remove or impute them before calling.</p>
     </div>
@@ -231,14 +231,14 @@ Fast computation of Hoeffding's D statistic.</p>
 Nonparametric Statistical Methods (3rd ed.).</p>
 <p>Blum, J. R., Kiefer, J. and Rosenblatt, M. (1961).
 Distribution free tests of independence based on the sample distribution
-function. <em>Annals of Mathematical Statistics</em> <b>32</b>, 485-498.</p>
+function. <em>Annals of Mathematical Statistics</em> <strong>32</strong>, 485-498.</p>
 <p>Arcones, M. A. and Gine, E. (1992).
 On the bootstrap of U and V statistics.
-<em>Annals of Statistics</em> <b>20</b>, 655-674.</p>
+<em>Annals of Statistics</em> <strong>20</strong>, 655-674.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="spearmanCor.html">spearmanCor</a></code>, <code><a href="ordAssocs.html">kendallTauB</a></code></p>
+    <div class="dont-index"><p><code><a href="spearmanCor.html">spearmanCor()</a></code>, <code><a href="ordAssocs.html">kendallTauB()</a></code></p>
 <p>Other assoc.continuous:
 <code><a href="corPart.html">corPart()</a></code>,
 <code><a href="corPolychor.html">corPolychor()</a></code>,

@@ -20,22 +20,22 @@ the calculation functions in different ways. If only `x` is passed, this
 can either be a matrix, which is then interpreted as a contingency table
 (this seems in the case of frequency data the natural interpretation and
 is by the way also what
-[`chisq.test`](https://rdrr.io/r/stats/chisq.test.html) expects).
+[`chisq.test()`](https://rdrr.io/r/stats/chisq.test.html) expects).
 However, it can also be a data.frame or a list, which must then contain
 exactly 2 elements containing the data. Alternatively, two single data
 vectors `x` and `y` can be passed. The two element arguments are
 typically processed by forming a contingency table with
-[`table`](https://rdrr.io/r/base/table.html)`(x, y, ...)`. `NAs` are by
-default handled the same way as the function does, so `NAs` omitted.
+`[table](x, y, ...)`. `NAs` are by default handled the same way as the
+function does, so `NAs` omitted.
 
 If the measure should be calculated pairwise for a set of variables
-[`pairApply`](https://andrisignorell.github.io/bedrock/reference/pairApply.html)
+[`bedrock::pairApply()`](https://andrisignorell.github.io/bedrock/reference/pairApply.html)
 can be used. This easily allows to create matrices of association
 measures (the same way as the `cor` does). `NAs` again are by default
 omitted pairwise, which corresponds to the `pairwise.complete` option of
-[`cor`](https://rdrr.io/r/stats/cor.html). Use
-[`complete.cases`](https://rdrr.io/r/stats/complete.cases.html), if only
-the complete cases of a `data.frame` are to be used. (see examples)
+[`cor()`](https://rdrr.io/r/stats/cor.html). Use
+[`complete.cases()`](https://rdrr.io/r/stats/complete.cases.html), if
+only the complete cases of a `data.frame` are to be used. (see examples)
 
 Most functions support calculation of confidence intervals. These can be
 requested by setting `conf.level` to the desired value (usually 0.95).

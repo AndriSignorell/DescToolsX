@@ -22,11 +22,12 @@ conDisPairs(x, y = NULL)
   optional second numeric vector or ordered factor. If provided, vector
   mode is used.
 
-  An [`ordered`](https://rdrr.io/r/base/factor.html) factor is converted
-  to its level codes, which is exactly the ordinal information the
-  counts rest on. An *unordered* factor is refused: its levels have no
-  order, and converting it anyway would silently impose the alphabetical
-  one and report concordances that are an artefact of the level names.
+  An [`ordered()`](https://rdrr.io/r/base/factor.html) factor is
+  converted to its level codes, which is exactly the ordinal information
+  the counts rest on. An *unordered* factor is refused: its levels have
+  no order, and converting it anyway would silently impose the
+  alphabetical one and report concordances that are an artefact of the
+  level names.
 
 ## Value
 
@@ -75,7 +76,7 @@ ignores all ties, Kendall's tau-b corrects for `Ties_X` and `Ties_Y`
 separately, Somers' \\D\\ for one of them only, and the \\c\\ statistic
 scores half a point for a tie in \\y\\. All of them are therefore a
 short formula on top of this one function - see
-[`ordAssocs`](ordAssocs.md).
+[`ordAssocs()`](ordAssocs.md).
 
 ### Two input modes
 
@@ -164,6 +165,6 @@ set.seed(1)
 n <- 2e5
 system.time(conDisPairs(rnorm(n), rnorm(n)))
 #>    user  system elapsed 
-#>   0.101   0.001   0.102 
+#>   0.097   0.001   0.097 
 # }
 ```

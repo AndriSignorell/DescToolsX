@@ -45,9 +45,11 @@ The mean squared error is defined as: \$\$ \frac{1}{n} \sum (ref - x)^2
 
 ## See also
 
-[`mean`](https://rdrr.io/r/base/mean.html)
+[`mean()`](https://rdrr.io/r/base/mean.html)
 
-Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
 [`mae()`](mae.md), [`mape()`](mape.md), [`nmae()`](nmae.md),
 [`nmse()`](nmse.md), [`rmse()`](rmse.md), [`smape()`](smape.md)
 

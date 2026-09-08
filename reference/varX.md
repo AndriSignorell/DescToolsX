@@ -51,7 +51,7 @@ varX(x, breaks, estimator = c("unbiased", "ml"), ...)
 - breaks:
 
   breaks for calculating the variance for classified data as composed by
-  [`freq`](freq.md)
+  [`freq()`](freq.md)
 
 ## Value
 
@@ -72,12 +72,12 @@ Using estimator `"unbiased"` the denominator \\n - 1\\ is used (known as
 `"ml"` yields the biased version using the denominator \\n\\. With
 frequency weights \\n\\ is the sum of the weights.
 
-These functions return [`NA`](https://rdrr.io/r/base/NA.html) when there
-is only one observation and `NA` when `x` has length zero.
+These functions return [`NA()`](https://rdrr.io/r/base/NA.html) when
+there is only one observation and `NA` when `x` has length zero.
 
-**Note:**` ` Analytic (precision) weights are not supported. For
+\*\*Note:\*\*` ` Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
-[`cov.wt`](https://rdrr.io/r/stats/cov.wt.html).
+[`stats::cov.wt()`](https://rdrr.io/r/stats/cov.wt.html).
 
 ## References
 
@@ -86,13 +86,13 @@ Language*. Wadsworth & Brooks/Cole.
 
 ## See also
 
-[`varCI`](https://andrisignorell.github.io/lumen/reference/varCI.html)
+[`lumen::varCI()`](https://andrisignorell.github.io/lumen/reference/varCI.html)
 for confidence intervals,
-[`varTest`](https://andrisignorell.github.io/lumen/reference/varTest.html)
+[`lumen::varTest()`](https://andrisignorell.github.io/lumen/reference/varTest.html)
 for tests and base R's implementations
-[`var`](https://rdrr.io/r/stats/cor.html),
-[`sd`](https://rdrr.io/r/stats/sd.html),
-[`cov`](https://rdrr.io/r/stats/cor.html)
+[`var()`](https://rdrr.io/r/stats/cor.html),
+[`sd()`](https://rdrr.io/r/stats/sd.html),
+[`cov()`](https://rdrr.io/r/stats/cor.html)
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
 [`madX()`](madX.md), [`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),

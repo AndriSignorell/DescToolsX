@@ -44,9 +44,11 @@ The RMSE is defined as: \$\$ \sqrt{\frac{1}{n} \sum (ref - x)^2} \$\$
 
 ## See also
 
-[`mse`](mse.md), [`mae`](mae.md)
+[`mse()`](mse.md), [`mae()`](mae.md)
 
-Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
 [`mae()`](mae.md), [`mape()`](mape.md), [`mse()`](mse.md),
 [`nmae()`](nmae.md), [`nmse()`](nmse.md), [`smape()`](smape.md)
 

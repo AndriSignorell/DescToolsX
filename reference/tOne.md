@@ -55,11 +55,11 @@ x[i, j, ..., drop = FALSE]
 - align:
 
   the character on whose position the strings will be aligned. Left
-  alignment can be requested by setting `sep = "\l"`, right alignment by
-  `"\r"` and center alignment by `"\c"`. Mind the backslashes, as if
-  they are omitted, strings would be aligned to the **character** **l**,
-  **r** or **c** respectively. Default value is `"\l"`, thus left
-  alignment.
+  alignment can be requested by setting `sep = "\\l"`, right alignment
+  by `"\\r"` and center alignment by `"\\c"`. Mind the backslashes, as
+  if they are omitted, strings would be aligned to the **character**
+  **l**, **r** or **c** respectively. Default value is `"\\l"`, thus
+  left alignment.
 
 - FUN:
 
@@ -163,9 +163,9 @@ used. Deviations from this can be freely passed as arguments to the
 function. fms can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of
 the function
-[`fm()`](https://andrisignorell.github.io/pharos/reference/fm.html) are
-available and can be provided as a list. See examples which show several
-different implementations.
+[`pharos::fm()`](https://andrisignorell.github.io/pharos/reference/fm.html)
+are available and can be provided as a list. See examples which show
+several different implementations.
 
 
       fmt = list(abs  = "abs.sty",
@@ -175,7 +175,7 @@ different implementations.
                  ) 
 
 Several tables can be appended using
-[`appendX()`](https://andrisignorell.github.io/bedrock/reference/appendX.html).
+[`bedrock::appendX()`](https://andrisignorell.github.io/bedrock/reference/appendX.html).
 This can be useful, if e.g. the `mean/sd` AND `median/IQR` should be
 displayed together. Another use case is to introduce a delimiter row.
 
@@ -186,7 +186,7 @@ and alignment are freely selectable in the Word table.
 
 ## See also
 
-[`appendX()`](https://andrisignorell.github.io/bedrock/reference/appendX.html)
+[`bedrock::appendX()`](https://andrisignorell.github.io/bedrock/reference/appendX.html)
 
 Other frequency: [`expFreq()`](expFreq.md), [`freq()`](freq.md),
 [`freq2D()`](freq2D.md), [`percTable()`](percTable.md)

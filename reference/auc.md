@@ -51,8 +51,8 @@ auc(
 - ...:
 
   additional arguments passed to
-  [`approx`](https://rdrr.io/r/stats/approxfun.html) for trapezoidal
-  interpolation
+  [`stats::approx()`](https://rdrr.io/r/stats/approxfun.html) for
+  trapezoidal interpolation
 
 ## Value
 
@@ -83,13 +83,15 @@ is not performed.
 
 ## See also
 
-[`approx`](https://rdrr.io/r/stats/approxfun.html),
-[`splinefun`](https://rdrr.io/r/stats/splinefun.html),
-[`integrate`](https://rdrr.io/r/stats/integrate.html)
+[`stats::approx()`](https://rdrr.io/r/stats/approxfun.html),
+[`stats::splinefun()`](https://rdrr.io/r/stats/splinefun.html),
+[`stats::integrate()`](https://rdrr.io/r/stats/integrate.html)
 
-Other model.metrics: [`brierScore()`](brierScore.md), [`mae()`](mae.md),
-[`mape()`](mape.md), [`mse()`](mse.md), [`nmae()`](nmae.md),
-[`nmse()`](nmse.md), [`rmse()`](rmse.md), [`smape()`](smape.md)
+Other model.metrics: [`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
+[`mae()`](mae.md), [`mape()`](mape.md), [`mse()`](mse.md),
+[`nmae()`](nmae.md), [`nmse()`](nmse.md), [`rmse()`](rmse.md),
+[`smape()`](smape.md)
 
 ## Examples
 

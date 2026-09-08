@@ -64,7 +64,7 @@ coefVarCI(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
@@ -138,9 +138,9 @@ confidence intervals. See Smithson (2003).
 `sides` names the side on which the finite bound lies: `"left"` yields
 \\\[lci, \infty)\\, `"right"` yields \\(-\infty, uci\]\\.
 
-**Note:**` ` Analytic (precision) weights are not supported. For
+\*\*Note:\*\*` ` Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
-[`cov.wt`](https://rdrr.io/r/stats/cov.wt.html).
+[`stats::cov.wt()`](https://rdrr.io/r/stats/cov.wt.html).
 
 ## Note
 
@@ -180,7 +180,7 @@ in Statistics Theory and Methods*, Volume 36, No. 12, pp 2187-2206.
 
 ## See also
 
-[`meanX`](meanX.md), [`sdX`](varX.md), (both supporting weights)
+[`meanX()`](meanX.md), [`sdX()`](varX.md), (both supporting weights)
 
 Other dispersion: [`iqrX()`](iqrX.md), [`madX()`](madX.md),
 [`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),

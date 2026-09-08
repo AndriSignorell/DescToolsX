@@ -71,7 +71,7 @@ somersDelta(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See details
-  in [`ConfidenceIntervals`](ConfidenceIntervals.md). The open side is
+  in [`ConfidenceIntervals()`](ConfidenceIntervals.md). The open side is
   closed at the boundary of the parameter's range - \\\pm 1\\ for gamma,
   the tau family and Somers' \\D\\, and \\\[0, 1\]\\ for the c
   statistic - rather than at an infinity none of them can reach.
@@ -110,7 +110,7 @@ selected measures.
 Let \\P\\ and \\Q\\ denote the numbers of concordant and discordant
 pairs, \\T_X\\ and \\T_Y\\ the numbers tied on \\X\\ and \\Y\\,
 \\n_0=n(n-1)/2\\, and \\m\\ the smaller table dimension.
-[`conDisPairs`](conDisPairs.md) returns these pair counts as `C`, `D`,
+[`conDisPairs()`](conDisPairs.md) returns these pair counts as `C`, `D`,
 `Ties_X`, and `Ties_Y` and describes their calculation.
 
 The measures are defined as follows:
@@ -145,7 +145,7 @@ other direction. `somersDelta()` performs this reversal when
 
 The c-statistic is used for a binary outcome and consistently ordered
 predictions and is related to Somers D as \\C\_{stat}=(D+1)/2\\. See
-[`cStat`](cStat.md) for direct estimation of the c-statistic from
+[`cStat()`](cStat.md) for direct estimation of the c-statistic from
 predicted values and a binary response.
 
 ## References

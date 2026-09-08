@@ -152,8 +152,8 @@ but it is deliberately not offered: its coverage cannot be relied on in
 the situation the statistic is most often used for.
 
 Missing values are an error rather than a silent approximation:
-[`order`](https://rdrr.io/r/base/order.html) and
-[`rank`](https://rdrr.io/r/base/rank.html) place `NA`s at the end by
+[`order()`](https://rdrr.io/r/base/order.html) and
+[`rank()`](https://rdrr.io/r/base/rank.html) place `NA`s at the end by
 default, which yields a formally valid permutation and hence a number
 that looks like an answer. Remove or impute them before calling.
 
@@ -180,7 +180,7 @@ statistics. *Annals of Statistics* **20**, 655-674.
 
 ## See also
 
-[`spearmanCor`](spearmanCor.md), [`kendallTauB`](ordAssocs.md)
+[`spearmanCor()`](spearmanCor.md), [`kendallTauB()`](ordAssocs.md)
 
 Other assoc.continuous: [`corPart()`](corPart.md),
 [`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),

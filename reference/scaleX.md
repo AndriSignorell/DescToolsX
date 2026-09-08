@@ -50,32 +50,33 @@ the centered and scaled matrix. The numeric centerings and scalings used
 
 ## Details
 
-The R base function [`scale`](https://rdrr.io/r/base/scale.html) centers
-each column by its mean and divides by the root mean square of the
-centered column, which for centered data is the standard deviation. Both
-are sensitive to outliers: a single extreme value moves the mean and
-inflates the standard deviation, so the remaining observations are
+The R base function [`base::scale()`](https://rdrr.io/r/base/scale.html)
+centers each column by its mean and divides by the root mean square of
+the centered column, which for centered data is the standard deviation.
+Both are sensitive to outliers: a single extreme value moves the mean
+and inflates the standard deviation, so the remaining observations are
 compressed towards zero.
 
 If `robust` is set to `TRUE` the column median takes the place of the
 mean and the median absolute deviation
-([`mad`](https://rdrr.io/r/stats/mad.html)) that of the standard
-deviation. Both have a breakdown point of 50 percent, so the
+([`stats::mad()`](https://rdrr.io/r/stats/mad.html)) that of the
+standard deviation. Both have a breakdown point of 50 percent, so the
 standardization reflects the bulk of the data rather than its extremes,
 and genuine outliers keep large scores instead of being pulled in.
 
 Whichever is chosen, `center` and `scale` accept either a logical flag
 or a numeric vector of values to use directly, in which case that vector
 must have one entry per column of `x`, as in
-[`scale`](https://rdrr.io/r/base/scale.html).
+[`base::scale()`](https://rdrr.io/r/base/scale.html).
 
 The two versions differ in one further respect. The MAD is invariant to
 location shifts, so for `robust = TRUE` the returned `"scaled:scale"` is
 the same whether or not the columns were centered first, and does not
 depend on `center`. The root mean square is not invariant; for
 `robust = FALSE` it is computed after centering, matching
-[`scale`](https://rdrr.io/r/base/scale.html), which is what makes it
-equal the standard deviation when `center` is `TRUE` and not otherwise.
+[`base::scale()`](https://rdrr.io/r/base/scale.html), which is what
+makes it equal the standard deviation when `center` is `TRUE` and not
+otherwise.
 
 A zero or non-finite scaling factor can produce undefined or non-finite
 results. `scaleX` emits a warning naming the affected columns rather
@@ -84,9 +85,11 @@ are subsequently dropped.
 
 ## See also
 
-[`scale`](https://rdrr.io/r/base/scale.html),
-[`sweep`](https://rdrr.io/r/base/sweep.html),
-[`mad`](https://rdrr.io/r/stats/mad.html), [`rangeX`](rangeX.md)
+[`base::scale()`](https://rdrr.io/r/base/scale.html),
+[`base::sweep()`](https://rdrr.io/r/base/sweep.html),
+[`stats::mad()`](https://rdrr.io/r/stats/mad.html),
+[`rangeX()`](rangeX.md),
+[`bedrock::linScale()`](https://andrisignorell.github.io/bedrock/reference/linScale.html)
 
 Other transform: [`boxCox()`](boxCox.md),
 [`boxCoxLambda()`](boxCoxLambda.md), [`logSt()`](logSt.md),

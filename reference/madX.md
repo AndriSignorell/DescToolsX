@@ -3,8 +3,8 @@
 Compute the median absolute deviation, i.e., the (lo-/hi-) median of the
 absolute deviations from the median, and (by default) adjust by a factor
 for asymptotically normal consistency. This function wraps the specific
-base R function [`mad`](https://rdrr.io/r/stats/mad.html) and extends it
-for the use of weights.
+base R function [`mad()`](https://rdrr.io/r/stats/mad.html) and extends
+it for the use of weights.
 
 ## Usage
 
@@ -75,12 +75,12 @@ Confidence intervals are provided by
 
 ## See also
 
-[`IQR`](https://rdrr.io/r/stats/IQR.html) which is simpler but less
-robust, [`iqrX`](iqrX.md) for the same using weights,  
-[`mad`](https://rdrr.io/r/stats/mad.html),
-[`median`](https://rdrr.io/r/stats/median.html),
-[`var`](https://rdrr.io/r/stats/cor.html) the base R equivalents  
-[`madCI`](https://andrisignorell.github.io/lumen/reference/mad-confints.html)
+[`IQR()`](https://rdrr.io/r/stats/IQR.html) which is simpler but less
+robust, [`iqrX()`](iqrX.md) for the same using weights,  
+[`mad()`](https://rdrr.io/r/stats/mad.html),
+[`median()`](https://rdrr.io/r/stats/median.html),
+[`var()`](https://rdrr.io/r/stats/cor.html) the base R equivalents  
+[`lumen::madCI()`](https://andrisignorell.github.io/lumen/reference/mad-confints.html)
 (confidence intervals).
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),

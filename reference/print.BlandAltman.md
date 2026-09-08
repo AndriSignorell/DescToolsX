@@ -16,7 +16,7 @@ print(x, digits = 3, ...)
 - x:
 
   an object of class `"BlandAltman"` as returned by
-  [`blandAltmanData`](blandAltmanData.md)
+  [`blandAltmanData()`](blandAltmanData.md)
 
 - digits:
 

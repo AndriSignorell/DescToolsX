@@ -42,7 +42,7 @@ rangeX(x, trim = NULL, robust = FALSE, na.rm = FALSE, ...)
 a numeric scalar containing the range width. The corresponding lower and
 upper bounds are returned in the `"bounds"` attribute. Note that the
 attribute is dropped by subsetting and by
-[`as.vector`](https://rdrr.io/r/base/vector.html), so read it before
+[`as.vector()`](https://rdrr.io/r/base/vector.html), so read it before
 computing on the result.
 
 ## Details
@@ -63,9 +63,9 @@ Robust range contributed by Werner Stahel.
 
 ## See also
 
-[`range`](https://rdrr.io/r/base/range.html),
-[`min`](https://rdrr.io/r/base/Extremes.html),
-[`max`](https://rdrr.io/r/base/Extremes.html)
+[`range()`](https://rdrr.io/r/base/range.html),
+[`min()`](https://rdrr.io/r/base/Extremes.html),
+[`max()`](https://rdrr.io/r/base/Extremes.html)
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
 [`madX()`](madX.md), [`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),

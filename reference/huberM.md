@@ -2,8 +2,8 @@
 
 A (generalized) Huber M-estimator of location with MAD scale that
 handles the degenerate case of zero scale gracefully, where
-[`huber()`](https://rdrr.io/pkg/MASS/man/huber.html) would return an
-error.
+[`MASS::huber()`](https://rdrr.io/pkg/MASS/man/huber.html) would return
+an error.
 
 ## Usage
 
@@ -36,7 +36,7 @@ huberM(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
@@ -133,8 +133,9 @@ Adapted from code by Martin Maechler to conform to package standards
 ## Random number generation
 
 `method = "boot"` resamples and therefore advances R's global random
-number generator. Call [`set.seed`](https://rdrr.io/r/base/Random.html)
-beforehand for reproducible intervals.
+number generator. Call
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
+reproducible intervals.
 
 ## References
 
@@ -143,9 +144,9 @@ Wiley.
 
 ## See also
 
-[`huber`](https://rdrr.io/pkg/MASS/man/huber.html),
-[`mad`](https://rdrr.io/r/stats/mad.html),
-[`tukeyBiweight`](tukeyBiweight.md)
+[`MASS::huber()`](https://rdrr.io/pkg/MASS/man/huber.html),
+[`mad()`](https://rdrr.io/r/stats/mad.html),
+[`tukeyBiweight()`](tukeyBiweight.md)
 
 Other location: [`gmean()`](gmean.md), [`hmean()`](hmean.md),
 [`hodgesLehmann()`](hodgesLehmann.md), [`meanX()`](meanX.md),

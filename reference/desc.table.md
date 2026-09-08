@@ -8,12 +8,6 @@ pairs via `Desc.qq` and `Desc.matrix`.
 ## Usage
 
 ``` r
-# S3 method for class 'Desc.qq'
-print(x, digits = NULL, ...)
-
-# S3 method for class 'Desc.qq'
-plot(x, main = x$meta$main, which = 1, ...)
-
 # S3 method for class 'table'
 desc(
   x,
@@ -49,6 +43,12 @@ desc(
 
 # S3 method for class 'Desc.table'
 print(x, print_header = TRUE, ...)
+
+# S3 method for class 'Desc.qq'
+print(x, digits = NULL, ...)
+
+# S3 method for class 'Desc.qq'
+plot(x, main = x$meta$main, which = 1, ...)
 ```
 
 ## Arguments
@@ -57,22 +57,6 @@ print(x, print_header = TRUE, ...)
 
   a `table` or `matrix` object. For the formula interface, use
   `desc(y ~ x, data)` which dispatches to this function automatically.
-
-- digits:
-
-  number of digits for numerical output
-
-- ...:
-
-  further arguments passed to or from other methods
-
-- main:
-
-  main title for the plot
-
-- which:
-
-  plots to produce
 
 - conf.level:
 
@@ -86,6 +70,10 @@ print(x, print_header = TRUE, ...)
   `"no"` (frequencies only). At `verbose = 3` all three proportions are
   shown regardless of this argument.
 
+- main:
+
+  main title for the plot; defaults to the title stored in `x$meta$main`
+
 - verbose:
 
   integer controlling the amount of output (1, 2, or 3). `NULL`
@@ -97,9 +85,21 @@ print(x, print_header = TRUE, ...)
 
   whether a plot is produced automatically
 
+- ...:
+
+  further arguments passed to or from other methods
+
 - print_header:
 
   whether the header is printed
+
+- digits:
+
+  number of digits for numerical output
+
+- which:
+
+  plots to produce
 
 ## Value
 

@@ -99,8 +99,8 @@ transformations for gene-expression microarray data, *Bioinformatics*.
 
 ## See also
 
-[`log`](https://rdrr.io/r/base/Log.html),
-[`log10`](https://rdrr.io/r/base/Log.html)
+[`log()`](https://rdrr.io/r/base/Log.html),
+[`log10()`](https://rdrr.io/r/base/Log.html)
 
 Other transform: [`boxCox()`](boxCox.md),
 [`boxCoxLambda()`](boxCoxLambda.md), [`scaleX()`](scaleX.md),

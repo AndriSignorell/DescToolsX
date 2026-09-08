@@ -28,10 +28,10 @@ of the same dimension and dimnames as `x`
 ## Details
 
 Expected values for a 2-dimensional table can be easily calculated with
-res \<- [`chisq.test`](https://rdrr.io/r/stats/chisq.test.html)`(x)` and
-accessed by `res$expected`. This approach fails for higher dimensional
-tables, for which there is no support. `expFreq()` also returns expected
-frequencies for higher dimensional tables.
+res \<- `[chisq.test](x)` and accessed by `res$expected`. This approach
+fails for higher dimensional tables, for which there is no support.
+`expFreq()` also returns expected frequencies for higher dimensional
+tables.
 
 ## Note
 
@@ -40,7 +40,7 @@ Based on code by David Meyer previously published as
 
 ## See also
 
-[`chisq.test`](https://rdrr.io/r/stats/chisq.test.html)
+[`chisq.test()`](https://rdrr.io/r/stats/chisq.test.html)
 
 Other frequency: [`freq()`](freq.md), [`freq2D()`](freq2D.md),
 [`percTable()`](percTable.md), [`tOne()`](tOne.md)

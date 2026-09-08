@@ -4,9 +4,9 @@ Replaces entries in a symmetric matrix (typically a correlation matrix)
 with `NA` wherever the corresponding p-value exceeds a significance
 threshold - retaining only the statistically supported associations.
 Designed as a pre-processing step for
-[`plotWeb`](https://andrisignorell.github.io/pharos/reference/plotWeb.html)
+[`pharos::plotWeb()`](https://andrisignorell.github.io/pharos/reference/plotWeb.html)
 and
-[`plotCor`](https://andrisignorell.github.io/pharos/reference/plotCor.html).
+[`pharos::plotCor()`](https://andrisignorell.github.io/pharos/reference/plotCor.html).
 
 ## Usage
 
@@ -26,8 +26,8 @@ keepSig(
 - m:
 
   a symmetric numeric matrix. Typically the output of
-  [`cor`](https://rdrr.io/r/stats/cor.html), but any symmetric matrix of
-  effect sizes or association measures is accepted.
+  [`stats::cor()`](https://rdrr.io/r/stats/cor.html), but any symmetric
+  matrix of effect sizes or association measures is accepted.
 
 - p:
 
@@ -48,9 +48,9 @@ keepSig(
 - method:
 
   character; the correlation test method passed to
-  [`cor.test`](https://rdrr.io/r/stats/cor.test.html) when computing
-  p-values from `data`. One of `"pearson"` (default), `"spearman"`, or
-  `"kendall"`.
+  [`stats::cor.test()`](https://rdrr.io/r/stats/cor.test.html) when
+  computing p-values from `data`. One of `"pearson"` (default),
+  `"spearman"`, or `"kendall"`.
 
 - diag:
 

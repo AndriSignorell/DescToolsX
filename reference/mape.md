@@ -51,7 +51,9 @@ Note that values where `ref = 0` lead to division by zero and result in
 
 ## See also
 
-Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md),
+[`brierScore()`](brierScore.md), [`logLoss()`](logLoss.md),
 [`mae()`](mae.md), [`mse()`](mse.md), [`nmae()`](nmae.md),
 [`nmse()`](nmse.md), [`rmse()`](rmse.md), [`smape()`](smape.md)
 

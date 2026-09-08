@@ -44,7 +44,7 @@ the proportion of agreeing rater *pairs*, \$\$P_o = \frac{1}{N}
 \sum\_{i=1}^{N} \frac{\sum\_{j} n\_{ij}(n\_{ij}-1)}{m(m-1)}.\$\$ Here,
 \\n\_{ij}\\ denotes the number of raters who assigned subject \\i\\ to
 category \\j\\. This is the same observed agreement as in Fleiss' kappa
-(and as computed by [`percAgreement`](percAgreement.md)); Randolph's
+(and as computed by [`percAgreement()`](percAgreement.md)); Randolph's
 coefficient differs from Fleiss' only in the chance agreement \\P_e\\,
 which is fixed at \\1/k\\ instead of being estimated from the marginals.
 
@@ -55,7 +55,7 @@ thus overstates chance agreement, which biases \\\kappa\\ downwards.
 Supply `categories` whenever the coding scheme is known.
 
 Long-format ratings can first be reshaped with
-[`raterFrame`](raterFrame.md).
+[`raterFrame()`](raterFrame.md).
 
 ## References
 

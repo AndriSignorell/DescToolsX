@@ -53,7 +53,7 @@ package).
 
 ## See also
 
-[`mad`](https://rdrr.io/r/stats/mad.html)
+[`mad()`](https://rdrr.io/r/stats/mad.html)
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
 [`madX()`](madX.md), [`meanSE()`](meanSE.md), [`rangeX()`](rangeX.md),

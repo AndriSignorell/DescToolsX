@@ -40,7 +40,7 @@ brierScore(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
@@ -132,11 +132,13 @@ Further bootstrap arguments passed through `...` via
 
 ## See also
 
-[`predict`](https://rdrr.io/r/stats/predict.html)
+[`stats::predict()`](https://rdrr.io/r/stats/predict.html)
 
-Other model.metrics: [`auc()`](auc.md), [`mae()`](mae.md),
-[`mape()`](mape.md), [`mse()`](mse.md), [`nmae()`](nmae.md),
-[`nmse()`](nmse.md), [`rmse()`](rmse.md), [`smape()`](smape.md)
+Other model.metrics: [`auc()`](auc.md),
+[`averagePrecision()`](averagePrecision.md), [`logLoss()`](logLoss.md),
+[`mae()`](mae.md), [`mape()`](mape.md), [`mse()`](mse.md),
+[`nmae()`](nmae.md), [`nmse()`](nmse.md), [`rmse()`](rmse.md),
+[`smape()`](smape.md)
 
 ## Examples
 

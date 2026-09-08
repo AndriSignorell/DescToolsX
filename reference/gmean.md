@@ -34,13 +34,14 @@ gsd(x, na.rm = FALSE)
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
   a vector of character strings representing the type of intervals
   required. The value should be any subset of the values `"classic"`,
-  `"boot"`. See [`boot.ci`](https://rdrr.io/pkg/boot/man/boot.ci.html).
+  `"boot"`. See
+  [`boot::boot.ci()`](https://rdrr.io/pkg/boot/man/boot.ci.html).
 
 - na.rm:
 
@@ -50,12 +51,12 @@ gsd(x, na.rm = FALSE)
 - ...:
 
   further arguments are passed to the
-  [`boot`](https://rdrr.io/pkg/boot/man/boot.html) function. Supported
-  arguments are `type` (`"norm"`, `"basic"`, `"stud"`, `"perc"`,
-  `"bca"`), `parallel` and the number of bootstrap replicates `R`. If
-  not defined those will be set to their defaults, being `"basic"` for
-  `type`, option `"boot.parallel"` (and if that is not set, `"no"`) for
-  `parallel` and `999` for `R`.
+  [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) function.
+  Supported arguments are `type` (`"norm"`, `"basic"`, `"stud"`,
+  `"perc"`, `"bca"`), `parallel` and the number of bootstrap replicates
+  `R`. If not defined those will be set to their defaults, being
+  `"basic"` for `type`, option `"boot.parallel"` (and if that is not
+  set, `"no"`) for `parallel` and `999` for `R`.
 
 ## Value
 
@@ -117,7 +118,7 @@ report."
 ## References
 
 Snedecor, G. W., Cochran, W. G. Cochran (1989) Statistical Methods, 8th
-ed. Ames, *IA: Iowa State University Press*
+ed. Ames, \*IA: Iowa State University Press \*
 
 Roenfeldt K. (2018) Better than Average: Calculating Geometric Means
 Using SAS, Henry M. Jackson Foundation for the Advancement of Military

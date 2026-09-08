@@ -2,9 +2,9 @@
 
 Calculates absolute and relative frequencies of a vector `x`. Continuous
 (numeric) variables will be cut using the same logic as used by the
-function [`hist`](https://rdrr.io/r/graphics/hist.html). Categorical
+function [`hist()`](https://rdrr.io/r/graphics/hist.html). Categorical
 variables will be aggregated by
-[`table`](https://rdrr.io/r/base/table.html). The result will contain
+[`table()`](https://rdrr.io/r/base/table.html). The result will contain
 single and cumulative frequencies for both, absolute values and
 percentages.
 
@@ -115,7 +115,7 @@ range of the data is divided into breaks pieces of equal length, and
 then the outer limits are moved away by 0.1\\ extreme values both fall
 within the break intervals. (If `x` is a constant vector, equal-length
 intervals are created that cover the single value.) See
-[`cut`](https://rdrr.io/r/base/cut.html).
+[`cut()`](https://rdrr.io/r/base/cut.html).
 
 With `breaks = FALSE` no classing takes place and the distinct values of
 a numeric or date `x` are tabulated directly (in ascending order of the
@@ -124,11 +124,11 @@ variables.
 
 ## See also
 
-[`cut`](https://rdrr.io/r/base/cut.html),
-[`hist`](https://rdrr.io/r/graphics/hist.html),
-[`cumsum`](https://rdrr.io/r/base/cumsum.html),
-[`table`](https://rdrr.io/r/base/table.html),
-[`prop.table`](https://rdrr.io/r/base/proportions.html)
+[`cut()`](https://rdrr.io/r/base/cut.html),
+[`hist()`](https://rdrr.io/r/graphics/hist.html),
+[`cumsum()`](https://rdrr.io/r/base/cumsum.html),
+[`table()`](https://rdrr.io/r/base/table.html),
+[`prop.table()`](https://rdrr.io/r/base/proportions.html)
 
 Other frequency: [`expFreq()`](expFreq.md), [`freq2D()`](freq2D.md),
 [`percTable()`](percTable.md), [`tOne()`](tOne.md)

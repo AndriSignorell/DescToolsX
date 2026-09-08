@@ -15,7 +15,7 @@ standard deviation of a vector x."><meta property="og:image" content="/logo.png"
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,13 +85,13 @@ coerced, if possible, by <code><a href="https://rdrr.io/r/base/vector.html" clas
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>a vector of character strings representing the type of
 intervals required. The value should be any subset of the values
-<code>"classic"</code>, <code>"boot"</code>.  See <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot.ci</a></code>.</p></dd>
+<code>"classic"</code>, <code>"boot"</code>.  See <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -100,7 +100,7 @@ before the computation proceeds. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments are passed to the <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot</a></code>
+<dd><p>further arguments are passed to the <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>
 function. Supported arguments are <code>type</code> (<code>"norm"</code>,
 <code>"basic"</code>, <code>"stud"</code>, <code>"perc"</code>, <code>"bca"</code>), <code>parallel</code>
 and the number of bootstrap replicates <code>R</code>. If not defined those will
@@ -135,7 +135,7 @@ component). Hence if any argument is negative, the result will be <code>NA</code
 If any argument is zero, then the geometric mean is zero.<br> For strict
 positive values the geometric mean is computed as
 <code>exp(meanCI(log(x)))</code>.</p>
-<p><b>Considerations (Roenfeldt 2018)</b> <code> </code> "The calculation of the
+<p><strong>Considerations (Roenfeldt 2018)</strong> <code> </code> "The calculation of the
 geometric mean requires that all values are non-zero and positive. So what
 should you do if you have data that do not meet this requirement? If you
 have values that equal zero, you have a few options:</p><ul><li><p>Adjust
@@ -161,7 +161,7 @@ results you are trying to report."</p>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Snedecor, G. W., Cochran, W. G. Cochran (1989) Statistical
-Methods, 8th ed. Ames, <em>IA: Iowa State University Press </em></p>
+Methods, 8th ed. Ames, *IA: Iowa State University Press *</p>
 <p>Roenfeldt K. (2018) Better than Average: Calculating Geometric Means Using
 SAS, Henry M. Jackson Foundation for the Advancement of Military Medicine,
 <br><a href="https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf" class="external-link">https://www.lexjansen.com/wuss/2018/56_Final_Paper_PDF.pdf</a></p>

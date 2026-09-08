@@ -38,8 +38,8 @@ Options used by descriptive methods include:
 
 ## See also
 
-[`options`](https://rdrr.io/r/base/options.html),
-[`getOption`](https://rdrr.io/r/base/options.html)
+[`options()`](https://rdrr.io/r/base/options.html),
+[`getOption()`](https://rdrr.io/r/base/options.html)
 
 ## Examples
 

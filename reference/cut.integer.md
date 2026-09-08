@@ -1,6 +1,6 @@
 # Cut an Integer Variable into Intervals
 
-A [`cut`](https://rdrr.io/r/base/cut.html) method for integer vectors.
+A [`cut()`](https://rdrr.io/r/base/cut.html) method for integer vectors.
 [`cut.default()`](https://rdrr.io/r/base/cut.html) labels its intervals
 in the mathematical `"(a,b]"` notation, which is right for a continuous
 variable but reads awkwardly for counts: for integers, `"11-20"` says
@@ -39,7 +39,7 @@ cut(
 
 - include.lowest, right, ordered_result, ...:
 
-  passed to [`cut.default`](https://rdrr.io/r/base/cut.html)
+  passed to [`cut.default()`](https://rdrr.io/r/base/cut.html)
 
 ## Value
 
@@ -50,8 +50,8 @@ a factor of the same length as `x`
 The integer labels are only constructed when `labels` is `NULL` *and*
 `breaks` is a vector of whole numbers. A scalar `breaks` (a number of
 intervals) is passed straight to
-[`cut.default`](https://rdrr.io/r/base/cut.html), which computes the cut
-points itself, and fractional break points fall back to the default
+[`cut.default()`](https://rdrr.io/r/base/cut.html), which computes the
+cut points itself, and fractional break points fall back to the default
 interval notation as well - `"34.3-66.6"` would suggest an integer range
 that does not exist.
 
@@ -60,8 +60,8 @@ Infinite outer breaks are rendered as `".."`, so
 
 ## See also
 
-[`cut`](https://rdrr.io/r/base/cut.html), [`cutAge`](cutAge.md),
-[`cutQ`](cutQ.md)
+[`cut()`](https://rdrr.io/r/base/cut.html), [`cutAge()`](cutAge.md),
+[`cutQ()`](cutQ.md)
 
 Other cut: [`cutAge()`](cutAge.md), [`cutQ()`](cutQ.md)
 

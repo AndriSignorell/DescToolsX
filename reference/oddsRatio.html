@@ -17,7 +17,7 @@ ratio, the model method one odds ratio per regression coefficient."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,12 +91,12 @@ ratio, the model method one odds ratio per regression coefficient.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>a 2x2 contingency table, two vectors to be cross-tabulated, or a
-binomial <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code> object</p></dd>
+binomial <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code> object</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>further arguments passed to methods. For the default method
-with two vectors, these reach <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code>, so <code>useNA</code> can
+with two vectors, these reach <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code>, so <code>useNA</code> can
 be set here.</p></dd>
 
 
@@ -114,7 +114,7 @@ method computes an interval by default.</p></dd>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>. An odds ratio
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>. An odds ratio
 is bounded below by 0 and unbounded above, so the open side is reported
 at 0 or <code>Inf</code> accordingly. Ignored, with a warning, for
 <code>method = "profile"</code>.</p></dd>
@@ -199,7 +199,7 @@ response when all predictors are zero. It is reported for completeness
 and is usually not the quantity of interest.</p>
 <p>Two interval methods are available. <code>"wald"</code> is the symmetric
 interval on the log-odds scale, back-transformed. <code>"profile"</code> inverts
-the likelihood ratio test through <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint.glm</a></code>; it is
+the likelihood ratio test through <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">stats::confint.glm()</a></code>; it is
 asymmetric on the odds scale, generally more reliable in small samples or
 with sparse cells, and considerably slower because the model is refitted
 along each coefficient. Profile intervals are two-sided by construction,
@@ -230,7 +230,7 @@ Wiley.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="attach-detach-aliases.html">attachAliases</a>, <a href="relRisk.html">relRisk</a>, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint.glm</a></code></p>
+    <div class="dont-index"><p><a href="attach-detach-aliases.html">attachAliases</a>, <a href="relRisk.html">relRisk</a>, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">stats::confint.glm()</a></code></p>
 <p>Other effect.size:
 <code><a href="cohenD.html">cohenD()</a></code>,
 <code><a href="cohenH.html">cohenH()</a></code>,

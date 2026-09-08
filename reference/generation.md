@@ -41,7 +41,7 @@ generation is not settled enough to hard-code an upper bound.
 
 ## See also
 
-[`cutAge`](cutAge.md)
+[`cutAge()`](cutAge.md)
 
 Other date.time: [`addMonths()`](AddMonths.md),
 [`countWorkDays()`](countWorkDays.md),

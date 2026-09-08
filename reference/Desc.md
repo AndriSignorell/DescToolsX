@@ -28,26 +28,8 @@ print(x, ...)
 # S3 method for class 'Desc'
 plot(x, ...)
 
-# S3 method for class 'Desc.AllNA'
-print(x, ...)
-
-# S3 method for class 'Desc.AllNA'
-plot(x, ...)
-
 # S3 method for class 'Desc.factor'
 plot(x, ...)
-
-# S3 method for class 'formula'
-desc(
-  formula,
-  data,
-  subset,
-  na.action = na.pass,
-  main = NULL,
-  verbose = NULL,
-  plotit = NULL,
-  ...
-)
 
 # S3 method for class 'logical'
 desc(
@@ -73,6 +55,24 @@ print(x, digits = NULL, ...)
 
 # S3 method for class 'Desc.numeric'
 plot(x, main = x$meta$main, ...)
+
+# S3 method for class 'Desc.AllNA'
+print(x, ...)
+
+# S3 method for class 'Desc.AllNA'
+plot(x, ...)
+
+# S3 method for class 'formula'
+desc(
+  formula,
+  data,
+  subset,
+  na.action = na.pass,
+  main = NULL,
+  verbose = NULL,
+  plotit = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -85,28 +85,18 @@ plot(x, main = x$meta$main, ...)
 
   further arguments passed to methods
 
-- formula:
+- ord:
 
-  formula describing the design. Depending on the function, supported
-  forms include `y ~ 1`, `Pair(x, y) ~ 1`, `y ~ group`, `y ~ predictor`,
-  and `y ~ treatment | block`
+  order of the levels
 
-- data:
+- conf.level:
 
-  optional matrix or data frame (or similar; see
-  [`model.frame`](https://rdrr.io/r/stats/model.frame.html)) containing
-  the variables in the formula. If omitted, variables are taken from
-  `environment(formula)`
+  confidence level of the interval (default 0.95). If set to `NA`, no
+  confidence interval is calculated.
 
-- subset:
+- include_x:
 
-  optional expression specifying a subset of observations to be used in
-  the analysis
-
-- na.action:
-
-  function specifying how missing values are handled; passed to
-  [`resolveFormula`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
+  logical; if `TRUE`, the original vector is retained in the result
 
 - main:
 
@@ -125,23 +115,33 @@ plot(x, main = x$meta$main, ...)
   classes of the variables. Default can be defined by the option
   `plotit`, if it does not exist then it's set to `TRUE`.
 
-- ord:
-
-  order of the levels
-
-- conf.level:
-
-  confidence level of the interval (default 0.95). If set to `NA`, no
-  confidence interval is calculated.
-
-- include_x:
-
-  logical; if `TRUE`, the original vector is retained in the result
-
 - digits:
 
   number of digits used to format relative frequencies; the default can
   be set with `setDescToolsXOption(digits = x)`
+
+- formula:
+
+  formula describing the design. Depending on the function, supported
+  forms include `y ~ 1`, `Pair(x, y) ~ 1`, `y ~ group`, `y ~ predictor`,
+  and `y ~ treatment | block`
+
+- data:
+
+  optional matrix or data frame (or similar; see
+  [`stats::model.frame()`](https://rdrr.io/r/stats/model.frame.html))
+  containing the variables in the formula. If omitted, variables are
+  taken from `environment(formula)`
+
+- subset:
+
+  optional expression specifying a subset of observations to be used in
+  the analysis
+
+- na.action:
+
+  function specifying how missing values are handled; passed to
+  [`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
 
 ## Value
 
@@ -190,28 +190,28 @@ possible.
 
 **Univariate descriptions**
 
-- Numeric variables: [`desc.numeric`](desc.numeric.md)
+- Numeric variables: [`desc.numeric()`](desc.numeric.md)
 
-- Factors and character vectors: [`desc.factor`](Desc.factor.md)
+- Factors and character vectors: [`desc.factor()`](Desc.factor.md)
 
-- Boolean variables: `desc.logical`
+- Boolean variables: `desc.logical()`
 
-- Contingency tables: [`desc.table`](desc.table.md)
+- Contingency tables: [`desc.table()`](desc.table.md)
 
-- Dates: [`desc.Date`](Desc.Date.md)
+- Dates: [`desc.Date()`](Desc.Date.md)
 
-- Time series: [`desc.ts`](desc.ts.md)
+- Time series: [`desc.ts()`](desc.ts.md)
 
 **Bivariate descriptions**
 
-- numeric ~ numeric: [`desc.nn`](Desc.nn.md)
+- numeric ~ numeric: [`desc.nn()`](Desc.nn.md)
 
-- numeric ~ qualitative: [`desc.nq`](desc.nq.md)
+- numeric ~ qualitative: [`desc.nq()`](desc.nq.md)
 
-- qualitative ~ numeric: [`desc.qn`](desc.qn.md)
+- qualitative ~ numeric: [`desc.qn()`](desc.qn.md)
 
-- qualitative ~ qualitative: [`desc.qq`](desc.qq.md) (wrapper around
-  [`desc.table`](desc.table.md))
+- qualitative ~ qualitative: [`desc.qq()`](desc.qq.md) (wrapper around
+  [`desc.table()`](desc.table.md))
 
 **Design** The `desc` system separates:
 
@@ -225,7 +225,7 @@ Description of a **dichotomous variable**. This can either be a logical
 vector, a factor with two levels or a numeric variable with only two
 unique values. The confidence levels for the relative frequencies are
 calculated by
-[`binomCI()`](https://andrisignorell.github.io/lumen/reference/binomCI.html),
+[`lumen::binomCI()`](https://andrisignorell.github.io/lumen/reference/binomCI.html),
 method `"Wilson"` on a confidence level defined by `conf.level`.
 
 Dichotomous variables can be condensed into a compact graphical
@@ -234,14 +234,14 @@ confidence intervals and can display them as a dot plot with error bars.
 
 ## See also
 
-[`summary`](https://rdrr.io/r/base/summary.html),
-[`plot`](https://rdrr.io/r/graphics/plot.default.html)
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html)
 
-[`plotPropCI`](https://andrisignorell.github.io/pharos/reference/plotPropCI.html)
+[`pharos::plotPropCI()`](https://andrisignorell.github.io/pharos/reference/plotPropCI.html)
 for graphical display
 
 Other desc: [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.nq`](desc.nq.md), [`desc.numeric()`](desc.numeric.md),
 [`desc.qn`](desc.qn.md), [`desc.qq`](desc.qq.md),
-[`desc.ts()`](desc.ts.md), [`print.Desc.qq()`](desc.table.md)
+[`desc.table()`](desc.table.md), [`desc.ts()`](desc.ts.md)

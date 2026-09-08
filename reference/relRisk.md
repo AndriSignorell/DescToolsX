@@ -36,7 +36,7 @@ relRisk(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See details
-  in [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  in [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - method:
 
@@ -52,7 +52,7 @@ relRisk(
 - ...:
 
   further arguments passed to
-  [`table`](https://rdrr.io/r/base/table.html)
+  [`table()`](https://rdrr.io/r/base/table.html)
 
 ## Value
 
@@ -98,8 +98,8 @@ estimate; if the unexposed group has no non-events (`x2 == n2`) that
 cubic has a root on the parameter boundary and its roots can no longer
 be assigned to the two interval bounds by their order alone. This case
 is therefore solved directly from the score statistic
-([`uniroot`](https://rdrr.io/r/stats/uniroot.html)); both routes agree
-to numerical precision wherever the closed form applies.
+([`stats::uniroot()`](https://rdrr.io/r/stats/uniroot.html)); both
+routes agree to numerical precision wherever the closed form applies.
 
 The Wald interval is asymptotic and may perform poorly for small counts
 or extreme probabilities. Note that `delta` enters the standard error
@@ -110,8 +110,8 @@ cells.
 
 If the table orientation differs from the required structure, rows or
 columns can be reversed using
-[`revX`](https://andrisignorell.github.io/bedrock/reference/revX.html)
-or transposed with [`t`](https://rdrr.io/r/base/t.html).
+[`bedrock::revX()`](https://andrisignorell.github.io/bedrock/reference/revX.html)
+or transposed with [`t()`](https://rdrr.io/r/base/t.html).
 
 ## References
 

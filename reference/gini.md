@@ -32,7 +32,7 @@ gini(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 - unbiased:
 
@@ -117,7 +117,7 @@ rather than as \\\pm\infty\\ (design_rules.md 4.1).
 
 A confidence level triggers a bootstrap and therefore advances R's
 global random number generator. Call
-[`set.seed`](https://rdrr.io/r/base/Random.html) beforehand for
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
 reproducible intervals.
 
 ## See also

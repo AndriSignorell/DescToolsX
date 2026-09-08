@@ -22,7 +22,7 @@ countWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
 - holiday:
 
   a vector of dates (or strings coercible with
-  [`as.Date`](https://rdrr.io/r/base/as.Date.html)) to exclude
+  [`as.Date()`](https://rdrr.io/r/base/as.Date.html)) to exclude
 
 - nonworkdays:
 

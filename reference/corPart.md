@@ -60,8 +60,9 @@ whether `m` is a covariance or a correlation matrix.
 - The joint submatrix of `x` and `y` must be invertible.
   Near-singularity from collinearity among the control variables is
   detected via the reciprocal condition number, not merely by a failure
-  of [`solve`](https://rdrr.io/r/base/solve.html), which succeeds and
-  returns nonsense well before the matrix is numerically singular.
+  of [`base::solve()`](https://rdrr.io/r/base/solve.html), which
+  succeeds and returns nonsense well before the matrix is numerically
+  singular.
 
 - `x` and `y` must not overlap.
 
@@ -70,8 +71,8 @@ whether `m` is a covariance or a correlation matrix.
 
 ## See also
 
-[`cor`](https://rdrr.io/r/stats/cor.html),
-[`cov`](https://rdrr.io/r/stats/cor.html)
+[`stats::cor()`](https://rdrr.io/r/stats/cor.html),
+[`stats::cov()`](https://rdrr.io/r/stats/cor.html)
 
 Other assoc.continuous: [`corPolychor()`](corPolychor.md),
 [`findCorrX()`](findCorrX.md), [`hoeffdingD()`](hoeffdingD.md),

@@ -52,9 +52,9 @@ some functions return further elements.
   the upper bound is finite, the lower one is open.
 
 Thus `sides = "left"` corresponds to `alternative = "greater"` in
-[`t.test`](https://rdrr.io/r/stats/t.test.html), and `sides = "right"`
-to `alternative = "less"`. This is also the convention used by the
-corresponding functions in DescTools.
+[`stats::t.test()`](https://rdrr.io/r/stats/t.test.html), and
+`sides = "right"` to `alternative = "less"`. This is also the convention
+used by the corresponding functions in DescTools.
 
 The open side is reported at the boundary of the parameter space, not at
 infinity - most of the statistics here are bounded, so this is the
@@ -81,10 +81,10 @@ closed-form variance and are therefore available for statistics that
 have none - at the price of being random and slower.
 
 Bootstrap intervals are partly computed with the boot package (see
-[`boot`](https://rdrr.io/pkg/boot/man/boot.html) and
-[`boot.ci`](https://rdrr.io/pkg/boot/man/boot.ci.html)). The number of
-resamples `R` and the interval type - `"perc"`, `"bca"` and others - are
-passed through `...`.
+[`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) and
+[`boot::boot.ci()`](https://rdrr.io/pkg/boot/man/boot.ci.html)). The
+number of resamples `R` and the interval type - `"perc"`, `"bca"` and
+others - are passed through `\dots`.
 
 `"bca"` corrects for bias and skewness and is the better choice for a
 smooth statistic whose parameter lies well inside its range. It is the
@@ -97,12 +97,12 @@ than a pathology. `"perc"` is the more robust default there.
 
 Requesting a bootstrap confidence interval draws a seed from R's global
 random number generator and therefore advances it. Call
-[`set.seed`](https://rdrr.io/r/base/Random.html) beforehand for
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
 reproducible intervals. This applies to the bootstrap methods only;
 classical intervals are deterministic.
 
 ## See also
 
-[`boot`](https://rdrr.io/pkg/boot/man/boot.html),
-[`boot.ci`](https://rdrr.io/pkg/boot/man/boot.ci.html),
-[`confint`](https://rdrr.io/r/stats/confint.html)
+[`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html),
+[`boot::boot.ci()`](https://rdrr.io/pkg/boot/man/boot.ci.html),
+[`stats::confint()`](https://rdrr.io/r/stats/confint.html)

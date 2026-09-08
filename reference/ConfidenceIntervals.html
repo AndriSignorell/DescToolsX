@@ -17,7 +17,7 @@ accept and refer here for what the values mean."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.948</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.951</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ since some functions return further elements.</p>
 
 
 </dl><p>Thus <code>sides = "left"</code> corresponds to <code>alternative = "greater"</code>
-in <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></code>, and <code>sides = "right"</code> to
+in <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">stats::t.test()</a></code>, and <code>sides = "right"</code> to
 <code>alternative = "less"</code>. This is also the convention used by the
 corresponding functions in <span class="pkg">DescTools</span>.</p>
 <p>The open side is reported at the boundary of the parameter space, not at
@@ -136,9 +136,9 @@ formula exists. Bootstrap intervals, requested with <code>"boot"</code>, need no
 closed-form variance and are therefore available for statistics that have
 none - at the price of being random and slower.</p>
 <p>Bootstrap intervals are partly computed with the <span class="pkg">boot</span> package (see
-<code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot</a></code> and <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot.ci</a></code>). The number of
+<code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> and <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>). The number of
 resamples <code>R</code> and the interval type - <code>"perc"</code>, <code>"bca"</code> and
-others - are passed through <code>...</code>.</p>
+others - are passed through <code>\dots</code>.</p>
 <p><code>"bca"</code> corrects for bias and skewness and is the better choice for a
 smooth statistic whose parameter lies well inside its range. It is the
 weaker choice near a boundary: both of its ingredients degrade where the
@@ -154,14 +154,14 @@ than a pathology. <code>"perc"</code> is the more robust default there.</p>
 
 <p>Requesting a bootstrap confidence interval draws a seed from R's global
 random number generator and therefore advances it. Call
-<code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code> beforehand for reproducible intervals. This
+<code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code> beforehand for reproducible intervals. This
 applies to the bootstrap methods only; classical intervals are
 deterministic.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot</a></code>, <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot.ci</a></code>,
-<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>, <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>,
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">stats::confint()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

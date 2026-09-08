@@ -81,7 +81,7 @@ the default is 1000.
 
 A confidence level triggers a bootstrap, which draws a seed from R's
 global random number generator and therefore advances it. Call
-[`set.seed`](https://rdrr.io/r/base/Random.html) beforehand for
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
 reproducible intervals.
 
 ## See also
