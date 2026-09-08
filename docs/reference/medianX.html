@@ -21,7 +21,7 @@ Freq-objects."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@ stripped before the computation proceeds</p></dd>
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
 <dd><p>breaks for calculating the mean for classified data as
-composed by <code><a href="freq.html">freq</a></code></p></dd>
+composed by <code><a href="freq.html">freq()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -119,7 +119,7 @@ generally the result of <code>x[FALSE][NA]</code>).</p>
     <p>This is a generic function for which methods can be written.  However, the
 default method makes use of <code>is.na</code>, <code>sort</code> and <code>mean</code> from
 package <span class="pkg">base</span> all of which are generic, and so the default method will
-work for most classes (e.g., <code>"<a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a>"</code>) for which a median is a
+work for most classes (e.g., <code>"[Date]"</code>) for which a median is a
 reasonable concept.</p>
 <p>Calculating the median for ordered factors is not implemented in standard R,
 as it's not well defined (it is not clear what to do if the median sits
@@ -141,7 +141,7 @@ New S Language</em>.  Wadsworth &amp; Brooks/Cole.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code> for general quantiles, <br><a href="https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html" class="external-link">Maechler on R-help mailing list, 2003-Nov</a>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code> for general quantiles, <br><a href="https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html" class="external-link">Maechler on R-help mailing list, 2003-Nov</a>
 <br><a href="https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal" class="external-link">StackOverflow discussion on median</a></p>
 <p>Other location:
 <code><a href="gmean.html">gmean()</a></code>,

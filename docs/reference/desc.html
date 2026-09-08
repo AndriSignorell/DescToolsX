@@ -21,7 +21,7 @@ displays absolute and relative frequencies in horizontal bar plots."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ displays absolute and relative frequencies in horizontal bar plots."><meta prope
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Describe Data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/desc.R" class="external-link"><code>R/desc.R</code></a>, <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/desc.allNA.R" class="external-link"><code>R/desc.allNA.R</code></a>, <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/desc.factor.R" class="external-link"><code>R/desc.factor.R</code></a>, and 3 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/Desc.R" class="external-link"><code>R/Desc.R</code></a>, <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/Desc.factor.R" class="external-link"><code>R/Desc.factor.R</code></a>, <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/Desc.logical.R" class="external-link"><code>R/Desc.logical.R</code></a>, and 3 more</small>
       <div class="d-none name"><code>desc.Rd</code></div>
     </div>
 
@@ -82,26 +82,8 @@ displays absolute and relative frequencies in horizontal bar plots.</p>
 <span><span class="co"># S3 method for class 'Desc'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'Desc.AllNA'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'Desc.AllNA'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># S3 method for class 'Desc.factor'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'formula'</span></span>
-<span><span class="fu">desc</span><span class="op">(</span></span>
-<span>  <span class="va">formula</span>,</span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="va">subset</span>,</span>
-<span>  na.action <span class="op">=</span> <span class="va">na.pass</span>,</span>
-<span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  plotit <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'logical'</span></span>
 <span><span class="fu">desc</span><span class="op">(</span></span>
@@ -126,7 +108,25 @@ displays absolute and relative frequencies in horizontal bar plots.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Desc.numeric'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, main <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">main</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, main <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">main</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'Desc.AllNA'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'Desc.AllNA'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'formula'</span></span>
+<span><span class="fu">desc</span><span class="op">(</span></span>
+<span>  <span class="va">formula</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">subset</span>,</span>
+<span>  na.action <span class="op">=</span> <span class="va">na.pass</span>,</span>
+<span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plotit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -142,28 +142,18 @@ vector</p></dd>
 <dd><p>further arguments passed to methods</p></dd>
 
 
-<dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
-<dd><p>formula of the form <code>lhs ~ rhs</code>, where <code>lhs</code>
-gives the response values and <code>rhs</code> the corresponding groups
-or explanatory variables</p></dd>
+<dt id="arg-ord">ord<a class="anchor" aria-label="anchor" href="#arg-ord"></a></dt>
+<dd><p>order of the levels</p></dd>
 
 
-<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>optional matrix or data frame (or similar; see
-<code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame</a></code>) containing the variables in the
-formula. By default the variables are taken from
-<code>environment(formula)</code>.</p></dd>
+<dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
+<dd><p>confidence level of the interval (default 0.95).
+If set to <code>NA</code>, no confidence interval is calculated.</p></dd>
 
 
-<dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
-<dd><p>optional vector specifying a subset of observations
-to be used in the analysis</p></dd>
-
-
-<dt id="arg-na-action">na.action<a class="anchor" aria-label="anchor" href="#arg-na-action"></a></dt>
-<dd><p>function indicating what should happen when
-the data contain <code>NA</code>s. Defaults to
-<code>getOption("na.action")</code>.</p></dd>
+<dt id="arg-include-x">include_x<a class="anchor" aria-label="anchor" href="#arg-include-x"></a></dt>
+<dd><p>logical; if <code>TRUE</code>, the original vector is retained
+in the result</p></dd>
 
 
 <dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
@@ -185,23 +175,33 @@ on the classes of the variables. Default can be defined by
 the option <code>plotit</code>, if it does not exist then it's set to <code>TRUE</code>.</p></dd>
 
 
-<dt id="arg-ord">ord<a class="anchor" aria-label="anchor" href="#arg-ord"></a></dt>
-<dd><p>order of the levels</p></dd>
-
-
-<dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
-<dd><p>confidence level of the interval (default 0.95).
-If set to <code>NA</code>, no confidence interval is calculated.</p></dd>
-
-
-<dt id="arg-include-x">include_x<a class="anchor" aria-label="anchor" href="#arg-include-x"></a></dt>
-<dd><p>logical; if <code>TRUE</code>, the original vector is retained
-in the result</p></dd>
-
-
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
 <dd><p>number of digits used to format relative frequencies; the
 default can be set with <code>setDescToolsXOption(digits = x)</code></p></dd>
+
+
+<dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
+<dd><p>formula describing the design. Depending on the function,
+supported forms include <code>y ~ 1</code>, <code>Pair(x, y) ~ 1</code>,
+<code>y ~ group</code>, <code>y ~ predictor</code>, and
+<code>y ~ treatment | block</code></p></dd>
+
+
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dd><p>optional matrix or data frame (or similar; see
+<code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">stats::model.frame()</a></code>) containing the variables in the
+formula. If omitted, variables are taken from
+<code>environment(formula)</code></p></dd>
+
+
+<dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
+<dd><p>optional expression specifying a subset of observations
+to be used in the analysis</p></dd>
+
+
+<dt id="arg-na-action">na.action<a class="anchor" aria-label="anchor" href="#arg-na-action"></a></dt>
+<dd><p>function specifying how missing values are handled;
+passed to <code><a href="https://andrisignorell.github.io/bedrock/reference/resolveFormula.html" class="external-link">bedrock::resolveFormula()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -240,17 +240,17 @@ method of the class of its first argument.</p>
 <p>Typing <code>?desc</code> + TAB at the prompt lists all available methods.
 You usually call <code>desc(x)</code>, but direct calls like
 <code>desc.numeric(x)</code> are also possible.</p>
-<p><strong>Univariate descriptions</strong></p><ul><li><p>Numeric variables: <code><a href="desc.numeric.html">desc.numeric</a></code></p></li>
-<li><p>Factors and character vectors: <code><a href="desc.factor.html">desc.factor</a></code></p></li>
-<li><p>Boolean variables: <code>desc.logical</code></p></li>
-<li><p>Contingency tables: <code><a href="desc.table.html">desc.table</a></code></p></li>
-<li><p>Dates: <code><a href="desc.Date.html">desc.Date</a></code></p></li>
-<li><p>Time series: <code><a href="desc.ts.html">desc.ts</a></code></p></li>
-</ul><p><strong>Bivariate descriptions</strong></p><ul><li><p>numeric ~ numeric: <code><a href="desc.nn.html">desc.nn</a></code></p></li>
-<li><p>numeric ~ qualitative: <code><a href="desc.nq.html">desc.nq</a></code></p></li>
-<li><p>qualitative ~ numeric: <code><a href="desc.qn.html">desc.qn</a></code></p></li>
-<li><p>qualitative ~ qualitative: <code><a href="desc.qq.html">desc.qq</a></code>
-(wrapper around <code><a href="desc.table.html">desc.table</a></code>)</p></li>
+<p><strong>Univariate descriptions</strong></p><ul><li><p>Numeric variables: <code><a href="desc.numeric.html">desc.numeric()</a></code></p></li>
+<li><p>Factors and character vectors: <code><a href="desc.factor.html">desc.factor()</a></code></p></li>
+<li><p>Boolean variables: <code>desc.logical()</code></p></li>
+<li><p>Contingency tables: <code><a href="desc.table.html">desc.table()</a></code></p></li>
+<li><p>Dates: <code><a href="desc.Date.html">desc.Date()</a></code></p></li>
+<li><p>Time series: <code><a href="desc.ts.html">desc.ts()</a></code></p></li>
+</ul><p><strong>Bivariate descriptions</strong></p><ul><li><p>numeric ~ numeric: <code><a href="desc.nn.html">desc.nn()</a></code></p></li>
+<li><p>numeric ~ qualitative: <code><a href="desc.nq.html">desc.nq()</a></code></p></li>
+<li><p>qualitative ~ numeric: <code><a href="desc.qn.html">desc.qn()</a></code></p></li>
+<li><p>qualitative ~ qualitative: <code><a href="desc.qq.html">desc.qq()</a></code>
+(wrapper around <code><a href="desc.table.html">desc.table()</a></code>)</p></li>
 </ul><p><strong>Design</strong>
 The <code>desc</code> system separates:</p><ul><li><p>computation (internal <code>.desc_*</code> functions)</p></li>
 <li><p>printing (<code>print.Desc.*</code>)</p></li>
@@ -258,7 +258,7 @@ The <code>desc</code> system separates:</p><ul><li><p>computation (internal <cod
 </ul><p>Description of a <strong>dichotomous variable</strong>. This can either be a logical
 vector, a factor with two levels or a numeric variable with only two unique
 values. The confidence levels for the relative frequencies are calculated by
-<code><a href="https://andrisignorell.github.io/lumen/reference/binomCI.html" class="external-link">binomCI()</a></code>, method <code>"Wilson"</code> on a confidence
+<code><a href="https://andrisignorell.github.io/lumen/reference/binomCI.html" class="external-link">lumen::binomCI()</a></code>, method <code>"Wilson"</code> on a confidence
 level defined by <code>conf.level</code>.</p>
 <p>Dichotomous variables can be condensed into a compact graphical
 representation. The method calculates frequencies and binomial confidence
@@ -266,8 +266,8 @@ intervals and can display them as a dot plot with error bars.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></code></p>
-<p><code><a href="https://andrisignorell.github.io/pharos/reference/plotPropCI.html" class="external-link">plotPropCI</a></code> for graphical display</p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code></p>
+<p><code><a href="https://andrisignorell.github.io/pharos/reference/plotPropCI.html" class="external-link">pharos::plotPropCI()</a></code> for graphical display</p>
 <p>Other desc:
 <code><a href="desc.Date.html">desc.Date()</a></code>,
 <code><a href="desc.factor.html">desc.factor()</a></code>,
@@ -276,8 +276,8 @@ intervals and can display them as a dot plot with error bars.</p>
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code>,
-<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
+<code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

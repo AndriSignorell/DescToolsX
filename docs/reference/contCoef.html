@@ -7,9 +7,9 @@
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Pearson's Contingency Coefficient — contCoef"><meta name="description" content="Computes Pearson's contingency coefficient for a contingency table. If
 x and y are supplied, the table is constructed first; see
-Association."><meta property="og:description" content="Computes Pearson's contingency coefficient for a contingency table. If
+Association()."><meta property="og:description" content="Computes Pearson's contingency coefficient for a contingency table. If
 x and y are supplied, the table is constructed first; see
-Association."><meta property="og:image" content="/logo.png"></head><body>
+Association()."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +17,7 @@ Association."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ Association."><meta property="og:image" content="/logo.png"></head><body>
     <div class="ref-description section level2">
     <p>Computes Pearson's contingency coefficient for a contingency table. If
 <code>x</code> and <code>y</code> are supplied, the table is constructed first; see
-<code><a href="Association.html">Association</a></code>.</p>
+<code><a href="Association.html">Association()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -92,7 +92,7 @@ Association."><meta property="og:image" content="/logo.png"></head><body>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-correct">correct<a class="anchor" aria-label="anchor" href="#arg-correct"></a></dt>
@@ -102,7 +102,7 @@ returned; defaults to <code>FALSE</code></p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>further arguments. Named arguments known to
-<code><a href="normalizeToConfusion.html">normalizeToConfusion</a></code> or <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> are used to
+<code><a href="normalizeToConfusion.html">normalizeToConfusion()</a></code> or <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> are used to
 build the table; <code>R</code> and <code>type</code> configure the bootstrap and
 are described under Details. Anything else is an error rather than a
 silent no-op.</p></dd>
@@ -134,7 +134,7 @@ The corrected coefficient therefore ranges from 0 to 1.</p>
 <p>Since no generally accepted analytical interval is available,
 only bootstrap intervals are implemented. The interval is obtained from
 a multinomial bootstrap over the cells of
-the table. Two arguments configure it, both passed through <code>...</code>:
+the table. Two arguments configure it, both passed through <code>\dots</code>:
 <code>R</code>, the number of replicates (default 999), and <code>type</code>, one
 of <code>"perc"</code> (default) or <code>"bca"</code>.</p>
 <p><code>"perc"</code> is the default deliberately. Under independence the
@@ -149,7 +149,7 @@ jackknife, which is not consistent for a functional that is not smooth.
 association and a reasonable number of observations.</p>
 <p>Confidence intervals are restricted to the attainable range. Measures
 such as <a href="cramerV.html">cramerV</a> may be preferable when inference is central.</p>
-<p>For further information see <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p>
+<p>For further information see <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

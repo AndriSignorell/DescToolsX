@@ -219,6 +219,3 @@ Sys.which("git")
 
 
 
-install.packages(c('goftest', 'vegan', 'VGAM', 'hexbin', 'ppcor', 'MuMIn', 'pons',
-                   'dbscan', 'dbscan', 'chron'))
-

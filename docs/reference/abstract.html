@@ -19,7 +19,7 @@ the other hand already calculates some basic statistics."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,7 +146,7 @@ width should be truncated. Default is <code>TRUE</code>.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The levels of a factor and describing variable labels (as created by
-<code><a href="https://andrisignorell.github.io/bedrock/reference/Label.html" class="external-link">label()</a></code>) will be wrapped within the columns.</p>
+<code><a href="https://andrisignorell.github.io/bedrock/reference/label.html" class="external-link">bedrock::label()</a></code>) will be wrapped within the columns.</p>
 <p>The first 4 columns are printed with the needed fix width, the last 2
 (Levels and Labels) are wrapped within the column. The width is calculated
 depending on the width of the screen as given by <code>getOption("width")</code>.</p>
@@ -166,13 +166,13 @@ depending on the width of the screen as given by <code>getOption("width")</code>
 <span class="r-in"><span><span class="va">d.mydata</span> <span class="op">&lt;-</span> <span class="va">CO2</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># let's use describing labels</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://andrisignorell.github.io/bedrock/reference/Label.html" class="external-link">label</a></span><span class="op">(</span><span class="va">d.mydata</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"CO2 contains data from an experiment on the cold</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://andrisignorell.github.io/bedrock/reference/label.html" class="external-link">label</a></span><span class="op">(</span><span class="va">d.mydata</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"CO2 contains data from an experiment on the cold</span></span></span>
 <span class="r-in"><span><span class="st">tolerance of the grass species Echinochloa crus-galli."</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://andrisignorell.github.io/bedrock/reference/Label.html" class="external-link">label</a></span><span class="op">(</span><span class="va">d.mydata</span><span class="op">$</span><span class="va">Plant</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"an ordered factor with levels Qn1 &lt; Qn2 &lt; Qn3 &lt; ... &lt; Mc1</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://andrisignorell.github.io/bedrock/reference/label.html" class="external-link">label</a></span><span class="op">(</span><span class="va">d.mydata</span><span class="op">$</span><span class="va">Plant</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"an ordered factor with levels Qn1 &lt; Qn2 &lt; Qn3 &lt; ... &lt; Mc1</span></span></span>
 <span class="r-in"><span><span class="st">giving a unique identifier for each plant."</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://andrisignorell.github.io/bedrock/reference/Label.html" class="external-link">label</a></span><span class="op">(</span><span class="va">d.mydata</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"a factor with levels Quebec Mississippi giving the</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://andrisignorell.github.io/bedrock/reference/label.html" class="external-link">label</a></span><span class="op">(</span><span class="va">d.mydata</span><span class="op">$</span><span class="va">Type</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"a factor with levels Quebec Mississippi giving the</span></span></span>
 <span class="r-in"><span><span class="st">origin of the plant"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">abstract</span><span class="op">(</span><span class="va">d.mydata</span><span class="op">)</span></span></span>

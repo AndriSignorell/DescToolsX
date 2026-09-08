@@ -27,7 +27,7 @@ linear time trend with seasonal dummy variables is used."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,14 +121,14 @@ parameter</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Seasonality is taken from <code>x</code> itself: a <code><a href="https://rdrr.io/r/stats/ts.html" class="external-link">ts</a></code> object
+    <p>Seasonality is taken from <code>x</code> itself: a <code><a href="https://rdrr.io/r/stats/ts.html" class="external-link">stats::ts()</a></code> object
 with <code>frequency(x) &gt; 1</code> is treated as seasonal, anything else
 (including a plain numeric vector) as non-seasonal. For method
 <code>"loglik"</code> the profile log likelihood is therefore computed from
 <code>lm(x ~ trend)</code> for non-seasonal data and from
 <code>lm(x ~ trend + factor(cycle(x)))</code> for seasonal data. Both methods
 optimise lambda continuously over <code>[lower, upper]</code> via
-<code><a href="https://rdrr.io/r/stats/optimize.html" class="external-link">optimize</a></code>.</p>
+<code><a href="https://rdrr.io/r/stats/optimize.html" class="external-link">stats::optimize()</a></code>.</p>
 <p>Both methods need enough data to identify their criterion, and signal an
 error rather than falling back silently when they do not have it:
 <code>"loglik"</code> requires at least three observations, and more than
@@ -148,9 +148,9 @@ to conform to package standards.</p>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Box, G. E. P. and Cox, D. R. (1964) An analysis of
-transformations. <em>JRSS B</em> <b>26</b> 211–246.</p>
+transformations. <em>JRSS B</em> <strong>26</strong> 211–246.</p>
 <p>Guerrero, V.M. (1993) Time-series analysis supported by power
-transformations. <em>Journal of Forecasting</em>, <b>12</b>, 37–48.</p>
+transformations. <em>Journal of Forecasting</em>, <strong>12</strong>, 37–48.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

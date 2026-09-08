@@ -11,6 +11,7 @@
 <url><loc>/reference/atkinson.html</loc></url>
 <url><loc>/reference/attach-detach-aliases.html</loc></url>
 <url><loc>/reference/auc.html</loc></url>
+<url><loc>/reference/averagePrecision.html</loc></url>
 <url><loc>/reference/blandAltmanData.html</loc></url>
 <url><loc>/reference/boxCox.html</loc></url>
 <url><loc>/reference/boxCoxLambda.html</loc></url>
@@ -81,6 +82,7 @@
 <url><loc>/reference/lambda.html</loc></url>
 <url><loc>/reference/lc.html</loc></url>
 <url><loc>/reference/lof.html</loc></url>
+<url><loc>/reference/logLoss.html</loc></url>
 <url><loc>/reference/logSt.html</loc></url>
 <url><loc>/reference/madX.html</loc></url>
 <url><loc>/reference/mae.html</loc></url>

@@ -19,7 +19,7 @@ data frames, lists, and raw rating vectors."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ data frames, lists, and raw rating vectors.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>input object. Accepted formats: a <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> representing
+<dd><p>input object. Accepted formats: a <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> representing
 a pre-computed contingency table; a square numeric <code>matrix</code>
 representing a pre-computed contingency table; a numeric <code>matrix</code>
 with exactly 2 columns (one per rater); a <code>list</code> or
@@ -100,7 +100,7 @@ an atomic vector of common levels shared by both raters; for
 
 
 <dt id="arg-usena">useNA<a class="anchor" aria-label="anchor" href="#arg-usena"></a></dt>
-<dd><p>passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code>. Controls whether <code>NA</code>
+<dd><p>passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code>. Controls whether <code>NA</code>
 values appear as a level. One of <code>"no"</code> (default), <code>"ifany"</code>,
 or <code>"always"</code>.</p></dd>
 
@@ -121,18 +121,18 @@ tables with independent row and column levels.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function handles the following input formats:</p><dl><dt><code>table</code></dt>
 <dd><p>A pre-computed 2D contingency table which is validated via
-<code><a href="isConfusionTable.html">isConfusionTable</a></code>. For <code>mode = "agreement"</code>, the
+<code><a href="isConfusionTable.html">isConfusionTable()</a></code>. For <code>mode = "agreement"</code>, the
 table must be square with identical row and column names.</p></dd>
 
 <dt><code>matrix</code></dt>
 <dd><p>Either a pre-computed contingency matrix (square,
-passing <code><a href="isConfusionTable.html">isConfusionTable</a></code> validation) or a two-rater
+passing <code><a href="isConfusionTable.html">isConfusionTable()</a></code> validation) or a two-rater
 matrix with exactly 2 columns. A 2-column non-square matrix is always
 treated as a rater matrix; each column is one rater's ratings.</p></dd>
 
 <dt>two vectors</dt>
 <dd><p>If both <code>x</code> and <code>y</code> are supplied, they are
-tabulated via <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> after coercing to factors.</p></dd>
+tabulated via <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> after coercing to factors.</p></dd>
 
 <dt><code>list</code> or <code>data.frame</code> with 2 elements</dt>
 <dd><p>Each element is

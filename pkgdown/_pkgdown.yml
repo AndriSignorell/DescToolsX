@@ -192,6 +192,8 @@ reference:
   - auc
   - conf
   - cStat
+  - averagePrecision
+  - logLoss
   # model.calibration -- Probabilistic calibration
   - brierScore
   # model.error -- Prediction-error measures

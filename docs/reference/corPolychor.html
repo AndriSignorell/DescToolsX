@@ -17,7 +17,7 @@ likelihood (ml) estimation are supported."><meta property="og:image" content="/l
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ likelihood (ml) estimation are supported.</p>
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
 <dd><p>optional second ordinal vector. If supplied, a contingency table
-is constructed via <code>table(x, y, ...)</code>.</p></dd>
+is constructed via <code>table(x, y, \dots)</code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -101,7 +101,7 @@ combine it with <code>method = "two-step"</code>.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><p>a list of control parameters passed to <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code></p></dd>
+<dd><p>a list of control parameters passed to <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim()</a></code></p></dd>
 
 
 <dt id="arg-maxcor">maxcor<a class="anchor" aria-label="anchor" href="#arg-maxcor"></a></dt>
@@ -110,7 +110,7 @@ combine it with <code>method = "two-step"</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> when <code>y</code>
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> when <code>y</code>
 is supplied, for example <code>useNA</code></p></dd>
 
 </dl></div>
@@ -155,7 +155,7 @@ back with the delta method, factor \((1 - \rho^2)\).</p></dd>
     <p>The polychoric correlation estimates the correlation between two latent
 normally distributed variables underlying observed ordinal variables.</p>
 <p>The likelihood is based on a discretized bivariate normal distribution,
-evaluated via <code><a href="https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html" class="external-link">pmvnorm</a></code>.</p>
+evaluated via <code><a href="https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html" class="external-link">mvtnorm::pmvnorm()</a></code>.</p>
 <p>For numerical stability:</p><ul><li><p>The correlation parameter is internally transformed using
 <code><a href="https://rdrr.io/r/base/Hyperbolic.html" class="external-link">tanh()</a></code> to enforce \(|\rho| &lt; 1\). The search range on that
 scale is derived from <code>maxcor</code>, so the estimate is free to
@@ -172,7 +172,7 @@ correlation coefficient. <em>Psychometrika</em>, 44(4), 443–460.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html" class="external-link">pmvnorm</a></code>, <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code></p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mvtnorm/man/pmvnorm.html" class="external-link">mvtnorm::pmvnorm()</a></code>, <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim()</a></code></p>
 <p>Other assoc.continuous:
 <code><a href="corPart.html">corPart()</a></code>,
 <code><a href="findCorrX.html">findCorrX()</a></code>,

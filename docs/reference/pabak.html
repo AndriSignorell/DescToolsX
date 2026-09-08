@@ -17,7 +17,7 @@ interval and the auxiliary prevalence and bias indices."><meta property="og:imag
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,7 @@ when <code>y</code> is provided.</p></dd>
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
 <dd><p><code>NULL</code> (default) or a categorical vector of the same length
-as <code>x</code>. When supplied, <code>table(x, y, ...)</code> is computed
+as <code>x</code>. When supplied, <code>table(x, y, \dots)</code> is computed
 internally.</p></dd>
 
 
@@ -91,11 +91,11 @@ internally.</p></dd>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> for the vector
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> for the vector
 interface, for example <code>useNA</code>.</p></dd>
 
 </dl></div>
@@ -163,8 +163,8 @@ the estimate, and they do not depend on <code>conf.level</code>.</p>
 \((-\infty, uci]\).</p>
 <p>Data can be passed either as a square confusion matrix (or data frame) in
 <code>x</code>, or as two vectors <code>x</code> and <code>y</code>, in which case
-<code>table(x, y, ...)</code> is computed internally.</p>
-<p>Missing values are handled as <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> does - excluded by
+<code>table(x, y, \dots)</code> is computed internally.</p>
+<p>Missing values are handled as <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> does - excluded by
 default. Pass <code>useNA = "ifany"</code> via <code>...</code> to include them.</p>
     </div>
     <div class="section level2">

@@ -17,7 +17,7 @@ by John Monahan (1984)."><meta property="og:image" content="/logo.png"></head><b
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@ by John Monahan (1984).</p>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -119,7 +119,7 @@ numeric vector with elements:</p><dl><dt><code>est</code></dt>
     <p>The Hodges-Lehmann estimator is the median of the combined
 data points and Walsh averages.</p>
 <p>It is the same as the pseudo median returned as a by-product
-of <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test</a></code>
+of <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test()</a></code>
 (which however does not calculate correctly as soon as ties
 are present).</p>
 <p>Note that in the two-sample case the estimator for the
@@ -142,14 +142,14 @@ reported as \(\pm\infty\).</p>
 
 
 <p>A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code>
+global random number generator. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code>
 beforehand for reproducible intervals. The point estimate itself is
 deterministic: the compiled routine picks its pivots from a local
 generator and does not touch R's stream.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test</a></code></p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">stats::wilcox.test()</a></code></p>
 <p>Other location:
 <code><a href="gmean.html">gmean()</a></code>,
 <code><a href="hmean.html">hmean()</a></code>,

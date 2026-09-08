@@ -15,7 +15,7 @@ agreement, together with asymptotic confidence intervals."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@ categorical vector when <code>y</code> is provided</p></dd>
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
 <dd><p><code>NULL</code> (default) or a categorical vector with
 compatible dimensions to <code>x</code>. When supplied,
-<code>table(x, y, ...)</code> is computed. The vector interface is
+<code>table(x, y, \dots)</code> is computed. The vector interface is
 available for unweighted kappa only (see Details).</p></dd>
 
 
@@ -90,7 +90,7 @@ available for unweighted kappa only (see Details).</p></dd>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
@@ -101,7 +101,7 @@ as <code>x</code> supplying user-defined weights for each cell</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> for the
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> for the
 vector interface, for example <code>useNA</code></p></dd>
 
 </dl></div>
@@ -132,19 +132,19 @@ where \(r\) is the number of rows/columns.  The Fleiss-Cohen weights
 attach greater importance to closer disagreements.</p>
 <p>Data can be passed either as a square confusion matrix (or data frame)
 in <code>x</code>, or as two vectors <code>x</code> and <code>y</code>, in which case
-<code>table(x, y, ...)</code> is computed internally.  Note that the vector
+<code>table(x, y, \dots)</code> is computed internally.  Note that the vector
 interface supports <strong>unweighted kappa only</strong>: the function raises
 an error if <code>weights</code> is not <code>"unweighted"</code> and <code>y</code> is
 supplied, because the level ordering of two independent factors cannot
 be guaranteed to be consistent when constructing the confusion table.</p>
-<p>Missing values are handled as <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code> does – excluded by
+<p>Missing values are handled as <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> does – excluded by
 default.  Pass <code>useNA = "ifany"</code> via <code>...</code> to include them.</p>
 <p><code>sides</code> names the side on which the finite bound lies:
 <code>"left"</code> yields an interval bounded below, with the upper limit
 fixed at 1, and <code>"right"</code> one bounded above, with the lower limit
 fixed at -1. Kappa is a bounded parameter, so the open side is reported
 at the range boundary rather than as \(\pm\infty\) (design_rules.md
-4.1), matching <code><a href="ccc.html">ccc</a></code>.</p>
+4.1), matching <code><a href="ccc.html">ccc()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -167,7 +167,7 @@ reliability of scoring EEG sleep recordings.
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/bedrock/reference/pairApply.html" class="external-link">pairApply</a></code></p>
+    <div class="dont-index"><p><code><a href="https://andrisignorell.github.io/bedrock/reference/pairApply.html" class="external-link">bedrock::pairApply()</a></code></p>
 <p>Other assoc.agreement:
 <code><a href="ccc.html">ccc()</a></code>,
 <code><a href="cronbachAlpha.html">cronbachAlpha()</a></code>,

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,13 +80,13 @@ coerced, if possible, by <code><a href="https://rdrr.io/r/base/vector.html" clas
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>a vector of character strings representing the type of
 intervals required. The value should be any subset of the values
-<code>"classic"</code>, <code>"boot"</code>.  See <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot.ci</a></code>.</p></dd>
+<code>"classic"</code>, <code>"boot"</code>.  See <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -95,7 +95,7 @@ before the computation proceeds. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments are passed to the <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot</a></code>
+<dd><p>further arguments are passed to the <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>
 function. Supported arguments are <code>type</code> (<code>"norm"</code>,
 <code>"basic"</code>, <code>"stud"</code>, <code>"perc"</code>, <code>"bca"</code>), <code>parallel</code>
 and the number of bootstrap replicates <code>R</code>. If not defined those will
@@ -122,7 +122,7 @@ numeric vector with elements:</p><dl><dt><code>est</code></dt>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>To compute the harmonic mean, <code>1/x</code> is first calculated, before the
 arithmetic mean and its confidence interval are computed by
-<code><a href="https://andrisignorell.github.io/lumen/reference/meanCI.html" class="external-link">meanCI</a></code>. The harmonic mean is then the reciprocal of the
+<code><a href="https://andrisignorell.github.io/lumen/reference/meanCI.html" class="external-link">lumen::meanCI()</a></code>. The harmonic mean is then the reciprocal of the
 arithmetic mean of the reciprocals of the values. The same applies to the
 confidence interval.</p>
 <p>The harmonic mean is restricted to strictly positive inputs. Non-positive
@@ -134,13 +134,13 @@ confidence interval is not defined, and thus <code>NA</code> will be reported.</
 yields an interval bounded below, <code>"right"</code> one bounded above. The
 harmonic mean of positive values is itself positive, so the open lower
 side is reported as 0 rather than as <code>NA</code> or \(-\infty\).</p>
-<p>Use <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></code> to calculate the measures from data frame, resp.
+<p>Use <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply()</a></code> to calculate the measures from data frame, resp.
 from a matrix. <br></p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Snedecor, G. W., Cochran, W. G. (1989) Statistical Methods, 8th
-ed. Ames, <em>IA: Iowa State University Press </em></p>
+ed. Ames, *IA: Iowa State University Press *</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -15,7 +15,7 @@ always a valid date.Negative values of n subtract months."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ always a valid date.Negative values of <code>n</code> subtract months.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>a <code>Date</code> object or an object coercible to one with
-<code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></code></p></dd>
+<code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code></p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
@@ -80,7 +80,7 @@ missing values</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></code>, such as
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code>, such as
 <code>origin</code>, <code>format</code>, or <code>tz</code></p></dd>
 
 </dl></div>
@@ -102,7 +102,7 @@ returned. Missing values in either argument produce missing values in the
 corresponding result.</p>
 <p>Inputs supplied as <code>POSIXct</code> are converted to <code>Date</code>, and their
 time-of-day information is discarded. By default, <code>as.Date.POSIXct</code>
-performs this conversion in UTC. Supply <code>tz</code> through <code>...</code> if
+performs this conversion in UTC. Supply <code>tz</code> through <code>\dots</code> if
 another time zone should determine the calendar date.</p>
     </div>
     <div class="section level2">

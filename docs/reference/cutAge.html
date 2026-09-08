@@ -6,11 +6,11 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create a Factor Variable by Cutting an Age Variable — cutAge"><meta name="description" content="Dividing the range of an age variable x into intervals is a frequent
-task in data analysis. The commonly used function cut has
+task in data analysis. The commonly used function cut() has
 unfavourable default values for this. cutAge() is a convenient
 wrapper for cutting age variables in groups of e.g. 10 years with more
 suitable defaults."><meta property="og:description" content="Dividing the range of an age variable x into intervals is a frequent
-task in data analysis. The commonly used function cut has
+task in data analysis. The commonly used function cut() has
 unfavourable default values for this. cutAge() is a convenient
 wrapper for cutting age variables in groups of e.g. 10 years with more
 suitable defaults."><meta property="og:image" content="/logo.png"></head><body>
@@ -21,7 +21,7 @@ suitable defaults."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ suitable defaults."><meta property="og:image" content="/logo.png"></head><body>
 
     <div class="ref-description section level2">
     <p>Dividing the range of an age variable <code>x</code> into intervals is a frequent
-task in data analysis. The commonly used function <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></code> has
+task in data analysis. The commonly used function <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut()</a></code> has
 unfavourable default values for this. <code>cutAge()</code> is a convenient
 wrapper for cutting age variables in groups of e.g. 10 years with more
 suitable defaults.</p>
@@ -93,12 +93,12 @@ into which x is to be cut. Default is 10-year intervals from 0 to 90.</p></dd>
 <dt id="arg-right">right<a class="anchor" aria-label="anchor" href="#arg-right"></a></dt>
 <dd><p>logical, indicating if the intervals should be closed on the
 right (and open on the left) or vice versa.  Default is <code>FALSE</code> -
-unlike in <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></code>!</p></dd>
+unlike in <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut()</a></code>!</p></dd>
 
 
 <dt id="arg-ordered-result">ordered_result<a class="anchor" aria-label="anchor" href="#arg-ordered-result"></a></dt>
 <dd><p>logical: should the result be an ordered factor?
-Default is <code>TRUE</code> - unlike in <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></code>!</p></dd>
+Default is <code>TRUE</code> - unlike in <code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut()</a></code>!</p></dd>
 
 
 <dt id="arg-full">full<a class="anchor" aria-label="anchor" href="#arg-full"></a></dt>
@@ -125,7 +125,7 @@ to change the labels</p></dd>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></code>, <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></code></p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut()</a></code>, <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq()</a></code></p>
 <p>Other cut:
 <code><a href="cut.integer.html">cut.integer()</a></code>,
 <code><a href="cutQ.html">cutQ()</a></code></p></div>

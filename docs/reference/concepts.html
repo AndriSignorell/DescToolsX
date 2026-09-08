@@ -15,7 +15,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@ inside a package.</p>
 <p><strong>Functions</strong></p><ul><li><p><code>getConcepts()</code> - Returns all unique concepts used in a package.</p></li>
 <li><p><code>conceptMap()</code> - Returns a mapping of concepts to functions.</p></li>
 <li><p><code>conceptAudit()</code> - Returns a summary table of concept usage.</p></li>
-</ul><p>The functions use <code><a href="https://rdrr.io/r/tools/Rdutils.html" class="external-link">Rd_db</a></code> to parse Rd files and
+</ul><p>The functions use <code><a href="https://rdrr.io/r/tools/Rdutils.html" class="external-link">tools::Rd_db()</a></code> to parse Rd files and
 extract <code>\\concept</code> tags programmatically.</p>
 <p>These tools are intended for package development,
 documentation consistency checks, and conceptual audits.</p>
@@ -175,27 +175,28 @@ documentation consistency checks, and conceptual audits.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [69] "outlier-resistance"                                     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [70] "pearson spearman r-squared residuals heteroscedasticity"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [71] "pkg.introspection"                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [72] "prediction-error"                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "programming"                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [74] "quantile"                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [75] "rank-correlation"                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [76] "rater-data"                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [77] "reliability"                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [78] "robust-statistic"                                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [79] "robust-statistics"                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [80] "roc"                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [81] "shape"                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [82] "standardization"                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [83] "summary"                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [84] "table-manipulation"                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [85] "table-summary"                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [86] "time-series"                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [87] "transform"                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [88] "transformation"                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [89] "utils"                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [90] "variance-analysis"                                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [91] "variance-component"                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [92] "variance-stabilization"                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [72] "precision-recall"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [73] "prediction-error"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [74] "programming"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [75] "quantile"                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [76] "rank-correlation"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [77] "rater-data"                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [78] "reliability"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [79] "robust-statistic"                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [80] "robust-statistics"                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [81] "roc"                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [82] "shape"                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [83] "standardization"                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [84] "summary"                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [85] "table-manipulation"                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [86] "table-summary"                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [87] "time-series"                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [88] "transform"                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [89] "transformation"                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [90] "utils"                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [91] "variance-analysis"                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [92] "variance-component"                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [93] "variance-stabilization"                                 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">conceptMap</span><span class="op">(</span><span class="st">"DescToolsX"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $agreement</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "blandAltmanData"      "icc"                  "isConfusionTable"    </span>
@@ -225,10 +226,10 @@ documentation consistency checks, and conceptual audits.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   concept nTopics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7     association-measure      17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34 descriptive-statistics      11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59          model.metrics      11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32                   desc      10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57       model-evaluation      10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3         assoc.agreement       9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           assoc.nominal       9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25       data-description       9</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

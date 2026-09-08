@@ -17,7 +17,7 @@ desc(y ~ x, data) when both y and x are numeric."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ quantitative variables. The function is dispatched automatically by
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>integer controlling the amount of output (1, 2, or 3).
 <code>NULL</code> (default) falls back to
-<code>x$meta$verbose %||% getOption("DescTools.verbose", 2)</code>.</p></dd>
+<code>x$meta$verbose \%||\% getOption("DescTools.verbose", 2)</code>.</p></dd>
 
 
 <dt id="arg-abs-sty">abs.sty<a class="anchor" aria-label="anchor" href="#arg-abs-sty"></a></dt>
@@ -183,12 +183,12 @@ heteroscedasticity and random coefficient variation.
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="desc.html">desc</a></code> for the generic entry point,
-<code><a href="desc.nq.html">desc.nq</a></code> for numeric ~ categorical,
-<code><a href="desc.qn.html">desc.qn</a></code> for categorical ~ numeric,
-<code><a href="desc.qq.html">desc.qq</a></code> for categorical ~ categorical,
-<code><a href="https://andrisignorell.github.io/lumen/reference/corCI.html" class="external-link">corCI</a></code>, <code><a href="https://andrisignorell.github.io/lumen/reference/bpTest.html" class="external-link">bpTest</a></code>,
-<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>, <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></code></p>
+    <div class="dont-index"><p><code><a href="desc.html">desc()</a></code> for the generic entry point,
+<code><a href="desc.nq.html">desc.nq()</a></code> for numeric ~ categorical,
+<code><a href="desc.qn.html">desc.qn()</a></code> for categorical ~ numeric,
+<code><a href="desc.qq.html">desc.qq()</a></code> for categorical ~ categorical,
+<code><a href="https://andrisignorell.github.io/lumen/reference/corCI.html" class="external-link">lumen::corCI()</a></code>, <code><a href="https://andrisignorell.github.io/lumen/reference/bpTest.html" class="external-link">lumen::bpTest()</a></code>,
+<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>, <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">stats::cor.test()</a></code></p>
 <p>Other desc:
 <code><a href="desc.html">desc()</a></code>,
 <code><a href="desc.Date.html">desc.Date()</a></code>,
@@ -197,8 +197,8 @@ heteroscedasticity and random coefficient variation.
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code>,
-<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
+<code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
     </div>
 
     <div class="section level2">

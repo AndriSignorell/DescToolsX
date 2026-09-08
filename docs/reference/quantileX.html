@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,13 +86,13 @@ be omitted</p></dd>
 
 
 <dt id="arg-names">names<a class="anchor" aria-label="anchor" href="#arg-names"></a></dt>
-<dd><p>logical; if true, the result has a <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></code>
+<dd><p>logical; if true, the result has a <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code>
 attribute.  Set to <code>FALSE</code> for speedup with many <code>probs</code>.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>an integer between 1 and 9 selecting one of the nine quantile
-algorithms of <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code>. All nine are available for
+algorithms of <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>. All nine are available for
 unweighted data. With <code>weights</code> only 5 and 7 (default) exist; any
 other value is an error. See Details for how the two differ in their
 reading of the weights.</p></dd>
@@ -111,7 +111,7 @@ probabilities <code>probs</code>, named when <code>names = TRUE</code></p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Without <code>weights</code> the call is handed to <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code>
+    <p>Without <code>weights</code> the call is handed to <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>
 unchanged, so all nine types are available and the results are identical
 to base R.</p>
 <p>With <code>weights</code> only types 5 and 7 exist, and they interpret the
@@ -147,8 +147,8 @@ gap.  <em>EU-SILC 131-rev/04</em>, Eurostat.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="medianX.html">medianX</a></code>, <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code>,
-<code><a href="https://andrisignorell.github.io/lumen/reference/quantileCI.html" class="external-link">quantileCI</a></code></p>
+    <div class="dont-index"><p><code><a href="medianX.html">medianX()</a></code>, <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>,
+<code><a href="https://andrisignorell.github.io/lumen/reference/quantileCI.html" class="external-link">lumen::quantileCI()</a></code></p>
 <p>Other quantile:
 <code><a href="extremes.html">extremes</a></code></p></div>
     </div>

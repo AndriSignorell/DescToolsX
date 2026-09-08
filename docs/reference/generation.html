@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,15 +67,14 @@
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>ordered factor with levels
-<code>c("Babyboomer", "Gen X",
-"Millennial", "Gen Z", "Gen Alpha")</code><br>
+<code>c("Babyboomer", "Gen X", "Millennial", "Gen Z", "Gen Alpha")</code><br>
 Values which fall outside the range
 of breaks are coded as <code>NA</code>, as are <code>NaN</code> and <code>NA</code> values.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The generations are defined as:<br></p>
-<table class="table table"><tr><td><b>birth year</b> <code> </code></td><td><b>label</b></td></tr><tr><td><code>1946-1964</code> <code> </code></td><td>Babyboomer</td></tr><tr><td><code>1965-1979</code></td><td>Generation X</td></tr><tr><td><code>1980-1995</code></td><td>Generation Y - also known as
+<table class="table table"><tr><td><strong>birth year</strong> <code> </code></td><td><strong>label</strong></td></tr><tr><td><code>1946-1964</code> <code> </code></td><td>Babyboomer</td></tr><tr><td><code>1965-1979</code></td><td>Generation X</td></tr><tr><td><code>1980-1995</code></td><td>Generation Y - also known as
 Millennials</td></tr><tr><td><code>1996-2010</code></td><td>Generation Z</td></tr><tr><td><code>2011 and later</code></td><td>Generation Alpha</td></tr></table><p>The last class is left open at the top. The table formerly gave it as
 1946-2025 while the code used <code>Inf</code>, so a birth year of 2026 was
 documented as <code>NA</code> and returned as <code>"Gen Alpha"</code>. Naming the
@@ -83,7 +82,7 @@ successor generation is not settled enough to hard-code an upper bound.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="cutAge.html">cutAge</a></code></p>
+    <div class="dont-index"><p><code><a href="cutAge.html">cutAge()</a></code></p>
 <p>Other date.time:
 <code><a href="addMonths.html">addMonths()</a></code>,
 <code><a href="countWorkDays.html">countWorkDays()</a></code>,

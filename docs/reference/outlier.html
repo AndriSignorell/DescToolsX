@@ -15,7 +15,7 @@ definition."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,9 +92,9 @@ containing the matching elements themselves is returned.</p></dd>
     <p>Outlier detection is a tricky problem and should be handled with care. We
 implement Tukey's boxplot rule as a rough idea of spotting extreme values.
 The fences are built from the hinges, exactly as
-<code><a href="https://rdrr.io/r/grDevices/boxplot.stats.html" class="external-link">boxplot.stats</a></code> does, so the result matches what
+<code><a href="https://rdrr.io/r/grDevices/boxplot.stats.html" class="external-link">grDevices::boxplot.stats()</a></code> does, so the result matches what
 a boxplot of the same data draws. Note that the hinges are not the
-type-7 quartiles of <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></code> and differ from them
+type-7 quartiles of <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> and differ from them
 for many sample sizes.</p>
 <p>Hampel considers values outside of median +/- 3 * (median absolute
 deviation) to be outliers.</p>
@@ -111,7 +111,7 @@ estimation, <em>Journal of the American Statistical Association</em>, 69,
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></code></p>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot()</a></code></p>
 <p>Other data.inspection:
 <code><a href="abstract.html">abstract()</a></code></p></div>
     </div>

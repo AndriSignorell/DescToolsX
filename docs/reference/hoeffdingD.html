@@ -19,7 +19,7 @@ classical \(O(n^2)\) one, which is slower but handles ties exactly."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -134,7 +134,7 @@ for large \(n\) (for \(n = 7\) the minimum over all permutations
 is \(-0.26\)).</p>
 <p>Note that the raw statistic of Hollander and Wolfe lies in
 \([-1/60, 1/30]\); this function returns 30 times that value, which
-is the scale <code><a href="https://rdrr.io/pkg/Hmisc/man/hoeffd.html" class="external-link">Hmisc::hoeffd()</a></code> reports. The two differ by exactly
+is the scale <code>Hmisc::hoeffd()</code> reports. The two differ by exactly
 the factor 30, so results are comparable only after accounting for it.</p>
     </div>
     <div class="section level2">
@@ -148,7 +148,7 @@ ties; with tied values it is biased, and the size of the bias grows with the
 number of ties.</p>
 <p><code>engine = "exact"</code> is the classical formulation of Hollander and Wolfe.
 It resolves ties through midranks and the fractional counts \(Q_i\), so it
-is exact for tied data - the same quantity <code><a href="https://rdrr.io/pkg/Hmisc/man/hoeffd.html" class="external-link">Hmisc::hoeffd()</a></code> reports.
+is exact for tied data - the same quantity <code>Hmisc::hoeffd()</code> reports.
 It costs \(O(n^2)\) time, which is a few milliseconds at \(n = 1000\)
 and roughly a second at \(n = 10000\).</p>
 <p>On data without ties the two agree to floating point accuracy, so the
@@ -211,7 +211,7 @@ relied on in the situation the statistic is most often used for.</p>
 </div>
 
 <p>Missing values are an error rather than a silent approximation:
-<code><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></code> and <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank</a></code> place <code>NA</code>s at the end
+<code><a href="https://rdrr.io/r/base/order.html" class="external-link">order()</a></code> and <code><a href="https://rdrr.io/r/base/rank.html" class="external-link">rank()</a></code> place <code>NA</code>s at the end
 by default, which yields a formally valid permutation and hence a number
 that looks like an answer. Remove or impute them before calling.</p>
     </div>
@@ -231,14 +231,14 @@ Fast computation of Hoeffding's D statistic.</p>
 Nonparametric Statistical Methods (3rd ed.).</p>
 <p>Blum, J. R., Kiefer, J. and Rosenblatt, M. (1961).
 Distribution free tests of independence based on the sample distribution
-function. <em>Annals of Mathematical Statistics</em> <b>32</b>, 485-498.</p>
+function. <em>Annals of Mathematical Statistics</em> <strong>32</strong>, 485-498.</p>
 <p>Arcones, M. A. and Gine, E. (1992).
 On the bootstrap of U and V statistics.
-<em>Annals of Statistics</em> <b>20</b>, 655-674.</p>
+<em>Annals of Statistics</em> <strong>20</strong>, 655-674.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="spearmanCor.html">spearmanCor</a></code>, <code><a href="ordAssocs.html">kendallTauB</a></code></p>
+    <div class="dont-index"><p><code><a href="spearmanCor.html">spearmanCor()</a></code>, <code><a href="ordAssocs.html">kendallTauB()</a></code></p>
 <p>Other assoc.continuous:
 <code><a href="corPart.html">corPart()</a></code>,
 <code><a href="corPolychor.html">corPolychor()</a></code>,

@@ -15,7 +15,7 @@ optional confidence intervals."><meta property="og:image" content="/logo.png"></
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.946</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.950</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@ computed.</p></dd>
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals</a></code>.</p></dd>
+<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -103,7 +103,7 @@ One of <code>"score"</code>, <code>"wald"</code>, or <code>"use-or"</code>.</p><
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></code></p></dd>
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -145,7 +145,7 @@ estimate; if the unexposed group has no non-events (<code>x2 == n2</code>) that
 cubic has a root on the parameter boundary and its roots can no longer be
 assigned to the two interval bounds by their order alone. This case is
 therefore solved directly from the score statistic
-(<code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot</a></code>); both routes agree to numerical precision
+(<code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">stats::uniroot()</a></code>); both routes agree to numerical precision
 wherever the closed form applies.</p>
 <p>The Wald interval is asymptotic and may perform poorly for small counts or
 extreme probabilities. Note that <code>delta</code> enters the standard error
@@ -154,8 +154,8 @@ the point estimate is <code>0</code> or <code>Inf</code> and the Wald interval
 degenerates accordingly. Use <code>method = "score"</code> for tables with zero
 cells.</p>
 <p>If the table orientation differs from the required structure, rows or
-columns can be reversed using <code><a href="https://andrisignorell.github.io/bedrock/reference/revX.html" class="external-link">revX</a></code> or transposed
-with <code><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></code>.</p>
+columns can be reversed using <code><a href="https://andrisignorell.github.io/bedrock/reference/revX.html" class="external-link">bedrock::revX()</a></code> or transposed
+with <code><a href="https://rdrr.io/r/base/t.html" class="external-link">t()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
