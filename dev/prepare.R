@@ -16,6 +16,7 @@ devtools::build_manual(pkg = "C:/temp/swissValet")
 devtools::document()
 devtools::load_all()
 devtools::check()
+
 devtools::test()
 devtools::run_examples()
 
