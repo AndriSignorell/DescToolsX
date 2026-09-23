@@ -11,73 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// ad_stat_cpp
-double ad_stat_cpp(NumericVector x);
-RcppExport SEXP _DescToolsX_ad_stat_cpp(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ad_stat_cpp(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ad_test_cpp
-double ad_test_cpp(NumericVector x);
-RcppExport SEXP _DescToolsX_ad_test_cpp(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ad_test_cpp(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ad_prob_exact_inf_cpp
-NumericVector ad_prob_exact_inf_cpp(NumericVector a);
-RcppExport SEXP _DescToolsX_ad_prob_exact_inf_cpp(SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(ad_prob_exact_inf_cpp(a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ad_prob_approx_inf_cpp
-NumericVector ad_prob_approx_inf_cpp(NumericVector a);
-RcppExport SEXP _DescToolsX_ad_prob_approx_inf_cpp(SEXP aSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    rcpp_result_gen = Rcpp::wrap(ad_prob_approx_inf_cpp(a));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ad_prob_n_cpp
-NumericVector ad_prob_n_cpp(NumericVector a, int n);
-RcppExport SEXP _DescToolsX_ad_prob_n_cpp(SEXP aSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(ad_prob_n_cpp(a, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// ad_test_r_cpp
-Rcpp::List ad_test_r_cpp(const Rcpp::NumericVector& x);
-RcppExport SEXP _DescToolsX_ad_test_r_cpp(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(ad_test_r_cpp(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // assoc_cpp
 Rcpp::NumericVector assoc_cpp(Rcpp::NumericVector xR, Rcpp::NumericVector yR, double conf_level);
 RcppExport SEXP _DescToolsX_assoc_cpp(SEXP xRSEXP, SEXP yRSEXP, SEXP conf_levelSEXP) {
@@ -477,12 +410,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_DescToolsX_ad_stat_cpp", (DL_FUNC) &_DescToolsX_ad_stat_cpp, 1},
-    {"_DescToolsX_ad_test_cpp", (DL_FUNC) &_DescToolsX_ad_test_cpp, 1},
-    {"_DescToolsX_ad_prob_exact_inf_cpp", (DL_FUNC) &_DescToolsX_ad_prob_exact_inf_cpp, 1},
-    {"_DescToolsX_ad_prob_approx_inf_cpp", (DL_FUNC) &_DescToolsX_ad_prob_approx_inf_cpp, 1},
-    {"_DescToolsX_ad_prob_n_cpp", (DL_FUNC) &_DescToolsX_ad_prob_n_cpp, 2},
-    {"_DescToolsX_ad_test_r_cpp", (DL_FUNC) &_DescToolsX_ad_test_r_cpp, 1},
     {"_DescToolsX_assoc_cpp", (DL_FUNC) &_DescToolsX_assoc_cpp, 3},
     {"_DescToolsX_brier_boot_cpp", (DL_FUNC) &_DescToolsX_brier_boot_cpp, 4},
     {"_DescToolsX_condis_pairs_tab_cpp", (DL_FUNC) &_DescToolsX_condis_pairs_tab_cpp, 1},
