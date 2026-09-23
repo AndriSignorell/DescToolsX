@@ -4,72 +4,103 @@
 \alias{simpson}
 \title{Simpson Diversity Indices}
 \usage{
-simpson(x, method = c("gini", "hunter", "deltas"), na.rm = FALSE)
+simpson(
+  x,
+  method = c("gini", "hunter", "iqv"),
+  categories = NULL,
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{x}{a factor or character vector of observations, or a vector of
 non-negative counts. Note that a \emph{numeric} vector is always read as
 counts, never as observations; wrap it in \code{\link[=factor]{factor()}} to have it
-tabulated instead.}
+tabulated instead. A data frame with a single row of numeric columns
+(e.g. one site of a community matrix) is read as counts.}
 
 \item{method}{character string specifying the index to compute:
-\code{"gini"}, \code{"hunter"}, or \code{"deltas"}}
+\code{"gini"}, \code{"hunter"}, or \code{"iqv"}.}
+
+\item{categories}{the possible categories for \code{method = "iqv"}: either
+their number (a single number) or the categories themselves (a vector,
+e.g. \code{levels(x)}). If \code{NULL} (default), the number of observed,
+non-empty categories is used. Ignored, with a warning, for the other
+methods.}
 
 \item{na.rm}{logical. If \code{TRUE}, missing values are removed before
 computation. If \code{FALSE} and \code{x} contains \code{NA}, the result
 will be \code{NA_real_}.}
 }
 \value{
-a numeric scalar between 0 and 1. Returns \code{NA_real_} if input
-is invalid or empty.
+a numeric scalar between 0 and 1. \code{NA_real_} (with a warning)
+when the index is undefined: no observations, \eqn{N < 2} for
+\code{"hunter"}, \eqn{K < 2} for \code{"iqv"}; \code{NA_real_} without a warning for
+missing values with \code{na.rm = FALSE}. Invalid input (negative, infinite
+or, for \code{"hunter"}, non-integer counts; invalid \code{categories}) is an
+error.
 }
 \description{
-Computes Simpson-type diversity indices, including the Gini-Simpson index,
-the Hunter-Gaston index (bias-corrected for sample size), and the
-Deltas-corrected Gini-Simpson index (bias-corrected for number of categories).
+Computes Simpson-type diversity indices: the Gini-Simpson index, the
+Hunter-Gaston index (its unbiased, finite-sample version) and the index of
+qualitative variation (the Gini-Simpson index rescaled to a maximum of 1).
 }
 \details{
 The Gini-Simpson index is defined as \eqn{1 - \sum p_i^2}, where \eqn{p_i}
-are the relative frequencies of categories.
+are the relative frequencies of the categories.
 
 The Hunter-Gaston index is defined as
-\eqn{1 - \sum n_i (n_i - 1) / (N (N - 1))}, where \eqn{n_i} are counts and
-\eqn{N} is the total sample size.
+\eqn{1 - \sum n_i (n_i - 1) / (N (N - 1))}, where \eqn{n_i} are the counts
+and \eqn{N} is the total sample size. It equals the Gini-Simpson index
+times \eqn{N / (N - 1)}. The complement, \eqn{\sum n_i (n_i - 1) / (N (N - 1))},
+is Simpson's unbiased \eqn{\lambda}, the probability that two observations
+are of the \emph{same} category.
 
-The Deltas correction is defined as
-\eqn{(1 - \sum p_i^2) * k / (k - 1)}, where \eqn{k} is the number of
-observed (non-empty) categories. The factor is the reciprocal of
-\eqn{(k-1)/k}, the largest value the Gini-Simpson index can attain with
-\eqn{k} categories, so the corrected index reaches 1 for a uniform
-distribution over the observed categories.
+The index of qualitative variation (IQV) is defined as
+\eqn{(1 - \sum p_i^2) \, K / (K - 1)}, where \eqn{K} is the number of
+categories. Since \eqn{(K - 1)/K} is the largest value the Gini-Simpson
+index can attain with \eqn{K} categories, the IQV reaches 1 exactly for a
+uniform distribution over all \eqn{K} categories.
 
-All indices represent the probability that two randomly selected
-observations belong to different categories.
+\code{"gini"} and \code{"hunter"} are the probability that two randomly selected
+observations belong to different categories, drawn with and without
+replacement respectively. \code{"iqv"} is not a probability but the
+Gini-Simpson index relative to its maximum.
 
-The Hunter-Gaston index corrects for finite sample size, while the
-Deltas correction adjusts for a small number of observed categories. Note
-that the finite-sample correction \eqn{N/(N-1)} applied to the
-Gini-Simpson index reproduces the Hunter-Gaston index exactly; the two are
-the same adjustment with \eqn{N} and \eqn{k} in the correction factor.
+\strong{Number of categories in the IQV.} \eqn{K} should be the number of
+categories that were \emph{possible}, not only those observed. With the
+default, a sample spread evenly over 3 of 5 possible categories gets an
+IQV of 1, although it is far from the maximum diversity the coding scheme
+allows. Supply \code{categories} whenever the set of categories is known; for a
+factor, \code{categories = levels(x)} uses all levels, including empty ones.
 
 A sample concentrated in a single category is perfectly homogeneous rather
-than undefined, so \code{"gini"} and \code{"hunter"} return 0 for it. Only
-the Deltas correction requires \eqn{k \ge 2}, since \eqn{k - 1} appears in
-its denominator.
+than undefined, so \code{"gini"} returns 0 for it, and so does \code{"hunter"} as
+long as \eqn{N \ge 2}. The IQV requires \eqn{K \ge 2}, since
+\eqn{K - 1} appears in its denominator; with \code{categories} given, a single
+occupied category gives an IQV of 0.
 
-When \code{x} is numeric, it is treated as a vector of counts. Non-integer
-values produce a warning; the Hunter-Gaston index requires integer counts.
+When \code{x} is numeric, it is treated as a vector of counts. Relative
+frequencies are fine for \code{"gini"} and \code{"iqv"}; the Hunter-Gaston index
+counts pairs of observations and therefore requires integer counts
+(non-integer counts can push it above 1).
 }
 \examples{
 x <- c("A", "A", "B", "C", "C", "C")
 
 simpson(x, method = "gini")
 simpson(x, method = "hunter")
-simpson(x, method = "deltas")
+simpson(x, method = "iqv")
+
+# the same sample, if five categories were possible
+simpson(x, method = "iqv", categories = 5)
+simpson(x, method = "iqv", categories = c("A", "B", "C", "D", "E"))
 
 # Using counts directly
 counts <- c(A = 2, B = 1, C = 3)
 simpson(counts, method = "hunter")
+
+# Hunter-Gaston = Gini-Simpson * N / (N - 1)
+simpson(counts, method = "gini") * 6 / 5
 
 # a numeric vector of observations must be tabulated first, otherwise
 # its values are read as counts
@@ -88,11 +119,13 @@ Numerical index of the discriminatory ability of typing systems.
 \emph{Journal of Clinical Microbiology}, 26(11), 2465-2466.
 https://doi.org/10.1128/jcm.26.11.2465-2466.1988
 
-Deltas, G. (2003).
-The small-sample bias of the Gini coefficient:
-Results and implications for empirical research.
-\emph{Review of Economics and Statistics}, 85(1), 226-234.
-https://doi.org/10.1162/rest.2003.85.1.226
+Mueller, J. H., & Schuessler, K. F. (1961).
+\emph{Statistical Reasoning in Sociology}. Houghton Mifflin.
+
+Agresti, A., & Agresti, B. F. (1978).
+Statistical analysis of qualitative variation.
+\emph{Sociological Methodology}, 9, 204-237.
+https://doi.org/10.2307/270810
 }
 \seealso{
 Other diversity.concentration:
