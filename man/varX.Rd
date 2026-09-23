@@ -24,11 +24,12 @@ is returned, if \code{"ml"} then it is the maximum likelihood estimate for a
 Gaussian distribution (denominator \eqn{n}).}
 
 \item{weights}{non-negative numeric vector of weights the same length as
-\code{x}, interpreted as frequency (replication) weights. Observations with
-larger weights contribute more strongly to the empirical distribution.
+\code{x}, interpreted as frequency (replication) weights (see Details).
+Missing weights are treated like missing values in \code{x}.
 Weights are supported for vector input only.}
 
-\item{na.rm}{logical. Should missing values be removed?}
+\item{na.rm}{logical. Should missing values be removed? With weights,
+observations are dropped if \code{x} or the weight is missing.}
 
 \item{\dots}{further arguments passed to or from other methods}
 
@@ -56,12 +57,26 @@ as "Bessel's correction") which gives an unbiased estimator of the
 version using the denominator \eqn{n}. With frequency weights \eqn{n} is the
 sum of the weights.
 
-These functions return \code{\link[=NA]{NA()}} when there is only one observation
-and \code{NA} when \code{x} has length zero.
+These functions return \code{NA} when there is only one observation and
+when \code{x} has length zero. With weights, "one observation" means a total
+weight of at most 1.
 
-**Note:**\verb{ } Analytic (precision) weights are not supported. For
-likelihood-based weighted variance estimation, see
-\code{\link[stats:cov.wt]{stats::cov.wt()}}.
+\strong{Weights} are frequency (replication) weights: an observation with
+weight 3 counts as three identical observations, and \eqn{n} is the sum
+of the weights. Consequently the result depends on the scale of the
+weights, not only on their ratios: equal weights reproduce the
+unweighted result only if each equals 1. Weights of \code{1/3} for three
+values add up to a single observation (result \code{NA}), weights of \code{4/3}
+to four observations.
+
+Missing values are handled pairwise: with \code{na.rm = TRUE}, every
+observation where \code{x} \emph{or} its weight is \code{NA} is dropped; with
+\code{na.rm = FALSE}, a missing value in either yields \code{NA}. Observations with
+weight 0 are dropped in any case.
+
+**Note:**\verb{ } Analytic (reliability) weights, whose scale does not
+matter, are not supported. For these see \code{\link[stats:cov.wt]{stats::cov.wt()}}
+(\code{method = "unbiased"}).
 }
 \examples{
 
@@ -81,6 +96,17 @@ sdX(z, weights=w)
 
 # check!
 all.equal(varX(x), varX(z, weights=w))
+
+# missing values in x or weights are dropped pairwise
+varX(c(1, NA, 3), weights=c(1, 1, 1))                # NA
+varX(c(1, NA, 3), weights=c(1, 1, 1), na.rm=TRUE)    # 2
+varX(c(1, 2, 3),  weights=c(1, NA, 1), na.rm=TRUE)   # 2
+
+# frequency weights depend on scale ...
+sdX(1:3, weights=rep(1/3, 3))     # NA, total weight 1 = one observation
+sdX(1:3, weights=rep(4/3, 3))     # 0.942809, four observations
+# ... reliability weights do not
+sqrt(cov.wt(cbind(1:3), wt=rep(1/3, 3))$cov)   # 1
 
 
 # Variance for frequency tables

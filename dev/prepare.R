@@ -22,7 +22,6 @@ devtools::run_examples()
 
 bedrock::`%][%`()
 
-devtools::
 
 covr::package_coverage()
 goodpractice::gp()

@@ -69,10 +69,19 @@ The estimator for calculating kurtosis can either be:\cr
 1 is the typical definition used in Stata and in many older textbooks.  \cr
 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
 
-Cramer (1997) mentions the asymptotic standard error of the kurtosis: \cr
-\preformatted{ASE.kurt = sqrt((24*n*(n - 1)^2) / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))}
-to be used for calculating the confidence intervals.
-This is implemented here with \code{method="classic"}. \cr
+\code{method = "classic"} uses a Wald interval with the standard error of the
+kurtosis under normality. For estimator 1 this is the exact standard
+error of \eqn{g_2}
+\preformatted{SE(g_2) = sqrt(24*n*(n - 2)*(n - 3) / ((n + 1)^2*(n + 3)*(n + 5)))}
+and since estimators 2 and 3 are linear in \eqn{g_2}, their standard
+errors follow by multiplying with the respective slope,
+\eqn{(n-1)(n+1)/((n-2)(n-3))} and \eqn{((n-1)/n)^2}. For estimator 2
+this gives the familiar formula of Cramer (1997), as reported by SPSS:
+\preformatted{SES = sqrt(6*n*(n - 1) / ((n - 2)*(n + 1)*(n + 3)))
+SEK = 2 * SES * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
+    = sqrt(24*n*(n - 1)^2 / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))}
+Note that it applies to \eqn{G_2} only, not to the default estimator 3.
+With weights, \eqn{n} is the sum of the weights. \cr
 However, Joanes and Gill (1998) advise
 against this approach, pointing out that the normal assumptions would
 virtually always be violated.  They suggest using the bootstrap method.

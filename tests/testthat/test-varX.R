@@ -41,6 +41,9 @@ test_that("weights are frequency weights", {
   expect_equal(varX(1:5, weights = 1:5, estimator = "ml"),
                varX(rep(1:5, times = 1:5), estimator = "ml"))
 
+  # scale matters: three weights of 4/3 are four observations
+  expect_equal(varX(1:3, weights = rep(4/3, 3)), 8/9)
+
 })
 
 
@@ -63,7 +66,6 @@ test_that("varX() validates weights", {
 
   expect_error(varX(1:5, weights = 1:4), "same length")
   expect_error(varX(1:5, weights = c(1, 1, 1, 1, -1)), "non-negative")
-  expect_error(varX(1:5, weights = c(1, 1, 1, 1, NA)), "non-negative")
   expect_error(varX(cbind(1:5, 2:6), weights = 1:5), "not supported")
 
 })
@@ -73,6 +75,14 @@ test_that("degenerate input gives NA", {
 
   expect_true(is.na(varX(1)))
   expect_true(is.na(varX(3, weights = 1)))
+
+  # total weight <= 1 is at most one observation, for both estimators
+  expect_identical(varX(1:3, weights = rep(1/3, 3)), NA_real_)
+  expect_identical(varX(1:3, weights = rep(1/3, 3), estimator = "ml"), NA_real_)
+  expect_identical(varX(5, weights = 1, estimator = "ml"), NA_real_)
+
+  # nothing left after na.rm
+  expect_identical(varX(c(NA, NA), weights = c(1, 1), na.rm = TRUE), NA_real_)
 
 })
 
@@ -93,4 +103,27 @@ test_that("varX.Freq checks its breaks", {
                (sum(mid^2 * fr$freq) - n * mu^2) / (n - 1))
   expect_equal(sdX(fr, breaks = brk), sqrt(varX(fr, breaks = brk)))
 
+})
+
+
+# Cases from the DescTools SD() issue (NA handling and scale of weights)
+
+v  <- c(1, NA, 2, NA, 3, NA)
+w1 <- rep(1, 6)
+w2 <- c(1, NA, 1, NA, 1, NA)
+
+test_that("missing values give NA with na.rm = FALSE", {
+  expect_identical(sdX(v, weights = w1), NA_real_)
+  expect_identical(sdX(v, weights = w1, estimator = "ml"), NA_real_)
+  expect_identical(sdX(v, weights = w2), NA_real_)
+  expect_identical(sdX(1:3, weights = c(1, NA, 1)), NA_real_)
+})
+
+
+test_that("na.rm = TRUE drops incomplete (x, weight) pairs", {
+  expect_equal(sdX(v, weights = w1, na.rm = TRUE), 1)
+  expect_equal(sdX(v, weights = w2, na.rm = TRUE), 1)
+  expect_equal(varX(1:5, weights = c(1, NA, 1, 1, 1), na.rm = TRUE),
+               var(c(1, 3, 4, 5)))
+  expect_equal(sdX(v, weights = c(1, 0, 1, 0, 1, 0), na.rm = TRUE), 1)
 })

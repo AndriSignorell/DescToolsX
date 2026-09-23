@@ -133,12 +133,14 @@ skew <- function(x,
   
   if (is.na(conf.level)) {
     
+    # [[ ]] rather than [ ]: the documented return is a plain numeric
+    # scalar, [ ] carried the name "est" through
     res <- .skew(
       x,
       weights = weights,
       estimator = estimator,
       na.rm = na.rm
-    )["est"]
+    )[["est"]]
     
   } else {
     
@@ -271,7 +273,7 @@ skew <- function(x,
     
   } else if (estimator == 3) {
     
-    # estimator 3: MINITAB/BDMP
+    # estimator 3: MINITAB/BMDP
     
     r.skew <- r.skew *
       ((n - 1) / n)^(3 / 2)
@@ -353,13 +355,14 @@ skew <- function(x,
     
     # weights[d] rather than weights: the indices d resample x, and a weight
     # belongs to its observation. Passing the unpermuted vector pairs replicate
-    # i with the weight of the original observation i.
+    # i with the weight of the original observation i. Only est is
+    # returned, so the variance is not bootstrapped along for nothing.
     function(x, d)
       .skew(
         x[d],
         weights = if (is.null(weights)) NULL else weights[d],
         estimator = estimator
-      ),
+      )[["est"]],
     
     R        = args$R,
     parallel = args$parallel,

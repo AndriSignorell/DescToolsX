@@ -15,10 +15,19 @@
 #' 1 is the typical definition used in Stata and in many older textbooks.  \cr
 #' 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
 #' 
-#' Cramer (1997) mentions the asymptotic standard error of the kurtosis: \cr 
-#' \preformatted{ASE.kurt = sqrt((24*n*(n - 1)^2) / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))} 
-#' to be used for calculating the confidence intervals.  
-#' This is implemented here with `method="classic"`. \cr 
+#' `method = "classic"` uses a Wald interval with the standard error of the
+#' kurtosis under normality. For estimator 1 this is the exact standard
+#' error of \eqn{g_2}
+#' \preformatted{SE(g_2) = sqrt(24*n*(n - 2)*(n - 3) / ((n + 1)^2*(n + 3)*(n + 5)))}
+#' and since estimators 2 and 3 are linear in \eqn{g_2}, their standard
+#' errors follow by multiplying with the respective slope,
+#' \eqn{(n-1)(n+1)/((n-2)(n-3))} and \eqn{((n-1)/n)^2}. For estimator 2
+#' this gives the familiar formula of Cramer (1997), as reported by SPSS:
+#' \preformatted{SES = sqrt(6*n*(n - 1) / ((n - 2)*(n + 1)*(n + 3)))
+#' SEK = 2 * SES * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
+#'     = sqrt(24*n*(n - 1)^2 / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))}
+#' Note that it applies to \eqn{G_2} only, not to the default estimator 3.
+#' With weights, \eqn{n} is the sum of the weights. \cr
 #' However, Joanes and Gill (1998) advise
 #' against this approach, pointing out that the normal assumptions would
 #' virtually always be violated.  They suggest using the bootstrap method.
@@ -212,15 +221,16 @@ kurt <- function(x,
     n <- length(x)
   }
   
-  se <- sqrt(
+  # exact standard error of g_2 under normality; estimators 2 and 3 are
+  # linear in g_2 and scale it by their slope below. For estimator 2 this
+  # reproduces Cramer's (1997) sqrt(24n(n-1)^2 / ((n-3)(n-2)(n+3)(n+5))),
+  # i.e. 2 * SES * sqrt((n^2-1) / ((n-3)(n+5))).
+  # defined from n = 4 on: at n = 3 the radicand is 0 and estimator 2
+  # divides by n - 3, so the interval would be degenerate or NaN
+  se <- if (is.na(n) || n < 4) NA_real_ else sqrt(
     (24 * n * (n - 2) * (n - 3)) /
       ((n + 1)^2 * (n + 3) * (n + 5))
   )
-  
-  # se <- sqrt(
-  #   (24 * n * (n - 1)^2) /
-  #   ((n - 3) * (n - 2) * (n + 3) * (n + 5))
-  # )
   
   if (estimator == 2) {
     
@@ -238,7 +248,7 @@ kurt <- function(x,
     
   } else if (estimator == 3) {
     
-    # estimator 3: MINITAB/BDMP
+    # estimator 3: MINITAB/BMDP
     
     r.kurt <- (r.kurt + 3) * (1 - 1 / n)^2 - 3
     

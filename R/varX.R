@@ -12,12 +12,26 @@
 #' version using the denominator \eqn{n}. With frequency weights \eqn{n} is the
 #' sum of the weights.
 #'
-#' These functions return [NA()] when there is only one observation
-#' and `NA` when `x` has length zero.
+#' These functions return `NA` when there is only one observation and
+#' when `x` has length zero. With weights, "one observation" means a total
+#' weight of at most 1.
 #'
-#' **Note:**\verb{ } Analytic (precision) weights are not supported. For
-#' likelihood-based weighted variance estimation, see
-#' [stats::cov.wt()].
+#' **Weights** are frequency (replication) weights: an observation with
+#' weight 3 counts as three identical observations, and \eqn{n} is the sum
+#' of the weights. Consequently the result depends on the scale of the
+#' weights, not only on their ratios: equal weights reproduce the
+#' unweighted result only if each equals 1. Weights of `1/3` for three
+#' values add up to a single observation (result `NA`), weights of `4/3`
+#' to four observations.
+#'
+#' Missing values are handled pairwise: with `na.rm = TRUE`, every
+#' observation where `x` *or* its weight is `NA` is dropped; with
+#' `na.rm = FALSE`, a missing value in either yields `NA`. Observations with
+#' weight 0 are dropped in any case.
+#'
+#' **Note:**\verb{ } Analytic (reliability) weights, whose scale does not
+#' matter, are not supported. For these see [stats::cov.wt()]
+#' (`method = "unbiased"`).
 #'
 #' @name varX
 #' @aliases varX varX.default varX.Freq sdX
@@ -28,10 +42,11 @@
 #' is returned, if `"ml"` then it is the maximum likelihood estimate for a
 #' Gaussian distribution (denominator \eqn{n}).
 #' @param weights non-negative numeric vector of weights the same length as
-#' `x`, interpreted as frequency (replication) weights. Observations with
-#' larger weights contribute more strongly to the empirical distribution.
+#' `x`, interpreted as frequency (replication) weights (see Details).
+#' Missing weights are treated like missing values in `x`.
 #' Weights are supported for vector input only.
-#' @param na.rm logical. Should missing values be removed?
+#' @param na.rm logical. Should missing values be removed? With weights,
+#' observations are dropped if `x` or the weight is missing.
 #' @param breaks breaks for calculating the variance for classified data as
 #' composed by [freq()]
 #' @param \dots further arguments passed to or from other methods
@@ -67,6 +82,17 @@
 #'
 #' # check!
 #' all.equal(varX(x), varX(z, weights=w))
+#'
+#' # missing values in x or weights are dropped pairwise
+#' varX(c(1, NA, 3), weights=c(1, 1, 1))                # NA
+#' varX(c(1, NA, 3), weights=c(1, 1, 1), na.rm=TRUE)    # 2
+#' varX(c(1, 2, 3),  weights=c(1, NA, 1), na.rm=TRUE)   # 2
+#'
+#' # frequency weights depend on scale ...
+#' sdX(1:3, weights=rep(1/3, 3))     # NA, total weight 1 = one observation
+#' sdX(1:3, weights=rep(4/3, 3))     # 0.942809, four observations
+#' # ... reliability weights do not
+#' sqrt(cov.wt(cbind(1:3), wt=rep(1/3, 3))$cov)   # 1
 #'
 #'
 #' # Variance for frequency tables
@@ -127,12 +153,18 @@ varX.default <- function(x, estimator = c("unbiased", "ml"),
   if (!is.numeric(x) && !is.logical(x))
     stop("Argument 'x' must be numeric.")
 
-  ## NA-Handling
+  # length check before any subsetting - ok & !is.na(weights) would
+  # otherwise recycle a mismatched vector silently
+  if (!is.null(weights) && length(weights) != length(x))
+    stop("Argument 'weights' must have the same length as 'x'.")
+
+  ## NA-Handling: drop incomplete (x, weight) pairs
   if (na.rm) {
     ok <- !is.na(x)
-    x <- x[ok]
     if (!is.null(weights))
-      weights <- weights[ok]
+      ok <- ok & !is.na(weights)
+    x <- x[ok]
+    weights <- weights[ok]      # NULL[ok] stays NULL
   }
 
   ## Weights?
@@ -149,25 +181,25 @@ varX.default <- function(x, estimator = c("unbiased", "ml"),
 
   } else {
 
-    if (length(weights) != length(x))
-      stop("Argument 'weights' must have the same length as 'x'.")
-    if (anyNA(weights) || any(weights < 0))
-      stop("Argument 'weights' must be non-negative and must not contain NAs.")
+    # only reachable with na.rm = FALSE: missing x or weight gives NA,
+    # as in var() and weighted.mean()
+    if (anyNA(x) || anyNA(weights))
+      return(NA_real_)
+    if (any(weights < 0))
+      stop("Argument 'weights' must be non-negative.")
 
     z <- .normWeights(x, weights, na.rm = FALSE)
 
-    if (estimator == "ml"){
-      res <- as.numeric(stats::cov.wt(cbind(z$x), z$weights, method = "ML")$cov)
+    # total weight <= 1 is at most one observation; isTRUE() also catches
+    # the NaN that .normWeights() returns for empty input
+    if (!isTRUE(z$wsum > 1))
+      return(NA_real_)
 
-    } else {
+    # use z$x throughout - x and z$x need not be the same vector
+    xbar <- sum(z$weights * z$x) / z$wsum
+    ss   <- sum(z$weights * (z$x - xbar)^2)
 
-      if (z$wsum <= 1)
-        return(NA_real_)
-
-      # use z$x throughout - x and z$x need not be the same vector
-      xbar <- sum(z$weights * z$x) / z$wsum
-      res <- sum(z$weights * ((z$x - xbar)^2)) / (z$wsum - 1)
-    }
+    res <- ss / if (estimator == "ml") z$wsum else z$wsum - 1
 
   }
 

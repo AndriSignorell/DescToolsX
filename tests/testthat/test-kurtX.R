@@ -115,3 +115,36 @@ test_that("kurt returns an unnamed scalar without conf.level", {
   expect_null(names(kurt(rnorm(50))))
 })
 
+
+test_that("the classic standard error matches the published formulas", {
+
+  set.seed(6)
+  x <- rnorm(40)
+  n <- length(x)
+  z <- qnorm(0.975)
+
+  se <- function(est) {
+    ci <- kurt(x, conf.level = 0.95, method = "classic", estimator = est)
+    unname(ci[["uci"]] - ci[["lci"]]) / (2 * z)
+  }
+
+  # estimator 1: exact SE of g_2 under normality
+  seG2 <- sqrt(24 * n * (n - 2) * (n - 3) / ((n + 1)^2 * (n + 3) * (n + 5)))
+  expect_equal(se(1), seG2)
+
+  # estimator 2: Cramer (1997) / SPSS, SEK = 2 * SES * sqrt(...)
+  ses <- sqrt(6 * n * (n - 1) / ((n - 2) * (n + 1) * (n + 3)))
+  expect_equal(se(2), 2 * ses * sqrt((n^2 - 1) / ((n - 3) * (n + 5))))
+  expect_equal(se(2), sqrt(24 * n * (n - 1)^2 /
+                             ((n - 3) * (n - 2) * (n + 3) * (n + 5))))
+
+  # estimator 3: g_2 scaled by ((n - 1) / n)^2
+  expect_equal(se(3), seG2 * ((n - 1) / n)^2)
+})
+
+
+test_that("the classic standard error is NA where it is undefined", {
+  res <- kurt(c(1, 2, 4), conf.level = 0.95, method = "classic")
+  expect_true(is.na(res[["lci"]]))
+  expect_true(is.na(res[["uci"]]))
+})
