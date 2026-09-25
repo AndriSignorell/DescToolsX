@@ -89,7 +89,9 @@ description (either frequencies or percents) should be returned and
 }
 \value{
 an object of class \code{"PercTable"} containing the requested
-frequency and percentage tables
+frequency and percentage tables. \code{print()} returns its argument
+invisibly, as print methods do; the formatted lines are available
+through \code{\link[=capture.output]{capture.output()}}.
 }
 \description{
 Creates a 2-way contingency table along with percentages, marginal, and

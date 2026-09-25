@@ -21,6 +21,11 @@
   if (length(weights) != length(x))
     stop("length of 'weights' must equal the length of 'x'")
 
+  # numeric, before the comparisons below: character weights were compared
+  # as strings ("10" < "9"), logical ones counted as 0/1 without comment
+  if (!is.numeric(weights))
+    stop("'weights' must be numeric")
+
   # Idea Henrik Bengtsson
   # Remove observations with zero weights.
   # This:
@@ -51,6 +56,11 @@
 
   if (any(weights < 0))
     stop("'weights' must be non-negative")
+
+  # an infinite weight makes every other one relatively zero and the
+  # weighted sums Inf/Inf
+  if (any(is.infinite(weights)))
+    stop("'weights' must be finite")
 
   s <- sum(weights)
 

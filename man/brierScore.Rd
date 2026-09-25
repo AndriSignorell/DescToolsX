@@ -39,8 +39,10 @@ approximation, default) or \code{"boot"} (bootstrap via
 Default \code{FALSE}.}
 
 \item{...}{further arguments passed to the bootstrap engine when
-\code{method = "boot"}: \code{R}, \code{type}, \code{parallel},
-\code{ncpus}. See Details.}
+\code{method = "boot"}: \code{R}, \code{type} (\code{"perc"}, \code{"basic"},
+\code{"norm"} or \code{"bca"}; \code{"stud"} is not available). \code{parallel} and
+\code{ncpus} are accepted but have no effect: the resampling loop in
+\code{brier_boot_cpp()} is serial. See Details.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar containing the Brier
@@ -67,9 +69,12 @@ The scaled Brier score (\code{scaled = TRUE}) expresses skill relative
 to the climatological baseline \eqn{BS_{\max}}, yielding 1 for a
 perfect model and 0 for the no-skill reference.
 
-\code{sides} names the side on which the finite bound lies:
-\code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-\eqn{(-\infty, uci]}.
+\code{sides} names the side on which the finite bound lies. The open side is
+reported at the boundary of the score's range, which is \eqn{[0, 1]}
+for the raw and \eqn{(-\infty, 1]} for the scaled score: \code{"left"}
+yields \eqn{[lci, 1]}, \code{"right"} yields \eqn{[0, uci]} (raw) or
+\eqn{(-\infty, uci]} (scaled). Two-sided intervals are clamped to the
+same range. One-sided intervals require \code{conf.level > 0.5}.
 
 \strong{Normal interval} (\code{method = "normal"})
 

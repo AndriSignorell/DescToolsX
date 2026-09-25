@@ -41,14 +41,16 @@ test_that("gini stops for NA without na.rm", {
 
 test_that("gini conf.level returns named vector est/lci/uci", {
   x <- c(10, 20, 30, 40)
-  res <- gini(x, conf.level = 0.95, R = 300)
+  # type = "perc": the bca adjustment pushes the quantiles of R = 300
+  # replicates of n = 4 onto the extreme order statistics and warns
+  res <- gini(x, conf.level = 0.95, R = 300, type = "perc")
   expect_length(res, 3)
   expect_named(res, c("est", "lci", "uci"))
 })
 
 test_that("gini CI: lci < est < uci", {
   x <- c(10, 20, 30, 40, 50, 60)
-  res <- gini(x, conf.level = 0.95, R = 300)
+  res <- gini(x, conf.level = 0.95, R = 300, type = "perc")
   expect_lt(res["lci"], res["est"])
   expect_gt(res["uci"], res["est"])
 })
@@ -96,3 +98,45 @@ test_that("gini honours sides", {
 })
 
 
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("weights are frequency weights, as the replicated vector shows", {
+  expect_equal(gini(c(10, 0), weights = c(2, 3)), gini(c(0, 0, 0, 10, 10)))
+  expect_equal(gini(c(10, 0), weights = c(2, 3), unbiased = FALSE),
+               gini(c(0, 0, 0, 10, 10), unbiased = FALSE))
+})
+
+test_that("one-sided intervals open at the range boundary", {
+  x <- c(3, 8, 1, 12, 5, 7, 2, 9, 4, 15)
+  set.seed(5)
+  two <- gini(x, conf.level = 0.90, R = 300, type = "perc")
+  set.seed(5)
+  l <- gini(x, conf.level = 0.95, sides = "left", R = 300, type = "perc")
+  set.seed(5)
+  r <- gini(x, conf.level = 0.95, sides = "right", R = 300, type = "perc")
+  expect_equal(unname(l[["lci"]]), unname(two[["lci"]]))
+  expect_equal(unname(r[["uci"]]), unname(two[["uci"]]))
+  expect_equal(unname(l[["uci"]]), 1)
+  expect_equal(unname(r[["lci"]]), 0)
+  expect_error(gini(x, conf.level = 0.4, sides = "left"), "exceed 0.5")
+})
+
+test_that("zero total weight gives NA of the requested shape", {
+  expect_true(is.na(gini(c(1, 2), weights = c(0, 0))))
+  res <- gini(c(1, 2), weights = c(0, 0), conf.level = 0.95)
+  expect_named(res, c("est", "lci", "uci"))
+  expect_true(all(is.na(res)))
+})
+
+test_that("gini validates its arguments", {
+  expect_error(gini(letters), "numeric")
+  expect_error(gini(1:3, weights = 1:2), "same length")
+  expect_error(gini(c(1, Inf, 3)), "finite")
+  expect_error(gini(1:3, unbiased = NA), "unbiased")
+  expect_error(gini(1:3, na.rm = "yes"), "na.rm")
+  for (cl in list(NULL, NaN, c(0.9, 0.95)))
+    expect_error(gini(1:3, conf.level = cl), "conf.level")
+  expect_error(gini(1:3, sides = "up"))
+  expect_error(gini(c(1, 2), weights = c(0.5, 0.5)), "effective sample size")
+  expect_equal(gini(c(1, NA, 3), na.rm = TRUE), gini(c(1, 3)))
+})

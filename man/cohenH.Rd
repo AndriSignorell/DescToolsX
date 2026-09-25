@@ -24,7 +24,10 @@ to create a contingency table via \code{table(x, y, ...)}}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}. Since \eqn{h} lies in
+\eqn{[-\pi, \pi]}, the open side is reported at \eqn{\pm\pi} and the
+two-sided interval is clamped to that range. One-sided intervals
+require \code{conf.level > 0.5}.}
 
 \item{...}{additional arguments passed to \code{table()}}
 }

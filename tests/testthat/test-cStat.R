@@ -95,3 +95,71 @@ test_that("cStat reports the same estimate with and without an interval", {
   expect_equal(unname(withCi[["est"]]), unname(plain))
 })
 
+
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("cStat counts concordant pairs, ties in x by half", {
+  resp <- c(0, 0, 1, 1)
+  expect_equal(cStat(c(0.1, 0.4, 0.35, 0.8), resp = resp), 3 / 4)
+  expect_equal(cStat(c(0.1, 0.4, 0.4, 0.8), resp = resp), 3.5 / 4)
+})
+
+test_that("the glm method uses fitted probabilities and the response", {
+  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
+  expect_equal(cStat(fit), cStat(fitted(fit), resp = mtcars$vs))
+  # without the stored response the model frame is used
+  fit0 <- glm(vs ~ mpg, data = mtcars, family = binomial, y = FALSE)
+  expect_equal(cStat(fit0), cStat(fit))
+})
+
+test_that("cStat rejects missing, non-binary and invalid input", {
+  expect_error(cStat(c(0.1, NA, 0.3), resp = c(0, 1, 1)), "missing values")
+  expect_error(cStat(1:6, resp = rep(1:3, 2)), "binary")
+  x <- runif(20)
+  y <- rep(0:1, 10)
+  for (cl in list(NULL, c(0.9, 0.95), NaN, 1.5, "0.95"))
+    expect_error(cStat(x, resp = y, conf.level = cl))
+})
+
+
+test_that("sides opens the named side at the range boundary", {
+  set.seed(9)
+  x <- runif(200)
+  y <- rbinom(200, 1, plogis(2 * x - 1))
+
+  # R = 500 on purpose: 2 * 0.95 - 1 and 0.90 differ in the last bit, and
+  # alpha/2 * R lands on 24.99999... for one and 25.00000... for the
+  # other. cstat_boot_cpp() used to truncate that to adjacent order
+  # statistics; the index rule must absorb the representation error.
+  set.seed(1); two <- cStat(x, resp = y, conf.level = 0.90, R = 500)
+  set.seed(1); l   <- cStat(x, resp = y, conf.level = 0.95, sides = "left",
+                            R = 500)
+  set.seed(1); r   <- cStat(x, resp = y, conf.level = 0.95, sides = "right",
+                            R = 500)
+
+  expect_named(l, c("est", "lci", "uci"))
+  # same seed, same replicates: the one-sided bound is the two-sided one
+  # at 2 * conf.level - 1
+  expect_equal(unname(l[["lci"]]), unname(two[["lci"]]))
+  expect_equal(unname(r[["uci"]]), unname(two[["uci"]]))
+  expect_equal(unname(l[["uci"]]), 1)
+  expect_equal(unname(r[["lci"]]), 0)
+})
+
+test_that("cStat validates sides and R", {
+  x <- runif(20)
+  y <- rep(0:1, 10)
+  expect_error(cStat(x, resp = y, conf.level = 0.4, sides = "left"),
+               "exceed 0.5")
+  expect_error(cStat(x, resp = y, sides = "up"))
+  expect_error(cStat(x, resp = y, conf.level = 0.95, R = 0), "'R'")
+  expect_error(cStat(x, resp = y, conf.level = 0.95, R = 99.5), "'R'")
+})
+
+test_that("the glm method passes sides on", {
+  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
+  set.seed(2)
+  res <- cStat(fit, conf.level = 0.95, sides = "right", R = 300)
+  expect_equal(unname(res[["lci"]]), 0)
+})

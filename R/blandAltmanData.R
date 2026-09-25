@@ -19,7 +19,10 @@
 #' \eqn{\sqrt{3 s_d^2 / n}} given by Bland and Altman.
 #'
 #' @name blandAltmanData
-#' @param x numeric vector or formula
+#' @param x numeric vector, or a formula `y ~ x` with two numeric
+#'   variables: the right-hand side is the reference method (`x`), the
+#'   left-hand side the method under comparison (`y`), so that the
+#'   differences are `lhs - rhs`
 #' @param y numeric vector
 #' @param data optional data frame used with the formula interface
 #' @param conf.level confidence level for the intervals reported for the
@@ -197,14 +200,18 @@ blandAltmanData.formula <- function(
     ...
 ){
 
+  # resolveFormula() returns the response (lhs) as $x and a continuous
+  # rhs as $predictor - there is no $y, so this used to hand NULL to the
+  # default method. allowed = restricts it to the paired numeric design.
   z <- bedrock::resolveFormula(
     formula = x,
-    data = data
+    data = data,
+    allowed = "numeric-numeric"
   )
 
   blandAltmanData(
-    x = z$x,
-    y = z$y,
+    x = z$predictor,
+    y = z$x,
     conf.level = conf.level,
     na.rm = na.rm,
     ...

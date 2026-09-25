@@ -119,10 +119,9 @@ test_that("profile intervals are two-sided and say so", {
   expect_equal(res$sides, "two.sided")
   expect_true(all(is.finite(res$coefficients$uci)))
 
-  # confint.glm() prints "Waiting for profiling to be done..." as a
-  # message, so silence is the wrong bar here - the point is that a
-  # two-sided request warns about nothing
-  expect_no_warning(suppressMessages(oddsRatio(fit, method = "profile")))
+  # the profiling message of confint.glm() is muffled inside oddsRatio(),
+  # so a two-sided request is completely silent
+  expect_silent(oddsRatio(fit, method = "profile"))
 })
 
 
@@ -165,4 +164,56 @@ test_that("the exponentiated intercept is the baseline odds", {
   # so the column order cannot silently shift
   expect_equal(res$coefficients$est[i], exp(coef(fit)[["(Intercept)"]]))
   expect_equal(res$coefficients$logEst[i], coef(fit)[["(Intercept)"]])
+})
+
+
+# Review 26.09.2026: input checks, the zero-cell correction, print --------
+
+test_that("oddsRatio.default validates the table", {
+  expect_error(oddsRatio(lm(mpg ~ wt, data = mtcars)), "2x2 table or a binomial glm")
+  expect_error(oddsRatio(matrix(letters[1:4], 2)), "numeric")
+  expect_error(oddsRatio(matrix(c(1, NA, 2, 3), 2)), "missing")
+  expect_error(oddsRatio(array(1:8, c(2, 2, 2))), "must be a matrix")
+  expect_error(oddsRatio(matrix(1:9, 3)), "2x2 matrix")
+  expect_error(oddsRatio(matrix(c(1, -1, 2, 3), 2)), "non-negative")
+  expect_error(oddsRatio(matrix(c(1, 1.5, 2, 3), 2)), "integer counts")
+  expect_error(oddsRatio(matrix(c(0, 3, 0, 4), 2)), "positive totals")
+})
+
+test_that("two vectors are cross-tabulated first", {
+  x <- c("a", "a", "b", "b", "a", "b", "a")
+  y <- c("u", "v", "u", "v", "u", "v", "v")
+  expect_equal(oddsRatio(x, y, conf.level = 0.95),
+               oddsRatio(table(x, y), conf.level = 0.95))
+})
+
+test_that("the Wald method adds 0.5 to every cell when one is zero", {
+  x  <- matrix(c(10, 0, 5, 7), 2)
+  xh <- x + 0.5
+  est <- xh[1, 1] * xh[2, 2] / (xh[1, 2] * xh[2, 1])
+  se  <- sqrt(sum(1 / xh))
+  expect_equal(unname(oddsRatio(x, method = "wald")), est)
+  expect_equal(unname(oddsRatio(x, method = "wald", conf.level = 0.95)),
+               c(est, exp(log(est) + c(-1, 1) * qnorm(0.975) * se)))
+})
+
+test_that("exact and mid-p give point estimates without conf.level", {
+  x <- matrix(c(12, 5, 7, 9), 2)
+  expect_equal(unname(oddsRatio(x, method = "exact")),
+               unname(fisher.test(x)$estimate))
+  mp <- oddsRatio(x, method = "midp")
+  expect_length(mp, 1L)
+  expect_true(is.finite(mp) && mp > 0)
+})
+
+test_that("the glm method refuses other families and prints its table", {
+  pfit <- glm(carb ~ mpg, data = mtcars, family = poisson)
+  expect_error(oddsRatio(pfit), "binomial")
+  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
+  or  <- oddsRatio(fit, conf.level = 0.95)
+  out <- capture.output(res <- print(or))
+  expect_identical(res, or)
+  expect_true(any(grepl("Odds Ratios (95% two.sided CI, method = wald)", out,
+                        fixed = TRUE)))
+  expect_true(any(grepl("mpg", out, fixed = TRUE)))
 })

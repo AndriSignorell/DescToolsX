@@ -25,7 +25,7 @@
 #'
 #' @param plotit logical. Should a plot be created? The plot type depends 
 #' on the classes of the variables. Default can be defined by 
-#' the option `plotit`, if it does not exist then it's set to `TRUE`.
+#' the option `plotit`, if it does not exist then it's set to `FALSE`.
 #' 
 #' @param verbose
 #' integer controlling verbosity of table output.
@@ -91,12 +91,18 @@ desc <- function(x, ...) {
 #' @method desc list
 #' @export
 desc.list <- function(x, ...) {
-  
-  res <- lapply(names(x), function(nm) {
-    desc(x[[nm]], main=nm, ...)
+
+  # lapply() over names(x) returned an empty result for an unnamed list;
+  # unnamed elements are labelled by position, as print() shows them
+  nms <- names(x)
+  if (is.null(nms)) nms <- rep("", length(x))
+  nms[!nzchar(nms)] <- sprintf("[[%d]]", which(!nzchar(nms)))
+
+  res <- lapply(seq_along(x), function(i) {
+    desc(x[[i]], main = nms[i], ...)
   })
   
-  names(res) <- names(x)
+  names(res) <- nms
   
   structure(
     list(
@@ -133,9 +139,11 @@ desc.data.frame <- function(x, ...) {
   
   abst <- abstract(x)
       attr(abst, which="main") <- 
+        # class collapsed: a tibble has three classes, and gettextf() then
+        # returned three headers
         cli::style_bold(gettextf("Describe %s (%s):", 
                                  deparse(substitute(x)),
-                                 class(x)))
+                                 paste(class(x), collapse = ", ")))
   res$abstract <- abst     
   
   return(res)
@@ -148,12 +156,10 @@ desc.data.frame <- function(x, ...) {
 #' @exportS3Method
 print.Desc <- function(x, ...) {
   
-  for (i in seq_along(x)) {
+  # Containers never plot: every leaf print method draws its own plot
+  # (via .plotIfRequested()), so plotting here as well drew each one twice.
+  for (i in seq_along(x))
     print(x[[i]], ...)
-    
-    if(x[[i]]$meta$plotit)  plot(x[[i]])
-    
-  }
   
   invisible(x)
 }
@@ -174,6 +180,15 @@ plot.Desc <- function(x, ...) {
 
 
 # == internal helper functions ===============================================
+
+# The single place where a print method turns into a plot. Called as the
+# last statement of every leaf print.Desc.* method - and only there, never
+# in containers such as print.Desc() or print.Desc.list().
+.plotIfRequested <- function(x) {
+  if (isTRUE(x$meta$plotit))
+    plot(x, main = x$meta$main)
+  invisible(x)
+}
 
 .descMeta <- function(x, xname, main, plotit, verbose) {
 

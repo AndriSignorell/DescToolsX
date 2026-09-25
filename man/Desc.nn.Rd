@@ -7,9 +7,9 @@
 \alias{plot.Desc.nn}
 \title{Describe a Numeric-Numeric Relationship}
 \usage{
-.descNN(x, y, conf.level = 0.95)
+.descNN(y, x, conf.level = 0.95)
 
-\method{print}{Desc.nn}(x, verbose = NULL, abs.sty = NULL, per.sty = NULL, ...)
+\method{print}{Desc.nn}(x, verbose = NULL, ...)
 
 \method{plot}{Desc.nn}(x, main = x$meta$main, which = 1, verbose = NULL, ...)
 }
@@ -20,12 +20,6 @@
 \item{verbose}{integer controlling the amount of output (1, 2, or 3).
 \code{NULL} (default) falls back to
 \verb{x$meta$verbose \\\%||\\\% getOption("DescTools.verbose", 2)}.}
-
-\item{abs.sty}{format style for counts. \code{NULL} falls back to
-\code{getOption("DescTools.abs.sty")}.}
-
-\item{per.sty}{format style for proportions. \code{NULL} falls back to
-\code{getOption("DescTools.per.sty")}.}
 
 \item{\dots}{further arguments passed to the underlying plot functions}
 
@@ -141,8 +135,8 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link[=desc.table]{desc.table()}},
-\code{\link[=desc.ts]{desc.ts()}}
+\code{\link[=desc.ts]{desc.ts()}},
+\code{\link[=print.Desc.qq]{print.Desc.qq()}}
 }
 \concept{bivariate numeric regression correlation scatterplot}
 \concept{desc}

@@ -13,7 +13,10 @@ blandAltmanData(x, ...)
 \method{blandAltmanData}{formula}(x, data = NULL, conf.level = 0.95, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{numeric vector or formula}
+\item{x}{numeric vector, or a formula \code{y ~ x} with two numeric
+variables: the right-hand side is the reference method (\code{x}), the
+left-hand side the method under comparison (\code{y}), so that the
+differences are \code{lhs - rhs}}
 
 \item{...}{further arguments passed to or from other methods}
 

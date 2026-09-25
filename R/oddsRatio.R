@@ -328,10 +328,16 @@ oddsRatio.glm <- function(
       sides <- "two.sided"
     }
     
+    # confint.glm() announces "Waiting for profiling to be done..." as a
+    # message - progress chatter from a call the user never made
+    # directly. Only messages are muffled; warnings about the profile
+    # (e.g. non-convergence) still reach the caller.
     ci <- exp(
-      confint(
-        x,
-        level = conf.level
+      suppressMessages(
+        confint(
+          x,
+          level = conf.level
+        )
       )
     )
     

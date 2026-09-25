@@ -26,13 +26,18 @@
 #'
 #' Bootstrap confidence intervals in `predict.Lc()` are based on
 #' resampling with replacement from the (weighted) empirical distribution,
-#' followed by pointwise quantiles across bootstrap replicates.  The number
+#' followed by interpolation of each replicate at the requested population
+#' shares and pointwise quantiles across bootstrap replicates.  The number
 #' of replications is controlled by `R` passed via `...` and
 #' extracted by `.extractBootArgs()` (default `R = 999`).
 #'
 #' @param x numeric vector of non-negative values
 #' @param n numeric vector of non-negative weights of the same length as
-#'   `x`. Defaults to equal weights (`rep(1, length(x))`).
+#'   `x`. Defaults to equal weights (`rep(1, length(x))`). Bootstrap intervals
+#'   draw `floor(sum(n))` observations with probabilities proportional to `n`;
+#'   the sum must be finite and at least one. Thus rescaling the weights
+#'   changes the bootstrap sample size; frequency weights are appropriate
+#'   when the weights represent replicated observations.
 #' @param na.rm logical. If `TRUE`, observations with `NA` in
 #'   `x` or `n` are removed before computation.  Default is
 #'   `FALSE`.
@@ -50,14 +55,18 @@
 #' @param conf.level numeric scalar in \eqn{(0, 1)}. If supplied,
 #'   bootstrap confidence intervals at level `conf.level` are added
 #'   as columns `lci` and `uci`.  Set to `NA` (default)
-#'   to suppress intervals.
+#'   to suppress intervals. For the standard curve, all-zero bootstrap
+#'   samples have undefined income shares and are omitted pointwise; if no
+#'   finite replicates remain, the corresponding limits are `NA`.
 #' @param general logical. If `TRUE`, the generalized Lorenz curve
 #'   is used.  Default is `FALSE`.
 #' @param ... further arguments passed to `lc.default()` from
 #'   `lc.formula()`. In `predict.Lc()`, the argument `R`
 #'   (positive integer, default `999`) controls the number of bootstrap
 #'   replications when `conf.level` is supplied; it is extracted via
-#'   `.extractBootArgs()` and ignored otherwise.
+#'   `.extractBootArgs()` and ignored otherwise. Only percentile intervals
+#'   are implemented: `type = "perc"` may be supplied explicitly; other
+#'   interval types are rejected.
 #'
 #' @return
 #' \describe{
@@ -69,8 +78,8 @@
 #'       \item{`L`}{numeric vector of Lorenz curve values at `p`}
 #'       \item{`L.general`}{generalized Lorenz curve values}
 #'       \item{`Gini`}{estimated Gini coefficient}
-#'       \item{`x`}{original unsorted data vector}
-#'       \item{`n`}{original weight vector}
+#'       \item{`x`}{unsorted data used after missing-value removal}
+#'       \item{`n`}{corresponding weights after missing-value removal}
 #'     }
 #'   }
 #'   \item{`lc.formula()`}{a single `"Lc"` object if the formula
@@ -200,9 +209,6 @@ lc.formula <- function(formula, data, subset, na.action = na.pass, ...) {
 #' @export
 lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   
-  xx <- x
-  nn <- n
-  
   if (na.rm) {
     keep <- !is.na(x) & !is.na(n)
     x <- x[keep]
@@ -215,6 +221,10 @@ lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   if (any(is.na(x)) || any(x < 0))
     stop("x must be non-negative and not contain NA values")
   
+  # Retain the effective unsorted sample for subsequent bootstrap prediction.
+  xx <- x
+  nn <- n
+
   g <- gini(x, weights = n, na.rm = FALSE)
   
   o <- order(x)
@@ -275,59 +285,79 @@ predict.Lc <- function(object, newdata, conf.level = NA, general = FALSE, ...) {
   }
   
   # --- confidence interval ---
+  if (length(conf.level) != 1L ||
+      !(is.numeric(conf.level) || is.logical(conf.level)) ||
+      is.nan(conf.level))
+    stop("conf.level must be a single number in (0, 1), or NA")
+
   if (!is.na(conf.level)) {
-    
-    if (!is.numeric(conf.level) || length(conf.level) != 1 ||
+    if (!is.numeric(conf.level) || !is.finite(conf.level) ||
         conf.level <= 0 || conf.level >= 1)
       stop("conf.level must be a single number in (0, 1)")
-    
-    bootArgs <- .extractBootArgs(match.call(expand.dots = FALSE)$`...`)
+
+    # This implementation computes pointwise percentile intervals only.
+    # Do not inherit the shared helper's BCa default or its BCa diagnostics.
+    bootDots <- list(...)
+    if (!is.null(bootDots$type) && !identical(bootDots$type, "perc"))
+      stop("predict.Lc supports only type = 'perc' (percentile intervals)")
+    bootDots$type <- "perc"
+    bootArgs <- .extractBootArgs(bootDots)
     R <- bootArgs$R
-    
-    # --- reconstruct weighted sample ---
-    wsum <- sum(object$n)
-    
-    if (wsum == 0 || length(object$x) == 0) {
-      lci <- uci <- rep(NA_real_, length(newdata))
-      return(data.frame(res, lci = lci, uci = uci))
+
+    # Also accept objects made before lc() stored its cleaned sample.
+    bx <- object$x
+    bw <- object$n
+    if (!is.numeric(bx) || !is.numeric(bw) || length(bx) != length(bw))
+      stop("the stored data and weights must be numeric vectors of equal length")
+    keep <- !is.na(bx) & !is.na(bw)
+    bx <- bx[keep]
+    bw <- bw[keep]
+    if (any(!is.finite(bx)) || any(bx < 0) ||
+        any(!is.finite(bw)) || any(bw < 0))
+      stop("the stored data and weights must be finite and non-negative")
+
+    wsum <- sum(bw)
+    if (!length(bx) || wsum == 0) {
+      return(data.frame(res, lci = rep(NA_real_, length(newdata)),
+                       uci = rep(NA_real_, length(newdata))))
     }
-    
-    x_full <- sample(
-      object$x,
-      size    = wsum,
-      replace = TRUE,
-      prob    = object$n
-    )
-    
-    # --- bootstrap ---
-    lst <- replicate(R, lc(x_full), simplify = FALSE)
-    
-    curve_name <- if (general) "L.general" else "L"
-    
-    mat <- do.call(
-      rbind,
-      lapply(lst, function(obj) obj[[curve_name]])
-    )
-    
-    ci_x <- lst[[1]]$p
-    
-    # --- handle degenerate bootstrap ---
-    if (is.null(mat) || nrow(mat) == 0) {
-      lci <- rep(NA_real_, length(newdata))
-      uci <- rep(NA_real_, length(newdata))
-    } else {
-      lci_raw <- apply(mat, 2, quantile,
-                       probs = (1 - conf.level) / 2,
-                       na.rm = TRUE)
-      uci_raw <- apply(mat, 2, quantile,
-                       probs = 1 - (1 - conf.level) / 2,
-                       na.rm = TRUE)
-      lci <- interp_safe(ci_x, lci_raw, newdata)
-      uci <- interp_safe(ci_x, uci_raw, newdata)
+    if (!is.finite(wsum) || wsum < 1)
+      stop("the sum of weights must be finite and at least 1 for bootstrap intervals")
+
+    # Preserve the existing frequency-weight resampling convention: the
+    # draw size is sum(weights), truncated by sample.int() when fractional.
+    # Sampling indices avoids sample(5, ...) interpreting one value as 1:5.
+    curves <- lapply(seq_len(R), function(i) {
+      idx <- sample.int(length(bx), size = wsum, replace = TRUE, prob = bw)
+      sampleX <- sort(bx[idx])
+      nSample <- length(sampleX)
+      p <- c(0, seq_len(nSample) / nSample)
+      income <- c(0, cumsum(sampleX))
+      if (general) {
+        values <- income / nSample
+      } else {
+        total <- income[length(income)]
+        if (total == 0)
+          return(rep(NA_real_, length(newdata)))
+        values <- income / total
+      }
+      interp_safe(p, values, newdata)
+    })
+
+    # Quantiles are taken AT newdata, not interpolated after taking quantiles.
+    mat <- do.call(rbind, curves)
+    point_quantile <- function(j, prob) {
+      values <- mat[, j]
+      values <- values[is.finite(values)]
+      if (!length(values)) return(NA_real_)
+      unname(quantile(values, probs = prob))
     }
-    
+    lci <- vapply(seq_along(newdata), point_quantile, numeric(1),
+                  prob = (1 - conf.level) / 2)
+    uci <- vapply(seq_along(newdata), point_quantile, numeric(1),
+                  prob = 1 - (1 - conf.level) / 2)
     res <- data.frame(res, lci = lci, uci = uci)
   }
-  
+
   res
 }

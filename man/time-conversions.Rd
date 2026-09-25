@@ -18,8 +18,11 @@ secToHms(x, digits = NULL)
 h:m:s format for \code{hmsToSec()}, or numeric vector of seconds for
 \code{secToHms()}}
 
-\item{digits}{the number of digits to use for potential fractions of
-seconds}
+\item{digits}{number of decimal places for seconds, an integer from 0
+to 15, or \code{NULL}. The default uses zero places if all non-missing values
+have negligible fractional parts, otherwise two. Positive values round
+fractional seconds with carry into seconds, minutes and hours. For
+compatibility, \code{digits = 0} discards fractions using \code{\link[=floor]{floor()}}.}
 }
 \value{
 depending on the function:
@@ -28,7 +31,10 @@ depending on the function:
 \item{\code{hmsToSec()}}{numeric vector of times in seconds}
 \item{\code{secToHms()}}{character vector of times in h:m:s format}
 }
-#'
+
+Missing seconds produce \code{NA_character_}; infinite values are rejected.
+Hours can exceed 23. Negative times retain the existing floor-based
+decomposition (for example, -1 second is \code{-1:59:59}).
 }
 \description{
 \code{hmsToSec} - Converts a vector of h:m:s to seconds.

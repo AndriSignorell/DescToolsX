@@ -10,7 +10,7 @@ cStat(x, ...)
 
 \method{cStat}{glm}(x, ...)
 
-\method{cStat}{default}(x, resp, conf.level = NA, ...)
+\method{cStat}{default}(x, resp, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 }
 \arguments{
 \item{x}{an object for which the C-statistic should be computed; for the
@@ -18,10 +18,15 @@ default method, a numeric vector of predicted values}
 
 \item{...}{additional arguments passed to methods}
 
-\item{resp}{a binary response vector (numeric, logical, or factor)}
+\item{resp}{binary response vector (numeric, logical, or factor)}
 
 \item{conf.level}{confidence level for the interval; \code{NA} (default)
 suppresses interval calculation}
+
+\item{sides}{character string specifying the sidedness of the confidence
+interval (one of \code{"two.sided"} (default), \code{"left"} or
+\code{"right"}). The open side is reported at the range boundary, 0 or 1.
+See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 }
 \value{
 if \code{conf.level = NA}, an unnamed numeric scalar between 0

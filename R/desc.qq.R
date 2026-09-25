@@ -62,8 +62,13 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
   
   cat(x$pair$strOut)
 
-  print.Desc.table(x$res, print_header=FALSE, ...)
+  # the inner table carries its own plotit (from the option default);
+  # only the pair is plotted, once
+  res <- x$res
+  res$meta$plotit <- FALSE
+  print.Desc.table(res, print_header=FALSE, ...)
 
+  .plotIfRequested(x)
 }
 
 

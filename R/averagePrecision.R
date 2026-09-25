@@ -1,3 +1,5 @@
+
+
 #' Average Precision Score
 #'
 #' Computes average precision (AP) for binary probabilistic predictions.
@@ -31,6 +33,8 @@
 #' @concept model-evaluation
 #' @concept classification
 #' @concept precision-recall
+#' 
+#' 
 #' @export
 averagePrecision <- function(x, pred = NULL) {
 
@@ -77,4 +81,5 @@ averagePrecision <- function(x, pred = NULL) {
   recall    <- tp / sum(resp)
 
   sum(diff(c(0, recall)) * precision)
+  
 }

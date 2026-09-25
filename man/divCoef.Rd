@@ -15,13 +15,14 @@ Euclidean distance is used, in which case the coefficient reduces to the
 Gini-Simpson index \eqn{1 - \sum p_i^2}.}
 
 \item{normalize}{logical; if \code{TRUE}, the diversity is scaled by its
-theoretical maximum}
+maximum over all relative abundances (see Details)}
 
 \item{na.rm}{logical; if \code{TRUE}, columns containing missing values
 yield \code{NA} instead of aborting}
 
-\item{tol}{numeric convergence tolerance for the iterative maximisation
-used by \code{normalize = TRUE}}
+\item{tol}{relative accuracy of the maximum used by
+\code{normalize = TRUE}: the iteration stops once the maximum is certified
+to within this fraction}
 }
 \value{
 a numeric vector of diversity coefficients, one per column
@@ -35,12 +36,17 @@ The diversity coefficient is defined as
 \deqn{D = \frac{x^T D^2 x}{2 (\sum x)^2}}{D = t(x) \%*\% D^2 \%*\% x / (2 * sum(x)^2)}
 where \eqn{x} is a column of \code{x} and \eqn{D} is the distance matrix.
 
-If \code{normalize = TRUE}, values are divided by the maximum achievable
-diversity under the given distance matrix. That maximum is found by a
-fixed-point iteration over the simplex, which is a heuristic: it is not
-guaranteed to reach the global optimum for an arbitrary distance matrix.
-A warning is issued when the iteration has not converged within
-\code{tol}.
+If \code{normalize = TRUE}, values are divided by the maximum of the
+coefficient over all relative abundance vectors, so that the result lies
+in \eqn{[0, 1]}. The maximum is found by the replicator (Baum-Eagon)
+iteration \eqn{p_i \leftarrow p_i (Ap)_i / p^T A p}, which increases
+\eqn{p^T A p} monotonically. For a Euclidean \code{dis} the quadratic form
+is concave on the simplex, so the iteration reaches the global maximum,
+and it stops once the Frank-Wolfe duality gap certifies that maximum to
+a relative accuracy of \code{tol}; normalized values may therefore exceed 1
+by at most that amount. For a non-Euclidean \code{dis} (which triggers a
+warning) only a local maximum is guaranteed. A warning is issued when
+the iteration has not converged.
 }
 \examples{
 set.seed(1)

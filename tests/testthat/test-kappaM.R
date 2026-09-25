@@ -153,3 +153,39 @@ test_that("pairwise.complete.obs names the estimator in its message", {
   expect_error(kappaM(d, use = "pairwise.complete.obs"), "estimator")
   expect_silent(kappaM(d, estimator = "light", use = "pairwise.complete.obs"))
 })
+
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("Conger's kappa copes with a category a rater never used", {
+  # rater A never uses category 3: table() of the codes dropped it, the
+  # columns of the marginal matrix had different lengths, and cbind()
+  # recycled the short one
+  d <- data.frame(A = c(1, 2, 1, 2, 1, 2, 1, 2),
+                  B = c(1, 2, 3, 2, 1, 3, 1, 2),
+                  C = c(1, 2, 3, 3, 1, 2, 2, 2))
+  expect_no_error(k <- kappaM(d, estimator = "conger", conf.level = 0.95))
+  expect_true(all(is.finite(k)))
+  # and the result does not depend on the order of the raters
+  expect_equal(kappaM(d[, c(3, 1, 2)], estimator = "conger",
+                      conf.level = 0.95), k)
+})
+
+test_that("missing ratings: complete.obs, everything and pairwise", {
+  d <- .kappa_dat
+  d$A[3] <- NA
+  expect_equal(kappaM(d), kappaM(d[-3, ]))
+  expect_true(is.na(kappaM(d, use = "everything")))
+  expect_named(kappaM(d, use = "everything", conf.level = 0.9),
+               c("est", "lci", "uci"))
+  expect_true(is.finite(kappaM(d, estimator = "light",
+                               use = "pairwise.complete.obs")))
+})
+
+test_that("kappaM refuses too little or too uniform input", {
+  expect_error(kappaM(1:3), "matrix or a data frame")
+  expect_error(kappaM(data.frame(A = 1:3)), "at least 2 raters")
+  expect_error(kappaM(data.frame(A = 1, B = 2)), "at least 2 subjects")
+  expect_error(kappaM(data.frame(A = c(1, 1), B = c(1, 1))),
+               "2 distinct rating categories")
+})

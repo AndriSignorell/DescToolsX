@@ -114,18 +114,18 @@ large <- function (x, k = 5L, unique = FALSE, na.last = NA) {
     
   } else {
     
-    # cap k by the number of NON-MISSING values: x has just been stripped
-    # of its NAs, so min(k, n) with the original length let k exceed
-    # length(x) and top_i_cpp() then read past the end of the vector
-    k <- min(k, length(x))
+    # The C++ side gets k capped by the number of NON-MISSING values (it
+    # would otherwise read past the end of the stripped vector); the
+    # result, NAs included, may still hold min(k, n) elements. Capping k
+    # itself dropped values: large(c(1, NA, 3), 3, na.last = TRUE) gave
+    # c(3, NA) instead of c(1, 3, NA).
+    res <- x[top_i_cpp(x, min(k, length(x)))]
     
-    res <- x[top_i_cpp(x, k)]
-    
-    if(!is.na(na.last)){
-      if(na.last==FALSE)
-        res <- tail(c(rep(NA, na_n), res), k)
-      if(na.last==TRUE)
-        res <- tail(c(res, rep(NA, na_n)), k)
+    # NA is the smallest value for na.last = FALSE, the largest for TRUE,
+    # as in sort(); x[NA] keeps the class (Date, factor), rep(NA) did not
+    if(!is.na(na.last) && na_n > 0L){
+      nas <- x[rep(NA_integer_, na_n)]
+      res <- tail(if (na.last) c(res, nas) else c(nas, res), min(k, n))
     }
     
   }
@@ -174,16 +174,12 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
     
   } else {
     
-    # see large(): cap by the stripped length, not the original one
-    k <- min(k, length(x))
+    # see large(): cap only the C++ call by the stripped length
+    res <- rev(x[bottom_i_cpp(x, min(k, length(x)))])
     
-    res <- rev(x[bottom_i_cpp(x, k)])
-    
-    if(!is.na(na.last) && k > 0L){
-      if(na.last==FALSE)
-        res <- c(rep(NA, na_n), res)[seq_len(k)]
-      if(na.last==TRUE)
-        res <- c(res, rep(NA, na_n))[seq_len(k)]
+    if(!is.na(na.last) && na_n > 0L){
+      nas <- x[rep(NA_integer_, na_n)]
+      res <- head(if (na.last) c(res, nas) else c(nas, res), min(k, n))
     }
     
   }

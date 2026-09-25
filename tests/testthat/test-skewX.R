@@ -189,7 +189,8 @@ test_that("na.rm reaches the bootstrap branch", {
   expect_false(is.na(skew(y, na.rm = TRUE)))
   
   set.seed(1)
-  res <- skew(y, conf.level = 0.95, na.rm = TRUE, R = 200)
+  # type = "perc": with R = 200 bca reaches the extreme order statistics
+  res <- skew(y, conf.level = 0.95, na.rm = TRUE, R = 200, type = "perc")
   expect_false(anyNA(res))
 })
 

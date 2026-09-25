@@ -20,10 +20,6 @@
 #'   `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`.
 #' @param which integer vector selecting which plots to draw. See Details.
 #'   `NULL` (default) selects plots automatically based on `verbose`.
-#' @param abs.sty format style for counts. `NULL` falls back to
-#'   `getOption("DescTools.abs.sty")`.
-#' @param per.sty format style for proportions. `NULL` falls back to
-#'   `getOption("DescTools.per.sty")`.
 #' @param \dots further arguments passed to the underlying plot functions
 #' 
 #' @param y numeric response variable
@@ -124,7 +120,7 @@
 #' desc(mpg ~ wt, mtcars) |> plot(which = 3)
 #'
 #' @rdname desc.nn
-#' @usage .descNN(x, y, conf.level = 0.95)
+#' @usage .descNN(y, x, conf.level = 0.95)
 NULL
 
 
@@ -153,7 +149,13 @@ NULL
 
 # ── Calc ──────────────────────────────────────────────────────────────────────
 
-.descNN <- function(x, y, conf.level = 0.95) {
+# (y, x), not (x, y): desc.formula() calls FUN(response, predictor) for
+# every pair type, and .descQN() already takes y first. With (x, y) the
+# response landed in 'x', and the regression below was the predictor
+# regressed on the response - slope, intercept, R^2 aside, the
+# Breusch-Pagan test and Cook's distances all belonged to the wrong model.
+# The correlations are symmetric and hid it.
+.descNN <- function(y, x, conf.level = 0.95) {
   
   # ── 1. Basic counts ──────────────────────────────────────────────────────────
   nTotal  <- length(x)
@@ -252,22 +254,26 @@ NULL
 
 #' @exportS3Method
 #' @rdname desc.nn
-print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
-                          per.sty = NULL, ...) {
+print.Desc.nn <- function(x, verbose = NULL, ...) {
 
   .printHeader(x$meta)
   
   cat(x$pair$strOut)
 
-  .printNN(x$res)
+  # verbose was accepted and then dropped: .printNN() fell back to the
+  # global option, so neither print(x, verbose = 3) nor
+  # desc(y ~ x, verbose = 3) showed the level-3 diagnostics
+  .printNN(x$res, verbose = verbose %||% x$meta$verbose)
 
+  # the plot belongs to the wrapper, which carries meta and data; inside
+  # .printNN() the object has neither, so plotit never took effect
+  .plotIfRequested(x)
 }
 
 
 
 
-.printNN <- function(x, verbose = NULL, abs.sty = NULL,
-                          per.sty = NULL, ...) {
+.printNN <- function(x, verbose = NULL, ...) {
 
   verbose <- verbose %||% getOption("DescTools.verbose", default = 2L)
 
@@ -337,12 +343,20 @@ print.Desc.nn <- function(x, verbose = NULL, abs.sty = NULL,
 #'   `x$meta$main`.
 #' @rdname desc.nn
 plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) {
+
+  # Plain local names for the formulas below. `x$data$y ~ x$data$x` was
+  # evaluated inside plotXY.formula(), whose own first argument is also
+  # called x - there x$data is the formula, not this object, so the model
+  # frame held no numeric predictor and the regression line died with
+  # "'from' must be a finite number".
+  response  <- x$data$y
+  predictor <- x$data$x
   
   for (j in which) {
     
     switch(as.character(j %||% "1"),
            "1" = {
-             plotXY(x$data$y ~ x$data$x,
+             plotXY(response ~ predictor,
                     main = main,
                     xlab = x$meta$xname, 
                     ylab = x$meta$yname, ...)
@@ -359,7 +373,7 @@ plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) 
            "4" = {
              plotHexbin(x = x$data$x, y = x$data$y, main = main, ...)
            },
-           warning(gettextf("No plot defined for which = %s (valid: 1-4).", which))
+           warning(gettextf("No plot defined for which = %s (valid: 1-4).", j))
     )
   }
 }

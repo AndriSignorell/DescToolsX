@@ -31,7 +31,10 @@
 #' @param y a numeric vector of equal length to `x`
 #' 
 #' @param conf.level confidence level of the interval. If set to `NA`
-#'   (the default), only the point estimate is returned.
+#'   (the default), only the point estimate is returned. With perfect
+#'   concordance or discordance the asymptotic variance is zero; the
+#'   analytic methods then return `NA` bounds with a warning.
+#'   One-sided intervals require `conf.level > 0.5`.
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
@@ -120,35 +123,12 @@ ccc <- function(
   sides <- match.arg(sides)
   method <- match.arg(method)
 
-  # Checked for length before is.na(), which would otherwise be passed a
-  # zero-length or multi-element value and make the if() below fail with
-  # an internal condition-length error rather than a clear message.
-  if(!is.numeric(conf.level) && !is.logical(conf.level))
-    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
+  checkConfLevel(conf.level)
 
-  if(length(conf.level) != 1L)
-    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
-
-  # NaN is numeric and NA-like, but suppressing the interval on a NaN
-  # confidence level would hide a caller error rather than express an
-  # intent to omit it, so only a true NA does that.
-  if(is.nan(conf.level))
-    stop("Argument 'conf.level' must be a single number between 0 and 1, or NA.")
-
-  if(!is.na(conf.level)) {
-
-    if(!is.numeric(conf.level) ||
-       !is.finite(conf.level) ||
-       conf.level <= 0 ||
-       conf.level >= 1) {
-
-      stop(
-        "Argument 'conf.level' must be a single number between 0 and 1."
-      )
-
-    }
-
-  }
+  # one-sided intervals are computed at the two-sided level
+  # 2 * conf.level - 1, which must stay positive
+  if(!is.na(conf.level) && sides != "two.sided" && conf.level <= 0.5)
+    stop("Argument 'conf.level' must exceed 0.5 for a one-sided interval.")
 
   if(na.rm) {
 
@@ -280,7 +260,11 @@ ccc <- function(
 
   }
 
-  alpha <- 1 - conf.level
+  # Every method computes a two-sided interval; a one-sided one is the
+  # two-sided interval at level 2 * conf.level - 1 with its uninformative
+  # side opened by applySides() - the finite bound is the same either way.
+  confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
+  alpha <- 1 - confAdj
 
   if(method == "boot") {
 
@@ -306,48 +290,15 @@ ccc <- function(
       ncpus = bootArgs$ncpus
     )
 
-    # Only the informative bound is taken from the resampling
-    # distribution; the other is fixed at the parameter boundary, so no
-    # degenerate 0 %/100 % quantile is requested. sides names the side on
-    # which the finite bound lies.
-    probs <- switch(
-      sides,
-      "two.sided" = c(alpha / 2, 1 - alpha / 2),
-      "left"      = alpha,
-      "right"     = conf.level
-    )
-
     ci <- unname(
       quantile(
         bootObj$t,
-        probs = probs,
+        probs = c(alpha / 2, 1 - alpha / 2),
         na.rm = TRUE
       )
     )
 
-    if(sides == "two.sided") {
-
-      lci <- ci[1]
-      uci <- ci[2]
-
-    } else if(sides == "left") {
-
-      lci <- ci[1]
-      uci <- 1
-
-    } else {
-
-      lci <- -1
-      uci <- ci[1]
-
-    }
-
   } else {
-
-    zCrit <- if(sides == "two.sided")
-      qnorm(1 - alpha / 2)
-    else
-      qnorm(conf.level)
 
     # Lin's (2000) asymptotic variance, expressed on the scale of rhoC
     # rather than on the z scale: the bracketed term equals the z-scale
@@ -369,52 +320,25 @@ ccc <- function(
 
     se <- sqrt(max(varRho, 0))
 
-    if(method == "asymptotic") {
+    # A zero standard error (x == y, or y == -x about a common mean) would
+    # collapse the interval onto the estimate, which excludes every other
+    # value - no finite sample supports that. NA bounds with a warning, as
+    # in cramerV, spearmanCor, kappaM and corCI.
+    if(se == 0) {
 
-      if(sides == "two.sided") {
+      warning("the asymptotic variance of the CCC is zero (perfect ",
+              "concordance or discordance); no confidence interval",
+              call. = FALSE)
 
-        lci <- rhoC - zCrit * se
-        uci <- rhoC + zCrit * se
-
-      } else if(sides == "left") {
-
-        lci <- rhoC - zCrit * se
-        uci <- 1
-
-      } else {
-
-        lci <- -1
-        uci <- rhoC + zCrit * se
-
-      }
-
-      lci <- max(lci, -1)
-      uci <- min(uci,  1)
+      ci <- c(NA_real_, NA_real_)
 
     } else {
 
-      # A zero standard error means the estimate is degenerate (e.g.
-      # x == y, giving rhoC == 1). The clamping applied to rhoAdj below
-      # would otherwise return a limit just short of the true value,
-      # so the interval collapses onto the estimate directly.
-      if(se == 0) {
+      zCrit <- qnorm(1 - alpha / 2)
 
-        if(sides == "two.sided") {
+      ci <- if(method == "asymptotic") {
 
-          lci <- rhoC
-          uci <- rhoC
-
-        } else if(sides == "left") {
-
-          lci <- rhoC
-          uci <- 1
-
-        } else {
-
-          lci <- -1
-          uci <- rhoC
-
-        }
+        rhoC + c(-1, 1) * zCrit * se
 
       } else {
 
@@ -426,37 +350,9 @@ ccc <- function(
 
         # Delta-method variance transformation:
         # d atanh(rho) / d rho = 1 / (1 - rho^2)
-        z <- fisherZ(rhoAdj)
-
         seZ <- se / (1 - rhoAdj^2)
 
-        if(sides == "two.sided") {
-
-          lci <- fisherZInv(
-            z - zCrit * seZ
-          )
-
-          uci <- fisherZInv(
-            z + zCrit * seZ
-          )
-
-        } else if(sides == "left") {
-
-          lci <- fisherZInv(
-            z - zCrit * seZ
-          )
-
-          uci <- 1
-
-        } else {
-
-          lci <- -1
-
-          uci <- fisherZInv(
-            z + zCrit * seZ
-          )
-
-        }
+        fisherZInv(fisherZ(rhoAdj) + c(-1, 1) * zCrit * seZ)
 
       }
 
@@ -464,14 +360,18 @@ ccc <- function(
 
   }
 
+  # clamps to [-1, 1] (the asymptotic interval can leave it) and opens
+  # the uninformative side at the range boundary
+  ci <- applySides(ci, sides, lo = -1, hi = 1)
+
   attrs$method <- method
   attrs$confLevel <- conf.level
   attrs$sides <- sides
 
   .makeEstimateResult(
     est = rhoC,
-    lci = lci,
-    uci = uci,
+    lci = ci[["lci"]],
+    uci = ci[["uci"]],
     attrs = attrs
   )
 

@@ -156,3 +156,81 @@ test_that("icc reproduces the Shrout and Fleiss reference values", {
   expect_gt(ci[["uci"]], ci[["est"]])
 })
 
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("the F-based intervals reproduce the Shrout-Fleiss reference", {
+  # reference values as reported by psych::ICC() for the same data,
+  # recomputed independently from the mean squares
+  ci <- function(model, type, unit)
+    round(unname(icc(.sf, model = model, type = type, unit = unit,
+                     conf.level = 0.95)[c("lci", "uci")]), 2)
+  expect_equal(ci("oneway", "agreement", "single"),   c(-0.13, 0.72))
+  expect_equal(ci("oneway", "agreement", "average"),  c(-0.88, 0.91))
+  expect_equal(ci("twoway", "agreement", "single"),   c(0.02, 0.76))
+  expect_equal(ci("twoway", "consistency", "single"), c(0.34, 0.95))
+  expect_equal(ci("twoway", "consistency", "average"), c(0.68, 0.99))
+  # the average bounds of ICC(2) are the Spearman-Brown step-up of the
+  # single bounds
+  s <- icc(.sf, conf.level = 0.95)
+  a <- icc(.sf, unit = "average", conf.level = 0.95)
+  sb <- function(r) 4 * r / (1 + 3 * r)
+  expect_equal(unname(a[c("lci", "uci")]), sb(unname(s[c("lci", "uci")])))
+  expect_equal(round(icc(.sf, unit = "average"), 2), 0.62)
+})
+
+test_that("one-sided intervals: two-sided at 2 * conf.level - 1, open at 1 / -Inf", {
+  two <- icc(.sf, conf.level = 0.90)
+  l <- icc(.sf, conf.level = 0.95, sides = "left")
+  r <- icc(.sf, conf.level = 0.95, sides = "right")
+  expect_equal(unname(l[["lci"]]), unname(two[["lci"]]))
+  expect_equal(unname(r[["uci"]]), unname(two[["uci"]]))
+  expect_equal(unname(l[["uci"]]), 1)
+  expect_identical(unname(r[["lci"]]), -Inf)
+  expect_error(icc(.sf, conf.level = 0.4, sides = "left"), "exceed 0.5")
+})
+
+test_that("missing ratings without na.rm give NA instead of an unbalanced ICC", {
+  x <- .sf
+  x[2, 3] <- NA
+  expect_identical(icc(x), NA_real_)
+  res <- icc(x, conf.level = 0.95)
+  expect_named(res, c("est", "lci", "uci"))
+  expect_true(all(is.na(res)))
+  expect_equal(icc(x, na.rm = TRUE), icc(.sf[-2, ]))
+})
+
+test_that("non-finite bootstrap replicates are dropped with a warning", {
+  # Real data do not produce NaN reliably: a resample of one subject has
+  # mean squares that are zero only up to rounding, so the ratio stays
+  # finite. The estimator is mocked instead - the first call is the point
+  # estimate, every third replicate after it is NaN.
+  k <- 0L
+  local_mocked_bindings(
+    .iccEstimateAnova = function(ratings, model, type, unit) {
+      k <<- k + 1L
+      list(est = if (k %% 3L == 0L) NaN else k / 100)
+    })
+  set.seed(3)
+  expect_warning(res <- icc(.sf, method = "boot", conf.level = 0.9, R = 30),
+                 "10 of 30 bootstrap resamples")
+  expect_true(all(is.finite(res)))
+
+  k <- 0L
+  local_mocked_bindings(
+    .iccEstimateAnova = function(ratings, model, type, unit) {
+      k <<- k + 1L
+      list(est = if (k == 1L) 0.5 else NaN)
+    })
+  expect_error(icc(.sf, method = "boot", conf.level = 0.9, R = 10),
+               "no bootstrap resample")
+})
+
+test_that("icc validates its input", {
+  expect_error(icc(matrix(letters[1:6], 3)), "numeric")
+  expect_error(icc(matrix(1:3, 1)), "at least 2 subjects")
+  expect_error(icc(.sf, na.rm = NA), "na.rm")
+  for (cl in list(NULL, NaN, c(0.9, 0.95)))
+    expect_error(icc(.sf, conf.level = cl), "conf.level")
+  expect_error(icc(.sf, conf.level = 0.9, method = "boot", R = 0), "'R'")
+})

@@ -27,7 +27,9 @@ test_that("averagePrecision accepts arbitrary numeric scores", {
 
 test_that("averagePrecision works with glm objects", {
   dat <- data.frame(
-    y = c(0, 0, 0, 1, 1, 1),
+    # overlapping classes: with complete separation glm() warns that the
+    # fitted probabilities are numerically 0 or 1
+    y = c(0, 0, 1, 0, 1, 1),
     x = c(-2, -1, 0, 0.5, 1, 2)
   )
   fit <- glm(y ~ x, data = dat, family = binomial)

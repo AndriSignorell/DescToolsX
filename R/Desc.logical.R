@@ -91,12 +91,13 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
   
   switch(match.arg(ord, c("level", "desc", "asc", "name")),
          level = {  },
-         name  = { ff <- ff[names(ff)] },
+         name  = { ff <- ff[order(names(ff))] },   # ff[names(ff)] was a no-op
          asc   = { ff <- sort(ff) },
          desc  = { ff <- -sort(-ff) }
   )
   
-  bf <- binomCI(ff, n, conf.level = conf.level)
+  # method spelled out: print() labels the interval "Wilson"
+  bf <- binomCI(ff, n, conf.level = conf.level, method = "wilson")
   if (is.null(dim(bf))) {
     bf <- matrix(bf, nrow = 1, dimnames = list(names(ff), names(bf)))
   } else {
@@ -199,9 +200,7 @@ print.Desc.logical <- function(x, digits = NULL, ...) {
     cat(gettextf("Nothing to plot in %s\n\n", x$xname))
   }
   
-  if(x$meta$plotit)
-    plot(x, main=x$meta$main)
-  
+  .plotIfRequested(x)
 }
 
 

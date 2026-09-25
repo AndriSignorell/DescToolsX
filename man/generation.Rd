@@ -13,7 +13,8 @@ generation(year)
 ordered factor with levels
 \code{c("Babyboomer", "Gen X", "Millennial", "Gen Z", "Gen Alpha")}\cr
 Values which fall outside the range
-of breaks are coded as \code{NA}, as are \code{NaN} and \code{NA} values.
+of breaks are coded as \code{NA}, as are \code{NaN} and \code{NA} values (including
+a plain logical \code{NA}).
 }
 \description{
 Yields the generation of a person based on the year of birth.

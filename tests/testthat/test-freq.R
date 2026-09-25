@@ -90,3 +90,36 @@ test_that("freq actually sorts by level name", {
   expect_equal(as.character(byName$level),  c("a", "b", "c"))
 })
 
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("a numeric vector without finite values gives an empty table", {
+  # the default breaks called hist(), which fails without a finite value
+  expect_no_error(ft <- freq(c(NA_real_, NA_real_)))
+  expect_equal(nrow(ft), 0L)
+  ft <- freq(c(NA_real_, NA_real_), useNA = "ifany")
+  expect_equal(ft$freq, 2)
+  expect_identical(ft$level, "<NA>")
+})
+
+test_that("numeric and date vectors are binned, breaks = FALSE keeps values", {
+  x <- c(1, 2, 2, 3, 7, 8, 9, 9, 10)
+  ft <- freq(x, breaks = c(0, 5, 10))
+  expect_equal(ft$freq, c(4, 5))
+  expect_equal(freq(x, breaks = FALSE)$freq, as.vector(table(x)))
+  d <- as.Date("2024-01-01") + c(0, 10, 40, 45, 70)
+  expect_equal(sum(freq(d, breaks = "month")$freq), 5)
+})
+
+test_that("the median class is the first reaching half the mass", {
+  # cumulative shares 1/6, 2/6, 1: "c" is the first to reach 0.5
+  ft <- freq(factor(c("a", "b", "c", "c", "c", "c")))
+  expect_identical(attr(ft, "medianclass"), "c")
+})
+
+test_that("print.Freq honours digits and falls back for altered objects", {
+  ft <- freq(factor(c("a", "b", "b")))
+  expect_output(expect_invisible(print(ft, digits = 3)), "66.667")
+  ft$extra <- 1
+  expect_output(print(ft), "extra")
+})

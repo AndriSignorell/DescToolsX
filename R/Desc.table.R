@@ -10,9 +10,10 @@
 #'   use `desc(y ~ x, data)` which dispatches to this function
 #'   automatically.
 #' @param prop character string controlling which proportions are shown in the
-#'   cross-tabulation. One of `"rows"` (default), `"cols"`,
-#'   `"total"`, or `"no"` (frequencies only). At `verbose = 3`
-#'   all three proportions are shown regardless of this argument.
+#'   cross-tabulation. One of `"rows"`, `"cols"`, `"total"`, or
+#'   `"no"` (frequencies only). If `NULL` (default), `"rows"` is used,
+#'   and all three proportions at `verbose = 3`; an explicit value is
+#'   always respected.
 #' @param verbose integer controlling the amount of output (1, 2, or 3).
 #'   `NULL` (default) falls back to
 #'   `getOption("DescTools.verbose", 2)`. If set explicitly in the
@@ -29,48 +30,33 @@
 #'   
 #' @name desc.table
 #' @details
-#' The `verbose` argument controls which statistics are computed and
-#' displayed. The following table gives an overview; items marked with
-#' *2x2* are only shown for 2 x 2 tables.
+#' The `verbose` argument controls which statistics are displayed. All
+#' of them are computed in any case; the lists below describe the printed
+#' output. The cross-tabulation always shows the frequencies together with
+#' the proportions selected by `prop`.
 #'
-#' **verbose = 1 — essential output:**
+#' **2 x 2 tables**
 #' \itemize{
-#'   \item Summary: n, rows, columns, missings
-#'   \item Cross-tabulation: frequencies
-#'   \item Pearson chi-squared test
-#'   \item Chi-squared with Yates continuity correction *(2x2)*
-#'   \item Fisher's exact test *(2x2)*
-#'   \item McNemar's test *(2x2)*
-#'   \item Cramér's V with confidence interval and effect size label
-#'   \item Odds ratio with confidence interval *(2x2)*
+#'   \item `verbose = 1`: chi-squared test with Yates continuity
+#'     correction, Fisher's exact test
+#'   \item `verbose = 2` (default): additionally McNemar's test and a table
+#'     of odds ratio, relative risks (col1, col2) and proportion difference,
+#'     each with confidence interval
+#'   \item `verbose = 3`: additionally the uncorrected Pearson chi-squared
+#'     test, and relative risks (row1, row2), Cramér's V and Cohen's h in
+#'     the table of estimates
 #' }
 #'
-#' **verbose = 2 — standard output (default):**
-#'
-#' All of the above, plus:
+#' **r x c tables**
 #' \itemize{
-#'   \item Cross-tabulation: row proportions (or as set by `prop`)
-#'   \item G-test (log likelihood ratio test of independence)
-#'   \item Mantel-Haenszel chi-squared test
-#'   \item Contingency coefficient
-#'   \item Kendall's tau-b with confidence interval
-#'   \item Relative risk col1/col2 and row1/row2 with confidence intervals
-#'     *(2x2)*
-#'   \item Proportions difference with confidence interval *(2x2)*
-#' }
-#'
-#' **verbose = 3 — full output:**
-#'
-#' All of the above, plus:
-#' \itemize{
-#'   \item Cross-tabulation: row, column, and total proportions
-#'   \item Lambda C|R, R|C, symmetric
-#'   \item Uncertainty coefficient C|R, R|C, symmetric
-#'   \item Mutual information
-#'   \item Goodman-Kruskal gamma with confidence interval
-#'   \item Stuart's tau-c with confidence interval
-#'   \item Somers' D C|R and R|C with confidence intervals
-#'   \item Pearson and Spearman correlation with confidence intervals
+#'   \item `verbose = 1`: Pearson chi-squared test
+#'   \item `verbose = 2` (default): additionally the G-test (log likelihood
+#'     ratio) and the Mantel-Haenszel chi-squared test, and the point
+#'     estimates of the first three association measures
+#'   \item `verbose = 3`: the full table of nominal and ordinal association
+#'     measures with confidence intervals (Cramér's V, contingency
+#'     coefficient, lambda, uncertainty coefficient, mutual information,
+#'     gamma, tau-b, tau-c, Somers' D, Pearson and Spearman correlation)
 #' }
 #'
 #' **Table types:**
@@ -248,6 +234,15 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
   # x[c(6, 8)] <- NULL
   
   footnote <- .getOption("footnote")[1]
+
+  # legend for the footnote marker on a table of estimates with intervals;
+  # printed wherever such a table is printed
+  printCiLegend <- function() {
+    out <- gettextf("\n%s\n%s %s%s conf. level\n",
+                    strrep("\u2500", 20),
+                    footnote, x$conf.level * 100, "%")
+    cat(if (.hasColor()) cli::col_silver(out) else out)
+  }
   
   if (x$ttype == "tndim") { # multdim table
     
@@ -366,7 +361,10 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
           txt <- capture.output(print(m))
           txt[1] <- paste(txt[1], footnote, sep = "")
           cat(txt, sep = "\n")
-          cat("\n")
+          # the legend used to sit in the r x c branch behind a
+          # `|| ttype == "t2x2"` that could never be true there, so the
+          # marker on this table was never explained
+          printCiLegend()
         }
       } else {
         # we report chisquare without cont-corr for rxc and with cont-corr for 2x2 by default
@@ -376,13 +374,6 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
         )
         if (!x$approx.ok) {
           cat(cli::col_cyan("  Note: expected counts < 5 in some cells\n"))
-        }
-        
-        if (x$meta$verbose == "3" &  x$ttype == "t2x2") {
-          cat("Pearson's Chi-squared test (cont. adj):\n  ",
-              .captOut(x$chisq.test.cont)[5], "\n",
-              sep = ""
-          )
         }
         
         if (x$meta$verbose > 1) { # print only with verbosity > 1
@@ -400,7 +391,9 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
         }
         
 
-      switch(x$meta$verbose,
+      # as.character(): switch() on a number selects by POSITION, which
+      # only coincided with the labels because they happen to be 1, 2, 3
+      switch(as.character(x$meta$verbose),
              "1" = {
                cat("\n")
              },
@@ -418,24 +411,15 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
              }
       )
       
-      if ((x$meta$verbose == "3") || (x$ttype == "t2x2")) {
-        
-        out <- gettextf( "\n%s\n%s %s%s conf. level\n", 
-                         strrep("\u2500", 20), 
-                         footnote, x$conf.level * 100, "%" )
-        if (.hasColor()) {
-          cat(cli::col_silver(out))
-        } else {
-          cat(out)
-        }
-      }
+      if (x$meta$verbose == 3)
+        printCiLegend()
     }
     
     cat("\n")
   }
   }
   
-
+  .plotIfRequested(x)
 }
 
 
@@ -446,14 +430,24 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
   d <- dim(x)
   n <- sum(x)
   
-  # expected values under complete independence
-  marg_probs <- lapply(seq_along(d), function(j) {
-    prop.table(margin.table(x, j))
-  })
-  E <- Reduce(function(a, b) outer(a, b), marg_probs) * n
-  
   O <- x
-  df <- prod(d - 1)
+
+  if (length(d) == 1L) {
+    # 1-dim: goodness of fit against the uniform distribution. The
+    # "independence" expectation of a single margin is the margin itself,
+    # which gave X-squared = 0 and p = 1 for every 1-dim table.
+    E  <- rep(n / d, d)
+    df <- d - 1L
+  } else {
+    # expected values under complete (mutual) independence
+    marg_probs <- lapply(seq_along(d), function(j) {
+      prop.table(margin.table(x, j))
+    })
+    E  <- Reduce(function(a, b) outer(a, b), marg_probs) * n
+    # prod(d - 1) is right for 2 dimensions only; mutual independence
+    # in k dimensions has prod(d) - 1 - sum(d - 1), cf. summary.table()
+    df <- prod(d) - 1L - sum(d - 1L)
+  }
   
   stat <- if (correct && identical(d, c(2L, 2L))) {
     sum((pmax(abs(O - E) - 0.5, 0))^2 / E)

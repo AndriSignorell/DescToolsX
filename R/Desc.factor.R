@@ -115,7 +115,7 @@ desc.factor <- function(x, maxrows = NULL, ord = NULL,
   
   res <- list(
     
-    meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
+    meta = .descMeta(x, xname, main, plotit, verbose),
 
     length = total_n,
     n = n,
@@ -123,7 +123,8 @@ desc.factor <- function(x, maxrows = NULL, ord = NULL,
     
     digits = digits,
     
-    levels = nlevels(x),
+    # nlevels() of a character vector is 0
+    levels = if (is.factor(x)) nlevels(x) else length(unique(x[ok])),
     unique = sum(freq$freq > 0), dupes = any(freq$freq > 1), maxrows = maxrows,
     ord = ord, freq = freq
     
@@ -168,7 +169,7 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
   m[] <- strAlign(m[], sep = "\\r")
   cat(paste(" ", apply(m, 1, paste, collapse = " ")), sep = "\n")
 
-  x$freq <- x$freq[1:min(nrow(x$freq), x$maxrows), ]
+  x$freq <- x$freq[seq_len(min(nrow(x$freq), x$maxrows)), , drop = FALSE]
   txt.freq <- .captOut(print(x$freq, digits = digits))
   cat("\n")
   cat(txt.freq, sep = "\n")
@@ -179,9 +180,7 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
     cat("\n")
   }
   
-  if(x$meta$plotit)
-    plot(x, main=x$meta$main)
-  
+  .plotIfRequested(x)
 }
 
 

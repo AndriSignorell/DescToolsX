@@ -66,3 +66,60 @@ test_that("coefVarCI method = 'naive' works", {
   ci <- coefVarCI(x, method = "naive")
   expect_length(ci, 3)
 })
+
+
+# Additional branch coverage and reference checks
+test_that("coefVar applies the documented finite-sample correction exactly", {
+  x <- c(8, 9, 10, 11, 12)
+  K <- sd(x) / mean(x)
+  n <- length(x)
+  expected <- K * (1 - 1 / (4 * (n - 1)) + K^2 / n + 1 / (2 * (n - 1)^2))
+  expect_equal(coefVar(x, unbiased = TRUE), expected)
+  expect_warning(ans <- coefVar(c(-1, 1, 1)), "exceeds 1")
+  expect_equal(ans, sd(c(-1, 1, 1)) / mean(c(-1, 1, 1)))
+})
+
+test_that("coefVar lm and aov methods use residual degrees of freedom", {
+  d <- data.frame(y = c(8, 10, 9, 12, 11, 13), g = factor(rep(1:2, each = 3)))
+  fit <- lm(y ~ g, d)
+  K <- sqrt(sum(residuals(fit)^2) / df.residual(fit)) / mean(d$y)
+  n <- df.residual(fit)
+  expected <- K * (1 - 1 / (4 * (n - 1)) + K^2 / n + 1 / (2 * (n - 1)^2))
+  expect_equal(coefVar(fit), K)
+  expect_equal(coefVar(fit, unbiased = TRUE), expected)
+  expect_equal(coefVar(aov(y ~ g, d), unbiased = TRUE), expected)
+})
+
+test_that("coefVarCI validates input and vectorizes confidence levels", {
+  x <- c(8, 9, 10, 11, 12)
+  expect_error(coefVarCI(matrix(x)), "numeric vector")
+  expect_error(coefVarCI(letters), "numeric vector")
+  for (bad in list("0.95", NA_real_, 0, 1, Inf))
+    expect_error(coefVarCI(x, conf.level = bad), "conf.level")
+  ans <- coefVarCI(x, conf.level = c(0.8, 0.95), method = "naive")
+  expect_equal(dim(ans), c(2L, 3L))
+  for (i in 1:2)
+    expect_equal(ans[i, ], coefVarCI(x, conf.level = c(0.8, 0.95)[i], method = "naive"))
+  expect_equal(coefVarCI(c(x, NA), na.rm = TRUE, method = "naive"),
+               coefVarCI(x, method = "naive"))
+})
+
+test_that("coefVarCI one-sided naive limits have the correct quantiles", {
+  x <- c(8, 9, 10, 11, 12)
+  K <- sd(x) / mean(x)
+  left <- coefVarCI(x, method = "naive", sides = "left")
+  right <- coefVarCI(x, method = "naive", sides = "right")
+  expect_equal(left, c(est = K, lci = K * sqrt(4 / qchisq(0.95, 4)), uci = Inf))
+  expect_equal(right, c(est = K, lci = -Inf, uci = K * sqrt(4 / qchisq(0.05, 4))))
+})
+
+test_that("coefVar forwards frequency weights consistently to point and interval estimates", {
+  x <- c(8, 10, 13)
+  w <- c(2, 3, 1)
+  ref <- sdX(x, weights = w) / weighted.mean(x, w)
+  expect_equal(coefVar(x, weights = w), ref)
+  n <- sum(w)
+  expect_equal(coefVarCI(x, weights = w, method = "naive"),
+               c(est = ref, lci = ref * sqrt((n - 1) / qchisq(0.975, n - 1)),
+                 uci = ref * sqrt((n - 1) / qchisq(0.025, n - 1))))
+})

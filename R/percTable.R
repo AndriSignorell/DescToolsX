@@ -62,7 +62,9 @@
 #' @param \dots further arguments passed to `print.PercTable()`
 #' 
 #' @return an object of class `"PercTable"` containing the requested
-#' frequency and percentage tables
+#' frequency and percentage tables. `print()` returns its argument
+#' invisibly, as print methods do; the formatted lines are available
+#' through [capture.output()].
 #' 
 #' 
 #' @references Agresti, Alan (2007) *Introduction to categorical data
@@ -256,9 +258,8 @@ print.PercTable <- function(x,
                             ...) {
   
   .printArgs <- x$.printArgs
-  x$.printArgs <- NULL
-  
   tables <- x
+  tables$.printArgs <- NULL
   
   # argument control sequence:
   # 1. given argument in print function
@@ -372,9 +373,9 @@ print.PercTable <- function(x,
   
   cat(paste(txt, collapse="\n"), "\n")
 
-  # NOTE: unlike the usual print() contract this returns the formatted lines,
-  # not its argument. Left unchanged -- see REVIEW.md, open question (P6).
-  invisible(txt)
+  # the argument, not the formatted lines (open question P6, decided for
+  # the print contract every other method of the suite follows)
+  invisible(x)
   
 }
 

@@ -119,7 +119,11 @@ freq <- function(x,
     
   } else {
     
-    if((is.numeric(x) || isDate(x)) && !isFALSE(breaks)){
+    # any(is.finite()) before isFALSE(breaks): the latter forces the
+    # default breaks, whose hist() fails on a vector without a single
+    # finite value - freq(c(NA_real_, NA_real_)) was an error from hist()
+    if((is.numeric(x) || isDate(x)) && any(is.finite(x)) &&
+       !isFALSE(breaks)){
       x <- cut(x, breaks = breaks, include.lowest = include.lowest,
                ordered_result = TRUE, ...)
     }
@@ -142,9 +146,17 @@ freq <- function(x,
   
   ptab <- prop.table(tab)
   
-  z <- data.frame(level = names(tab),
-                  freq = as.vector(tab[]), perc = as.vector(ptab[]),
-                  cumfreq = cumsum(tab[]), cumperc = cumsum(ptab[]))
+  # An empty table has names(tab) == NULL, and data.frame() silently drops
+  # a NULL column: the result had four columns and z[, 5] below failed
+  # with "undefined columns selected". character(0) keeps the level
+  # column, as.vector() keeps table classes out of the columns.
+  lvl <- names(tab)
+  if (is.null(lvl)) lvl <- character(0)
+
+  z <- data.frame(level = lvl,
+                  freq = as.vector(tab), perc = as.vector(ptab),
+                  cumfreq = cumsum(as.vector(tab)),
+                  cumperc = cumsum(as.vector(ptab)))
   
   # the first class beyond 50% cumulative percentages is the median class
   attr(z, which = "medianclass") <- z[which(z[, 5]>=0.5)[1], 1]

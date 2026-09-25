@@ -250,6 +250,16 @@ conDisPairs <- function(x, y = NULL){
     if(any(x < 0)){
       stop("Table counts must be non-negative.")
     }
+
+    # The C++ side takes an IntegerMatrix: Rcpp truncates 2.5 to 2 and turns
+    # Inf into NA, and the partition check below then failed with "pair
+    # counts do not add up", which blames the counting rather than the
+    # input. The Fenwick sums are int as well, so the total must fit.
+    if(any(!is.finite(x)) || any(x != round(x)))
+      stop("Table counts must be finite whole numbers.")
+
+    if(sum(x) > .Machine$integer.max)
+      stop("Table counts must not add up to more than .Machine$integer.max.")
     
     if(sum(x) < 2){
       return(setNamesX(rep(NA_real_, 5),

@@ -48,6 +48,10 @@ devtools::check(args = "--as-cran")
 devtools::check_mac_release()
 
 
+"¯\_(¨/)_/¯"
+'¯\_("/)_/¯'
+¯\_(``/)_/¯
+¯\_(''/)_/¯
 
 
 # hard CRAN check

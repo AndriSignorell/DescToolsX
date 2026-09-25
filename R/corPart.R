@@ -13,37 +13,47 @@
 #'   The two are told apart by symmetry, not by shape alone - a data
 #'   matrix with as many rows as columns would otherwise be mistaken for
 #'   a correlation matrix.
-#' @param x integer vector of indices specifying the variables of interest
-#'   for which partial correlations are computed
-#' @param y integer vector of indices specifying the control variables
-#'   (conditioning set)
+#' @param x column indices (whole numbers, no duplicates) of the variables
+#'   of interest for which partial correlations are computed
+#' @param y column indices (whole numbers, no duplicates) of the control
+#'   variables (conditioning set); must not overlap with `x`
 #'
 #' @return a symmetric numeric matrix containing the partial correlations
 #'   among variables in `x`, adjusted for variables in `y`.
 #'   Row and column names correspond to `colnames(m)[x]`.
 #'
 #' @details
-#' Partial correlations are read off the precision matrix. Let \eqn{K} be
-#' the inverse of the joint covariance matrix of \eqn{(x, y)}; then
+#' Only the variables in `y` are controlled for. Let \eqn{S} be the
+#' joint covariance matrix of the selected variables. The residual covariance
+#' matrix of `x` after linear adjustment for `y` is the Schur complement
 #'
-#' \deqn{\rho_{ij \cdot y} = - K_{ij} / \sqrt{K_{ii} K_{jj}}}{
-#'   rho_ij.y = -K_ij / sqrt(K_ii * K_jj)}
+#' \deqn{V = S_{xx} - S_{xy} S_{yy}^{-1} S_{yx}.}{
+#'   V = S_xx - S_xy * solve(S_yy, S_yx)}
 #'
-#' for \eqn{i, j} in \eqn{x}. This is algebraically equivalent to forming
-#' the Schur complement
-#' \eqn{\Sigma_{xx} - \Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}} and scaling
-#' it to unit diagonal, but needs a single inversion instead of two.
+#' The result has entries \eqn{V_{ij}/\sqrt{V_{ii} V_{jj}}}.
+#' With complete raw data, this equals the correlation matrix of the
+#' residuals from regressing each variable in `x` on all variables in `y`,
+#' including an intercept. Adding another variable to `x` does not change
+#' the correlations between the previously selected variables.
+#'
+#' Normalizing the inverse of the joint covariance matrix would also control
+#' for the other variables in `x`. That is a different quantity when
+#' `length(x) > 2`.
 #'
 #' Because the result is scaled to unit diagonal, it makes no difference
 #' whether `m` is a covariance or a correlation matrix.
 #'
 #' @section Numerical considerations:
 #' \itemize{
-#'   \item The joint submatrix of `x` and `y` must be invertible.
-#'     Near-singularity from collinearity among the control variables is
-#'     detected via the reciprocal condition number, not merely by a
-#'     failure of [base::solve()], which succeeds and returns
-#'     nonsense well before the matrix is numerically singular.
+#'   \item The joint submatrix of `x` and `y` must be invertible, and
+#'     every selected variable must have positive variance.
+#'     Near-singularity from collinearity is detected via the reciprocal
+#'     condition number, not merely by a failure of [base::solve()],
+#'     which succeeds and returns nonsense well before the matrix is
+#'     numerically singular. The condition number is taken on the
+#'     correlation scale, so variables measured in very different units
+#'     are not mistaken for collinear ones.
+#'   \item For raw data only the selected columns enter [stats::cov()].
 #'   \item `x` and `y` must not overlap.
 #'   \item For raw data, correlations are computed pairwise, which can
 #'     produce a non-positive-definite matrix when values are missing.
@@ -83,56 +93,77 @@ corPart <- function(m, x, y) {
   # silently taken to be one, with no error anywhere downstream.
   isCovMat <- nrow(m) == ncol(m) && isSymmetric(unname(m))
 
-  S <- if (isCovMat) m else cov(m, use = "pairwise.complete.obs")
+  p <- ncol(m)
 
-  p <- ncol(S)
-
-  # --- index checks ---
+  # --- index checks, against m itself: raw data then only needs the
+  # selected columns in cov(), not all of them ---
   if (length(x) == 0L || length(y) == 0L)
     stop("'x' and 'y' must each name at least one variable")
 
-  if (any(!is.finite(x)) || any(!is.finite(y)) ||
+  # is.numeric() first: TRUE passed every arithmetic test below as index 1
+  if (!is.numeric(x) || !is.numeric(y) ||
+      any(!is.finite(x)) || any(!is.finite(y)) ||
       any(x %% 1 != 0) || any(y %% 1 != 0) ||
       any(x < 1) || any(y < 1) ||
       any(x > p) || any(y > p)) {
     stop("x and y must be integer indices in 1:ncol(m)")
   }
 
+  # a repeated index duplicates a row and column of the submatrix, which
+  # then failed below as "collinearity" - true, but not the user's mistake
+  if (anyDuplicated(x) || anyDuplicated(y))
+    stop("'x' and 'y' must not contain duplicate indices")
+
   if (length(intersect(x, y)) > 0L)
     stop("'x' and 'y' must not overlap - a variable cannot be both of ",
          "interest and a control")
 
   # --- relevant submatrix ---
+  # pairwise deletion works pair by pair, so the covariance of the selected
+  # columns equals the corresponding block of the full pairwise matrix
   idx <- c(x, y)
-  S_sub <- S[idx, idx, drop = FALSE]
+  S_sub <- if (isCovMat) m[idx, idx, drop = FALSE]
+           else cov(m[, idx, drop = FALSE], use = "pairwise.complete.obs")
 
   if (anyNA(S_sub))
     stop("the covariance matrix contains missing values; too few complete ",
          "pairs in 'm'")
 
-  # --- inversion (precision matrix) ---
-  # solve() only errors below its own tolerance and happily returns
-  # garbage for a merely ill-conditioned matrix, which the documentation
-  # nevertheless promised to catch
+  if (any(!is.finite(S_sub)))
+    stop("the covariance matrix must contain only finite values")
+
+  if (any(diag(S_sub) <= 0))
+    stop("the variables with index ",
+         paste(idx[diag(S_sub) <= 0], collapse = ", "),
+         " have no positive variance")
+
+  # The result is scale-free, the condition number is not: on the covariance
+  # scale, uncorrelated variables in metres and in micrometres alone gave
+  # rcond() ~ 1e-14 and a spurious "collinearity" error. On the correlation
+  # scale the check measures collinearity and nothing else; the partial
+  # correlations are identical either way (and solve() is better
+  # conditioned, too).
+  S_sub <- cov2cor(S_sub)
+
+  # singular or ill-conditioned joint matrix
   if (rcond(S_sub) < .Machine$double.eps^0.5)
     stop("Covariance matrix is singular or ill-conditioned (collinearity)")
 
-  P <- solve(S_sub)
-
+  # Control ONLY for y, irrespective of the number of variables in x.
+  # solve(A, B) avoids constructing an explicit inverse.
   k <- length(x)
+  ix <- seq_len(k)
+  iy <- k + seq_along(y)
+  S_xx <- S_sub[ix, ix, drop = FALSE]
+  S_xy <- S_sub[ix, iy, drop = FALSE]
+  S_yy <- S_sub[iy, iy, drop = FALSE]
+  residualCov <- S_xx - S_xy %*% solve(S_yy, t(S_xy))
+  residualCov <- (residualCov + t(residualCov)) / 2
 
-  # --- partial correlations from the precision matrix ---
-  P_xx <- P[seq_len(k), seq_len(k), drop = FALSE]
+  if (any(!is.finite(residualCov)) || any(diag(residualCov) <= 0))
+    stop("Residual variances must be finite and positive")
 
-  # diag(v) with a length-1 v builds an identity matrix of size round(v)
-  # instead of a 1x1 matrix - corPart(m, x = 1, y = ...) died on a
-  # non-conformable multiplication. nrow= forces the intended reading.
-  dv <- 1 / sqrt(diag(P_xx))
-  D  <- diag(dv, nrow = k)
-
-  pc <- -D %*% P_xx %*% D
-
-  diag(pc) <- 1
+  pc <- cov2cor(residualCov)
 
   colnames(pc) <- rownames(pc) <- colnames(m)[x]
 

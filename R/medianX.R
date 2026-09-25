@@ -13,14 +13,14 @@
 #' work for most classes (e.g., `"[Date]"`) for which a median is a
 #' reasonable concept.
 #' 
-#' Calculating the median for ordered factors is not implemented in standard R,
-#' as it's not well defined (it is not clear what to do if the median sits
-#' between two levels in factors of even length). This function returns the
-#' high median and prints a warning if the low median would be different (which
-#' is supposed to be a rare event). There's a vivid discussion between experts
-#' going on whether this should be defined or not. We'll wait for definitive
-#' results and enjoy the function's comfort so far...
-#' 
+#' For ordered factors, the result is the upper sample median: the category
+#' at position `floor(n / 2) + 1` in the sorted non-missing observations.
+#' If the two middle observations of an even-sized sample differ, a warning
+#' is issued. Their integer level codes are not averaged, because distances
+#' between ordinal categories are not defined. Unused levels are preserved
+#' and cannot become the median merely by lying between observed categories.
+#' Unordered factors are rejected.
+#'
 #' @note 
 #' There are alternative approaches for calculating weighted median
 #' (e.g. `matrixstats::weightedMedian`).
@@ -30,19 +30,25 @@
 #' @param x an object for which a method has been defined, or a numeric vector
 #' containing the values whose median is to be computed
 #' @param weights a numerical vector of weights the same length as `x`
-#' giving the weights to use for elements of `x`
-#' @param breaks breaks for calculating the mean for classified data as
-#' composed by [freq()]
+#' giving the weights to use for elements of `x`. Only the ratios of the
+#' weights matter (see Details); frequency weights reproduce the median of
+#' the replicated sample. Supported for numeric `x` only.
+#' @param breaks breaks for calculating the median for classified data as
+#' composed by [freq()]; strictly increasing, one more than there are
+#' classes. If the median falls into an open-ended class (`-Inf` or `Inf`
+#' as a bound), `NA` is returned with a warning.
 #' @param na.rm a logical value indicating whether `NA` values should be
 #' stripped before the computation proceeds
-#' @param \dots further arguments passed to or from other methods
-#' @return the default method returns a length-one object of the same type as
-#' `x`, except when `x` is integer of even length, when the result
-#' will be double.
+#' @param \dots further arguments passed to [stats::median()] in the
+#' unweighted default method, otherwise unused
+#' @return the unweighted default method returns a length-one object of the
+#' same type as `x`, except when `x` is integer of even length, when the
+#' result will be double. With weights the result is double.
 #' 
 #' If there are no values or if `na.rm = FALSE` and there are `NA`
 #' values the result is `NA` of the same type as `x` (or more
-#' generally the result of `x[FALSE][NA]`).
+#' generally the result of `x[FALSE][NA]`). For ordered factors, missing
+#' results retain the ordered-factor class and the original levels.
 #' @seealso [quantile()] for general quantiles, \cr
 #' [Maechler on R-help mailing list, 2003-Nov](https://stat.ethz.ch/pipermail/r-help/2003-November/042684.html)
 #' \cr
@@ -102,7 +108,7 @@ medianX <- function(x, ...)
 #' @export
 medianX.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
   if(is.null(weights))
-    median(x=x, na.rm=na.rm)
+    median(x=x, na.rm=na.rm, ...)
   else
     # type = 5, not the quantileX default of 7. Type 7 reads the weights
     # as replication counts and is therefore not scale invariant, so a
@@ -117,28 +123,30 @@ medianX.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
 # ordered interface for the median
 #' @rdname medianX
 #' @export
-medianX.factor <- function(x, na.rm = FALSE, ...) {
+medianX.factor <- function(x, weights = NULL, na.rm = FALSE, ...) {
   
-  # Answered by Hong Ooi on 2011-10-28T00:37:08-04:00
-  # http://www.rqna.net/qna/nuiukm-idiomatic-method-of-finding-the-median-of-an-ordinal-in-r.html
-  
-  # An unordered factor has no median, and saying so is more useful than
-  # a bare NA that looks like a missing value in the data.
-  if(!is.ordered(x))
+  # weights used to vanish in '...' and the unweighted median came back
+  # without any notice
+  if (!is.null(weights))
+    stop("weights are not supported for ordered factors", call. = FALSE)
+
+  if (!is.ordered(x))
     stop("the median of an unordered factor is not defined; ",
          "use an ordered factor", call. = FALSE)
-  
-  if(na.rm) x <- na.omit(x)
-  if(any(is.na(x))) return(NA)
-  
-  levs <- levels(x)
-  m <- median(as.integer(x), na.rm = na.rm)
-  if(floor(m) != m)
-  {
-    warning("Median is between two values; using the first one")
-    m <- floor(m)
-  }
-  ordered(m, labels = levs, levels = seq_along(levs))
+
+  if (na.rm) x <- x[!is.na(x)]
+  if (!length(x) || anyNA(x))
+    return(unname(x[NA_integer_]))
+
+  ranks <- sort.int(as.integer(x))
+  n <- length(ranks)
+  upper <- n %/% 2L + 1L
+
+  if (n %% 2L == 0L && ranks[upper - 1L] != ranks[upper])
+    warning("Median is between two values; using the upper median",
+            call. = FALSE)
+
+  ordered(ranks[upper], levels = seq_along(levels(x)), labels = levels(x))
 }
 
 
@@ -150,16 +158,36 @@ medianX.Freq <- function(x, breaks, ...)  {
   if (length(breaks) != nrow(x) + 1L)
     stop("'breaks' must have one more element than 'x' has classes")
 
-  mi <- min(which(x$cumperc > 0.5))
+  if (!is.numeric(breaks) || anyNA(breaks) ||
+      is.unsorted(breaks, strictly = TRUE))
+    stop("'breaks' must be strictly increasing")
+
+  n <- tail(x$cumfreq, 1)
+  if (!isTRUE(n > 0))
+    return(NA_real_)
+
+  # The median class is the first one that reaches half the mass, counted
+  # on the integer cumfreq. The former `cumperc > 0.5` compared a cumulative
+  # sum of proportions: when a class ends at exactly half the mass, rounding
+  # decided whether that class or the next was taken. Both give the same
+  # value - unless the next class is empty, where the answer jumped from
+  # its lower to its upper bound. Now always the lower one.
+  mi <- which(2 * x$cumfreq >= n)[1L]
+
+  if (!all(is.finite(breaks[c(mi, mi + 1L)]))) {
+    warning("the median lies in an open-ended class; ",
+            "it cannot be interpolated", call. = FALSE)
+    return(NA_real_)
+  }
 
   # x[mi - 1, "cumfreq"] is x[0, ] when the FIRST class already carries
-  # more than half the mass - a zero-row selection, so the whole
-  # expression collapsed to numeric(0) and the function returned an empty
-  # vector rather than a median. Below the first class the cumulative
-  # frequency is zero by definition.
+  # half the mass - a zero-row selection, so the whole expression
+  # collapsed to numeric(0) and the function returned an empty vector
+  # rather than a median. Below the first class the cumulative frequency
+  # is zero by definition.
   cumBelow <- if (mi == 1L) 0 else x[mi - 1L, "cumfreq"]
 
-  breaks[mi] + (tail(x$cumfreq, 1)/2 - cumBelow) /
+  breaks[mi] + (n/2 - cumBelow) /
     x[mi, "freq"] * diff(breaks[c(mi, mi+1)])
 
 }

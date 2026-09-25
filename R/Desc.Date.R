@@ -55,7 +55,9 @@
 #'     residuals, and p-value}
 #'   \item{`month`}{observed and expected month counts, standardized
 #'     residuals, and p-value}
-#'   \item{`sentinel`}{heuristic data-quality diagnostics}
+#'   \item{`sentinel`}{heuristic data-quality diagnostics: `flag`,
+#'     `reason` (character vector of all triggered checks, empty if
+#'     none), `lowest`, `highest`}
 #'   \item{`meta`}{metadata}
 #' }
 #'
@@ -73,7 +75,7 @@ desc.Date <- function(x,
                       plotit  = NULL,
                       verbose = NULL,
                       wprobs  = rep(1/7, 7),
-                      mprobs  = rep(1/12, 12),
+                      mprobs  = NULL,
                       ...) {
 
   # ------------------------------
@@ -109,7 +111,9 @@ desc.Date <- function(x,
   # ------------------------------
   # Weekday distribution
 
-  wdNum    <- as.integer(strftime(xOk, "%u"))   # 1 = Monday ... 7 = Sunday
+  # format.Date, not strftime(): the latter goes through as.POSIXlt(tz = "")
+  # and must not be allowed to depend on the session time zone
+  wdNum    <- as.integer(format(xOk, "%u"))     # 1 = Monday ... 7 = Sunday
   wdObs    <- tabulate(wdNum, nbins = 7)
   wdLevels <- weekdays(as.Date("2023-01-02") + 0:6)
   names(wdObs) <- wdLevels
@@ -147,24 +151,19 @@ desc.Date <- function(x,
   # ------------------------------
   # Sentinel detection
 
-  sentinelFlag   <- FALSE
-  sentinelReason <- NULL
-
-  if (maxD > Sys.Date() + 365) {
-    sentinelFlag   <- TRUE
-    sentinelReason <- "Date far in future (possible open-ended coding)"
-  }
-
-  if (minD < as.Date("1900-01-01")) {
-    sentinelFlag   <- TRUE
-    sentinelReason <- "Very early date (possible default value)"
-  }
-
+  # all reasons are collected - each check used to overwrite the previous
+  # one, so a vector with both 1899-01-01 and 9999-12-31 reported only
+  # the sentinel year
   yrs <- as.integer(format(xOk, "%Y"))
-  if (any(yrs %in% c(2099, 2999, 3000, 9999))) {
-    sentinelFlag   <- TRUE
-    sentinelReason <- "Suspicious sentinel year detected"
-  }
+  sentinelReason <- c(
+    "Date far in future (possible open-ended coding)"
+      [maxD > Sys.Date() + 365],
+    "Very early date (possible default value)"
+      [minD < as.Date("1900-01-01")],
+    "Suspicious sentinel year detected"
+      [any(yrs %in% c(2099, 2999, 3000, 9999))]
+  )
+  sentinelFlag <- length(sentinelReason) > 0L
 
   sentinelInfo <- list(
     flag   = sentinelFlag,
@@ -289,7 +288,8 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
   cat("\n")
 
   if (x$sentinel$flag)
-    cat("\n\u26A0 Sentinel detected:", x$sentinel$reason, "\n")
+    cat("\n\u26A0 Sentinel detected:",
+        paste(x$sentinel$reason, collapse = "; "), "\n")
 
   if (verbose < 2)
     return(invisible(x))

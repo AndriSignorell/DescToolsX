@@ -116,3 +116,28 @@ test_that("percTable() default method splits its dots correctly", {
   pt2 <- percTable(x = x, y = y)
   expect_equal(sum(pt2$freq), 3)
 })
+
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("print.PercTable returns its argument invisibly", {
+  pt <- percTable(tab, margins = c("rows", "cols"))
+  expect_output(res <- print(pt))
+  expect_identical(res, pt)
+})
+
+test_that("the formula method tabulates response by group", {
+  d <- data.frame(y = factor(c("a", "b", "a", "b", "a")),
+                  g = factor(c("u", "u", "v", "v", "v")))
+  pt <- percTable(y ~ g, data = d)
+  expect_s3_class(pt, "PercTable")
+  expect_equal(sum(pt$freq), 5)
+  expect_error(percTable(y ~ g + g2, data = cbind(d, g2 = d$g)),
+               "incorrect")
+})
+
+test_that("expected frequencies and the total proportions are optional parts", {
+  pt <- percTable(tab, prop = "total", expected = TRUE)
+  expect_equal(pt$expected, expFreq(tab), ignore_attr = TRUE)
+  expect_equal(sum(pt$perc), 1)
+})

@@ -25,7 +25,10 @@
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
-#'   `"right"`). See [ConfidenceIntervals()].
+#'   `"right"`). See [ConfidenceIntervals()]. Since \eqn{h} lies in
+#'   \eqn{[-\pi, \pi]}, the open side is reported at \eqn{\pm\pi} and the
+#'   two-sided interval is clamped to that range. One-sided intervals
+#'   require `conf.level > 0.5`.
 #'   
 #' @param ... additional arguments passed to `table()`
 #'
@@ -105,6 +108,19 @@ cohenH <- function(x,
   if (!is.numeric(x) && !is.table(x))
     stop("Input must be numeric.")
 
+  # Counts, so finite and non-negative. Without this, rows (-5, -5) and
+  # (5, 5) gave p1 = p2 = 0.5 and the plausible-looking h = 0, and an NA
+  # cell reached the n1 == 0 test as "missing value where TRUE/FALSE
+  # needed".
+  if (anyNA(x) || any(!is.finite(x)))
+    stop("The table must not contain missing or infinite counts.")
+  if (any(x < 0))
+    stop("The table counts must be non-negative.")
+
+  # checked before is.na(conf.level) is read below: NULL or c(0.9, 0.95)
+  # broke that if() internally, and NaN silently meant "no interval"
+  checkConfLevel(conf.level)
+
   # a/b/c/d as local names would mask base::c(); spelled out instead
   n1 <- x[1L, 1L] + x[1L, 2L]
   n2 <- x[2L, 1L] + x[2L, 2L]
@@ -120,19 +136,17 @@ cohenH <- function(x,
   if (is.na(conf.level))
     return(h)
 
-  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
-      conf.level <= 0 || conf.level >= 1)
-    stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
+  if (sides != "two.sided" && conf.level <= 0.5)
+    stop("Argument 'conf.level' must exceed 0.5 for a one-sided interval.")
 
   se <- sqrt(1 / n1 + 1 / n2)
 
-  confAdj <- if (sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
+  confAdj <- if (sides != "two.sided") 2 * conf.level - 1 else conf.level
   z <- qnorm(1 - (1 - confAdj) / 2)
 
-  out <- c(est = h, lci = h - z * se, uci = h + z * se)
-
-  if (sides == "left")  out[["uci"]] <- Inf
-  if (sides == "right") out[["lci"]] <- -Inf
-
-  return(out)
+  # h = 2 asin(sqrt(p1)) - 2 asin(sqrt(p2)) with both terms in [0, pi], so
+  # h lies in [-pi, pi]: the Wald interval is clamped to that range and the
+  # open side of a one-sided interval is reported at its boundary rather
+  # than at +/-Inf
+  c(est = h, applySides(h + c(-1, 1) * z * se, sides, lo = -pi, hi = pi))
 }

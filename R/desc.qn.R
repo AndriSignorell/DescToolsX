@@ -291,10 +291,7 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
   
   cat("\n")
   
-  
-  
-  invisible(x)
-  
+  .plotIfRequested(x)
 }
 
   

@@ -2,8 +2,6 @@
 # normalizeToConfusion -- test suite
 # run with: testthat::test_file("test-normalizeToConfusion.R")
 
-library(testthat)
-
 # ── helpers ───────────────────────────────────────────────────────────────────
 
 A <- c("pos", "neg", "pos", "inc")
@@ -43,8 +41,10 @@ test_that("useNA = 'always' adds NA row and column", {
   B2    <- c("pos", "pos", "neg", "inc")
   B2[2] <- NA
   tab   <- normalizeToConfusion(A2, B2, useNA = "always")
-  print(colnames(tab))
-  expect_true(any(is.na(colnames(tab))) || "<NA>" %in% colnames(tab) || "NA" %in% colnames(tab))
+  # the NA level comes last; the missing rating of B2[2] is counted in the
+  # NA column of the row A2[2] = "neg"
+  expect_identical(colnames(tab), c("inc", "neg", "pos", NA))
+  expect_equal(tab["neg", 4L], 1)
 })
 
 # ── 2. table input ────────────────────────────────────────────────────────────
@@ -186,4 +186,45 @@ test_that("row and column sums are consistent with input length", {
 })
 
 
+# Additional branch coverage and reference checks
+test_that("normalizeToConfusion validates and relabels existing rectangular tables", {
+  m <- matrix(1:6, 2, dimnames = list(c("a", "b"), c("x", "y", "z")))
+  tab <- as.table(m)
+  lev <- list(c("A", "B"), c("X", "Y", "Z"))
+  actual <- normalizeToConfusion(tab, levels = lev, mode = "association")
+  expect_equal(as.numeric(actual), as.numeric(m))
+  expect_identical(dimnames(actual), lev)
+  expect_error(normalizeToConfusion(tab, levels = letters[1:3], mode = "association"), "list")
+  expect_error(normalizeToConfusion(tab, levels = list("A", c("X", "Y", "Z")),
+                                    mode = "association"), "dimensions")
+  expect_equal(as.numeric(normalizeToConfusion(m, levels = lev, mode = "association")),
+               as.numeric(actual))
+  tab[1, 1] <- -1
+  expect_error(normalizeToConfusion(tab, mode = "association"), "valid contingency")
+})
 
+test_that("normalizeToConfusion warns about unnamed inputs and checks levels", {
+  m <- matrix(c(4, 1, 2, 5), 2)
+  tab <- structure(m, class = "table")
+  expect_warning(a <- normalizeToConfusion(m), "Matrix has no dimnames")
+  expect_warning(b <- normalizeToConfusion(tab), "Table has no dimnames")
+  expect_equal(as.numeric(a), as.numeric(b))
+  expect_silent(a <- normalizeToConfusion(m, levels = c("no", "yes")))
+  expect_identical(dimnames(a), list(c("no", "yes"), c("no", "yes")))
+  expect_error(normalizeToConfusion(m, levels = "a"), "atomic vector")
+  expect_error(normalizeToConfusion(m, levels = list("a", "b")), "atomic vector")
+  dimnames(m) <- list(c("a", "b"), c("b", "a"))
+  expect_error(normalizeToConfusion(m), "row and column names must match")
+})
+
+test_that("normalizeToConfusion requires an explicit interpretation of n-by-2 counts", {
+  m <- matrix(1:6, 3)
+  expect_error(normalizeToConfusion(m, mode = "association"), "ambiguous")
+  tab <- normalizeToConfusion(as.table(m), mode = "association")
+  expect_equal(dim(tab), c(3L, 2L))
+  expect_equal(as.numeric(tab), as.numeric(m))
+  m <- cbind(c("a", "a", "b"), c("x", "y", "x"))
+  ans <- normalizeToConfusion(m, mode = "association")
+  expect_equal(as.numeric(ans), c(1, 1, 1, 0))
+  expect_equal(normalizeToConfusion(as.data.frame(m), mode = "association"), ans)
+})

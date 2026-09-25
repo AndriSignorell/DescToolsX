@@ -29,12 +29,18 @@ Default is \code{\link[stats:na.pass]{stats::na.pass()}}.}
 \code{lc.formula()}. In \code{predict.Lc()}, the argument \code{R}
 (positive integer, default \code{999}) controls the number of bootstrap
 replications when \code{conf.level} is supplied; it is extracted via
-\code{.extractBootArgs()} and ignored otherwise.}
+\code{.extractBootArgs()} and ignored otherwise. Only percentile intervals
+are implemented: \code{type = "perc"} may be supplied explicitly; other
+interval types are rejected.}
 
 \item{x}{numeric vector of non-negative values}
 
 \item{n}{numeric vector of non-negative weights of the same length as
-\code{x}. Defaults to equal weights (\code{rep(1, length(x))}).}
+\code{x}. Defaults to equal weights (\code{rep(1, length(x))}). Bootstrap intervals
+draw \code{floor(sum(n))} observations with probabilities proportional to \code{n};
+the sum must be finite and at least one. Thus rescaling the weights
+changes the bootstrap sample size; frequency weights are appropriate
+when the weights represent replicated observations.}
 
 \item{na.rm}{logical. If \code{TRUE}, observations with \code{NA} in
 \code{x} or \code{n} are removed before computation.  Default is
@@ -49,7 +55,9 @@ omitted, the original grid points are returned.}
 \item{conf.level}{numeric scalar in \eqn{(0, 1)}. If supplied,
 bootstrap confidence intervals at level \code{conf.level} are added
 as columns \code{lci} and \code{uci}.  Set to \code{NA} (default)
-to suppress intervals.}
+to suppress intervals. For the standard curve, all-zero bootstrap
+samples have undefined income shares and are omitted pointwise; if no
+finite replicates remain, the corresponding limits are \code{NA}.}
 
 \item{general}{logical. If \code{TRUE}, the generalized Lorenz curve
 is used.  Default is \code{FALSE}.}
@@ -64,8 +72,8 @@ starting at 0}
 \item{\code{L}}{numeric vector of Lorenz curve values at \code{p}}
 \item{\code{L.general}}{generalized Lorenz curve values}
 \item{\code{Gini}}{estimated Gini coefficient}
-\item{\code{x}}{original unsorted data vector}
-\item{\code{n}}{original weight vector}
+\item{\code{x}}{unsorted data used after missing-value removal}
+\item{\code{n}}{corresponding weights after missing-value removal}
 }
 }
 \item{\code{lc.formula()}}{a single \code{"Lc"} object if the formula
@@ -104,7 +112,8 @@ an \code{"LcList"}.
 
 Bootstrap confidence intervals in \code{predict.Lc()} are based on
 resampling with replacement from the (weighted) empirical distribution,
-followed by pointwise quantiles across bootstrap replicates.  The number
+followed by interpolation of each replicate at the requested population
+shares and pointwise quantiles across bootstrap replicates.  The number
 of replications is controlled by \code{R} passed via \code{...} and
 extracted by \code{.extractBootArgs()} (default \code{R = 999}).
 }

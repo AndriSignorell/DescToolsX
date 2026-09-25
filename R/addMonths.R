@@ -206,6 +206,7 @@ addMonths.ym <- function(x, n, ...) {
   targetDay <- min(originalDay, daysInTargetMonth)
   
   return(unclass(targetMonth + targetDay - 1L))
+  
 }
 
 

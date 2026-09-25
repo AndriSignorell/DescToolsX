@@ -203,33 +203,46 @@ test_that("boot CI: normal and boot agree for large n", {
 # Sides
 # -----------------------------------------------------------------------
 
-test_that("normal CI: sides = 'left' sets uci = Inf", {
+# The open side is reported at the boundary of the score's range: [0, 1]
+# for the raw score, (-Inf, 1] for the scaled one (formerly +/-Inf always).
+
+test_that("normal CI: sides = 'left' opens uci to 1", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "normal",
                     sides = "left")
-  expect_equal(unname(res["uci"]), Inf)
+  expect_equal(unname(res["uci"]), 1)
   expect_false(is.infinite(res["lci"]))
 })
 
 
-test_that("normal CI: sides = 'right' sets lci = -Inf", {
+test_that("normal CI: sides = 'right' opens lci to 0", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "normal",
                     sides = "right")
-  expect_equal(unname(res["lci"]), -Inf)
+  expect_equal(unname(res["lci"]), 0)
   expect_false(is.infinite(res["uci"]))
 })
 
 
-test_that("boot CI: sides = 'left' sets uci = Inf", {
+test_that("boot CI: sides = 'left' opens uci to 1", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "boot",
                     sides = "left", type = "norm", R = 299)
-  expect_equal(unname(res["uci"]), Inf)
+  expect_equal(unname(res["uci"]), 1)
 })
 
 
-test_that("boot CI: sides = 'right' sets lci = -Inf", {
+test_that("boot CI: sides = 'right' opens lci to 0", {
   res <- brierScore(resp, pred, conf.level = 0.95, method = "boot",
                     sides = "right", type = "norm", R = 299)
-  expect_equal(unname(res["lci"]), -Inf)
+  expect_equal(unname(res["lci"]), 0)
+})
+
+
+test_that("the scaled score opens downwards to -Inf", {
+  r <- brierScore(resp, pred, conf.level = 0.95, scaled = TRUE,
+                  sides = "right")
+  l <- brierScore(resp, pred, conf.level = 0.95, scaled = TRUE,
+                  sides = "left")
+  expect_identical(unname(r[["lci"]]), -Inf)
+  expect_equal(unname(l[["uci"]]), 1)
 })
 
 
@@ -271,4 +284,92 @@ test_that("invalid conf.level raises error", {
 test_that("invalid method raises error", {
   expect_error(brierScore(resp, pred, conf.level = 0.95, method = "bca"),
                "arg")
+})
+
+
+# Additional coverage: explicit branches and reference results
+test_that("brier_boot_cpp resamples paired outcomes and predictions", {
+  boot <- DescToolsX:::brier_boot_cpp
+  y <- rep(c(0, 1), 10)
+  set.seed(401)
+  expect_equal(as.numeric(boot(y, y, R = 25L, scaled = FALSE)), rep(0, 25))
+  expect_equal(as.numeric(boot(y, 1 - y, R = 25L, scaled = FALSE)), rep(1, 25))
+  expect_equal(as.numeric(boot(y, rep(0.5, length(y)), R = 25L, scaled = FALSE)),
+               rep(0.25, 25))
+  expect_length(boot(y, y, R = 1L, scaled = FALSE), 1L)
+})
+
+test_that("brier_boot_cpp scales by the prevalence of each resample", {
+  boot <- DescToolsX:::brier_boot_cpp
+  y <- rep(c(0, 0, 1), 20)
+  p <- numeric(length(y))
+  # With p=0 the unscaled Brier score is exactly the resampled prevalence.
+  set.seed(402)
+  prevalence <- as.numeric(boot(y, p, R = 80L, scaled = FALSE))
+  expect_true(all(prevalence > 0 & prevalence < 1))
+  set.seed(402)
+  scaled <- as.numeric(boot(y, p, R = 80L, scaled = TRUE))
+  expect_equal(scaled, 1 - prevalence / (prevalence * (1 - prevalence)))
+  set.seed(402)
+  expect_identical(scaled, as.numeric(boot(y, p, R = 80L, scaled = TRUE)))
+})
+
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("conf.level and scaled are validated before use", {
+  for (cl in list(NULL, NaN, c(0.9, 0.95), "0.95"))
+    expect_error(brierScore(resp, pred, conf.level = cl), "conf.level")
+  expect_error(brierScore(resp, pred, scaled = NA), "scaled")
+  expect_error(brierScore(resp, pred, conf.level = 0.4, sides = "left"),
+               "exceed 0.5")
+})
+
+test_that("the scaled score of a constant response is an error, not -Inf", {
+  expect_error(brierScore(c(0, 0, 0), c(0.1, 0.2, 0.3), scaled = TRUE),
+               "no variation")
+})
+
+test_that("perc and basic bootstrap bounds come from the same replicates", {
+  R <- 500L
+  set.seed(11)
+  v <- as.numeric(DescToolsX:::brier_boot_cpp(resp, pred, R, FALSE))
+  est <- brierScore(resp, pred)
+
+  set.seed(11)
+  p <- brierScore(resp, pred, conf.level = 0.9, method = "boot",
+                  type = "perc", R = R)
+  expect_equal(unname(p[c("lci", "uci")]),
+               quantile(v, c(0.05, 0.95), names = FALSE))
+
+  set.seed(11)
+  b <- brierScore(resp, pred, conf.level = 0.9, method = "boot",
+                  type = "basic", R = R)
+  expect_equal(unname(b[c("lci", "uci")]),
+               2 * est - quantile(v, c(0.95, 0.05), names = FALSE))
+
+  expect_error(brierScore(resp, pred, conf.level = 0.9, method = "boot",
+                          type = "stud", R = R), "stud")
+})
+
+test_that("resamples with a constant response are dropped with a warning", {
+  set.seed(12)
+  v <- as.numeric(DescToolsX:::brier_boot_cpp(c(0, 1), c(0.2, 0.8), 200L, TRUE))
+  expect_true(anyNA(v))
+  expect_true(all(is.finite(v[!is.na(v)])))
+
+  set.seed(13)
+  r <- c(0, 0, 0, 1, 0, 1)
+  expect_warning(res <- brierScore(r, c(0.1, 0.3, 0.2, 0.7, 0.4, 0.6),
+                                   conf.level = 0.9, scaled = TRUE,
+                                   method = "boot", type = "perc", R = 400),
+                 "constant response")
+  expect_true(all(is.finite(res)))
+})
+
+test_that("the glm method takes fitted probabilities and the response", {
+  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
+  expect_equal(brierScore(fit), brierScore(mtcars$vs, fitted(fit)))
+  fit0 <- glm(vs ~ mpg, data = mtcars, family = binomial, y = FALSE)
+  expect_equal(brierScore(fit0), brierScore(fit))
 })

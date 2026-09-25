@@ -12,7 +12,7 @@ etaSq(fit, type = 2, anova = FALSE)
 
 \method{etaSq}{lm}(fit, type = 2, anova = FALSE)
 
-\method{etaSq}{aovlist}(fit, type = 2, anova = FALSE)
+\method{etaSq}{aovlist}(fit, type = 1, anova = FALSE)
 
 aovlDetails(fit)
 
@@ -20,10 +20,13 @@ aovlErrorTerms(fit)
 }
 \arguments{
 \item{fit}{an analysis of variance object of class \code{"aov"} or
-\code{"aovlist"}}
+\code{"aovlist"}, or a linear model of class \code{"lm"} (weights are
+respected). Generalized linear models and multivariate \code{"mlm"} fits
+are refused: their sums of squares do not decompose the variance of
+the response.}
 
 \item{type}{type of sums of squares to calculate.
-\code{etaSq.aovlist()} requires \code{type = 1}.}
+\code{etaSq.aovlist()} requires \code{type = 1}, which is its default.}
 
 \item{anova}{logical; whether to include the full ANOVA table with the
 effect sizes}
@@ -59,7 +62,7 @@ sums of squares (\code{type=2}), in keeping with the \code{Anova} function
 in the \code{car} package. It is possible to revert to the Type I SS values
 (\code{type=1}) to be consistent with \code{anova}, but this rarely tests
 hypotheses of interest. Type III SS values (\code{type=3}) can also be
-computed. \code{etaSq.aovlist} requires \code{type=1}.
+computed. \code{etaSq.aovlist} requires \code{type=1}, which is also its default.
 }
 \note{
 Based on code by Danielle Navarro, and Daniel Wollschlaeger.

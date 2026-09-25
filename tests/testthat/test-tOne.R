@@ -126,7 +126,9 @@ test_that("TEST = NA drops the test column and the legend", {
   t1 <- tOne(d.set[, c("num", "cat")], d.set$g, TEST = NA, fmt = FMT)
   expect_null(attr(t1, "legend"))
 
-  t2 <- tOne(d.set[, c("num", "cat")], d.set$g, fmt = FMT)
+  # 8 observations in a 3x2 table: the chi-squared warning is expected
+  expect_warning(t2 <- tOne(d.set[, c("num", "cat")], d.set$g, fmt = FMT),
+                 "Chi-squared approximation")
   expect_true(nzchar(attr(t2, "legend")))
   expect_equal(ncol(unclass(t2)), 5)         # ... plus the test column
 
@@ -162,7 +164,8 @@ test_that("print() returns its argument invisibly", {
 
 test_that("subsetting keeps class and legend", {
 
-  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, fmt = FMT)
+  expect_warning(t1 <- tOne(d.set[, c("num", "cat")], d.set$g, fmt = FMT),
+                 "Chi-squared approximation")
   sub <- t1[1:2, ]
 
   expect_s3_class(sub, "tOne")

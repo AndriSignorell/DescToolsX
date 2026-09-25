@@ -3,6 +3,7 @@
 \name{date_functions}
 \alias{date_functions}
 \alias{year}
+\alias{isoYear}
 \alias{quarter}
 \alias{month}
 \alias{week}
@@ -88,6 +89,8 @@ yearMonth(x)
 
 yearWeek(x, method = c("iso", "us"))
 
+isoYear(x)
+
 yearDay(x)
 
 diffDays360(startDate, endDate, method = c("eu", "us"))
@@ -147,11 +150,20 @@ Convenience wrappers for extracting date/time components and performing
 common date calculations - a readable alternative to \code{\link[=format]{format()}}
 and its cryptic format codes.
 }
+\details{
+\code{isoYear()} is the year to which the ISO week of \code{x} belongs. It
+differs from \code{year()} in the first and last days of some years:
+30 December 2019 lies in ISO week 1 of 2020, and 3 January 2021 in
+week 53 of 2020. Use it with \code{week()} wherever the pair (year, week)
+has to be unambiguous, e.g. for grouping; \code{yearWeek()} returns the
+same pair as one integer \code{yyyyww}.
+}
 \section{Date component extractors}{
 
 \tabular{lll}{
 \strong{Function}    \tab \strong{Returns}                                          \tab \strong{Range / Notes} \cr
 \code{year}        \tab Year of a date or \code{ym} object                     \tab \code{yyyy} \cr
+\code{isoYear}     \tab ISO 8601 week-numbering year                          \tab \code{yyyy}; see Details \cr
 \code{quarter}     \tab Quarter of the year                                    \tab 1-4 \cr
 \code{month}       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for \code{ym} \cr
 \code{week}        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
@@ -209,6 +221,10 @@ x <- today()   # equivalent to Sys.Date()
 
 year(x)
 quarter(x)
+
+# calendar year vs. ISO week-numbering year at the turn of the year
+d <- as.Date(c("2019-12-30", "2021-01-03"))
+cbind(year = year(d), isoYear = isoYear(d), week = week(d))
 
 # month: numeric, abbreviated, full name
 month(x)

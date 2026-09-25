@@ -92,9 +92,23 @@ gini <- function(x,
                  na.rm = FALSE,
                  ...) {
   
+  # --- arguments ---
+  # checked up front: conf.level used to be read by is.na() unchecked, and
+  # sides was matched only when an interval was requested
+  if (!is.numeric(x))
+    stop("'x' must be numeric")
+  checkConfLevel(conf.level)
+  sides <- match.arg(sides)
+  checkFlag(unbiased)
+  checkFlag(na.rm)
+
   # --- weights ---
   if (is.null(weights)) {
     weights <- rep_len(1, length(x))
+  } else if (!is.numeric(weights) || length(weights) != length(x)) {
+    # a shorter vector was indexed past its end after order(x) and the
+    # NAs travelled into the sums
+    stop("'weights' must be a numeric vector of the same length as 'x'")
   }
   
   # --- NA handling ---
@@ -113,6 +127,9 @@ gini <- function(x,
   
   if (any(x < 0))
     stop("x must be non-negative")
+
+  if (any(is.infinite(x)) || any(is.infinite(weights)))
+    stop("'x' and 'weights' must be finite")
   
   if (any(weights < 0))
     stop("weights must be non-negative")
@@ -170,10 +187,10 @@ gini <- function(x,
   
   
   # --- CI ---
-  sides <- match.arg(sides)
-  
-  if (sides != "two.sided")
-    conf.level <- 1 - 2 * (1 - conf.level)
+  if (sides != "two.sided" && conf.level <= 0.5)
+    stop("'conf.level' must exceed 0.5 for a one-sided interval")
+
+  confAdj <- if (sides != "two.sided") 2 * conf.level - 1 else conf.level
   
   dots <- list(...)
   boot_args <- .extractBootArgs(dots)
@@ -191,7 +208,7 @@ gini <- function(x,
   
   ci <- boot::boot.ci(
     boot.fun,
-    conf = conf.level,
+    conf = confAdj,
     type = boot_args$type
   )
   
@@ -203,15 +220,8 @@ gini <- function(x,
 
   bounds <- if (boot_args$type == "norm") ciMat[2:3] else ciMat[4:5]
 
-  # The one-sided case doubled alpha above and then did nothing with it:
-  # gini(x, conf.level = 0.95, sides = "left") returned a two-sided 90%
-  # interval labelled as one-sided. Gini is bounded, so the open side goes
-  # to the range boundary.
-  lci <- max(bounds[1L], 0)
-  uci <- min(bounds[2L], 1)
-
-  if (sides == "left")  uci <- 1
-  if (sides == "right") lci <- 0
-
-  c(est = unname(boot.fun$t0), lci = unname(lci), uci = unname(uci))
+  # Gini is bounded, so the interval is clamped to [0, 1] and the open
+  # side of a one-sided interval goes to the range boundary.
+  c(est = unname(boot.fun$t0),
+    applySides(unname(bounds), sides, lo = 0, hi = 1))
 }

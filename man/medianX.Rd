@@ -11,7 +11,7 @@ medianX(x, ...)
 
 \method{medianX}{default}(x, weights = NULL, na.rm = FALSE, ...)
 
-\method{medianX}{factor}(x, na.rm = FALSE, ...)
+\method{medianX}{factor}(x, weights = NULL, na.rm = FALSE, ...)
 
 \method{medianX}{Freq}(x, breaks, ...)
 }
@@ -19,25 +19,31 @@ medianX(x, ...)
 \item{x}{an object for which a method has been defined, or a numeric vector
 containing the values whose median is to be computed}
 
-\item{\dots}{further arguments passed to or from other methods}
+\item{\dots}{further arguments passed to \code{\link[stats:median]{stats::median()}} in the
+unweighted default method, otherwise unused}
 
 \item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}}
+giving the weights to use for elements of \code{x}. Only the ratios of the
+weights matter (see Details); frequency weights reproduce the median of
+the replicated sample. Supported for numeric \code{x} only.}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds}
 
-\item{breaks}{breaks for calculating the mean for classified data as
-composed by \code{\link[=freq]{freq()}}}
+\item{breaks}{breaks for calculating the median for classified data as
+composed by \code{\link[=freq]{freq()}}; strictly increasing, one more than there are
+classes. If the median falls into an open-ended class (\code{-Inf} or \code{Inf}
+as a bound), \code{NA} is returned with a warning.}
 }
 \value{
-the default method returns a length-one object of the same type as
-\code{x}, except when \code{x} is integer of even length, when the result
-will be double.
+the unweighted default method returns a length-one object of the
+same type as \code{x}, except when \code{x} is integer of even length, when the
+result will be double. With weights the result is double.
 
 If there are no values or if \code{na.rm = FALSE} and there are \code{NA}
 values the result is \code{NA} of the same type as \code{x} (or more
-generally the result of \code{x[FALSE][NA]}).
+generally the result of \code{x[FALSE][NA]}). For ordered factors, missing
+results retain the ordered-factor class and the original levels.
 }
 \description{
 Compute the sample median. The function basically wraps the function
@@ -53,13 +59,13 @@ package \pkg{base} all of which are generic, and so the default method will
 work for most classes (e.g., \code{"[Date]"}) for which a median is a
 reasonable concept.
 
-Calculating the median for ordered factors is not implemented in standard R,
-as it's not well defined (it is not clear what to do if the median sits
-between two levels in factors of even length). This function returns the
-high median and prints a warning if the low median would be different (which
-is supposed to be a rare event). There's a vivid discussion between experts
-going on whether this should be defined or not. We'll wait for definitive
-results and enjoy the function's comfort so far...
+For ordered factors, the result is the upper sample median: the category
+at position \code{floor(n / 2) + 1} in the sorted non-missing observations.
+If the two middle observations of an even-sized sample differ, a warning
+is issued. Their integer level codes are not averaged, because distances
+between ordinal categories are not defined. Unused levels are preserved
+and cannot become the median merely by lying between observed categories.
+Unordered factors are rejected.
 }
 \note{
 There are alternative approaches for calculating weighted median

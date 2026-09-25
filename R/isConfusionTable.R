@@ -110,7 +110,8 @@ isConfusionTable <- function(
 
 .IsNonNegIntMatrix <- function(x, tol = .Machine$double.eps^0.5) {
   
-  ### Check if x is a nonnegative integer symmetric Matrix
+  ### Check if x is a square, nonnegative, integer-valued matrix
+  ### ("square", not "symmetric" - symmetry is not checked)
   
   
   # 1) must be a (numeric) 2D-matrix
@@ -129,10 +130,12 @@ isConfusionTable <- function(
   # small tolerance allowed (for numeric rounding errors)
   if (min(x) < -tol) return(FALSE)
   
-  # 3) Integer: true integer storage or numerically 'integer-like'
+  # 3) Integer: true integer storage or numerically 'integer-like'.
+  # Absolute, cell by cell, as in isConfusionTable(): all.equal() compares
+  # the MEAN relative difference, so a single 0.5 among counts of 1e8
+  # passed as integer.
   if (!is.integer(x)) {
-    # only check if not integer
-    if(!isTRUE(all.equal(x, round(x), tol))) return(FALSE)
+    if (any(abs(x - round(x)) > tol)) return(FALSE)
   }
   
   return(TRUE)

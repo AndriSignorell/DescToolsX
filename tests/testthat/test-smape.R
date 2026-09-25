@@ -110,7 +110,9 @@ test_that("the lm methods refuse a non-numeric response", {
   expect_equal(rmse(fit),
                sqrt(mean(residuals(fit)^2)))
   
-  gfit <- glm(I(mpg > 20) ~ hp, data = mtcars, family = binomial)
+  # factor response without (quasi-)separation; I(mpg > 20) ~ hp gave
+  # fitted probabilities numerically 0 or 1
+  gfit <- glm(factor(vs) ~ mpg, data = mtcars, family = binomial)
   # a factor or matrix response reached the arithmetic unchecked before
   expect_error(rmse(gfit), "numeric vector")
   expect_error(smape(gfit), "numeric vector")

@@ -362,3 +362,19 @@ test_that("const reaches the bootstrap engine", {
   expect_false(isTRUE(all.equal(a[["est"]], tukeyBiweight(x, const = 9))))
   
 })
+
+
+# Additional coverage: explicit branches and reference results
+test_that("tbrm_boot_cpp validates arguments at the native entry point", {
+  # Public-wrapper validation cannot exercise these C++ stop() branches.
+  boot <- DescToolsX:::tbrm_boot_cpp
+  x <- c(1, 2, 3, 4, 20)
+  for (bad in c(0L, -1L))
+    expect_error(boot(x, R = bad), "'R' must be at least 1")
+  for (bad in c(0, 1, -0.1, 1.1))
+    expect_error(boot(x, alpha = bad), "'alpha' must lie")
+  for (bad in c(0, -1, NA_real_, NaN))
+    expect_error(boot(x, constant = bad), "'constant' must be a positive number")
+  expect_error(boot(numeric()), "at least 2 observations")
+  expect_error(boot(1), "at least 2 observations")
+})

@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.956
+Version: 0.0.0.957
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -66,11 +66,11 @@ LinkingTo: Rcpp, RcppParallel, RcppArmadillo
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Imports:
-    stats, boot, cli, withr, stringi, mvtnorm, Rcpp, RcppParallel
+    stats, boot, cli, stringi, mvtnorm, Rcpp, RcppParallel
 Suggests:
     goftest, testthat (>= 3.0.0), R.rsp, readr, vegan, VGAM, nnet,
     MASS, rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
-    survival, pons, dbscan, prettyunits
+    survival, pons, dbscan, prettyunits, withr
 Remotes:  
     AndriSignorell/bedrock, AndriSignorell/pharos, AndriSignorell/lumen, AndriSignorell/pons
 VignetteBuilder: R.rsp

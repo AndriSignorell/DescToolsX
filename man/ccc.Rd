@@ -20,7 +20,10 @@ ccc(
 \item{y}{a numeric vector of equal length to \code{x}}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
-(the default), only the point estimate is returned.}
+(the default), only the point estimate is returned. With perfect
+concordance or discordance the asymptotic variance is zero; the
+analytic methods then return \code{NA} bounds with a warning.
+One-sided intervals require \code{conf.level > 0.5}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or

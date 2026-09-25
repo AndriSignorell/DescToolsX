@@ -57,10 +57,18 @@
 #' @export
 herfindahl <- function(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE) {
 
+  if (!is.numeric(x))
+    stop("'x' must be numeric")
+  checkFlag(na.rm)
+
   # same validation as atkinson(), which shares the family
   if (!is.numeric(n) || anyNA(n) || any(n < 0, na.rm = TRUE) ||
       any(n %% 1 != 0, na.rm = TRUE))
     stop("'n' must be a vector of non-negative whole numbers")
+
+  # rep() recycles neither way and failed with "invalid 'times' argument"
+  if (length(n) != length(x))
+    stop("'n' must have the same length as 'x'")
 
   m <- if (is.null(parameter)) 1 else parameter
 
@@ -72,6 +80,10 @@ herfindahl <- function(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE) {
   if(na.rm) x <- as.numeric(na.omit(x))
   if (length(x) == 0L) return(NA_real_)
   if (any(is.na(x)) || any(x < 0)) return(NA_real_)
+
+  # an infinite share makes every other share 0/Inf and the sum NaN
+  if (any(is.infinite(x)))
+    stop("'x' must be finite")
 
   # all shares zero leaves 0/0
   if (sum(x) == 0) return(NA_real_)

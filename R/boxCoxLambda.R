@@ -220,9 +220,9 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
         "'x' has frequency %d but only %d observations; method \"loglik\" needs more than %d for the seasonal model",
         period, n, period + 1L), domain = NA)
 
-    cycleIdx <- droplevels(factor(stats::cycle(x)))
-    if (nlevels(cycleIdx) < 2L)
-      stop("'x' covers only one seasonal position; no seasonal model can be fitted")
+    # n > period + 1 consecutive observations cover every seasonal
+    # position, so there are always period >= 2 levels here
+    cycleIdx <- factor(stats::cycle(x))
 
     stats::model.matrix(~ trend + cycleIdx)
 

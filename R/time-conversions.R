@@ -12,15 +12,22 @@
 #' @param x date-time object for `hmsToMinute()`, vector of times in
 #' h:m:s format for `hmsToSec()`, or numeric vector of seconds for
 #' `secToHms()`
-#' @param digits the number of digits to use for potential fractions of
-#' seconds
+#' @param digits number of decimal places for seconds, an integer from 0
+#'   to 15, or `NULL`. The default uses zero places if all non-missing values
+#'   have negligible fractional parts, otherwise two. Positive values round
+#'   fractional seconds with carry into seconds, minutes and hours. For
+#'   compatibility, `digits = 0` discards fractions using [floor()].
 #' @return depending on the function:
 #' \describe{
 #'   \item{`hmsToMinute()`}{numeric vector of times in minutes}
 #'   \item{`hmsToSec()`}{numeric vector of times in seconds}
 #'   \item{`secToHms()`}{character vector of times in h:m:s format}
 #' }
-#' #' 
+#'
+#' Missing seconds produce `NA_character_`; infinite values are rejected.
+#' Hours can exceed 23. Negative times retain the existing floor-based
+#' decomposition (for example, -1 second is `-1:59:59`).
+#'
 #' @note Based on code by Tyler Rinker, adapted to conform to package standards. 
 #' 
 #' @examples
@@ -58,18 +65,40 @@ hmsToSec <- function(x) {
 
 #' @rdname time-conversions
 #' @export
-secToHms <- function(x, digits=NULL) {
-  
+secToHms <- function(x, digits = NULL) {
   x <- as.numeric(x)
-  
-  h <- floor(x/3600)
-  m <- floor((x-h*3600)/60)
-  s <- floor(x-(m*60 + h*3600))
-  b <- x-(s + m*60 + h*3600)
-  
-  if(is.null(digits)) digits <- ifelse(all(b < sqrt(.Machine$double.eps)),0, 2)
-  if(digits==0) f <- "" else f <- gettextf(paste(".%0", digits, "d", sep=""), round(b*10^digits, 0))
-  
-  gettextf("%02d:%02d:%02d%s", h, m, s, f)
-  
+  if (any(!is.na(x) & !is.finite(x)))
+    stop("'x' must contain finite seconds or NA")
+  if (!is.null(digits) &&
+      (!is.numeric(digits) || length(digits) != 1L ||
+       !is.finite(digits) || digits < 0 || digits > 15 ||
+       digits != floor(digits)))
+    stop("'digits' must be NULL or a single whole number from 0 to 15")
+
+  ans <- rep(NA_character_, length(x))
+  keep <- !is.na(x)
+  if (!any(keep)) return(ans)
+  values <- x[keep]
+  whole <- floor(values)
+  fractions <- values - whole
+
+  if (is.null(digits))
+    digits <- if (all(fractions < sqrt(.Machine$double.eps))) 0 else 2
+
+  suffix <- ""
+  if (digits > 0) {
+    scale <- 10^digits
+    ticks <- round(fractions * scale)
+    carry <- ticks >= scale
+    whole <- whole + as.numeric(carry)
+    ticks[carry] <- 0
+    suffix <- paste0(".", sprintf("%0*.0f", as.integer(digits), ticks))
+  }
+
+  h <- floor(whole / 3600)
+  remainder <- whole - h * 3600
+  m <- floor(remainder / 60)
+  s <- remainder - m * 60
+  ans[keep] <- sprintf("%02.0f:%02.0f:%02.0f%s", h, m, s, suffix)
+  ans
 }

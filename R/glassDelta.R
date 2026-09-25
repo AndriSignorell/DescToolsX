@@ -116,24 +116,19 @@ glassDelta <- function(x, y,
   if (!is.numeric(y) || !is.null(dim(y)))
     stop("'y' must be a numeric vector")
 
-  .checkFlag <- function(a) {
-    if (!is.logical(a) || length(a) != 1L || is.na(a))
-      stop(gettextf("'%s' must be a single non-missing logical value",
-                    deparse1(substitute(a))), call. = FALSE)
-  }
+  # the package-wide checkFlag(); a local .checkFlag() defined here was
+  # never called
   checkFlag(useControlSd)
   checkFlag(correct)
   checkFlag(na.rm)
 
-  if (length(conf.level) != 1L ||
-      !((is.logical(conf.level) && is.na(conf.level)) ||
-        (is.numeric(conf.level) && !is.nan(conf.level))))
-    stop("'conf.level' must be NA or a single numeric value")
-
-  if (!is.na(conf.level) && (conf.level <= 0 || conf.level >= 1))
-    stop("'conf.level' must lie strictly between 0 and 1")
-
+  checkConfLevel(conf.level)
   sides <- match.arg(sides)
+
+  # one-sided intervals are computed at the two-sided level
+  # 2 * conf.level - 1, which must stay positive
+  if (!is.na(conf.level) && sides != "two.sided" && conf.level <= 0.5)
+    stop("'conf.level' must exceed 0.5 for a one-sided interval")
 
   # -- missing values -------------------------------------------------------
   if (na.rm) {
@@ -190,11 +185,17 @@ glassDelta <- function(x, y,
     # "lci.lci" and res["lci"] became NA. Same lesson as .toWallClock():
     # when a shared helper changes shape, every caller has to be checked,
     # not just the one being fixed.
-    lim  <- unname(.nctCI(tObs, df = nC - 1, conf.level = conf.level,
-                          sides = sides))
+    # Two-sided at the adjusted level, then the uninformative side opened
+    # by applySides(): the one-sided bound at conf.level IS the two-sided
+    # bound at 2 * conf.level - 1, since .nctCI() inverts two one-sided
+    # tail conditions. Delta is unbounded, so the open side is +/-Inf.
+    confAdj <- if (sides == "two.sided") conf.level else 2 * conf.level - 1
+    lim  <- unname(.nctCI(tObs, df = nC - 1, conf.level = confAdj,
+                          sides = "two.sided"))
     scl  <- sqrt((nC + nE) / (nC * nE))
 
-    res <- cf * c(est = delta, lci = lim[1L] * scl, uci = lim[2L] * scl)
+    res <- c(est = cf * delta,
+             applySides(cf * lim * scl, sides, lo = -Inf, hi = Inf))
   }
 
   attr(res, "magnitude") <- c("negligible", "small", "medium", "large")[

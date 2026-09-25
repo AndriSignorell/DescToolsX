@@ -345,3 +345,112 @@ test_that("huberM survives a zero scale", {
   expect_warning(huberM(rep(9, 100)), "zero")
 })
 
+
+# Additional branch coverage and reference checks
+test_that("huberM handles missing interval input and explicit starting values", {
+  expect_identical(huberM(c(1, NA), conf.level = 0.95),
+                   c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+  expect_true(is.na(huberM(c(NA_real_, NA_real_), na.rm = TRUE)))
+  for (bad in list("1", c(1, 2))) {
+    expect_error(huberM(1:5, mu = bad), "'mu'")
+    expect_error(huberM(1:5, s = bad), "'s'")
+  }
+  expect_equal(huberM(c(1, 2, 5), mu = 0, s = 100, k = 100), 8 / 3)
+})
+
+test_that("huberM internal weighted location matches a replicated sample", {
+  engine <- DescToolsX:::.huberM
+  x <- c(0, 2, 4)
+  w <- c(1, 2, 1)
+  a <- engine(x, weights = w, mu = 0, s = 1, k = 100)
+  expect_equal(a$mu, mean(rep(x, w)))
+  b <- engine(c(x, NA), weights = c(w, 7), mu = 0, s = 1, k = 100)
+  expect_equal(a$mu, b$mu)
+  expect_true(is.na(engine(x, weights = c(0, 0, 0), mu = 0, s = 1)$mu))
+  # the standard error is available with weights now (frequency weights:
+  # the replicated sample's SE), where the original stopped
+  expect_equal(engine(x, weights = w, mu = 0, s = 1, se = TRUE)$SE,
+               engine(rep(x, w), mu = 0, s = 1, se = TRUE)$SE)
+  expect_error(engine(x, mu = 0, s = -1), "negative scale")
+  expect_error(engine(x, weights = c(1, -1, 1), mu = 0, s = 1))
+})
+
+test_that("huberM normal bootstrap bounds agree with boot for an unclipped mean", {
+  # The fixed clipping window contains every observation and every resample mean.
+  x <- seq(-2, 2, length.out = 41)
+  set.seed(812)
+  actual <- huberM(x, conf.level = 0.9, method = "boot", type = "norm",
+                   R = 199, mu = 0, s = 100, k = 100, parallel = "no", ncpus = 1)
+  set.seed(812)
+  ref <- boot::boot(x, statistic = function(z, i) mean(z[i]), R = 199,
+                    sim = "ordinary", parallel = "no", ncpus = 1)
+  bounds <- boot::boot.ci(ref, conf = 0.9, type = "norm")$normal[2:3]
+  expect_equal(unname(actual), c(mean(x), unname(bounds)), tolerance = 1e-7)
+})
+
+
+# -----------------------------------------------------------------------
+# Weights (formerly only reachable inside .huberM) - review 25.09.2026
+# -----------------------------------------------------------------------
+
+set.seed(41)
+xh <- round(c(rnorm(30, 10, 2), 25, 31), 1)
+wh <- sample(1:4, length(xh), replace = TRUE)
+
+test_that("frequency weights reproduce the replicated data exactly", {
+  xr <- rep(xh, wh)
+  expect_equal(huberM(xh, weights = wh), huberM(xr))
+  expect_equal(huberM(xh, weights = wh, conf.level = 0.95),
+               huberM(xr, conf.level = 0.95))
+  # unit weights change nothing
+  expect_equal(huberM(xh, weights = rep(1, length(xh)), conf.level = 0.9),
+               huberM(xh, conf.level = 0.9))
+})
+
+test_that("the weighted starting values are median and MAD of the replicates", {
+  xr <- rep(xh, wh)
+  mu <- medianX(xh, weights = wh)
+  expect_equal(mu, median(xr))
+  expect_equal(1.4826 * medianX(abs(xh - mu), weights = wh),
+               mad(xr, center = mu))
+  expect_equal(.tauHuber(xh, mu = mu, s = mad(xr), weights = wh),
+               .tauHuber(xr, mu = mu, s = mad(xr)))
+})
+
+test_that("missing values drop together with their weights", {
+  expect_equal(huberM(c(xh, NA), weights = c(wh, 7), na.rm = TRUE),
+               huberM(xh, weights = wh))
+  expect_true(is.na(huberM(c(xh, NA), weights = c(wh, 7))))
+})
+
+test_that("the weighted bootstrap resamples observations with their weights", {
+  set.seed(1)
+  res <- huberM(xh, weights = wh, conf.level = 0.9, method = "boot",
+                R = 499, type = "perc")
+  expect_named(res, c("est", "lci", "uci"))
+  expect_true(res[["lci"]] <= res[["est"]] && res[["est"]] <= res[["uci"]])
+  expect_equal(unname(res[["est"]]), huberM(xh, weights = wh))
+  set.seed(1)
+  expect_no_error(huberM(xh, conf.level = 0.9, method = "boot", R = 499,
+                         type = "basic"))
+})
+
+test_that("sides and conf.level follow the suite conventions", {
+  two <- huberM(xh, conf.level = 0.90)
+  l <- huberM(xh, conf.level = 0.95, sides = "left")
+  expect_equal(unname(l[["lci"]]), unname(two[["lci"]]))
+  expect_identical(unname(l[["uci"]]), Inf)
+  expect_identical(unname(huberM(xh, conf.level = 0.95,
+                                 sides = "right")[["lci"]]), -Inf)
+  expect_error(huberM(xh, conf.level = 0.4, sides = "left"), "exceed 0.5")
+  for (cl in list(NULL, NaN, c(0.9, 0.95)))
+    expect_error(huberM(xh, conf.level = cl), "conf.level")
+  expect_error(huberM(xh, na.rm = NA), "na.rm")
+})
+
+test_that("invalid weights are refused", {
+  expect_error(huberM(xh, weights = wh[-1]), "weights")
+  expect_error(huberM(xh, weights = replace(wh, 1, -1)), "weights")
+  expect_error(huberM(xh, weights = replace(wh, 1, NA)), "weights")
+  expect_error(huberM(xh, weights = rep(0, length(xh))), "sum to zero")
+})

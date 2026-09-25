@@ -5,9 +5,9 @@ test_that("pabak works correctly", {
   # Point estimate for 2x2 table
   # ------------------------------------------------------------------
   
-  x <- matrix(c(45, 15,
-                5, 35),
-              nrow = 2, byrow = TRUE)
+  x <- withLevels(matrix(c(45, 15,
+                           5, 35),
+                         nrow = 2, byrow = TRUE))
   
   # po = (45 + 35) / 100 = 0.8
   # PABAK = 2 * 0.8 - 1 = 0.6
@@ -72,7 +72,7 @@ test_that("pabak works correctly", {
   # PI and BI are undefined for k > 2
   # ------------------------------------------------------------------
   
-  x3 <- diag(c(10, 20, 30))
+  x3 <- withLevels(diag(c(10, 20, 30)))
   
   res3 <- pabak(x3, conf.level = 0.95)
   
@@ -98,9 +98,9 @@ test_that("pabak works correctly", {
   # Confidence interval is truncated to [-1, 1]
   # ------------------------------------------------------------------
   
-  xPerfect <- matrix(c(99, 0,
-                       0, 1),
-                     nrow = 2, byrow = TRUE)
+  xPerfect <- withLevels(matrix(c(99, 0,
+                                  0, 1),
+                                nrow = 2, byrow = TRUE))
   
   resPerfect <- pabak(
     xPerfect,
@@ -145,7 +145,7 @@ test_that("pabak works correctly", {
   # ------------------------------------------------------------------
   
   expect_error(
-    pabak(matrix(0, 2, 2)),
+    pabak(withLevels(matrix(0, 2, 2))),
     "empty"
   )
   

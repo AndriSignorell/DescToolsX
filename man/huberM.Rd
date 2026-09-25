@@ -12,6 +12,7 @@ huberM(
   k = 1.345,
   mu = NULL,
   s = NULL,
+  weights = NULL,
   na.rm = FALSE,
   ...
 )
@@ -24,7 +25,9 @@ huberM(
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}. The location is unbounded,
+so the open side is \eqn{\pm}\code{Inf}. One-sided intervals require
+\code{conf.level > 0.5}.}
 
 \item{method}{confidence interval method: \code{"wald"} (default) or
 \code{"boot"}.}
@@ -38,6 +41,14 @@ uses \code{median(x)}, computed after \code{na.rm} is applied.}
 \item{s}{scale estimate held constant through the iterations.
 \code{NULL} (default) uses \code{mad(x, center = mu)}, computed
 after \code{na.rm} is applied.}
+
+\item{weights}{optional non-negative frequency weights of the same
+length as \code{x}. The starting values then become the weighted median
+and the weighted MAD (both via \code{\link[=medianX]{medianX()}}, the MAD with the usual
+constant 1.4826), and \eqn{n} in the Wald interval is
+\code{sum(weights)}, so integer weights give exactly the result of the
+replicated data. The bootstrap resamples observations together with
+their weights.}
 
 \item{na.rm}{logical; whether to remove missing values before computation;
 default is \code{FALSE}}
@@ -91,8 +102,8 @@ arguments are passed through \code{...} and extracted via
 \code{.extractBootArgs()}:
 \describe{
 \item{\code{R}}{number of bootstrap replicates (default \code{999})}
-\item{\code{type}}{confidence interval type: \code{"perc"} or
-\code{"bca"} (default)}
+\item{\code{type}}{confidence interval type: \code{"perc"}, \code{"basic"},
+\code{"norm"} or \code{"bca"} (default)}
 \item{\code{parallel}}{parallelization mode: \code{"no"},
 \code{"multicore"}, or \code{"snow"} (default \code{"no"})}
 \item{\code{ncpus}}{number of CPUs for parallel bootstrap (default

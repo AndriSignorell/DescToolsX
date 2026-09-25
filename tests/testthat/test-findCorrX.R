@@ -108,3 +108,22 @@ test_that("findCorrX removes the higher-scoring variable of a pair", {
   expect_error(findCorrX(unname(cmat), cutoff = 0.8, output = "names"),
                "output = 'index'")
 })
+
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("verbose reports each removal", {
+  cm <- matrix(c(1, 0.95, 0.2, 0.95, 1, 0.3, 0.2, 0.3, 1), 3,
+               dimnames = list(letters[1:3], letters[1:3]))
+  expect_message(findCorrX(cm, cutoff = 0.9, verbose = TRUE), "Comparing")
+  expect_silent(findCorrX(cm, cutoff = 0.9))
+})
+
+test_that("findCorrX validates type, cutoff and verbose", {
+  cm <- diag(3)
+  expect_error(findCorrX(matrix(letters[1:4], 2), cutoff = 0.8), "numeric")
+  expect_error(findCorrX(cm, cutoff = NA_real_), "cutoff")
+  expect_error(findCorrX(cm, cutoff = c(0.5, 0.6)), "cutoff")
+  expect_error(findCorrX(cm, verbose = NA), "verbose")
+  expect_error(findCorrX(matrix(1), cutoff = 0.5), "two variables")
+})

@@ -376,11 +376,20 @@ NumericVector cstat_boot_cpp(NumericVector yR,
 
   int n2 = s.size();
 
-  int lo = (int)(alpha / 2.0 * n2);
-  int hi = (int)((1 - alpha / 2.0) * n2);
-
-  lo = std::max(0, std::min(lo, n2 - 1));
-  hi = std::max(0, std::min(hi, n2 - 1));
+  // Percentile interval: the k-th smallest and the k-th largest replicate,
+  // k = alpha/2 * n2 rounded up. The former (int)(alpha/2 * n2) and
+  // (int)((1 - alpha/2) * n2) had two defects:
+  //  - truncation made the index hinge on the last bit of alpha. For
+  //    n2 = 500, alpha = 1 - 0.90 gives 24.999999999999993 (index 24) while
+  //    alpha = 1 - (2 * 0.95 - 1) gives 25.00000000000002 (index 25) -
+  //    adjacent order statistics for what is the same level;
+  //  - the two bounds were not mirror images: for conf.level = 0.95 and
+  //    n2 = 1000 there were 25 replicates below lci but 24 above uci.
+  // The tolerance absorbs representation error only, far below 1/n2;
+  // hi mirrors lo, so the interval is symmetric by construction.
+  int lo = (int)std::ceil(alpha / 2.0 * n2 - 1e-9) - 1;
+  lo = std::max(0, std::min(lo, (n2 - 1) / 2));
+  const int hi = n2 - 1 - lo;
 
   // --- original ---
   std::vector<int> idx_full(x.size());

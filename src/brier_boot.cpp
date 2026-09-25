@@ -28,7 +28,10 @@ arma::vec brier_boot_cpp(const arma::vec& resp,
       double mean_y = arma::mean(y);
       double Bmax = mean_y * pow(1 - mean_y, 2) +
         (1 - mean_y) * pow(mean_y, 2);
-      bs = 1.0 - bs / Bmax;
+      // A resample with a constant response has Bmax == 0 and no scaled
+      // score; -Inf or NaN made quantile() on the R side fail. NA is
+      // dropped there with a warning.
+      bs = (Bmax > 0) ? 1.0 - bs / Bmax : NA_REAL;
     }
     
     out[r] = bs;

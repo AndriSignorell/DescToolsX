@@ -58,6 +58,11 @@ NULL
 
   g <- droplevels(factor(g))
   kw <- kruskal.test(x~g)
+
+  # eta squared needs the n and k the test was computed on: kruskal.test()
+  # drops incomplete pairs, length(x) and unique(g) did not (NA counted
+  # as a group of its own)
+  ok <- complete.cases(x, g)
   
   res <- list(
           tab = .buildSummaryTable(
@@ -66,8 +71,8 @@ NULL
           test  = kw,
           vtest = leveneTest(x~g),
           eta   = .eta2Kruskal(H = kw$statistic, 
-                                k = length(unique(g)), 
-                                n = length(x))
+                                k = nlevels(droplevels(g[ok])), 
+                                n = sum(ok))
         )
           
 }  
@@ -97,6 +102,7 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
             call. = FALSE)
   }
   
+  .plotIfRequested(x)
 }
 
 
@@ -106,6 +112,11 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 #' @rdname desc.nq
 #' @export
 plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
+
+  # local names for the formulas: `x$data$y ~ x$data$x` is evaluated in
+  # functions whose first argument is called x as well (see plot.Desc.nn)
+  response <- x$data$y
+  group    <- x$data$x
   
   switch(as.character(which %||% "1"),
          "1" = {
@@ -114,10 +125,10 @@ plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
                            xlab = x$meta$xname, 
                            ylab = x$meta$yname, mar=mar(left=6), ...)         },
          "2" = {
-           plotDens(x$data$y ~ x$data$x, main = main, ...)
+           plotDens(response ~ group, main = main, ...)
          },
          "3" = {
-           plotDensBox(x$data$y ~ x$data$x, main = main, ...)
+           plotDensBox(response ~ group, main = main, ...)
          },
          warning(gettextf("No plot defined for which = %s (valid: 1-3).", which))
          

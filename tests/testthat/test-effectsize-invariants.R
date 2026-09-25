@@ -26,7 +26,8 @@ test_that("weighted kappa reproduces the PSU reference example", {
 
 test_that("kappa is invariant to transposition with symmetric weights", {
 
-  m <- matrix(c(53, 5, 2, 11, 14, 5, 1, 6, 3), nrow = 3, byrow = TRUE)
+  m <- withLevels(matrix(c(53, 5, 2, 11, 14, 5, 1, 6, 3), nrow = 3,
+                         byrow = TRUE))
 
   for (w in c("unweighted", "equal-spacing", "fleiss-cohen"))
     expect_equal(cohenKappa(m, weights = w),
@@ -134,7 +135,8 @@ test_that("the percentile bootstrap honours the requested level", {
   percOne <- brierScore(resp, pred, conf.level = 0.95, sides = "left",
                         method = "boot", type = "perc", R = 999)
 
-  expect_identical(unname(percOne[["uci"]]), Inf)
+  # the Brier score lies in [0, 1]: the open side is reported at 1
+  expect_identical(unname(percOne[["uci"]]), 1)
   expect_true(is.finite(percOne[["lci"]]))
 })
 

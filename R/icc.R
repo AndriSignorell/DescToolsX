@@ -51,9 +51,15 @@
 #'   (the default), only the point estimate is returned.
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
-#'   `"right"`). See [ConfidenceIntervals()].
+#'   `"right"`). See [ConfidenceIntervals()]. The open side of a
+#'   one-sided interval is reported at 1 above and at `-Inf` below: the
+#'   F-based bounds of the ANOVA method are not restricted to
+#'   \eqn{[0, 1]}, and clamping them would change two-sided results.
+#'   One-sided intervals require `conf.level > 0.5`.
 #'
-#' @param na.rm logical; if `TRUE`, complete cases are used
+#' @param na.rm logical; if `TRUE`, complete cases are used. With
+#'   `FALSE` (default) and missing ratings the result is `NA`, since the
+#'   mean squares assume a complete subjects x raters layout.
 #' @param \dots additional arguments. For `method = "boot"`,
 #' the number of bootstrap resamples can be specified via `R`.
 #'
@@ -157,19 +163,42 @@ icc <- function(x,
     stop("type = \"consistency\" is not defined for model = \"oneway\"; ",
          "a one-way design has no rater effect", call. = FALSE)
 
-  if(!is.na(conf.level) && sides != "two.sided")
-    stop("only two-sided confidence intervals are currently implemented")
+  checkConfLevel(conf.level)
+  checkFlag(na.rm)
+
+  # The F-based and the percentile intervals are both built from two
+  # one-sided bounds at alpha/2 each, so a one-sided interval is the
+  # two-sided one at 2 * conf.level - 1 with its other side opened.
+  if(!is.na(conf.level) && sides != "two.sided" && conf.level <= 0.5)
+    stop("'conf.level' must exceed 0.5 for a one-sided interval", call. = FALSE)
   
   dots <- list(...)
   
   # extract bootstrap arguments
   R <- if(!is.null(dots$R)) dots$R else 1000
+  checkCount(R, min = 1L, name = "R")
   
   if(inherits(x,"formula"))
     x <- raterFrame(x)
   
   ratings <- as.matrix(x)
-  if(na.rm) ratings <- na.omit(ratings)
+
+  if(!is.numeric(ratings))
+    stop("ratings must be numeric", call. = FALSE)
+
+  if(na.rm) {
+    ratings <- na.omit(ratings)
+  } else if(anyNA(ratings)) {
+    # aov() drops the incomplete rows on its own, and the mean squares of
+    # an unbalanced layout went into formulas that assume a balanced one:
+    # a number came back, just not an ICC
+    return(if(is.na(conf.level)) NA_real_
+           else c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+  }
+
+  if(nrow(ratings) < 2L || ncol(ratings) < 2L)
+    stop("at least 2 subjects and 2 raters with complete ratings are needed",
+         call. = FALSE)
   
   if(method == "anova" || method == "boot") {
     estObj <- .iccEstimateAnova(ratings, model, type, unit)
@@ -178,9 +207,11 @@ icc <- function(x,
   }
   
   if(!is.na(conf.level)) {
-    ci <- .iccCI(estObj, ratings, conf.level,
+    confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
+    ci <- .iccCI(estObj, ratings, confAdj,
                  model, type, unit, method, R)
-    res <- c(est = estObj$est, lci = ci[1], uci = ci[2])
+    res <- c(est = estObj$est,
+             applySides(unname(ci), sides, lo = -Inf, hi = 1))
   } else {
     res <- estObj$est
   }
@@ -440,6 +471,17 @@ icc <- function(x,
     .iccEstimateAnova(ratings[idx,,drop=FALSE],
                       model,type,unit)$est
   })
+
+  # a resample that draws the same subject throughout has no between-
+  # subject variation and gives NaN, on which quantile() stops
+  bad <- !is.finite(vals)
+  if(all(bad))
+    stop("no bootstrap resample gave a finite ICC", call. = FALSE)
+  if(any(bad)) {
+    warning(sum(bad), " of ", R, " bootstrap resamples gave no finite ICC ",
+            "and were dropped", call. = FALSE)
+    vals <- vals[!bad]
+  }
   
   unname(quantile(vals, c(alpha/2, 1-alpha/2)))
 }

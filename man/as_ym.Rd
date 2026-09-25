@@ -16,7 +16,9 @@ as.ym(x)
 \arguments{
 \item{x}{a vector of integers, representing the dates in the format YYYYMM,
 to which a number of months has to be added. YYYY must lie in the range of
-1000-3000, MM in 1-12. Values outside that range become \code{NA}.}
+1000-3000, MM in 1-12. Values outside that range become \code{NA}. A
+\code{Date} or \code{POSIXct}/\code{POSIXlt} is converted to its year and month
+(a date-time in its own time zone).}
 
 \item{d}{the day to be used for converting a yearmonth to a date. Default is
 \enumerate{

@@ -1,4 +1,6 @@
 
+# .anxiety has ties: every call that is not about the tie warning itself
+# uses correct = TRUE
 .anxiety <- data.frame(
   rater1=c(3,3,3,4,5,5,2,3,5,2,2,6,1,5,2,2,1,2,4,3),
   rater2=c(3,6,4,6,2,4,2,4,3,3,2,3,3,3,2,2,1,3,3,4),
@@ -6,12 +8,12 @@
 )
 
 test_that("kendallW returns a single numeric by default", {
-  w <- kendallW(.anxiety)
+  w <- kendallW(.anxiety, correct = TRUE)
   expect_length(w, 1); expect_true(is.numeric(w))
 })
 
 test_that("kendallW result is in [0, 1]", {
-  w <- kendallW(.anxiety)
+  w <- kendallW(.anxiety, correct = TRUE)
   expect_gte(w, 0); expect_lte(w, 1)
 })
 
@@ -32,12 +34,12 @@ test_that("kendallW warns when ties present and correct = FALSE", {
 })
 
 test_that("kendallW test = TRUE returns an htest object", {
-  res <- kendallW(.anxiety, test = TRUE)
+  res <- kendallW(.anxiety, correct = TRUE, test = TRUE)
   expect_s3_class(res, "htest")
 })
 
 test_that("kendallW test = TRUE has estimate, statistic, p.value", {
-  res <- kendallW(.anxiety, test = TRUE)
+  res <- kendallW(.anxiety, correct = TRUE, test = TRUE)
   expect_named(res, c("estimate","parameter","statistic","p.value",
                       "alternative","method","data.name"))
 })

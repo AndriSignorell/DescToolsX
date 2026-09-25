@@ -24,7 +24,8 @@
 #' `c("Babyboomer", "Gen X",
 #' "Millennial", "Gen Z", "Gen Alpha")`\cr
 #' Values which fall outside the range
-#' of breaks are coded as `NA`, as are `NaN` and `NA` values.
+#' of breaks are coded as `NA`, as are `NaN` and `NA` values (including
+#' a plain logical `NA`).
 #' 
 #' @seealso [cutAge()]
 #' @examples
@@ -45,6 +46,11 @@ generation <- function(year){
   
   # ordered_result, spelled out: 'ordered' only worked through partial
   # matching against cut.default()'s formal
+  # an all-NA input is logical (NA, c(NA, NA)); cut() would refuse it as
+  # non-numeric, but NA in means NA out, as for mean(c(1, NA))
+  if (is.logical(year) && all(is.na(year)))
+    year <- as.numeric(year)
+
   cut(year,
       breaks = c(1946, 1965, 1980, 1996, 2011, Inf), right = FALSE,
       labels = c("Babyboomer", "Gen X", "Millennial", "Gen Z", "Gen Alpha"),

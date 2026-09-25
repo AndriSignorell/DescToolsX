@@ -18,122 +18,29 @@
 
 
 
-# check if the user system supports colors
+# does the console show ANSI colours? cli::num_ansi_colors() does the
+# detection that used to be copied verbatim from crayon here (RStudio,
+# Emacs, ConEmu, TERM, ...) - and keeps it current, and honours NO_COLOR
+# and options(cli.num_colors = ). cli is imported anyway.
 .hasColor <- function() {
-  .rstudio_with_ansi_support <- function() {
-    if (Sys.getenv("RSTUDIO", "") == "") {
-      return(FALSE)
-    }
-    if ((cols <- Sys.getenv("RSTUDIO_CONSOLE_COLOR", "")) != "" &&
-        !is.na(as.numeric(cols))) {
-      return(TRUE)
-    }
-    requireNamespace("rstudioapi", quietly = TRUE) &&
-      rstudioapi::isAvailable() &&
-      rstudioapi::hasFun("getConsoleHasColor")
-  }
-  
-  .inside_emacs <- function() {
-    Sys.getenv("EMACS") != "" || Sys.getenv("INSIDE_EMACS") != ""
-  }
-  
-  .emacs_version <- function() {
-    ver <- Sys.getenv("INSIDE_EMACS")
-    if (ver == "") {
-      return(NA_integer_)
-    }
-    ver <- gsub("'", "", ver)
-    ver <- strsplit(ver, ",", fixed = TRUE)[[1]]
-    ver <- strsplit(ver, ".", fixed = TRUE)[[1]]
-    as.numeric(ver)
-  }
-  
-  
-  ## this is verbatim from crayon
-  ## but it's just this function we use, so don't import...
-  
-  enabled <- getOption("crayon.enabled")
-  if (!is.null(enabled)) {
-    return(isTRUE(enabled))
-  }
-  if (.rstudio_with_ansi_support() && sink.number() == 0) {
-    return(TRUE)
-  }
-  if (!isatty(stdout())) {
-    return(FALSE)
-  }
-  if (.Platform$OS.type == "windows") {
-    if (Sys.getenv("ConEmuANSI") == "ON") {
-      return(TRUE)
-    }
-    if (Sys.getenv("CMDER_ROOT") != "") {
-      return(TRUE)
-    }
-    return(FALSE)
-  }
-  if (.inside_emacs() &&
-      !is.na(.emacs_version()[1]) &&
-      .emacs_version()[1] >= 23) {
-    return(TRUE)
-  }
-  if ("COLORTERM" %in% names(Sys.getenv())) {
-    return(TRUE)
-  }
-  if (Sys.getenv("TERM") == "dumb") {
-    return(FALSE)
-  }
-  grepl("^screen|^xterm|^vt100|color|ansi|cygwin|linux",
-        Sys.getenv("TERM"),
-        ignore.case = TRUE, perl = TRUE
-  )
+  cli::num_ansi_colors() > 1L
 }
 
 
 
-.captOut <- function(..., file = NULL, append = FALSE, width=150) {
-  
-  opt <- options(width=width)
-  
-  args <- substitute(list(...))[-1L]
-  rval <- NULL
-  closeit <- TRUE
-  if (is.null(file))
-    file <- textConnection("rval", "w", local = TRUE)
-  else if (is.character(file))
-    file <- file(file, if (append)
-      "a"
-      else "w")
-  else if (inherits(file, "connection")) {
-    if (!isOpen(file))
-      open(file, if (append)
-        "a"
-        else "w")
-    else closeit <- FALSE
-  }
-  else stop("'file' must be NULL, a character string or a connection")
-  sink(file)
-  on.exit({
-    sink()
-    if (closeit) close(file)
-    options(opt)
-  })
-  pf <- parent.frame()
-  evalVis <- function(expr) withVisible(eval(expr, pf))
-  for (i in seq_along(args)) {
-    expr <- args[[i]]
-    tmp <- switch(mode(expr), expression = lapply(expr, evalVis),
-                  call = , name = list(evalVis(expr)), stop("bad argument"))
-    for (item in tmp) if (item$visible)
-      print(item$value)
-  }
+# capture.output() with a wider console, so that long test statistics are
+# not wrapped before a caller picks out a line. The former hand-rolled
+# sink()/textConnection() version was a copy of capture.output() itself,
+# with two on.exit() handlers of which the second silently replaced the
+# first.
+.captOut <- function(..., file = NULL, append = FALSE, width = 150) {
+  opt <- options(width = width)
   on.exit(options(opt))
-  sink()
-  if (closeit)
-    close(file)
-  if (is.null(rval))
-    invisible(NULL)
-  else rval
-  
+  # list(...) first: capture.output() evaluates its arguments in ITS
+  # parent frame, which would be this function, not the caller - handing
+  # the dots through would look up x$chisq.test in the wrong place
+  objs <- list(...)
+  capture.output(for (o in objs) print(o), file = file, append = append)
 }
 
 
@@ -184,34 +91,35 @@
   if (chisq == 0) return(c(lower = 0, upper = NA))
   
   alpha <- 1 - conf
-  target_lower <- alpha / 2
-  target_upper <- 1 - alpha / 2
-  
-  cdf_diff <- function(lambda, target) {
-    pchisq(chisq, df = df, ncp = lambda) - target
+
+  # pchisq(chisq, df, lambda) falls in lambda, so its value at lambda = 0
+  # is the largest it can take. Where even that is below the target, the
+  # bound is 0 - decided here, not inferred from a failing uniroot().
+  p0 <- pchisq(chisq, df = df)
+
+  # The roots lie near chisq - df. A fixed bracket of 1e6 did not reach
+  # them for larger statistics: uniroot() failed, and the error handler
+  # turned the lower bound into 0.
+  hi <- max(max_ncp, 10 * chisq)
+
+  # pchisq() with ncp is documented as reliable up to about 1e5; beyond
+  # that pnchisq() stops with "not converged in 1000000 iter." and a
+  # warning per call. There the noncentral chi-squared is a normal
+  # distribution with mean df + ncp and variance 2 (df + 2 ncp) to a
+  # skewness below 0.01, which is ample for locating a quantile.
+  cdf <- function(lambda) {
+    if (lambda <= 1e5)
+      pchisq(chisq, df = df, ncp = lambda)
+    else
+      pnorm((chisq - df - lambda) / sqrt(2 * (df + 2 * lambda)))
   }
-  
-  lower <- tryCatch(
-    uniroot(
-      cdf_diff,
-      interval = c(0, max_ncp),
-      target = target_upper,
-      tol = tol
-    )$root,
-    error = function(e) 0
-  )
-  
-  upper <- tryCatch(
-    uniroot(
-      cdf_diff,
-      interval = c(0, max_ncp),
-      target = target_lower,
-      tol = tol
-    )$root,
-    error = function(e) NA
-  )
-  
-  c(lower = lower, upper = upper)
+
+  root <- function(target) {
+    if (p0 <= target)
+      return(0)
+    uniroot(function(lambda) cdf(lambda) - target,
+            interval = c(0, hi), tol = tol)$root
+  }
+
+  c(lower = root(1 - alpha / 2), upper = root(alpha / 2))
 }
-
-

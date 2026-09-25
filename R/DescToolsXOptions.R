@@ -34,10 +34,11 @@
 #' @export
 setDescToolsXOption <- function(...) {
   opts <- list(...)
-  stopifnot(length(opts) > 0)
+  if (length(opts) == 0L || is.null(names(opts)) || any(names(opts) == ""))
+    stop("all options must be supplied as name = value")
   names(opts) <- paste0("DescToolsX.", names(opts))
+  # options() returns the previous values invisibly
   options(opts)
-  # invisible(NULL)
 }
 
 

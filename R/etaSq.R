@@ -16,14 +16,17 @@
 #' in the `car` package. It is possible to revert to the Type I SS values
 #' (`type=1`) to be consistent with `anova`, but this rarely tests
 #' hypotheses of interest. Type III SS values (`type=3`) can also be
-#' computed. `etaSq.aovlist` requires `type=1`.
+#' computed. `etaSq.aovlist` requires `type=1`, which is also its default.
 #' 
 #' @name etaSq
 #' @aliases etaSq etaSq.lm etaSq.aovlist aovlDetails aovlErrorTerms
 #' @param fit an analysis of variance object of class `"aov"` or
-#' `"aovlist"`
+#' `"aovlist"`, or a linear model of class `"lm"` (weights are
+#' respected). Generalized linear models and multivariate `"mlm"` fits
+#' are refused: their sums of squares do not decompose the variance of
+#' the response.
 #' @param type type of sums of squares to calculate.
-#' `etaSq.aovlist()` requires `type = 1`.
+#' `etaSq.aovlist()` requires `type = 1`, which is its default.
 #' @param anova logical; whether to include the full ANOVA table with the
 #' effect sizes
 #' 
@@ -142,6 +145,22 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
   if (is.null(fit$model)) {
     stop("'fit' does not contain the model frame - refit with model = TRUE")
   }
+
+  # glm and mlm inherit from lm and reached the arithmetic below, which
+  # then returned numbers that are not eta squared at all
+  if (inherits(fit, c("glm", "mlm")))
+    stop("eta squared is defined for linear models (lm, aov); 'fit' is of class ",
+         paste(class(fit), collapse = "/"), call. = FALSE)
+
+  # Prior weights: anova() and drop1() already weight the sums of squares,
+  # the total and residual SS below did not, and the type-2 refits dropped
+  # the weights altogether. w = 1 reproduces the unweighted case.
+  w <- stats::weights(fit)
+  if (is.null(w)) w <- rep(1, nrow(fit$model))
+  yResp <- fit$model[, 1]
+  ssTotal <- sum(w * (yResp - sum(w * yResp) / sum(w))^2)
+  refit <- function(f) do.call("lm", list(formula = f, data = fit$model,
+                                          weights = w))
   
   # stats::anova() is still reachable in call position, but the logical
   # argument of the same name makes every anova(fit) below read like a
@@ -157,8 +176,8 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
   }
   else {
     if (type == 2) {
-      ss.tot <- sum((fit$model[, 1] - mean(fit$model[, 1]))^2)
-      ss.res <- sum((fit$residuals)^2)
+      ss.tot <- ssTotal
+      ss.res <- sum(w * fit$residuals^2)
       terms <- attr(fit$terms, "factors")[-1, , drop = FALSE]
       l <- attr(fit$terms, "term.labels")
       ss <- matrix(NA, length(l), 1)
@@ -166,9 +185,9 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
       for (i in seq_along(ss)) {
         vars.this.term <- which(terms[, i] != 0)
         dependent.terms <- which(apply(terms[vars.this.term, , drop = FALSE], 2, prod) > 0)
-        m0 <- lm(fit$terms[-dependent.terms], fit$model)
+        m0 <- refit(fit$terms[-dependent.terms])
         if (length(dependent.terms) > 1) {
-          m1 <- lm(fit$terms[-setdiff(dependent.terms, i)], fit$model)
+          m1 <- refit(fit$terms[-setdiff(dependent.terms, i)])
           ss[i] <- anovaTab(m0, m1)$`Sum of Sq`[2]
         }
         else {
@@ -213,7 +232,7 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
         mod <- drop1(fit, scope = fit$terms)
         ss <- mod[-1, "Sum of Sq", drop = FALSE]
         ss.res <- mod[1, "RSS"]
-        ss.tot <- sum((fit$model[, 1] - mean(fit$model[, 1]))^2)
+        ss.tot <- ssTotal
         ss <- as.matrix(ss)
       }
       else {
@@ -252,7 +271,9 @@ etaSq.lm <- function (fit, type = 2, anova = FALSE) {
 
 #' @rdname etaSq
 #' @export
-etaSq.aovlist <-  function (fit, type = 2, anova = FALSE) {
+# type = 1 as default: the only type this method supports. With the
+# generic's type = 2, etaSq(aovlistFit) failed unless type was spelled out.
+etaSq.aovlist <-  function (fit, type = 1, anova = FALSE) {
   
   # author:  Daniel Wollschlaeger
   # contact: contact@dwoll.de
@@ -323,31 +344,23 @@ aovlDetails <- function(fit) {
   aovSum  <- summary(fit)
   etNames <- names(aovSum)  # error terms
   
-  getOneRes <- function(tt, tab) {  # tab=anova table, tt = tested term
-    ttIdx <- which(strTrim(rownames(tab)) == tt)
-    list(df=tab[ttIdx,       "Df"],
-         SS=tab[ttIdx,       "Sum Sq"],
-         MS=tab[ttIdx,       "Mean Sq"],
-         dfE=tab["Residuals", "Df"],
-         SSE=tab["Residuals", "Sum Sq"],
-         MSE=tab["Residuals", "Mean Sq"],
-         F=tab[ttIdx, "F value"],
-         p=tab[ttIdx, "Pr(>F)"])
-  }
-  
   getTermRes <- function(et) { # et = error term
     tab <- aovSum[[et]][[1]]
     at  <- strTrim(rownames(tab)) # all terms
-    tt  <- at[-which(at == "Residuals")]     # tested terms only
+    # at != "Residuals", not at[-which(...)]: without a Residuals row
+    # which() is integer(0), at[-integer(0)] is empty, and every tested
+    # term of the stratum vanished without a trace
+    tt  <- at[at != "Residuals"]     # tested terms only
     
     if(length(tt) > 0)
     {
+      if (!"Residuals" %in% at)
+        stop(gettextf("error stratum '%s' has no residual degrees of freedom; eta squared is not defined for its terms",
+                      et), domain = NA)
       # error terms
       etRes <- list(df=tab["Residuals", "Df"],
                     SS=tab["Residuals", "Sum Sq"],
                     MS=tab["Residuals", "Mean Sq"])
-      ttRes <- lapply(tt, getOneRes, tab=tab)
-      ttRes <- setNamesX(ttRes, tt)
       ttIdx <- which(strTrim(rownames(tab)) %in% tt)
       return(data.frame(tt=tt, et=et,
                         tab[ttIdx, , drop=FALSE],

@@ -16,9 +16,12 @@
 #' to the climatological baseline \eqn{BS_{\max}}, yielding 1 for a
 #' perfect model and 0 for the no-skill reference.
 #'
-#' `sides` names the side on which the finite bound lies:
-#' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
-#' \eqn{(-\infty, uci]}. 
+#' `sides` names the side on which the finite bound lies. The open side is
+#' reported at the boundary of the score's range, which is \eqn{[0, 1]}
+#' for the raw and \eqn{(-\infty, 1]} for the scaled score: `"left"`
+#' yields \eqn{[lci, 1]}, `"right"` yields \eqn{[0, uci]} (raw) or
+#' \eqn{(-\infty, uci]} (scaled). Two-sided intervals are clamped to the
+#' same range. One-sided intervals require `conf.level > 0.5`.
 #'
 #' **Normal interval** (`method = "normal"`)
 #'
@@ -71,8 +74,10 @@
 #'   approximation, default) or `"boot"` (bootstrap via
 #'   `brier_boot_cpp()`)
 #' @param ...     further arguments passed to the bootstrap engine when
-#'   `method = "boot"`: `R`, `type`, `parallel`,
-#'   `ncpus`. See Details.
+#'   `method = "boot"`: `R`, `type` (`"perc"`, `"basic"`,
+#'   `"norm"` or `"bca"`; `"stud"` is not available). `parallel` and
+#'   `ncpus` are accepted but have no effect: the resampling loop in
+#'   `brier_boot_cpp()` is serial. See Details.
 #'
 #' @return if `conf.level = NA`, a numeric scalar containing the Brier
 #' score; otherwise a named numeric vector with elements:
@@ -108,6 +113,10 @@ brierScore <- function(x,
 
   sides  <- match.arg(sides)
   method <- match.arg(method)
+  # checked before is.na() below: NULL or c(0.9, 0.95) broke that if()
+  # with an internal error, and NaN quietly suppressed the interval
+  checkConfLevel(conf.level)
+  checkFlag(scaled)
 
   # --- extract resp / pred ---------------------------------------------
   if (!is.null(pred)) {
@@ -132,6 +141,12 @@ brierScore <- function(x,
   if (any(pred < 0 | pred > 1))
     stop("'pred' must contain probabilities in [0, 1].")
 
+  # the scaled score divides by the Brier score of the prevalence, which
+  # is 0 for a constant response: the point estimate was -Inf or NaN
+  # without comment, only the interval branch checked it
+  if (scaled && length(unique(resp)) < 2L)
+    stop("the scaled Brier score is undefined: the response has no variation.")
+
   # --- point estimate --------------------------------------------------
   bsHat <- .brierLoss(resp, pred, scaled)
 
@@ -139,14 +154,12 @@ brierScore <- function(x,
     return(bsHat)
 
   # --- CI setup --------------------------------------------------------
-  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
-      conf.level <= 0 || conf.level >= 1)
-    stop("Argument 'conf.level' must be a single numeric value in (0, 1).")
-
   # A one-sided interval puts the full alpha on its single finite side, so
   # the two-sided machinery below is run at a doubled alpha and the
-  # irrelevant bound opened afterwards.
-  confAdj <- if (sides != "two.sided") 1 - 2 * (1 - conf.level) else conf.level
+  # irrelevant bound opened afterwards by applySides().
+  if (sides != "two.sided" && conf.level <= 0.5)
+    stop("'conf.level' must exceed 0.5 for a one-sided interval.")
+  confAdj <- if (sides != "two.sided") 2 * conf.level - 1 else conf.level
   alpha   <- 1 - confAdj
   n       <- length(resp)
 
@@ -165,10 +178,7 @@ brierScore <- function(x,
                  # estimate. Delta method with BSmax held fixed.
                  if (scaled) {
                    meanY <- mean(resp)
-                   bsMax <- meanY * (1 - meanY)^2 + (1 - meanY) * meanY^2
-                   if (bsMax <= 0)
-                     stop("the scaled Brier score is undefined: the response has no variation.")
-                   se <- se / bsMax
+                   se <- se / (meanY * (1 - meanY)^2 + (1 - meanY) * meanY^2)
                  }
 
                  z <- qnorm(1 - alpha / 2)
@@ -179,7 +189,22 @@ brierScore <- function(x,
                  bootArgs <- .extractBootArgs(list(...))
                  bootType <- bootArgs$type
 
-                 bootVals <- brier_boot_cpp(resp, pred, bootArgs$R, scaled)
+                 bootVals <- as.numeric(
+                   brier_boot_cpp(resp, pred, bootArgs$R, scaled))
+
+                 # A resample with a constant response has no scaled
+                 # score; the C++ side returns NA for it instead of the
+                 # -Inf/NaN that made quantile() fail.
+                 nBad <- sum(is.na(bootVals))
+                 if (nBad == length(bootVals))
+                   stop("all bootstrap resamples have a constant response; ",
+                        "the scaled Brier score is undefined for them.")
+                 if (nBad > 0L) {
+                   warning(nBad, " of ", length(bootVals), " bootstrap ",
+                           "resamples had a constant response and were ",
+                           "dropped", call. = FALSE)
+                   bootVals <- bootVals[!is.na(bootVals)]
+                 }
 
                  switch(bootType,
 
@@ -193,6 +218,20 @@ brierScore <- function(x,
                           quantile(bootVals, probs = c(alpha / 2, 1 - alpha / 2),
                                    names = FALSE)
                         },
+
+                        basic = {
+                          # basic (reverse percentile): 2 * est - quantiles
+                          2 * bsHat - quantile(bootVals,
+                                               probs = c(1 - alpha / 2, alpha / 2),
+                                               names = FALSE)
+                        },
+
+                        # 'stud' needs a standard error per resample, which
+                        # the C++ loop does not compute; the switch returned
+                        # NULL for it and lci came back as NA
+                        stud = stop("type = \"stud\" is not available for ",
+                                    "brierScore(); use \"perc\", \"basic\", ",
+                                    "\"norm\" or \"bca\".", call. = FALSE),
 
                         norm = {
                           seBoot <- sd(bootVals)
@@ -223,11 +262,12 @@ brierScore <- function(x,
                }
   )
 
-  # --- one-sided truncation --------------------------------------------
-  if (sides == "left")  ci[2L] <- Inf
-  if (sides == "right") ci[1L] <- -Inf
-
-  c(est = bsHat, lci = ci[1L], uci = ci[2L])
+  # --- range and sides -------------------------------------------------
+  # The raw score lies in [0, 1], the scaled one in (-Inf, 1]. The open
+  # side is reported at that boundary (it used to be +/-Inf regardless),
+  # and the two-sided interval is clamped to it.
+  c(est = bsHat,
+    applySides(ci, sides, lo = if (scaled) -Inf else 0, hi = 1))
 }
 
 

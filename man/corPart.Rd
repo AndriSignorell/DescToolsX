@@ -16,11 +16,11 @@ The two are told apart by symmetry, not by shape alone - a data
 matrix with as many rows as columns would otherwise be mistaken for
 a correlation matrix.}
 
-\item{x}{integer vector of indices specifying the variables of interest
-for which partial correlations are computed}
+\item{x}{column indices (whole numbers, no duplicates) of the variables
+of interest for which partial correlations are computed}
 
-\item{y}{integer vector of indices specifying the control variables
-(conditioning set)}
+\item{y}{column indices (whole numbers, no duplicates) of the control
+variables (conditioning set); must not overlap with \code{x}}
 }
 \value{
 a symmetric numeric matrix containing the partial correlations
@@ -33,16 +33,22 @@ while controlling for another set of variables \code{y}, based on a
 covariance/correlation matrix or on raw data.
 }
 \details{
-Partial correlations are read off the precision matrix. Let \eqn{K} be
-the inverse of the joint covariance matrix of \eqn{(x, y)}; then
+Only the variables in \code{y} are controlled for. Let \eqn{S} be the
+joint covariance matrix of the selected variables. The residual covariance
+matrix of \code{x} after linear adjustment for \code{y} is the Schur complement
 
-\deqn{\rho_{ij \cdot y} = - K_{ij} / \sqrt{K_{ii} K_{jj}}}{
-  rho_ij.y = -K_ij / sqrt(K_ii * K_jj)}
+\deqn{V = S_{xx} - S_{xy} S_{yy}^{-1} S_{yx}.}{
+  V = S_xx - S_xy * solve(S_yy, S_yx)}
 
-for \eqn{i, j} in \eqn{x}. This is algebraically equivalent to forming
-the Schur complement
-\eqn{\Sigma_{xx} - \Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}} and scaling
-it to unit diagonal, but needs a single inversion instead of two.
+The result has entries \eqn{V_{ij}/\sqrt{V_{ii} V_{jj}}}.
+With complete raw data, this equals the correlation matrix of the
+residuals from regressing each variable in \code{x} on all variables in \code{y},
+including an intercept. Adding another variable to \code{x} does not change
+the correlations between the previously selected variables.
+
+Normalizing the inverse of the joint covariance matrix would also control
+for the other variables in \code{x}. That is a different quantity when
+\code{length(x) > 2}.
 
 Because the result is scaled to unit diagonal, it makes no difference
 whether \code{m} is a covariance or a correlation matrix.
@@ -50,11 +56,15 @@ whether \code{m} is a covariance or a correlation matrix.
 \section{Numerical considerations}{
 
 \itemize{
-\item The joint submatrix of \code{x} and \code{y} must be invertible.
-Near-singularity from collinearity among the control variables is
-detected via the reciprocal condition number, not merely by a
-failure of \code{\link[base:solve]{base::solve()}}, which succeeds and returns
-nonsense well before the matrix is numerically singular.
+\item The joint submatrix of \code{x} and \code{y} must be invertible, and
+every selected variable must have positive variance.
+Near-singularity from collinearity is detected via the reciprocal
+condition number, not merely by a failure of \code{\link[base:solve]{base::solve()}},
+which succeeds and returns nonsense well before the matrix is
+numerically singular. The condition number is taken on the
+correlation scale, so variables measured in very different units
+are not mistaken for collinear ones.
+\item For raw data only the selected columns enter \code{\link[stats:cov]{stats::cov()}}.
 \item \code{x} and \code{y} must not overlap.
 \item For raw data, correlations are computed pairwise, which can
 produce a non-positive-definite matrix when values are missing.

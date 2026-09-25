@@ -48,10 +48,7 @@ print.Desc.AllNA <- function(x, ...) {
   
   cat(out, sep = "\n")
   
-  if (x$meta$plotit)
-    plot(x)
-  
-  invisible(x)
+  .plotIfRequested(x)
 }
 
 
@@ -60,8 +57,21 @@ print.Desc.AllNA <- function(x, ...) {
 #' @export
 plot.Desc.AllNA <- function(x, ...) {
   canvas()
+
+  # The shrug's U+30C4 (katakana "tsu") is fine on screen devices and
+  # cairo_pdf(), but pdf() and postscript() encode text in a single-byte
+  # font encoding, where it does not exist: text() stopped with
+  # "conversion failure ... in 'mbcsToSbcs'". Those devices get a shrug
+  # made of Latin-1 characters instead: a diaeresis over a slash, which
+  # is what the tsu looks like (two strokes and a curve). Written as
+  # \u escapes, so the source file stays ASCII for R CMD check.
+  singleByteDevice <- names(grDevices::dev.cur()) %in%
+    c("pdf", "postscript", "xfig", "pictex")
+
+  face <- if (singleByteDevice) "\u00a8/" else "\u30c4"
+
   text(0, 0,
-       labels = "Nothing to plot!\n\n\u00af\\_(\u30c4)_/\u00af",
+       labels = paste0("Nothing to plot!\n\n\u00af\\_(", face, ")_/\u00af"),
        cex    = 4,
        col    = fade(pal(n = NA)[5]),
        font   = 2,

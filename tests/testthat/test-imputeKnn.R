@@ -212,7 +212,9 @@ test_that("imputeKnn checks distData against x", {
 test_that("imputeKnn errors when too few complete cases remain", {
 
   dat <- data.frame(
-    x = c(1, NA, NA, NA),
+    # x keeps some variation, otherwise the zero-variance warning
+    # precedes the error
+    x = c(1, 2, NA, NA),
     y = c(1, 2, 3, 4)
   )
 

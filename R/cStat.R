@@ -6,9 +6,13 @@
 #'
 #' @param x an object for which the C-statistic should be computed; for the
 #' default method, a numeric vector of predicted values
-#' @param resp binary response vector
+#' @param resp binary response vector (numeric, logical, or factor)
 #' @param conf.level confidence level for the interval; `NA` (default)
 #' suppresses interval calculation
+#' @param sides character string specifying the sidedness of the confidence
+#'   interval (one of `"two.sided"` (default), `"left"` or
+#'   `"right"`). The open side is reported at the range boundary, 0 or 1.
+#'   See [ConfidenceIntervals()].
 #' @param ... additional arguments passed to methods
 #'
 #' @return if `conf.level = NA`, an unnamed numeric scalar between 0
@@ -93,9 +97,9 @@ cStat.glm <- function(x, ...) {
 
 #' @method cStat default
 #' @rdname cStat
-#' @param resp a binary response vector (numeric, logical, or factor)
 #' @export
-cStat.default <- function(x, resp, conf.level = NA, ...) {
+cStat.default <- function(x, resp, conf.level = NA,
+                          sides = c("two.sided", "left", "right"), ...) {
 
   if (missing(resp)) {
     stop("`resp` must be provided for the default method.", call. = FALSE)
@@ -130,24 +134,32 @@ cStat.default <- function(x, resp, conf.level = NA, ...) {
   # documented "numeric scalar" came back labelled
   est <- unname((z["C"] + 0.5 * z["Ties_Y"]) / (z["D"] + z["C"] + z["Ties_Y"]))
 
+  # checked BEFORE is.na(): NULL or c(0.9, 0.95) broke the if() with an
+  # internal error, and NaN quietly suppressed the interval
+  checkConfLevel(conf.level)
+  sides <- match.arg(sides)
+
   if (is.na(conf.level))
     return(est)
 
-  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
-      conf.level <= 0 || conf.level >= 1)
-    stop("`conf.level` must be a single number in (0, 1), or NA.",
+  # one-sided intervals are computed at the two-sided level
+  # 2 * conf.level - 1, which must stay positive
+  if (sides != "two.sided" && conf.level <= 0.5)
+    stop("'conf.level' must exceed 0.5 for a one-sided interval",
          call. = FALSE)
+  confAdj <- if (sides == "two.sided") conf.level else 2 * conf.level - 1
 
   seed <- sample.int(.Machine$integer.max, 1)
 
   R <- list(...)$R %||% 1000
+  checkCount(R, min = 1L, name = "R")
 
   ci <- cstat_boot_cpp(y, x, R,
-                       alpha = 1 - conf.level,
+                       alpha = 1 - confAdj,
                        seed = seed)
 
   # est comes from the exact O(n log n) pass above, not from the bootstrap
   # output, so that cStat(x, resp) and cStat(x, resp, conf.level = 0.95)
   # cannot report two different point estimates
-  c(est = est, lci = unname(ci[2]), uci = unname(ci[3]))
+  c(est = est, applySides(unname(ci[2:3]), sides, lo = 0, hi = 1))
 }

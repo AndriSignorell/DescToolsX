@@ -71,6 +71,11 @@ findCorrX <- function(x,
   
   if (!is.matrix(x))
     stop("x must be a matrix")
+
+  if (!is.numeric(x))
+    stop("x must be a numeric correlation matrix")
+
+  checkFlag(verbose)
   
   # isSymmetric() on the unnamed matrix: all.equal() also compares
   # dimnames, so a matrix whose row and column names differ was rejected
@@ -81,7 +86,10 @@ findCorrX <- function(x,
   if (nrow(x) < 2)
     stop("Need at least two variables")
   
-  if (!is.numeric(cutoff) || length(cutoff) != 1 || cutoff <= 0 || cutoff >= 1)
+  # is.finite() first: cutoff = NA_real_ turned the comparisons into NA
+  # and the if() into "missing value where TRUE/FALSE needed"
+  if (!is.numeric(cutoff) || length(cutoff) != 1 || !is.finite(cutoff) ||
+      cutoff <= 0 || cutoff >= 1)
     stop("cutoff must be a numeric value between 0 and 1 (exclusive).")
   
   if (output == "names" && is.null(colnames(x)))

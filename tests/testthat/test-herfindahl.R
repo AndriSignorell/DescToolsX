@@ -57,3 +57,22 @@ test_that("herfindahl rejects a degenerate parameter", {
   expect_equal(herfindahl(x), sum((x / sum(x))^2))
 })
 
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("parameter = NULL means the classical index", {
+  x <- c(541, 1463, 2445, 3438)
+  expect_equal(herfindahl(x, parameter = NULL), herfindahl(x))
+  expect_equal(herfindahl(x, parameter = 2),
+               sum((x / sum(x))^3)^(1 / 2))
+})
+
+test_that("herfindahl validates its arguments", {
+  expect_error(herfindahl(letters[1:3]), "numeric")
+  expect_error(herfindahl(1:3, n = 1:2), "same length")
+  expect_error(herfindahl(1:3, n = c(1, 1.5, 1)), "whole numbers")
+  expect_error(herfindahl(c(1, Inf, 3)), "finite")
+  expect_error(herfindahl(1:3, na.rm = NA), "na.rm")
+  expect_error(herfindahl(1:3, parameter = c(1, 2)), "positive")
+  expect_true(is.na(herfindahl(numeric(0))))
+})

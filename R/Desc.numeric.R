@@ -328,10 +328,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
   # rewriting: the block above replaces x$n, x$length and friends with
   # formatted strings, so plot.Desc.numeric()'s `x$n <= 1L` guard would
   # be a string comparison.
-  if (x$meta$plotit)
-    plot(orig, main = x$meta$main)
-
-  invisible(orig)
+  .plotIfRequested(orig)
 }
 
 

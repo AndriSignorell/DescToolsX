@@ -9,6 +9,7 @@
 #' \tabular{lll}{
 #'   **Function**    \tab **Returns**                                          \tab **Range / Notes** \cr
 #'   `year`        \tab Year of a date or `ym` object                     \tab `yyyy` \cr
+#'   `isoYear`     \tab ISO 8601 week-numbering year                          \tab `yyyy`; see Details \cr
 #'   `quarter`     \tab Quarter of the year                                    \tab 1-4 \cr
 #'   `month`       \tab Month of the year (numeric, abbreviated, or full name) \tab 1-12; S3 dispatch for `ym` \cr
 #'   `week`        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
@@ -52,9 +53,17 @@
 #' `options(lang = "local")` for the current system locale.  When the
 #' option is absent, `"local"` is used as default.
 #'
+#' @details
+#' `isoYear()` is the year to which the ISO week of `x` belongs. It
+#' differs from `year()` in the first and last days of some years:
+#' 30 December 2019 lies in ISO week 1 of 2020, and 3 January 2021 in
+#' week 53 of 2020. Use it with `week()` wherever the pair (year, week)
+#' has to be unambiguous, e.g. for grouping; `yearWeek()` returns the
+#' same pair as one integer `yyyyww`.
+#'
 #' @name date_functions
 #'
-#' @aliases year quarter month week day day<- weekday yearDay yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone yearDays monthDays month.ym year.ym
+#' @aliases year isoYear quarter month week day day<- weekday yearDay yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone yearDays monthDays month.ym year.ym
 #' 
 #' @param x a `Date`, `POSIXct`, `POSIXlt`, or `ym` object
 #' to evaluate
@@ -96,6 +105,10 @@
 #'
 #' year(x)
 #' quarter(x)
+#'
+#' # calendar year vs. ISO week-numbering year at the turn of the year
+#' d <- as.Date(c("2019-12-30", "2021-01-03"))
+#' cbind(year = year(d), isoYear = isoYear(d), week = week(d))
 #'
 #' # month: numeric, abbreviated, full name
 #' month(x)
@@ -274,13 +287,20 @@ day <- function(x){ as.POSIXlt(x)$mday }
 #' @export
 "day<-" <- function(x, value) {
 
-  # "+" adds DAYS to a Date but SECONDS to a POSIXct, so the plain
-  # x + (value - day(x)) shifted a date-time by a few seconds instead of
-  # to the requested day of the month, silently and without error.
-  if (inherits(x, "POSIXt"))
-    x + (value - day(x)) * 86400
-  else
+  # "+" adds DAYS to a Date but SECONDS to a POSIXct. Multiplying by 86400
+  # fixed that, but across a daylight-saving change a day is not 86400 s
+  # and the clock time moved by an hour. The calendar fields are set
+  # instead; as.POSIXct() normalises an overflowing day as the arithmetic
+  # did (31 February becomes early March), in the zone of x.
+  if (inherits(x, "POSIXt")) {
+    lt <- as.POSIXlt(x)
+    lt$mday <- value
+    lt$isdst <- -1L
+    res <- as.POSIXct(lt)
+    if (inherits(x, "POSIXlt")) as.POSIXlt(res) else res
+  } else {
     x + (value - day(x))
+  }
 }
 
 
@@ -414,6 +434,16 @@ yearWeek <- function(x, method = c("iso", "us")){
   
   return(res)
   
+}
+
+
+#' @rdname date_functions
+#' @export
+isoYear <- function(x) {
+  # the calendar year of the Thursday of the ISO week, computed in C++
+  # (isoYear_cpp() existed all along but had no R caller); like week(),
+  # a date-time is taken in its own time zone
+  .Call("_DescToolsX_isoYear_cpp", .asDateInTz(x), PACKAGE = "DescToolsX")
 }
 
 

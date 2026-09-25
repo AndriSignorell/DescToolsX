@@ -295,8 +295,12 @@ kappaM <- function(x,
   })
 
   # Rater-specific marginal distributions, categories in rows.
+  # factor(levels = levi): table() of the bare codes drops the categories
+  # a rater never used, so the columns came out with different lengths -
+  # cbind() recycled the short ones and rownames() then failed or
+  # labelled the wrong categories
   pjr <- do.call(cbind, lapply(seq_len(nr), function(r) {
-    as.numeric(table(xx[, r])) / ns
+    as.numeric(table(factor(xx[, r], levels = levi))) / ns
   }))
   rownames(pjr) <- as.character(levi)
 

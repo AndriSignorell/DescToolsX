@@ -51,3 +51,33 @@ test_that("+.ym operator adds months", {
 test_that("-.ym operator subtracts months", {
   expect_equal(as.ym(202306) - 5L, 202301L)
 })
+
+
+# Review 25.09.2026 ------------------------------------------------------------
+
+test_that("dates and date-times are converted to their year and month", {
+  expect_equal(unclass(as.ym(as.Date(c("2023-08-15", NA)))), c(202308L, NA))
+  # a date-time in its own zone: 00:30 on 1 January in Zurich is still 2019
+  t <- as.POSIXct("2019-01-01 00:30", tz = "Europe/Zurich")
+  expect_equal(unclass(as.ym(t)), 201901L)
+})
+
+test_that("as.ym accepts character and factor input and keeps names", {
+  expect_equal(unclass(as.ym(c(a = "202308", b = "x"))),
+               c(a = 202308L, b = NA))
+  expect_equal(unclass(as.ym(factor("202401"))), 202401L)
+  expect_true(is.na(as.ym(202308.5)))
+})
+
+test_that("as.Date.ym validates d and gives NA for impossible days", {
+  expect_true(is.na(as.Date(as.ym(202302), d = 30)))
+  expect_equal(as.Date(as.ym(c(202301, NA))), as.Date(c("2023-01-01", NA)))
+  for (d in list(0, 32, 1.5, NA, c(1, 2), "1"))
+    expect_error(as.Date(as.ym(202301), d = d), "'d'")
+})
+
+test_that("print.ym prints the bare integers and returns invisibly", {
+  x <- as.ym(c(202301, 202302))
+  expect_output(res <- print(x), "202301 202302")
+  expect_identical(res, x)
+})

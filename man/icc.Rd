@@ -25,7 +25,11 @@ columns}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
+\code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}. The open side of a
+one-sided interval is reported at 1 above and at \code{-Inf} below: the
+F-based bounds of the ANOVA method are not restricted to
+\eqn{[0, 1]}, and clamping them would change two-sided results.
+One-sided intervals require \code{conf.level > 0.5}.}
 
 \item{method}{character string specifying the estimation and confidence
 interval method; defaults to \code{"anova"}}
@@ -37,7 +41,9 @@ interval method; defaults to \code{"anova"}}
 
 \item{unit}{character string, either \code{"single"} or \code{"average"}}
 
-\item{na.rm}{logical; if \code{TRUE}, complete cases are used}
+\item{na.rm}{logical; if \code{TRUE}, complete cases are used. With
+\code{FALSE} (default) and missing ratings the result is \code{NA}, since the
+mean squares assume a complete subjects x raters layout.}
 
 \item{\dots}{additional arguments. For \code{method = "boot"},
 the number of bootstrap resamples can be specified via \code{R}.}
