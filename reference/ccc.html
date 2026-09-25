@@ -15,7 +15,7 @@ agreement between two continuous measurements."><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,10 @@ agreement between two continuous measurements.</p>
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
 <dd><p>confidence level of the interval. If set to <code>NA</code>
-(the default), only the point estimate is returned.</p></dd>
+(the default), only the point estimate is returned. With perfect
+concordance or discordance the asymptotic variance is zero; the
+analytic methods then return <code>NA</code> bounds with a warning.
+One-sided intervals require <code>conf.level &gt; 0.5</code>.</p></dd>
 
 
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>

@@ -244,7 +244,6 @@ res$coefficients
 
 # profile likelihood intervals: asymmetric on the odds scale, slower
 oddsRatio(fit, method = "profile")
-#> Waiting for profiling to be done...
 #> Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
 #> 
 #> Call:

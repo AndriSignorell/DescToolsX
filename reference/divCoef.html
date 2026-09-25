@@ -15,7 +15,7 @@ frame, optionally using a provided distance matrix."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ Gini-Simpson index \(1 - \sum p_i^2\).</p></dd>
 
 <dt id="arg-normalize">normalize<a class="anchor" aria-label="anchor" href="#arg-normalize"></a></dt>
 <dd><p>logical; if <code>TRUE</code>, the diversity is scaled by its
-theoretical maximum</p></dd>
+maximum over all relative abundances (see Details)</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -85,8 +85,9 @@ yield <code>NA</code> instead of aborting</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
-<dd><p>numeric convergence tolerance for the iterative maximisation
-used by <code>normalize = TRUE</code></p></dd>
+<dd><p>relative accuracy of the maximum used by
+<code>normalize = TRUE</code>: the iteration stops once the maximum is certified
+to within this fraction</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -98,12 +99,17 @@ used by <code>normalize = TRUE</code></p></dd>
     <p>The diversity coefficient is defined as
 $$D = \frac{x^T D^2 x}{2 (\sum x)^2}$$
 where \(x\) is a column of <code>x</code> and \(D\) is the distance matrix.</p>
-<p>If <code>normalize = TRUE</code>, values are divided by the maximum achievable
-diversity under the given distance matrix. That maximum is found by a
-fixed-point iteration over the simplex, which is a heuristic: it is not
-guaranteed to reach the global optimum for an arbitrary distance matrix.
-A warning is issued when the iteration has not converged within
-<code>tol</code>.</p>
+<p>If <code>normalize = TRUE</code>, values are divided by the maximum of the
+coefficient over all relative abundance vectors, so that the result lies
+in \([0, 1]\). The maximum is found by the replicator (Baum-Eagon)
+iteration \(p_i \leftarrow p_i (Ap)_i / p^T A p\), which increases
+\(p^T A p\) monotonically. For a Euclidean <code>dis</code> the quadratic form
+is concave on the simplex, so the iteration reaches the global maximum,
+and it stops once the Frank-Wolfe duality gap certifies that maximum to
+a relative accuracy of <code>tol</code>; normalized values may therefore exceed 1
+by at most that amount. For a non-Euclidean <code>dis</code> (which triggers a
+warning) only a local maximum is guaranteed. A warning is issued when
+the iteration has not converged.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -124,7 +130,7 @@ A warning is issued when the iteration has not converged within
 <span class="r-in"><span><span class="fu">divCoef</span><span class="op">(</span><span class="va">x</span>, <span class="va">d</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.095912 1.959129 1.740829 1.485362</span>
 <span class="r-in"><span><span class="fu">divCoef</span><span class="op">(</span><span class="va">x</span>, <span class="va">d</span>, normalize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8327579 0.7784104 0.6916744 0.5901711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5727755 0.5353949 0.4757375 0.4059229</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># without a distance matrix this is the Gini-Simpson index</span></span></span>
 <span class="r-in"><span><span class="fu">divCoef</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>

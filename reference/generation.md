@@ -19,7 +19,7 @@ generation(year)
 ordered factor with levels
 `c("Babyboomer", "Gen X", "Millennial", "Gen Z", "Gen Alpha")`  
 Values which fall outside the range of breaks are coded as `NA`, as are
-`NaN` and `NA` values.
+`NaN` and `NA` values (including a plain logical `NA`).
 
 ## Details
 

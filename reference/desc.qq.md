@@ -59,5 +59,5 @@ provides association measures and visualizations.
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.nq`](desc.nq.md), [`desc.numeric()`](desc.numeric.md),
-[`desc.qn`](desc.qn.md), [`desc.table()`](desc.table.md),
-[`desc.ts()`](desc.ts.md)
+[`desc.qn`](desc.qn.md), [`desc.ts()`](desc.ts.md),
+[`print.Desc.qq()`](desc.table.md)

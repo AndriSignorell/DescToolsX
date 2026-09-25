@@ -206,40 +206,53 @@ num.sty <- style(digits = 1, bigMark = "'")   # numeric
 tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")],
   groups = Pizza$quality)
 #> 
-#> var                total              low                medium             high                                 
-#> n                  1008               156 (15.5%)        356 (35.3%)        496 (49.2%)                          
-#> temperature        47.937 (9.938)     32.874 (7.772)     45.640 (7.387)     53.604 (6.474)     *** ¹             
-#> delivery_min       25.653 (10.843)    33.925 (11.742)    26.522 (10.113)    22.615 (9.497)     *** ¹             
-#> driver                                                                                         *** ³             
-#> Butcher            79 ( 7.9%)         10 ( 6.5%)         36 (10.1%)         33 ( 6.7%)                           
-#> Carpenter          225 (22.4%)        59 (38.1%)         90 (25.4%)         76 (15.4%)                           
-#> Carter             196 (19.5%)        11 ( 7.1%)         72 (20.3%)         113 (22.9%)                          
-#> Farmer             94 ( 9.4%)         10 ( 6.5%)         26 ( 7.3%)         58 (11.7%)                           
-#> Hunter             130 (12.9%)        8 ( 5.2%)          43 (12.1%)         79 (16.0%)                           
-#> Miller             109 (10.9%)        16 (10.3%)         35 ( 9.9%)         58 (11.7%)                           
-#> Taylor             171 (17.0%)        41 (26.5%)         53 (14.9%)         77 (15.6%)                           
-#> wine_ordered (= 1) 161 (16.1%)        32 (20.8%)         63 (17.9%)         66 (13.4%)         .   ³             
+#>    var                  total             low               medium         
+#>    n                    1008              156 (15.5%)       356 (35.3%)    
+#>    temperature          47.937 (9.938)    32.874 (7.772)    45.640 (7.387) 
+#>    delivery_min         25.653 (10.843)   33.925 (11.742)   26.522 (10.113)
+#>    driver                                                                  
+#>      Butcher             79 ( 7.9%)        10 ( 6.5%)        36 (10.1%)    
+#>      Carpenter          225 (22.4%)        59 (38.1%)        90 (25.4%)    
+#>      Carter             196 (19.5%)        11 ( 7.1%)        72 (20.3%)    
+#>      Farmer              94 ( 9.4%)        10 ( 6.5%)        26 ( 7.3%)    
+#>      Hunter             130 (12.9%)         8 ( 5.2%)        43 (12.1%)    
+#>      Miller             109 (10.9%)        16 (10.3%)        35 ( 9.9%)    
+#>      Taylor             171 (17.0%)        41 (26.5%)        53 (14.9%)    
+#>    wine_ordered (= 1)   161 (16.1%)        32 (20.8%)        63 (17.9%)    
+#>    high                  
+#>    496 (49.2%)           
+#>    53.604 (6.474)   *** ¹
+#>    22.615 (9.497)   *** ¹
+#>                     *** ³
+#>     33 ( 6.7%)           
+#>     76 (15.4%)           
+#>    113 (22.9%)           
+#>     58 (11.7%)           
+#>     79 (16.0%)           
+#>     58 (11.7%)           
+#>     77 (15.6%)           
+#>     66 (13.4%)      .   ³
 #> ---
 #> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
 # the same but no groups now...
 tOne(x = Pizza[, c("temperature", "delivery_min", "driver", "wine_ordered")])
 #> 
-#> var                total             
-#> n                  1209              
-#> temperature        47.937 (9.938)    
-#> delivery_min       25.653 (10.843)   
-#> driver                               
-#> Butcher            96 ( 8.0%)        
-#> Carpenter          272 (22.6%)       
-#> Carter             234 (19.4%)       
-#> Farmer             117 ( 9.7%)       
-#> Hunter             156 (13.0%)       
-#> Miller             125 (10.4%)       
-#> Taylor             204 (16.9%)       
-#> wine_ordered (= 1) 187 (15.6%)       
+#>    var                  total          
+#>    n                    1209           
+#>    temperature          47.937 (9.938) 
+#>    delivery_min         25.653 (10.843)
+#>    driver                              
+#>      Butcher             96 ( 8.0%)    
+#>      Carpenter          272 (22.6%)    
+#>      Carter             234 (19.4%)    
+#>      Farmer             117 ( 9.7%)    
+#>      Hunter             156 (13.0%)    
+#>      Miller             125 (10.4%)    
+#>      Taylor             204 (16.9%)    
+#>    wine_ordered (= 1)    187 (15.6%)   
 #> 
 
 # define median/IQR as describing functions for the numeric variables
@@ -251,15 +264,15 @@ tOne(iris[, -5], iris[, 5],
   }
 )
 #> 
-#> var          total        setosa       versicolor   virginica                
-#> n            150          50 (33.3%)   50 (33.3%)   50 (33.3%)               
-#> Sepal.Length 5.8 / 1.300  5.0 / 0.400  5.9 / 0.700  6.5 / 0.675  *** ¹       
-#> Sepal.Width  3.0 / 0.500  3.4 / 0.475  2.8 / 0.475  3.0 / 0.375  *** ¹       
-#> Petal.Length 4.4 / 3.500  1.5 / 0.175  4.4 / 0.600  5.6 / 0.775  *** ¹       
-#> Petal.Width  1.3 / 1.500  0.2 / 0.100  1.3 / 0.300  2.0 / 0.500  *** ¹       
+#>    var            total         setosa        versicolor    virginica          
+#>    n              150           50 (33.3%)    50 (33.3%)    50 (33.3%)         
+#>    Sepal.Length   5.8 / 1.300   5.0 / 0.400   5.9 / 0.700   6.5 / 0.675   *** ¹
+#>    Sepal.Width    3.0 / 0.500   3.4 / 0.475   2.8 / 0.475   3.0 / 0.375   *** ¹
+#>    Petal.Length   4.4 / 3.500   1.5 / 0.175   4.4 / 0.600   5.6 / 0.775   *** ¹
+#>    Petal.Width    1.3 / 1.500   0.2 / 0.100   1.3 / 0.300   2.0 / 0.500   *** ¹
 #> ---
 #> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
 # replace kruskal.test by ANOVA and report the p.value
@@ -280,15 +293,15 @@ tOne(x = iris[, -5], groups = iris[, 5],
                 pval = style(fmt = "*", naForm = "   "))
 )
 #> 
-#> var          total        setosa       versicolor   virginica                
-#> n            150          50 (33.3%)   50 (33.3%)   50 (33.3%)               
-#> Sepal.Length 5.8 / 0.828  5.0 / 0.352  5.9 / 0.516  6.6 / 0.636  *** ¹       
-#> Sepal.Width  3.1 / 0.436  3.4 / 0.379  2.8 / 0.314  3.0 / 0.322  *** ¹       
-#> Petal.Length 3.8 / 1.765  1.5 / 0.174  4.3 / 0.470  5.6 / 0.552  *** ¹       
-#> Petal.Width  1.2 / 0.762  0.2 / 0.105  1.3 / 0.198  2.0 / 0.275  *** ¹       
+#>    var            total         setosa        versicolor    virginica          
+#>    n              150           50 (33.3%)    50 (33.3%)    50 (33.3%)         
+#>    Sepal.Length   5.8 / 0.828   5.0 / 0.352   5.9 / 0.516   6.6 / 0.636   *** ¹
+#>    Sepal.Width    3.1 / 0.436   3.4 / 0.379   2.8 / 0.314   3.0 / 0.322   *** ¹
+#>    Petal.Length   3.8 / 1.765   1.5 / 0.174   4.3 / 0.470   5.6 / 0.552   *** ¹
+#>    Petal.Width    1.2 / 0.762   0.2 / 0.105   1.3 / 0.198   2.0 / 0.275   *** ¹
 #> ---
 #> ¹) ANOVA, ²) Fisher exact test, ³) Chi-Square test
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
 t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")],
@@ -314,20 +327,32 @@ attr(t1, "legend") <- "numeric: mean / sd (median)), factor: n (n%)"
 
 t1
 #> 
-#> var                      Brent                    Camden                   Westminster             
-#> n                        474 (39.5%)              344 (28.7%)              381 (31.8%)             
-#> temperature              51.1 / 8.734 (53.4)      47.4 / 10.111 (50.3)     44.3 / 9.836 (45.9)     
-#> driver                                                                                             
-#> Butcher                  72 (15.2%)               1 ( 0.3%)                22 ( 5.8%)              
-#> Carpenter                29 ( 6.1%)               19 ( 5.6%)               221 (58.2%)             
-#> Carter                   177 (37.4%)              47 (13.8%)               5 ( 1.3%)               
-#> Farmer                   19 ( 4.0%)               87 (25.5%)               11 ( 2.9%)              
-#> Hunter                   128 (27.1%)              4 ( 1.2%)                24 ( 6.3%)              
-#> Miller                   6 ( 1.3%)                41 (12.0%)               77 (20.3%)              
-#> Taylor                   42 ( 8.9%)               142 (41.6%)              20 ( 5.3%)              
-#> rebate (= TRUE)          235 (50.3%)              172 (50.3%)              184 (48.7%)             
+#>    var               Brent                      Camden                  
+#>    n                              474 (39.5%)                344 (28.7%)
+#>    temperature            51.1 / 8.734 (53.4)   47.4 / 10.111 (50.3)    
+#>    driver                                                               
+#>      Butcher                       72 (15.2%)                  1 ( 0.3%)
+#>      Carpenter                     29 ( 6.1%)                 19 ( 5.6%)
+#>      Carter                       177 (37.4%)                 47 (13.8%)
+#>      Farmer                        19 ( 4.0%)                 87 (25.5%)
+#>      Hunter                       128 (27.1%)                  4 ( 1.2%)
+#>      Miller                         6 ( 1.3%)                 41 (12.0%)
+#>      Taylor                        42 ( 8.9%)                142 (41.6%)
+#>    rebate (= TRUE)                235 (50.3%)                172 (50.3%)
+#>    Westminster             
+#>                 381 (31.8%)
+#>         44.3 / 9.836 (45.9)
+#>                            
+#>                  22 ( 5.8%)
+#>                 221 (58.2%)
+#>                   5 ( 1.3%)
+#>                  11 ( 2.9%)
+#>                  24 ( 6.3%)
+#>                  77 (20.3%)
+#>                  20 ( 5.3%)
+#>                 184 (48.7%)
 #> ---
-#> numeric: mean / sd (median)), factor: n (n%) 
+#> numeric: mean / sd (median)), factor: n (n%)
 #> 
 
 
@@ -342,41 +367,51 @@ d.set <- data.frame(x = x, y = y, z = z, g = g)
 tOne(d.set[1:3], d.set$g, intref = "low")
 #> Warning: Chi-squared approximation may be incorrect
 #> 
-#> var         total       a           b           c           d                      
-#> n           100         30 (30.0%)  21 (21.0%)  25 (25.0%)  24 (24.0%)             
-#> x (= 0)     32 (32.0%)  10 (33.3%)  9 (42.9%)   7 (28.0%)   6 (25.0%)   ³          
-#> y (= FALSE) 30 (30.0%)  8 (26.7%)   7 (33.3%)   10 (40.0%)  5 (20.8%)   ³          
-#> z (= 0)     21 (21.0%)  7 (23.3%)   4 (19.0%)   6 (24.0%)   4 (16.7%)   ³          
+#>    var           total        a            b            c            d         
+#>    n             100          30 (30.0%)   21 (21.0%)   25 (25.0%)   24 (24.0%)
+#>    x (= 0)       32 (32.0%)   10 (33.3%)    9 (42.9%)    7 (28.0%)    6 (25.0%)
+#>    y (= FALSE)   30 (30.0%)    8 (26.7%)    7 (33.3%)   10 (40.0%)    5 (20.8%)
+#>    z (= 0)       21 (21.0%)    7 (23.3%)    4 (19.0%)    6 (24.0%)    4 (16.7%)
+#>         
+#>         
+#>        ³
+#>        ³
+#>        ³
 #> ---
 #> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
 tOne(d.set[1:3], d.set$g, intref = "high")
 #> Warning: Chi-squared approximation may be incorrect
 #> 
-#> var        total      a          b          c          d                    
-#> n          100        30 (30.0%) 21 (21.0%) 25 (25.0%) 24 (24.0%)           
-#> x (= 1)    68 (68.0%) 20 (66.7%) 12 (57.1%) 18 (72.0%) 18 (75.0%) ³         
-#> y (= TRUE) 70 (70.0%) 22 (73.3%) 14 (66.7%) 15 (60.0%) 19 (79.2%) ³         
-#> z (= 1)    79 (79.0%) 23 (76.7%) 17 (81.0%) 19 (76.0%) 20 (83.3%) ³         
+#>    var          total        a            b            c            d         
+#>    n            100          30 (30.0%)   21 (21.0%)   25 (25.0%)   24 (24.0%)
+#>    x (= 1)      68 (68.0%)   20 (66.7%)   12 (57.1%)   18 (72.0%)   18 (75.0%)
+#>    y (= TRUE)   70 (70.0%)   22 (73.3%)   14 (66.7%)   15 (60.0%)   19 (79.2%)
+#>    z (= 1)      79 (79.0%)   23 (76.7%)   17 (81.0%)   19 (76.0%)   20 (83.3%)
+#>         
+#>         
+#>        ³
+#>        ³
+#>        ³
 #> ---
 #> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
 # report both levels of the factor
 tOne(data.frame(z = z), g, intref = "both")
 #> Warning: Chi-squared approximation may be incorrect
 #> 
-#> var        total      a          b          c          d                    
-#> n          100        30 (30.0%) 21 (21.0%) 25 (25.0%) 24 (24.0%)           
-#> z                                                                 ³         
-#> 0          21 (21.0%) 7 (23.3%)  4 (19.0%)  6 (24.0%)  4 (16.7%)            
-#> 1          79 (79.0%) 23 (76.7%) 17 (81.0%) 19 (76.0%) 20 (83.3%)           
+#>    var   total        a            b            c            d                 
+#>    n     100          30 (30.0%)   21 (21.0%)   25 (25.0%)   24 (24.0%)        
+#>    z                                                                          ³
+#>      0   21 (21.0%)    7 (23.3%)    4 (19.0%)    6 (24.0%)    4 (16.7%)        
+#>      1   79 (79.0%)   23 (76.7%)   17 (81.0%)   19 (76.0%)   20 (83.3%)        
 #> ---
 #> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
 options(opt)

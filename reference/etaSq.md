@@ -11,7 +11,7 @@ etaSq(fit, type = 2, anova = FALSE)
 etaSq(fit, type = 2, anova = FALSE)
 
 # S3 method for class 'aovlist'
-etaSq(fit, type = 2, anova = FALSE)
+etaSq(fit, type = 1, anova = FALSE)
 
 aovlDetails(fit)
 
@@ -22,12 +22,15 @@ aovlErrorTerms(fit)
 
 - fit:
 
-  an analysis of variance object of class `"aov"` or `"aovlist"`
+  an analysis of variance object of class `"aov"` or `"aovlist"`, or a
+  linear model of class `"lm"` (weights are respected). Generalized
+  linear models and multivariate `"mlm"` fits are refused: their sums of
+  squares do not decompose the variance of the response.
 
 - type:
 
   type of sums of squares to calculate. `etaSq.aovlist()` requires
-  `type = 1`.
+  `type = 1`, which is its default.
 
 - anova:
 
@@ -69,7 +72,7 @@ sums of squares (`type=2`), in keeping with the `Anova` function in the
 `car` package. It is possible to revert to the Type I SS values
 (`type=1`) to be consistent with `anova`, but this rarely tests
 hypotheses of interest. Type III SS values (`type=3`) can also be
-computed. `etaSq.aovlist` requires `type=1`.
+computed. `etaSq.aovlist` requires `type=1`, which is also its default.
 
 ## Note
 

@@ -36,7 +36,10 @@ cohenH(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md). Since \\h\\ lies in
+  \\\[-\pi, \pi\]\\, the open side is reported at \\\pm\pi\\ and the
+  two-sided interval is clamped to that range. One-sided intervals
+  require `conf.level > 0.5`.
 
 - ...:
 

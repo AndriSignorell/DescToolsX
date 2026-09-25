@@ -36,13 +36,14 @@ varX(x, breaks, estimator = c("unbiased", "ml"), ...)
 - weights:
 
   non-negative numeric vector of weights the same length as `x`,
-  interpreted as frequency (replication) weights. Observations with
-  larger weights contribute more strongly to the empirical distribution.
-  Weights are supported for vector input only.
+  interpreted as frequency (replication) weights (see Details). Missing
+  weights are treated like missing values in `x`. Weights are supported
+  for vector input only.
 
 - na.rm:
 
-  logical. Should missing values be removed?
+  logical. Should missing values be removed? With weights, observations
+  are dropped if `x` or the weight is missing.
 
 - ...:
 
@@ -72,12 +73,27 @@ Using estimator `"unbiased"` the denominator \\n - 1\\ is used (known as
 `"ml"` yields the biased version using the denominator \\n\\. With
 frequency weights \\n\\ is the sum of the weights.
 
-These functions return [`NA()`](https://rdrr.io/r/base/NA.html) when
-there is only one observation and `NA` when `x` has length zero.
+These functions return `NA` when there is only one observation and when
+`x` has length zero. With weights, "one observation" means a total
+weight of at most 1.
 
-\*\*Note:\*\*` ` Analytic (precision) weights are not supported. For
-likelihood-based weighted variance estimation, see
-[`stats::cov.wt()`](https://rdrr.io/r/stats/cov.wt.html).
+**Weights** are frequency (replication) weights: an observation with
+weight 3 counts as three identical observations, and \\n\\ is the sum of
+the weights. Consequently the result depends on the scale of the
+weights, not only on their ratios: equal weights reproduce the
+unweighted result only if each equals 1. Weights of `1/3` for three
+values add up to a single observation (result `NA`), weights of `4/3` to
+four observations.
+
+Missing values are handled pairwise: with `na.rm = TRUE`, every
+observation where `x` *or* its weight is `NA` is dropped; with
+`na.rm = FALSE`, a missing value in either yields `NA`. Observations
+with weight 0 are dropped in any case.
+
+\*\*Note:\*\*` ` Analytic (reliability) weights, whose scale does not
+matter, are not supported. For these see
+[`stats::cov.wt()`](https://rdrr.io/r/stats/cov.wt.html)
+(`method = "unbiased"`).
 
 ## References
 
@@ -126,6 +142,24 @@ sdX(z, weights=w)
 # check!
 all.equal(varX(x), varX(z, weights=w))
 #> [1] TRUE
+
+# missing values in x or weights are dropped pairwise
+varX(c(1, NA, 3), weights=c(1, 1, 1))                # NA
+#> [1] NA
+varX(c(1, NA, 3), weights=c(1, 1, 1), na.rm=TRUE)    # 2
+#> [1] 2
+varX(c(1, 2, 3),  weights=c(1, NA, 1), na.rm=TRUE)   # 2
+#> [1] 2
+
+# frequency weights depend on scale ...
+sdX(1:3, weights=rep(1/3, 3))     # NA, total weight 1 = one observation
+#> [1] NA
+sdX(1:3, weights=rep(4/3, 3))     # 0.942809, four observations
+#> [1] 0.942809
+# ... reliability weights do not
+sqrt(cov.wt(cbind(1:3), wt=rep(1/3, 3))$cov)   # 1
+#>      [,1]
+#> [1,]    1
 
 
 # Variance for frequency tables

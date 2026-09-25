@@ -7,10 +7,10 @@ quantitative variables. The function is dispatched automatically by
 ## Usage
 
 ``` r
-.descNN(x, y, conf.level = 0.95)
+.descNN(y, x, conf.level = 0.95)
 
 # S3 method for class 'Desc.nn'
-print(x, verbose = NULL, abs.sty = NULL, per.sty = NULL, ...)
+print(x, verbose = NULL, ...)
 
 # S3 method for class 'Desc.nn'
 plot(x, main = x$meta$main, which = 1, verbose = NULL, ...)
@@ -28,16 +28,6 @@ plot(x, main = x$meta$main, which = 1, verbose = NULL, ...)
   integer controlling the amount of output (1, 2, or 3). `NULL`
   (default) falls back to
   `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`.
-
-- abs.sty:
-
-  format style for counts. `NULL` falls back to
-  `getOption("DescTools.abs.sty")`.
-
-- per.sty:
-
-  format style for proportions. `NULL` falls back to
-  `getOption("DescTools.per.sty")`.
 
 - ...:
 
@@ -170,8 +160,8 @@ heteroscedasticity and random coefficient variation. *Econometrica*, 47,
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nq`](desc.nq.md),
 [`desc.numeric()`](desc.numeric.md), [`desc.qn`](desc.qn.md),
-[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
-[`desc.ts()`](desc.ts.md)
+[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
+[`print.Desc.qq()`](desc.table.md)
 
 ## Examples
 
@@ -189,11 +179,11 @@ desc(mpg ~ wt, mtcars)
 #> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
 #> 
 #> Linear regression:
-#>   Intercept:    6.0473  (  5.4168,   6.6777)  ***
-#>   Slope:       -0.1409  ( -0.1710,  -0.1108)  ***
+#>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***
+#>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***
 #>   R²: 0.753   adj. R²: 0.745   p: <0.001
-#>   Residual SE: 0.4945 on 30 df
-#>   Shapiro-Wilk on residuals: W = 0.919,  p = 0.02
+#>   Residual SE: 3.0459 on 30 df
+#>   Shapiro-Wilk on residuals: W = 0.945,  p = 0.104
 #> 
 
 
@@ -210,11 +200,14 @@ desc(mpg ~ wt, mtcars, verbose = 3)
 #> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
 #> 
 #> Linear regression:
-#>   Intercept:    6.0473  (  5.4168,   6.6777)  ***
-#>   Slope:       -0.1409  ( -0.1710,  -0.1108)  ***
+#>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***
+#>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***
 #>   R²: 0.753   adj. R²: 0.745   p: <0.001
-#>   Residual SE: 0.4945 on 30 df
-#>   Shapiro-Wilk on residuals: W = 0.919,  p = 0.02
+#>   Residual SE: 3.0459 on 30 df
+#>   Shapiro-Wilk on residuals: W = 0.945,  p = 0.104
+#> 
+#>   Breusch-Pagan test: BP = 0.0404,  df = 1,  p = 0.841
+#>   Cook's distance: max = 0.5319,  n > 4/n threshold: 3
 #> 
 
 
@@ -232,11 +225,9 @@ print(d, verbose = 1)
 #> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
 #> 
 #> Linear regression:
-#>   Intercept:    6.0473  (  5.4168,   6.6777)  ***
-#>   Slope:       -0.1409  ( -0.1710,  -0.1108)  ***
+#>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***
+#>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***
 #>   R²: 0.753   adj. R²: 0.745   p: <0.001
-#>   Residual SE: 0.4945 on 30 df
-#>   Shapiro-Wilk on residuals: W = 0.919,  p = 0.02
 #> 
 plot(d, which = 1:2)
 

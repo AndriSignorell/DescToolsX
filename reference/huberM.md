@@ -16,6 +16,7 @@ huberM(
   k = 1.345,
   mu = NULL,
   s = NULL,
+  weights = NULL,
   na.rm = FALSE,
   ...
 )
@@ -36,7 +37,9 @@ huberM(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md). The location is
+  unbounded, so the open side is \\\pm\\`Inf`. One-sided intervals
+  require `conf.level > 0.5`.
 
 - method:
 
@@ -56,6 +59,15 @@ huberM(
 
   scale estimate held constant through the iterations. `NULL` (default)
   uses `mad(x, center = mu)`, computed after `na.rm` is applied.
+
+- weights:
+
+  optional non-negative frequency weights of the same length as `x`. The
+  starting values then become the weighted median and the weighted MAD
+  (both via [`medianX()`](medianX.md), the MAD with the usual constant
+  1.4826), and \\n\\ in the Wald interval is `sum(weights)`, so integer
+  weights give exactly the result of the replicated data. The bootstrap
+  resamples observations together with their weights.
 
 - na.rm:
 
@@ -112,7 +124,8 @@ via `.extractBootArgs()`:
 
 - `type`:
 
-  confidence interval type: `"perc"` or `"bca"` (default)
+  confidence interval type: `"perc"`, `"basic"`, `"norm"` or `"bca"`
+  (default)
 
 - `parallel`:
 

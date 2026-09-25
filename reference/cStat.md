@@ -12,7 +12,7 @@ cStat(x, ...)
 cStat(x, ...)
 
 # Default S3 method
-cStat(x, resp, conf.level = NA, ...)
+cStat(x, resp, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 ```
 
 ## Arguments
@@ -28,12 +28,19 @@ cStat(x, resp, conf.level = NA, ...)
 
 - resp:
 
-  a binary response vector (numeric, logical, or factor)
+  binary response vector (numeric, logical, or factor)
 
 - conf.level:
 
   confidence level for the interval; `NA` (default) suppresses interval
   calculation
+
+- sides:
+
+  character string specifying the sidedness of the confidence interval
+  (one of `"two.sided"` (default), `"left"` or `"right"`). The open side
+  is reported at the range boundary, 0 or 1. See
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
 ## Value
 
@@ -104,5 +111,5 @@ r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
              data = bedrock::Pizza, family = binomial)
 cStat(r.mod, conf.level = 0.95)
 #>       est       lci       uci 
-#> 0.6251552 0.5786945 0.6705040 
+#> 0.6251552 0.5784738 0.6705040 
 ```

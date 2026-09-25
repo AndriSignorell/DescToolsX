@@ -21,7 +21,7 @@ Freq-objects."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ class containing the median, which is implemented in the interface for
 <span><span class="fu">medianX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'factor'</span></span>
-<span><span class="fu">medianX</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">medianX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Freq'</span></span>
 <span><span class="fu">medianX</span><span class="op">(</span><span class="va">x</span>, <span class="va">breaks</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -87,12 +87,15 @@ containing the values whose median is to be computed</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to or from other methods</p></dd>
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/stats/median.html" class="external-link">stats::median()</a></code> in the
+unweighted default method, otherwise unused</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
 <dd><p>a numerical vector of weights the same length as <code>x</code>
-giving the weights to use for elements of <code>x</code></p></dd>
+giving the weights to use for elements of <code>x</code>. Only the ratios of the
+weights matter (see Details); frequency weights reproduce the median of
+the replicated sample. Supported for numeric <code>x</code> only.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -101,18 +104,21 @@ stripped before the computation proceeds</p></dd>
 
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
-<dd><p>breaks for calculating the mean for classified data as
-composed by <code><a href="freq.html">freq()</a></code></p></dd>
+<dd><p>breaks for calculating the median for classified data as
+composed by <code><a href="freq.html">freq()</a></code>; strictly increasing, one more than there are
+classes. If the median falls into an open-ended class (<code>-Inf</code> or <code>Inf</code>
+as a bound), <code>NA</code> is returned with a warning.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>the default method returns a length-one object of the same type as
-<code>x</code>, except when <code>x</code> is integer of even length, when the result
-will be double.</p>
+    <p>the unweighted default method returns a length-one object of the
+same type as <code>x</code>, except when <code>x</code> is integer of even length, when the
+result will be double. With weights the result is double.</p>
 <p>If there are no values or if <code>na.rm = FALSE</code> and there are <code>NA</code>
 values the result is <code>NA</code> of the same type as <code>x</code> (or more
-generally the result of <code>x[FALSE][NA]</code>).</p>
+generally the result of <code>x[FALSE][NA]</code>). For ordered factors, missing
+results retain the ordered-factor class and the original levels.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -121,13 +127,13 @@ default method makes use of <code>is.na</code>, <code>sort</code> and <code>mean
 package <span class="pkg">base</span> all of which are generic, and so the default method will
 work for most classes (e.g., <code>"[Date]"</code>) for which a median is a
 reasonable concept.</p>
-<p>Calculating the median for ordered factors is not implemented in standard R,
-as it's not well defined (it is not clear what to do if the median sits
-between two levels in factors of even length). This function returns the
-high median and prints a warning if the low median would be different (which
-is supposed to be a rare event). There's a vivid discussion between experts
-going on whether this should be defined or not. We'll wait for definitive
-results and enjoy the function's comfort so far...</p>
+<p>For ordered factors, the result is the upper sample median: the category
+at position <code>floor(n / 2) + 1</code> in the sorted non-missing observations.
+If the two middle observations of an even-sized sample differ, a warning
+is issued. Their integer level codes are not averaged, because distances
+between ordinal categories are not defined. Unused levels are preserved
+and cannot become the median merely by lying between observed categories.
+Unordered factors are rejected.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

@@ -21,7 +21,12 @@ secToHms(x, digits = NULL)
 
 - digits:
 
-  the number of digits to use for potential fractions of seconds
+  number of decimal places for seconds, an integer from 0 to 15, or
+  `NULL`. The default uses zero places if all non-missing values have
+  negligible fractional parts, otherwise two. Positive values round
+  fractional seconds with carry into seconds, minutes and hours. For
+  compatibility, `digits = 0` discards fractions using
+  [`floor()`](https://rdrr.io/r/base/Round.html).
 
 ## Value
 
@@ -39,7 +44,9 @@ depending on the function:
 
   character vector of times in h:m:s format
 
-\#'
+Missing seconds produce `NA_character_`; infinite values are rejected.
+Hours can exceed 23. Negative times retain the existing floor-based
+decomposition (for example, -1 second is `-1:59:59`).
 
 ## Details
 

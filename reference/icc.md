@@ -35,7 +35,11 @@ icc(
 
   character string specifying the sidedness of the confidence interval
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
-  [`ConfidenceIntervals()`](ConfidenceIntervals.md).
+  [`ConfidenceIntervals()`](ConfidenceIntervals.md). The open side of a
+  one-sided interval is reported at 1 above and at `-Inf` below: the
+  F-based bounds of the ANOVA method are not restricted to \\\[0, 1\]\\,
+  and clamping them would change two-sided results. One-sided intervals
+  require `conf.level > 0.5`.
 
 - method:
 
@@ -56,7 +60,9 @@ icc(
 
 - na.rm:
 
-  logical; if `TRUE`, complete cases are used
+  logical; if `TRUE`, complete cases are used. With `FALSE` (default)
+  and missing ratings the result is `NA`, since the mean squares assume
+  a complete subjects x raters layout.
 
 - ...:
 

@@ -26,13 +26,13 @@ corPart(m, x, y)
 
 - x:
 
-  integer vector of indices specifying the variables of interest for
-  which partial correlations are computed
+  column indices (whole numbers, no duplicates) of the variables of
+  interest for which partial correlations are computed
 
 - y:
 
-  integer vector of indices specifying the control variables
-  (conditioning set)
+  column indices (whole numbers, no duplicates) of the control variables
+  (conditioning set); must not overlap with `x`
 
 ## Value
 
@@ -42,27 +42,38 @@ correspond to `colnames(m)[x]`.
 
 ## Details
 
-Partial correlations are read off the precision matrix. Let \\K\\ be the
-inverse of the joint covariance matrix of \\(x, y)\\; then
+Only the variables in `y` are controlled for. Let \\S\\ be the joint
+covariance matrix of the selected variables. The residual covariance
+matrix of `x` after linear adjustment for `y` is the Schur complement
 
-\$\$\rho\_{ij \cdot y} = - K\_{ij} / \sqrt{K\_{ii} K\_{jj}}\$\$
+\$\$V = S\_{xx} - S\_{xy} S\_{yy}^{-1} S\_{yx}.\$\$
 
-for \\i, j\\ in \\x\\. This is algebraically equivalent to forming the
-Schur complement \\\Sigma\_{xx} -
-\Sigma\_{xy}\Sigma\_{yy}^{-1}\Sigma\_{yx}\\ and scaling it to unit
-diagonal, but needs a single inversion instead of two.
+The result has entries \\V\_{ij}/\sqrt{V\_{ii} V\_{jj}}\\. With complete
+raw data, this equals the correlation matrix of the residuals from
+regressing each variable in `x` on all variables in `y`, including an
+intercept. Adding another variable to `x` does not change the
+correlations between the previously selected variables.
+
+Normalizing the inverse of the joint covariance matrix would also
+control for the other variables in `x`. That is a different quantity
+when `length(x) > 2`.
 
 Because the result is scaled to unit diagonal, it makes no difference
 whether `m` is a covariance or a correlation matrix.
 
 ## Numerical considerations
 
-- The joint submatrix of `x` and `y` must be invertible.
-  Near-singularity from collinearity among the control variables is
-  detected via the reciprocal condition number, not merely by a failure
-  of [`base::solve()`](https://rdrr.io/r/base/solve.html), which
-  succeeds and returns nonsense well before the matrix is numerically
-  singular.
+- The joint submatrix of `x` and `y` must be invertible, and every
+  selected variable must have positive variance. Near-singularity from
+  collinearity is detected via the reciprocal condition number, not
+  merely by a failure of
+  [`base::solve()`](https://rdrr.io/r/base/solve.html), which succeeds
+  and returns nonsense well before the matrix is numerically singular.
+  The condition number is taken on the correlation scale, so variables
+  measured in very different units are not mistaken for collinear ones.
+
+- For raw data only the selected columns enter
+  [`stats::cov()`](https://rdrr.io/r/stats/cor.html).
 
 - `x` and `y` must not overlap.
 

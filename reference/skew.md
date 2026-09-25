@@ -137,14 +137,13 @@ Other shape: [`kurt()`](kurt.md)
 ``` r
 
 skew(bedrock::Pizza$price, na.rm=TRUE)
-#>       est 
-#> 0.4970801 
+#> [1] 0.4970801
 
 # use sapply to calculate skewness for a data.frame
 sapply(bedrock::Pizza[,c("temperature","price","delivery_min")], 
        skew, na.rm=TRUE)
-#>  temperature.est        price.est delivery_min.est 
-#>       -0.8418683        0.4970801        0.6106322 
+#>  temperature        price delivery_min 
+#>   -0.8418683    0.4970801    0.6106322 
 
 # the estimate lies inside its own confidence interval
 set.seed(1)

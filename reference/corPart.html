@@ -17,7 +17,7 @@ covariance/correlation matrix or on raw data."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,13 +75,13 @@ a correlation matrix.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>integer vector of indices specifying the variables of interest
-for which partial correlations are computed</p></dd>
+<dd><p>column indices (whole numbers, no duplicates) of the variables
+of interest for which partial correlations are computed</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>integer vector of indices specifying the control variables
-(conditioning set)</p></dd>
+<dd><p>column indices (whole numbers, no duplicates) of the control
+variables (conditioning set); must not overlap with <code>x</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -92,13 +92,18 @@ Row and column names correspond to <code>colnames(m)[x]</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Partial correlations are read off the precision matrix. Let \(K\) be
-the inverse of the joint covariance matrix of \((x, y)\); then</p>
-<p>$$\rho_{ij \cdot y} = - K_{ij} / \sqrt{K_{ii} K_{jj}}$$</p>
-<p>for \(i, j\) in \(x\). This is algebraically equivalent to forming
-the Schur complement
-\(\Sigma_{xx} - \Sigma_{xy}\Sigma_{yy}^{-1}\Sigma_{yx}\) and scaling
-it to unit diagonal, but needs a single inversion instead of two.</p>
+    <p>Only the variables in <code>y</code> are controlled for. Let \(S\) be the
+joint covariance matrix of the selected variables. The residual covariance
+matrix of <code>x</code> after linear adjustment for <code>y</code> is the Schur complement</p>
+<p>$$V = S_{xx} - S_{xy} S_{yy}^{-1} S_{yx}.$$</p>
+<p>The result has entries \(V_{ij}/\sqrt{V_{ii} V_{jj}}\).
+With complete raw data, this equals the correlation matrix of the
+residuals from regressing each variable in <code>x</code> on all variables in <code>y</code>,
+including an intercept. Adding another variable to <code>x</code> does not change
+the correlations between the previously selected variables.</p>
+<p>Normalizing the inverse of the joint covariance matrix would also control
+for the other variables in <code>x</code>. That is a different quantity when
+<code>length(x) &gt; 2</code>.</p>
 <p>Because the result is scaled to unit diagonal, it makes no difference
 whether <code>m</code> is a covariance or a correlation matrix.</p>
     </div>
@@ -106,11 +111,15 @@ whether <code>m</code> is a covariance or a correlation matrix.</p>
     <h2 id="numerical-considerations">Numerical considerations<a class="anchor" aria-label="anchor" href="#numerical-considerations"></a></h2>
 
 
-<ul><li><p>The joint submatrix of <code>x</code> and <code>y</code> must be invertible.
-Near-singularity from collinearity among the control variables is
-detected via the reciprocal condition number, not merely by a
-failure of <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">base::solve()</a></code>, which succeeds and returns
-nonsense well before the matrix is numerically singular.</p></li>
+<ul><li><p>The joint submatrix of <code>x</code> and <code>y</code> must be invertible, and
+every selected variable must have positive variance.
+Near-singularity from collinearity is detected via the reciprocal
+condition number, not merely by a failure of <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">base::solve()</a></code>,
+which succeeds and returns nonsense well before the matrix is
+numerically singular. The condition number is taken on the
+correlation scale, so variables measured in very different units
+are not mistaken for collinear ones.</p></li>
+<li><p>For raw data only the selected columns enter <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::cov()</a></code>.</p></li>
 <li><p><code>x</code> and <code>y</code> must not overlap.</p></li>
 <li><p>For raw data, correlations are computed pairwise, which can
 produce a non-positive-definite matrix when values are missing.</p></li>

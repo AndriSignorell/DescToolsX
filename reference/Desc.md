@@ -28,8 +28,26 @@ print(x, ...)
 # S3 method for class 'Desc'
 plot(x, ...)
 
+# S3 method for class 'Desc.AllNA'
+print(x, ...)
+
+# S3 method for class 'Desc.AllNA'
+plot(x, ...)
+
 # S3 method for class 'Desc.factor'
 plot(x, ...)
+
+# S3 method for class 'formula'
+desc(
+  formula,
+  data,
+  subset,
+  na.action = na.pass,
+  main = NULL,
+  verbose = NULL,
+  plotit = NULL,
+  ...
+)
 
 # S3 method for class 'logical'
 desc(
@@ -55,24 +73,6 @@ print(x, digits = NULL, ...)
 
 # S3 method for class 'Desc.numeric'
 plot(x, main = x$meta$main, ...)
-
-# S3 method for class 'Desc.AllNA'
-print(x, ...)
-
-# S3 method for class 'Desc.AllNA'
-plot(x, ...)
-
-# S3 method for class 'formula'
-desc(
-  formula,
-  data,
-  subset,
-  na.action = na.pass,
-  main = NULL,
-  verbose = NULL,
-  plotit = NULL,
-  ...
-)
 ```
 
 ## Arguments
@@ -84,41 +84,6 @@ desc(
 - ...:
 
   further arguments passed to methods
-
-- ord:
-
-  order of the levels
-
-- conf.level:
-
-  confidence level of the interval (default 0.95). If set to `NA`, no
-  confidence interval is calculated.
-
-- include_x:
-
-  logical; if `TRUE`, the original vector is retained in the result
-
-- main:
-
-  character string, `NULL`, or `NA`, defining the main title. By default
-  (`main = NULL`) the title will be composed as: (\<class(es)\>). If
-  `NA`, no title is printed.
-
-- verbose:
-
-  integer controlling verbosity of table output. One of `1` (minimal),
-  `2` (default), `3` (extensive). Applies to tables only.
-
-- plotit:
-
-  logical. Should a plot be created? The plot type depends on the
-  classes of the variables. Default can be defined by the option
-  `plotit`, if it does not exist then it's set to `TRUE`.
-
-- digits:
-
-  number of digits used to format relative frequencies; the default can
-  be set with `setDescToolsXOption(digits = x)`
 
 - formula:
 
@@ -142,6 +107,41 @@ desc(
 
   function specifying how missing values are handled; passed to
   [`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
+
+- main:
+
+  character string, `NULL`, or `NA`, defining the main title. By default
+  (`main = NULL`) the title will be composed as: (\<class(es)\>). If
+  `NA`, no title is printed.
+
+- verbose:
+
+  integer controlling verbosity of table output. One of `1` (minimal),
+  `2` (default), `3` (extensive). Applies to tables only.
+
+- plotit:
+
+  logical. Should a plot be created? The plot type depends on the
+  classes of the variables. Default can be defined by the option
+  `plotit`, if it does not exist then it's set to `FALSE`.
+
+- ord:
+
+  order of the levels
+
+- conf.level:
+
+  confidence level of the interval (default 0.95). If set to `NA`, no
+  confidence interval is calculated.
+
+- include_x:
+
+  logical; if `TRUE`, the original vector is retained in the result
+
+- digits:
+
+  number of digits used to format relative frequencies; the default can
+  be set with `setDescToolsXOption(digits = x)`
 
 ## Value
 
@@ -244,4 +244,4 @@ Other desc: [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.nq`](desc.nq.md), [`desc.numeric()`](desc.numeric.md),
 [`desc.qn`](desc.qn.md), [`desc.qq`](desc.qq.md),
-[`desc.table()`](desc.table.md), [`desc.ts()`](desc.ts.md)
+[`desc.ts()`](desc.ts.md), [`print.Desc.qq()`](desc.table.md)

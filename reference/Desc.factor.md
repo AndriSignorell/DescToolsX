@@ -94,7 +94,7 @@ print(x, digits = NULL, ...)
 
   logical. Should a plot be created? The plot type depends on the
   classes of the variables. Default can be defined by the option
-  `plotit`, if it does not exist then it's set to `TRUE`.
+  `plotit`, if it does not exist then it's set to `FALSE`.
 
 - digits:
 
@@ -129,5 +129,5 @@ for graphical display
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.nn`](Desc.nn.md), [`desc.nq`](desc.nq.md),
 [`desc.numeric()`](desc.numeric.md), [`desc.qn`](desc.qn.md),
-[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
-[`desc.ts()`](desc.ts.md)
+[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
+[`print.Desc.qq()`](desc.table.md)

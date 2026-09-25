@@ -54,7 +54,10 @@ brierScore(
 - ...:
 
   further arguments passed to the bootstrap engine when
-  `method = "boot"`: `R`, `type`, `parallel`, `ncpus`. See Details.
+  `method = "boot"`: `R`, `type` (`"perc"`, `"basic"`, `"norm"` or
+  `"bca"`; `"stud"` is not available). `parallel` and `ncpus` are
+  accepted but have no effect: the resampling loop in `brier_boot_cpp()`
+  is serial. See Details.
 
 ## Value
 
@@ -84,8 +87,12 @@ The scaled Brier score (`scaled = TRUE`) expresses skill relative to the
 climatological baseline \\BS\_{\max}\\, yielding 1 for a perfect model
 and 0 for the no-skill reference.
 
-`sides` names the side on which the finite bound lies: `"left"` yields
-\\\[lci, \infty)\\, `"right"` yields \\(-\infty, uci\]\\.
+`sides` names the side on which the finite bound lies. The open side is
+reported at the boundary of the score's range, which is \\\[0, 1\]\\ for
+the raw and \\(-\infty, 1\]\\ for the scaled score: `"left"` yields
+\\\[lci, 1\]\\, `"right"` yields \\\[0, uci\]\\ (raw) or \\(-\infty,
+uci\]\\ (scaled). Two-sided intervals are clamped to the same range.
+One-sided intervals require `conf.level > 0.5`.
 
 **Normal interval** (`method = "normal"`)
 

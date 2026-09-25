@@ -96,12 +96,23 @@ The estimator for calculating kurtosis can either be:
 2 is used in SAS and SPSS.  
 3 is used in MINITAB and BMDP.  
 
-Cramer (1997) mentions the asymptotic standard error of the kurtosis:  
+`method = "classic"` uses a Wald interval with the standard error of the
+kurtosis under normality. For estimator 1 this is the exact standard
+error of \\g_2\\
 
-    ASE.kurt = sqrt((24*n*(n - 1)^2) / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))
+    SE(g_2) = sqrt(24*n*(n - 2)*(n - 3) / ((n + 1)^2*(n + 3)*(n + 5)))
 
-to be used for calculating the confidence intervals. This is implemented
-here with `method="classic"`.  
+and since estimators 2 and 3 are linear in \\g_2\\, their standard
+errors follow by multiplying with the respective slope,
+\\(n-1)(n+1)/((n-2)(n-3))\\ and \\((n-1)/n)^2\\. For estimator 2 this
+gives the familiar formula of Cramer (1997), as reported by SPSS:
+
+    SES = sqrt(6*n*(n - 1) / ((n - 2)*(n + 1)*(n + 3)))
+    SEK = 2 * SES * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
+        = sqrt(24*n*(n - 1)^2 / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))
+
+Note that it applies to \\G_2\\ only, not to the default estimator 3.
+With weights, \\n\\ is the sum of the weights.  
 However, Joanes and Gill (1998) advise against this approach, pointing
 out that the normal assumptions would virtually always be violated. They
 suggest using the bootstrap method. That's why the default method for

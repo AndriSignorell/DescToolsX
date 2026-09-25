@@ -16,9 +16,6 @@ documentation tools.
 - [`ConfidenceIntervals`](ConfidenceIntervals.md) : Confidence Interval
   Interface - Common Arguments
 - [`Formulas`](Formulas.md) : Formula Interfaces - Common Arguments
-- [`getConcepts()`](concepts.md) [`conceptMap()`](concepts.md)
-  [`conceptAudit()`](concepts.md) : Concept Utilities for Package
-  Documentation
 - [`day.abb`](constants.md) [`day.name`](constants.md) : DescToolsX
   Constants
 - [`setDescToolsXOption()`](setDescToolsXOption.md) : Set DescToolsX
@@ -34,13 +31,13 @@ tables.
 
 - [`desc()`](Desc.md) [`print(`*`<Desc.list>`*`)`](Desc.md)
   [`print(`*`<Desc>`*`)`](Desc.md) [`plot(`*`<Desc>`*`)`](Desc.md)
+  [`print(`*`<Desc.AllNA>`*`)`](Desc.md)
+  [`plot(`*`<Desc.AllNA>`*`)`](Desc.md)
   [`plot(`*`<Desc.factor>`*`)`](Desc.md)
   [`print(`*`<Desc.logical>`*`)`](Desc.md)
   [`plot(`*`<Desc.logical>`*`)`](Desc.md)
   [`print(`*`<Desc.numeric>`*`)`](Desc.md)
-  [`plot(`*`<Desc.numeric>`*`)`](Desc.md)
-  [`print(`*`<Desc.AllNA>`*`)`](Desc.md)
-  [`plot(`*`<Desc.AllNA>`*`)`](Desc.md) : Describe Data
+  [`plot(`*`<Desc.numeric>`*`)`](Desc.md) : Describe Data
 
 - [`desc(`*`<Date>`*`)`](Desc.Date.md) : Descriptive statistics for
   calendar date variables
@@ -75,12 +72,12 @@ tables.
 
   Print method for `"Desc.Date"` objects
 
-- [`desc(`*`<table>`*`)`](desc.table.md)
+- [`print(`*`<Desc.qq>`*`)`](desc.table.md)
+  [`plot(`*`<Desc.qq>`*`)`](desc.table.md)
+  [`desc(`*`<table>`*`)`](desc.table.md)
   [`desc(`*`<matrix>`*`)`](desc.table.md)
   [`desc(`*`<array>`*`)`](desc.table.md)
-  [`print(`*`<Desc.table>`*`)`](desc.table.md)
-  [`print(`*`<Desc.qq>`*`)`](desc.table.md)
-  [`plot(`*`<Desc.qq>`*`)`](desc.table.md) : Describe a Contingency
+  [`print(`*`<Desc.table>`*`)`](desc.table.md) : Describe a Contingency
   Table
 
 - [`expFreq()`](expFreq.md) : Expected Frequencies
@@ -284,8 +281,8 @@ categorization.
   [`now()`](date_functions.md) [`hour()`](date_functions.md)
   [`minute()`](date_functions.md) [`second()`](date_functions.md)
   [`timezone()`](date_functions.md) [`yearMonth()`](date_functions.md)
-  [`yearWeek()`](date_functions.md) [`yearDay()`](date_functions.md)
-  [`diffDays360()`](date_functions.md)
+  [`yearWeek()`](date_functions.md) [`isoYear()`](date_functions.md)
+  [`yearDay()`](date_functions.md) [`diffDays360()`](date_functions.md)
   [`lastDayOfMonth()`](date_functions.md)
   [`yearDays()`](date_functions.md) [`monthDays()`](date_functions.md)
   [`isWeekend()`](date_functions.md) [`isLeapYear()`](date_functions.md)

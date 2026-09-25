@@ -70,6 +70,8 @@ yearMonth(x)
 
 yearWeek(x, method = c("iso", "us"))
 
+isoYear(x)
+
 yearDay(x)
 
 diffDays360(startDate, endDate, method = c("eu", "us"))
@@ -138,12 +140,22 @@ components, an ordered factor or character vector when `fmt` requests
 names, logical for `isWeekend()` and `isLeapYear()`, `Date` for
 `today()` and `lastDayOfMonth()`, and `POSIXct` for `now()`
 
+## Details
+
+`isoYear()` is the year to which the ISO week of `x` belongs. It differs
+from `year()` in the first and last days of some years: 30 December 2019
+lies in ISO week 1 of 2020, and 3 January 2021 in week 53 of 2020. Use
+it with `week()` wherever the pair (year, week) has to be unambiguous,
+e.g. for grouping; `yearWeek()` returns the same pair as one integer
+`yyyyww`.
+
 ## Date component extractors
 
 |  |  |  |
 |----|----|----|
 | **Function** | **Returns** | **Range / Notes** |
 | `year` | Year of a date or `ym` object | `yyyy` |
+| `isoYear` | ISO 8601 week-numbering year | `yyyy`; see Details |
 | `quarter` | Quarter of the year | 1-4 |
 | `month` | Month of the year (numeric, abbreviated, or full name) | 1-12; S3 dispatch for `ym` |
 | `week` | Week of the year | ISO 8601 or US convention |
@@ -213,6 +225,13 @@ year(x)
 quarter(x)
 #> [1] 3
 
+# calendar year vs. ISO week-numbering year at the turn of the year
+d <- as.Date(c("2019-12-30", "2021-01-03"))
+cbind(year = year(d), isoYear = isoYear(d), week = week(d))
+#>      year isoYear week
+#> [1,] 2019    2020    1
+#> [2,] 2021    2020   53
+
 # month: numeric, abbreviated, full name
 month(x)
 #> [1] 9
@@ -230,13 +249,13 @@ month(x, fmt = "mmm", lang = "local")
 #> 12 Levels: January < February < March < April < May < June < ... < December
 
 week(x)
-#> [1] 37
+#> [1] 39
 week(x, method = "us")
-#> [1] 36
+#> [1] 39
 
 # day is both readable and writable
 day(x)
-#> [1] 9
+#> [1] 25
 day(x) <- 20
 x
 #> [1] "2026-09-20"
@@ -267,8 +286,8 @@ isLeapYear(2000L)
 
 # month names for a weekly time sequence
 month(seq(Sys.Date(), Sys.Date() + 150, by = "weeks"), fmt = "mm")
-#>  [1] Sep Sep Sep Sep Oct Oct Oct Oct Nov Nov Nov Nov Dec Dec Dec Dec Dec Jan Jan
-#> [20] Jan Jan Feb
+#>  [1] Sep Oct Oct Oct Oct Oct Nov Nov Nov Nov Dec Dec Dec Dec Jan Jan Jan Jan Jan
+#> [20] Feb Feb Feb
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 
 # last day of month for several dates

@@ -123,7 +123,10 @@ percTable(
 ## Value
 
 an object of class `"PercTable"` containing the requested frequency and
-percentage tables
+percentage tables. [`print()`](https://rdrr.io/r/base/print.html)
+returns its argument invisibly, as print methods do; the formatted lines
+are available through
+[`capture.output()`](https://rdrr.io/r/utils/capture.output.html).
 
 ## Details
 

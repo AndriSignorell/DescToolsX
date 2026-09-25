@@ -24,7 +24,8 @@ divCoef(x, dis = NULL, normalize = FALSE, na.rm = FALSE, tol = 0.00000001)
 
 - normalize:
 
-  logical; if `TRUE`, the diversity is scaled by its theoretical maximum
+  logical; if `TRUE`, the diversity is scaled by its maximum over all
+  relative abundances (see Details)
 
 - na.rm:
 
@@ -33,8 +34,8 @@ divCoef(x, dis = NULL, normalize = FALSE, na.rm = FALSE, tol = 0.00000001)
 
 - tol:
 
-  numeric convergence tolerance for the iterative maximisation used by
-  `normalize = TRUE`
+  relative accuracy of the maximum used by `normalize = TRUE`: the
+  iteration stops once the maximum is certified to within this fraction
 
 ## Value
 
@@ -46,11 +47,17 @@ The diversity coefficient is defined as \$\$D = \frac{x^T D^2 x}{2 (\sum
 x)^2}\$\$ where \\x\\ is a column of `x` and \\D\\ is the distance
 matrix.
 
-If `normalize = TRUE`, values are divided by the maximum achievable
-diversity under the given distance matrix. That maximum is found by a
-fixed-point iteration over the simplex, which is a heuristic: it is not
-guaranteed to reach the global optimum for an arbitrary distance matrix.
-A warning is issued when the iteration has not converged within `tol`.
+If `normalize = TRUE`, values are divided by the maximum of the
+coefficient over all relative abundance vectors, so that the result lies
+in \\\[0, 1\]\\. The maximum is found by the replicator (Baum-Eagon)
+iteration \\p_i \leftarrow p_i (Ap)\_i / p^T A p\\, which increases
+\\p^T A p\\ monotonically. For a Euclidean `dis` the quadratic form is
+concave on the simplex, so the iteration reaches the global maximum, and
+it stops once the Frank-Wolfe duality gap certifies that maximum to a
+relative accuracy of `tol`; normalized values may therefore exceed 1 by
+at most that amount. For a non-Euclidean `dis` (which triggers a
+warning) only a local maximum is guaranteed. A warning is issued when
+the iteration has not converged.
 
 ## See also
 
@@ -67,7 +74,7 @@ d <- dist(matrix(rnorm(10), ncol = 2))
 divCoef(x, d)
 #> [1] 2.095912 1.959129 1.740829 1.485362
 divCoef(x, d, normalize = TRUE)
-#> [1] 0.8327579 0.7784104 0.6916744 0.5901711
+#> [1] 0.5727755 0.5353949 0.4757375 0.4059229
 
 # without a distance matrix this is the Gini-Simpson index
 divCoef(matrix(c(1, 1, 1, 1, 0, 0), ncol = 2))

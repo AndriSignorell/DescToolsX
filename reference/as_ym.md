@@ -24,7 +24,9 @@ print(x, ...)
 
   a vector of integers, representing the dates in the format YYYYMM, to
   which a number of months has to be added. YYYY must lie in the range
-  of 1000-3000, MM in 1-12. Values outside that range become `NA`.
+  of 1000-3000, MM in 1-12. Values outside that range become `NA`. A
+  `Date` or `POSIXct`/`POSIXlt` is converted to its year and month (a
+  date-time in its own time zone).
 
 - d:
 

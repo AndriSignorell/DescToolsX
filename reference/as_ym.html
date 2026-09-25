@@ -21,7 +21,7 @@ arithmetic for objects of class "ym".'><meta property="og:image" content="/logo.
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,9 @@ arithmetic for objects of class <code>"ym"</code>.</p>
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>a vector of integers, representing the dates in the format YYYYMM,
 to which a number of months has to be added. YYYY must lie in the range of
-1000-3000, MM in 1-12. Values outside that range become <code>NA</code>.</p></dd>
+1000-3000, MM in 1-12. Values outside that range become <code>NA</code>. A
+<code>Date</code> or <code>POSIXct</code>/<code>POSIXlt</code> is converted to its year and month
+(a date-time in its own time zone).</p></dd>
 
 
 <dt id="arg-d">d<a class="anchor" aria-label="anchor" href="#arg-d"></a></dt>

@@ -15,7 +15,7 @@ extending classical descriptive statistics with key time series diagnostics."><m
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ extending classical descriptive statistics with key time series diagnostics."><m
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Diagnostic Summary for Time Series Objects</h1>
-      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/main/R/Desc.ts.R" class="external-link"><code>R/Desc.ts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/main/R/desc.ts.R" class="external-link"><code>R/desc.ts.R</code></a></small>
       <div class="d-none name"><code>desc.ts.Rd</code></div>
     </div>
 
@@ -57,7 +57,15 @@ extending classical descriptive statistics with key time series diagnostics.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'ts'</span></span>
-<span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">x</span>, maxLag <span class="op">=</span> <span class="fl">12</span>, main <span class="op">=</span> <span class="cn">NULL</span>, plotit <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  maxLag <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plotit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Desc.ts'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -88,7 +96,7 @@ If <code>NA</code>, no title is printed.</variable></p></dd>
 <dt id="arg-plotit">plotit<a class="anchor" aria-label="anchor" href="#arg-plotit"></a></dt>
 <dd><p>logical. Should a plot be created? The plot type depends
 on the classes of the variables. Default can be defined by
-the option <code>plotit</code>, if it does not exist then it's set to <code>TRUE</code>.</p></dd>
+the option <code>plotit</code>, if it does not exist then it's set to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -97,18 +105,20 @@ One of <code>1</code> (minimal), <code>2</code> (default), <code>3</code> (exten
 Applies to tables only.</p></dd>
 
 
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to methods</p></dd>
-
-
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
 <dd><p>number of digits used to format numeric values</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>further arguments passed to methods</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an object of class <code>c("Desc.ts", "Desc")</code> containing the
-computed statistics</p>
+    <p>an object of class <code>c("Desc.ts", "Desc")</code> with, among others,
+the components <code>acf1</code>, <code>ljungbox</code>, <code>adf</code>, <code>kpss</code> (test results),
+<code>stationary</code> (logical, the combined rule above), <code>trend</code> (named vector
+<code>slope</code>, <code>p.value</code>) and <code>boxcoxlambda</code></p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -127,6 +137,10 @@ hypothesis of a unit root (p &lt; 0.05) and the KPSS test does not reject
 the null hypothesis of stationarity (p &gt; 0.05).</p>
 <p>The Box-Cox transformation parameter is estimated using
 <code><a href="boxCoxLambda.html">boxCoxLambda()</a></code>.</p>
+<p>Missing values are allowed. The autocorrelation and the Ljung-Box test
+keep the time structure (<code>na.action = na.pass</code>), the ADF and KPSS tests
+and the Box-Cox parameter use the observed values only. The Box-Cox
+parameter is <code>NA</code> unless all values are strictly positive.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -150,38 +164,50 @@ Forecasting: Principles and Practice.</p>
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.table.html">desc.table()</a></code></p></div>
+<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>p-value smaller than reported p-value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AirPassengers (ts)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">AirPassengers (ts)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  start      end  frequency          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    144      118          0  144  118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  start      end  frequency          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1949-1  1960-12         12          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> length        n        NAs  unique    0s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    144      144          0     118     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          100.0%       0.0%          0.0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  start      end  frequency              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1949-1  1960-12         12              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lag-1 autocorrelation : 0.948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ljung-Box (lag 12)     : Q = 1036.482, p = &lt; 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ADF                   : -0.352, p = 0.502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KPSS                  : 2.739, p = &lt;0.010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stationary            : no</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> linear trend          : slope = 31.886, p = &lt; 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Box-Cox lambda        : 0.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="desc.ts-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">Nile</span>, maxLag <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>p-value smaller than reported p-value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Nile (ts)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Nile (ts)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result is not a multiple of vector length (arg 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  start     end  frequency         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    100      85          0  100  85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  start     end  frequency         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1871-1  1970-1          1         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> length       n        NAs  unique    0s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    100     100          0      85     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         100.0%       0.0%          0.0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  start     end  frequency              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1871-1  1970-1          1              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lag-1 autocorrelation : 0.498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Ljung-Box (lag 10)     : Q = 88.127, p = &lt; 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ADF                   : -0.964, p = 0.306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KPSS                  : 0.965, p = &lt;0.010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stationary            : no</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> linear trend          : slope = -2.714, p = &lt; 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Box-Cox lambda        : 0.999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="desc.ts-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

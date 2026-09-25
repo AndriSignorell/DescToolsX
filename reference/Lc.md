@@ -47,7 +47,8 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
   `predict.Lc()`, the argument `R` (positive integer, default `999`)
   controls the number of bootstrap replications when `conf.level` is
   supplied; it is extracted via `.extractBootArgs()` and ignored
-  otherwise.
+  otherwise. Only percentile intervals are implemented: `type = "perc"`
+  may be supplied explicitly; other interval types are rejected.
 
 - x:
 
@@ -56,7 +57,11 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
 - n:
 
   numeric vector of non-negative weights of the same length as `x`.
-  Defaults to equal weights (`rep(1, length(x))`).
+  Defaults to equal weights (`rep(1, length(x))`). Bootstrap intervals
+  draw `floor(sum(n))` observations with probabilities proportional to
+  `n`; the sum must be finite and at least one. Thus rescaling the
+  weights changes the bootstrap sample size; frequency weights are
+  appropriate when the weights represent replicated observations.
 
 - na.rm:
 
@@ -77,7 +82,10 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
 
   numeric scalar in \\(0, 1)\\. If supplied, bootstrap confidence
   intervals at level `conf.level` are added as columns `lci` and `uci`.
-  Set to `NA` (default) to suppress intervals.
+  Set to `NA` (default) to suppress intervals. For the standard curve,
+  all-zero bootstrap samples have undefined income shares and are
+  omitted pointwise; if no finite replicates remain, the corresponding
+  limits are `NA`.
 
 - general:
 
@@ -108,11 +116,11 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
 
   `x`
 
-  :   original unsorted data vector
+  :   unsorted data used after missing-value removal
 
   `n`
 
-  :   original weight vector
+  :   corresponding weights after missing-value removal
 
 - `lc.formula()`:
 
@@ -147,6 +155,7 @@ object is returned when there is only one group; otherwise an
 
 Bootstrap confidence intervals in `predict.Lc()` are based on resampling
 with replacement from the (weighted) empirical distribution, followed by
+interpolation of each replicate at the requested population shares and
 pointwise quantiles across bootstrap replicates. The number of
 replications is controlled by `R` passed via `...` and extracted by
 `.extractBootArgs()` (default `R = 999`).
@@ -303,9 +312,9 @@ predict(lc_obj, newdata = seq(0, 1, by = 0.25),
         conf.level = 0.95, R = 200)
 #>      p          L        lci        uci
 #> 1 0.00 0.00000000 0.00000000 0.00000000
-#> 2 0.25 0.05914571 0.05797344 0.05797344
-#> 3 0.50 0.18850553 0.19951495 0.19951495
-#> 4 0.75 0.42410184 0.44869940 0.44869940
+#> 2 0.25 0.05914571 0.04688052 0.07469386
+#> 3 0.50 0.18850553 0.15672765 0.22737628
+#> 4 0.75 0.42410184 0.36339943 0.48715348
 #> 5 1.00 1.00000000 1.00000000 1.00000000
         
         

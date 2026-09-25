@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@
 <span><span class="fu">etaSq</span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="fl">2</span>, anova <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'aovlist'</span></span>
-<span><span class="fu">etaSq</span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="fl">2</span>, anova <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">etaSq</span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="fl">1</span>, anova <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">aovlDetails</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span></span>
@@ -72,12 +72,15 @@
 
 <dl><dt id="arg-fit">fit<a class="anchor" aria-label="anchor" href="#arg-fit"></a></dt>
 <dd><p>an analysis of variance object of class <code>"aov"</code> or
-<code>"aovlist"</code></p></dd>
+<code>"aovlist"</code>, or a linear model of class <code>"lm"</code> (weights are
+respected). Generalized linear models and multivariate <code>"mlm"</code> fits
+are refused: their sums of squares do not decompose the variance of
+the response.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>type of sums of squares to calculate.
-<code>etaSq.aovlist()</code> requires <code>type = 1</code>.</p></dd>
+<code>etaSq.aovlist()</code> requires <code>type = 1</code>, which is its default.</p></dd>
 
 
 <dt id="arg-anova">anova<a class="anchor" aria-label="anchor" href="#arg-anova"></a></dt>
@@ -118,7 +121,7 @@ sums of squares (<code>type=2</code>), in keeping with the <code>Anova</code> fu
 in the <code>car</code> package. It is possible to revert to the Type I SS values
 (<code>type=1</code>) to be consistent with <code>anova</code>, but this rarely tests
 hypotheses of interest. Type III SS values (<code>type=3</code>) can also be
-computed. <code>etaSq.aovlist</code> requires <code>type=1</code>.</p>
+computed. <code>etaSq.aovlist</code> requires <code>type=1</code>, which is also its default.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

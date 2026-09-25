@@ -18,7 +18,9 @@ blandAltmanData(x, data = NULL, conf.level = 0.95, na.rm = FALSE, ...)
 
 - x:
 
-  numeric vector or formula
+  numeric vector, or a formula `y ~ x` with two numeric variables: the
+  right-hand side is the reference method (`x`), the left-hand side the
+  method under comparison (`y`), so that the differences are `lhs - rhs`
 
 - ...:
 

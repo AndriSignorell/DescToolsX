@@ -30,7 +30,10 @@ ccc(
 - conf.level:
 
   confidence level of the interval. If set to `NA` (the default), only
-  the point estimate is returned.
+  the point estimate is returned. With perfect concordance or
+  discordance the asymptotic variance is zero; the analytic methods then
+  return `NA` bounds with a warning. One-sided intervals require
+  `conf.level > 0.5`.
 
 - sides:
 

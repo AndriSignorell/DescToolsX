@@ -8,6 +8,12 @@ pairs via `Desc.qq` and `Desc.matrix`.
 ## Usage
 
 ``` r
+# S3 method for class 'Desc.qq'
+print(x, digits = NULL, ...)
+
+# S3 method for class 'Desc.qq'
+plot(x, main = x$meta$main, which = 1, ...)
+
 # S3 method for class 'table'
 desc(
   x,
@@ -43,12 +49,6 @@ desc(
 
 # S3 method for class 'Desc.table'
 print(x, print_header = TRUE, ...)
-
-# S3 method for class 'Desc.qq'
-print(x, digits = NULL, ...)
-
-# S3 method for class 'Desc.qq'
-plot(x, main = x$meta$main, which = 1, ...)
 ```
 
 ## Arguments
@@ -58,6 +58,22 @@ plot(x, main = x$meta$main, which = 1, ...)
   a `table` or `matrix` object. For the formula interface, use
   `desc(y ~ x, data)` which dispatches to this function automatically.
 
+- digits:
+
+  number of digits for numerical output
+
+- ...:
+
+  further arguments passed to or from other methods
+
+- main:
+
+  main title for the plot
+
+- which:
+
+  plots to produce
+
 - conf.level:
 
   numeric, confidence level for all confidence intervals. Default is
@@ -66,13 +82,10 @@ plot(x, main = x$meta$main, which = 1, ...)
 - prop:
 
   character string controlling which proportions are shown in the
-  cross-tabulation. One of `"rows"` (default), `"cols"`, `"total"`, or
-  `"no"` (frequencies only). At `verbose = 3` all three proportions are
-  shown regardless of this argument.
-
-- main:
-
-  main title for the plot; defaults to the title stored in `x$meta$main`
+  cross-tabulation. One of `"rows"`, `"cols"`, `"total"`, or `"no"`
+  (frequencies only). If `NULL` (default), `"rows"` is used, and all
+  three proportions at `verbose = 3`; an explicit value is always
+  respected.
 
 - verbose:
 
@@ -85,21 +98,9 @@ plot(x, main = x$meta$main, which = 1, ...)
 
   whether a plot is produced automatically
 
-- ...:
-
-  further arguments passed to or from other methods
-
 - print_header:
 
   whether the header is printed
-
-- digits:
-
-  number of digits for numerical output
-
-- which:
-
-  plots to produce
 
 ## Value
 
@@ -109,66 +110,36 @@ containing all computed statistics and is intended to be used via its
 
 ## Details
 
-The `verbose` argument controls which statistics are computed and
-displayed. The following table gives an overview; items marked with
-*2x2* are only shown for 2 x 2 tables.
+The `verbose` argument controls which statistics are displayed. All of
+them are computed in any case; the lists below describe the printed
+output. The cross-tabulation always shows the frequencies together with
+the proportions selected by `prop`.
 
-**verbose = 1 — essential output:**
+**2 x 2 tables**
 
-- Summary: n, rows, columns, missings
+- `verbose = 1`: chi-squared test with Yates continuity correction,
+  Fisher's exact test
 
-- Cross-tabulation: frequencies
+- `verbose = 2` (default): additionally McNemar's test and a table of
+  odds ratio, relative risks (col1, col2) and proportion difference,
+  each with confidence interval
 
-- Pearson chi-squared test
+- `verbose = 3`: additionally the uncorrected Pearson chi-squared test,
+  and relative risks (row1, row2), Cramér's V and Cohen's h in the table
+  of estimates
 
-- Chi-squared with Yates continuity correction *(2x2)*
+**r x c tables**
 
-- Fisher's exact test *(2x2)*
+- `verbose = 1`: Pearson chi-squared test
 
-- McNemar's test *(2x2)*
+- `verbose = 2` (default): additionally the G-test (log likelihood
+  ratio) and the Mantel-Haenszel chi-squared test, and the point
+  estimates of the first three association measures
 
-- Cramér's V with confidence interval and effect size label
-
-- Odds ratio with confidence interval *(2x2)*
-
-**verbose = 2 — standard output (default):**
-
-All of the above, plus:
-
-- Cross-tabulation: row proportions (or as set by `prop`)
-
-- G-test (log likelihood ratio test of independence)
-
-- Mantel-Haenszel chi-squared test
-
-- Contingency coefficient
-
-- Kendall's tau-b with confidence interval
-
-- Relative risk col1/col2 and row1/row2 with confidence intervals
-  *(2x2)*
-
-- Proportions difference with confidence interval *(2x2)*
-
-**verbose = 3 — full output:**
-
-All of the above, plus:
-
-- Cross-tabulation: row, column, and total proportions
-
-- Lambda C\|R, R\|C, symmetric
-
-- Uncertainty coefficient C\|R, R\|C, symmetric
-
-- Mutual information
-
-- Goodman-Kruskal gamma with confidence interval
-
-- Stuart's tau-c with confidence interval
-
-- Somers' D C\|R and R\|C with confidence intervals
-
-- Pearson and Spearman correlation with confidence intervals
+- `verbose = 3`: the full table of nominal and ordinal association
+  measures with confidence intervals (Cramér's V, contingency
+  coefficient, lambda, uncertainty coefficient, mutual information,
+  gamma, tau-b, tau-c, Somers' D, Pearson and Spearman correlation)
 
 **Table types:**
 
@@ -253,6 +224,7 @@ desc(tab)
 #> Kendall Tau-b       -0.057
 #> 
 #> 
+
 desc(tab, prop = "rows", verbose = 3)
 #> ────────────────────────────────────────────────────────────────────────────── 
 #> tab (table)
@@ -313,6 +285,7 @@ desc(tab, prop = "rows", verbose = 3)
 #> ¹ 95% conf. level
 #> 
 
+
 # 2x2 table — additional measures are shown automatically
 tab2 <- tab[1:2, 1:2]
 desc(tab2)
@@ -346,7 +319,10 @@ desc(tab2)
 #> rel. risk (col2)      0.035   0.005   0.250
 #> prop. diff            0.382   0.251   0.526
 #> 
+#> ────────────────────
+#> ¹ 95% conf. level
 #> 
+
 
 # formula interface — dispatches to desc.table internally
 desc(driver ~ area, data = Pizza)
@@ -436,5 +412,6 @@ desc(m, verbose = 2)
 #> Kendall Tau-b       0.073
 #> 
 #> 
+
 
 ```

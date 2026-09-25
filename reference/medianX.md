@@ -16,7 +16,7 @@ medianX(x, ...)
 medianX(x, weights = NULL, na.rm = FALSE, ...)
 
 # S3 method for class 'factor'
-medianX(x, na.rm = FALSE, ...)
+medianX(x, weights = NULL, na.rm = FALSE, ...)
 
 # S3 method for class 'Freq'
 medianX(x, breaks, ...)
@@ -31,12 +31,16 @@ medianX(x, breaks, ...)
 
 - ...:
 
-  further arguments passed to or from other methods
+  further arguments passed to
+  [`stats::median()`](https://rdrr.io/r/stats/median.html) in the
+  unweighted default method, otherwise unused
 
 - weights:
 
   a numerical vector of weights the same length as `x` giving the
-  weights to use for elements of `x`
+  weights to use for elements of `x`. Only the ratios of the weights
+  matter (see Details); frequency weights reproduce the median of the
+  replicated sample. Supported for numeric `x` only.
 
 - na.rm:
 
@@ -45,18 +49,21 @@ medianX(x, breaks, ...)
 
 - breaks:
 
-  breaks for calculating the mean for classified data as composed by
-  [`freq()`](freq.md)
+  breaks for calculating the median for classified data as composed by
+  [`freq()`](freq.md); strictly increasing, one more than there are
+  classes. If the median falls into an open-ended class (`-Inf` or `Inf`
+  as a bound), `NA` is returned with a warning.
 
 ## Value
 
-the default method returns a length-one object of the same type as `x`,
-except when `x` is integer of even length, when the result will be
-double.
+the unweighted default method returns a length-one object of the same
+type as `x`, except when `x` is integer of even length, when the result
+will be double. With weights the result is double.
 
 If there are no values or if `na.rm = FALSE` and there are `NA` values
 the result is `NA` of the same type as `x` (or more generally the result
-of `x[FALSE][NA]`).
+of `x[FALSE][NA]`). For ordered factors, missing results retain the
+ordered-factor class and the original levels.
 
 ## Details
 
@@ -66,14 +73,13 @@ base all of which are generic, and so the default method will work for
 most classes (e.g., `"[Date]"`) for which a median is a reasonable
 concept.
 
-Calculating the median for ordered factors is not implemented in
-standard R, as it's not well defined (it is not clear what to do if the
-median sits between two levels in factors of even length). This function
-returns the high median and prints a warning if the low median would be
-different (which is supposed to be a rare event). There's a vivid
-discussion between experts going on whether this should be defined or
-not. We'll wait for definitive results and enjoy the function's comfort
-so far...
+For ordered factors, the result is the upper sample median: the category
+at position `floor(n / 2) + 1` in the sorted non-missing observations.
+If the two middle observations of an even-sized sample differ, a warning
+is issued. Their integer level codes are not averaged, because distances
+between ordinal categories are not defined. Unused levels are preserved
+and cannot become the median merely by lying between observed
+categories. Unordered factors are rejected.
 
 ## Note
 
