@@ -1,1 +1,16 @@
 DescToolsX.dll
+RcppExports.o
+assoc.o
+brier_boot.o
+con_dis_pairs_tab.o
+con_dis_pairs_xy.o
+contcoef_bca.o
+contcoef_table.o
+dates.o
+extremes.o
+hlqest.o
+hoeffding_D.o
+power_sum.o
+skew_kurt.o
+tukey_biweight.o
+tukey_biweight_boot.o

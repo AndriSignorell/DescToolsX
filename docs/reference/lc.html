@@ -21,7 +21,7 @@ pharos package.'><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,7 +103,9 @@ Default is <code><a href="https://rdrr.io/r/stats/na.fail.html" class="external-
 <code>lc.formula()</code>. In <code>predict.Lc()</code>, the argument <code>R</code>
 (positive integer, default <code>999</code>) controls the number of bootstrap
 replications when <code>conf.level</code> is supplied; it is extracted via
-<code>.extractBootArgs()</code> and ignored otherwise.</p></dd>
+<code>.extractBootArgs()</code> and ignored otherwise. Only percentile intervals
+are implemented: <code>type = "perc"</code> may be supplied explicitly; other
+interval types are rejected.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
@@ -112,7 +114,11 @@ replications when <code>conf.level</code> is supplied; it is extracted via
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>numeric vector of non-negative weights of the same length as
-<code>x</code>. Defaults to equal weights (<code>rep(1, length(x))</code>).</p></dd>
+<code>x</code>. Defaults to equal weights (<code>rep(1, length(x))</code>). Bootstrap intervals
+draw <code>floor(sum(n))</code> observations with probabilities proportional to <code>n</code>;
+the sum must be finite and at least one. Thus rescaling the weights
+changes the bootstrap sample size; frequency weights are appropriate
+when the weights represent replicated observations.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -135,7 +141,9 @@ omitted, the original grid points are returned.</p></dd>
 <dd><p>numeric scalar in \((0, 1)\). If supplied,
 bootstrap confidence intervals at level <code>conf.level</code> are added
 as columns <code>lci</code> and <code>uci</code>.  Set to <code>NA</code> (default)
-to suppress intervals.</p></dd>
+to suppress intervals. For the standard curve, all-zero bootstrap
+samples have undefined income shares and are omitted pointwise; if no
+finite replicates remain, the corresponding limits are <code>NA</code>.</p></dd>
 
 
 <dt id="arg-general">general<a class="anchor" aria-label="anchor" href="#arg-general"></a></dt>
@@ -162,10 +170,10 @@ starting at 0</p></dd>
 <dd><p>estimated Gini coefficient</p></dd>
 
 <dt><code>x</code></dt>
-<dd><p>original unsorted data vector</p></dd>
+<dd><p>unsorted data used after missing-value removal</p></dd>
 
 <dt><code>n</code></dt>
-<dd><p>original weight vector</p></dd>
+<dd><p>corresponding weights after missing-value removal</p></dd>
 
 
 </dl></dd>
@@ -198,7 +206,8 @@ group and a separate Lorenz curve is computed for each level.  A single
 an <code>"LcList"</code>.</p>
 <p>Bootstrap confidence intervals in <code>predict.Lc()</code> are based on
 resampling with replacement from the (weighted) empirical distribution,
-followed by pointwise quantiles across bootstrap replicates.  The number
+followed by interpolation of each replicate at the requested population
+shares and pointwise quantiles across bootstrap replicates.  The number
 of replications is controlled by <code>R</code> passed via <code>...</code> and
 extracted by <code>.extractBootArgs()</code> (default <code>R = 999</code>).</p>
     </div>
@@ -356,9 +365,9 @@ extracted by <code>.extractBootArgs()</code> (default <code>R = 999</code>).</p>
 <span class="r-in"><span>        conf.level <span class="op">=</span> <span class="fl">0.95</span>, R <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      p          L        lci        uci</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.00 0.00000000 0.00000000 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.25 0.05914571 0.05797344 0.05797344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.50 0.18850553 0.19951495 0.19951495</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.75 0.42410184 0.44869940 0.44869940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.25 0.05914571 0.04688052 0.07469386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.50 0.18850553 0.15672765 0.22737628</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.75 0.42410184 0.36339943 0.48715348</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 1.00 1.00000000 1.00000000 1.00000000</span>
 <span class="r-in"><span>        </span></span>
 <span class="r-in"><span>        </span></span>

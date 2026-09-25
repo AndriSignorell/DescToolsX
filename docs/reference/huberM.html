@@ -17,7 +17,7 @@ MASS::huber() would return an error."><meta property="og:image" content="/logo.p
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@ the degenerate case of zero scale gracefully, where
 <span>  k <span class="op">=</span> <span class="fl">1.345</span>,</span>
 <span>  mu <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  s <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -88,7 +89,9 @@ the degenerate case of zero scale gracefully, where
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
 interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
+<code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>. The location is unbounded,
+so the open side is \(\pm\)<code>Inf</code>. One-sided intervals require
+<code>conf.level &gt; 0.5</code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -110,6 +113,16 @@ uses <code>median(x)</code>, computed after <code>na.rm</code> is applied.</p></
 <dd><p>scale estimate held constant through the iterations.
 <code>NULL</code> (default) uses <code>mad(x, center = mu)</code>, computed
 after <code>na.rm</code> is applied.</p></dd>
+
+
+<dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
+<dd><p>optional non-negative frequency weights of the same
+length as <code>x</code>. The starting values then become the weighted median
+and the weighted MAD (both via <code><a href="medianX.html">medianX()</a></code>, the MAD with the usual
+constant 1.4826), and \(n\) in the Wald interval is
+<code>sum(weights)</code>, so integer weights give exactly the result of the
+replicated data. The bootstrap resamples observations together with
+their weights.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -167,8 +180,8 @@ arguments are passed through <code>...</code> and extracted via
 <dd><p>number of bootstrap replicates (default <code>999</code>)</p></dd>
 
 <dt><code>type</code></dt>
-<dd><p>confidence interval type: <code>"perc"</code> or
-<code>"bca"</code> (default)</p></dd>
+<dd><p>confidence interval type: <code>"perc"</code>, <code>"basic"</code>,
+<code>"norm"</code> or <code>"bca"</code> (default)</p></dd>
 
 <dt><code>parallel</code></dt>
 <dd><p>parallelization mode: <code>"no"</code>,

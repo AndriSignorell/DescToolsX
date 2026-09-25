@@ -15,7 +15,7 @@ with a confidence interval via a normal approximation or bootstrap."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,8 +108,10 @@ Default <code>FALSE</code>.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>further arguments passed to the bootstrap engine when
-<code>method = "boot"</code>: <code>R</code>, <code>type</code>, <code>parallel</code>,
-<code>ncpus</code>. See Details.</p></dd>
+<code>method = "boot"</code>: <code>R</code>, <code>type</code> (<code>"perc"</code>, <code>"basic"</code>,
+<code>"norm"</code> or <code>"bca"</code>; <code>"stud"</code> is not available). <code>parallel</code> and
+<code>ncpus</code> are accepted but have no effect: the resampling loop in
+<code>brier_boot_cpp()</code> is serial. See Details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -136,9 +138,12 @@ probability.  Lower is better; a perfect model scores 0.</p>
 <p>The scaled Brier score (<code>scaled = TRUE</code>) expresses skill relative
 to the climatological baseline \(BS_{\max}\), yielding 1 for a
 perfect model and 0 for the no-skill reference.</p>
-<p><code>sides</code> names the side on which the finite bound lies:
-<code>"left"</code> yields \([lci, \infty)\), <code>"right"</code> yields
-\((-\infty, uci]\).</p>
+<p><code>sides</code> names the side on which the finite bound lies. The open side is
+reported at the boundary of the score's range, which is \([0, 1]\)
+for the raw and \((-\infty, 1]\) for the scaled score: <code>"left"</code>
+yields \([lci, 1]\), <code>"right"</code> yields \([0, uci]\) (raw) or
+\((-\infty, uci]\) (scaled). Two-sided intervals are clamped to the
+same range. One-sided intervals require <code>conf.level &gt; 0.5</code>.</p>
 <p><strong>Normal interval</strong> (<code>method = "normal"</code>)</p>
 <p>A delta-method normal approximation based on the variance of the
 per-observation Brier losses.  Fast and deterministic; reliable for

@@ -17,7 +17,7 @@ adequate statistical tests."><meta property="og:image" content="/logo.png"></hea
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -251,40 +251,53 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Pizza</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temperature"</span>, <span class="st">"delivery_min"</span>, <span class="st">"driver"</span>, <span class="st">"wine_ordered"</span><span class="op">)</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>  groups <span class="op">=</span> <span class="va">Pizza</span><span class="op">$</span><span class="va">quality</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var                total              low                medium             high                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n                  1008               156 (15.5%)        356 (35.3%)        496 (49.2%)                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> temperature        47.937 (9.938)     32.874 (7.772)     45.640 (7.387)     53.604 (6.474)     *** ¹             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> delivery_min       25.653 (10.843)    33.925 (11.742)    26.522 (10.113)    22.615 (9.497)     *** ¹             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> driver                                                                                         *** ³             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Butcher            79 ( 7.9%)         10 ( 6.5%)         36 (10.1%)         33 ( 6.7%)                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Carpenter          225 (22.4%)        59 (38.1%)         90 (25.4%)         76 (15.4%)                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Carter             196 (19.5%)        11 ( 7.1%)         72 (20.3%)         113 (22.9%)                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Farmer             94 ( 9.4%)         10 ( 6.5%)         26 ( 7.3%)         58 (11.7%)                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hunter             130 (12.9%)        8 ( 5.2%)          43 (12.1%)         79 (16.0%)                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Miller             109 (10.9%)        16 (10.3%)         35 ( 9.9%)         58 (11.7%)                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Taylor             171 (17.0%)        41 (26.5%)         53 (14.9%)         77 (15.6%)                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> wine_ordered (= 1) 161 (16.1%)        32 (20.8%)         63 (17.9%)         66 (13.4%)         .   ³             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var                  total             low               medium         </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n                    1008              156 (15.5%)       356 (35.3%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    temperature          47.937 (9.938)    32.874 (7.772)    45.640 (7.387) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    delivery_min         25.653 (10.843)   33.925 (11.742)   26.522 (10.113)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    driver                                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Butcher             79 ( 7.9%)        10 ( 6.5%)        36 (10.1%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carpenter          225 (22.4%)        59 (38.1%)        90 (25.4%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carter             196 (19.5%)        11 ( 7.1%)        72 (20.3%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Farmer              94 ( 9.4%)        10 ( 6.5%)        26 ( 7.3%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Hunter             130 (12.9%)         8 ( 5.2%)        43 (12.1%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Miller             109 (10.9%)        16 (10.3%)        35 ( 9.9%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Taylor             171 (17.0%)        41 (26.5%)        53 (14.9%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    wine_ordered (= 1)   161 (16.1%)        32 (20.8%)        63 (17.9%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    high                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    496 (49.2%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    53.604 (6.474)   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    22.615 (9.497)   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     *** ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     33 ( 6.7%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     76 (15.4%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    113 (22.9%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     58 (11.7%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     79 (16.0%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     58 (11.7%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     77 (15.6%)           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     66 (13.4%)      .   ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># the same but no groups now...</span></span></span>
 <span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Pizza</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temperature"</span>, <span class="st">"delivery_min"</span>, <span class="st">"driver"</span>, <span class="st">"wine_ordered"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var                total             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n                  1209              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> temperature        47.937 (9.938)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> delivery_min       25.653 (10.843)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> driver                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Butcher            96 ( 8.0%)        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Carpenter          272 (22.6%)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Carter             234 (19.4%)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Farmer             117 ( 9.7%)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hunter             156 (13.0%)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Miller             125 (10.4%)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Taylor             204 (16.9%)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> wine_ordered (= 1) 187 (15.6%)       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var                  total          </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n                    1209           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    temperature          47.937 (9.938) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    delivery_min         25.653 (10.843)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    driver                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Butcher             96 ( 8.0%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carpenter          272 (22.6%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carter             234 (19.4%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Farmer             117 ( 9.7%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Hunter             156 (13.0%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Miller             125 (10.4%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Taylor             204 (16.9%)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    wine_ordered (= 1)    187 (15.6%)   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># define median/IQR as describing functions for the numeric variables</span></span></span>
@@ -296,15 +309,15 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span>  <span class="op">}</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var          total        setosa       versicolor   virginica                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n            150          50 (33.3%)   50 (33.3%)   50 (33.3%)               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length 5.8 / 1.300  5.0 / 0.400  5.9 / 0.700  6.5 / 0.675  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width  3.0 / 0.500  3.4 / 0.475  2.8 / 0.475  3.0 / 0.375  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length 4.4 / 3.500  1.5 / 0.175  4.4 / 0.600  5.6 / 0.775  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width  1.3 / 1.500  0.2 / 0.100  1.3 / 0.300  2.0 / 0.500  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var            total         setosa        versicolor    virginica          </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n              150           50 (33.3%)    50 (33.3%)    50 (33.3%)         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length   5.8 / 1.300   5.0 / 0.400   5.9 / 0.700   6.5 / 0.675   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Width    3.0 / 0.500   3.4 / 0.475   2.8 / 0.475   3.0 / 0.375   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Length   4.4 / 3.500   1.5 / 0.175   4.4 / 0.600   5.6 / 0.775   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Width    1.3 / 1.500   0.2 / 0.100   1.3 / 0.300   2.0 / 0.500   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># replace kruskal.test by ANOVA and report the p.value</span></span></span>
@@ -325,15 +338,15 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span>                pval <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"*"</span>, naForm <span class="op">=</span> <span class="st">"   "</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var          total        setosa       versicolor   virginica                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n            150          50 (33.3%)   50 (33.3%)   50 (33.3%)               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length 5.8 / 0.828  5.0 / 0.352  5.9 / 0.516  6.6 / 0.636  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width  3.1 / 0.436  3.4 / 0.379  2.8 / 0.314  3.0 / 0.322  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Length 3.8 / 1.765  1.5 / 0.174  4.3 / 0.470  5.6 / 0.552  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width  1.2 / 0.762  0.2 / 0.105  1.3 / 0.198  2.0 / 0.275  *** ¹       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ¹) ANOVA, ²) Fisher exact test, ³) Chi-Square test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var            total         setosa        versicolor    virginica          </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n              150           50 (33.3%)    50 (33.3%)    50 (33.3%)         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Length   5.8 / 0.828   5.0 / 0.352   5.9 / 0.516   6.6 / 0.636   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sepal.Width    3.1 / 0.436   3.4 / 0.379   2.8 / 0.314   3.0 / 0.322   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Length   3.8 / 1.765   1.5 / 0.174   4.3 / 0.470   5.6 / 0.552   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Petal.Width    1.2 / 0.762   0.2 / 0.105   1.3 / 0.198   2.0 / 0.275   *** ¹</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹) ANOVA, ²) Fisher exact test, ³) Chi-Square test</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu">tOne</span><span class="op">(</span>x     <span class="op">=</span> <span class="va">Pizza</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temperature"</span>, <span class="st">"driver"</span>, <span class="st">"rebate"</span><span class="op">)</span><span class="op">]</span>,</span></span>
@@ -359,20 +372,32 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">t1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var                      Brent                    Camden                   Westminster             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n                        474 (39.5%)              344 (28.7%)              381 (31.8%)             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> temperature              51.1 / 8.734 (53.4)      47.4 / 10.111 (50.3)     44.3 / 9.836 (45.9)     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> driver                                                                                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Butcher                  72 (15.2%)               1 ( 0.3%)                22 ( 5.8%)              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Carpenter                29 ( 6.1%)               19 ( 5.6%)               221 (58.2%)             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Carter                   177 (37.4%)              47 (13.8%)               5 ( 1.3%)               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Farmer                   19 ( 4.0%)               87 (25.5%)               11 ( 2.9%)              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hunter                   128 (27.1%)              4 ( 1.2%)                24 ( 6.3%)              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Miller                   6 ( 1.3%)                41 (12.0%)               77 (20.3%)              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Taylor                   42 ( 8.9%)               142 (41.6%)              20 ( 5.3%)              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rebate (= TRUE)          235 (50.3%)              172 (50.3%)              184 (48.7%)             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> numeric: mean / sd (median)), factor: n (n%) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var               Brent                      Camden                  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n                              474 (39.5%)                344 (28.7%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    temperature            51.1 / 8.734 (53.4)   47.4 / 10.111 (50.3)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    driver                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Butcher                       72 (15.2%)                  1 ( 0.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carpenter                     29 ( 6.1%)                 19 ( 5.6%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carter                       177 (37.4%)                 47 (13.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Farmer                        19 ( 4.0%)                 87 (25.5%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Hunter                       128 (27.1%)                  4 ( 1.2%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Miller                         6 ( 1.3%)                 41 (12.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Taylor                        42 ( 8.9%)                142 (41.6%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    rebate (= TRUE)                235 (50.3%)                172 (50.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Westminster             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 381 (31.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         44.3 / 9.836 (45.9)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  22 ( 5.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 221 (58.2%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   5 ( 1.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  11 ( 2.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  24 ( 6.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  77 (20.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  20 ( 5.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 184 (48.7%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">numeric: mean / sd (median)), factor: n (n%)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -387,41 +412,51 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="va">d.set</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">d.set</span><span class="op">$</span><span class="va">g</span>, intref <span class="op">=</span> <span class="st">"low"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var         total       a           b           c           d                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n           100         30 (30.0%)  21 (21.0%)  25 (25.0%)  24 (24.0%)             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x (= 0)     32 (32.0%)  10 (33.3%)  9 (42.9%)   7 (28.0%)   6 (25.0%)   ³          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> y (= FALSE) 30 (30.0%)  8 (26.7%)   7 (33.3%)   10 (40.0%)  5 (20.8%)   ³          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> z (= 0)     21 (21.0%)  7 (23.3%)   4 (19.0%)   6 (24.0%)   4 (16.7%)   ³          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var           total        a            b            c            d         </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n             100          30 (30.0%)   21 (21.0%)   25 (25.0%)   24 (24.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    x (= 0)       32 (32.0%)   10 (33.3%)    9 (42.9%)    7 (28.0%)    6 (25.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    y (= FALSE)   30 (30.0%)    8 (26.7%)    7 (33.3%)   10 (40.0%)    5 (20.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    z (= 0)       21 (21.0%)    7 (23.3%)    4 (19.0%)    6 (24.0%)    4 (16.7%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="va">d.set</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">d.set</span><span class="op">$</span><span class="va">g</span>, intref <span class="op">=</span> <span class="st">"high"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var        total      a          b          c          d                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n          100        30 (30.0%) 21 (21.0%) 25 (25.0%) 24 (24.0%)           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x (= 1)    68 (68.0%) 20 (66.7%) 12 (57.1%) 18 (72.0%) 18 (75.0%) ³         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> y (= TRUE) 70 (70.0%) 22 (73.3%) 14 (66.7%) 15 (60.0%) 19 (79.2%) ³         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> z (= 1)    79 (79.0%) 23 (76.7%) 17 (81.0%) 19 (76.0%) 20 (83.3%) ³         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var          total        a            b            c            d         </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n            100          30 (30.0%)   21 (21.0%)   25 (25.0%)   24 (24.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    x (= 1)      68 (68.0%)   20 (66.7%)   12 (57.1%)   18 (72.0%)   18 (75.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    y (= TRUE)   70 (70.0%)   22 (73.3%)   14 (66.7%)   15 (60.0%)   19 (79.2%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    z (= 1)      79 (79.0%)   23 (76.7%)   17 (81.0%)   19 (76.0%)   20 (83.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># report both levels of the factor</span></span></span>
 <span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span><span class="op">)</span>, <span class="va">g</span>, intref <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> var        total      a          b          c          d                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> n          100        30 (30.0%) 21 (21.0%) 25 (25.0%) 24 (24.0%)           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> z                                                                 ³         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0          21 (21.0%) 7 (23.3%)  4 (19.0%)  6 (24.0%)  4 (16.7%)            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          79 (79.0%) 23 (76.7%) 17 (81.0%) 19 (76.0%) 20 (83.3%)           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var   total        a            b            c            d                 </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n     100          30 (30.0%)   21 (21.0%)   25 (25.0%)   24 (24.0%)        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    z                                                                          ³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      0   21 (21.0%)    7 (23.3%)    4 (19.0%)    6 (24.0%)    4 (16.7%)        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      1   79 (79.0%)   23 (76.7%)   17 (81.0%)   19 (76.0%)   20 (83.3%)        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹) Kruskal-Wallis test, ²) Fisher exact test, ³) Chi-Square test</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="va">opt</span><span class="op">)</span></span></span>

@@ -48,10 +48,9 @@ devtools::check(args = "--as-cran")
 devtools::check_mac_release()
 
 
-"¯\_(¨/)_/¯"
-'¯\_("/)_/¯'
-¯\_(``/)_/¯
-¯\_(''/)_/¯
+
+usethis::create_github_token()   # öffnet GitHub mit sinnvollen Scopes (repo, workflow, ...)
+gitcreds::gitcreds_set()
 
 
 # hard CRAN check

@@ -5,11 +5,11 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simpson Diversity Indices — simpson"><meta name="description" content="Computes Simpson-type diversity indices, including the Gini-Simpson index,
-the Hunter-Gaston index (bias-corrected for sample size), and the
-Deltas-corrected Gini-Simpson index (bias-corrected for number of categories)."><meta property="og:description" content="Computes Simpson-type diversity indices, including the Gini-Simpson index,
-the Hunter-Gaston index (bias-corrected for sample size), and the
-Deltas-corrected Gini-Simpson index (bias-corrected for number of categories)."><meta property="og:image" content="/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simpson Diversity Indices — simpson"><meta name="description" content="Computes Simpson-type diversity indices: the Gini-Simpson index, the
+Hunter-Gaston index (its unbiased, finite-sample version) and the index of
+qualitative variation (the Gini-Simpson index rescaled to a maximum of 1)."><meta property="og:description" content="Computes Simpson-type diversity indices: the Gini-Simpson index, the
+Hunter-Gaston index (its unbiased, finite-sample version) and the index of
+qualitative variation (the Gini-Simpson index rescaled to a maximum of 1)."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +17,7 @@ Deltas-corrected Gini-Simpson index (bias-corrected for number of categories).">
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,14 +52,19 @@ Deltas-corrected Gini-Simpson index (bias-corrected for number of categories).">
     </div>
 
     <div class="ref-description section level2">
-    <p>Computes Simpson-type diversity indices, including the Gini-Simpson index,
-the Hunter-Gaston index (bias-corrected for sample size), and the
-Deltas-corrected Gini-Simpson index (bias-corrected for number of categories).</p>
+    <p>Computes Simpson-type diversity indices: the Gini-Simpson index, the
+Hunter-Gaston index (its unbiased, finite-sample version) and the index of
+qualitative variation (the Gini-Simpson index rescaled to a maximum of 1).</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gini"</span>, <span class="st">"hunter"</span>, <span class="st">"deltas"</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simpson</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gini"</span>, <span class="st">"hunter"</span>, <span class="st">"iqv"</span><span class="op">)</span>,</span>
+<span>  categories <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,12 +75,21 @@ Deltas-corrected Gini-Simpson index (bias-corrected for number of categories).</
 <dd><p>a factor or character vector of observations, or a vector of
 non-negative counts. Note that a <em>numeric</em> vector is always read as
 counts, never as observations; wrap it in <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code> to have it
-tabulated instead.</p></dd>
+tabulated instead. A data frame with a single row of numeric columns
+(e.g. one site of a community matrix) is read as counts.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>character string specifying the index to compute:
-<code>"gini"</code>, <code>"hunter"</code>, or <code>"deltas"</code></p></dd>
+<code>"gini"</code>, <code>"hunter"</code>, or <code>"iqv"</code>.</p></dd>
+
+
+<dt id="arg-categories">categories<a class="anchor" aria-label="anchor" href="#arg-categories"></a></dt>
+<dd><p>the possible categories for <code>method = "iqv"</code>: either
+their number (a single number) or the categories themselves (a vector,
+e.g. <code>levels(x)</code>). If <code>NULL</code> (default), the number of observed,
+non-empty categories is used. Ignored, with a warning, for the other
+methods.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -86,35 +100,47 @@ will be <code>NA_real_</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a numeric scalar between 0 and 1. Returns <code>NA_real_</code> if input
-is invalid or empty.</p>
+    <p>a numeric scalar between 0 and 1. <code>NA_real_</code> (with a warning)
+when the index is undefined: no observations, \(N &lt; 2\) for
+<code>"hunter"</code>, \(K &lt; 2\) for <code>"iqv"</code>; <code>NA_real_</code> without a warning for
+missing values with <code>na.rm = FALSE</code>. Invalid input (negative, infinite
+or, for <code>"hunter"</code>, non-integer counts; invalid <code>categories</code>) is an
+error.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The Gini-Simpson index is defined as \(1 - \sum p_i^2\), where \(p_i\)
-are the relative frequencies of categories.</p>
+are the relative frequencies of the categories.</p>
 <p>The Hunter-Gaston index is defined as
-\(1 - \sum n_i (n_i - 1) / (N (N - 1))\), where \(n_i\) are counts and
-\(N\) is the total sample size.</p>
-<p>The Deltas correction is defined as
-\((1 - \sum p_i^2) * k / (k - 1)\), where \(k\) is the number of
-observed (non-empty) categories. The factor is the reciprocal of
-\((k-1)/k\), the largest value the Gini-Simpson index can attain with
-\(k\) categories, so the corrected index reaches 1 for a uniform
-distribution over the observed categories.</p>
-<p>All indices represent the probability that two randomly selected
-observations belong to different categories.</p>
-<p>The Hunter-Gaston index corrects for finite sample size, while the
-Deltas correction adjusts for a small number of observed categories. Note
-that the finite-sample correction \(N/(N-1)\) applied to the
-Gini-Simpson index reproduces the Hunter-Gaston index exactly; the two are
-the same adjustment with \(N\) and \(k\) in the correction factor.</p>
+\(1 - \sum n_i (n_i - 1) / (N (N - 1))\), where \(n_i\) are the counts
+and \(N\) is the total sample size. It equals the Gini-Simpson index
+times \(N / (N - 1)\). The complement, \(\sum n_i (n_i - 1) / (N (N - 1))\),
+is Simpson's unbiased \(\lambda\), the probability that two observations
+are of the <em>same</em> category.</p>
+<p>The index of qualitative variation (IQV) is defined as
+\((1 - \sum p_i^2) \, K / (K - 1)\), where \(K\) is the number of
+categories. Since \((K - 1)/K\) is the largest value the Gini-Simpson
+index can attain with \(K\) categories, the IQV reaches 1 exactly for a
+uniform distribution over all \(K\) categories.</p>
+<p><code>"gini"</code> and <code>"hunter"</code> are the probability that two randomly selected
+observations belong to different categories, drawn with and without
+replacement respectively. <code>"iqv"</code> is not a probability but the
+Gini-Simpson index relative to its maximum.</p>
+<p><strong>Number of categories in the IQV.</strong> \(K\) should be the number of
+categories that were <em>possible</em>, not only those observed. With the
+default, a sample spread evenly over 3 of 5 possible categories gets an
+IQV of 1, although it is far from the maximum diversity the coding scheme
+allows. Supply <code>categories</code> whenever the set of categories is known; for a
+factor, <code>categories = levels(x)</code> uses all levels, including empty ones.</p>
 <p>A sample concentrated in a single category is perfectly homogeneous rather
-than undefined, so <code>"gini"</code> and <code>"hunter"</code> return 0 for it. Only
-the Deltas correction requires \(k \ge 2\), since \(k - 1\) appears in
-its denominator.</p>
-<p>When <code>x</code> is numeric, it is treated as a vector of counts. Non-integer
-values produce a warning; the Hunter-Gaston index requires integer counts.</p>
+than undefined, so <code>"gini"</code> returns 0 for it, and so does <code>"hunter"</code> as
+long as \(N \ge 2\). The IQV requires \(K \ge 2\), since
+\(K - 1\) appears in its denominator; with <code>categories</code> given, a single
+occupied category gives an IQV of 0.</p>
+<p>When <code>x</code> is numeric, it is treated as a vector of counts. Relative
+frequencies are fine for <code>"gini"</code> and <code>"iqv"</code>; the Hunter-Gaston index
+counts pairs of observations and therefore requires integer counts
+(non-integer counts can push it above 1).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -123,11 +149,12 @@ values produce a warning; the Hunter-Gaston index requires integer counts.</p>
 Numerical index of the discriminatory ability of typing systems.
 <em>Journal of Clinical Microbiology</em>, 26(11), 2465-2466.
 https://doi.org/10.1128/jcm.26.11.2465-2466.1988</p>
-<p>Deltas, G. (2003).
-The small-sample bias of the Gini coefficient:
-Results and implications for empirical research.
-<em>Review of Economics and Statistics</em>, 85(1), 226-234.
-https://doi.org/10.1162/rest.2003.85.1.226</p>
+<p>Mueller, J. H., &amp; Schuessler, K. F. (1961).
+<em>Statistical Reasoning in Sociology</em>. Houghton Mifflin.</p>
+<p>Agresti, A., &amp; Agresti, B. F. (1978).
+Statistical analysis of qualitative variation.
+<em>Sociological Methodology</em>, 9, 204-237.
+https://doi.org/10.2307/270810</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -144,12 +171,22 @@ https://doi.org/10.1162/rest.2003.85.1.226</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6111111</span>
 <span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"hunter"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7333333</span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"deltas"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"iqv"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9166667</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the same sample, if five categories were possible</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"iqv"</span>, categories <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7638889</span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"iqv"</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7638889</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using counts directly</span></span></span>
 <span class="r-in"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>A <span class="op">=</span> <span class="fl">2</span>, B <span class="op">=</span> <span class="fl">1</span>, C <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">counts</span>, method <span class="op">=</span> <span class="st">"hunter"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7333333</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Hunter-Gaston = Gini-Simpson * N / (N - 1)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">counts</span>, method <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span> <span class="op">*</span> <span class="fl">6</span> <span class="op">/</span> <span class="fl">5</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7333333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a numeric vector of observations must be tabulated first, otherwise</span></span></span>

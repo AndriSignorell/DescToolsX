@@ -15,7 +15,7 @@ as kurt(x) + 3 if required."><meta property="og:image" content="/logo.png"></hea
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,8 +137,15 @@ computation proceeds. <br></p>
 <p>The estimator for calculating kurtosis can either be:<br><code>1: g_2 = m_4 / m_2^2 - 3 </code> <br><code>2: G_2 = ((n+1) g_2 + 6) * (n-1) / ((n-2)(n-3)) </code> <br><code>3: b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 </code> <br></p>
 <p>1 is the typical definition used in Stata and in many older textbooks.  <br>
 2 is used in SAS and SPSS.  <br> 3 is used in MINITAB and BMDP. <br></p>
-<p>Cramer (1997) mentions the asymptotic standard error of the kurtosis: <br></p><div class="sourceCode"><pre><code><span><span class="va">ASE.kurt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="va">n</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">3</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">3</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p>to be used for calculating the confidence intervals.
-This is implemented here with <code>method="classic"</code>. <br>
+<p><code>method = "classic"</code> uses a Wald interval with the standard error of the
+kurtosis under normality. For estimator 1 this is the exact standard
+error of \(g_2\)</p><div class="sourceCode"><pre><code><span><span class="fu">SE</span><span class="op">(</span><span class="va">g_2</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="va">n</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">3</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">3</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p>and since estimators 2 and 3 are linear in \(g_2\), their standard
+errors follow by multiplying with the respective slope,
+\((n-1)(n+1)/((n-2)(n-3))\) and \(((n-1)/n)^2\). For estimator 2
+this gives the familiar formula of Cramer (1997), as reported by SPSS:</p><div class="sourceCode"><pre><code>SES = sqrt(6*n*(n - 1) / ((n - 2)*(n + 1)*(n + 3)))
+SEK = 2 * SES * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
+    = sqrt(24*n*(n - 1)^2 / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))</code></pre></div><p>Note that it applies to \(G_2\) only, not to the default estimator 3.
+With weights, \(n\) is the sum of the weights. <br>
 However, Joanes and Gill (1998) advise
 against this approach, pointing out that the normal assumptions would
 virtually always be violated.  They suggest using the bootstrap method.

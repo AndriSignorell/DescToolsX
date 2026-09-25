@@ -19,7 +19,7 @@ weekdays and months.'><meta property="og:image" content="/logo.png"></head><body
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ weekdays and months.'><meta property="og:image" content="/logo.png"></head><body
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Descriptive statistics for calendar date variables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/Desc.Date.R" class="external-link"><code>R/Desc.Date.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AndriSignorell/DescToolsX/blob/HEAD/R/desc.Date.R" class="external-link"><code>R/desc.Date.R</code></a></small>
       <div class="d-none name"><code>desc.Date.Rd</code></div>
     </div>
 
@@ -69,7 +69,7 @@ weekdays and months.</p>
 <span>  plotit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  wprobs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">7</span><span class="op">)</span>,</span>
-<span>  mprobs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">12</span><span class="op">)</span>,</span>
+<span>  mprobs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -93,7 +93,7 @@ If <code>NA</code>, no title is printed.</variable></p></dd>
 <dt id="arg-plotit">plotit<a class="anchor" aria-label="anchor" href="#arg-plotit"></a></dt>
 <dd><p>logical. Should a plot be created? The plot type depends
 on the classes of the variables. Default can be defined by
-the option <code>plotit</code>, if it does not exist then it's set to <code>TRUE</code>.</p></dd>
+the option <code>plotit</code>, if it does not exist then it's set to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -133,7 +133,9 @@ residuals, and p-value</p></dd>
 residuals, and p-value</p></dd>
 
 <dt><code>sentinel</code></dt>
-<dd><p>heuristic data-quality diagnostics</p></dd>
+<dd><p>heuristic data-quality diagnostics: <code>flag</code>,
+<code>reason</code> (character vector of all triggered checks, empty if
+none), <code>lowest</code>, <code>highest</code></p></dd>
 
 <dt><code>meta</code></dt>
 <dd><p>metadata</p></dd>
@@ -177,8 +179,8 @@ as a diagnostic aid rather than a formal validation procedure.</p>
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.table.html">desc.table()</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
+<code><a href="desc.ts.html">desc.ts()</a></code>,
+<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.952</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.957</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,11 @@ h:m:s format for <code>hmsToSec()</code>, or numeric vector of seconds for
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>the number of digits to use for potential fractions of
-seconds</p></dd>
+<dd><p>number of decimal places for seconds, an integer from 0
+to 15, or <code>NULL</code>. The default uses zero places if all non-missing values
+have negligible fractional parts, otherwise two. Positive values round
+fractional seconds with carry into seconds, minutes and hours. For
+compatibility, <code>digits = 0</code> discards fractions using <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -87,7 +90,9 @@ seconds</p></dd>
 <dd><p>character vector of times in h:m:s format</p></dd>
 
 
-</dl><p>#'</p>
+</dl><p>Missing seconds produce <code>NA_character_</code>; infinite values are rejected.
+Hours can exceed 23. Negative times retain the existing floor-based
+decomposition (for example, -1 second is <code>-1:59:59</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

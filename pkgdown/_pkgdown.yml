@@ -48,7 +48,6 @@ reference:
   - ConfidenceIntervals
   - Formulas
   # package.utilities -- Constants, concepts, and options
-  - concepts
   - constants
   - setDescToolsXOption
 
