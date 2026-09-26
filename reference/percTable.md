@@ -13,7 +13,7 @@ percTable(...)
 percTable(x, y = NULL, ...)
 
 # S3 method for class 'formula'
-percTable(formula, data, subset, na.action, ...)
+percTable(formula, data, subset, na.action = na.omit, ...)
 
 # S3 method for class 'table'
 percTable(
@@ -62,7 +62,8 @@ percTable(
 - formula:
 
   a formula of the form `lhs ~ rhs` where `lhs` will be tabled versus
-  rhs (`table(lhs, rhs)`)
+  rhs (`table(lhs, rhs)`); `lhs ~ a:b` tables `lhs` against the cells of
+  `a` and `b`
 
 - data:
 
@@ -73,12 +74,14 @@ percTable(
 
 - subset:
 
-  an optional vector specifying a subset of observations to be used
+  an optional expression specifying a subset of observations, evaluated
+  in `data` (`subset = wine_delivered == 0`), as in
+  [`xtabs()`](https://rdrr.io/r/stats/xtabs.html)
 
 - na.action:
 
   a function which indicates what should happen when the data contain
-  NAs. Defaults to `getOption("na.action")`.
+  NAs. Defaults to [`na.omit()`](https://rdrr.io/r/stats/na.fail.html).
 
 - freq:
 

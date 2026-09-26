@@ -223,7 +223,6 @@ desc(tab)
 #> Cramer V             0.650
 #> Kendall Tau-b       -0.057
 #> 
-#> 
 
 desc(tab, prop = "rows", verbose = 3)
 #> ────────────────────────────────────────────────────────────────────────────── 
@@ -370,7 +369,6 @@ desc(driver ~ area, data = Pizza)
 #> Cramer V             0.650
 #> Kendall Tau-b       -0.057
 #> 
-#> 
 
 
 # from a matrix
@@ -410,7 +408,6 @@ desc(m, verbose = 2)
 #> Contingency Coeff.  0.122
 #> Cramer V            0.087
 #> Kendall Tau-b       0.073
-#> 
 #> 
 
 

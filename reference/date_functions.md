@@ -255,7 +255,7 @@ week(x, method = "us")
 
 # day is both readable and writable
 day(x)
-#> [1] 25
+#> [1] 26
 day(x) <- 20
 x
 #> [1] "2026-09-20"

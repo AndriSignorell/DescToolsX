@@ -17,7 +17,7 @@ table."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.958</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.959</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ table.</p>
 <span><span class="fu">percTable</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'formula'</span></span>
-<span><span class="fu">percTable</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">subset</span>, <span class="va">na.action</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">percTable</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">subset</span>, na.action <span class="op">=</span> <span class="va">na.omit</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'table'</span></span>
 <span><span class="fu">percTable</span><span class="op">(</span></span>
@@ -115,7 +115,8 @@ table.</p>
 
 <dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
 <dd><p>a formula of the form <code>lhs ~ rhs</code> where <code>lhs</code> will
-be tabled versus rhs (<code>table(lhs, rhs)</code>)</p></dd>
+be tabled versus rhs (<code>table(lhs, rhs)</code>); <code>lhs ~ a:b</code> tables <code>lhs</code>
+against the cells of <code>a</code> and <code>b</code></p></dd>
 
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
@@ -126,13 +127,13 @@ be tabled versus rhs (<code>table(lhs, rhs)</code>)</p></dd>
 
 
 <dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
-<dd><p>an optional vector specifying a subset of observations to be
-used</p></dd>
+<dd><p>an optional expression specifying a subset of observations,
+evaluated in <code>data</code> (<code>subset = wine_delivered == 0</code>), as in <code><a href="https://rdrr.io/r/stats/xtabs.html" class="external-link">xtabs()</a></code></p></dd>
 
 
 <dt id="arg-na-action">na.action<a class="anchor" aria-label="anchor" href="#arg-na-action"></a></dt>
 <dd><p>a function which indicates what should happen when the data
-contain NAs. Defaults to <code>getOption("na.action")</code>.</p></dd>
+contain NAs. Defaults to <code><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit()</a></code>.</p></dd>
 
 
 <dt id="arg-freq">freq<a class="anchor" aria-label="anchor" href="#arg-freq"></a></dt>

@@ -174,7 +174,6 @@ desc(mpg ~ wt, mtcars)
 #> Summary:
 #> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)
 #> 
-#> 
 #> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large
 #> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
 #> 
@@ -194,7 +193,6 @@ desc(mpg ~ wt, mtcars, verbose = 3)
 #> 
 #> Summary:
 #> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)
-#> 
 #> 
 #> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large
 #> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
@@ -219,7 +217,6 @@ print(d, verbose = 1)
 #> 
 #> Summary:
 #> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)
-#> 
 #> 
 #> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large
 #> Spearman r:  -0.886  (-0.943, -0.778)  ***  large

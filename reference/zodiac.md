@@ -82,19 +82,6 @@ desc(z)
 #>   length      n    NAs unique levels  dupes
 #>      120    120      0     12     12      y
 #>          100.0%   0.0%                     
-#>           level  freq   perc  cumfreq  cumperc
-#> 1      Aquarius    14  11.7%       14    11.7%
-#> 2         Aries    12  10.0%       26    21.7%
-#> 3           Leo    12  10.0%       38    31.7%
-#> 4         Libra    12  10.0%       50    41.7%
-#> 5       Scorpio    11   9.2%       61    50.8%
-#> 6        Taurus    10   8.3%       71    59.2%
-#> 7        Gemini    10   8.3%       81    67.5%
-#> 8   Sagittarius    10   8.3%       91    75.8%
-#> 9        Pisces     9   7.5%      100    83.3%
-#> 10        Virgo     8   6.7%      108    90.0%
-#> 11    Capricorn     6   5.0%      114    95.0%
-#> 12       Cancer     6   5.0%      120   100.0%
 #> 
 #>           level  freq   perc  cumfreq  cumperc
 #> 1      Aquarius    14  11.7%       14    11.7%

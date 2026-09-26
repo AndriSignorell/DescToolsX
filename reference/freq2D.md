@@ -8,7 +8,16 @@ Calculate a frequency distribution for two continuous variables.
 freq2D(x, ...)
 
 # S3 method for class 'formula'
-freq2D(x, data, subset, na.action, n = 20, pad = 0, dnn = NULL, ...)
+freq2D(
+  formula,
+  data,
+  subset,
+  na.action = na.omit,
+  n = 20,
+  pad = 0,
+  dnn = NULL,
+  ...
+)
 
 # Default S3 method
 freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
@@ -25,6 +34,10 @@ freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
 
   named arguments passed to the default method
 
+- formula:
+
+  a [`formula()`](https://rdrr.io/r/stats/formula.html), such as `y ~ x`
+
 - data:
 
   a `data.frame`, `matrix`, or `list` from which the variables in
@@ -32,12 +45,15 @@ freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
 
 - subset:
 
-  an optional vector specifying a subset of observations to be used
+  an optional expression specifying a subset of observations, evaluated
+  in `data` (`subset = depth > 100`), as in
+  [`plot.formula()`](https://rdrr.io/r/graphics/plot.formula.html)
 
 - na.action:
 
   a function which indicates what should happen when the data contain
-  missing values. Defaults to `getOption("na.action")`.
+  missing values. Defaults to
+  [`na.omit()`](https://rdrr.io/r/stats/na.fail.html).
 
 - n:
 
@@ -56,10 +72,6 @@ freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
 - y:
 
   a vector of y values
-
-- formula:
-
-  a [`formula()`](https://rdrr.io/r/stats/formula.html), such as `y ~ x`
 
 ## Value
 
@@ -191,4 +203,69 @@ freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
 #>   -38   0   0   0   0   0   0   1   2   0   0   0   0   0   0
 #>   -39   0   0   0   0   0   0   1   0   0   0   0   0   0   0
 #>   -40   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+#> attr(,"data.name")
+#> [1] "lat ~ long"
+freq2D(lat ~ long, quakes, subset = depth > 100)
+#>      long
+#> lat   166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183
+#>   -11   8   2   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+#>   -12   5   8   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+#>   -13   1  11   0   3   4   0   0   1   0   0   0   0   0   0   0   0   0   0
+#>   -14   0   8   0   0   1   1   1   1   0   0   0   0   0   0   0   0   0   0
+#>   -15   0   9   3   0   0   2   0   0   0   0   0   0   0   0   0   1   1   1
+#>   -16   0   2   8   0   0   0   0   0   0   0   0   0   1   0   0   1   0   3
+#>   -17   0   0   0   1   0   0   0   0   0   0   0   0   0   0   1   8   3   4
+#>   -18   0   0   0   3   0   0   0   0   0   0   0   1   0   0   2  49  42   4
+#>   -19   0   0   0  19   3   0   0   0   0   0   0   0   0   0   0   3  15   8
+#>   -20   0   0   0   1   2   0   0   0   1   0   0   0   0   0   1   7  33   5
+#>   -21   0   0   0   0   2   0   0   0   0   0   0   0   0   0   0  49  26   2
+#>   -22   0   0   0   0   1   5   4   0   0   0   0   0   0   0  16  15   5   6
+#>   -23   0   0   0   0   1   0   0   0   0   0   0   0   0   4  18   3   0   3
+#>   -24   0   0   0   0   0   0   0   0   0   0   0   0   0   5  39   2   1   7
+#>   -25   0   0   0   0   0   0   0   0   0   0   0   0   2   1  16   5   0   4
+#>   -26   0   0   0   0   0   0   0   0   0   0   0   0   6   3   7   1   5   2
+#>   -27   0   0   0   0   0   0   0   0   0   0   0   0   2   1   0   2   1   3
+#>   -28   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   9   0
+#>   -29   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1   3   0
+#>   -30   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   6   2   0
+#>   -31   0   0   0   0   0   0   0   0   0   0   0   0   0   0   2   4   0   0
+#>   -32   0   0   0   0   0   0   0   0   0   0   0   0   0   0   4   2   0   0
+#>   -33   0   0   0   0   0   0   0   0   0   0   0   0   0   0   2   0   4   0
+#>   -34   0   0   0   0   0   0   0   0   0   0   0   0   0   0   1   0   1   0
+#>   -35   0   0   0   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0
+#>   -36   0   0   0   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0
+#>   -37   0   0   0   0   0   0   0   0   0   0   0   1   2   0   0   0   0   0
+#>   -38   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0
+#>   -39   0   0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   0   0
+#>      long
+#> lat   184 185 186 187
+#>   -11   0   0   0   0
+#>   -12   0   0   0   0
+#>   -13   0   0   0   0
+#>   -14   0   0   0   0
+#>   -15   1   5   5   2
+#>   -16   4  10   6   1
+#>   -17   0   4   6   0
+#>   -18   1   7   0   2
+#>   -19  11   5   1   0
+#>   -20  19   4   1   0
+#>   -21   6   4   2   0
+#>   -22   6   1   0   0
+#>   -23   2   1   0   0
+#>   -24   1   0   0   0
+#>   -25   0   0   0   0
+#>   -26   0   0   0   0
+#>   -27   0   0   0   0
+#>   -28   0   0   0   0
+#>   -29   0   0   0   0
+#>   -30   0   0   0   0
+#>   -31   0   0   0   0
+#>   -32   0   0   0   0
+#>   -33   0   0   0   0
+#>   -34   0   0   0   0
+#>   -35   0   0   0   0
+#>   -36   0   0   0   0
+#>   -37   0   0   0   0
+#>   -38   0   0   0   0
+#>   -39   0   0   0   0
 ```

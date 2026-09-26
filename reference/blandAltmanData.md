@@ -11,7 +11,7 @@ blandAltmanData(x, ...)
 blandAltmanData(x, y, conf.level = 0.95, na.rm = FALSE, ...)
 
 # S3 method for class 'formula'
-blandAltmanData(x, data = NULL, conf.level = 0.95, na.rm = FALSE, ...)
+blandAltmanData(formula, data, subset, conf.level = 0.95, na.rm = FALSE, ...)
 ```
 
 ## Arguments
@@ -40,9 +40,19 @@ blandAltmanData(x, data = NULL, conf.level = 0.95, na.rm = FALSE, ...)
   logical; if `TRUE`, incomplete observation pairs are removed before
   computation
 
+- formula:
+
+  a formula `y ~ x` with two numeric variables, see `x`
+
 - data:
 
   optional data frame used with the formula interface
+
+- subset:
+
+  an optional expression specifying a subset of observations, evaluated
+  in `data` (`subset = y > 0`), as in
+  [`plot.formula()`](https://rdrr.io/r/graphics/plot.formula.html)
 
 ## Value
 

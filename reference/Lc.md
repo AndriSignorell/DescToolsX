@@ -34,7 +34,8 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
 
 - subset:
 
-  optional expression indicating which rows of `data` to use
+  optional expression indicating which rows of `data` to use, evaluated
+  in `data` (`subset = x > 0.5`)
 
 - na.action:
 
