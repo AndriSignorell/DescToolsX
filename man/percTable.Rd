@@ -13,7 +13,7 @@ percTable(...)
 
 \method{percTable}{default}(x, y = NULL, ...)
 
-\method{percTable}{formula}(formula, data, subset, na.action, ...)
+\method{percTable}{formula}(formula, data, subset, na.action = na.omit, ...)
 
 \method{percTable}{table}(
   x,
@@ -49,18 +49,19 @@ percTable(...)
 \item{y}{an optional second vector to be tabulated against \code{x}}
 
 \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs} will
-be tabled versus rhs (\code{table(lhs, rhs)})}
+be tabled versus rhs (\code{table(lhs, rhs)}); \code{lhs ~ a:b} tables \code{lhs}
+against the cells of \code{a} and \code{b}}
 
 \item{data}{an optional matrix or data frame (or similar: see
 \code{\link[=model.frame]{model.frame()}}) containing the variables in the formula
 \code{formula}.  By default the variables are taken from
 \code{environment(formula)}.}
 
-\item{subset}{an optional vector specifying a subset of observations to be
-used}
+\item{subset}{an optional expression specifying a subset of observations,
+evaluated in \code{data} (\code{subset = wine_delivered == 0}), as in \code{\link[=xtabs]{xtabs()}}}
 
 \item{na.action}{a function which indicates what should happen when the data
-contain NAs. Defaults to \code{getOption("na.action")}.}
+contain NAs. Defaults to \code{\link[=na.omit]{na.omit()}}.}
 
 \item{freq}{logical. Should absolute frequencies be included? Defaults to
 \code{TRUE}.}

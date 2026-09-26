@@ -132,8 +132,48 @@ test_that("the formula method tabulates response by group", {
   pt <- percTable(y ~ g, data = d)
   expect_s3_class(pt, "PercTable")
   expect_equal(sum(pt$freq), 5)
+  # y ~ a + b is not a grouped design; the cells must be asked for with a:b
   expect_error(percTable(y ~ g + g2, data = cbind(d, g2 = d$g)),
-               "incorrect")
+               "a:b")
+})
+
+
+# Formula interface via resolveFormulaFromCall() ------------------------------
+
+d.pt <- data.frame(y = factor(c("a", "b", "a", "b", "a", "b", "a", "a")),
+                   g = factor(c("u", "u", "v", "v", "v", "u", "u", "v")),
+                   h = factor(c("s", "t", "s", "t", "t", "s", "t", "s")))
+
+test_that("the formula method evaluates subset in data", {
+  pt <- percTable(y ~ g, data = d.pt, subset = h == "s")
+  expect_equal(sum(pt$freq), sum(d.pt$h == "s"))
+  expect_equal(pt$freq,
+               percTable(y ~ g, data = d.pt[d.pt$h == "s", ])$freq)
+})
+
+test_that("the formula method finds subset variables of a calling function", {
+  f <- function(dat, lev) percTable(y ~ g, data = dat, subset = h == lev)
+  expect_equal(sum(f(d.pt, "t")$freq), sum(d.pt$h == "t"))
+})
+
+test_that("the formula method sets data.name from the formula", {
+  # used to be NULL: the field is 'dataName', not 'data.name'
+  expect_identical(attr(percTable(y ~ g, data = d.pt), "data.name"), "y ~ g")
+})
+
+test_that("y ~ a:b tabulates the response against the cells", {
+  pt <- percTable(y ~ g:h, data = d.pt)
+  # two-dimensional: response x cells, not response x g x h
+  expect_length(dim(pt$freq), 2L)
+  expect_equal(ncol(pt$freq), nlevels(interaction(d.pt$g, d.pt$h)))
+  expect_identical(names(dimnames(pt$freq)), c("y", "g:h"))
+  expect_equal(sum(pt$freq), nrow(d.pt))
+})
+
+test_that("the formula method omits missing values by default", {
+  dn <- d.pt
+  dn$y[2] <- NA
+  expect_equal(sum(percTable(y ~ g, data = dn)$freq), nrow(dn) - 1L)
 })
 
 test_that("expected frequencies and the total proportions are optional parts", {

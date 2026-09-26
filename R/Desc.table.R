@@ -415,7 +415,6 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
         printCiLegend()
     }
     
-    cat("\n")
   }
   }
   

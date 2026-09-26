@@ -285,8 +285,6 @@ print.Desc.nn <- function(x, verbose = NULL, ...) {
     sprintf("%6.3f  (%6.3f, %6.3f)  %s  %s",
             r, ci["lci"], ci["uci"], .stars(p), .rLabel(r))
 
-  cat("\n")
-
   # ── correlations ─────────────────────────────────────────────────────────────
   cat(sprintf("Pearson  r:  %s\n", fmtR(x$pearson$r,  x$pearson$ci,  x$pearson$p)))
   cat(sprintf("Spearman r:  %s\n", fmtR(x$spearman$r, x$spearman$ci, x$spearman$p)))

@@ -10,7 +10,7 @@ blandAltmanData(x, ...)
 
 \method{blandAltmanData}{default}(x, y, conf.level = 0.95, na.rm = FALSE, ...)
 
-\method{blandAltmanData}{formula}(x, data = NULL, conf.level = 0.95, na.rm = FALSE, ...)
+\method{blandAltmanData}{formula}(formula, data, subset, conf.level = 0.95, na.rm = FALSE, ...)
 }
 \arguments{
 \item{x}{numeric vector, or a formula \code{y ~ x} with two numeric
@@ -28,7 +28,12 @@ bias and the limits of agreement}
 \item{na.rm}{logical; if \code{TRUE}, incomplete observation pairs are
 removed before computation}
 
+\item{formula}{a formula \code{y ~ x} with two numeric variables, see \code{x}}
+
 \item{data}{optional data frame used with the formula interface}
+
+\item{subset}{an optional expression specifying a subset of observations,
+evaluated in \code{data} (\code{subset = y > 0}), as in \code{\link[=plot.formula]{plot.formula()}}}
 }
 \value{
 an object of class \code{"BlandAltman"} with components:

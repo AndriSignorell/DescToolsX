@@ -223,6 +223,7 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
   }
 
   # ── Kruskal-Wallis + eta² ────────────────────────────────────────────────────
+  cat("\n")
   cat("Kruskal-Wallis rank sum test:\n")
   cat(sprintf("  H = %s,  df = %d,  p = %s\n",
               fm(unname(x$res$kw$statistic), fmt = "abs.sty"),

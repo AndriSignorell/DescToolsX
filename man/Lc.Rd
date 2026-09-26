@@ -20,7 +20,7 @@ response and grouping variable}
 \item{data}{optional data frame in which to evaluate \code{formula}}
 
 \item{subset}{optional expression indicating which rows of \code{data}
-to use}
+to use, evaluated in \code{data} (\code{subset = x > 0.5})}
 
 \item{na.action}{function for handling missing values in the model frame.
 Default is \code{\link[stats:na.pass]{stats::na.pass()}}.}

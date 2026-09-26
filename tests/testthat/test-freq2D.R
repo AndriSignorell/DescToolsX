@@ -69,3 +69,35 @@ test_that("freq2D copes with a single occupied bin row", {
 })
 
 
+# Formula interface via resolveFormulaFromCall() ------------------------------
+
+test_that("freq2D formula interface evaluates subset in data", {
+  res  <- freq2D(lat ~ long, data = quakes, subset = mag > 5)
+  expect_equal(sum(res), sum(quakes$mag > 5))
+
+  sel <- quakes$mag > 5
+  expect_equal(as.vector(res),
+               as.vector(freq2D(quakes$long[sel], quakes$lat[sel])))
+})
+
+test_that("freq2D formula interface finds subset variables of a calling function", {
+  f <- function(m) freq2D(lat ~ long, data = quakes, subset = mag > m)
+  expect_equal(sum(f(5.5)), sum(quakes$mag > 5.5))
+})
+
+test_that("freq2D formula interface sets data.name", {
+  # used to be NULL: the field is 'dataName', not 'data.name'
+  expect_identical(attr(freq2D(lat ~ long, data = quakes), "data.name"),
+                   "lat ~ long")
+})
+
+test_that("freq2D formula interface drops incomplete pairs", {
+  q <- quakes
+  q$lat[1:3] <- NA
+  expect_equal(sum(freq2D(lat ~ long, data = q)), nrow(q) - 3L)
+})
+
+test_that("freq2D formula interface requires two numeric variables", {
+  q <- transform(quakes, g = factor(stations > 30))
+  expect_error(freq2D(lat ~ g, data = q))
+})

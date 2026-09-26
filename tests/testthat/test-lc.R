@@ -221,3 +221,27 @@ test_that("predict.Lc uses percentile validation instead of the shared BCa defau
   expect_error(predict(obj, conf.level = 0.9, R = 199, type = "norm"),
                "supports only type")
 })
+
+test_that("lc formula interface sets data.name and the group levels", {
+  d <- data.frame(value = c(1, 2, 4, 8, 3, 6), group = rep(c("a", "b"), each = 3))
+  res <- lc(value ~ group, data = d)
+  # used to be NULL: the field is 'dataName', not 'data.name'
+  expect_identical(attr(res, "data.name"), "value ~ group")
+  expect_identical(attr(res, "groups"), c("a", "b"))
+})
+
+test_that("lc formula interface finds subset variables of a calling function", {
+  d <- data.frame(value = c(1, 2, 4, 8, 3, 6), group = rep(c("a", "b"), each = 3))
+  f <- function(dat, lim) lc(value ~ 1, data = dat, subset = value <= lim)
+  expect_equal(f(d, 4)$L, lc(c(1, 2, 4, 3))$L)
+})
+
+test_that("lc formula interface builds the cells of y ~ a:b", {
+  d <- data.frame(value = c(1, 2, 4, 8, 3, 6, 5, 7),
+                  a = rep(c("u", "v"), each = 4),
+                  b = rep(c("s", "t"), times = 4))
+  res <- lc(value ~ a:b, data = d)
+  expect_s3_class(res, "LcList")
+  expect_setequal(names(res), c("u:s", "u:t", "v:s", "v:t"))
+  expect_equal(res[["u:s"]]$L, lc(c(1, 4))$L)
+})

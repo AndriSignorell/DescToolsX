@@ -24,7 +24,10 @@
 #'   left-hand side the method under comparison (`y`), so that the
 #'   differences are `lhs - rhs`
 #' @param y numeric vector
+#' @param formula a formula `y ~ x` with two numeric variables, see `x`
 #' @param data optional data frame used with the formula interface
+#' @param subset an optional expression specifying a subset of observations,
+#'   evaluated in `data` (`subset = y > 0`), as in [plot.formula()]
 #' @param conf.level confidence level for the intervals reported for the
 #'   bias and the limits of agreement
 #' @param na.rm logical; if `TRUE`, incomplete observation pairs are
@@ -193,20 +196,26 @@ blandAltmanData.default <- function(
 #' @rdname blandAltmanData
 #' @export
 blandAltmanData.formula <- function(
-    x,
-    data = NULL,
+    formula,
+    data,
+    subset,
     conf.level = 0.95,
     na.rm = FALSE,
     ...
 ){
 
+  # The first argument is called 'formula', as in the other formula methods:
+  # R CMD check exempts the first argument of a .formula method from the
+  # generic/method consistency check (tools:::checkS3methods).
+  
+  # formula, data and subset are forwarded unevaluated. na.pass: missing
+  # values are left to 'na.rm' of the default method.
   # resolveFormula() returns the response (lhs) as $x and a continuous
-  # rhs as $predictor - there is no $y, so this used to hand NULL to the
-  # default method. allowed = restricts it to the paired numeric design.
-  z <- bedrock::resolveFormula(
-    formula = x,
-    data = data,
-    allowed = "numeric-numeric"
+  # rhs as $predictor - there is no $y. allowed = restricts it to the paired
+  # numeric design.
+  z <- bedrock::resolveFormulaFromCall(
+    allowed   = "numeric-numeric",
+    na.action = na.pass
   )
 
   blandAltmanData(

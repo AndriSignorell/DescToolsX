@@ -46,15 +46,16 @@
 #' `"rows"` for row margins, `2` or `"cols"` for column
 #' margins, or both; `NULL` includes none.
 #' @param formula a formula of the form `lhs ~ rhs` where `lhs` will
-#' be tabled versus rhs (`table(lhs, rhs)`)
+#' be tabled versus rhs (`table(lhs, rhs)`); `lhs ~ a:b` tables `lhs`
+#' against the cells of `a` and `b`
 #' @param data an optional matrix or data frame (or similar: see
 #' [model.frame()]) containing the variables in the formula
 #' `formula`.  By default the variables are taken from
 #' `environment(formula)`.
-#' @param subset an optional vector specifying a subset of observations to be
-#' used
+#' @param subset an optional expression specifying a subset of observations,
+#' evaluated in `data` (`subset = wine_delivered == 0`), as in [xtabs()]
 #' @param na.action a function which indicates what should happen when the data
-#' contain NAs. Defaults to `getOption("na.action")`.
+#' contain NAs. Defaults to [na.omit()].
 #' @param blockSep logical, defining if an empty row should be introduced between
 #' the table rows. Default is FALSE, if only a table with one single
 #' description (either frequencies or percents) should be returned and
@@ -169,28 +170,25 @@ percTable.default <- function (x, y = NULL, ...) {
 
 #' @rdname percTable
 #' @export
-percTable.formula <- function(formula, data, subset, na.action, ...) {
+percTable.formula <- function(formula, data, subset, na.action = na.omit,
+                              ...) {
   
-  if (missing(formula) || (length(formula) != 3L) || 
-      (length(attr(terms(formula[-2L]), "term.labels")) != 1L))
-    stop("'formula' missing or incorrect")
-  
-    
-  ## IMPORTANT!!
-  ## --- capture subset / na.action HERE ---
-  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
-  na_expr     <- if (!missing(na.action)) substitute(na.action) else NULL
-  
-  pf <- resolveFormula(
-    formula   = formula,
-    data      = data,
-    subset    = subset_expr,
-    na.action = na_expr,
-    allowed   = c("two-sample-independent", "n-sample-independent")
+  # formula, data and subset are forwarded unevaluated, so that 'subset' is
+  # evaluated in 'data' as in xtabs()
+  pf <- resolveFormulaFromCall(
+    allowed   = c("two-sample-independent", "n-sample-independent"),
+    na.action = na.action
   )
   
-  y <- do.call("percTable", c(list(table(pf$mf)), list(...)))
-  attr(y, "data.name") <- pf$data.name
+  # response against the grouping factor, not table(pf$mf): for lhs ~ a:b
+  # the model frame holds a and b separately and gave a 3-dimensional table
+  tab <- table(pf$response, pf$group,
+               dnn = c(deparse1(formula[[2L]]), deparse1(formula[[3L]])))
+  
+  y <- do.call("percTable", c(list(tab), list(...)))
+  # dataName, not data.name: resolveFormula() names its components in
+  # camelCase, and the misspelt field set the attribute to NULL
+  attr(y, "data.name") <- pf$dataName
   y
   
 }

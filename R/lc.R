@@ -45,7 +45,7 @@
 #'   response and grouping variable
 #' @param data optional data frame in which to evaluate `formula`
 #' @param subset optional expression indicating which rows of `data`
-#'   to use
+#'   to use, evaluated in `data` (`subset = x > 0.5`)
 #' @param na.action function for handling missing values in the model frame.
 #'   Default is [stats::na.pass()].
 #' @param object object of class `"Lc"` as returned by `lc()`
@@ -170,14 +170,11 @@ lc <- function(x, ...)
 #' @export
 lc.formula <- function(formula, data, subset, na.action = na.pass, ...) {
   
-  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
-  
-  rf <- resolveFormula(
-    formula,
-    data       = data,
-    subset     = subset_expr,
-    na.action  = na.action,
-    allowed    = c("one-sample", "n-sample-independent")
+  # formula, data and subset are forwarded unevaluated, so that 'subset' is
+  # evaluated in 'data'
+  rf <- resolveFormulaFromCall(
+    allowed   = c("one-sample", "n-sample-independent"),
+    na.action = na.action
   )
   
   # --- one sample ---
@@ -195,7 +192,8 @@ lc.formula <- function(formula, data, subset, na.action = na.pass, ...) {
     class(res) <- c("LcList", "list")
     
     attr(res, "groups") <- levels(rf$group)
-    attr(res, "data.name") <- rf$data.name
+    # dataName, not data.name: the misspelt field set the attribute to NULL
+    attr(res, "data.name") <- rf$dataName
     
     return(res)
   }

@@ -29,20 +29,25 @@
 
 
 # capture.output() with a wider console, so that long test statistics are
-# not wrapped before a caller picks out a line. The former hand-rolled
-# sink()/textConnection() version was a copy of capture.output() itself,
-# with two on.exit() handlers of which the second silently replaced the
-# first.
+# not wrapped before a caller picks out a line.
+# The arguments are taken as unevaluated expressions and evaluated in the
+# caller's frame *inside* the capture: forcing them beforehand (e.g. via
+# list(...)) let a print() call write straight to the console, and its
+# returned value was then printed a second time into the capture.
+# Visible values are printed, invisible ones (such as print()'s return
+# value) are not - as at the console, and as capture.output() does itself.
 .captOut <- function(..., file = NULL, append = FALSE, width = 150) {
   opt <- options(width = width)
   on.exit(options(opt))
-  # list(...) first: capture.output() evaluates its arguments in ITS
-  # parent frame, which would be this function, not the caller - handing
-  # the dots through would look up x$chisq.test in the wrong place
-  objs <- list(...)
-  capture.output(for (o in objs) print(o), file = file, append = append)
+  exprs <- as.list(substitute(list(...)))[-1L]
+  env   <- parent.frame()
+  capture.output(
+    for (e in exprs) {
+      r <- withVisible(eval(e, env))
+      if (r$visible) print(r$value)
+    },
+    file = file, append = append)
 }
-
 
 
 .makeEstimateResult <- function(

@@ -236,12 +236,24 @@ plot.Desc <- function(x, ...) {
 
 
 
-.ChisqWarning <- function(){
-  cat(cli::col_red("\nWarning message:\n  Exp. counts < 5: Chi-squared approx. may be incorrect!!\n\n"))
+
+# RStudio styles console lines beginning with "Warning message:" itself
+# (grey bar), but only as plain text: ANSI codes in front defeat the
+# match. So colour is left to RStudio there, and applied elsewhere.
+.printWarning <- function(msg, col = cli::col_grey) {
+  txt <- gettextf("Warning message:\n  %s\n", msg)
+  if (!identical(Sys.getenv("RSTUDIO"), "1"))
+    txt <- col(txt)
+  cat(txt)
+  # separate chunk: RStudio drops a blank line inside its warning block
+  # cat("\u00a0\n")
 }
 
 
-
+.ChisqWarning <- function() {
+  cat("\n")
+  .printWarning("Exp. counts < 5: Chi-squared approx. may be incorrect!!")
+}
 
 
 

@@ -26,7 +26,15 @@ test_that("print.Desc.nq shows both tests and warns about missing groups", {
   d2 <- dnq
   d2$g[2] <- NA
   res2 <- desc(y ~ g, data = d2)[["g"]]
-  expect_warning(capture.output(print(res2)), "Grouping variable contains 1 NAs")
+  # desc.formula() passes the missing group on (na.pass), the pair summary
+  # counts it
+  expect_identical(res2$pair$nMissingGroups, 1L)
+  # the note is printed by .printWarning() (dezent grau via cat), it is no
+  # longer a warning condition; collect stdout and stderr, whichever it uses
+  err <- character()
+  out <- capture.output(err <- capture.output(print(res2), type = "message"))
+  expect_true(any(grepl("Grouping variable contains 1 NAs", c(out, err),
+                        fixed = TRUE)))
 })
 
 test_that(".eta2Kruskal clamps at zero and labels the size", {

@@ -8,7 +8,16 @@
 \usage{
 freq2D(x, ...)
 
-\method{freq2D}{formula}(x, data, subset, na.action, n = 20, pad = 0, dnn = NULL, ...)
+\method{freq2D}{formula}(
+  formula,
+  data,
+  subset,
+  na.action = na.omit,
+  n = 20,
+  pad = 0,
+  dnn = NULL,
+  ...
+)
 
 \method{freq2D}{default}(x, y, n = 20, pad = 0, dnn = NULL, ...)
 }
@@ -18,14 +27,16 @@ contain the x and y values}
 
 \item{\dots}{named arguments passed to the default method}
 
+\item{formula}{a \code{\link[=formula]{formula()}}, such as \code{y ~ x}}
+
 \item{data}{a \code{data.frame}, \code{matrix}, or \code{list} from which
 the variables in \code{formula} should be taken}
 
-\item{subset}{an optional vector specifying a subset of observations to be
-used}
+\item{subset}{an optional expression specifying a subset of observations,
+evaluated in \code{data} (\code{subset = depth > 100}), as in \code{\link[=plot.formula]{plot.formula()}}}
 
 \item{na.action}{a function which indicates what should happen when the data
-contain missing values. Defaults to \code{getOption("na.action")}.}
+contain missing values. Defaults to \code{\link[=na.omit]{na.omit()}}.}
 
 \item{n}{the desired number of bins for the output, a scalar or a vector of
 length 2}
@@ -36,8 +47,6 @@ zeros}
 \item{dnn}{names for the dimensions in the result}
 
 \item{y}{a vector of y values}
-
-\item{formula}{a \code{\link[=formula]{formula()}}, such as \code{y ~ x}}
 }
 \value{
 a frequency matrix whose rows represent the y bins in descending
@@ -60,6 +69,7 @@ Based on code by Arni Magnusson, adapted to conform to package standards.
 
 freq2D(quakes$long, quakes$lat, dnn="")
 freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
+freq2D(lat ~ long, quakes, subset = depth > 100)
 
 }
 \seealso{

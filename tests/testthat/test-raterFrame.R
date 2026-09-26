@@ -88,3 +88,28 @@ test_that("raterFrame() feeds the agreement functions", {
   
   expect_true(is.finite(randolphKappa(m)))
 })
+
+
+# Formula interface via resolveFormulaFromCall() ------------------------------
+
+test_that("raterFrame() evaluates subset in the long-format data", {
+
+  m <- raterFrame(rating ~ subj | rater, data = d.long, subset = rater != "C")
+  expect_equal(colnames(m), c("subj", "A", "B"))
+
+  m2 <- raterFrame(rating ~ subj | rater, data = d.long, subset = subj != "5")
+  expect_equal(nrow(m2), 4L)
+  expect_false(anyNA(m2))
+})
+
+test_that("raterFrame() finds subset variables of a calling function", {
+
+  f <- function(dat, r) raterFrame(rating ~ subj | rater, data = dat,
+                                   subset = rater %in% r)
+  expect_equal(colnames(f(d.long, c("A", "C"))), c("subj", "A", "C"))
+})
+
+test_that("raterFrame() requires a blocked formula", {
+
+  expect_error(raterFrame(rating ~ rater, data = d.long))
+})

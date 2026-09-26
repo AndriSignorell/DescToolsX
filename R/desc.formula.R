@@ -7,25 +7,36 @@
 desc.formula <- function(formula, data, subset, na.action = na.pass,
                          main = NULL, verbose = NULL, plotit = NULL, ...) {
   
-  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
-  call        <- match.call()
+  call <- match.call()
+  
+  # the subset as written, for the title of a one-sample description
+  subsetExpr <- if (!missing(subset)) substitute(subset)
+  
+  # ── One resolveFormula() call per right-hand side term ─────────────────────
+  # Built from this function's own call, as resolveFormulaFromCall() does:
+  # data and subset are handed on unevaluated and evaluated in the caller's
+  # frame, so that 'subset' is evaluated in 'data' as in lm(). The former
+  # do.call() with list(data = data) forced 'data' and failed without it
+  # ("argument "data" is missing"); only the formula differs per term.
+  rfCall <- call[c(1L, match(c("data", "subset"), names(call), 0L))]
+  rfCall[[1L]]     <- quote(resolveFormula)
+  rfCall$na.action <- na.action
+  rfCall$allowed   <- c("one-sample", "n-sample-independent", "numeric-numeric")
+  callerEnv        <- parent.frame()
   
   # ── Zielgrösse und RHS-Terme bestimmen ─────────────────────────────────────
-  y_name  <- deparse(formula[[2L]])
+  y_name  <- deparse1(formula[[2L]])
   x_names <- attr(terms(formula), "term.labels")
   
-  # ── Pro RHS-Term eine eigene resolveFormula ─────────────────────────────────
+  # y ~ 1 has no term label; without this it returned an empty result
+  if (!length(x_names))
+    x_names <- "1"
+  
   res <- lapply(x_names, function(nm) {
     
-    f1 <- as.formula(paste(y_name, "~", nm), env = environment(formula))
-    
-    rf <- do.call(resolveFormula, list(
-      formula   = f1,
-      data      = data,
-      subset    = subset_expr,
-      na.action = na.action,
-      allowed   = c("one-sample", "n-sample-independent", "numeric-numeric")
-    ))
+    rfCall$formula <- as.formula(paste(y_name, "~", nm),
+                                 env = environment(formula))
+    rf <- eval(rfCall, callerEnv)
     
     # ── Variablen aus rf ──────────────────────────────────────────────────────
     y <- rf$x                                                 # response
@@ -41,9 +52,12 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
                  rf$group)                                     # n-sample-independent
     
     # ── one-sample: direkt zu desc() ─────────────────────────────────────────
+    # the title shows the subset only if there is one ("y[NULL]" otherwise)
     if (rf$type == "one-sample")
       return(desc(y,
-                  main    = main %||% gettextf("%s[%s]", y_name, deparse(subset_expr)),
+                  main    = main %||% (if (is.null(subsetExpr)) y_name
+                                       else gettextf("%s[%s]", y_name,
+                                                     deparse1(subsetExpr))),
                   plotit  = plotit,
                   verbose = verbose, ...))
     

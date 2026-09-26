@@ -71,3 +71,20 @@ test_that("the formula method rejects a categorical right-hand side", {
   d <- data.frame(a = factor(rep(c("u", "v"), 15)), b = y)
   expect_error(blandAltmanData(b ~ a, data = d))
 })
+
+test_that("the formula method evaluates subset in data", {
+  d <- data.frame(a = x, b = y, grp = rep(c("u", "v"), 15))
+  sel <- d$grp == "u"
+  expect_equal(blandAltmanData(b ~ a, data = d, subset = grp == "u"),
+               blandAltmanData(d$a[sel], d$b[sel]))
+
+  f <- function(dat, g) blandAltmanData(b ~ a, data = dat, subset = grp == g)
+  expect_identical(f(d, "v")$nObs, 15L)
+})
+
+test_that("the formula method leaves missing values to na.rm", {
+  # na.pass: incomplete pairs reach the default method unchanged
+  d <- data.frame(a = replace(x, 3, NA), b = y)
+  expect_error(blandAltmanData(b ~ a, data = d), "na.rm = TRUE")
+  expect_identical(blandAltmanData(b ~ a, data = d, na.rm = TRUE)$nObs, 29L)
+})

@@ -18,10 +18,10 @@
 #' @param formula a [formula()], such as `y ~ x`
 #' @param data a `data.frame`, `matrix`, or `list` from which
 #' the variables in `formula` should be taken
-#' @param subset an optional vector specifying a subset of observations to be
-#' used
+#' @param subset an optional expression specifying a subset of observations,
+#' evaluated in `data` (`subset = depth > 100`), as in [plot.formula()]
 #' @param na.action a function which indicates what should happen when the data
-#' contain missing values. Defaults to `getOption("na.action")`.
+#' contain missing values. Defaults to [na.omit()].
 #' @param n the desired number of bins for the output, a scalar or a vector of
 #' length 2
 #' @param pad number of rows and columns to add to each margin, containing only
@@ -41,6 +41,7 @@
 #' 
 #' freq2D(quakes$long, quakes$lat, dnn="")
 #' freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
+#' freq2D(lat ~ long, quakes, subset = depth > 100)
 #' 
 #' @family frequency
 #' @concept frequency-table
@@ -55,29 +56,18 @@ freq2D <- function(x, ...)
 
 #' @rdname freq2D
 #' @export
-freq2D.formula <- function(x, data, subset, na.action,
+freq2D.formula <- function(formula, data, subset, na.action = na.omit,
                            n=20, pad=0, dnn=NULL, ...) {
 
-  # the generic is freq2D(x, ...), so the first formal has to be named x -
-  # 'formula' here triggered the S3 generic/method consistency check in
-  # R CMD check, and blandAltmanData.formula() in this package already
-  # uses x
-  formula <- x
-
-  if (missing(formula) || length(formula) != 3L)
-    stop("'formula' missing or incorrect")
+  # The first argument is called 'formula', as in the other formula methods:
+  # R CMD check exempts the first argument of a .formula method from the
+  # generic/method consistency check (tools:::checkS3methods).
   
-  ## IMPORTANT!!
-  ## --- capture subset / na.action HERE ---
-  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
-  na_expr     <- if (!missing(na.action)) substitute(na.action) else NULL
-  
-  pf <- bedrock::resolveFormula(
-    formula   = formula,
-    data      = data,
-    subset    = subset_expr,
-    na.action = na_expr,
-    allowed   = "numeric-numeric"
+  # formula, data and subset are forwarded unevaluated, so that 'subset' is
+  # evaluated in 'data' as in plot.formula()
+  pf <- bedrock::resolveFormulaFromCall(
+    allowed   = "numeric-numeric",
+    na.action = na.action
   )
   
   y <- do.call(
@@ -87,7 +77,8 @@ freq2D.formula <- function(x, data, subset, na.action,
       list(...)
     )
   )
-  attr(y, "data.name") <- pf$data.name
+  # dataName, not data.name: the misspelt field set the attribute to NULL
+  attr(y, "data.name") <- pf$dataName
 
   y
   

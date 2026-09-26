@@ -61,17 +61,13 @@
 #' @export
 raterFrame <- function(formula, data, subset, na.action, dropSubj = FALSE) {
 
-  # capture subset unevaluated, following the resolveFormula() contract
-  # (avoids the collision with base::subset)
-  subset_expr <- if (!missing(subset)) substitute(subset) else NULL
-
+  # formula, data and subset are forwarded unevaluated, so that 'subset' is
+  # evaluated in the long-format 'data'.
   # na.pass here on purpose: na.action must act per *subject*, i.e. on the
   # wide frame after reshaping -- missing combinations do not even exist as
   # rows in the long format
-  r <- resolveFormula(formula, data,
-                      subset    = subset_expr,
-                      na.action = na.pass,
-                      allowed   = "n-sample-dependent")
+  r <- resolveFormulaFromCall(allowed   = "n-sample-dependent",
+                              na.action = na.pass)
 
   mf <- r$mf   # columns: rating, subject, rater (order guaranteed)
 

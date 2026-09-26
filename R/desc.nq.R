@@ -96,11 +96,19 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
   out <- strTrim(capture.output(x$res$vtest)[c(2,5)])
   cat(gettextf("%s:\n  %s\n\n", out[1], out[2]))
   
-  if(x$pair$nMissingGroups > 0){
-    warning(gettextf("  Grouping variable contains %s NAs (%s).", 
-            x$pair$nMissingGroups, fm(x$pair$pctMissingGroups, fmt="per.sty")), 
-            call. = FALSE)
-  }
+  # if(x$pair$nMissingGroups > 0){
+  #   # trailing \n: a deferred warning is shown only after the print method
+  #   # has returned, so a closing cat("\n") here would land before it
+  #   warning(gettextf("  Grouping variable contains %s NAs (%s).", 
+  #                    x$pair$nMissingGroups, fm(x$pair$pctMissingGroups, fmt="per.sty")), 
+  #           call. = FALSE)
+  # }
+  # 
+  
+  if (x$pair$nMissingGroups > 0)
+    .printWarning(gettextf("Grouping variable contains %s NAs (%s).",
+                           x$pair$nMissingGroups,
+                           fm(x$pair$pctMissingGroups, fmt = "per.sty")))
   
   .plotIfRequested(x)
 }
