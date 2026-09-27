@@ -119,8 +119,6 @@ Theory, application, and implementation. \emph{Journal of Statistical
 Software}, 20(8), 1-24.
 }
 \seealso{
-\code{\link[=cohenD]{cohenD()}}
-
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},
 \code{\link[=cohenH]{cohenH()}},

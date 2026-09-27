@@ -15,7 +15,7 @@ variable y and a numeric variable x."><meta property="og:image" content="/logo.p
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.959</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.960</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -163,9 +163,37 @@ The numeric variable <code>x</code> is optionally discretized using
 <code>breaks</code>. By default, quartiles are used.</p>
     </div>
     <div class="section level2">
+    <h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a></h2>
+
+
+<p>The plot method <code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.qn.html" class="external-link">pharos::plot.Desc.qn()</a></code> is part of pharos; its help
+page documents <code>which</code> and all further arguments. It draws one of the
+following displays:</p>
+<dl><dt><code>which = 1</code></dt>
+<dd><p>Spineplot of <code>y</code> against <code>x</code> (default).</p></dd>
+
+<dt><code>which = 2</code></dt>
+<dd><p>Conditional density plot: the conditional
+distribution of <code>y</code> along <code>x</code>.</p></dd>
+
+<dt><code>which = 3</code></dt>
+<dd><p>Overlaid kernel density estimates of <code>x</code>, one per
+level of <code>y</code>.</p></dd>
+
+<dt><code>which = 4</code></dt>
+<dd><p>Boxplots of <code>x</code> by level of <code>y</code>.</p></dd>
+
+<dt><code>which = 5</code></dt>
+<dd><p>Prevalence of the second level of <code>y</code> with Wilson
+confidence intervals across the groups of <code>x</code>; binary <code>y</code> only.</p></dd>
+
+
+</dl></div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="desc.html">desc()</a></code>, <code><a href="desc.nn.html">desc.nn()</a></code>, <code><a href="desc.nq.html">desc.nq()</a></code>,
+    <div class="dont-index"><p><code><a href="desc.html">desc()</a></code>, <code><a href="desc.nn.html">desc.nn()</a></code>, <code><a href="desc.nq.html">desc.nq()</a></code>, <code><a href="desc.qq.html">desc.qq()</a></code>,
 <code><a href="https://rdrr.io/r/stats/kruskal.test.html" class="external-link">kruskal.test()</a></code>, <code><a href="https://andrisignorell.github.io/lumen/reference/leveneTest.html" class="external-link">lumen::leveneTest()</a></code></p>
+<p>Plot method: <code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.qn.html" class="external-link">pharos::plot.Desc.qn()</a></code></p>
 <p>Other desc:
 <code><a href="desc.html">desc()</a></code>,
 <code><a href="desc.Date.html">desc.Date()</a></code>,
@@ -174,10 +202,204 @@ The numeric variable <code>x</code> is optionally discretized using
 <code><a href="desc.nq.html">desc.nq</a></code>,
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code>,
-<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
+<code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># basic usage via desc()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">──────────────────────────────────────────────────────────────────────────────</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">quality ~ delivery_min (Pizza) (Desc.qn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1008 (83.4%), missings: 201 (16.6%), groups: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             low   medium     high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   35.100   25.850   21.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iqr      16.650   13.725   12.850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           156      356      496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        15.5%    35.3%    49.2%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   H = 122,  df = 2,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.120 (moderate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levene's test for homogeneity of variance (center = median):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   F = 5.3528,  df1 = 2,  df2 = 1005,  p = 0.00487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kendall Tau-b:  -0.266  (-0.313, -0.220)  ***  small</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Conditional distribution of y by x-quantile:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         xCut</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> yOk      [9–17) [17–24) [24–33) [33–66)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   low     5.3%   8.8%   13.4%   33.9%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   medium 30.0%  33.1%   41.5%   36.6%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   high   64.8%  58.2%   45.1%   29.6%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="desc.qn-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># more detail</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span>, verbose <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">──────────────────────────────────────────────────────────────────────────────</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">quality ~ delivery_min (Pizza) (Desc.qn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1008 (83.4%), missings: 201 (16.6%), groups: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             low   medium     high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean     33.925   26.522   22.615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   35.100   25.850   21.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sd       11.742   10.113    9.497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iqr      16.650   13.725   12.850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           156      356      496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        15.5%    35.3%    49.2%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NAs           0        0        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zeros         0        0        0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   H = 122,  df = 2,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.120 (moderate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levene's test for homogeneity of variance (center = median):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   F = 5.3528,  df1 = 2,  df2 = 1005,  p = 0.00487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kendall Tau-b:  -0.266  (-0.313, -0.220)  ***  small</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:     -0.335  (-0.389, -0.279)  ***  moderate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Conditional distribution of y by x-quantile:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         xCut</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> yOk      [9–17) [17–24) [24–33) [33–66)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   low     5.3%   8.8%   13.4%   33.9%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   medium 30.0%  33.1%   41.5%   36.6%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   high   64.8%  58.2%   45.1%   29.6%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="desc.qn-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># store result, print and plot separately</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">d</span>, verbose <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">──────────────────────────────────────────────────────────────────────────────</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">quality ~ delivery_min (Pizza) (Desc.qn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1008 (83.4%), missings: 201 (16.6%), groups: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             low   medium     high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   35.100   25.850   21.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           156      356      496</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        15.5%    35.3%    49.2%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   H = 122,  df = 2,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.120 (moderate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Conditional distribution of y by x-quantile:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         xCut</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> yOk      [9–17) [17–24) [24–33) [33–66)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   low     5.3%   8.8%   13.4%   33.9%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   medium 30.0%  33.1%   41.5%   36.6%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   high   64.8%  58.2%   45.1%   29.6%  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the plots, see pharos::plot.Desc.qn()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>                     <span class="co"># spineplot</span></span></span>
+<span class="r-plt img"><img src="desc.qn-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>                     <span class="co"># conditional density</span></span></span>
+<span class="r-plt img"><img src="desc.qn-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>                     <span class="co"># densities by level of y</span></span></span>
+<span class="r-plt img"><img src="desc.qn-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>                     <span class="co"># boxplots</span></span></span>
+<span class="r-plt img"><img src="desc.qn-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># binary y: AUC, prevalence by groups of x, Cochran-Armitage test</span></span></span>
+<span class="r-in"><span><span class="co"># (complaint is stored as 0/1 and would be described as numeric-numeric)</span></span></span>
+<span class="r-in"><span><span class="va">pz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">Pizza</span>, complaint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">complaint</span>, levels <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                                          labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"no"</span>, <span class="st">"yes"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span><span class="va">complaint</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">pz</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d2</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">──────────────────────────────────────────────────────────────────────────────</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">complaint ~ delivery_min (pz) (Desc.qn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1080 (89.3%), missings: 129 (10.7%), groups: 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              no      yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   23.700   29.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iqr      14.750   16.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           875      205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        81.0%    19.0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   H = 25,  df = 1,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.022 (small)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levene's test for homogeneity of variance (center = median):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   F = 3.5339,  df1 = 1,  df2 = 1078,  p = 0.0604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AUC = 61.2%  (no vs yes)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kendall Tau-b:   0.124  ( 0.076,  0.173)  ***  small</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Prevalence of "yes" by groups (Wilson CI):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            n      est      lci      uci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------- </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9–17)               271    13.3%     9.8%    17.8%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [17–24)              267    13.9%    10.2%    18.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [24–33)              271    19.6%    15.3%    24.7%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [33–66)              271    29.2%    24.1%    34.8%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cochran-Armitage trend test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Z = -4.998,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d2</span>, which <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>                    <span class="co"># prevalence with Wilson CI</span></span></span>
+<span class="r-plt img"><img src="desc.qn-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># own breaks instead of quartiles</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span><span class="va">complaint</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">pz</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">──────────────────────────────────────────────────────────────────────────────</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">complaint ~ delivery_min (pz) (Desc.qn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1080 (89.3%), missings: 129 (10.7%), groups: 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              no      yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   23.700   29.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iqr      14.750   16.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           875      205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        81.0%    19.0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   H = 25,  df = 1,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.022 (small)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levene's test for homogeneity of variance (center = median):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   F = 3.5339,  df1 = 1,  df2 = 1078,  p = 0.0604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AUC = 61.2%  (no vs yes)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kendall Tau-b:   0.124  ( 0.076,  0.173)  ***  small</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Prevalence of "yes" by groups (Wilson CI):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            n      est      lci      uci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------- </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [9–20)               358    14.0%    10.8%    17.9%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [20–30)              378    16.1%    12.8%    20.2%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [30–40)              225    24.4%    19.3%    30.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [40–66)              119    32.8%    25.0%    41.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cochran-Armitage trend test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Z = -4.966,  p = &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="desc.qn-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pipe</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="desc.qn-9.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

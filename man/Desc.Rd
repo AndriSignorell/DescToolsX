@@ -74,21 +74,25 @@ vector}
 
 \item{...}{further arguments passed to methods}
 
-\item{formula}{formula describing the design. Depending on the function,
-supported forms include \code{y ~ 1}, \code{Pair(x, y) ~ 1},
-\code{y ~ group}, \code{y ~ predictor}, and
-\code{y ~ treatment | block}}
+\item{formula}{formula describing the design, see section
+\strong{Supported forms}. Which forms a function accepts is documented on
+its own help page.}
 
 \item{data}{optional matrix or data frame (or similar; see
-\code{\link[stats:model.frame]{stats::model.frame()}}) containing the variables in the
-formula. If omitted, variables are taken from
-\code{environment(formula)}}
+\code{\link[stats:model.frame]{stats::model.frame()}}) containing the variables in the formula.
+A matrix is converted to a data frame. If omitted or \code{NULL},
+variables are taken from \code{environment(formula)}.}
 
 \item{subset}{optional expression specifying a subset of observations
-to be used in the analysis}
+to be used in the analysis. It is evaluated in \code{data} first, then in
+\code{environment(formula)}, and applied before missing values are
+handled.}
 
-\item{na.action}{function specifying how missing values are handled;
-passed to \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}}
+\item{na.action}{function specifying how missing values are handled,
+passed to \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}. The resolver's default
+\code{\link[stats:na.pass]{stats::na.pass()}} keeps incomplete cases in the model frame, so the
+function itself can count and report them (as \code{\link[=desc]{desc()}} does) before
+removing them. \code{\link[stats:na.omit]{stats::na.omit()}} drops them beforehand.}
 
 \item{main}{character string, \code{NULL}, or \code{NA}, defining the main
 title. By default (\code{main = NULL}) the title will
@@ -204,8 +208,8 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link[=desc.ts]{desc.ts()}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
 \concept{data-description}
 \concept{desc}

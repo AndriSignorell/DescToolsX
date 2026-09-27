@@ -17,17 +17,22 @@
 \item{x}{numeric predictor for \code{.descNN()}, or an object of class
 \code{"Desc.nn"} for the print and plot methods}
 
-\item{verbose}{integer controlling the amount of output (1, 2, or 3).
-\code{NULL} (default) falls back to
-\verb{x$meta$verbose \\\%||\\\% getOption("DescTools.verbose", 2)}.}
+\item{verbose}{integer controlling the amount of printed output
+(1, 2, or 3). \code{NULL} (default) falls back to
+\verb{x$meta$verbose \\\%||\\\% getOption("DescTools.verbose", 2)}.
+Has no effect on \code{plot()}.}
 
-\item{\dots}{further arguments passed to the underlying plot functions}
+\item{\dots}{further arguments. In \code{plot()} they are passed on to the
+plot function selected by \code{which} (see section \strong{Plots}, where each
+function is linked). They go unchanged to \emph{every} selected plot, so
+arguments specific to one function, such as \code{type} for
+\code{\link[pharos:plotDens2D]{pharos::plotDens2D()}}, belong with a single \code{which}.}
 
 \item{main}{main title for the plot. Defaults to the title stored in
 \code{x$meta$main}.}
 
-\item{which}{integer vector selecting which plots to draw. See Details.
-\code{NULL} (default) selects plots automatically based on \code{verbose}.}
+\item{which}{integer vector selecting the plots to draw, one plot per
+element, see section \strong{Plots}. Default \code{1}.}
 
 \item{y}{numeric response variable}
 
@@ -77,35 +82,52 @@ and \code{corCI()} (Fisher z-transform) for correlations.
 \code{moderate}   \tab 0.30 \eqn{\le} |r| < 0.50 \cr
 \code{large}      \tab |r| \eqn{\ge} 0.50 \cr
 }
+}
+\section{Plots}{
 
-\strong{Plot options via \code{which}:}
+\code{plot()} draws one of four displays of the joint distribution, selected
+by \code{which}. All arguments in \code{...} go straight to the underlying
+function; its help page lists what can be set.
+
 \describe{
-\item{\code{which = 1}}{Scatterplot with linear regression line and
-confidence band.}
-\item{\code{which = 2}}{Scatterplot with Loess smoother and confidence
-band (via \code{lines.loess()}).}
-\item{\code{which = 3}}{Residual plot: residuals vs. fitted values.}
-\item{\code{which = 4}}{Q-Q plot of residuals.}
+\item{\code{which = 1}}{Scatterplot of response against predictor,
+drawn by \code{\link[pharos:plotXY]{pharos::plotXY()}}. Axes are labelled with the variable
+names; point style, regression line and smoothers are controlled
+there.}
+\item{\code{which = 2}}{Two-dimensional kernel density estimate on the
+complete cases, drawn by \code{\link[pharos:plotDens2D]{pharos::plotDens2D()}}. Its \code{type}
+argument switches the display, e.g. \code{type = "contour"},
+\code{"image"} or \code{"persp"}.}
+\item{\code{which = 3}}{Bagplot (bivariate boxplot: bag with the inner
+half of the data, fence, outliers), drawn by \code{\link[pharos:plotBag]{pharos::plotBag()}}.}
+\item{\code{which = 4}}{Hexagonal binning, drawn by
+\code{\link[pharos:plotHexbin]{pharos::plotHexbin()}}; the choice for large n, where points in a
+scatterplot overplot.}
 }
 
-Default \code{which} by verbose level:
-\itemize{
-\item \code{verbose = 1}: \code{which = 1}
-\item \code{verbose = 2}: \code{which = 1:2}
-\item \code{verbose = 3}: \code{which = 1:4}
+\code{main} defaults to the title stored in the object and is passed to
+every plot.
 }
-}
+
 \examples{
 # basic usage via desc()
-desc(mpg ~ wt, mtcars)
+desc(temperature ~ delivery_min, Pizza)
 
 # more detail
-desc(mpg ~ wt, mtcars, verbose = 3)
+desc(temperature ~ delivery_min, Pizza, verbose = 3)
 
-# store result and plot separately
-d <- desc(mpg ~ wt, mtcars, plotit = FALSE)
+# store result, print and plot separately
+d <- desc(temperature ~ delivery_min, Pizza, plotit = FALSE)
 print(d, verbose = 1)
-plot(d, which = 1:2)
+
+# the four plots
+plot(d, which = 1)                     # scatterplot       -> plotXY()
+plot(d, which = 2)                     # 2D density        -> plotDens2D()
+plot(d, which = 2, type = "contour")
+plot(d, which = 2, type = "image")
+plot(d, which = 2, type = "persp")
+plot(d, which = 3)                     # bagplot           -> plotBag()
+plot(d, which = 4)                     # hexagonal binning -> plotHexbin()
 
 # pipe
 desc(mpg ~ wt, mtcars) |> plot(which = 3)
@@ -127,6 +149,9 @@ heteroscedasticity and random coefficient variation.
 \code{\link[lumen:corCI]{lumen::corCI()}}, \code{\link[lumen:bpTest]{lumen::bpTest()}},
 \code{\link[stats:lm]{stats::lm()}}, \code{\link[stats:cor.test]{stats::cor.test()}}
 
+Plot functions: \code{\link[pharos:plotXY]{pharos::plotXY()}}, \code{\link[pharos:plotDens2D]{pharos::plotDens2D()}},
+\code{\link[pharos:plotBag]{pharos::plotBag()}}, \code{\link[pharos:plotHexbin]{pharos::plotHexbin()}}
+
 Other desc:
 \code{\link[=desc]{desc()}},
 \code{\link[=desc.Date]{desc.Date()}},
@@ -135,9 +160,10 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link[=desc.ts]{desc.ts()}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
+\concept{bagplot hexbin 2d density contour}
 \concept{bivariate numeric regression correlation scatterplot}
 \concept{desc}
 \concept{pearson spearman r-squared residuals heteroscedasticity}

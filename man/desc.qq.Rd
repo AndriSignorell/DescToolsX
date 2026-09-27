@@ -3,23 +3,43 @@
 \name{desc.qq}
 \alias{desc.qq}
 \alias{.descQQ}
+\alias{print.Desc.qq}
+\alias{plot.Desc.qq}
 \title{Describe Relationship: Categorical x by Categorical y}
 \usage{
 .descQQ(x, y, ...)
+
+\method{print}{Desc.qq}(x, digits = NULL, ...)
+
+\method{plot}{Desc.qq}(x, main = x$meta$main, which = 1, ...)
 }
 \arguments{
-\item{x}{a categorical variable}
+\item{x}{a categorical variable for \code{.descQQ()}, or an object of class
+\code{"Desc.qq"} for the print and plot methods}
+
+\item{digits}{currently unused}
+
+\item{\dots}{further arguments. In \code{.descQQ()} passed to \code{\link[=desc]{desc()}}, in
+\code{print()} to \code{\link[=print.Desc.table]{print.Desc.table()}}, in \code{plot()} to
+\code{\link[pharos:plot.Desc.table]{pharos::plot.Desc.table()}}.}
+
+\item{main}{main title for the plot; defaults to the title stored in
+\code{x$meta$main}}
+
+\item{which}{integer vector selecting the plots to draw, passed on to
+\code{\link[pharos:plot.Desc.table]{pharos::plot.Desc.table()}}, see section \strong{Plots}. Default \code{1}.}
 
 \item{y}{a categorical variable}
-
-\item{...}{further arguments, currently unused}
 }
 \value{
-an object of class \code{c("Desc.qq", "Desc")}
+\code{.descQQ()} returns an object of class \code{c("Desc.qq", "Desc")}.
+The plot method returns the value of \code{\link[pharos:plot.Desc.table]{pharos::plot.Desc.table()}}.
 }
 \description{
-Computes descriptive statistics for the relationship between two
-categorical variables \code{x} and \code{y}.
+Computes, prints and plots descriptive statistics for the relationship
+between two categorical variables \code{x} and \code{y}. The function is
+dispatched automatically by \code{desc(y ~ x, data)} when both variables
+are categorical.
 }
 \details{
 This function is a wrapper around \code{\link[=desc.table]{desc.table()}} applied to
@@ -42,9 +62,42 @@ Internally, \code{desc.qq(x, y)} is equivalent to:
 desc(table(x, y))
 }
 }
+\section{Plots}{
+
+\code{plot()} labels the table dimensions with the variable names and hands
+over to \code{\link[pharos:plot.Desc.table]{pharos::plot.Desc.table()}}, the plot method for contingency
+tables. Its help page documents the displays selected by \code{which} and
+all further arguments; the displays themselves are drawn by
+\code{\link[pharos:plotMosaic]{pharos::plotMosaic()}}, \code{\link[pharos:plotAssoc]{pharos::plotAssoc()}} and
+\code{\link[pharos:plotHeatmap]{pharos::plotHeatmap()}}, among others.
+
+\code{main} defaults to the title stored in the object.
+}
+
+\examples{
+# basic usage via desc()
+desc(quality ~ area, Pizza)
+
+# store result, print and plot separately
+d <- desc(quality ~ area, Pizza, plotit = FALSE)
+d
+
+# the plots, see pharos::plot.Desc.table()
+plot(d, which = 1)
+plot(d, which = 2)
+plot(d, which = 3)
+plot(d, which = 4)                     # association plot
+plot(d, which = 5)                     # heatmap
+
+# pipe
+desc(quality ~ area, Pizza) |> plot(which = 4)
+
+}
 \seealso{
-\link{desc}, \link{desc.table},
-\link{desc.qn}, \link{desc.nn}, \link[pharos:plot.Desc.table]{pharos::plot.Desc.table}
+\code{\link[=desc]{desc()}}, \code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.qn]{desc.qn()}}, \code{\link[=desc.nq]{desc.nq()}}, \code{\link[=desc.nn]{desc.nn()}}
+
+Plot method: \code{\link[pharos:plot.Desc.table]{pharos::plot.Desc.table()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -54,10 +107,11 @@ Other desc:
 \code{\link{desc.nq}},
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
-\code{\link[=desc.ts]{desc.ts()}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
 \concept{association-measures}
+\concept{contingency table mosaic heatmap}
 \concept{data-description}
 \concept{desc}
 \concept{descriptive-statistics}

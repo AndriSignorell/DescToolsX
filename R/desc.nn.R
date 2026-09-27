@@ -1,9 +1,9 @@
 
-
 # ── Desc.nn — quantitative ~ quantitative ────────────────────────────────────
-# Two functions:
-#   calcDescNn(x, y, conf.level)  →  list with all computed statistics
-#   print.Desc.nn(x, ...)         →  formatted console output
+# Functions:
+#   .descNN(y, x, conf.level)  →  list with all computed statistics
+#   print.Desc.nn(x, ...)      →  formatted console output
+#   plot.Desc.nn(x, which, ...)→  one of four bivariate displays
 
 
 
@@ -15,19 +15,24 @@
 #'
 #' @param x numeric predictor for `.descNN()`, or an object of class
 #' `"Desc.nn"` for the print and plot methods
-#' @param verbose integer controlling the amount of output (1, 2, or 3).
-#'   `NULL` (default) falls back to
+#' @param verbose integer controlling the amount of printed output
+#'   (1, 2, or 3). `NULL` (default) falls back to
 #'   `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`.
-#' @param which integer vector selecting which plots to draw. See Details.
-#'   `NULL` (default) selects plots automatically based on `verbose`.
-#' @param \dots further arguments passed to the underlying plot functions
-#' 
+#'   Has no effect on `plot()`.
+#' @param which integer vector selecting the plots to draw, one plot per
+#'   element, see section **Plots**. Default `1`.
+#' @param \dots further arguments. In `plot()` they are passed on to the
+#'   plot function selected by `which` (see section **Plots**, where each
+#'   function is linked). They go unchanged to *every* selected plot, so
+#'   arguments specific to one function, such as `type` for
+#'   [pharos::plotDens2D()], belong with a single `which`.
+#'
 #' @param y numeric response variable
 #' @param conf.level confidence level for interval estimates (default 0.95)
 #'
 #' @name desc.nn
 #' @aliases .descNN
-#' 
+#'
 #' @details
 #' **Print output by verbose level:**
 #'
@@ -56,22 +61,29 @@
 #'   `large`      \tab |r| \eqn{\ge} 0.50 \cr
 #' }
 #'
-#' **Plot options via `which`:**
+#' @section Plots:
+#' `plot()` draws one of four displays of the joint distribution, selected
+#' by `which`. All arguments in `...` go straight to the underlying
+#' function; its help page lists what can be set.
+#'
 #' \describe{
-#'   \item{`which = 1`}{Scatterplot with linear regression line and
-#'     confidence band.}
-#'   \item{`which = 2`}{Scatterplot with Loess smoother and confidence
-#'     band (via `lines.loess()`).}
-#'   \item{`which = 3`}{Residual plot: residuals vs. fitted values.}
-#'   \item{`which = 4`}{Q-Q plot of residuals.}
+#'   \item{`which = 1`}{Scatterplot of response against predictor,
+#'     drawn by [pharos::plotXY()]. Axes are labelled with the variable
+#'     names; point style, regression line and smoothers are controlled
+#'     there.}
+#'   \item{`which = 2`}{Two-dimensional kernel density estimate on the
+#'     complete cases, drawn by [pharos::plotDens2D()]. Its `type`
+#'     argument switches the display, e.g. `type = "contour"`,
+#'     `"image"` or `"persp"`.}
+#'   \item{`which = 3`}{Bagplot (bivariate boxplot: bag with the inner
+#'     half of the data, fence, outliers), drawn by [pharos::plotBag()].}
+#'   \item{`which = 4`}{Hexagonal binning, drawn by
+#'     [pharos::plotHexbin()]; the choice for large n, where points in a
+#'     scatterplot overplot.}
 #' }
 #'
-#' Default `which` by verbose level:
-#' \itemize{
-#'   \item `verbose = 1`: `which = 1`
-#'   \item `verbose = 2`: `which = 1:2`
-#'   \item `verbose = 3`: `which = 1:4`
-#' }
+#' `main` defaults to the title stored in the object and is passed to
+#' every plot.
 #'
 #' @return `.descNN()` returns an object of class
 #' `c("Desc.nn", "Desc")`. Its `lm$intercept` and `lm$slope`
@@ -100,21 +112,33 @@
 #'   [lumen::corCI()], [lumen::bpTest()],
 #'   [stats::lm()], [stats::cor.test()]
 #'
+#'   Plot functions: [pharos::plotXY()], [pharos::plotDens2D()],
+#'   [pharos::plotBag()], [pharos::plotHexbin()]
+#'
 #' @family desc
 #' @concept bivariate numeric regression correlation scatterplot
 #' @concept pearson spearman r-squared residuals heteroscedasticity
+#' @concept bagplot hexbin 2d density contour
 #'
 #' @examples
 #' # basic usage via desc()
-#' desc(mpg ~ wt, mtcars)
+#' desc(temperature ~ delivery_min, Pizza)
 #'
 #' # more detail
-#' desc(mpg ~ wt, mtcars, verbose = 3)
+#' desc(temperature ~ delivery_min, Pizza, verbose = 3)
 #'
-#' # store result and plot separately
-#' d <- desc(mpg ~ wt, mtcars, plotit = FALSE)
+#' # store result, print and plot separately
+#' d <- desc(temperature ~ delivery_min, Pizza, plotit = FALSE)
 #' print(d, verbose = 1)
-#' plot(d, which = 1:2)
+#'
+#' # the four plots
+#' plot(d, which = 1)                     # scatterplot       -> plotXY()
+#' plot(d, which = 2)                     # 2D density        -> plotDens2D()
+#' plot(d, which = 2, type = "contour")
+#' plot(d, which = 2, type = "image")
+#' plot(d, which = 2, type = "persp")
+#' plot(d, which = 3)                     # bagplot           -> plotBag()
+#' plot(d, which = 4)                     # hexagonal binning -> plotHexbin()
 #'
 #' # pipe
 #' desc(mpg ~ wt, mtcars) |> plot(which = 3)
@@ -349,29 +373,30 @@ plot.Desc.nn <- function(x, main = x$meta$main, which = 1, verbose = NULL, ...) 
   # "'from' must be a finite number".
   response  <- x$data$y
   predictor <- x$data$x
-  
+
   for (j in which) {
-    
-    switch(as.character(j %||% "1"),
+
+    switch(as.character(j),
            "1" = {
              plotXY(response ~ predictor,
                     main = main,
-                    xlab = x$meta$xname, 
+                    xlab = x$meta$xname,
                     ylab = x$meta$yname, ...)
            },
            "2" = {
-             zz <- as.data.frame(x$data)
-             zz <- zz[complete.cases(zz), ]
-             
-             plotDens2D(x = zz$x, y = zz$y, main = main, ...)
+             ok <- complete.cases(predictor, response)
+             plotDens2D(x = predictor[ok], y = response[ok], main = main, ...)
            },
            "3" = {
-             plotBag(x = cbind(x$data$x, y = x$data$y), main = main, ...)
+             plotBag(x = cbind(x = predictor, y = response), main = main, ...)
            },
            "4" = {
-             plotHexbin(x = x$data$x, y = x$data$y, main = main, ...)
+             plotHexbin(x = predictor, y = response, main = main, ...)
            },
            warning(gettextf("No plot defined for which = %s (valid: 1-4).", j))
     )
   }
+
+  # documented as returning x invisibly, returned the last switch() value
+  invisible(x)
 }

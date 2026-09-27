@@ -79,9 +79,61 @@ If \code{y} has two levels:
 The numeric variable \code{x} is optionally discretized using
 \code{breaks}. By default, quartiles are used.
 }
+\section{Plots}{
+
+The plot method \code{\link[pharos:plot.Desc.qn]{pharos::plot.Desc.qn()}} is part of pharos; its help
+page documents \code{which} and all further arguments. It draws one of the
+following displays:
+
+\describe{
+\item{\code{which = 1}}{Spineplot of \code{y} against \code{x} (default).}
+\item{\code{which = 2}}{Conditional density plot: the conditional
+distribution of \code{y} along \code{x}.}
+\item{\code{which = 3}}{Overlaid kernel density estimates of \code{x}, one per
+level of \code{y}.}
+\item{\code{which = 4}}{Boxplots of \code{x} by level of \code{y}.}
+\item{\code{which = 5}}{Prevalence of the second level of \code{y} with Wilson
+confidence intervals across the groups of \code{x}; binary \code{y} only.}
+}
+}
+
+\examples{
+# basic usage via desc()
+desc(quality ~ delivery_min, Pizza)
+
+# more detail
+desc(quality ~ delivery_min, Pizza, verbose = 3)
+
+# store result, print and plot separately
+d <- desc(quality ~ delivery_min, Pizza, plotit = FALSE)
+print(d, verbose = 1)
+
+# the plots, see pharos::plot.Desc.qn()
+plot(d, which = 1)                     # spineplot
+plot(d, which = 2)                     # conditional density
+plot(d, which = 3)                     # densities by level of y
+plot(d, which = 4)                     # boxplots
+
+# binary y: AUC, prevalence by groups of x, Cochran-Armitage test
+# (complaint is stored as 0/1 and would be described as numeric-numeric)
+pz <- transform(Pizza, complaint = factor(complaint, levels = 0:1,
+                                          labels = c("no", "yes")))
+d2 <- desc(complaint ~ delivery_min, pz, plotit = FALSE)
+d2
+plot(d2, which = 5)                    # prevalence with Wilson CI
+
+# own breaks instead of quartiles
+desc(complaint ~ delivery_min, pz, breaks = c(20, 30, 40))
+
+# pipe
+desc(quality ~ delivery_min, Pizza) |> plot(which = 2)
+
+}
 \seealso{
-\code{\link[=desc]{desc()}}, \code{\link[=desc.nn]{desc.nn()}}, \code{\link[=desc.nq]{desc.nq()}},
+\code{\link[=desc]{desc()}}, \code{\link[=desc.nn]{desc.nn()}}, \code{\link[=desc.nq]{desc.nq()}}, \code{\link[=desc.qq]{desc.qq()}},
 \code{\link[=kruskal.test]{kruskal.test()}}, \code{\link[lumen:leveneTest]{lumen::leveneTest()}}
+
+Plot method: \code{\link[pharos:plot.Desc.qn]{pharos::plot.Desc.qn()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -91,10 +143,11 @@ Other desc:
 \code{\link{desc.nq}},
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qq}},
-\code{\link[=desc.ts]{desc.ts()}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
 \concept{association-measures}
 \concept{data-description}
 \concept{desc}
 \concept{descriptive-statistics}
+\concept{spineplot cdplot prevalence}

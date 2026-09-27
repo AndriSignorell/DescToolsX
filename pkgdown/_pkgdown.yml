@@ -67,6 +67,7 @@ reference:
   - desc.qn
   - desc.qq
   - desc.ts
+  - desc.table
   # data.print -- Specialized print methods
   - print.Desc.Date
   - print.Desc.qq

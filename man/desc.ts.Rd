@@ -107,7 +107,7 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}}
 }
 \concept{data-description}
 \concept{desc}

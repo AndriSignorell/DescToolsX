@@ -97,8 +97,6 @@
 #' glassDelta(x, y, useControlSd = FALSE)
 #'
 #'
-#' @seealso [cohenD()]
-#'
 #' @family effect.size
 #' @concept effect-size
 #'

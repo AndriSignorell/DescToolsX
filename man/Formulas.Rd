@@ -4,40 +4,73 @@
 \alias{Formulas}
 \title{Formula Interfaces - Common Arguments}
 \arguments{
-\item{formula}{formula describing the design. Depending on the function,
-supported forms include \code{y ~ 1}, \code{Pair(x, y) ~ 1},
-\code{y ~ group}, \code{y ~ predictor}, and
-\code{y ~ treatment | block}}
+\item{formula}{formula describing the design, see section
+\strong{Supported forms}. Which forms a function accepts is documented on
+its own help page.}
 
 \item{data}{optional matrix or data frame (or similar; see
-\code{\link[stats:model.frame]{stats::model.frame()}}) containing the variables in the
-formula. If omitted, variables are taken from
-\code{environment(formula)}}
+\code{\link[stats:model.frame]{stats::model.frame()}}) containing the variables in the formula.
+A matrix is converted to a data frame. If omitted or \code{NULL},
+variables are taken from \code{environment(formula)}.}
 
 \item{subset}{optional expression specifying a subset of observations
-to be used in the analysis}
+to be used in the analysis. It is evaluated in \code{data} first, then in
+\code{environment(formula)}, and applied before missing values are
+handled.}
 
-\item{na.action}{function specifying how missing values are handled;
-passed to \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}}
+\item{na.action}{function specifying how missing values are handled,
+passed to \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}. The resolver's default
+\code{\link[stats:na.pass]{stats::na.pass()}} keeps incomplete cases in the model frame, so the
+function itself can count and report them (as \code{\link[=desc]{desc()}} does) before
+removing them. \code{\link[stats:na.omit]{stats::na.omit()}} drops them beforehand.}
 }
 \description{
 Common arguments and conventions for formula interfaces in DescToolsX.
 }
 \details{
 Formula interfaces in DescToolsX are resolved consistently by
-\code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}. The resolver constructs the
-\code{\link[stats:model.frame]{stats::model.frame()}} and classifies the resulting design as
-one-sample, two-sample independent, two-sample dependent, n-sample
-independent, n-sample dependent, or numeric-numeric.
+\code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}}. The resolver builds the
+\code{\link[stats:model.frame]{stats::model.frame()}} once, applying \code{data}, \code{subset} and
+\code{na.action}, and classifies the design as one-sample, two-sample
+independent, two-sample dependent, n-sample independent, n-sample
+dependent, or numeric-numeric. Each function states which designs it
+accepts; any other form is rejected with an error naming the design
+found.
 
-Individual functions may support only a subset of these designs. The
-accepted forms are documented on the corresponding function's help page.
-Data lookup, subsetting, and missing-value handling are delegated to
-\code{resolveFormula()}.
+Besides the model frame, the resolver returns the row positions of the
+retained observations in the original data. Functions that align
+external vectors with the model frame (e.g. an ordering variable after
+\code{subset} and \code{na.action}) use these instead of recomputing them.
 }
+\section{Supported forms}{
+
+\describe{
+\item{\code{y ~ 1}}{one sample}
+\item{\code{Pair(x, y) ~ 1}}{two dependent (paired) samples, see
+\code{\link[stats:Pair]{stats::Pair()}}}
+\item{\code{y ~ group}}{two or more independent samples, \code{group} being
+categorical}
+\item{\code{y ~ treatment | block}}{two or more dependent samples in a
+block design}
+\item{\code{y ~ x}}{two numeric variables (response and predictor)}
+}
+
+\strong{\code{desc()}} accepts \code{y ~ x} for any combination of numeric and
+categorical variables and dispatches on the types of the two columns
+of the model frame:
+\tabular{lll}{
+\strong{y}       \tab \strong{x}       \tab \strong{method} \cr
+numeric     \tab numeric     \tab \code{\link[=desc.nn]{desc.nn()}} \cr
+numeric     \tab categorical \tab \code{\link[=desc.nq]{desc.nq()}} \cr
+categorical \tab numeric     \tab \code{\link[=desc.qn]{desc.qn()}} \cr
+categorical \tab categorical \tab \code{\link[=desc.qq]{desc.qq()}} \cr
+}
+}
+
 \seealso{
 \code{\link[bedrock:resolveFormula]{bedrock::resolveFormula()}},
 \code{\link[stats:formula]{stats::formula()}},
 \code{\link[stats:model.frame]{stats::model.frame()}},
-\code{\link[stats:Pair]{stats::Pair()}}
+\code{\link[stats:Pair]{stats::Pair()}},
+\code{\link[=desc]{desc()}}
 }

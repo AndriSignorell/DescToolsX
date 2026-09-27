@@ -43,6 +43,22 @@
 #' The numeric variable `x` is optionally discretized using
 #' `breaks`. By default, quartiles are used.
 #'
+#' @section Plots:
+#' The plot method [pharos::plot.Desc.qn()] is part of pharos; its help
+#' page documents `which` and all further arguments. It draws one of the
+#' following displays:
+#'
+#' \describe{
+#'   \item{`which = 1`}{Spineplot of `y` against `x` (default).}
+#'   \item{`which = 2`}{Conditional density plot: the conditional
+#'     distribution of `y` along `x`.}
+#'   \item{`which = 3`}{Overlaid kernel density estimates of `x`, one per
+#'     level of `y`.}
+#'   \item{`which = 4`}{Boxplots of `x` by level of `y`.}
+#'   \item{`which = 5`}{Prevalence of the second level of `y` with Wilson
+#'     confidence intervals across the groups of `x`; binary `y` only.}
+#' }
+#'
 #' @return an object of class `c("Desc.qn", "Desc")` with components:
 #' \describe{
 #'   \item{`grpTable`}{group-wise summary table}
@@ -67,13 +83,47 @@
 #' }
 #'
 #' @seealso
-#' [desc()], [desc.nn()], [desc.nq()],
+#' [desc()], [desc.nn()], [desc.nq()], [desc.qq()],
 #' [kruskal.test()], [lumen::leveneTest()]
+#'
+#' Plot method: [pharos::plot.Desc.qn()]
 #'
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
 #' @concept association-measures
+#' @concept spineplot cdplot prevalence
+#'
+#' @examples
+#' # basic usage via desc()
+#' desc(quality ~ delivery_min, Pizza)
+#'
+#' # more detail
+#' desc(quality ~ delivery_min, Pizza, verbose = 3)
+#'
+#' # store result, print and plot separately
+#' d <- desc(quality ~ delivery_min, Pizza, plotit = FALSE)
+#' print(d, verbose = 1)
+#'
+#' # the plots, see pharos::plot.Desc.qn()
+#' plot(d, which = 1)                     # spineplot
+#' plot(d, which = 2)                     # conditional density
+#' plot(d, which = 3)                     # densities by level of y
+#' plot(d, which = 4)                     # boxplots
+#'
+#' # binary y: AUC, prevalence by groups of x, Cochran-Armitage test
+#' # (complaint is stored as 0/1 and would be described as numeric-numeric)
+#' pz <- transform(Pizza, complaint = factor(complaint, levels = 0:1,
+#'                                           labels = c("no", "yes")))
+#' d2 <- desc(complaint ~ delivery_min, pz, plotit = FALSE)
+#' d2
+#' plot(d2, which = 5)                    # prevalence with Wilson CI
+#'
+#' # own breaks instead of quartiles
+#' desc(complaint ~ delivery_min, pz, breaks = c(20, 30, 40))
+#'
+#' # pipe
+#' desc(quality ~ delivery_min, Pizza) |> plot(which = 2)
 #'
 #' @rdname desc.qn
 #' @usage .descQN(y, x, conf.level = 0.95, breaks, right)
@@ -298,25 +348,8 @@ print.Desc.qn <- function(x, verbose = NULL, ...) {
   
 # ── Plot ──────────────────────────────────────────────────────────────────────
   
-# ── plot.Desc.qn — qualitative y ~ quantitative x ────────────────────────────
-#
-# which:
-#   1  Spineplot                          (default)
-#   2  Conditional density plot (cdplot)
-#   3  Overlapping density per group
-#   4  Boxplot
-#   5  Prevalence + Wilson-CI along x     (binary y only)
-#
-# Default by verbose:
-#   verbose = 1  →  which = 1
-#   verbose = 2  →  which = 1:2
-#   verbose = 3  →  which = 1:2  (+5 if binary y)
-#
-# Design parameters (line width, colors, point size etc.) will be
-# governed by DescToolsX design rules once defined.
-
-
-# plot.Desc.qn is defined in pharos
+# plot.Desc.qn is defined in pharos; the displays per `which` are
+# documented in the section "Plots" above and in pharos::plot.Desc.qn()
 
 
 

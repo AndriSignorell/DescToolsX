@@ -5,15 +5,21 @@
 #' @title Describe Relationship: Numeric x by Categorical g
 #'
 #' @description
-#' Computes descriptive statistics for a numeric variable `x`
-#' grouped by a categorical variable `g`.
+#' Computes, prints and plots descriptive statistics for a numeric variable
+#' `x` grouped by a categorical variable `g`. The function is dispatched
+#' automatically by `desc(y ~ g, data)` when `y` is numeric and `g`
+#' categorical.
 #'
-#' @param x a numeric variable
+#' @param x a numeric variable for `.descNQ()`, or an object of class
+#'   `"Desc.nq"` for the print and plot methods
 #' @param g a categorical grouping variable (factor or coercible to factor)
-#' @param ... further arguments, currently unused
-#' @param which integer vector selecting which plots to draw. See Details.
-#'   `NULL` (default) selects plots automatically based on `verbose`.
-#' @param digits number of digits used to format relative frequencies
+#' @param which integer vector selecting the plots to draw, one plot per
+#'   element, see section **Plots**. Default `1`.
+#' @param digits currently unused
+#' @param \dots further arguments. In `.descNQ()` unused, in `print()`
+#'   passed to [bedrock::printCharMatrix()]. In `plot()` they are passed on
+#'   to the plot function selected by `which` (see section **Plots**, where
+#'   each function is linked) and go unchanged to *every* selected plot.
 #'
 #' @details
 #' The function summarizes the distribution of `x` across levels of
@@ -32,22 +38,61 @@
 #' differs between groups defined by `g`. The effect size \eqn{\eta^2}
 #' provides a standardized measure of group differences.
 #'
-#' @return an object of class `c("Desc.nq", "Desc")` with components:
+#' @section Plots:
+#' `plot()` draws one of three displays of `x` by group, selected by
+#' `which`. All arguments in `...` go straight to the underlying
+#' function; its help page lists what can be set.
+#'
+#' \describe{
+#'   \item{`which = 1`}{Boxplots by group, drawn by [pharos::plotBox()].
+#'     Axes are labelled with the variable names.}
+#'   \item{`which = 2`}{Overlaid kernel density estimates, one per group,
+#'     drawn by [pharos::plotDens()].}
+#'   \item{`which = 3`}{Density and boxplot combined per group, drawn by
+#'     [pharos::plotDensBox()].}
+#' }
+#'
+#' `main` defaults to the title stored in the object and is passed to
+#' every plot.
+#'
+#' @return `.descNQ()` returns an object of class `c("Desc.nq", "Desc")`
+#' with components:
 #' \describe{
 #'   \item{`tab`}{group-wise summary table}
 #'   \item{`test`}{result of the Kruskal-Wallis test}
 #'   \item{`vtest`}{result of Levene's test}
 #'   \item{`eta`}{effect size}
 #' }
+#' The plot method returns `x` invisibly.
 #'
 #' @seealso
-#' [desc], [desc.qn], [desc.nn], [pharos::plot.Desc.qn]
-#' [kruskal.test], [lumen::leveneTest]
+#' [desc()], [desc.qn()], [desc.nn()], [desc.qq()],
+#' [kruskal.test()], [lumen::leveneTest()]
+#'
+#' Plot functions: [pharos::plotBox()], [pharos::plotDens()],
+#' [pharos::plotDensBox()]
 #'
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
 #' @concept hypothesis-testing
+#' @concept boxplot density group comparison
+#'
+#' @examples
+#' # basic usage via desc()
+#' desc(temperature ~ area, Pizza)
+#'
+#' # store result, print and plot separately
+#' d <- desc(temperature ~ area, Pizza, plotit = FALSE)
+#' d
+#'
+#' # the three plots
+#' plot(d, which = 1)                     # boxplots          -> plotBox()
+#' plot(d, which = 2)                     # densities         -> plotDens()
+#' plot(d, which = 3)                     # density + boxplot -> plotDensBox()
+#'
+#' # pipe
+#' desc(temperature ~ area, Pizza) |> plot(which = 2)
 #'
 #' @rdname desc.nq
 #' @usage .descNQ(x, g, ...)
@@ -96,15 +141,6 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
   out <- strTrim(capture.output(x$res$vtest)[c(2,5)])
   cat(gettextf("%s:\n  %s\n\n", out[1], out[2]))
   
-  # if(x$pair$nMissingGroups > 0){
-  #   # trailing \n: a deferred warning is shown only after the print method
-  #   # has returned, so a closing cat("\n") here would land before it
-  #   warning(gettextf("  Grouping variable contains %s NAs (%s).", 
-  #                    x$pair$nMissingGroups, fm(x$pair$pctMissingGroups, fmt="per.sty")), 
-  #           call. = FALSE)
-  # }
-  # 
-  
   if (x$pair$nMissingGroups > 0)
     .printWarning(gettextf("Grouping variable contains %s NAs (%s).",
                            x$pair$nMissingGroups,
@@ -119,28 +155,35 @@ print.Desc.nq <- function(x, digits = NULL, ...) {
 #' `x$meta$main`
 #' @rdname desc.nq
 #' @export
-plot.Desc.nq <- function(x, main = x$meta$main, which = NULL, ...) {
+plot.Desc.nq <- function(x, main = x$meta$main, which = 1, ...) {
 
   # local names for the formulas: `x$data$y ~ x$data$x` is evaluated in
   # functions whose first argument is called x as well (see plot.Desc.nn)
   response <- x$data$y
   group    <- x$data$x
-  
-  switch(as.character(which %||% "1"),
-         "1" = {
-           plotBox(x$data$y, g = x$data$x,
-                           main = main,
-                           xlab = x$meta$xname, 
-                           ylab = x$meta$yname, mar=mar(left=6), ...)         },
-         "2" = {
-           plotDens(response ~ group, main = main, ...)
-         },
-         "3" = {
-           plotDensBox(response ~ group, main = main, ...)
-         },
-         warning(gettextf("No plot defined for which = %s (valid: 1-3).", which))
-         
-  )
+
+  # loop instead of a bare switch(): switch() takes a single value, so
+  # which = 1:3 failed with "EXPR must be a length 1 vector"
+  for (j in which) {
+
+    switch(as.character(j),
+           "1" = {
+             plotBox(response, g = group,
+                     main = main,
+                     xlab = x$meta$xname,
+                     ylab = x$meta$yname, ...)
+           },
+           "2" = {
+             plotDens(response ~ group, main = main, ...)
+           },
+           "3" = {
+             plotDensBox(response ~ group, main = main, ...)
+           },
+           warning(gettextf("No plot defined for which = %s (valid: 1-3).", j))
+    )
+  }
+
+  invisible(x)
 }
 
 

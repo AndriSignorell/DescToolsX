@@ -11,35 +11,43 @@
 
 \method{print}{Desc.nq}(x, digits = NULL, ...)
 
-\method{plot}{Desc.nq}(x, main = x$meta$main, which = NULL, ...)
+\method{plot}{Desc.nq}(x, main = x$meta$main, which = 1, ...)
 }
 \arguments{
-\item{x}{a numeric variable}
+\item{x}{a numeric variable for \code{.descNQ()}, or an object of class
+\code{"Desc.nq"} for the print and plot methods}
 
-\item{digits}{number of digits used to format relative frequencies}
+\item{digits}{currently unused}
 
-\item{...}{further arguments, currently unused}
+\item{\dots}{further arguments. In \code{.descNQ()} unused, in \code{print()}
+passed to \code{\link[bedrock:printCharMatrix]{bedrock::printCharMatrix()}}. In \code{plot()} they are passed on
+to the plot function selected by \code{which} (see section \strong{Plots}, where
+each function is linked) and go unchanged to \emph{every} selected plot.}
 
 \item{main}{main title for the plot; defaults to the title stored in
 \code{x$meta$main}}
 
-\item{which}{integer vector selecting which plots to draw. See Details.
-\code{NULL} (default) selects plots automatically based on \code{verbose}.}
+\item{which}{integer vector selecting the plots to draw, one plot per
+element, see section \strong{Plots}. Default \code{1}.}
 
 \item{g}{a categorical grouping variable (factor or coercible to factor)}
 }
 \value{
-an object of class \code{c("Desc.nq", "Desc")} with components:
+\code{.descNQ()} returns an object of class \code{c("Desc.nq", "Desc")}
+with components:
 \describe{
 \item{\code{tab}}{group-wise summary table}
 \item{\code{test}}{result of the Kruskal-Wallis test}
 \item{\code{vtest}}{result of Levene's test}
 \item{\code{eta}}{effect size}
 }
+The plot method returns \code{x} invisibly.
 }
 \description{
-Computes descriptive statistics for a numeric variable \code{x}
-grouped by a categorical variable \code{g}.
+Computes, prints and plots descriptive statistics for a numeric variable
+\code{x} grouped by a categorical variable \code{g}. The function is dispatched
+automatically by \code{desc(y ~ g, data)} when \code{y} is numeric and \code{g}
+categorical.
 }
 \details{
 The function summarizes the distribution of \code{x} across levels of
@@ -58,9 +66,48 @@ The Kruskal-Wallis test evaluates whether the distribution of \code{x}
 differs between groups defined by \code{g}. The effect size \eqn{\eta^2}
 provides a standardized measure of group differences.
 }
+\section{Plots}{
+
+\code{plot()} draws one of three displays of \code{x} by group, selected by
+\code{which}. All arguments in \code{...} go straight to the underlying
+function; its help page lists what can be set.
+
+\describe{
+\item{\code{which = 1}}{Boxplots by group, drawn by \code{\link[pharos:plotBox]{pharos::plotBox()}}.
+Axes are labelled with the variable names.}
+\item{\code{which = 2}}{Overlaid kernel density estimates, one per group,
+drawn by \code{\link[pharos:plotDens]{pharos::plotDens()}}.}
+\item{\code{which = 3}}{Density and boxplot combined per group, drawn by
+\code{\link[pharos:plotDensBox]{pharos::plotDensBox()}}.}
+}
+
+\code{main} defaults to the title stored in the object and is passed to
+every plot.
+}
+
+\examples{
+# basic usage via desc()
+desc(temperature ~ area, Pizza)
+
+# store result, print and plot separately
+d <- desc(temperature ~ area, Pizza, plotit = FALSE)
+d
+
+# the three plots
+plot(d, which = 1)                     # boxplots          -> plotBox()
+plot(d, which = 2)                     # densities         -> plotDens()
+plot(d, which = 3)                     # density + boxplot -> plotDensBox()
+
+# pipe
+desc(temperature ~ area, Pizza) |> plot(which = 2)
+
+}
 \seealso{
-\link{desc}, \link{desc.qn}, \link{desc.nn}, \link[pharos:plot.Desc.qn]{pharos::plot.Desc.qn}
-\link{kruskal.test}, \link[lumen:leveneTest]{lumen::leveneTest}
+\code{\link[=desc]{desc()}}, \code{\link[=desc.qn]{desc.qn()}}, \code{\link[=desc.nn]{desc.nn()}}, \code{\link[=desc.qq]{desc.qq()}},
+\code{\link[=kruskal.test]{kruskal.test()}}, \code{\link[lumen:leveneTest]{lumen::leveneTest()}}
+
+Plot functions: \code{\link[pharos:plotBox]{pharos::plotBox()}}, \code{\link[pharos:plotDens]{pharos::plotDens()}},
+\code{\link[pharos:plotDensBox]{pharos::plotDensBox()}}
 
 Other desc:
 \code{\link[=desc]{desc()}},
@@ -70,9 +117,10 @@ Other desc:
 \code{\link[=desc.numeric]{desc.numeric()}},
 \code{\link{desc.qn}},
 \code{\link{desc.qq}},
-\code{\link[=desc.ts]{desc.ts()}},
-\code{\link[=print.Desc.qq]{print.Desc.qq()}}
+\code{\link[=desc.table]{desc.table()}},
+\code{\link[=desc.ts]{desc.ts()}}
 }
+\concept{boxplot density group comparison}
 \concept{data-description}
 \concept{desc}
 \concept{descriptive-statistics}

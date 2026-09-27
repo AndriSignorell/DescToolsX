@@ -22,12 +22,10 @@
 #' @param conf.level numeric, confidence level for all confidence intervals.
 #'   Default is `0.95`.
 #' @param \dots further arguments passed to or from other methods
-#' @param which plots to produce
 #' @param main main title for the plot
 #' @param plotit whether a plot is produced automatically
-#' @param digits number of digits for numerical output
 #' @param print_header whether the header is printed
-#'   
+#'
 #' @name desc.table
 #' @details
 #' The `verbose` argument controls which statistics are displayed. All
@@ -75,17 +73,25 @@
 #' (tau-b and above) are activated automatically when both variables are
 #' `ordered` factors.
 #'
+#' @section Plots:
+#' The plot method [pharos::plot.Desc.table()] is part of pharos; its help
+#' page documents `which` and all further arguments. The displays are
+#' drawn by [pharos::plotMosaic()], [pharos::plotAssoc()] and
+#' [pharos::plotHeatmap()], among others.
+#'
 #' @return an object of class `c("Desc.table", "Desc")`.
 #'   The object is a list containing all computed statistics and is intended
 #'   to be used via its `print` and `plot` methods.
 #'
 #' @seealso
-#'   [desc] for the generic function and formula interface,
-#'   [desc.numeric] for univariate numeric descriptions,
-#'   [desc.factor] for univariate factor descriptions,
-#'   [pharos::plot.Desc.table] for different plotting options,
-#'   [stats::chisq.test], [stats::fisher.test],
-#'   [cramerV], [oddsRatio]
+#'   [desc()] for the generic function and formula interface,
+#'   [desc.qq()] for categorical ~ categorical via the formula interface,
+#'   [desc.numeric()] for univariate numeric descriptions,
+#'   [desc.factor()] for univariate factor descriptions,
+#'   [stats::chisq.test()], [stats::fisher.test()],
+#'   [cramerV()], [oddsRatio()]
+#'
+#'   Plot method: [pharos::plot.Desc.table()]
 #'
 #' @examples
 #' # from an existing table
@@ -107,17 +113,19 @@
 #'                             c("Allanah","Maria","Rhonda")))
 #' desc(m, verbose = 2)
 #'
-
-#' 
+#' # plots, see pharos::plot.Desc.table()
+#' desc(tab, plotit = FALSE) |> plot(which = 4)
+#'
 #' @family desc
 #' @concept data-description
 #' @concept descriptive-statistics
 #' @concept table-manipulation
-#'
+NULL
 
 
 
 #' @method desc table
+#' @rdname desc.table
 #' @export
 desc.table <- function(x, conf.level = 0.95, prop = NULL,
                        main = NULL, verbose = NULL, plotit = NULL,

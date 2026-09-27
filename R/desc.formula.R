@@ -24,6 +24,10 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
   rfCall$allowed   <- c("one-sample", "n-sample-independent", "numeric-numeric")
   callerEnv        <- parent.frame()
   
+  # names of the arguments in '...', read without evaluating them
+  dotNames <- ...names()
+  nDots    <- ...length()
+  
   # ── Zielgrösse und RHS-Terme bestimmen ─────────────────────────────────────
   y_name  <- deparse1(formula[[2L]])
   x_names <- attr(terms(formula), "term.labels")
@@ -73,6 +77,11 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
                   stop(gettextf("Unknown type combination: %s", type))
     )
     
+    # which method is chosen depends on the data, so an argument meant for
+    # one pair type (breaks for qn) reached another and died there with
+    # "unused argument" - or was swallowed by a '...' without a word
+    .checkDescDots(dotNames, nDots, type, y_name, nm)
+    
     structure(
       list(
         meta = .descMetaXY(nm, y_name, main, plotit, verbose,
@@ -113,6 +122,53 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
     verbose    = verbose %||% getOption("Desc.verbose", 2)
   )
   
+}
+
+
+
+# Arguments a pair type accepts via '...' of desc.formula(): the formals
+# of its computing function, without the data arguments and without those
+# desc.formula() handles itself. qq goes through desc.table(), whose '...'
+# ends in percTable().
+.descDotArgs <- function(type) {
+  
+  nms <- switch(type,
+                "nn" = names(formals(.descNN)),
+                "nq" = names(formals(.descNQ)),
+                "qn" = names(formals(.descQN)),
+                "qq" = c(names(formals(desc.table)),
+                         names(formals(percTable))))
+  
+  # margins: desc.table() sets it for percTable() itself, passing it
+  # again would fail with "matched by multiple actual arguments"
+  setdiff(unique(nms),
+          c("x", "y", "g", "...", "main", "plotit", "verbose", "margins"))
+}
+
+
+.checkDescDots <- function(dotNames, nDots, type, yname, xname) {
+  
+  if (nDots == 0L)
+    return(invisible())
+  
+  if (is.null(dotNames) || !all(nzchar(dotNames)))
+    stop("further arguments to desc() must be named", call. = FALSE)
+  
+  ok  <- .descDotArgs(type)
+  bad <- setdiff(dotNames, ok)
+  
+  if (length(bad)) {
+    lbl <- c(n = "numeric", q = "categorical")[strsplit(type, "")[[1L]]]
+    stop(gettextf(
+      "%s %s not used for %s ~ %s (%s ~ %s, see ?desc.%s). Valid: %s",
+      if (length(bad) == 1L) "argument" else "arguments",
+      paste0("'", bad, "'", collapse = ", "),
+      yname, xname, lbl[1L], lbl[2L], type,
+      if (length(ok)) paste0("'", ok, "'", collapse = ", ") else "none"),
+      call. = FALSE)
+  }
+  
+  invisible()
 }
 
 
@@ -169,11 +225,3 @@ desc.formula <- function(formula, data, subset, na.action = na.pass,
   if (is.factor(x) || is.character(x) || is.logical(x)) return("q")
   stop("Unsupported type")
 }
-
-
-
-
-
-
-
-
