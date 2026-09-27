@@ -5,9 +5,13 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Describe Relationship: Categorical x by Categorical y — desc.qq"><meta name="description" content="Computes descriptive statistics for the relationship between two
-categorical variables x and y."><meta property="og:description" content="Computes descriptive statistics for the relationship between two
-categorical variables x and y."><meta property="og:image" content="/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Describe Relationship: Categorical x by Categorical y — desc.qq"><meta name="description" content="Computes, prints and plots descriptive statistics for the relationship
+between two categorical variables x and y. The function is
+dispatched automatically by desc(y ~ x, data) when both variables
+are categorical."><meta property="og:description" content="Computes, prints and plots descriptive statistics for the relationship
+between two categorical variables x and y. The function is
+dispatched automatically by desc(y ~ x, data) when both variables
+are categorical."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +19,7 @@ categorical variables x and y."><meta property="og:image" content="/logo.png"></
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.959</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.960</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,13 +54,21 @@ categorical variables x and y."><meta property="og:image" content="/logo.png"></
     </div>
 
     <div class="ref-description section level2">
-    <p>Computes descriptive statistics for the relationship between two
-categorical variables <code>x</code> and <code>y</code>.</p>
+    <p>Computes, prints and plots descriptive statistics for the relationship
+between two categorical variables <code>x</code> and <code>y</code>. The function is
+dispatched automatically by <code>desc(y ~ x, data)</code> when both variables
+are categorical.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.descQQ</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.descQQ</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'Desc.qq'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'Desc.qq'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, main <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">main</span>, which <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,20 +76,38 @@ categorical variables <code>x</code> and <code>y</code>.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a categorical variable</p></dd>
+<dd><p>a categorical variable for <code>.descQQ()</code>, or an object of class
+<code>"Desc.qq"</code> for the print and plot methods</p></dd>
+
+
+<dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
+<dd><p>currently unused</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>further arguments. In <code>.descQQ()</code> passed to <code><a href="Desc.html">desc()</a></code>, in
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> to <code><a href="desc.table.html">print.Desc.table()</a></code>, in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> to
+<code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html" class="external-link">pharos::plot.Desc.table()</a></code>.</p></dd>
+
+
+<dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
+<dd><p>main title for the plot; defaults to the title stored in
+<code>x$meta$main</code></p></dd>
+
+
+<dt id="arg-which">which<a class="anchor" aria-label="anchor" href="#arg-which"></a></dt>
+<dd><p>integer vector selecting the plots to draw, passed on to
+<code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html" class="external-link">pharos::plot.Desc.table()</a></code>, see section <strong>Plots</strong>. Default <code>1</code>.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
 <dd><p>a categorical variable</p></dd>
 
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments, currently unused</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an object of class <code>c("Desc.qq", "Desc")</code></p>
+    <p><code>.descQQ()</code> returns an object of class <code>c("Desc.qq", "Desc")</code>.
+The plot method returns the value of <code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html" class="external-link">pharos::plot.Desc.table()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -95,9 +125,22 @@ Internally, <code>desc.qq(x, y)</code> is equivalent to:</p><div class="sourceCo
 
     </div>
     <div class="section level2">
+    <h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a></h2>
+
+
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> labels the table dimensions with the variable names and hands
+over to <code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html" class="external-link">pharos::plot.Desc.table()</a></code>, the plot method for contingency
+tables. Its help page documents the displays selected by <code>which</code> and
+all further arguments; the displays themselves are drawn by
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotMosaic.html" class="external-link">pharos::plotMosaic()</a></code>, <code><a href="https://andrisignorell.github.io/pharos/reference/plotAssoc.html" class="external-link">pharos::plotAssoc()</a></code> and
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotHeatmap.html" class="external-link">pharos::plotHeatmap()</a></code>, among others.</p>
+<p><code>main</code> defaults to the title stored in the object.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="Desc.html">desc</a>, <a href="desc.table.html">desc.table</a>,
-<a href="desc.qn.html">desc.qn</a>, <a href="Desc.nn.html">desc.nn</a>, <a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html" class="external-link">pharos::plot.Desc.table</a></p>
+    <div class="dont-index"><p><code><a href="Desc.html">desc()</a></code>, <code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.qn.html">desc.qn()</a></code>, <code><a href="desc.nq.html">desc.nq()</a></code>, <code><a href="Desc.nn.html">desc.nn()</a></code></p>
+<p>Plot method: <code><a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html" class="external-link">pharos::plot.Desc.table()</a></code></p>
 <p>Other desc:
 <code><a href="Desc.html">desc()</a></code>,
 <code><a href="Desc.Date.html">desc.Date()</a></code>,
@@ -106,10 +149,102 @@ Internally, <code>desc.qq(x, y)</code> is equivalent to:</p><div class="sourceCo
 <code><a href="desc.nq.html">desc.nq</a></code>,
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code>,
-<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
+<code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># basic usage via desc()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">area</span>, <span class="va">Pizza</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">quality ~ area (Pizza) (Desc.qq)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 999 (82.6%), missings: 210 (17.4%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Brent   Camden Westminster      Sum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> low    freq         30       46          79      155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     19.4%    29.7%       51.0%    15.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> medium freq        134       97         122      353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     38.0%    27.5%       34.6%    35.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high   freq        232      144         115      491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     47.3%    29.3%       23.4%    49.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sum    freq        396      287         316      999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     39.6%    28.7%       31.6%   100.0% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson's Chi-squared test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   X-squared = 53.559, df = 4, p-value = 6.509e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Log likelihood ratio (G-test) test of independence:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   G = 55.05, df = 4, p-value = 3.171e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mantel-Haenszel Chi-squared:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   X-squared = 51.341, df = 1, p-value = 7.762e-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Contingency Coeff.   0.226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cramer V             0.164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kendall Tau-b       -0.196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="desc.qq-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># store result, print and plot separately</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">area</span>, <span class="va">Pizza</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">quality ~ area (Pizza) (Desc.qq)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 999 (82.6%), missings: 210 (17.4%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Brent   Camden Westminster      Sum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> low    freq         30       46          79      155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     19.4%    29.7%       51.0%    15.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> medium freq        134       97         122      353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     38.0%    27.5%       34.6%    35.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high   freq        232      144         115      491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     47.3%    29.3%       23.4%    49.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sum    freq        396      287         316      999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        p.row     39.6%    28.7%       31.6%   100.0% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson's Chi-squared test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   X-squared = 53.559, df = 4, p-value = 6.509e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Log likelihood ratio (G-test) test of independence:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   G = 55.05, df = 4, p-value = 3.171e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mantel-Haenszel Chi-squared:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   X-squared = 51.341, df = 1, p-value = 7.762e-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Contingency Coeff.   0.226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cramer V             0.164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kendall Tau-b       -0.196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the plots, see pharos::plot.Desc.table()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="desc.qq-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="desc.qq-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="desc.qq-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>                     <span class="co"># association plot</span></span></span>
+<span class="r-plt img"><img src="desc.qq-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>                     <span class="co"># heatmap</span></span></span>
+<span class="r-plt img"><img src="desc.qq-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pipe</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">quality</span> <span class="op">~</span> <span class="va">area</span>, <span class="va">Pizza</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>which <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="desc.qq-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

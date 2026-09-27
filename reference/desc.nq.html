@@ -5,9 +5,13 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Describe Relationship: Numeric x by Categorical g — desc.nq"><meta name="description" content="Computes descriptive statistics for a numeric variable x
-grouped by a categorical variable g."><meta property="og:description" content="Computes descriptive statistics for a numeric variable x
-grouped by a categorical variable g."><meta property="og:image" content="/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Describe Relationship: Numeric x by Categorical g — desc.nq"><meta name="description" content="Computes, prints and plots descriptive statistics for a numeric variable
+x grouped by a categorical variable g. The function is dispatched
+automatically by desc(y ~ g, data) when y is numeric and g
+categorical."><meta property="og:description" content="Computes, prints and plots descriptive statistics for a numeric variable
+x grouped by a categorical variable g. The function is dispatched
+automatically by desc(y ~ g, data) when y is numeric and g
+categorical."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +19,7 @@ grouped by a categorical variable g."><meta property="og:image" content="/logo.p
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.959</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.960</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,8 +54,10 @@ grouped by a categorical variable g."><meta property="og:image" content="/logo.p
     </div>
 
     <div class="ref-description section level2">
-    <p>Computes descriptive statistics for a numeric variable <code>x</code>
-grouped by a categorical variable <code>g</code>.</p>
+    <p>Computes, prints and plots descriptive statistics for a numeric variable
+<code>x</code> grouped by a categorical variable <code>g</code>. The function is dispatched
+automatically by <code>desc(y ~ g, data)</code> when <code>y</code> is numeric and <code>g</code>
+categorical.</p>
     </div>
 
     <div class="section level2">
@@ -62,7 +68,7 @@ grouped by a categorical variable <code>g</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Desc.nq'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, main <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">main</span>, which <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, main <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">main</span>, which <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,15 +76,19 @@ grouped by a categorical variable <code>g</code>.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a numeric variable</p></dd>
+<dd><p>a numeric variable for <code>.descNQ()</code>, or an object of class
+<code>"Desc.nq"</code> for the print and plot methods</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>number of digits used to format relative frequencies</p></dd>
+<dd><p>currently unused</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments, currently unused</p></dd>
+<dd><p>further arguments. In <code>.descNQ()</code> unused, in <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>
+passed to <code><a href="https://andrisignorell.github.io/bedrock/reference/printCharMatrix.html" class="external-link">bedrock::printCharMatrix()</a></code>. In <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> they are passed on
+to the plot function selected by <code>which</code> (see section <strong>Plots</strong>, where
+each function is linked) and go unchanged to <em>every</em> selected plot.</p></dd>
 
 
 <dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
@@ -87,8 +97,8 @@ grouped by a categorical variable <code>g</code>.</p>
 
 
 <dt id="arg-which">which<a class="anchor" aria-label="anchor" href="#arg-which"></a></dt>
-<dd><p>integer vector selecting which plots to draw. See Details.
-<code>NULL</code> (default) selects plots automatically based on <code>verbose</code>.</p></dd>
+<dd><p>integer vector selecting the plots to draw, one plot per
+element, see section <strong>Plots</strong>. Default <code>1</code>.</p></dd>
 
 
 <dt id="arg-g">g<a class="anchor" aria-label="anchor" href="#arg-g"></a></dt>
@@ -97,7 +107,8 @@ grouped by a categorical variable <code>g</code>.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an object of class <code>c("Desc.nq", "Desc")</code> with components:</p><dl><dt><code>tab</code></dt>
+    <p><code>.descNQ()</code> returns an object of class <code>c("Desc.nq", "Desc")</code>
+with components:</p><dl><dt><code>tab</code></dt>
 <dd><p>group-wise summary table</p></dd>
 
 <dt><code>test</code></dt>
@@ -110,7 +121,8 @@ grouped by a categorical variable <code>g</code>.</p>
 <dd><p>effect size</p></dd>
 
 
-</dl></div>
+</dl><p>The plot method returns <code>x</code> invisibly.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function summarizes the distribution of <code>x</code> across levels of
@@ -125,9 +137,34 @@ differs between groups defined by <code>g</code>. The effect size \(\eta^2\)
 provides a standardized measure of group differences.</p>
     </div>
     <div class="section level2">
+    <h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a></h2>
+
+
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> draws one of three displays of <code>x</code> by group, selected by
+<code>which</code>. All arguments in <code>...</code> go straight to the underlying
+function; its help page lists what can be set.</p>
+<dl><dt><code>which = 1</code></dt>
+<dd><p>Boxplots by group, drawn by <code><a href="https://andrisignorell.github.io/pharos/reference/plotBox.html" class="external-link">pharos::plotBox()</a></code>.
+Axes are labelled with the variable names.</p></dd>
+
+<dt><code>which = 2</code></dt>
+<dd><p>Overlaid kernel density estimates, one per group,
+drawn by <code><a href="https://andrisignorell.github.io/pharos/reference/plotDens.html" class="external-link">pharos::plotDens()</a></code>.</p></dd>
+
+<dt><code>which = 3</code></dt>
+<dd><p>Density and boxplot combined per group, drawn by
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotDensBox.html" class="external-link">pharos::plotDensBox()</a></code>.</p></dd>
+
+
+</dl><p><code>main</code> defaults to the title stored in the object and is passed to
+every plot.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="Desc.html">desc</a>, <a href="desc.qn.html">desc.qn</a>, <a href="Desc.nn.html">desc.nn</a>, <a href="https://andrisignorell.github.io/pharos/reference/plot.Desc.qn.html" class="external-link">pharos::plot.Desc.qn</a>
-<a href="https://rdrr.io/r/stats/kruskal.test.html" class="external-link">kruskal.test</a>, <a href="https://andrisignorell.github.io/lumen/reference/leveneTest.html" class="external-link">lumen::leveneTest</a></p>
+    <div class="dont-index"><p><code><a href="Desc.html">desc()</a></code>, <code><a href="desc.qn.html">desc.qn()</a></code>, <code><a href="Desc.nn.html">desc.nn()</a></code>, <code><a href="desc.qq.html">desc.qq()</a></code>,
+<code><a href="https://rdrr.io/r/stats/kruskal.test.html" class="external-link">kruskal.test()</a></code>, <code><a href="https://andrisignorell.github.io/lumen/reference/leveneTest.html" class="external-link">lumen::leveneTest()</a></code></p>
+<p>Plot functions: <code><a href="https://andrisignorell.github.io/pharos/reference/plotBox.html" class="external-link">pharos::plotBox()</a></code>, <code><a href="https://andrisignorell.github.io/pharos/reference/plotDens.html" class="external-link">pharos::plotDens()</a></code>,
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotDensBox.html" class="external-link">pharos::plotDensBox()</a></code></p>
 <p>Other desc:
 <code><a href="Desc.html">desc()</a></code>,
 <code><a href="Desc.Date.html">desc.Date()</a></code>,
@@ -136,10 +173,86 @@ provides a standardized measure of group differences.</p>
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code>,
-<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
+<code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># basic usage via desc()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">temperature</span> <span class="op">~</span> <span class="va">area</span>, <span class="va">Pizza</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">temperature ~ area (Pizza) (Desc.nq)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1161 (96.0%), missings: 48 (4.0%), groups: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Brent   Camden   Westminster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean     51.139   47.420        44.258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   53.400   50.300        45.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sd        8.734   10.111         9.836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iqr      10.500   12.200        13.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           467      335           359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        40.2%    28.9%         30.9%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NAs           7        9            22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zeros         0        0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Kruskal-Wallis chi-squared = 115.83, df = 2, p-value &lt; 2.2e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.098 (moderate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levene's Test for Homogeneity of Variance (center = median):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   F = 5.3473, num df = 2, denom df = 1158, p-value = 0.004879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Warning message:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">  Grouping variable contains 10 NAs (0.8%).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="desc.nq-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># store result, print and plot separately</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">temperature</span> <span class="op">~</span> <span class="va">area</span>, <span class="va">Pizza</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">temperature ~ area (Pizza) (Desc.nq)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1161 (96.0%), missings: 48 (4.0%), groups: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Brent   Camden   Westminster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean     51.139   47.420        44.258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> median   53.400   50.300        45.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sd        8.734   10.111         9.836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iqr      10.500   12.200        13.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> n           467      335           359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> np        40.2%    28.9%         30.9%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NAs           7        9            22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zeros         0        0             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kruskal-Wallis rank sum test:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Kruskal-Wallis chi-squared = 115.83, df = 2, p-value &lt; 2.2e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   η² = 0.098 (moderate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levene's Test for Homogeneity of Variance (center = median):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   F = 5.3473, num df = 2, denom df = 1158, p-value = 0.004879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Warning message:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">  Grouping variable contains 10 NAs (0.8%).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the three plots</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>                     <span class="co"># boxplots          -&gt; plotBox()</span></span></span>
+<span class="r-plt img"><img src="desc.nq-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>                     <span class="co"># densities         -&gt; plotDens()</span></span></span>
+<span class="r-plt img"><img src="desc.nq-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>                     <span class="co"># density + boxplot -&gt; plotDensBox()</span></span></span>
+<span class="r-plt img"><img src="desc.nq-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pipe</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">temperature</span> <span class="op">~</span> <span class="va">area</span>, <span class="va">Pizza</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="desc.nq-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -165,6 +165,6 @@ set.seed(1)
 n <- 2e5
 system.time(conDisPairs(rnorm(n), rnorm(n)))
 #>    user  system elapsed 
-#>   0.089   0.002   0.091 
+#>   0.090   0.000   0.091 
 # }
 ```

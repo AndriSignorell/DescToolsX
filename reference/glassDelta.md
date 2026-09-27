@@ -118,8 +118,6 @@ Software*, 20(8), 1-24.
 
 ## See also
 
-[`cohenD()`](cohenD.md)
-
 Other effect.size: [`cohenD()`](cohenD.md), [`cohenH()`](cohenH.md),
 [`etaSq()`](etaSq.md), [`oddsRatio()`](oddsRatio.md),
 [`relRisk()`](relRisk.md)

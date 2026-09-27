@@ -8,12 +8,6 @@ pairs via `Desc.qq` and `Desc.matrix`.
 ## Usage
 
 ``` r
-# S3 method for class 'Desc.qq'
-print(x, digits = NULL, ...)
-
-# S3 method for class 'Desc.qq'
-plot(x, main = x$meta$main, which = 1, ...)
-
 # S3 method for class 'table'
 desc(
   x,
@@ -58,22 +52,6 @@ print(x, print_header = TRUE, ...)
   a `table` or `matrix` object. For the formula interface, use
   `desc(y ~ x, data)` which dispatches to this function automatically.
 
-- digits:
-
-  number of digits for numerical output
-
-- ...:
-
-  further arguments passed to or from other methods
-
-- main:
-
-  main title for the plot
-
-- which:
-
-  plots to produce
-
 - conf.level:
 
   numeric, confidence level for all confidence intervals. Default is
@@ -87,6 +65,10 @@ print(x, print_header = TRUE, ...)
   three proportions at `verbose = 3`; an explicit value is always
   respected.
 
+- main:
+
+  main title for the plot
+
 - verbose:
 
   integer controlling the amount of output (1, 2, or 3). `NULL`
@@ -97,6 +79,10 @@ print(x, print_header = TRUE, ...)
 - plotit:
 
   whether a plot is produced automatically
+
+- ...:
+
+  further arguments passed to or from other methods
 
 - print_header:
 
@@ -156,16 +142,31 @@ via the formula interface `desc(y ~ x, data)`, the type of `y` and `x`
 is known and ordinal-specific measures (tau-b and above) are activated
 automatically when both variables are `ordered` factors.
 
+## Plots
+
+The plot method
+[`pharos::plot.Desc.table()`](https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html)
+is part of pharos; its help page documents `which` and all further
+arguments. The displays are drawn by
+[`pharos::plotMosaic()`](https://andrisignorell.github.io/pharos/reference/plotMosaic.html),
+[`pharos::plotAssoc()`](https://andrisignorell.github.io/pharos/reference/plotAssoc.html)
+and
+[`pharos::plotHeatmap()`](https://andrisignorell.github.io/pharos/reference/plotHeatmap.html),
+among others.
+
 ## See also
 
-[desc](Desc.md) for the generic function and formula interface,
-[desc.numeric](desc.numeric.md) for univariate numeric descriptions,
-[desc.factor](Desc.factor.md) for univariate factor descriptions,
-[pharos::plot.Desc.table](https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html)
-for different plotting options,
-[stats::chisq.test](https://rdrr.io/r/stats/chisq.test.html),
-[stats::fisher.test](https://rdrr.io/r/stats/fisher.test.html),
-[cramerV](cramerV.md), [oddsRatio](oddsRatio.md)
+[`desc()`](Desc.md) for the generic function and formula interface,
+[`desc.qq()`](desc.qq.md) for categorical ~ categorical via the formula
+interface, [`desc.numeric()`](desc.numeric.md) for univariate numeric
+descriptions, [`desc.factor()`](Desc.factor.md) for univariate factor
+descriptions,
+[`stats::chisq.test()`](https://rdrr.io/r/stats/chisq.test.html),
+[`stats::fisher.test()`](https://rdrr.io/r/stats/fisher.test.html),
+[`cramerV()`](cramerV.md), [`oddsRatio()`](oddsRatio.md)
+
+Plot method:
+[`pharos::plot.Desc.table()`](https://andrisignorell.github.io/pharos/reference/plot.Desc.table.html)
 
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
@@ -266,7 +267,7 @@ desc(tab, prop = "rows", verbose = 3)
 #>   X-squared = 2.6144, df = 1, p-value = 0.1059
 #> 
 #>                             est      lci      uci
-#> Contingency Coeff.        0.677    0.658    0.695
+#> Contingency Coeff.        0.677    0.658    0.696
 #> Cramer V                  0.650    0.606    0.687
 #> Kendall Tau-b            -0.057   -0.107   -0.008
 #> Goodman Kruskal Gamma    -0.071   -0.132   -0.010
@@ -410,5 +411,8 @@ desc(m, verbose = 2)
 #> Kendall Tau-b       0.073
 #> 
 
+
+# plots, see pharos::plot.Desc.table()
+desc(tab, plotit = FALSE) |> plot(which = 4)
 
 ```

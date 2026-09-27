@@ -255,7 +255,7 @@ week(x, method = "us")
 
 # day is both readable and writable
 day(x)
-#> [1] 26
+#> [1] 27
 day(x) <- 20
 x
 #> [1] "2026-09-20"
@@ -286,7 +286,7 @@ isLeapYear(2000L)
 
 # month names for a weekly time sequence
 month(seq(Sys.Date(), Sys.Date() + 150, by = "weeks"), fmt = "mm")
-#>  [1] Sep Oct Oct Oct Oct Oct Nov Nov Nov Nov Dec Dec Dec Dec Jan Jan Jan Jan Jan
+#>  [1] Sep Oct Oct Oct Oct Nov Nov Nov Nov Nov Dec Dec Dec Dec Jan Jan Jan Jan Jan
 #> [20] Feb Feb Feb
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 

@@ -87,26 +87,33 @@ plot(x, main = x$meta$main, ...)
 
 - formula:
 
-  formula describing the design. Depending on the function, supported
-  forms include `y ~ 1`, `Pair(x, y) ~ 1`, `y ~ group`, `y ~ predictor`,
-  and `y ~ treatment | block`
+  formula describing the design, see section **Supported forms**. Which
+  forms a function accepts is documented on its own help page.
 
 - data:
 
   optional matrix or data frame (or similar; see
   [`stats::model.frame()`](https://rdrr.io/r/stats/model.frame.html))
-  containing the variables in the formula. If omitted, variables are
-  taken from `environment(formula)`
+  containing the variables in the formula. A matrix is converted to a
+  data frame. If omitted or `NULL`, variables are taken from
+  `environment(formula)`.
 
 - subset:
 
   optional expression specifying a subset of observations to be used in
-  the analysis
+  the analysis. It is evaluated in `data` first, then in
+  `environment(formula)`, and applied before missing values are handled.
 
 - na.action:
 
-  function specifying how missing values are handled; passed to
-  [`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html)
+  function specifying how missing values are handled, passed to
+  [`bedrock::resolveFormula()`](https://andrisignorell.github.io/bedrock/reference/resolveFormula.html).
+  The resolver's default
+  [`stats::na.pass()`](https://rdrr.io/r/stats/na.fail.html) keeps
+  incomplete cases in the model frame, so the function itself can count
+  and report them (as `desc()` does) before removing them.
+  [`stats::na.omit()`](https://rdrr.io/r/stats/na.fail.html) drops them
+  beforehand.
 
 - main:
 
@@ -244,4 +251,4 @@ Other desc: [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nn`](Desc.nn.md),
 [`desc.nq`](desc.nq.md), [`desc.numeric()`](desc.numeric.md),
 [`desc.qn`](desc.qn.md), [`desc.qq`](desc.qq.md),
-[`desc.ts()`](desc.ts.md), [`print.Desc.qq()`](desc.table.md)
+[`desc.table()`](desc.table.md), [`desc.ts()`](desc.ts.md)

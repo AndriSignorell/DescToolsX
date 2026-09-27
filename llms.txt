@@ -259,25 +259,24 @@ tables.
 - [`.descQN()`](desc.qn.md) [`print(`*`<Desc.qn>`*`)`](desc.qn.md) :
   Describe Relationship: Categorical y vs Numeric x
 
-- [`.descQQ()`](desc.qq.md) : Describe Relationship: Categorical x by
-  Categorical y
+- [`.descQQ()`](desc.qq.md) [`print(`*`<Desc.qq>`*`)`](desc.qq.md)
+  [`plot(`*`<Desc.qq>`*`)`](desc.qq.md) : Describe Relationship:
+  Categorical x by Categorical y
 
 - [`desc(`*`<ts>`*`)`](desc.ts.md)
   [`print(`*`<Desc.ts>`*`)`](desc.ts.md)
   [`plot(`*`<Desc.ts>`*`)`](desc.ts.md) : Diagnostic Summary for Time
   Series Objects
 
-- [`print(`*`<Desc.Date>`*`)`](print.Desc.Date.md) :
-
-  Print method for `"Desc.Date"` objects
-
-- [`print(`*`<Desc.qq>`*`)`](desc.table.md)
-  [`plot(`*`<Desc.qq>`*`)`](desc.table.md)
-  [`desc(`*`<table>`*`)`](desc.table.md)
+- [`desc(`*`<table>`*`)`](desc.table.md)
   [`desc(`*`<matrix>`*`)`](desc.table.md)
   [`desc(`*`<array>`*`)`](desc.table.md)
   [`print(`*`<Desc.table>`*`)`](desc.table.md) : Describe a Contingency
   Table
+
+- [`print(`*`<Desc.Date>`*`)`](print.Desc.Date.md) :
+
+  Print method for `"Desc.Date"` objects
 
 - [`expFreq()`](expFreq.md) : Expected Frequencies
 

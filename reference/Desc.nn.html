@@ -17,7 +17,7 @@ desc(y ~ x, data) when both y and x are numeric."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.959</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.960</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,13 +78,18 @@ quantitative variables. The function is dispatched automatically by
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>integer controlling the amount of output (1, 2, or 3).
-<code>NULL</code> (default) falls back to
-<code>x$meta$verbose \%||\% getOption("DescTools.verbose", 2)</code>.</p></dd>
+<dd><p>integer controlling the amount of printed output
+(1, 2, or 3). <code>NULL</code> (default) falls back to
+<code>x$meta$verbose \%||\% getOption("DescTools.verbose", 2)</code>.
+Has no effect on <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to the underlying plot functions</p></dd>
+<dd><p>further arguments. In <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> they are passed on to the
+plot function selected by <code>which</code> (see section <strong>Plots</strong>, where each
+function is linked). They go unchanged to <em>every</em> selected plot, so
+arguments specific to one function, such as <code>type</code> for
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotDens2D.html" class="external-link">pharos::plotDens2D()</a></code>, belong with a single <code>which</code>.</p></dd>
 
 
 <dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
@@ -93,8 +98,8 @@ quantitative variables. The function is dispatched automatically by
 
 
 <dt id="arg-which">which<a class="anchor" aria-label="anchor" href="#arg-which"></a></dt>
-<dd><p>integer vector selecting which plots to draw. See Details.
-<code>NULL</code> (default) selects plots automatically based on <code>verbose</code>.</p></dd>
+<dd><p>integer vector selecting the plots to draw, one plot per
+element, see section <strong>Plots</strong>. Default <code>1</code>.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
@@ -144,25 +149,39 @@ and Cook's distance summary.</p></dd>
 </dl><p><strong>Confidence intervals</strong> are reported throughout instead of standard
 errors and t-values, using <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> for regression coefficients
 and <code><a href="https://andrisignorell.github.io/lumen/reference/corCI.html" class="external-link">corCI()</a></code> (Fisher z-transform) for correlations.</p>
-<p><strong>Effect size labels</strong> for correlations follow Cohen (1988):</p><table class="table table"><tr><td><code>negligible</code></td><td>|r| &lt; 0.10</td></tr><tr><td><code>small</code></td><td>0.10 \(\le\) |r| &lt; 0.30</td></tr><tr><td><code>moderate</code></td><td>0.30 \(\le\) |r| &lt; 0.50</td></tr><tr><td><code>large</code></td><td>|r| \(\ge\) 0.50</td></tr></table><p><strong>Plot options via <code>which</code>:</strong></p><dl><dt><code>which = 1</code></dt>
-<dd><p>Scatterplot with linear regression line and
-confidence band.</p></dd>
+<p><strong>Effect size labels</strong> for correlations follow Cohen (1988):</p><table class="table table"><tr><td><code>negligible</code></td><td>|r| &lt; 0.10</td></tr><tr><td><code>small</code></td><td>0.10 \(\le\) |r| &lt; 0.30</td></tr><tr><td><code>moderate</code></td><td>0.30 \(\le\) |r| &lt; 0.50</td></tr><tr><td><code>large</code></td><td>|r| \(\ge\) 0.50</td></tr></table></div>
+    <div class="section level2">
+    <h2 id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a></h2>
+
+
+<p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> draws one of four displays of the joint distribution, selected
+by <code>which</code>. All arguments in <code>...</code> go straight to the underlying
+function; its help page lists what can be set.</p>
+<dl><dt><code>which = 1</code></dt>
+<dd><p>Scatterplot of response against predictor,
+drawn by <code><a href="https://andrisignorell.github.io/pharos/reference/plotXY.html" class="external-link">pharos::plotXY()</a></code>. Axes are labelled with the variable
+names; point style, regression line and smoothers are controlled
+there.</p></dd>
 
 <dt><code>which = 2</code></dt>
-<dd><p>Scatterplot with Loess smoother and confidence
-band (via <code>lines.loess()</code>).</p></dd>
+<dd><p>Two-dimensional kernel density estimate on the
+complete cases, drawn by <code><a href="https://andrisignorell.github.io/pharos/reference/plotDens2D.html" class="external-link">pharos::plotDens2D()</a></code>. Its <code>type</code>
+argument switches the display, e.g. <code>type = "contour"</code>,
+<code>"image"</code> or <code>"persp"</code>.</p></dd>
 
 <dt><code>which = 3</code></dt>
-<dd><p>Residual plot: residuals vs. fitted values.</p></dd>
+<dd><p>Bagplot (bivariate boxplot: bag with the inner
+half of the data, fence, outliers), drawn by <code><a href="https://andrisignorell.github.io/pharos/reference/plotBag.html" class="external-link">pharos::plotBag()</a></code>.</p></dd>
 
 <dt><code>which = 4</code></dt>
-<dd><p>Q-Q plot of residuals.</p></dd>
+<dd><p>Hexagonal binning, drawn by
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotHexbin.html" class="external-link">pharos::plotHexbin()</a></code>; the choice for large n, where points in a
+scatterplot overplot.</p></dd>
 
 
-</dl><p>Default <code>which</code> by verbose level:</p><ul><li><p><code>verbose = 1</code>: <code>which = 1</code></p></li>
-<li><p><code>verbose = 2</code>: <code>which = 1:2</code></p></li>
-<li><p><code>verbose = 3</code>: <code>which = 1:4</code></p></li>
-</ul></div>
+</dl><p><code>main</code> defaults to the title stored in the object and is passed to
+every plot.</p>
+    </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral
@@ -179,6 +198,8 @@ heteroscedasticity and random coefficient variation.
 <code><a href="desc.qq.html">desc.qq()</a></code> for categorical ~ categorical,
 <code><a href="https://andrisignorell.github.io/lumen/reference/corCI.html" class="external-link">lumen::corCI()</a></code>, <code><a href="https://andrisignorell.github.io/lumen/reference/bpTest.html" class="external-link">lumen::bpTest()</a></code>,
 <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>, <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">stats::cor.test()</a></code></p>
+<p>Plot functions: <code><a href="https://andrisignorell.github.io/pharos/reference/plotXY.html" class="external-link">pharos::plotXY()</a></code>, <code><a href="https://andrisignorell.github.io/pharos/reference/plotDens2D.html" class="external-link">pharos::plotDens2D()</a></code>,
+<code><a href="https://andrisignorell.github.io/pharos/reference/plotBag.html" class="external-link">pharos::plotBag()</a></code>, <code><a href="https://andrisignorell.github.io/pharos/reference/plotHexbin.html" class="external-link">pharos::plotHexbin()</a></code></p>
 <p>Other desc:
 <code><a href="Desc.html">desc()</a></code>,
 <code><a href="Desc.Date.html">desc.Date()</a></code>,
@@ -187,78 +208,90 @@ heteroscedasticity and random coefficient variation.
 <code><a href="desc.numeric.html">desc.numeric()</a></code>,
 <code><a href="desc.qn.html">desc.qn</a></code>,
 <code><a href="desc.qq.html">desc.qq</a></code>,
-<code><a href="desc.ts.html">desc.ts()</a></code>,
-<code><a href="desc.table.html">print.Desc.qq()</a></code></p></div>
+<code><a href="desc.table.html">desc.table()</a></code>,
+<code><a href="desc.ts.html">desc.ts()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># basic usage via desc()</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">temperature</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">mpg ~ wt (mtcars) (Desc.nn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">temperature ~ delivery_min (Pizza) (Desc.nn)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1170 (96.8%), missings: 39 (3.2%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:  -0.886  (-0.943, -0.778)  ***  large</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson  r:  -0.575  (-0.612, -0.536)  ***  large</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:  -0.573  (-0.611, -0.534)  ***  large</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Linear regression:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   R²: 0.753   adj. R²: 0.745   p: &lt;0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Residual SE: 3.0459 on 30 df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Shapiro-Wilk on residuals: W = 0.945,  p = 0.104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Intercept:   61.4190  ( 60.2237,  62.6142)  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Slope:       -0.5347  ( -0.5783,  -0.4910)  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R²: 0.331   adj. R²: 0.330   p: &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Residual SE: 8.1324 on 1168 df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Shapiro-Wilk on residuals: W = 0.910,  p = &lt;0.001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="Desc.nn-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># more detail</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, <span class="va">mtcars</span>, verbose <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">temperature</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span>, verbose <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">mpg ~ wt (mtcars) (Desc.nn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">temperature ~ delivery_min (Pizza) (Desc.nn)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1170 (96.8%), missings: 39 (3.2%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:  -0.886  (-0.943, -0.778)  ***  large</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson  r:  -0.575  (-0.612, -0.536)  ***  large</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:  -0.573  (-0.611, -0.534)  ***  large</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Linear regression:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   R²: 0.753   adj. R²: 0.745   p: &lt;0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Residual SE: 3.0459 on 30 df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Shapiro-Wilk on residuals: W = 0.945,  p = 0.104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Intercept:   61.4190  ( 60.2237,  62.6142)  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Slope:       -0.5347  ( -0.5783,  -0.4910)  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R²: 0.331   adj. R²: 0.330   p: &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Residual SE: 8.1324 on 1168 df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Shapiro-Wilk on residuals: W = 0.910,  p = &lt;0.001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Breusch-Pagan test: BP = 0.0404,  df = 1,  p = 0.841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Cook's distance: max = 0.5319,  n &gt; 4/n threshold: 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Breusch-Pagan test: BP = 2.2987,  df = 1,  p = 0.129</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Cook's distance: max = 0.0248,  n &gt; 4/n threshold: 71</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="Desc.nn-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># store result and plot separately</span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, <span class="va">mtcars</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># store result, print and plot separately</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">temperature</span> <span class="op">~</span> <span class="va">delivery_min</span>, <span class="va">Pizza</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">d</span>, verbose <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────────────────────────── </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">mpg ~ wt (mtcars) (Desc.nn)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">temperature ~ delivery_min (Pizza) (Desc.nn)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs: 1209, valid: 1170 (96.8%), missings: 39 (3.2%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:  -0.886  (-0.943, -0.778)  ***  large</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pearson  r:  -0.575  (-0.612, -0.536)  ***  large</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spearman r:  -0.573  (-0.611, -0.534)  ***  large</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Linear regression:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   R²: 0.753   adj. R²: 0.745   p: &lt;0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Intercept:   61.4190  ( 60.2237,  62.6142)  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Slope:       -0.5347  ( -0.5783,  -0.4910)  ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R²: 0.331   adj. R²: 0.330   p: &lt;0.001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the four plots</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>                     <span class="co"># scatterplot       -&gt; plotXY()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>                     <span class="co"># 2D density        -&gt; plotDens2D()</span></span></span>
 <span class="r-plt img"><img src="Desc.nn-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"contour"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"image"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="Desc.nn-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"persp"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="Desc.nn-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>                     <span class="co"># bagplot           -&gt; plotBag()</span></span></span>
+<span class="r-plt img"><img src="Desc.nn-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d</span>, which <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>                     <span class="co"># hexagonal binning -&gt; plotHexbin()</span></span></span>
+<span class="r-plt img"><img src="Desc.nn-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># pipe</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="Desc.html">desc</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>which <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="Desc.nn-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="Desc.nn-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

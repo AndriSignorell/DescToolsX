@@ -25,13 +25,21 @@ plot(x, main = x$meta$main, which = 1, verbose = NULL, ...)
 
 - verbose:
 
-  integer controlling the amount of output (1, 2, or 3). `NULL`
+  integer controlling the amount of printed output (1, 2, or 3). `NULL`
   (default) falls back to
-  `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`.
+  `x$meta$verbose \%||\% getOption("DescTools.verbose", 2)`. Has no
+  effect on [`plot()`](https://rdrr.io/r/graphics/plot.default.html).
 
 - ...:
 
-  further arguments passed to the underlying plot functions
+  further arguments. In
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) they are
+  passed on to the plot function selected by `which` (see section
+  **Plots**, where each function is linked). They go unchanged to
+  *every* selected plot, so arguments specific to one function, such as
+  `type` for
+  [`pharos::plotDens2D()`](https://andrisignorell.github.io/pharos/reference/plotDens2D.html),
+  belong with a single `which`.
 
 - main:
 
@@ -40,8 +48,8 @@ plot(x, main = x$meta$main, which = 1, verbose = NULL, ...)
 
 - which:
 
-  integer vector selecting which plots to draw. See Details. `NULL`
-  (default) selects plots automatically based on `verbose`.
+  integer vector selecting the plots to draw, one plot per element, see
+  section **Plots**. Default `1`.
 
 - y:
 
@@ -110,32 +118,42 @@ coefficients and
 | `moderate`   | 0.30 \\\le\\ \|r\| \< 0.50 |
 | `large`      | \|r\| \\\ge\\ 0.50         |
 
-**Plot options via `which`:**
+## Plots
+
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws one of
+four displays of the joint distribution, selected by `which`. All
+arguments in `...` go straight to the underlying function; its help page
+lists what can be set.
 
 - `which = 1`:
 
-  Scatterplot with linear regression line and confidence band.
+  Scatterplot of response against predictor, drawn by
+  [`pharos::plotXY()`](https://andrisignorell.github.io/pharos/reference/plotXY.html).
+  Axes are labelled with the variable names; point style, regression
+  line and smoothers are controlled there.
 
 - `which = 2`:
 
-  Scatterplot with Loess smoother and confidence band (via
-  `lines.loess()`).
+  Two-dimensional kernel density estimate on the complete cases, drawn
+  by
+  [`pharos::plotDens2D()`](https://andrisignorell.github.io/pharos/reference/plotDens2D.html).
+  Its `type` argument switches the display, e.g. `type = "contour"`,
+  `"image"` or `"persp"`.
 
 - `which = 3`:
 
-  Residual plot: residuals vs. fitted values.
+  Bagplot (bivariate boxplot: bag with the inner half of the data,
+  fence, outliers), drawn by
+  [`pharos::plotBag()`](https://andrisignorell.github.io/pharos/reference/plotBag.html).
 
 - `which = 4`:
 
-  Q-Q plot of residuals.
+  Hexagonal binning, drawn by
+  [`pharos::plotHexbin()`](https://andrisignorell.github.io/pharos/reference/plotHexbin.html);
+  the choice for large n, where points in a scatterplot overplot.
 
-Default `which` by verbose level:
-
-- `verbose = 1`: `which = 1`
-
-- `verbose = 2`: `which = 1:2`
-
-- `verbose = 3`: `which = 1:4`
+`main` defaults to the title stored in the object and is passed to every
+plot.
 
 ## References
 
@@ -157,76 +175,94 @@ heteroscedasticity and random coefficient variation. *Econometrica*, 47,
 [`stats::lm()`](https://rdrr.io/r/stats/lm.html),
 [`stats::cor.test()`](https://rdrr.io/r/stats/cor.test.html)
 
+Plot functions:
+[`pharos::plotXY()`](https://andrisignorell.github.io/pharos/reference/plotXY.html),
+[`pharos::plotDens2D()`](https://andrisignorell.github.io/pharos/reference/plotDens2D.html),
+[`pharos::plotBag()`](https://andrisignorell.github.io/pharos/reference/plotBag.html),
+[`pharos::plotHexbin()`](https://andrisignorell.github.io/pharos/reference/plotHexbin.html)
+
 Other desc: [`desc()`](Desc.md), [`desc.Date()`](Desc.Date.md),
 [`desc.factor()`](Desc.factor.md), [`desc.nq`](desc.nq.md),
 [`desc.numeric()`](desc.numeric.md), [`desc.qn`](desc.qn.md),
-[`desc.qq`](desc.qq.md), [`desc.ts()`](desc.ts.md),
-[`print.Desc.qq()`](desc.table.md)
+[`desc.qq`](desc.qq.md), [`desc.table()`](desc.table.md),
+[`desc.ts()`](desc.ts.md)
 
 ## Examples
 
 ``` r
 # basic usage via desc()
-desc(mpg ~ wt, mtcars)
+desc(temperature ~ delivery_min, Pizza)
 #> ────────────────────────────────────────────────────────────────────────────── 
-#> mpg ~ wt (mtcars) (Desc.nn)
+#> temperature ~ delivery_min (Pizza) (Desc.nn)
 #> 
 #> Summary:
-#> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)
+#> pairs: 1209, valid: 1170 (96.8%), missings: 39 (3.2%)
 #> 
-#> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large
-#> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
+#> Pearson  r:  -0.575  (-0.612, -0.536)  ***  large
+#> Spearman r:  -0.573  (-0.611, -0.534)  ***  large
 #> 
 #> Linear regression:
-#>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***
-#>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***
-#>   R²: 0.753   adj. R²: 0.745   p: <0.001
-#>   Residual SE: 3.0459 on 30 df
-#>   Shapiro-Wilk on residuals: W = 0.945,  p = 0.104
+#>   Intercept:   61.4190  ( 60.2237,  62.6142)  ***
+#>   Slope:       -0.5347  ( -0.5783,  -0.4910)  ***
+#>   R²: 0.331   adj. R²: 0.330   p: <0.001
+#>   Residual SE: 8.1324 on 1168 df
+#>   Shapiro-Wilk on residuals: W = 0.910,  p = <0.001
 #> 
 
 
 # more detail
-desc(mpg ~ wt, mtcars, verbose = 3)
+desc(temperature ~ delivery_min, Pizza, verbose = 3)
 #> ────────────────────────────────────────────────────────────────────────────── 
-#> mpg ~ wt (mtcars) (Desc.nn)
+#> temperature ~ delivery_min (Pizza) (Desc.nn)
 #> 
 #> Summary:
-#> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)
+#> pairs: 1209, valid: 1170 (96.8%), missings: 39 (3.2%)
 #> 
-#> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large
-#> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
+#> Pearson  r:  -0.575  (-0.612, -0.536)  ***  large
+#> Spearman r:  -0.573  (-0.611, -0.534)  ***  large
 #> 
 #> Linear regression:
-#>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***
-#>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***
-#>   R²: 0.753   adj. R²: 0.745   p: <0.001
-#>   Residual SE: 3.0459 on 30 df
-#>   Shapiro-Wilk on residuals: W = 0.945,  p = 0.104
+#>   Intercept:   61.4190  ( 60.2237,  62.6142)  ***
+#>   Slope:       -0.5347  ( -0.5783,  -0.4910)  ***
+#>   R²: 0.331   adj. R²: 0.330   p: <0.001
+#>   Residual SE: 8.1324 on 1168 df
+#>   Shapiro-Wilk on residuals: W = 0.910,  p = <0.001
 #> 
-#>   Breusch-Pagan test: BP = 0.0404,  df = 1,  p = 0.841
-#>   Cook's distance: max = 0.5319,  n > 4/n threshold: 3
+#>   Breusch-Pagan test: BP = 2.2987,  df = 1,  p = 0.129
+#>   Cook's distance: max = 0.0248,  n > 4/n threshold: 71
 #> 
 
 
-# store result and plot separately
-d <- desc(mpg ~ wt, mtcars, plotit = FALSE)
+# store result, print and plot separately
+d <- desc(temperature ~ delivery_min, Pizza, plotit = FALSE)
 print(d, verbose = 1)
 #> ────────────────────────────────────────────────────────────────────────────── 
-#> mpg ~ wt (mtcars) (Desc.nn)
+#> temperature ~ delivery_min (Pizza) (Desc.nn)
 #> 
 #> Summary:
-#> pairs: 32, valid: 32 (100.0%), missings: 0 (0.0%)
+#> pairs: 1209, valid: 1170 (96.8%), missings: 39 (3.2%)
 #> 
-#> Pearson  r:  -0.868  (-0.934, -0.744)  ***  large
-#> Spearman r:  -0.886  (-0.943, -0.778)  ***  large
+#> Pearson  r:  -0.575  (-0.612, -0.536)  ***  large
+#> Spearman r:  -0.573  (-0.611, -0.534)  ***  large
 #> 
 #> Linear regression:
-#>   Intercept:   37.2851  ( 33.4505,  41.1198)  ***
-#>   Slope:       -5.3445  ( -6.4863,  -4.2026)  ***
-#>   R²: 0.753   adj. R²: 0.745   p: <0.001
+#>   Intercept:   61.4190  ( 60.2237,  62.6142)  ***
+#>   Slope:       -0.5347  ( -0.5783,  -0.4910)  ***
+#>   R²: 0.331   adj. R²: 0.330   p: <0.001
 #> 
-plot(d, which = 1:2)
+
+# the four plots
+plot(d, which = 1)                     # scatterplot       -> plotXY()
+plot(d, which = 2)                     # 2D density        -> plotDens2D()
+
+plot(d, which = 2, type = "contour")
+plot(d, which = 2, type = "image")
+
+plot(d, which = 2, type = "persp")
+
+plot(d, which = 3)                     # bagplot           -> plotBag()
+
+plot(d, which = 4)                     # hexagonal binning -> plotHexbin()
 
 
 # pipe
