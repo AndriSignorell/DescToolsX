@@ -142,5 +142,20 @@ abstract(d.mydata)
 #> data frame:  84 obs. of  5 variables
 #>      84 complete cases (100.0%)
 #> 
-#> Error in strTrunc(res[, i], maxLen = width[i]): unused argument (maxLen = width[i])
+#>   Nr  Class  ColName    NAs  Levels                Label                
+#>   1   ord    Plant      .    (12): 1-Qn1, 2-Qn2,   an ordered factor    
+#>                              3-Qn3, 4-Qc1, 5-Qc3,  with levels Qn1 < Qn2
+#>                              ...                   < Qn3 < ... < Mc1    
+#>                                                    giving a unique      
+#>                                                    identifier for each  
+#>                                                    plant.               
+#>   2   fac    Type       .    (2): 1-Quebec,        a factor with levels 
+#>                              2-Mississippi         Quebec Mississippi   
+#>                                                    giving the origin of 
+#>                                                    the plant            
+#>   3   fac    Treatment  .    (2): 1-nonchilled,    -                    
+#>                              2-chilled                                  
+#>   4   num    conc       .                          -                    
+#>   5   num    uptake     .                          -                    
+#> 
 ```

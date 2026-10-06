@@ -322,13 +322,38 @@ t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")],
                           strPad(fm(x, fmt="%", digits=1), width=5, align = "r")),
                       pval = style(fmt = "*", naForm = "   "))
 )
-#> Error in strPad(fm(x, fmt = "%", digits = 1), width = 5, align = "r"): unused argument (align = "r")
 # add a userdefined legend
 attr(t1, "legend") <- "numeric: mean / sd (median)), factor: n (n%)"
-#> Error: object 't1' not found
 
 t1
-#> Error: object 't1' not found
+#> 
+#>    var               Brent                      Camden                  
+#>    n                              474 (39.5%)                344 (28.7%)
+#>    temperature            51.1 / 8.734 (53.4)   47.4 / 10.111 (50.3)    
+#>    driver                                                               
+#>      Butcher                       72 (15.2%)                  1 ( 0.3%)
+#>      Carpenter                     29 ( 6.1%)                 19 ( 5.6%)
+#>      Carter                       177 (37.4%)                 47 (13.8%)
+#>      Farmer                        19 ( 4.0%)                 87 (25.5%)
+#>      Hunter                       128 (27.1%)                  4 ( 1.2%)
+#>      Miller                         6 ( 1.3%)                 41 (12.0%)
+#>      Taylor                        42 ( 8.9%)                142 (41.6%)
+#>    rebate (= TRUE)                235 (50.3%)                172 (50.3%)
+#>    Westminster             
+#>                 381 (31.8%)
+#>         44.3 / 9.836 (45.9)
+#>                            
+#>                  22 ( 5.8%)
+#>                 221 (58.2%)
+#>                   5 ( 1.3%)
+#>                  11 ( 2.9%)
+#>                  24 ( 6.3%)
+#>                  77 (20.3%)
+#>                  20 ( 5.3%)
+#>                 184 (48.7%)
+#> ---
+#> numeric: mean / sd (median)), factor: n (n%)
+#> 
 
 
 # dichotomous integer or logical values can be reported by the high or low value

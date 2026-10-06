@@ -15,7 +15,7 @@ for classification models or predicted vs. observed labels."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.960</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.962</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,7 +239,19 @@ column margin. <code>confusion.default()</code> builds the table accordingly.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   Kappa : 0.1667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  McNemar's Test P-Value : 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in strPad(paste0(rownames(x$byclass), " :"), width = 25L, align = "right"):</span> unused argument (align = "right")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Sensitivity : 0.5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Specificity : 0.6667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Pos Pred Value : 0.5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Neg Pred Value : 0.6667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Prevalence : 0.4000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Detection Rate : 0.2000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Detection Prevalence : 0.4000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Balanced Accuracy : 0.5833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 F-Value : 0.5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Matthews Cor.-Coef. : 0.1667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        'Positive' Class : B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># table</span></span></span>
 <span class="r-in"><span><span class="fu">confusion</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">ref</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -260,7 +272,19 @@ column margin. <code>confusion.default()</code> builds the table accordingly.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   Kappa : 0.1667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  McNemar's Test P-Value : 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in strPad(paste0(rownames(x$byclass), " :"), width = 25L, align = "right"):</span> unused argument (align = "right")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Sensitivity : 0.5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Specificity : 0.6667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Pos Pred Value : 0.5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Neg Pred Value : 0.6667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Prevalence : 0.4000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Detection Rate : 0.2000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Detection Prevalence : 0.4000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Balanced Accuracy : 0.5833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 F-Value : 0.5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Matthews Cor.-Coef. : 0.1667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        'Positive' Class : B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># glm</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
@@ -281,7 +305,19 @@ column margin. <code>confusion.default()</code> builds the table accordingly.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   Kappa : 0.8704</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  McNemar's Test P-Value : 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in strPad(paste0(rownames(x$byclass), " :"), width = 25L, align = "right"):</span> unused argument (align = "right")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Sensitivity : 0.9231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Specificity : 0.9474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Pos Pred Value : 0.9231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Neg Pred Value : 0.9474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Prevalence : 0.4063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Detection Rate : 0.3750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Detection Prevalence : 0.4063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Balanced Accuracy : 0.9352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 F-Value : 0.9231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Matthews Cor.-Coef. : 0.8704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        'Positive' Class : 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

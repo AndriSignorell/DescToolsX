@@ -217,7 +217,19 @@ confusion(pred, ref)
 #>                   Kappa : 0.1667
 #>  McNemar's Test P-Value : 1
 #> 
-#> Error in strPad(paste0(rownames(x$byclass), " :"), width = 25L, align = "right"): unused argument (align = "right")
+#>             Sensitivity : 0.5000
+#>             Specificity : 0.6667
+#>          Pos Pred Value : 0.5000
+#>          Neg Pred Value : 0.6667
+#>              Prevalence : 0.4000
+#>          Detection Rate : 0.2000
+#>    Detection Prevalence : 0.4000
+#>       Balanced Accuracy : 0.5833
+#>                 F-Value : 0.5000
+#>     Matthews Cor.-Coef. : 0.1667
+#> 
+#>        'Positive' Class : B
+#> 
 
 # table
 confusion(table(pred, ref))
@@ -238,7 +250,19 @@ confusion(table(pred, ref))
 #>                   Kappa : 0.1667
 #>  McNemar's Test P-Value : 1
 #> 
-#> Error in strPad(paste0(rownames(x$byclass), " :"), width = 25L, align = "right"): unused argument (align = "right")
+#>             Sensitivity : 0.5000
+#>             Specificity : 0.6667
+#>          Pos Pred Value : 0.5000
+#>          Neg Pred Value : 0.6667
+#>              Prevalence : 0.4000
+#>          Detection Rate : 0.2000
+#>    Detection Prevalence : 0.4000
+#>       Balanced Accuracy : 0.5833
+#>                 F-Value : 0.5000
+#>     Matthews Cor.-Coef. : 0.1667
+#> 
+#>        'Positive' Class : B
+#> 
 
 # glm
 m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
@@ -259,5 +283,17 @@ confusion(m)
 #>                   Kappa : 0.8704
 #>  McNemar's Test P-Value : 1
 #> 
-#> Error in strPad(paste0(rownames(x$byclass), " :"), width = 25L, align = "right"): unused argument (align = "right")
+#>             Sensitivity : 0.9231
+#>             Specificity : 0.9474
+#>          Pos Pred Value : 0.9231
+#>          Neg Pred Value : 0.9474
+#>              Prevalence : 0.4063
+#>          Detection Rate : 0.3750
+#>    Detection Prevalence : 0.4063
+#>       Balanced Accuracy : 0.9352
+#>                 F-Value : 0.9231
+#>     Matthews Cor.-Coef. : 0.8704
+#> 
+#>        'Positive' Class : 1
+#> 
 ```

@@ -137,5 +137,5 @@ desc(Pizza$delivery_min)             # numeric
 #> ¹ 95%-CI (classic)
 #> 
 #> 
-#> Error: 'plotFreqDist' is not an exported object from 'namespace:pharos'
+
 ```
