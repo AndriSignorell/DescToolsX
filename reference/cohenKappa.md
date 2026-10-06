@@ -11,7 +11,7 @@ cohenKappa(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  weights = c("unweighted", "equal-spacing", "fleiss-cohen"),
+  weighting = c("unweighted", "equal-spacing", "fleiss-cohen"),
   ...
 )
 ```
@@ -40,7 +40,7 @@ cohenKappa(
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
   [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
-- weights:
+- weighting:
 
   either a character string selecting a built-in weight scheme –
   `"unweighted"` (default), `"equal-spacing"`, or `"fleiss-cohen"` – or
@@ -86,7 +86,7 @@ Data can be passed either as a square confusion matrix (or data frame)
 in `x`, or as two vectors `x` and `y`, in which case
 `table(x, y, \dots)` is computed internally. Note that the vector
 interface supports **unweighted kappa only**: the function raises an
-error if `weights` is not `"unweighted"` and `y` is supplied, because
+error if `weighting` is not `"unweighted"` and `y` is supplied, because
 the level ordering of two independent factors cannot be guaranteed to be
 consistent when constructing the confusion table.
 
@@ -161,13 +161,13 @@ mw <- matrix(
   nrow = 6, byrow = TRUE,
   dimnames = list(rater1 = cats, rater2 = cats))
 
-cohenKappa(mw, weights = "equal-spacing", conf.level = 0.95)
+cohenKappa(mw, weighting = "equal-spacing", conf.level = 0.95)
 #>       est       lci       uci 
 #> 0.3156685 0.1968117 0.4345252 
 
 # user-supplied weight matrix
 wm <- outer(1:6, 1:6, function(i, j) 1 - abs(i - j) / (6 - 1))
-cohenKappa(mw, weights = wm, conf.level = 0.95)
+cohenKappa(mw, weighting = wm, conf.level = 0.95)
 #>       est       lci       uci 
 #> 0.3156685 0.1968117 0.4345252 
 

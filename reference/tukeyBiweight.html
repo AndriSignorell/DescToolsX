@@ -60,7 +60,7 @@ of a numeric vector, optionally with a bootstrap confidence interval.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
-<span>  const <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  constant <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -85,7 +85,7 @@ interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
 <code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
-<dt id="arg-const">const<a class="anchor" aria-label="anchor" href="#arg-const"></a></dt>
+<dt id="arg-constant">constant<a class="anchor" aria-label="anchor" href="#arg-constant"></a></dt>
 <dd><p>tuning constant passed to <code>tbrm_cpp()</code>. Defaults to <code>9</code>.</p></dd>
 
 
@@ -118,7 +118,7 @@ numeric vector with elements:</p><dl><dt><code>est</code></dt>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The biweight mean is a robust location estimator that downweights
 observations far from the median.  It is defined via the tuning constant
-<code>const</code> (default 9), which controls the breakdown point: larger
+<code>constant</code> (default 9), which controls the breakdown point: larger
 values are less resistant but more efficient under normality.</p>
 <p>When <code>conf.level</code> is not <code>NA</code> a bootstrap confidence interval
 is returned.  The resampling is done in C++; the R random number generator

@@ -68,7 +68,7 @@ package standards.
 
 ## See also
 
-[`as.ym()`](as_ym.md), [`year()`](date_functions.md),
+[`asYm()`](asYm.md), [`year()`](date_functions.md),
 [`month()`](date_functions.md)
 
 Other date.time: [`countWorkDays()`](countWorkDays.md),

@@ -68,8 +68,8 @@ Robust range contributed by Werner Stahel.
 [`max()`](https://rdrr.io/r/base/Extremes.html)
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
-[`madX()`](madX.md), [`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),
-[`varX()`](varX.md)
+[`madX()`](madX.md), [`meanAbsDev()`](meanAbsDev.md),
+[`meanSE()`](meanSE.md), [`varX()`](varX.md)
 
 ## Examples
 
@@ -82,13 +82,13 @@ c(xm, rangeX(x, trim = 0.10))
 
 x <- c(rnorm(20), rnorm(3, 5, 20))
 rangeX(x, robust=TRUE)
-#> [1] 3.546073
+#> [1] 3.574194
 #> attr(,"bounds")
-#> [1] -1.539950  2.006123
+#> [1] -1.904542  1.669652
 
 # compared to
 rangeX(x)
-#> [1] 22.62374
+#> [1] 71.43202
 #> attr(,"bounds")
-#> [1] -1.53995 21.08379
+#> [1] -30.73876  40.69326
 ```

@@ -15,7 +15,7 @@ freq(
   x,
   breaks = if (isDate(x)) pretty(x) else hist(x, plot = FALSE)$breaks,
   include.lowest = TRUE,
-  ord = c("level", "desc", "asc", "name"),
+  order = c("level", "desc", "asc", "name"),
   useNA = c("no", "ifany", "always"),
   ...
 )
@@ -52,7 +52,7 @@ print(x, digits = NULL, ...)
   `right = FALSE`) `"breaks"` value should be included. Ignored if x is
   neither numeric nor a date, or if `breaks = FALSE`.
 
-- ord:
+- order:
 
   how should the result be ordered? Default is `"level"`, other choices
   are 'by frequency' (`"desc"` or `"asc"`) or 'by name of the levels'
@@ -119,7 +119,7 @@ intervals are created that cover the single value.) See
 
 With `breaks = FALSE` no classing takes place and the distinct values of
 a numeric or date `x` are tabulated directly (in ascending order of the
-values). In this case the `ord` argument applies as for categorical
+values). In this case the `order` argument applies as for categorical
 variables.
 
 ## See also
@@ -178,7 +178,7 @@ print(d.freq, digits=5)
 #> 14  (130,140]     1   0.08354%     1197  100.00000%
 
 # sorted by frequency
-freq(Pizza$driver, ord="desc")
+freq(Pizza$driver, order="desc")
 #>        level  freq   perc  cumfreq  cumperc
 #> 1  Carpenter   272  22.6%      272    22.6%
 #> 2     Carter   234  19.4%      506    42.0%
@@ -189,7 +189,7 @@ freq(Pizza$driver, ord="desc")
 #> 7    Butcher    96   8.0%     1204   100.0%
 
 # sorted by name using all the observations, say including NAs
-freq(Pizza$driver, ord="name", useNA="ifany")
+freq(Pizza$driver, order="name", useNA="ifany")
 #>        level  freq   perc  cumfreq  cumperc
 #> 1       <NA>     5   0.4%        5     0.4%
 #> 2    Butcher    96   7.9%      101     8.4%
@@ -221,7 +221,7 @@ freq(Pizza$count, breaks = FALSE)
 #> 8      8     7   0.6%     1197   100.0%
 
 # ... which also allows ordering by frequency
-freq(Pizza$count, breaks = FALSE, ord = "desc")
+freq(Pizza$count, breaks = FALSE, order = "desc")
 #>    level  freq   perc  cumfreq  cumperc
 #> 1      3   300  25.1%      300    25.1%
 #> 2      2   259  21.6%      559    46.7%

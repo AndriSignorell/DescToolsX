@@ -12,7 +12,7 @@ cramerV(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"),
+  method = c("ncchisq", "ncchisq-adj", "fisher", "fisher-adj"),
   correct = FALSE,
   ...
 )
@@ -44,8 +44,8 @@ cramerV(
 
   character string specifying the confidence interval method:
   `"ncchisq"` (default, using the noncentral chi-squared distribution),
-  `"ncchisqadj"`, `"fisher"` (using fisher z transformation), or
-  `"fisheradj"` (using the Fisher z transformation and bias correction)
+  `"ncchisq-adj"`, `"fisher"` (using fisher z transformation), or
+  `"fisher-adj"` (using the Fisher z transformation and bias correction)
 
 - correct:
 
@@ -127,8 +127,9 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 [bedrock::pairApply](https://andrisignorell.github.io/bedrock/reference/pairApply.html),
 [Association](Association.md)
 
-Other assoc.nominal: [`contCoef()`](contCoef.md), [`gkTau()`](gkTau.md),
-[`lambda()`](lambda.md), [`mutInf()`](mutInf.md), [`phi()`](phi.md),
+Other assoc.nominal: [`contCoef()`](contCoef.md),
+[`gkLambda()`](gkLambda.md), [`gkTau()`](gkTau.md),
+[`mutInf()`](mutInf.md), [`phiCoef()`](phiCoef.md),
 [`tschuprowT()`](tschuprowT.md), [`uncertCoef()`](uncertCoef.md),
 [`yule`](yule.md)
 

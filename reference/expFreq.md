@@ -6,7 +6,7 @@ independence.
 ## Usage
 
 ``` r
-expFreq(x, freq = c("abs", "rel"))
+expFreq(x, scale = c("count", "proportion"))
 ```
 
 ## Arguments
@@ -15,10 +15,10 @@ expFreq(x, freq = c("abs", "rel"))
 
   a table
 
-- freq:
+- scale:
 
-  whether absolute or relative frequencies are computed. Must be `"abs"`
-  or `"rel"`; partial matching is supported.
+  whether expected counts or expected proportions are computed. Must be
+  `"count"` (default) or `"proportion"`; partial matching is supported.
 
 ## Value
 
@@ -87,7 +87,7 @@ expFreq(Titanic)
 #>   Crew 213.7034295  58.0246169
 #> 
 
-expFreq(UCBAdmissions, freq="r")
+expFreq(UCBAdmissions, scale="proportion")
 #> , , Dept = A
 #> 
 #>           Gender

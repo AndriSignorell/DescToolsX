@@ -69,8 +69,7 @@ classical \(O(n^2)\) one, which is slower but handles ties exactly.</p>
 <span>  R <span class="op">=</span> <span class="fl">999</span>,</span>
 <span>  jitter <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  eps <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"def"</span>, <span class="st">"test"</span><span class="op">)</span></span>
+<span>  output <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"test"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,15 +110,8 @@ standard deviation of the affected variable. A variable with zero
 variance cannot be jittered and raises an error.</p></dd>
 
 
-<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>optional integer random seed for reproducibility when
-<code>jitter = TRUE</code>. The state of R's random number generator is
-restored afterwards, so passing a seed does not disturb the calling
-session.</p></dd>
-
-
 <dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
-<dd><p>output format, either <code>"def"</code> (default), which returns
+<dd><p>output format, either <code>"estimate"</code> (default), which returns
 the statistic, or <code>"test"</code>, which returns an object of class
 <code>"htest"</code> with a permutation P value for the hypothesis of
 independence.</p></dd>
@@ -219,9 +211,9 @@ that looks like an answer. Remove or impute them before calling.</p>
     <h2 id="random-number-generation">Random number generation<a class="anchor" aria-label="anchor" href="#random-number-generation"></a></h2>
 
 
-<p><code>jitter = TRUE</code> draws from R's random number generator and
-therefore advances it, unless <code>seed</code> is supplied - in which case
-the previous state is restored.</p>
+<p><code>jitter = TRUE</code> and <code>output = "test"</code> draw from R's random number
+generator and therefore advance it. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> beforehand for a
+reproducible result.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -240,11 +232,11 @@ On the bootstrap of U and V statistics.
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="spearmanCor.html">spearmanCor()</a></code>, <code><a href="ordAssocs.html">kendallTauB()</a></code></p>
 <p>Other assoc.continuous:
-<code><a href="corPart.html">corPart()</a></code>,
-<code><a href="corPolychor.html">corPolychor()</a></code>,
-<code><a href="findCorrX.html">findCorrX()</a></code>,
+<code><a href="findCor.html">findCor()</a></code>,
 <code><a href="keepSig.html">keepSig()</a></code>,
+<code><a href="partialCor.html">partialCor()</a></code>,
 <code><a href="pearsonCor.html">pearsonCor()</a></code>,
+<code><a href="polychorCor.html">polychorCor()</a></code>,
 <code><a href="spearmanCor.html">spearmanCor()</a></code></p></div>
     </div>
 

@@ -8,10 +8,10 @@ Numeric and factor variables are both supported.
 ``` r
 imputeKnn(
   x,
+  distData = NULL,
   k = 10,
   scale = TRUE,
-  method = c("weighted", "median"),
-  distData = NULL
+  method = c("weighted", "median")
 )
 ```
 
@@ -20,6 +20,12 @@ imputeKnn(
 - x:
 
   a data frame with missing values.
+
+- distData:
+
+  optional data frame supplying the pool of potential neighbours. If
+  given, neighbours are drawn from `distData` only, while `x` alone is
+  imputed. It must have the same variables as `x`.
 
 - k:
 
@@ -36,12 +42,6 @@ imputeKnn(
   the aggregation applied to the neighbours' values, either `"weighted"`
   for a distance-weighted mean (numeric) or weighted mode (factor), or
   `"median"` for a median (numeric) or mode (factor).
-
-- distData:
-
-  optional data frame supplying the pool of potential neighbours. If
-  given, neighbours are drawn from `distData` only, while `x` alone is
-  imputed. It must have the same variables as `x`.
 
 ## Value
 

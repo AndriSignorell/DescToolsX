@@ -7,7 +7,7 @@ marginal distributions (i.e., it is free-marginal).
 ## Usage
 
 ``` r
-randolphKappa(x, categories = NULL, conf.level = NA, ...)
+randolphKappa(x, levels = NULL, ...)
 ```
 
 ## Arguments
@@ -17,19 +17,17 @@ randolphKappa(x, categories = NULL, conf.level = NA, ...)
   a matrix of size \\N \times m\\ with subjects in rows and raters in
   columns; cells contain the assigned categories
 
-- categories:
+- levels:
 
   the categories a rater could have chosen from, or a single number
   giving how many there were. Defaults to `NULL`, i.e. the categories
   actually observed in `x`. See Details.
 
-- conf.level:
-
-  reserved for future confidence intervals; must be `NA`
-
 - ...:
 
-  reserved for future bootstrap options and currently ignored
+  reserved for future bootstrap options. No confidence interval is
+  implemented yet, so any argument given here raises an error instead of
+  being ignored.
 
 ## Value
 
@@ -50,9 +48,9 @@ which is fixed at \\1/k\\ instead of being estimated from the marginals.
 
 \\P_e = 1/k\\ refers to the categories a rater could have *chosen*, not
 to those that happen to occur in the data. If a category was available
-but never used, the default `categories = NULL` understates \\k\\ and
-thus overstates chance agreement, which biases \\\kappa\\ downwards.
-Supply `categories` whenever the coding scheme is known.
+but never used, the default `levels = NULL` understates \\k\\ and thus
+overstates chance agreement, which biases \\\kappa\\ downwards. Supply
+`levels` whenever the coding scheme is known.
 
 Long-format ratings can first be reshaped with
 [`raterFrame()`](raterFrame.md).
@@ -87,7 +85,7 @@ randolphKappa(x)
 
 # the raters could have chosen from five categories, not just the three
 # they used
-randolphKappa(x, categories = 5)
+randolphKappa(x, levels = 5)
 #> [1] 0.6666667
 
 ## Long format with a formula

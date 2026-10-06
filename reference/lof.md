@@ -37,11 +37,11 @@ threshold, as its scale depends on the data. Values below 1 arise in
 unusually dense regions and are not normally of interest.
 
 The computation uses
-[`dbscan::lof()`](https://rdrr.io/pkg/dbscan/man/lof.html) from the
-dbscan package, which builds a kd-tree and therefore scales to large
-data. Note that its `minPts` counts the observation itself, whereas `k`
-here counts neighbours only, following Breunig et al.; the translation
-`minPts = k + 1` is applied internally.
+[`dbscan::lof()`](http://michael.hahsler.net/dbscan/reference/lof.md)
+from the dbscan package, which builds a kd-tree and therefore scales to
+large data. Note that its `minPts` counts the observation itself,
+whereas `k` here counts neighbours only, following Breunig et al.; the
+translation `minPts = k + 1` is applied internally.
 
 Duplicated observations need care. Where an observation has more than
 `k` exact duplicates, every neighbour distance is zero, the local
@@ -70,7 +70,7 @@ International Conference on Management of Data*, 93-104.
 
 ## See also
 
-[`dbscan::lof()`](https://rdrr.io/pkg/dbscan/man/lof.html)
+[`dbscan::lof()`](http://michael.hahsler.net/dbscan/reference/lof.md)
 
 ## Examples
 

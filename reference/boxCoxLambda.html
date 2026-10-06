@@ -76,7 +76,7 @@ linear time trend with seasonal dummy variables is used.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">boxCoxLambda</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"guerrero"</span>, <span class="st">"loglik"</span><span class="op">)</span>,</span>
+<span>  estimator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"guerrero"</span>, <span class="st">"loglik"</span><span class="op">)</span>,</span>
 <span>  lower <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
 <span>  upper <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  nonseasonalLength <span class="op">=</span> <span class="fl">2</span></span>
@@ -94,7 +94,7 @@ otherwise; missing values are not removed but rejected, since subsetting
 would strip a <code>ts</code> of its frequency and cycle positions.</p></dd>
 
 
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dt id="arg-estimator">estimator<a class="anchor" aria-label="anchor" href="#arg-estimator"></a></dt>
 <dd><p>method to be used in calculating lambda. Can be either
 <code>"guerrero"</code> (default) or <code>"loglik"</code>.</p></dd>
 
@@ -166,12 +166,12 @@ transformations. <em>Journal of Forecasting</em>, <strong>12</strong>, 37–48.<
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="fu">boxCoxLambda</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># profile log likelihood, seasonal trend model</span></span></span>
-<span class="r-in"><span><span class="fu">boxCoxLambda</span><span class="op">(</span><span class="va">AirPassengers</span>, method <span class="op">=</span> <span class="st">"loglik"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">boxCoxLambda</span><span class="op">(</span><span class="va">AirPassengers</span>, estimator <span class="op">=</span> <span class="st">"loglik"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1977788</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plain numeric vector, treated as non-seasonal</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">boxCoxLambda</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"loglik"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">boxCoxLambda</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, estimator <span class="op">=</span> <span class="st">"loglik"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02665803</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

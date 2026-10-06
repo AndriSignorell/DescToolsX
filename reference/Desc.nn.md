@@ -171,7 +171,7 @@ heteroscedasticity and random coefficient variation. *Econometrica*, 47,
 [`desc.qn()`](desc.qn.md) for categorical ~ numeric,
 [`desc.qq()`](desc.qq.md) for categorical ~ categorical,
 [`lumen::corCI()`](https://andrisignorell.github.io/lumen/reference/corCI.html),
-[`lumen::bpTest()`](https://andrisignorell.github.io/lumen/reference/bpTest.html),
+[`lumen::breuschPaganTest()`](https://andrisignorell.github.io/lumen/reference/breuschPaganTest.html),
 [`stats::lm()`](https://rdrr.io/r/stats/lm.html),
 [`stats::cor.test()`](https://rdrr.io/r/stats/cor.test.html)
 

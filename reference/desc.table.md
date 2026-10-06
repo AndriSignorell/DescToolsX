@@ -42,7 +42,7 @@ desc(
 )
 
 # S3 method for class 'Desc.table'
-print(x, print_header = TRUE, ...)
+print(x, printHeader = TRUE, ...)
 ```
 
 ## Arguments
@@ -84,7 +84,7 @@ print(x, print_header = TRUE, ...)
 
   further arguments passed to or from other methods
 
-- print_header:
+- printHeader:
 
   whether the header is printed
 

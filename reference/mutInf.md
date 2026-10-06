@@ -72,8 +72,8 @@ Wiley.
 [`entropy()`](entropy.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
-[`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),
-[`lambda()`](lambda.md), [`phi()`](phi.md),
+[`cramerV()`](cramerV.md), [`gkLambda()`](gkLambda.md),
+[`gkTau()`](gkTau.md), [`phiCoef()`](phiCoef.md),
 [`tschuprowT()`](tschuprowT.md), [`uncertCoef()`](uncertCoef.md),
 [`yule`](yule.md)
 

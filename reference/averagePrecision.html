@@ -53,7 +53,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">averagePrecision</span><span class="op">(</span><span class="va">x</span>, pred <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">averagePrecision</span><span class="op">(</span><span class="va">x</span>, ref <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,15 +61,15 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>either a numeric vector of observed binary outcomes (0/1) when
-<code>pred</code> is supplied, or a fitted model object from which both response
-and predictions are extracted</p></dd>
+<dd><p>either a numeric vector of predicted probabilities or scores
+when <code>ref</code> is supplied, or a fitted model object from which both
+response and predictions are extracted</p></dd>
 
 
-<dt id="arg-pred">pred<a class="anchor" aria-label="anchor" href="#arg-pred"></a></dt>
-<dd><p>numeric vector of predicted probabilities or scores. Required
-when <code>x</code> is a response vector; ignored when <code>x</code> is a model
-object.</p></dd>
+<dt id="arg-ref">ref<a class="anchor" aria-label="anchor" href="#arg-ref"></a></dt>
+<dd><p>numeric vector of observed binary outcomes (0/1), the
+reference the predictions are scored against. Required when <code>x</code> is a
+vector of predictions; ignored when <code>x</code> is a model object.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -105,7 +105,7 @@ not restricted to the interval [0, 1].</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.35</span>, <span class="fl">0.8</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">averagePrecision</span><span class="op">(</span><span class="va">resp</span>, <span class="va">pred</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">averagePrecision</span><span class="op">(</span><span class="va">pred</span>, <span class="va">resp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8333333</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

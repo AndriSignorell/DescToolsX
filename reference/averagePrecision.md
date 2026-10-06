@@ -5,21 +5,22 @@ Computes average precision (AP) for binary probabilistic predictions.
 ## Usage
 
 ``` r
-averagePrecision(x, pred = NULL)
+averagePrecision(x, ref = NULL)
 ```
 
 ## Arguments
 
 - x:
 
-  either a numeric vector of observed binary outcomes (0/1) when `pred`
-  is supplied, or a fitted model object from which both response and
-  predictions are extracted
+  either a numeric vector of predicted probabilities or scores when
+  `ref` is supplied, or a fitted model object from which both response
+  and predictions are extracted
 
-- pred:
+- ref:
 
-  numeric vector of predicted probabilities or scores. Required when `x`
-  is a response vector; ignored when `x` is a model object.
+  numeric vector of observed binary outcomes (0/1), the reference the
+  predictions are scored against. Required when `x` is a vector of
+  predictions; ignored when `x` is a model object.
 
 ## Value
 
@@ -49,6 +50,6 @@ Other model.metrics: [`auc()`](auc.md), [`brierScore()`](brierScore.md),
 ``` r
 resp <- c(0, 0, 1, 1)
 pred <- c(0.1, 0.4, 0.35, 0.8)
-averagePrecision(resp, pred)
+averagePrecision(pred, resp)
 #> [1] 0.8333333
 ```

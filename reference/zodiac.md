@@ -5,7 +5,7 @@ Calculate the sign of zodiac of a date.
 ## Usage
 
 ``` r
-zodiac(x, lang = c("en", "de"), stringsAsFactors = TRUE)
+zodiac(x, lang = .getOption("lang"), stringsAsFactors = TRUE)
 ```
 
 ## Arguments
@@ -17,8 +17,12 @@ zodiac(x, lang = c("en", "de"), stringsAsFactors = TRUE)
 
 - lang:
 
-  language of the zodiac names, either English (`"en"`) or German
-  (`"de"`)
+  language of the zodiac names: `"en"` (English), `"de"` (German) or
+  `"local"`, which gives the German names in a German locale and the
+  English ones everywhere else. Falls back to the `"lang"` option
+  (`options(DescToolsX.lang = )`) as in [`month()`](date_functions.md)
+  and [`weekday()`](date_functions.md), and to `"local"` if the option
+  is not set.
 
 - stringsAsFactors:
 

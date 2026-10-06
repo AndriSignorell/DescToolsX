@@ -102,9 +102,10 @@ North-Holland Publishing Company.
 [`Association()`](Association.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
-[`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),
-[`lambda()`](lambda.md), [`mutInf()`](mutInf.md), [`phi()`](phi.md),
-[`tschuprowT()`](tschuprowT.md), [`yule`](yule.md)
+[`cramerV()`](cramerV.md), [`gkLambda()`](gkLambda.md),
+[`gkTau()`](gkTau.md), [`mutInf()`](mutInf.md),
+[`phiCoef()`](phiCoef.md), [`tschuprowT()`](tschuprowT.md),
+[`yule`](yule.md)
 
 ## Examples
 

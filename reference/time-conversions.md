@@ -5,7 +5,7 @@
 ## Usage
 
 ``` r
-hmsToMinute(x)
+hmsToMin(x)
 
 hmsToSec(x)
 
@@ -16,8 +16,8 @@ secToHms(x, digits = NULL)
 
 - x:
 
-  date-time object for `hmsToMinute()`, vector of times in h:m:s format
-  for `hmsToSec()`, or numeric vector of seconds for `secToHms()`
+  date-time object for `hmsToMin()`, vector of times in h:m:s format for
+  `hmsToSec()`, or numeric vector of seconds for `secToHms()`
 
 - digits:
 
@@ -32,7 +32,7 @@ secToHms(x, digits = NULL)
 
 depending on the function:
 
-- `hmsToMinute()`:
+- `hmsToMin()`:
 
   numeric vector of times in minutes
 

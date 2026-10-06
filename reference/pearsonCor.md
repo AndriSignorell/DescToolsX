@@ -11,7 +11,7 @@ pearsonCor(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  scoresType = "table",
+  scoresType = c("table", "ranks", "ridit", "mod-ridit"),
   na.rm = FALSE
 )
 ```
@@ -40,7 +40,9 @@ pearsonCor(
 
 - scoresType:
 
-  score calculation method for table input
+  score calculation method for table input, one of `"table"` (default),
+  `"ranks"`, `"ridit"` or `"mod-ridit"`, see
+  [`lumen::scores()`](https://andrisignorell.github.io/lumen/reference/scores.html)
 
 - na.rm:
 
@@ -80,9 +82,9 @@ standards.
 [lumen::fisherZ](https://andrisignorell.github.io/lumen/reference/fisherZ.html),
 [lumen::fisherZInv](https://andrisignorell.github.io/lumen/reference/fisherZ.html)
 
-Other assoc.continuous: [`corPart()`](corPart.md),
-[`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),
+Other assoc.continuous: [`findCor()`](findCor.md),
 [`hoeffdingD()`](hoeffdingD.md), [`keepSig()`](keepSig.md),
+[`partialCor()`](partialCor.md), [`polychorCor()`](polychorCor.md),
 [`spearmanCor()`](spearmanCor.md)
 
 ## Examples

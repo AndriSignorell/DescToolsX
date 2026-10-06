@@ -116,8 +116,9 @@ Chapman & Hall, chapter 14.
 
 [bedrock::pairApply](https://andrisignorell.github.io/bedrock/reference/pairApply.html)
 
-Other assoc.nominal: [`cramerV()`](cramerV.md), [`gkTau()`](gkTau.md),
-[`lambda()`](lambda.md), [`mutInf()`](mutInf.md), [`phi()`](phi.md),
+Other assoc.nominal: [`cramerV()`](cramerV.md),
+[`gkLambda()`](gkLambda.md), [`gkTau()`](gkTau.md),
+[`mutInf()`](mutInf.md), [`phiCoef()`](phiCoef.md),
 [`tschuprowT()`](tschuprowT.md), [`uncertCoef()`](uncertCoef.md),
 [`yule`](yule.md)
 

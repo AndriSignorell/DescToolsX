@@ -15,7 +15,7 @@ oddsRatio(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("wald", "exact", "midp"),
+  method = c("wald", "exact", "mid-p"),
   interval = c(0, 1000),
   ...
 )
@@ -68,13 +68,13 @@ print(x, digits = 3, ...)
 - method:
 
   character string specifying the interval method. For a contingency
-  table one of `"wald"`, `"exact"` or `"midp"`; for a binomial model one
-  of `"wald"` or `"profile"`. See Details.
+  table one of `"wald"`, `"exact"` or `"mid-p"`; for a binomial model
+  one of `"wald"` or `"profile"`. See Details.
 
 - interval:
 
   numeric vector of length two giving the search interval for the root
-  finding in the mid-p method. Only used by `method = "midp"`; widen it
+  finding in the mid-p method. Only used by `method = "mid-p"`; widen it
   if the reported bound sits at one of its ends.
 
 - digits:
@@ -127,11 +127,11 @@ Three interval methods are available. `"wald"` is the asymptotic
 interval on the log scale, fast and adequate for reasonably large
 counts. `"exact"` is the conditional interval based on the noncentral
 hypergeometric distribution (Fisher); it guarantees coverage but is
-conservative, sometimes markedly so. `"midp"` halves the probability of
+conservative, sometimes markedly so. `"mid-p"` halves the probability of
 the observed table and lies between the two: it has coverage closer to
 the nominal level than the exact interval without the Wald interval's
 reliance on large counts. With a zero cell the point estimate is 0 or
-`Inf` and only `"exact"` and `"midp"` still deliver a finite bound on
+`Inf` and only `"exact"` and `"mid-p"` still deliver a finite bound on
 the informative side.
 
 ### Binomial models
@@ -201,9 +201,9 @@ oddsRatio(tab, conf.level = 0.95)
 #>  3.0000000  0.8914747 10.0956314 
 
 # the exact interval is the widest, the Wald interval the narrowest
-sapply(c("wald", "exact", "midp"),
+sapply(c("wald", "exact", "mid-p"),
        function(m) oddsRatio(tab, conf.level = 0.95, method = m))
-#>           wald      exact       midp
+#>           wald      exact      mid-p
 #> est  3.0000000  2.9483345  2.9118822
 #> lci  0.8914747  0.7770679  0.8795254
 #> uci 10.0956314 12.7381845 10.8604692

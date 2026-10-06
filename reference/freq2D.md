@@ -13,14 +13,14 @@ freq2D(
   data,
   subset,
   na.action = na.omit,
-  n = 20,
+  nBins = 20,
   pad = 0,
   dnn = NULL,
   ...
 )
 
 # Default S3 method
-freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
+freq2D(x, y, nBins = 20, pad = 0, dnn = NULL, ...)
 ```
 
 ## Arguments
@@ -55,7 +55,7 @@ freq2D(x, y, n = 20, pad = 0, dnn = NULL, ...)
   missing values. Defaults to
   [`na.omit()`](https://rdrr.io/r/stats/na.fail.html).
 
-- n:
+- nBins:
 
   the desired number of bins for the output, a scalar or a vector of
   length 2
@@ -82,7 +82,7 @@ and whose columns represent the x bins
 
 The exact number of bins is determined by the
 [`pretty()`](https://rdrr.io/r/base/pretty.html) function, based on the
-value of `n`.
+value of `nBins`.
 
 Padding the margins with zeros can be helpful for subsequent analysis,
 such as smoothing.
@@ -169,7 +169,7 @@ freq2D(quakes$long, quakes$lat, dnn="")
 #>   -37   0   0   0   0   0
 #>   -38   0   0   0   0   0
 #>   -39   0   0   0   0   0
-freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
+freq2D(lat ~ long, quakes, nBins=c(10, 20), pad=1)
 #>      long
 #> lat   164 166 168 170 172 174 176 178 180 182 184 186 188 190
 #>   -10   0   0   0   0   0   0   0   0   0   0   0   0   0   0

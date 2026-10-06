@@ -52,9 +52,9 @@ desc(
 # S3 method for class 'logical'
 desc(
   x,
-  ord = "level",
+  order = "level",
   conf.level = 0.95,
-  include_x = TRUE,
+  includeX = TRUE,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -132,7 +132,7 @@ plot(x, main = x$meta$main, ...)
   classes of the variables. Default can be defined by the option
   `plotit`, if it does not exist then it's set to `FALSE`.
 
-- ord:
+- order:
 
   order of the levels
 
@@ -141,7 +141,7 @@ plot(x, main = x$meta$main, ...)
   confidence level of the interval (default 0.95). If set to `NA`, no
   confidence interval is calculated.
 
-- include_x:
+- includeX:
 
   logical; if `TRUE`, the original vector is retained in the result
 

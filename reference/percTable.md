@@ -427,7 +427,7 @@ percTable(driver ~ area, data=Pizza, subset=wine_delivered==0)
 #>           p.col     8.4%   41.3%        5.8% 
 
 # sort the table by rows, order first column (Zurich), then third, then row.names (0)
-percTable(sortX(tab, ord=c(1,3,0)))
+percTable(sortX(tab, by=c(1,3,0)))
 #>                Brown    Blue   Hazel   Green
 #>                                             
 #> Blond freq         7      94      10      16

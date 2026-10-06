@@ -15,8 +15,7 @@ hoeffdingD(
   R = 999,
   jitter = FALSE,
   eps = NULL,
-  seed = NULL,
-  output = c("def", "test")
+  output = c("estimate", "test")
 )
 ```
 
@@ -54,17 +53,11 @@ hoeffdingD(
   deviation of the affected variable. A variable with zero variance
   cannot be jittered and raises an error.
 
-- seed:
-
-  optional integer random seed for reproducibility when `jitter = TRUE`.
-  The state of R's random number generator is restored afterwards, so
-  passing a seed does not disturb the calling session.
-
 - output:
 
-  output format, either `"def"` (default), which returns the statistic,
-  or `"test"`, which returns an object of class `"htest"` with a
-  permutation P value for the hypothesis of independence.
+  output format, either `"estimate"` (default), which returns the
+  statistic, or `"test"`, which returns an object of class `"htest"`
+  with a permutation P value for the hypothesis of independence.
 
 ## Value
 
@@ -159,9 +152,10 @@ that looks like an answer. Remove or impute them before calling.
 
 ## Random number generation
 
-`jitter = TRUE` draws from R's random number generator and therefore
-advances it, unless `seed` is supplied - in which case the previous
-state is restored.
+`jitter = TRUE` and `output = "test"` draw from R's random number
+generator and therefore advance it. Call
+[`set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for a
+reproducible result.
 
 ## References
 
@@ -182,9 +176,9 @@ statistics. *Annals of Statistics* **20**, 655-674.
 
 [`spearmanCor()`](spearmanCor.md), [`kendallTauB()`](ordAssocs.md)
 
-Other assoc.continuous: [`corPart()`](corPart.md),
-[`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),
-[`keepSig()`](keepSig.md), [`pearsonCor()`](pearsonCor.md),
+Other assoc.continuous: [`findCor()`](findCor.md),
+[`keepSig()`](keepSig.md), [`partialCor()`](partialCor.md),
+[`pearsonCor()`](pearsonCor.md), [`polychorCor()`](polychorCor.md),
 [`spearmanCor()`](spearmanCor.md)
 
 ## Examples

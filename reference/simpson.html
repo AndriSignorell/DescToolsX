@@ -59,12 +59,7 @@ qualitative variation (the Gini-Simpson index rescaled to a maximum of 1).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simpson</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gini"</span>, <span class="st">"hunter"</span>, <span class="st">"iqv"</span><span class="op">)</span>,</span>
-<span>  categories <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gini"</span>, <span class="st">"hunter"</span>, <span class="st">"iqv"</span><span class="op">)</span>, levels <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,13 +74,13 @@ tabulated instead. A data frame with a single row of numeric columns
 (e.g. one site of a community matrix) is read as counts.</p></dd>
 
 
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
 <dd><p>character string specifying the index to compute:
 <code>"gini"</code>, <code>"hunter"</code>, or <code>"iqv"</code>.</p></dd>
 
 
-<dt id="arg-categories">categories<a class="anchor" aria-label="anchor" href="#arg-categories"></a></dt>
-<dd><p>the possible categories for <code>method = "iqv"</code>: either
+<dt id="arg-levels">levels<a class="anchor" aria-label="anchor" href="#arg-levels"></a></dt>
+<dd><p>the possible categories for <code>metric = "iqv"</code>: either
 their number (a single number) or the categories themselves (a vector,
 e.g. <code>levels(x)</code>). If <code>NULL</code> (default), the number of observed,
 non-empty categories is used. Ignored, with a warning, for the other
@@ -104,7 +99,7 @@ will be <code>NA_real_</code>.</p></dd>
 when the index is undefined: no observations, \(N &lt; 2\) for
 <code>"hunter"</code>, \(K &lt; 2\) for <code>"iqv"</code>; <code>NA_real_</code> without a warning for
 missing values with <code>na.rm = FALSE</code>. Invalid input (negative, infinite
-or, for <code>"hunter"</code>, non-integer counts; invalid <code>categories</code>) is an
+or, for <code>"hunter"</code>, non-integer counts; invalid <code>levels</code>) is an
 error.</p>
     </div>
     <div class="section level2">
@@ -130,12 +125,12 @@ Gini-Simpson index relative to its maximum.</p>
 categories that were <em>possible</em>, not only those observed. With the
 default, a sample spread evenly over 3 of 5 possible categories gets an
 IQV of 1, although it is far from the maximum diversity the coding scheme
-allows. Supply <code>categories</code> whenever the set of categories is known; for a
-factor, <code>categories = levels(x)</code> uses all levels, including empty ones.</p>
+allows. Supply <code>levels</code> whenever the set of categories is known; for a
+factor, <code>levels = levels(x)</code> uses all levels, including empty ones.</p>
 <p>A sample concentrated in a single category is perfectly homogeneous rather
 than undefined, so <code>"gini"</code> returns 0 for it, and so does <code>"hunter"</code> as
 long as \(N \ge 2\). The IQV requires \(K \ge 2\), since
-\(K - 1\) appears in its denominator; with <code>categories</code> given, a single
+\(K - 1\) appears in its denominator; with <code>levels</code> given, a single
 occupied category gives an IQV of 0.</p>
 <p>When <code>x</code> is numeric, it is treated as a vector of counts. Relative
 frequencies are fine for <code>"gini"</code> and <code>"iqv"</code>; the Hunter-Gaston index
@@ -167,36 +162,36 @@ https://doi.org/10.2307/270810</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>, <span class="st">"C"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6111111</span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"hunter"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="st">"hunter"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7333333</span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"iqv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="st">"iqv"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9166667</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># the same sample, if five categories were possible</span></span></span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"iqv"</span>, categories <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="st">"iqv"</span>, levels <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7638889</span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"iqv"</span>, categories <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="st">"iqv"</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7638889</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using counts directly</span></span></span>
 <span class="r-in"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>A <span class="op">=</span> <span class="fl">2</span>, B <span class="op">=</span> <span class="fl">1</span>, C <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">counts</span>, method <span class="op">=</span> <span class="st">"hunter"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">counts</span>, metric <span class="op">=</span> <span class="st">"hunter"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7333333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Hunter-Gaston = Gini-Simpson * N / (N - 1)</span></span></span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">counts</span>, method <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span> <span class="op">*</span> <span class="fl">6</span> <span class="op">/</span> <span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">counts</span>, metric <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span> <span class="op">*</span> <span class="fl">6</span> <span class="op">/</span> <span class="fl">5</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7333333</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a numeric vector of observations must be tabulated first, otherwise</span></span></span>
 <span class="r-in"><span><span class="co"># its values are read as counts</span></span></span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, metric <span class="op">=</span> <span class="st">"gini"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.64</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With missing values</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="cn">NA</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"gini"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">simpson</span><span class="op">(</span><span class="va">x</span>, metric <span class="op">=</span> <span class="st">"gini"</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4444444</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -61,14 +61,14 @@
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">subset</span>,</span>
 <span>  na.action <span class="op">=</span> <span class="va">na.omit</span>,</span>
-<span>  n <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  nBins <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  pad <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  dnn <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">freq2D</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, n <span class="op">=</span> <span class="fl">20</span>, pad <span class="op">=</span> <span class="fl">0</span>, dnn <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">freq2D</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, nBins <span class="op">=</span> <span class="fl">20</span>, pad <span class="op">=</span> <span class="fl">0</span>, dnn <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -103,7 +103,7 @@ evaluated in <code>data</code> (<code>subset = depth &gt; 100</code>), as in <co
 contain missing values. Defaults to <code><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit()</a></code>.</p></dd>
 
 
-<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
+<dt id="arg-nbins">nBins<a class="anchor" aria-label="anchor" href="#arg-nbins"></a></dt>
 <dd><p>the desired number of bins for the output, a scalar or a vector of
 length 2</p></dd>
 
@@ -129,7 +129,7 @@ order and whose columns represent the x bins</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The exact number of bins is determined by the <code><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty()</a></code> function,
-based on the value of <code>n</code>.</p>
+based on the value of <code>nBins</code>.</p>
 <p>Padding the margins with zeros can be helpful for subsequent analysis, such
 as smoothing.</p>
     </div>
@@ -214,7 +214,7 @@ as smoothing.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -37   0   0   0   0   0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -38   0   0   0   0   0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -39   0   0   0   0   0</span>
-<span class="r-in"><span><span class="fu">freq2D</span><span class="op">(</span><span class="va">lat</span> <span class="op">~</span> <span class="va">long</span>, <span class="va">quakes</span>, n<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>, pad<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">freq2D</span><span class="op">(</span><span class="va">lat</span> <span class="op">~</span> <span class="va">long</span>, <span class="va">quakes</span>, nBins<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>, pad<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      long</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lat   164 166 168 170 172 174 176 178 180 182 184 186 188 190</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -10   0   0   0   0   0   0   0   0   0   0   0   0   0   0</span>

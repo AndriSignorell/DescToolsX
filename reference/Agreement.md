@@ -37,7 +37,7 @@ All agreement measures in this package share a common interface.
 
 - model:
 
-  model for the ICC, `"oneway"` or `"twoway"`
+  model for the ICC, `"one-way"` or `"two-way"`
 
 - type:
 

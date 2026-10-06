@@ -15,7 +15,7 @@ package.
 lc(formula, data, subset, na.action = na.pass, ...)
 
 # Default S3 method
-lc(x, n = rep(1, length(x)), na.rm = FALSE, ...)
+lc(x, weights = NULL, na.rm = FALSE, ...)
 
 # S3 method for class 'Lc'
 predict(object, newdata, conf.level = NA, general = FALSE, ...)
@@ -55,19 +55,19 @@ predict(object, newdata, conf.level = NA, general = FALSE, ...)
 
   numeric vector of non-negative values
 
-- n:
+- weights:
 
   numeric vector of non-negative weights of the same length as `x`.
-  Defaults to equal weights (`rep(1, length(x))`). Bootstrap intervals
-  draw `floor(sum(n))` observations with probabilities proportional to
-  `n`; the sum must be finite and at least one. Thus rescaling the
+  Defaults to equal weights. Bootstrap intervals draw
+  `floor(sum(weights))` observations with probabilities proportional to
+  `weights`; the sum must be finite and at least one. Thus rescaling the
   weights changes the bootstrap sample size; frequency weights are
   appropriate when the weights represent replicated observations.
 
 - na.rm:
 
-  logical. If `TRUE`, observations with `NA` in `x` or `n` are removed
-  before computation. Default is `FALSE`.
+  logical. If `TRUE`, observations with `NA` in `x` or `weights` are
+  removed before computation. Default is `FALSE`.
 
 - object:
 
@@ -188,7 +188,7 @@ lc_obj$Gini
 
 # with weights
 w <- runif(100, 0.5, 2)
-lc(x, n = w)
+lc(x, weights = w)
 #> $p
 #>   [1] 0.00000000 0.01667602 0.02765357 0.03283079 0.04202449 0.04696748
 #>   [7] 0.05638264 0.06201162 0.07023687 0.07523165 0.08742561 0.09825205
@@ -328,7 +328,7 @@ lc_obj <- lc(x)
 plot(lc_obj)
 
 # overlay confidence band
-lines(lc_obj, cbandArgs = list(conf.level = 0.95))
+lines(lc_obj, cband = list(conf.level = 0.95))
 
 # add points
 points(lc_obj, pch = 16)

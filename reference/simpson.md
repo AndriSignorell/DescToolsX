@@ -8,12 +8,7 @@ of 1).
 ## Usage
 
 ``` r
-simpson(
-  x,
-  method = c("gini", "hunter", "iqv"),
-  categories = NULL,
-  na.rm = FALSE
-)
+simpson(x, metric = c("gini", "hunter", "iqv"), levels = NULL, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -27,14 +22,14 @@ simpson(
   instead. A data frame with a single row of numeric columns (e.g. one
   site of a community matrix) is read as counts.
 
-- method:
+- metric:
 
   character string specifying the index to compute: `"gini"`,
   `"hunter"`, or `"iqv"`.
 
-- categories:
+- levels:
 
-  the possible categories for `method = "iqv"`: either their number (a
+  the possible categories for `metric = "iqv"`: either their number (a
   single number) or the categories themselves (a vector, e.g.
   `levels(x)`). If `NULL` (default), the number of observed, non-empty
   categories is used. Ignored, with a warning, for the other methods.
@@ -50,7 +45,7 @@ a numeric scalar between 0 and 1. `NA_real_` (with a warning) when the
 index is undefined: no observations, \\N \< 2\\ for `"hunter"`, \\K \<
 2\\ for `"iqv"`; `NA_real_` without a warning for missing values with
 `na.rm = FALSE`. Invalid input (negative, infinite or, for `"hunter"`,
-non-integer counts; invalid `categories`) is an error.
+non-integer counts; invalid `levels`) is an error.
 
 ## Details
 
@@ -78,14 +73,14 @@ Gini-Simpson index relative to its maximum.
 categories that were *possible*, not only those observed. With the
 default, a sample spread evenly over 3 of 5 possible categories gets an
 IQV of 1, although it is far from the maximum diversity the coding
-scheme allows. Supply `categories` whenever the set of categories is
-known; for a factor, `categories = levels(x)` uses all levels, including
-empty ones.
+scheme allows. Supply `levels` whenever the set of categories is known;
+for a factor, `levels = levels(x)` uses all levels, including empty
+ones.
 
 A sample concentrated in a single category is perfectly homogeneous
 rather than undefined, so `"gini"` returns 0 for it, and so does
 `"hunter"` as long as \\N \ge 2\\. The IQV requires \\K \ge 2\\, since
-\\K - 1\\ appears in its denominator; with `categories` given, a single
+\\K - 1\\ appears in its denominator; with `levels` given, a single
 occupied category gives an IQV of 0.
 
 When `x` is numeric, it is treated as a vector of counts. Relative
@@ -119,35 +114,35 @@ Other diversity.concentration: [`entropy()`](entropy.md),
 ``` r
 x <- c("A", "A", "B", "C", "C", "C")
 
-simpson(x, method = "gini")
+simpson(x, metric = "gini")
 #> [1] 0.6111111
-simpson(x, method = "hunter")
+simpson(x, metric = "hunter")
 #> [1] 0.7333333
-simpson(x, method = "iqv")
+simpson(x, metric = "iqv")
 #> [1] 0.9166667
 
 # the same sample, if five categories were possible
-simpson(x, method = "iqv", categories = 5)
+simpson(x, metric = "iqv", levels = 5)
 #> [1] 0.7638889
-simpson(x, method = "iqv", categories = c("A", "B", "C", "D", "E"))
+simpson(x, metric = "iqv", levels = c("A", "B", "C", "D", "E"))
 #> [1] 0.7638889
 
 # Using counts directly
 counts <- c(A = 2, B = 1, C = 3)
-simpson(counts, method = "hunter")
+simpson(counts, metric = "hunter")
 #> [1] 0.7333333
 
 # Hunter-Gaston = Gini-Simpson * N / (N - 1)
-simpson(counts, method = "gini") * 6 / 5
+simpson(counts, metric = "gini") * 6 / 5
 #> [1] 0.7333333
 
 # a numeric vector of observations must be tabulated first, otherwise
 # its values are read as counts
-simpson(factor(c(1, 1, 2, 2, 3)), method = "gini")
+simpson(factor(c(1, 1, 2, 2, 3)), metric = "gini")
 #> [1] 0.64
 
 # With missing values
 x <- c("A", "A", NA, "B")
-simpson(x, method = "gini", na.rm = TRUE)
+simpson(x, metric = "gini", na.rm = TRUE)
 #> [1] 0.4444444
 ```

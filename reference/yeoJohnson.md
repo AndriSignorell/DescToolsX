@@ -37,15 +37,16 @@ are preserved.
 The Yeo-Johnson transformation extends the Box-Cox transformation to
 allow for zero and negative values. It is defined piecewise:
 
-\$\$f\_\lambda(x) = \frac{(x+1)^\lambda - 1}{\lambda}\$\$ for \\x \ge
+\$\$f\_\gkLambda(x) = \frac{(x+1)^\lambda - 1}{\lambda}\$\$ for \\x \ge
 0\\ and \\\lambda \ne 0\\,
 
-\$\$f\_\lambda(x) = \log(x+1)\$\$ for \\x \ge 0\\ and \\\lambda = 0\\,
+\$\$f\_\gkLambda(x) = \log(x+1)\$\$ for \\x \ge 0\\ and \\\lambda = 0\\,
 
-\$\$f\_\lambda(x) = -\frac{(-x+1)^{2-\lambda} - 1}{2-\lambda}\$\$ for
+\$\$f\_\gkLambda(x) = -\frac{(-x+1)^{2-\lambda} - 1}{2-\lambda}\$\$ for
 \\x \< 0\\ and \\\lambda \ne 2\\, and
 
-\$\$f\_\lambda(x) = -\log(-x+1)\$\$ for \\x \< 0\\ and \\\lambda = 2\\.
+\$\$f\_\gkLambda(x) = -\log(-x+1)\$\$ for \\x \< 0\\ and \\\lambda =
+2\\.
 
 The transformation is defined for all real-valued inputs and is
 continuous and differentiable for all \\x\\. It is commonly used as an

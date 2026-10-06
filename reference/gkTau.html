@@ -132,7 +132,7 @@ except the calculations of the tau statistic are based on assignment
 probabilities specified by marginal or conditional proportions.
 Misclassification probabilities are based on random category assignment with
 probabilities specified by marginal or conditional proportion.</p>
-<p>Goodman Kruskal tau reduces to \(\phi^2\) (see: <code><a href="phi.html">phi()</a></code>) in the
+<p>Goodman Kruskal tau reduces to \(\phi^2\) (see: <code><a href="phiCoef.html">phiCoef()</a></code>) in the
 2x2-table case.<br></p>
 <p>The measure lies in \([0, 1]\) by construction. Both ends are reached by
 cancellation, so an estimate within a few machine epsilons of a bound is
@@ -169,14 +169,14 @@ Newbury Park, CA: Sage, pp. 24–30</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="lambda.html">lambda()</a></code>, <code><a href="cramerV.html">cramerV()</a></code>,
+    <div class="dont-index"><p><code><a href="gkLambda.html">gkLambda()</a></code>, <code><a href="cramerV.html">cramerV()</a></code>,
 <code><a href="Association.html">Association()</a></code></p>
 <p>Other assoc.nominal:
 <code><a href="contCoef.html">contCoef()</a></code>,
 <code><a href="cramerV.html">cramerV()</a></code>,
-<code><a href="lambda.html">lambda()</a></code>,
+<code><a href="gkLambda.html">gkLambda()</a></code>,
 <code><a href="mutInf.html">mutInf()</a></code>,
-<code><a href="phi.html">phi()</a></code>,
+<code><a href="phiCoef.html">phiCoef()</a></code>,
 <code><a href="tschuprowT.html">tschuprowT()</a></code>,
 <code><a href="uncertCoef.html">uncertCoef()</a></code>,
 <code><a href="yule.html">yule</a></code></p></div>
@@ -210,7 +210,7 @@ Newbury Park, CA: Sage, pp. 24–30</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.2156410 0.0000000 0.5537724 </span>
 <span class="r-in"><span><span class="co"># reduce both to:</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="phi.html">phi</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="phiCoef.html">phiCoef</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.215641</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

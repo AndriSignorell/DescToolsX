@@ -14,7 +14,7 @@ variables is used.
 ``` r
 boxCoxLambda(
   x,
-  method = c("guerrero", "loglik"),
+  estimator = c("guerrero", "loglik"),
   lower = -1,
   upper = 2,
   nonseasonalLength = 2
@@ -31,7 +31,7 @@ boxCoxLambda(
   since subsetting would strip a `ts` of its frequency and cycle
   positions.
 
-- method:
+- estimator:
 
   method to be used in calculating lambda. Can be either `"guerrero"`
   (default) or `"loglik"`.
@@ -103,11 +103,11 @@ Other transform: [`boxCox()`](boxCox.md), [`logSt()`](logSt.md),
 lambda <- boxCoxLambda(AirPassengers)
 
 # profile log likelihood, seasonal trend model
-boxCoxLambda(AirPassengers, method = "loglik")
+boxCoxLambda(AirPassengers, estimator = "loglik")
 #> [1] 0.1977788
 
 # plain numeric vector, treated as non-seasonal
 set.seed(1)
-boxCoxLambda(rlnorm(100), method = "loglik")
+boxCoxLambda(rlnorm(100), estimator = "loglik")
 #> [1] 0.02665803
 ```

@@ -11,7 +11,7 @@ plots.
 desc(
   x,
   maxrows = NULL,
-  ord = NULL,
+  order = NULL,
   conf.level = 0.95,
   main = NULL,
   verbose = NULL,
@@ -24,7 +24,7 @@ desc(
 desc(
   x,
   maxrows = NULL,
-  ord = NULL,
+  order = NULL,
   conf.level = 0.95,
   main = NULL,
   verbose = NULL,
@@ -48,7 +48,7 @@ print(x, digits = NULL, ...)
   numeric; defines the maximum number of rows in a frequency table to be
   reported. For factors with many levels it is often not interesting to
   see all of them. Default is set to 12 most frequent ones (resp. the
-  first ones if `ord` is set to `"levels"` or `"names"`).
+  first ones if `order` is set to `"levels"` or `"names"`).
 
   For a numeric argument x `maxrows` is the minimum number of unique
   values needed for a numeric variable to be treated as continuous. If
@@ -65,7 +65,7 @@ print(x, digits = NULL, ...)
   Setting `maxrows` to `Inf` will unconditionally report all values and
   also produce a plot with type "h" instead of a histogram.
 
-- ord:
+- order:
 
   character out of `"name"` (alphabetical order), `"level"`, `"asc"` (by
   frequencies ascending), `"desc"` (by frequencies descending) defining

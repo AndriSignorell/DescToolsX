@@ -84,8 +84,8 @@ proportions. Misclassification probabilities are based on random
 category assignment with probabilities specified by marginal or
 conditional proportion.
 
-Goodman Kruskal tau reduces to \\\phi^2\\ (see: [`phi()`](phi.md)) in
-the 2x2-table case.  
+Goodman Kruskal tau reduces to \\\phi^2\\ (see:
+[`phiCoef()`](phiCoef.md)) in the 2x2-table case.  
 
 The measure lies in \\\[0, 1\]\\ by construction. Both ends are reached
 by cancellation, so an estimate within a few machine epsilons of a bound
@@ -126,12 +126,12 @@ Papers Series on Quantitative Applications in the Social Sciences,
 
 ## See also
 
-[`lambda()`](lambda.md), [`cramerV()`](cramerV.md),
+[`gkLambda()`](gkLambda.md), [`cramerV()`](cramerV.md),
 [`Association()`](Association.md)
 
 Other assoc.nominal: [`contCoef()`](contCoef.md),
-[`cramerV()`](cramerV.md), [`lambda()`](lambda.md),
-[`mutInf()`](mutInf.md), [`phi()`](phi.md),
+[`cramerV()`](cramerV.md), [`gkLambda()`](gkLambda.md),
+[`mutInf()`](mutInf.md), [`phiCoef()`](phiCoef.md),
 [`tschuprowT()`](tschuprowT.md), [`uncertCoef()`](uncertCoef.md),
 [`yule`](yule.md)
 
@@ -164,7 +164,7 @@ gkTau(tab, direction="column", conf.level=0.95)
 #>       est       lci       uci 
 #> 0.2156410 0.0000000 0.5537724 
 # reduce both to:
-phi(tab)^2
+phiCoef(tab)^2
 #> [1] 0.215641
 
 

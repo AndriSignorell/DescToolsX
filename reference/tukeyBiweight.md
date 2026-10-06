@@ -10,7 +10,7 @@ tukeyBiweight(
   x,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  const = 9,
+  constant = 9,
   na.rm = FALSE,
   ...
 )
@@ -33,7 +33,7 @@ tukeyBiweight(
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
   [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
-- const:
+- constant:
 
   tuning constant passed to `tbrm_cpp()`. Defaults to `9`.
 
@@ -69,8 +69,8 @@ with elements:
 
 The biweight mean is a robust location estimator that downweights
 observations far from the median. It is defined via the tuning constant
-`const` (default 9), which controls the breakdown point: larger values
-are less resistant but more efficient under normality.
+`constant` (default 9), which controls the breakdown point: larger
+values are less resistant but more efficient under normality.
 
 When `conf.level` is not `NA` a bootstrap confidence interval is
 returned. The resampling is done in C++; the R random number generator

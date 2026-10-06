@@ -7,7 +7,7 @@ version uses mean and standard deviation, the robust one median and MAD
 ## Usage
 
 ``` r
-scaleX(x, center = TRUE, scale = TRUE, robust = FALSE, na.rm = TRUE)
+scaleX(x, center = TRUE, scale = TRUE, robust = FALSE, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -37,10 +37,11 @@ scaleX(x, center = TRUE, scale = TRUE, robust = FALSE, na.rm = TRUE)
 
 - na.rm:
 
-  logical; if `TRUE` (default), missing values are omitted when the
-  column centers and scales are computed. Ignored for whichever of
-  `center` and `scale` is given as a numeric vector. Missing entries of
-  `x` itself always remain missing in the result.
+  logical; if `TRUE`, missing values are omitted when the column centers
+  and scales are computed. With the default `FALSE` a column holding
+  missing values gets `NA` as its center and scale. Ignored for
+  whichever of `center` and `scale` is given as a numeric vector.
+  Missing entries of `x` itself always remain missing in the result.
 
 ## Value
 
@@ -98,12 +99,13 @@ Other transform: [`boxCox()`](boxCox.md),
 ## Examples
 
 ``` r
+# temperature has missing values: without na.rm = TRUE the result is NA
 x <- bedrock::Pizza$temperature
 
 # robust standardization is far less affected by the extreme values
-plot(scaleX(x, robust = TRUE), col = "black", pch = 16, cex = 0.4,
-     ylab = "standardized temperature")
-points(scaleX(x), col = "red", pch = 16, cex = 0.4)
+plot(scaleX(x, robust = TRUE, na.rm = TRUE), col = "black", pch = 16,
+     cex = 0.4, ylab = "standardized temperature")
+points(scaleX(x, na.rm = TRUE), col = "red", pch = 16, cex = 0.4)
 legend("topright", legend = c("robust (median/MAD)", "conventional"),
        col = c("black", "red"), pch = 16, bty = "n")
 

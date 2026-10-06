@@ -6,23 +6,23 @@ probabilistic predictions.
 ## Usage
 
 ``` r
-logLoss(x, pred = NULL, eps = .Machine$double.eps)
+logLoss(x, ref = NULL, eps = .Machine$double.eps)
 ```
 
 ## Arguments
 
 - x:
 
-  Either a numeric or logical vector containing the observed binary
-  outcomes (0/1) when `pred` is supplied, or a fitted binomial `glm`
-  from which response and fitted probabilities are extracted. Factors
-  are not accepted, as the choice of the positive level would have to be
-  guessed.
+  Either a numeric vector containing predicted probabilities in
+  \\\[0,1\]\\ when `ref` is supplied, or a fitted binomial `glm` from
+  which response and fitted probabilities are extracted.
 
-- pred:
+- ref:
 
-  Numeric vector containing predicted probabilities in \\\[0,1\]\\.
-  Required when `x` is a response vector.
+  Numeric or logical vector containing the observed binary outcomes
+  (0/1), the reference the predictions are scored against. Required when
+  `x` is a vector of predictions. Factors are not accepted, as the
+  choice of the positive level would have to be guessed.
 
 - eps:
 
@@ -68,11 +68,11 @@ Other model.metrics: [`auc()`](auc.md),
 ``` r
 resp <- c(0, 0, 1, 1)
 pred <- c(0.1, 0.4, 0.35, 0.8)
-logLoss(resp, pred)
+logLoss(pred, resp)
 #> [1] 0.472288
 
 # a confidently wrong prediction is capped by eps
-logLoss(c(0, 1), c(1, 0), eps = 1e-6)
+logLoss(c(1, 0), c(0, 1), eps = 1e-6)
 #> [1] 13.81551
 
 m <- glm(am ~ hp + wt, data = mtcars, family = binomial)

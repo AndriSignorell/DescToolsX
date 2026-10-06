@@ -10,7 +10,7 @@ large(x, k = 5L, unique = FALSE, na.last = NA)
 
 small(x, k = 5L, unique = FALSE, na.last = NA)
 
-highLow(x, nlow = 5L, nhigh = nlow, na.last = NA)
+highLow(x, nLow = 5L, nHigh = nLow, na.last = NA)
 ```
 
 ## Arguments
@@ -37,15 +37,15 @@ highLow(x, nlow = 5L, nhigh = nlow, na.last = NA)
   the data are put last; if `FALSE`, they are put first; if `NA`, they
   are removed.
 
-- nlow:
+- nLow:
 
   number of smallest values included in the formatted output; defaults
   to 5
 
-- nhigh:
+- nHigh:
 
   number of largest values included in the formatted output; defaults to
-  `nlow`
+  `nLow`
 
 ## Value
 

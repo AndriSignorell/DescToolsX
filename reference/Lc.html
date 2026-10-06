@@ -69,7 +69,7 @@ with <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="externa
 <span><span class="fu">lc</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">subset</span>, na.action <span class="op">=</span> <span class="va">na.pass</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">lc</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">lc</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="cn">NULL</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Lc'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">newdata</span>, conf.level <span class="op">=</span> <span class="cn">NA</span>, general <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -112,10 +112,11 @@ interval types are rejected.</p></dd>
 <dd><p>numeric vector of non-negative values</p></dd>
 
 
-<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
+<dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
 <dd><p>numeric vector of non-negative weights of the same length as
-<code>x</code>. Defaults to equal weights (<code>rep(1, length(x))</code>). Bootstrap intervals
-draw <code>floor(sum(n))</code> observations with probabilities proportional to <code>n</code>;
+<code>x</code>. Defaults to equal weights. Bootstrap intervals draw
+<code>floor(sum(weights))</code> observations with probabilities proportional to
+<code>weights</code>;
 the sum must be finite and at least one. Thus rescaling the weights
 changes the bootstrap sample size; frequency weights are appropriate
 when the weights represent replicated observations.</p></dd>
@@ -123,7 +124,7 @@ when the weights represent replicated observations.</p></dd>
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
 <dd><p>logical. If <code>TRUE</code>, observations with <code>NA</code> in
-<code>x</code> or <code>n</code> are removed before computation.  Default is
+<code>x</code> or <code>weights</code> are removed before computation.  Default is
 <code>FALSE</code>.</p></dd>
 
 
@@ -240,7 +241,7 @@ extracted by <code>.extractBootArgs()</code> (default <code>R = 999</code>).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># with weights</span></span></span>
 <span class="r-in"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">0.5</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">lc</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">lc</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0.00000000 0.01667602 0.02765357 0.03283079 0.04202449 0.04696748</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [7] 0.05638264 0.06201162 0.07023687 0.07523165 0.08742561 0.09825205</span>
@@ -380,7 +381,7 @@ extracted by <code>.extractBootArgs()</code> (default <code>R = 999</code>).</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lc_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># overlay confidence band</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">lc_obj</span>, cbandArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">lc_obj</span>, cband <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># add points</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">lc_obj</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span></span>

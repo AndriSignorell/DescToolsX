@@ -7,7 +7,7 @@ The coefficient could be corrected for ties within raters.
 ## Usage
 
 ``` r
-kendallW(x, correct = FALSE, test = FALSE, na.rm = NULL)
+kendallW(x, correct = FALSE, test = FALSE)
 ```
 
 ## Arguments
@@ -26,10 +26,6 @@ kendallW(x, correct = FALSE, test = FALSE, na.rm = NULL)
 
   a logical indicating whether the test statistic and p-value should be
   reported (default `FALSE`)
-
-- na.rm:
-
-  deprecated and ignored
 
 ## Value
 

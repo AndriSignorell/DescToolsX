@@ -12,7 +12,7 @@ normalizeToConfusion(
   x,
   y = NULL,
   levels = NULL,
-  useNA = "no",
+  useNA = c("no", "ifany", "always"),
   mode = c("agreement", "association")
 )
 ```

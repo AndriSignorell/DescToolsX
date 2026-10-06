@@ -14,7 +14,7 @@ krippAlpha(
   metric = c("nominal", "ordinal", "interval", "ratio"),
   levels = NULL,
   raters = NULL,
-  output = c("def", "ext"),
+  output = c("default", "extended"),
   ...
 )
 ```
@@ -62,23 +62,22 @@ krippAlpha(
 
 - output:
 
-  output format, either `"def"` (default) or `"ext"` for extended
-  results
+  output format, either `"default"` (default) or `"extended"` for
+  extended results
 
 - ...:
 
-  further arguments passed to
-  [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html). Supported
-  arguments are `type` (`"norm"`, `"basic"`, `"stud"`, `"perc"`,
-  `"bca"`), `parallel` and the number of bootstrap replicates `R`.
-  Defaults are `"basic"` for `type`, option `"boot.parallel"` (or `"no"`
-  if unset) for `parallel`, and `999` for `R`.
+  bootstrap options, passed to
+  [`lumen::bootCI()`](https://andrisignorell.github.io/lumen/reference/bootCI.html):
+  the interval type `type` (`"bca"`, `"perc"`, `"basic"`, `"norm"`), the
+  number of replicates `R`, and `parallel` and `ncpus`. Defaults are
+  `"bca"` for `type`, `999` for `R` and `"no"` for `parallel`.
 
 ## Value
 
-if `output = "def"` and `conf.level = NA`, a numeric scalar. If
-`output = "def"` and a confidence interval is requested, a named numeric
-vector with elements:
+if `output = "default"` and `conf.level = NA`, a numeric scalar. If
+`output = "default"` and a confidence interval is requested, a named
+numeric vector with elements:
 
 - `est`:
 
@@ -92,7 +91,7 @@ vector with elements:
 
   upper confidence interval bound
 
-If `output = "ext"`, a list with elements:
+If `output = "extended"`, a list with elements:
 
 - `alpha`:
 

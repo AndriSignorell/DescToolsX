@@ -12,7 +12,7 @@ cStat(x, ...)
 cStat(x, ...)
 
 # Default S3 method
-cStat(x, resp, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
+cStat(x, ref, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 ```
 
 ## Arguments
@@ -26,7 +26,7 @@ cStat(x, resp, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 
   additional arguments passed to methods
 
-- resp:
+- ref:
 
   binary response vector (numeric, logical, or factor)
 
@@ -67,7 +67,7 @@ with the higher predicted value has the higher observed outcome.
 
 Ties in predicted values are handled by assigning a weight of 0.5.
 
-`resp` is converted with `as.numeric(factor(resp)) - 1`, so the
+`ref` is converted with `as.numeric(factor(resp)) - 1`, so the
 **second** level in sort order counts as the event - `1` for a 0/1
 coding, `TRUE` for a logical, and the second factor level otherwise.
 Getting this backwards returns \\1 - C\\ rather than an error, so check
@@ -103,7 +103,7 @@ Other assoc.ordinal: [`conDisPairs()`](conDisPairs.md),
 set.seed(1)
 x <- runif(100)
 y <- rbinom(100, 1, 0.5)
-cStat(x, resp = y)
+cStat(x, ref = y)
 #> [1] 0.4569243
 
 # GLM method

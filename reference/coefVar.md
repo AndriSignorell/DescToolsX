@@ -136,7 +136,9 @@ https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm
 confidence intervals. See Smithson (2003).
 
 `sides` names the side on which the finite bound lies: `"left"` yields
-\\\[lci, \infty)\\, `"right"` yields \\(-\infty, uci\]\\.
+\\\[lci, \infty)\\, `"right"` yields \\\[0, uci\]\\: the open side goes
+to the boundary of the parameter range, which is 0 for a positive
+coefficient of variation.
 
 \*\*Note:\*\*` ` Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
@@ -183,7 +185,7 @@ in Statistics Theory and Methods*, Volume 36, No. 12, pp 2187-2206.
 [`meanX()`](meanX.md), [`sdX()`](varX.md), (both supporting weights)
 
 Other dispersion: [`iqrX()`](iqrX.md), [`madX()`](madX.md),
-[`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),
+[`meanAbsDev()`](meanAbsDev.md), [`meanSE()`](meanSE.md),
 [`rangeX()`](rangeX.md), [`varX()`](varX.md)
 
 ## Examples

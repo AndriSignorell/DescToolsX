@@ -6,7 +6,7 @@ frame, optionally using a provided distance matrix.
 ## Usage
 
 ``` r
-divCoef(x, dis = NULL, normalize = FALSE, na.rm = FALSE, tol = 0.00000001)
+divCoef(x, dis = NULL, normalize = FALSE, tol = 0.00000001, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -27,15 +27,15 @@ divCoef(x, dis = NULL, normalize = FALSE, na.rm = FALSE, tol = 0.00000001)
   logical; if `TRUE`, the diversity is scaled by its maximum over all
   relative abundances (see Details)
 
-- na.rm:
-
-  logical; if `TRUE`, columns containing missing values yield `NA`
-  instead of aborting
-
 - tol:
 
   relative accuracy of the maximum used by `normalize = TRUE`: the
   iteration stops once the maximum is certified to within this fraction
+
+- na.rm:
+
+  logical; if `TRUE`, columns containing missing values yield `NA`
+  instead of aborting
 
 ## Value
 

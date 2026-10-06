@@ -60,10 +60,10 @@ adequate statistical tests.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tOne</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>, groups <span class="op">=</span> <span class="cn">NA</span>, add.length <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  colnames <span class="op">=</span> <span class="cn">NULL</span>, vnames <span class="op">=</span> <span class="cn">NULL</span>, total <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  align <span class="op">=</span> <span class="st">"\\l"</span>, FUN <span class="op">=</span> <span class="cn">NULL</span>, TEST <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  intref <span class="op">=</span> <span class="st">"high"</span>,</span>
+<span>  <span class="va">x</span>, groups <span class="op">=</span> <span class="cn">NA</span>, addLength <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  colNames <span class="op">=</span> <span class="cn">NULL</span>, varNames <span class="op">=</span> <span class="cn">NULL</span>, total <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  align <span class="op">=</span> <span class="st">"\\l"</span>, FUN <span class="op">=</span> <span class="cn">NULL</span>, tests <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  intRef <span class="op">=</span> <span class="st">"high"</span>,</span>
 <span>  fmt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>abs <span class="op">=</span> <span class="st">"abs.sty"</span>, num <span class="op">=</span> <span class="st">"num.sty"</span>, per <span class="op">=</span> <span class="st">"per.sty"</span>,</span>
 <span>             pval <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"*"</span>, naForm <span class="op">=</span> <span class="st">"   "</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -87,16 +87,16 @@ adequate statistical tests.</p>
 <dd><p>the grouping variable</p></dd>
 
 
-<dt id="arg-add-length">add.length<a class="anchor" aria-label="anchor" href="#arg-add-length"></a></dt>
+<dt id="arg-addlength">addLength<a class="anchor" aria-label="anchor" href="#arg-addlength"></a></dt>
 <dd><p>logical. If set to <code>TRUE</code> (default), a row with the
 group sizes will be inserted as first row of the table.</p></dd>
 
 
-<dt id="arg-colnames">colnames<a class="anchor" aria-label="anchor" href="#arg-colnames"></a></dt>
+<dt id="arg-colnames">colNames<a class="anchor" aria-label="anchor" href="#arg-colnames"></a></dt>
 <dd><p>a vector of column names for the result table</p></dd>
 
 
-<dt id="arg-vnames">vnames<a class="anchor" aria-label="anchor" href="#arg-vnames"></a></dt>
+<dt id="arg-varnames">varNames<a class="anchor" aria-label="anchor" href="#arg-varnames"></a></dt>
 <dd><p>a vector of variable names to be placed in the first column
 instead of the real names</p></dd>
 
@@ -122,14 +122,14 @@ alternatives as <code>median</code>/<code>IQR</code> are possible by defining a
 function). See examples.</p></dd>
 
 
-<dt id="arg-test">TEST<a class="anchor" aria-label="anchor" href="#arg-test"></a></dt>
+<dt id="arg-tests">tests<a class="anchor" aria-label="anchor" href="#arg-tests"></a></dt>
 <dd><p>a list of functions to be used to test the variables. Must be
 named as <code>"num"</code>, <code>"cat"</code> and <code>"dich"</code> and be defined as
 function with arguments <code>(x, g)</code>, generating something similar to a
-p-value. Use <code>TEST=NA</code> to suppress test. (See examples.)</p></dd>
+p-value. Use <code>tests=NA</code> to suppress test. (See examples.)</p></dd>
 
 
-<dt id="arg-intref">intref<a class="anchor" aria-label="anchor" href="#arg-intref"></a></dt>
+<dt id="arg-intref">intRef<a class="anchor" aria-label="anchor" href="#arg-intref"></a></dt>
 <dd><p>one out of <code>"high"</code> (default), <code>"low"</code> or
 <code>"both"</code>, defining which value of a dichotomous variable should be
 reported. Usually this will be <code>1</code> or <code>TRUE</code>. Setting it to
@@ -190,11 +190,11 @@ variables.</p><div class="sourceCode"><pre><code><span></span>
 <p>Their difference is tested with the Kruskal-Wallis test. For categorical
 variables the absolute and relative frequencies are calculated and tested
 with a chi-square test. <br> The tests can be changed with the argument
-<code>TEST</code>. These must be organised as list containing elements named
+<code>tests</code>. These must be organised as list containing elements named
 <code>"num"</code>, <code>"cat"</code> and <code>"dich"</code>. Each of them must be a
 function with arguments <code>(x, g)</code>, returning something similar to a
 p-value.</p><div class="sourceCode"><pre><code>
-  TEST = list( num = list(fun = function(x, g){
+  tests = list( num = list(fun = function(x, g){
       summary(aov(x ~ g))\verb{[[1]][1, "Pr(&gt;F)"]}}, lbl = "ANOVA"),
     cat = list(fun = function(x, g){
       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
@@ -327,7 +327,7 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span>            <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>            <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>     TEST <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>     tests <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>       num <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">g</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">aov</a></span><span class="op">(</span><span class="va">x</span> <span class="op">~</span> <span class="va">g</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"Pr(&gt;F)"</span><span class="op">]</span><span class="op">}</span>,</span></span>
 <span class="r-in"><span>                        lbl <span class="op">=</span> <span class="st">"ANOVA"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>               cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">g</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html" class="external-link">chisq.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">g</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">p.val</span><span class="op">}</span>,</span></span>
@@ -359,46 +359,21 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span>                                      <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                      <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>           TEST <span class="op">=</span> <span class="cn">NA</span>,</span></span>
+<span class="r-in"><span>           tests <span class="op">=</span> <span class="cn">NA</span>,</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>           fmt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>abs  <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>bigMark <span class="op">=</span> <span class="st">" "</span>, digits<span class="op">=</span><span class="fl">0</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      num  <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>bigMark <span class="op">=</span> <span class="st">" "</span>, digits<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      per  <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                          <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/strPad.html" class="external-link">strPad</a></span><span class="op">(</span><span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="va">x</span>, fmt<span class="op">=</span><span class="st">"%"</span>, digits<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, width<span class="op">=</span><span class="fl">5</span>, adj <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/strPad.html" class="external-link">strPad</a></span><span class="op">(</span><span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="va">x</span>, fmt<span class="op">=</span><span class="st">"%"</span>, digits<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, width<span class="op">=</span><span class="fl">5</span>, align <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      pval <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"*"</span>, naForm <span class="op">=</span> <span class="st">"   "</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in strPad(fm(x, fmt = "%", digits = 1), width = 5, align = "r"):</span> unused argument (align = "r")</span>
 <span class="r-in"><span><span class="co"># add a userdefined legend</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">t1</span>, <span class="st">"legend"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"numeric: mean / sd (median)), factor: n (n%)"</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 't1' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">t1</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var               Brent                      Camden                  </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    n                              474 (39.5%)                344 (28.7%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    temperature            51.1 / 8.734 (53.4)   47.4 / 10.111 (50.3)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    driver                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Butcher                       72 (15.2%)                  1 ( 0.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Carpenter                     29 ( 6.1%)                 19 ( 5.6%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Carter                       177 (37.4%)                 47 (13.8%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Farmer                        19 ( 4.0%)                 87 (25.5%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Hunter                       128 (27.1%)                  4 ( 1.2%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Miller                         6 ( 1.3%)                 41 (12.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Taylor                        42 ( 8.9%)                142 (41.6%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    rebate (= TRUE)                235 (50.3%)                172 (50.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Westminster             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 381 (31.8%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         44.3 / 9.836 (45.9)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  22 ( 5.8%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 221 (58.2%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   5 ( 1.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  11 ( 2.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  24 ( 6.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  77 (20.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  20 ( 5.3%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 184 (48.7%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">numeric: mean / sd (median)), factor: n (n%)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 't1' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># dichotomous integer or logical values can be reported by the high or low value</span></span></span>
@@ -409,7 +384,7 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">d.set</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, z <span class="op">=</span> <span class="va">z</span>, g <span class="op">=</span> <span class="va">g</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="va">d.set</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">d.set</span><span class="op">$</span><span class="va">g</span>, intref <span class="op">=</span> <span class="st">"low"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="va">d.set</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">d.set</span><span class="op">$</span><span class="va">g</span>, intRef <span class="op">=</span> <span class="st">"low"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var           total        a            b            c            d         </span></span>
@@ -427,7 +402,7 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="va">d.set</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">d.set</span><span class="op">$</span><span class="va">g</span>, intref <span class="op">=</span> <span class="st">"high"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="va">d.set</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">d.set</span><span class="op">$</span><span class="va">g</span>, intRef <span class="op">=</span> <span class="st">"high"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var          total        a            b            c            d         </span></span>
@@ -446,7 +421,7 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># report both levels of the factor</span></span></span>
-<span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span><span class="op">)</span>, <span class="va">g</span>, intref <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tOne</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span><span class="op">)</span>, <span class="va">g</span>, intRef <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Chi-squared approximation may be incorrect</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var   total        a            b            c            d                 </span></span>

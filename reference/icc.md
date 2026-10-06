@@ -11,8 +11,8 @@ icc(
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("anova", "reml", "boot"),
-  model = c("twoway", "oneway"),
-  type = c("agreement", "consistency"),
+  model = c("two-way", "one-way"),
+  definition = c("agreement", "consistency"),
   unit = c("single", "average"),
   na.rm = FALSE,
   ...
@@ -48,9 +48,9 @@ icc(
 
 - model:
 
-  character string, either `"oneway"` or `"twoway"`
+  character string, either `"one-way"` or `"two-way"`
 
-- type:
+- definition:
 
   character string, either `"agreement"` or `"consistency"`
 
@@ -94,23 +94,23 @@ decisions:
 
 - **model**: one-way or two-way ANOVA design
 
-- **type**: agreement or consistency
+- **definition**: agreement or consistency
 
 - **unit**: single rating or average of k ratings
 
 The six classical Shrout–Fleiss cases are:
 
-|        |             |                 |
-|--------|-------------|-----------------|
-| model  | type        | unit            |
-| oneway | agreement   | single (ICC1)   |
-| oneway | agreement   | average (ICC1k) |
-| twoway | agreement   | single (ICC2)   |
-| twoway | agreement   | average (ICC2k) |
-| twoway | consistency | single (ICC3)   |
-| twoway | consistency | average (ICC3k) |
+|         |             |                 |
+|---------|-------------|-----------------|
+| model   | definition  | unit            |
+| one-way | agreement   | single (ICC1)   |
+| one-way | agreement   | average (ICC1k) |
+| two-way | agreement   | single (ICC2)   |
+| two-way | agreement   | average (ICC2k) |
+| two-way | consistency | single (ICC3)   |
+| two-way | consistency | average (ICC3k) |
 
-For `model = "oneway"` only `type = "agreement"` is meaningful.
+For `model = "one-way"` only `definition = "agreement"` is meaningful.
 
 Confidence intervals can be computed using different inference methods:
 
@@ -168,14 +168,14 @@ icc(sf)
 #> [1] 0.2897638
 
 # get all versions
-args <- formals(icc)[c("model","type","unit")]
+args <- formals(icc)[c("model","definition","unit")]
 grid <- expand.grid(lapply(args, eval), 
                     stringsAsFactors = FALSE)[-c(4,8),]
                     
 out <- apply(grid, 1, function(row)
   icc(sf,
       model = row["model"],
-      type  = row["type"],
+      definition = row["definition"],
       unit  = row["unit"],
       method = "anova",
       conf.level = 0.95) )

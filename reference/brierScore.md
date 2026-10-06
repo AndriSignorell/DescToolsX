@@ -9,7 +9,7 @@ bootstrap.
 ``` r
 brierScore(
   x,
-  pred = NULL,
+  ref = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("normal", "boot"),
@@ -22,14 +22,15 @@ brierScore(
 
 - x:
 
-  either a numeric vector of observed binary outcomes (\\0\\/\\1\\) when
-  `pred` is supplied, or a fitted model object (`glm` or similar) from
+  either a numeric vector of predicted probabilities in \\\[0,1\]\\ when
+  `ref` is supplied, or a fitted model object (`glm` or similar) from
   which both response and predictions are extracted
 
-- pred:
+- ref:
 
-  a numeric vector of predicted probabilities in \\\[0,1\]\\. Required
-  when `x` is a numeric vector; ignored when `x` is a model object.
+  a numeric vector of observed binary outcomes (\\0\\/\\1\\), the
+  reference the predictions are scored against. Required when `x` is a
+  vector of predictions; ignored when `x` is a model object.
 
 - conf.level:
 
@@ -154,15 +155,15 @@ set.seed(1)
 resp <- rbinom(200, 1, 0.4)
 pred <- plogis(rnorm(200, ifelse(resp == 1, 0.5, -0.5)))
 
-brierScore(resp, pred)
+brierScore(pred, resp)
 #> [1] 0.2016726
-brierScore(resp, pred, conf.level = 0.95)
+brierScore(pred, resp, conf.level = 0.95)
 #>       est       lci       uci 
 #> 0.2016726 0.1748892 0.2284559 
-brierScore(resp, pred, conf.level = 0.95, method = "boot", type = "bca")
+brierScore(pred, resp, conf.level = 0.95, method = "boot", type = "bca")
 #>       est       lci       uci 
 #> 0.2016726 0.1780219 0.2324446 
-brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
+brierScore(pred, resp, conf.level = 0.95, scaled = TRUE)
 #>       est       lci       uci 
 #> 0.1693025 0.0589808 0.2796242 
 ```

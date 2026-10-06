@@ -5,7 +5,7 @@ Computes the Theil inequality index (Theil T).
 ## Usage
 
 ``` r
-theil(x, n = rep(1, length(x)), na.rm = FALSE)
+theil(x, weights = NULL, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -14,11 +14,11 @@ theil(x, n = rep(1, length(x)), na.rm = FALSE)
 
   numeric vector of non-negative values, such as incomes
 
-- n:
+- weights:
 
-  optional frequency weights. Each element of `x` is replicated `n`
-  times. Must be a vector of non-negative integers of the same length as
-  `x`.
+  optional frequency weights. Each element of `x` is replicated
+  `weights` times. Must be a vector of non-negative integers of the same
+  length as `x`.
 
 - na.rm:
 
@@ -74,7 +74,7 @@ theil(c(1, 2, 3, 4, 5))
 #> [1] 0.1196876
 
 # frequency weights replicate the observations
-theil(1:3, n = c(1, 2, 3))
+theil(1:3, weights = c(1, 2, 3))
 #> [1] 0.05699495
 theil(rep(1:3, times = c(1, 2, 3)))
 #> [1] 0.05699495

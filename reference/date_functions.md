@@ -72,15 +72,15 @@ yearWeek(x, method = c("iso", "us"))
 
 isoYear(x)
 
-yearDay(x)
+dayOfYear(x)
 
-diffDays360(startDate, endDate, method = c("eu", "us"))
+diffDays360(from, to, method = c("eu", "us"))
 
 lastDayOfMonth(x)
 
-yearDays(x)
+daysInYear(x)
 
-monthDays(x)
+daysInMonth(x)
 
 isWeekend(x)
 
@@ -129,7 +129,7 @@ isLeapYear(x)
 
   replacement value for the `day<-` assignment function
 
-- startDate, endDate:
+- from, to:
 
   start and end dates for `diffDays360()`
 
@@ -161,7 +161,7 @@ e.g. for grouping; `yearWeek()` returns the same pair as one integer
 | `week` | Week of the year | ISO 8601 or US convention |
 | `day` | Day of the month (readable/writable) | 1-31 |
 | `weekday` | Day of the week (numeric, abbreviated, or full name) | 1 = Mon ... 7 = Sun |
-| `yearDay` | Day of the year | 1-366 |
+| `dayOfYear` | Day of the year | 1-366 |
 | `yearWeek` | Compact year-week integer | `yyyyww` (ISO or US) |
 | `yearMonth` | Compact year-month integer | `yyyymm` |
 
@@ -192,8 +192,8 @@ e.g. for grouping; `yearWeek()` returns the same pair as one integer
 | **Function** | **Description** |
 | `diffDays360` | Days between two dates using the 360-day calendar convention |
 | `lastDayOfMonth` | Last calendar day of the month of `x` |
-| `yearDays` | Total number of days in the year of `x` (365 or 366) |
-| `monthDays` | Number of days in the month of `x` (28-31) |
+| `daysInYear` | Total number of days in the year of `x` (365 or 366) |
+| `daysInMonth` | Number of days in the month of `x` (28-31) |
 
 ## Language for month and weekday names
 
@@ -223,7 +223,7 @@ x <- today()   # equivalent to Sys.Date()
 year(x)
 #> [1] 2026
 quarter(x)
-#> [1] 3
+#> [1] 4
 
 # calendar year vs. ISO week-numbering year at the turn of the year
 d <- as.Date(c("2019-12-30", "2021-01-03"))
@@ -234,51 +234,51 @@ cbind(year = year(d), isoYear = isoYear(d), week = week(d))
 
 # month: numeric, abbreviated, full name
 month(x)
-#> [1] 9
+#> [1] 10
 month(x, fmt = "mm",  lang = "en")
-#> [1] Sep
+#> [1] Oct
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 month(x, fmt = "mm",  lang = "local")
-#> [1] Sep
+#> [1] Oct
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 month(x, fmt = "mmm", lang = "en")
-#> [1] September
+#> [1] October
 #> 12 Levels: January < February < March < April < May < June < ... < December
 month(x, fmt = "mmm", lang = "local")
-#> [1] September
+#> [1] October
 #> 12 Levels: January < February < March < April < May < June < ... < December
 
 week(x)
-#> [1] 39
+#> [1] 41
 week(x, method = "us")
-#> [1] 39
+#> [1] 40
 
 # day is both readable and writable
 day(x)
-#> [1] 27
+#> [1] 6
 day(x) <- 20
 x
-#> [1] "2026-09-20"
+#> [1] "2026-10-20"
 
 # weekday: numeric, abbreviated, full name
 weekday(x)
-#> [1] 7
+#> [1] 2
 weekday(x, fmt = "dd",  lang = "en")
-#> [1] Sun
+#> [1] Tue
 #> Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun
 weekday(x, fmt = "ddd", lang = "local")
-#> [1] Sunday
+#> [1] Tuesday
 #> 7 Levels: Monday < Tuesday < Wednesday < Thursday < Friday < ... < Sunday
 
-yearDay(x)
-#> [1] 263
+dayOfYear(x)
+#> [1] 293
 yearWeek(x)
-#> [1] 202638
+#> [1] 202643
 yearMonth(x)
-#> [1] 202609
+#> [1] 202610
 
 isWeekend(x)
-#> [1] TRUE
+#> [1] FALSE
 isLeapYear(x)
 #> [1] FALSE
 isLeapYear(2000L)
@@ -286,8 +286,8 @@ isLeapYear(2000L)
 
 # month names for a weekly time sequence
 month(seq(Sys.Date(), Sys.Date() + 150, by = "weeks"), fmt = "mm")
-#>  [1] Sep Oct Oct Oct Oct Nov Nov Nov Nov Nov Dec Dec Dec Dec Jan Jan Jan Jan Jan
-#> [20] Feb Feb Feb
+#>  [1] Oct Oct Oct Oct Nov Nov Nov Nov Dec Dec Dec Dec Dec Jan Jan Jan Jan Feb Feb
+#> [20] Feb Feb Mar
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 
 # last day of month for several dates
@@ -295,9 +295,9 @@ lastDayOfMonth(as.Date(c("2014-10-12", "2013-01-31", "2011-12-05")))
 #> [1] "2014-10-31" "2013-01-31" "2011-12-31"
 
 # days in month / year
-monthDays(x)
-#> [1] 30
-yearDays(x)
+daysInMonth(x)
+#> [1] 31
+daysInYear(x)
 #> [1] 365
 
 # 360-day calendar difference. The two conventions agree here ...

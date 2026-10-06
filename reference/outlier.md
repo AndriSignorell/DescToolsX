@@ -6,7 +6,12 @@ definition.
 ## Usage
 
 ``` r
-outlier(x, method = c("boxplot", "hampel"), value = TRUE, na.rm = FALSE)
+outlier(
+  x,
+  method = c("boxplot", "hampel"),
+  output = c("value", "index"),
+  na.rm = FALSE
+)
 ```
 
 ## Arguments
@@ -20,11 +25,11 @@ outlier(x, method = c("boxplot", "hampel"), value = TRUE, na.rm = FALSE)
   the method to be used. So far Tukey's boxplot and Hampel's rule are
   implemented.
 
-- value:
+- output:
 
-  logical. If `FALSE`, a vector containing the (integer) indices of the
-  outliers is returned, and if `TRUE` (default), a vector containing the
-  matching elements themselves is returned.
+  character string, one of `"value"` (default) or `"index"`. `"value"`
+  returns the outlying elements themselves, `"index"` their (integer)
+  positions in `x`.
 
 - na.rm:
 
@@ -32,7 +37,7 @@ outlier(x, method = c("boxplot", "hampel"), value = TRUE, na.rm = FALSE)
 
 ## Value
 
-the outlying values if `value = TRUE`; otherwise their indices
+the outlying values if `output = "value"`; otherwise their indices
 
 ## Details
 
@@ -72,7 +77,7 @@ outlier(Pizza$temperature, na.rm=TRUE)
 #> [13] 20.40 21.90 19.40 20.20 19.30 20.20 22.40
 
 # it's the same as the result from boxplot
-sort(Pizza$temperature[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE)])
+sort(Pizza$temperature[outlier(Pizza$temperature, output="index", na.rm=TRUE)])
 #>  [1] 19.30 19.40 20.00 20.20 20.20 20.35 20.40 20.45 21.00 21.30 21.60 21.70
 #> [13] 21.80 21.90 22.10 22.20 22.20 22.40 22.50
 b <- boxplot(Pizza$temperature, plot=FALSE)
@@ -81,7 +86,7 @@ sort(b$out)
 #> [13] 21.80 21.90 22.10 22.20 22.20 22.40 22.50
 
 # nice to find the corresponding rows
-Pizza[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE), ]
+Pizza[outlier(Pizza$temperature, output="index", na.rm=TRUE), ]
 #>      index       date week weekday        area count rebate   price operator
 #> 20      20 2014-03-01    9       6 Westminster     1  FALSE  11.990   Rhonda
 #> 41      41 2014-03-01    9       6       Brent     2  FALSE  24.980   Rhonda

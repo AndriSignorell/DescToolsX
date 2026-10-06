@@ -5,13 +5,7 @@ Computes the Atkinson inequality index.
 ## Usage
 
 ``` r
-atkinson(
-  x,
-  n = rep(1, length(x)),
-  epsilon = 0.5,
-  na.rm = FALSE,
-  tol = 0.00000001
-)
+atkinson(x, weights = NULL, epsilon = 0.5, tol = 0.00000001, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -20,7 +14,7 @@ atkinson(
 
   numeric vector of non-negative values, such as incomes
 
-- n:
+- weights:
 
   optional frequency weights; either a single non-negative whole number
   or a vector having the same length as `x`
@@ -30,14 +24,14 @@ atkinson(
   single non-negative numeric value specifying the inequality aversion
   parameter
 
-- na.rm:
-
-  logical; whether missing values in `x` are removed
-
 - tol:
 
   single non-negative numeric value specifying the tolerance for
   treating `epsilon` as equal to one
+
+- na.rm:
+
+  logical; whether missing values in `x` are removed
 
 ## Value
 
@@ -63,7 +57,7 @@ n_i} \right) }{\bar{x}\_n}. \$\$
 
 The calculation uses normalized frequency weights and logarithmic power
 means. It therefore does not construct the potentially very large vector
-that would result from `rep(x, n)`.
+that would result from `rep(x, weights)`.
 
 Observations with zero frequency are ignored. If all frequencies are
 zero or no observations remain after removing missing values, `NA_real_`
@@ -101,7 +95,7 @@ atkinson(x, epsilon = 2)
 #> [1] 0.6290111
 
 # frequency weights
-atkinson(c(10, 20, 30), n = c(3, 1, 1))
+atkinson(c(10, 20, 30), weights = c(3, 1, 1))
 #> [1] 0.05558586
 
 # zero incomes

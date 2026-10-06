@@ -70,9 +70,9 @@ matrix with the same dimensions and dimnames as `m`, with `NA` wherever
 [lumen::corTest](https://andrisignorell.github.io/lumen/reference/corTest.html),
 [stats::cor.test](https://rdrr.io/r/stats/cor.test.html)
 
-Other assoc.continuous: [`corPart()`](corPart.md),
-[`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),
-[`hoeffdingD()`](hoeffdingD.md), [`pearsonCor()`](pearsonCor.md),
+Other assoc.continuous: [`findCor()`](findCor.md),
+[`hoeffdingD()`](hoeffdingD.md), [`partialCor()`](partialCor.md),
+[`pearsonCor()`](pearsonCor.md), [`polychorCor()`](polychorCor.md),
 [`spearmanCor()`](spearmanCor.md)
 
 ## Examples

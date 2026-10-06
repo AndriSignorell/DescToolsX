@@ -8,10 +8,10 @@ performing adequate statistical tests.
 
 ``` r
 tOne(
-  x, groups = NA, add.length = TRUE,
-  colnames = NULL, vnames = NULL, total = TRUE,
-  align = "\\l", FUN = NULL, TEST = NULL,
-  intref = "high",
+  x, groups = NA, addLength = TRUE,
+  colNames = NULL, varNames = NULL, total = TRUE,
+  align = "\\l", FUN = NULL, tests = NULL,
+  intRef = "high",
   fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty",
              pval = style(fmt = "*", naForm = "   "))
 )
@@ -33,16 +33,16 @@ x[i, j, ..., drop = FALSE]
 
   the grouping variable
 
-- add.length:
+- addLength:
 
   logical. If set to `TRUE` (default), a row with the group sizes will
   be inserted as first row of the table.
 
-- colnames:
+- colNames:
 
   a vector of column names for the result table
 
-- vnames:
+- varNames:
 
   a vector of variable names to be placed in the first column instead of
   the real names
@@ -67,14 +67,14 @@ x[i, j, ..., drop = FALSE]
   (including integer) variables (`mean`/`sd` is default, alternatives as
   `median`/`IQR` are possible by defining a function). See examples.
 
-- TEST:
+- tests:
 
   a list of functions to be used to test the variables. Must be named as
   `"num"`, `"cat"` and `"dich"` and be defined as function with
   arguments `(x, g)`, generating something similar to a p-value. Use
-  `TEST=NA` to suppress test. (See examples.)
+  `tests=NA` to suppress test. (See examples.)
 
-- intref:
+- intRef:
 
   one out of `"high"` (default), `"low"` or `"both"`, defining which
   value of a dichotomous variable should be reported. Usually this will
@@ -140,13 +140,13 @@ to describe numeric variables.
 Their difference is tested with the Kruskal-Wallis test. For categorical
 variables the absolute and relative frequencies are calculated and
 tested with a chi-square test.  
-The tests can be changed with the argument `TEST`. These must be
+The tests can be changed with the argument `tests`. These must be
 organised as list containing elements named `"num"`, `"cat"` and
 `"dich"`. Each of them must be a function with arguments `(x, g)`,
 returning something similar to a p-value.
 
 
-      TEST = list( num = list(fun = function(x, g){
+      tests = list( num = list(fun = function(x, g){
           summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
         cat = list(fun = function(x, g){
           chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
@@ -282,7 +282,7 @@ tOne(x = iris[, -5], groups = iris[, 5],
             fm(mean(x, na.rm = TRUE), digits = 1),
             fm(sd(x, na.rm = TRUE), digits = 3)),
 
-     TEST = list(
+     tests = list(
        num = list(fun = function(x, g){summary(aov(x ~ g))[[1]][1, "Pr(>F)"]},
                         lbl = "ANOVA"),
                cat = list(fun = function(x, g){chisq.test(table(x, g))$p.val},
@@ -314,46 +314,21 @@ t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")],
                                       fm(sd(x, na.rm = TRUE), digits = 3),
                                       fm(median(x, na.rm = TRUE), digits = 1)),
 
-           TEST = NA,
+           tests = NA,
 
            fmt = list(abs  = style(bigMark = " ", digits=0),
                       num  = style(bigMark = " ", digits=1),
                       per  = style(fmt=function(x)
-                          strPad(fm(x, fmt="%", digits=1), width=5, adj = "r")),
+                          strPad(fm(x, fmt="%", digits=1), width=5, align = "r")),
                       pval = style(fmt = "*", naForm = "   "))
 )
+#> Error in strPad(fm(x, fmt = "%", digits = 1), width = 5, align = "r"): unused argument (align = "r")
 # add a userdefined legend
 attr(t1, "legend") <- "numeric: mean / sd (median)), factor: n (n%)"
+#> Error: object 't1' not found
 
 t1
-#> 
-#>    var               Brent                      Camden                  
-#>    n                              474 (39.5%)                344 (28.7%)
-#>    temperature            51.1 / 8.734 (53.4)   47.4 / 10.111 (50.3)    
-#>    driver                                                               
-#>      Butcher                       72 (15.2%)                  1 ( 0.3%)
-#>      Carpenter                     29 ( 6.1%)                 19 ( 5.6%)
-#>      Carter                       177 (37.4%)                 47 (13.8%)
-#>      Farmer                        19 ( 4.0%)                 87 (25.5%)
-#>      Hunter                       128 (27.1%)                  4 ( 1.2%)
-#>      Miller                         6 ( 1.3%)                 41 (12.0%)
-#>      Taylor                        42 ( 8.9%)                142 (41.6%)
-#>    rebate (= TRUE)                235 (50.3%)                172 (50.3%)
-#>    Westminster             
-#>                 381 (31.8%)
-#>         44.3 / 9.836 (45.9)
-#>                            
-#>                  22 ( 5.8%)
-#>                 221 (58.2%)
-#>                   5 ( 1.3%)
-#>                  11 ( 2.9%)
-#>                  24 ( 6.3%)
-#>                  77 (20.3%)
-#>                  20 ( 5.3%)
-#>                 184 (48.7%)
-#> ---
-#> numeric: mean / sd (median)), factor: n (n%)
-#> 
+#> Error: object 't1' not found
 
 
 # dichotomous integer or logical values can be reported by the high or low value
@@ -364,7 +339,7 @@ z <- factor(sample(x = c(0, 1), size = 100, prob = c(0.3, 0.7), replace = TRUE))
 g <- sample(x = letters[1:4], size = 100, replace = TRUE)
 d.set <- data.frame(x = x, y = y, z = z, g = g)
 
-tOne(d.set[1:3], d.set$g, intref = "low")
+tOne(d.set[1:3], d.set$g, intRef = "low")
 #> Warning: Chi-squared approximation may be incorrect
 #> 
 #>    var           total        a            b            c            d         
@@ -382,7 +357,7 @@ tOne(d.set[1:3], d.set$g, intref = "low")
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 
-tOne(d.set[1:3], d.set$g, intref = "high")
+tOne(d.set[1:3], d.set$g, intRef = "high")
 #> Warning: Chi-squared approximation may be incorrect
 #> 
 #>    var          total        a            b            c            d         
@@ -401,7 +376,7 @@ tOne(d.set[1:3], d.set$g, intref = "high")
 #> 
 
 # report both levels of the factor
-tOne(data.frame(z = z), g, intref = "both")
+tOne(data.frame(z = z), g, intRef = "both")
 #> Warning: Chi-squared approximation may be incorrect
 #> 
 #>    var   total        a            b            c            d                 

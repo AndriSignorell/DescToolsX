@@ -6,7 +6,7 @@ concentration or inequality.
 ## Usage
 
 ``` r
-herfindahl(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE)
+herfindahl(x, weights = NULL, parameter = 1, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -16,10 +16,10 @@ herfindahl(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE)
   numeric vector of non-negative values, such as market shares, incomes,
   or frequencies
 
-- n:
+- weights:
 
-  optional frequency weights. Each element of `x` is replicated `n`
-  times.
+  optional frequency weights. Each element of `x` is replicated
+  `weights` times.
 
 - parameter:
 

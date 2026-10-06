@@ -111,8 +111,8 @@ for tests and base R's implementations
 [`cov()`](https://rdrr.io/r/stats/cor.html)
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
-[`madX()`](madX.md), [`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),
-[`rangeX()`](rangeX.md)
+[`madX()`](madX.md), [`meanAbsDev()`](meanAbsDev.md),
+[`meanSE()`](meanSE.md), [`rangeX()`](rangeX.md)
 
 ## Examples
 

@@ -56,16 +56,18 @@ remotes::install_github("AndriSignorell/DescToolsX")
   [`tukeyBiweight()`](reference/tukeyBiweight.md),
   [`hodgesLehmann()`](reference/hodgesLehmann.md)
 - [`varX()`](reference/varX.md), [`madX()`](reference/madX.md),
-  [`iqrX()`](reference/iqrX.md), [`meanAD()`](reference/meanAD.md),
+  [`iqrX()`](reference/iqrX.md),
+  [`meanAbsDev()`](reference/meanAbsDev.md),
   [`meanSE()`](reference/meanSE.md), [`coefVar()`](reference/coefVar.md)
 - [`skew()`](reference/skew.md), [`kurt()`](reference/kurt.md)
 
 ### 🔹 Association and Correlation
 
 - Nominal: [`cramerV()`](reference/cramerV.md),
-  [`contCoef()`](reference/contCoef.md), [`phi()`](reference/phi.md),
+  [`contCoef()`](reference/contCoef.md),
+  [`phiCoef()`](reference/phiCoef.md),
   [`tschuprowT()`](reference/tschuprowT.md),
-  [`lambda()`](reference/lambda.md),
+  [`gkLambda()`](reference/gkLambda.md),
   [`uncertCoef()`](reference/uncertCoef.md),
   [`gkTau()`](reference/gkTau.md), [`yule()`](reference/yule.md)
 - Ordinal: [`ordAssocs()`](reference/ordAssocs.md),
@@ -73,10 +75,10 @@ remotes::install_github("AndriSignorell/DescToolsX")
   [`kendallW()`](reference/kendallW.md)
 - Continuous: [`pearsonCor()`](reference/pearsonCor.md),
   [`spearmanCor()`](reference/spearmanCor.md),
-  [`corPart()`](reference/corPart.md),
-  [`corPolychor()`](reference/corPolychor.md),
+  [`partialCor()`](reference/partialCor.md),
+  [`polychorCor()`](reference/polychorCor.md),
   [`hoeffdingD()`](reference/hoeffdingD.md),
-  [`findCorrX()`](reference/findCorrX.md)
+  [`findCor()`](reference/findCor.md)
 - [`Association()`](reference/Association.md) — common interface across
   the measures
 
@@ -128,7 +130,7 @@ remotes::install_github("AndriSignorell/DescToolsX")
 ### 🔹 Dates and Time
 
 - [`addMonths()`](reference/AddMonths.md),
-  [`as_ym()`](reference/as_ym.md),
+  [`asYm()`](reference/asYm.md),
   [`countWorkDays()`](reference/countWorkDays.md),
   [`generation()`](reference/generation.md),
   [`zodiac()`](reference/zodiac.md)

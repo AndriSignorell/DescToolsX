@@ -12,7 +12,7 @@ desc(
   x,
   maxrows = NULL,
   conf.level = 0.95,
-  include_x = TRUE,
+  includeX = TRUE,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -33,13 +33,13 @@ desc(
   numeric; defines the maximum number of rows in a frequency table to be
   reported. For factors with many levels it is often not interesting to
   see all of them. Default is set to 12 most frequent ones (resp. the
-  first ones if `ord` is set to `"levels"` or `"names"`).
+  first ones if `order` is set to `"levels"` or `"names"`).
 
 - conf.level:
 
   confidence level for interval estimates (default 0.95)
 
-- include_x:
+- includeX:
 
   logical; if `TRUE`, the original vector is retained in the result
 
@@ -137,5 +137,5 @@ desc(Pizza$delivery_min)             # numeric
 #> ¹ 95%-CI (classic)
 #> 
 #> 
-
+#> Error: 'plotFreqDist' is not an exported object from 'namespace:pharos'
 ```

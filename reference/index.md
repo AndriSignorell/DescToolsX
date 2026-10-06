@@ -111,9 +111,10 @@ Classical, weighted, robust, and nonlinear descriptive statistics.
 - [`tukeyBiweight()`](tukeyBiweight.md) : Tukey's Biweight Mean
 - [`coefVar()`](coefVar.md) [`coefVarCI()`](coefVar.md) : Coefficient of
   Variation
-- [`iqrX()`](iqrX.md) : The (weighted) Interquartile Range
+- [`iqrX()`](iqrX.md) : The (Weighted) Interquartile Range
 - [`madX()`](madX.md) : Median Absolute Deviation
-- [`meanAD()`](meanAD.md) : Mean Absolute Deviation From a Center Point
+- [`meanAbsDev()`](meanAbsDev.md) : Mean Absolute Deviation From a
+  Center Point
 - [`meanSE()`](meanSE.md) : Standard Error of Mean
 - [`rangeX()`](rangeX.md) : (Robust) Range
 - [`sdX()`](varX.md) [`varX()`](varX.md) : (Weighted) Variance and
@@ -132,9 +133,9 @@ tools.
 - [`contCoef()`](contCoef.md) : Pearson's Contingency Coefficient
 - [`cramerV()`](cramerV.md) : Cramer's V
 - [`gkTau()`](gkTau.md) : Goodman Kruskal's Tau
-- [`lambda()`](lambda.md) : Goodman Kruskal Lambda
+- [`gkLambda()`](gkLambda.md) : Goodman Kruskal Lambda
 - [`mutInf()`](mutInf.md) : Mutual Information
-- [`phi()`](phi.md) : Phi Coefficient
+- [`phiCoef()`](phiCoef.md) : Phi Coefficient
 - [`tschuprowT()`](tschuprowT.md) : Tschuprow's T
 - [`uncertCoef()`](uncertCoef.md) : Uncertainty Coefficient
 - [`yuleQ()`](yule.md) [`yuleY()`](yule.md) : Yule's Coefficients of
@@ -145,9 +146,9 @@ tools.
   [`kendallTauA()`](ordAssocs.md) [`kendallTauB()`](ordAssocs.md)
   [`stuartTauC()`](ordAssocs.md) [`somersDelta()`](ordAssocs.md) :
   Ordinal Association Measures
-- [`corPart()`](corPart.md) : Partial Correlation Matrix
-- [`corPolychor()`](corPolychor.md) : Polychoric Correlation
-- [`findCorrX()`](findCorrX.md) : Identify Highly Correlated Variables
+- [`partialCor()`](partialCor.md) : Partial Correlation Matrix
+- [`polychorCor()`](polychorCor.md) : Polychoric Correlation
+- [`findCor()`](findCor.md) : Identify Highly Correlated Variables
 - [`hoeffdingD()`](hoeffdingD.md) : Hoeffding's D Statistic
 - [`keepSig()`](keepSig.md) : Keep Only Significant Values in a
   Symmetric Matrix
@@ -218,9 +219,11 @@ Classification metrics, calibration, discrimination, and
 prediction-error measures.
 
 - [`auc()`](auc.md) : Compute Area Under the Curve
-- [`conf()`](conf.md) [`print(`*`<Conf>`*`)`](conf.md)
-  [`plot(`*`<Conf>`*`)`](conf.md) [`sensX()`](conf.md)
-  [`specX()`](conf.md) : Confusion Matrix and Classification Metrics
+- [`confusion()`](confusion.md)
+  [`print(`*`<Confusion>`*`)`](confusion.md)
+  [`plot(`*`<Confusion>`*`)`](confusion.md)
+  [`sensitivity()`](confusion.md) [`specificity()`](confusion.md) :
+  Confusion Matrix and Classification Metrics
 - [`cStat()`](cStat.md) : Concordance Statistic (C-Statistic / AUC)
 - [`averagePrecision()`](averagePrecision.md) : Average Precision Score
 - [`logLoss()`](logLoss.md) : Log Loss
@@ -262,8 +265,8 @@ Binning, transformations, imputation, scaling, and outlier detection.
 Date classes, calendar arithmetic, extraction, conversion, and
 categorization.
 
-- [`as.ym()`](as_ym.md) [`as.Date(`*`<ym>`*`)`](as_ym.md)
-  [`print(`*`<ym>`*`)`](as_ym.md) : A Class for Dealing with the
+- [`asYm()`](asYm.md) [`as.Date(`*`<ym>`*`)`](asYm.md)
+  [`print(`*`<ym>`*`)`](asYm.md) : A Class for Dealing with the
   Yearmonth Format
 - [`isDate()`](date-time-predicates.md)
   [`isTime()`](date-time-predicates.md)
@@ -281,12 +284,14 @@ categorization.
   [`minute()`](date_functions.md) [`second()`](date_functions.md)
   [`timezone()`](date_functions.md) [`yearMonth()`](date_functions.md)
   [`yearWeek()`](date_functions.md) [`isoYear()`](date_functions.md)
-  [`yearDay()`](date_functions.md) [`diffDays360()`](date_functions.md)
+  [`dayOfYear()`](date_functions.md)
+  [`diffDays360()`](date_functions.md)
   [`lastDayOfMonth()`](date_functions.md)
-  [`yearDays()`](date_functions.md) [`monthDays()`](date_functions.md)
+  [`daysInYear()`](date_functions.md)
+  [`daysInMonth()`](date_functions.md)
   [`isWeekend()`](date_functions.md) [`isLeapYear()`](date_functions.md)
   : Basic Date Functions
-- [`hmsToMinute()`](time-conversions.md)
+- [`hmsToMin()`](time-conversions.md)
   [`hmsToSec()`](time-conversions.md)
   [`secToHms()`](time-conversions.md) : Convert h:m:s To/From seconds
 - [`generation()`](generation.md) : Generation by Birth Year

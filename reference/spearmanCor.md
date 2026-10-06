@@ -88,10 +88,10 @@ Wiley
 
 [`Association()`](Association.md)
 
-Other assoc.continuous: [`corPart()`](corPart.md),
-[`corPolychor()`](corPolychor.md), [`findCorrX()`](findCorrX.md),
+Other assoc.continuous: [`findCor()`](findCor.md),
 [`hoeffdingD()`](hoeffdingD.md), [`keepSig()`](keepSig.md),
-[`pearsonCor()`](pearsonCor.md)
+[`partialCor()`](partialCor.md), [`pearsonCor()`](pearsonCor.md),
+[`polychorCor()`](polychorCor.md)
 
 ## Examples
 
@@ -113,7 +113,7 @@ spearmanCor(pain, conf.level=0.95)
 # must be the same as
 with(lapply(
        bedrock::untable(pain, 
-                        colnames = c("adverse","dose")), 
+                        colNames = c("adverse","dose")), 
        ordered), 
      spearmanCor(adverse, dose, conf.level=0.95))
 #>       est       lci       uci 

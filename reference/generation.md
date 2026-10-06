@@ -5,12 +5,12 @@ Yields the generation of a person based on the year of birth.
 ## Usage
 
 ``` r
-generation(year)
+generation(x)
 ```
 
 ## Arguments
 
-- year:
+- x:
 
   year of birth
 

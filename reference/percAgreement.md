@@ -14,7 +14,7 @@ percAgreement(
   sides = c("two.sided", "left", "right"),
   input = c("auto", "confusion", "ratings"),
   fpc = 0,
-  output = c("def", "ext"),
+  output = c("default", "extended"),
   ...
 )
 ```
@@ -55,8 +55,8 @@ percAgreement(
 
 - output:
 
-  output format, either `"def"` (default) or `"ext"` for extended
-  results
+  output format, either `"default"` (default) or `"extended"` for
+  extended results
 
 - ...:
 
@@ -65,8 +65,8 @@ percAgreement(
 
 ## Value
 
-if `output = "def"` and `conf.level = NA`, a numeric scalar; otherwise a
-named numeric vector with elements:
+if `output = "default"` and `conf.level = NA`, a numeric scalar;
+otherwise a named numeric vector with elements:
 
 - `est`:
 
@@ -80,8 +80,8 @@ named numeric vector with elements:
 
   upper confidence interval bound
 
-if `output = "ext"`, a list with the elements `est`, `se`, `ci` (the
-named triple above), `n`, `nPairable` and `method`.
+if `output = "extended"`, a list with the elements `est`, `se`, `ci`
+(the named triple above), `n`, `nPairable` and `method`.
 
 ## Details
 

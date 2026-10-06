@@ -84,7 +84,7 @@ robust, [`iqrX()`](iqrX.md) for the same using weights,
 (confidence intervals).
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
-[`meanAD()`](meanAD.md), [`meanSE()`](meanSE.md),
+[`meanAbsDev()`](meanAbsDev.md), [`meanSE()`](meanSE.md),
 [`rangeX()`](rangeX.md), [`varX()`](varX.md)
 
 ## Examples

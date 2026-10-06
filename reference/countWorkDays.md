@@ -6,7 +6,7 @@ the provided holiday dates.
 ## Usage
 
 ``` r
-countWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
+countWorkDays(from, to, holidays = NULL, nonWorkDays = c("Sat", "Sun"))
 ```
 
 ## Arguments
@@ -19,12 +19,12 @@ countWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
 
   final dates
 
-- holiday:
+- holidays:
 
   a vector of dates (or strings coercible with
   [`as.Date()`](https://rdrr.io/r/base/as.Date.html)) to exclude
 
-- nonworkdays:
+- nonWorkDays:
 
   a character vector containing the English three-letter weekday
   abbreviations to be treated as non-work days, i.e. a subset of
@@ -78,7 +78,7 @@ head(data.frame(date = x, day = weekday(x, fmt = "dd", lang = "en")))
 countWorkDays(from = min(x), to = max(x))
 #> [1] 18
 countWorkDays(from = min(x), to = max(x),
-              holiday = c("2019-01-07", "2019-01-08"))
+              holidays = c("2019-01-07", "2019-01-08"))
 #> [1] 16
 
 # a single day

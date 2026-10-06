@@ -40,7 +40,8 @@ hodgesLehmann(
 
 - na.rm:
 
-  logical; whether to remove missing values
+  logical; if `TRUE`, missing values are removed from `x` and `y`
+  separately before the computation
 
 - ...:
 
@@ -81,11 +82,19 @@ sample from x and a sample from y.
 \\\[lci, \infty)\\, `"right"` yields \\(-\infty, uci\]\\. The estimator
 is unbounded, so the open side is reported as \\\pm\infty\\.
 
+**Missing values.** `NA` and `NaN` are treated alike. With
+`na.rm = FALSE`, a missing value in `x` or `y` yields `NA` - a scalar,
+or `c(est = NA, lci = NA, uci = NA)` when an interval was requested.
+With `na.rm = TRUE` the missing values are removed from each sample
+separately; `x` and `y` are independent samples, not pairs. An empty
+sample, given or left over after the removal, yields `NA` as well.
+Invalid arguments are an error even when data are missing.
+
 `x` and `y` are not modified.
 
 ## Note
 
-C++ port of Monahan’s algorithm by Cyril Flurin Moser
+C++ port of Monahan's algorithm by Cyril Flurin Moser
 
 ## Random number generation
 
@@ -95,6 +104,25 @@ global random number generator. Call
 reproducible intervals. The point estimate itself is deterministic: the
 compiled routine picks its pivots from a local generator and does not
 touch R's stream.
+
+## References
+
+Hodges, J. L., Lehmann, E. L. (1963). Estimates of location based on
+rank tests. *The Annals of Mathematical Statistics*, 34(2), 598–611.
+[doi:10.1214/aoms/1177704172](https://doi.org/10.1214/aoms/1177704172)
+
+Monahan, J. F. (1984). Algorithm 616: Fast computation of the
+Hodges-Lehmann location estimator. *ACM Transactions on Mathematical
+Software*, 10(3), 265–270.
+[doi:10.1145/1271.319414](https://doi.org/10.1145/1271.319414) .
+Original code: <https://www4.stat.ncsu.edu/~monahan/jul10/>
+
+Efron, B. (1987). Better bootstrap confidence intervals. *Journal of the
+American Statistical Association*, 82(397), 171–185.
+[doi:10.1080/01621459.1987.10478410](https://doi.org/10.1080/01621459.1987.10478410)
+
+Davison, A. C., Hinkley, D. V. (1997). *Bootstrap Methods and Their
+Application*. Cambridge University Press.
 
 ## See also
 
@@ -124,6 +152,12 @@ v
 y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 hodgesLehmann(x, y)
 #> [1] 0.56
+
+# missing values: NA, or removed per sample with na.rm
+hodgesLehmann(c(x, NA), y)
+#> [1] NA
+hodgesLehmann(c(x, NA), y[-1], na.rm = TRUE)
+#> [1] 0.54
 
 set.seed(1)
 hodgesLehmann(x, conf.level = 0.95)

@@ -5,7 +5,7 @@ Computes the Rosenbluth index as a measure of concentration.
 ## Usage
 
 ``` r
-rosenbluth(x, n = rep(1, length(x)), na.rm = FALSE)
+rosenbluth(x, weights = NULL, na.rm = FALSE)
 ```
 
 ## Arguments
@@ -15,10 +15,10 @@ rosenbluth(x, n = rep(1, length(x)), na.rm = FALSE)
   numeric vector of non-negative values, such as market shares or
   frequencies
 
-- n:
+- weights:
 
-  optional frequency weights. Each element of `x` is replicated `n`
-  times.
+  optional frequency weights. Each element of `x` is replicated
+  `weights` times.
 
 - na.rm:
 
@@ -74,6 +74,6 @@ rosenbluth(c(10, 1, 1, 1))
 #> [1] 0.52
 
 # frequency weights replicate the values
-rosenbluth(c(10, 1), n = c(1, 3))
+rosenbluth(c(10, 1), weights = c(1, 3))
 #> [1] 0.52
 ```

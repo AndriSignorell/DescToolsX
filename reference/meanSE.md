@@ -39,8 +39,8 @@ the standard error as a numeric scalar
 [lumen::meanCI](https://andrisignorell.github.io/lumen/reference/meanCI.html)
 
 Other dispersion: [`coefVar()`](coefVar.md), [`iqrX()`](iqrX.md),
-[`madX()`](madX.md), [`meanAD()`](meanAD.md), [`rangeX()`](rangeX.md),
-[`varX()`](varX.md)
+[`madX()`](madX.md), [`meanAbsDev()`](meanAbsDev.md),
+[`rangeX()`](rangeX.md), [`varX()`](varX.md)
 
 ## Examples
 
