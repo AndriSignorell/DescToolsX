@@ -17,7 +17,7 @@ adequate statistical tests."><meta property="og:image" content="/logo.png"></hea
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.960</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.962</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -367,13 +367,38 @@ to MS-Word. Both font and alignment are freely selectable in the Word table.</p>
 <span class="r-in"><span>                          <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/strPad.html" class="external-link">strPad</a></span><span class="op">(</span><span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">fm</a></span><span class="op">(</span><span class="va">x</span>, fmt<span class="op">=</span><span class="st">"%"</span>, digits<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, width<span class="op">=</span><span class="fl">5</span>, align <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      pval <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"*"</span>, naForm <span class="op">=</span> <span class="st">"   "</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in strPad(fm(x, fmt = "%", digits = 1), width = 5, align = "r"):</span> unused argument (align = "r")</span>
 <span class="r-in"><span><span class="co"># add a userdefined legend</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">t1</span>, <span class="st">"legend"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"numeric: mean / sd (median)), factor: n (n%)"</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 't1' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">t1</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 't1' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">   var               Brent                      Camden                  </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    n                              474 (39.5%)                344 (28.7%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    temperature            51.1 / 8.734 (53.4)   47.4 / 10.111 (50.3)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    driver                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Butcher                       72 (15.2%)                  1 ( 0.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carpenter                     29 ( 6.1%)                 19 ( 5.6%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Carter                       177 (37.4%)                 47 (13.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Farmer                        19 ( 4.0%)                 87 (25.5%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Hunter                       128 (27.1%)                  4 ( 1.2%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Miller                         6 ( 1.3%)                 41 (12.0%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Taylor                        42 ( 8.9%)                142 (41.6%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    rebate (= TRUE)                235 (50.3%)                172 (50.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Westminster             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 381 (31.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         44.3 / 9.836 (45.9)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  22 ( 5.8%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 221 (58.2%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   5 ( 1.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  11 ( 2.9%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  24 ( 6.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  77 (20.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  20 ( 5.3%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 184 (48.7%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">---</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">numeric: mean / sd (median)), factor: n (n%)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># dichotomous integer or logical values can be reported by the high or low value</span></span></span>
