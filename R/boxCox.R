@@ -8,7 +8,7 @@
 #' `x` and is given by
 #'
 #' \deqn{
-#' f_\gkLambda(x) = \left\{ \begin{array}{ll}
+#' f_\lambda(x) = \left\{ \begin{array}{ll}
 #'   (x^\lambda - 1) / \lambda & \mbox{if } \lambda \neq 0 \\
 #'   \log(x)                   & \mbox{if } \lambda = 0
 #' \end{array} \right.

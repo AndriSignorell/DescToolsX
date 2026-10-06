@@ -136,8 +136,8 @@ desc.Date <- function(x,
   names(moObs) <- moLevels
 
   if (is.null(mprobs)) {
-    daysInMonth <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-    mprobs    <- daysInMonth / sum(daysInMonth)
+    monthDays <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    mprobs    <- monthDays / sum(monthDays)
   }
 
   if (length(mprobs) != 12)

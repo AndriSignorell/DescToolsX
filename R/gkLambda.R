@@ -19,7 +19,7 @@
 #' 
 #' @param direction type of lambda. Can be one out of `"symmetric"`
 #' (default), `"row"`, `"column"` (abbreviations are allowed).  If
-#' direction is set to `"row"` then gkLambda(R|C) (column dependent) will be
+#' direction is set to `"row"` then lambda(R|C) (column dependent) will be
 #' reported. See Details.
 #' 
 #' @param conf.level confidence level of the interval. If set to `NA`

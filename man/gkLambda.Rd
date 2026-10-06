@@ -30,7 +30,7 @@ interval (one of \code{"two.sided"} (default), \code{"left"} or
 
 \item{direction}{type of lambda. Can be one out of \code{"symmetric"}
 (default), \code{"row"}, \code{"column"} (abbreviations are allowed).  If
-direction is set to \code{"row"} then gkLambda(R|C) (column dependent) will be
+direction is set to \code{"row"} then lambda(R|C) (column dependent) will be
 reported. See Details.}
 
 \item{...}{further arguments, passed on to
