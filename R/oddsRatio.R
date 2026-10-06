@@ -15,11 +15,11 @@
 #' interval on the log scale, fast and adequate for reasonably large counts.
 #' `"exact"` is the conditional interval based on the noncentral
 #' hypergeometric distribution (Fisher); it guarantees coverage but is
-#' conservative, sometimes markedly so. `"midp"` halves the probability
+#' conservative, sometimes markedly so. `"mid-p"` halves the probability
 #' of the observed table and lies between the two: it has coverage closer to
 #' the nominal level than the exact interval without the Wald interval's
 #' reliance on large counts. With a zero cell the point estimate is 0 or
-#' `Inf` and only `"exact"` and `"midp"` still deliver a
+#' `Inf` and only `"exact"` and `"mid-p"` still deliver a
 #' finite bound on the informative side.
 #' }
 #'
@@ -104,7 +104,7 @@
 #' oddsRatio(tab, conf.level = 0.95)
 #'
 #' # the exact interval is the widest, the Wald interval the narrowest
-#' sapply(c("wald", "exact", "midp"),
+#' sapply(c("wald", "exact", "mid-p"),
 #'        function(m) oddsRatio(tab, conf.level = 0.95, method = m))
 #'
 #' # one-sided: "left" carries the finite lower bound
@@ -147,11 +147,11 @@ oddsRatio <- function(x, ...) {
 #'   `method = "profile"`.
 #' @param method character string specifying the interval method. For a
 #'   contingency table one of `"wald"`, `"exact"` or
-#'   `"midp"`; for a binomial model one of `"wald"` or
+#'   `"mid-p"`; for a binomial model one of `"wald"` or
 #'   `"profile"`. See Details.
 #' @param interval numeric vector of length two giving the search interval
 #'   for the root finding in the mid-p method. Only used by
-#'   `method = "midp"`; widen it if the reported bound sits at one of
+#'   `method = "mid-p"`; widen it if the reported bound sits at one of
 #'   its ends.
 #'
 #' @rdname oddsRatio
@@ -162,7 +162,7 @@ oddsRatio.default <- function(
     y = NULL,
     conf.level = NA,
     sides = c("two.sided", "left", "right"),
-    method = c("wald", "exact", "midp"),
+    method = c("wald", "exact", "mid-p"),
     interval = c(0, 1000),
     ...
 ) {
@@ -238,7 +238,7 @@ oddsRatio.default <- function(
       conf.level = confAdj
     ),
     
-    "midp" = .oddsRatioMidP(
+    "mid-p" = .oddsRatioMidP(
       x = x,
       conf.level = confAdj,
       interval = interval

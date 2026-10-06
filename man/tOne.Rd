@@ -7,10 +7,10 @@
 \title{Create Table One Describing Baseline Characteristics}
 \usage{
 tOne(
-  x, groups = NA, add.length = TRUE,
-  colnames = NULL, vnames = NULL, total = TRUE,
-  align = "\\\\l", FUN = NULL, TEST = NULL,
-  intref = "high",
+  x, groups = NA, addLength = TRUE,
+  colNames = NULL, varNames = NULL, total = TRUE,
+  align = "\\\\l", FUN = NULL, tests = NULL,
+  intRef = "high",
   fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty",
              pval = style(fmt = "*", naForm = "   "))
 )
@@ -24,12 +24,12 @@ tOne(
 
 \item{groups}{the grouping variable}
 
-\item{add.length}{logical. If set to \code{TRUE} (default), a row with the
+\item{addLength}{logical. If set to \code{TRUE} (default), a row with the
 group sizes will be inserted as first row of the table.}
 
-\item{colnames}{a vector of column names for the result table}
+\item{colNames}{a vector of column names for the result table}
 
-\item{vnames}{a vector of variable names to be placed in the first column
+\item{varNames}{a vector of variable names to be placed in the first column
 instead of the real names}
 
 \item{total}{logical (default \code{TRUE}), defines whether the results
@@ -47,12 +47,12 @@ numeric (including integer) variables (\code{mean}/\code{sd} is default,
 alternatives as \code{median}/\code{IQR} are possible by defining a
 function). See examples.}
 
-\item{TEST}{a list of functions to be used to test the variables. Must be
+\item{tests}{a list of functions to be used to test the variables. Must be
 named as \code{"num"}, \code{"cat"} and \code{"dich"} and be defined as
 function with arguments \verb{(x, g)}, generating something similar to a
-p-value. Use \code{TEST=NA} to suppress test. (See examples.)}
+p-value. Use \code{tests=NA} to suppress test. (See examples.)}
 
-\item{intref}{one out of \code{"high"} (default), \code{"low"} or
+\item{intRef}{one out of \code{"high"} (default), \code{"low"} or
 \code{"both"}, defining which value of a dichotomous variable should be
 reported. Usually this will be \code{1} or \code{TRUE}. Setting it to
 \code{"low"} will report the lower value \code{0} or \code{FALSE},
@@ -109,12 +109,12 @@ variables.
 Their difference is tested with the Kruskal-Wallis test. For categorical
 variables the absolute and relative frequencies are calculated and tested
 with a chi-square test. \cr The tests can be changed with the argument
-\code{TEST}. These must be organised as list containing elements named
+\code{tests}. These must be organised as list containing elements named
 \code{"num"}, \code{"cat"} and \code{"dich"}. Each of them must be a
 function with arguments \verb{(x, g)}, returning something similar to a
 p-value.
 \preformatted{
-  TEST = list( num = list(fun = function(x, g){
+  tests = list( num = list(fun = function(x, g){
       summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
     cat = list(fun = function(x, g){
       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
@@ -182,7 +182,7 @@ tOne(x = iris[, -5], groups = iris[, 5],
             fm(mean(x, na.rm = TRUE), digits = 1),
             fm(sd(x, na.rm = TRUE), digits = 3)),
 
-     TEST = list(
+     tests = list(
        num = list(fun = function(x, g){summary(aov(x ~ g))[[1]][1, "Pr(>F)"]},
                         lbl = "ANOVA"),
                cat = list(fun = function(x, g){chisq.test(table(x, g))$p.val},
@@ -203,12 +203,12 @@ t1 <- tOne(x     = Pizza[,c("temperature", "driver", "rebate")],
                                       fm(sd(x, na.rm = TRUE), digits = 3),
                                       fm(median(x, na.rm = TRUE), digits = 1)),
 
-           TEST = NA,
+           tests = NA,
 
            fmt = list(abs  = style(bigMark = " ", digits=0),
                       num  = style(bigMark = " ", digits=1),
                       per  = style(fmt=function(x)
-                          strPad(fm(x, fmt="\%", digits=1), width=5, adj = "r")),
+                          strPad(fm(x, fmt="\%", digits=1), width=5, align = "r")),
                       pval = style(fmt = "*", naForm = "   "))
 )
 # add a userdefined legend
@@ -225,12 +225,12 @@ z <- factor(sample(x = c(0, 1), size = 100, prob = c(0.3, 0.7), replace = TRUE))
 g <- sample(x = letters[1:4], size = 100, replace = TRUE)
 d.set <- data.frame(x = x, y = y, z = z, g = g)
 
-tOne(d.set[1:3], d.set$g, intref = "low")
+tOne(d.set[1:3], d.set$g, intRef = "low")
 
-tOne(d.set[1:3], d.set$g, intref = "high")
+tOne(d.set[1:3], d.set$g, intRef = "high")
 
 # report both levels of the factor
-tOne(data.frame(z = z), g, intref = "both")
+tOne(data.frame(z = z), g, intRef = "both")
 
 options(opt)
 

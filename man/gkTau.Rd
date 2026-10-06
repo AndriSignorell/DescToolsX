@@ -61,7 +61,7 @@ probabilities specified by marginal or conditional proportions.
 Misclassification probabilities are based on random category assignment with
 probabilities specified by marginal or conditional proportion.
 
-Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link[=phi]{phi()}}) in the
+Goodman Kruskal tau reduces to \eqn{\phi^2} (see: \code{\link[=phiCoef]{phiCoef()}}) in the
 2x2-table case.\cr
 
 The measure lies in \eqn{[0, 1]} by construction. Both ends are reached by
@@ -102,7 +102,7 @@ tab <- as.table(cbind(c(11,2),c(4,6)))
 gkTau(tab, direction="row", conf.level=0.95)
 gkTau(tab, direction="column", conf.level=0.95)
 # reduce both to:
-phi(tab)^2
+phiCoef(tab)^2
 
 
 # example 1 in Liebetrau (1983)
@@ -143,15 +143,15 @@ Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 Newbury Park, CA: Sage, pp. 24--30
 }
 \seealso{
-\code{\link[=lambda]{lambda()}}, \code{\link[=cramerV]{cramerV()}},
+\code{\link[=gkLambda]{gkLambda()}}, \code{\link[=cramerV]{cramerV()}},
 \code{\link[=Association]{Association()}}
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
-\code{\link[=lambda]{lambda()}},
+\code{\link[=gkLambda]{gkLambda()}},
 \code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
+\code{\link[=phiCoef]{phiCoef()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

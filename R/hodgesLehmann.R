@@ -26,8 +26,8 @@
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
-#'
-#' @param na.rm logical; whether to remove missing values
+#' @param na.rm logical; if `TRUE`, missing values are removed from `x` and
+#'   `y` separately before the computation
 #' @param ... additional arguments passed to bootstrap procedures
 #'
 #' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
@@ -44,6 +44,14 @@
 #' \eqn{(-\infty, uci]}. The estimator is unbounded, so the open side is
 #' reported as \eqn{\pm\infty}.
 #'
+#' **Missing values.** `NA` and `NaN` are treated alike. With
+#' `na.rm = FALSE`, a missing value in `x` or `y` yields `NA` - a scalar,
+#' or `c(est = NA, lci = NA, uci = NA)` when an interval was requested. With
+#' `na.rm = TRUE` the missing values are removed from each sample
+#' separately; `x` and `y` are independent samples, not pairs. An empty
+#' sample, given or left over after the removal, yields `NA` as well.
+#' Invalid arguments are an error even when data are missing.
+#'
 #' `x` and `y` are not modified.
 #'
 #' @section Random number generation:
@@ -53,7 +61,24 @@
 #' deterministic: the compiled routine picks its pivots from a local
 #' generator and does not touch R's stream.
 #'
-#' @note C++ port of Monahan’s algorithm by Cyril Flurin Moser
+#' @note C++ port of Monahan's algorithm by Cyril Flurin Moser
+#'
+#' @references
+#' Hodges, J. L., Lehmann, E. L. (1963). Estimates of location based on
+#' rank tests. *The Annals of Mathematical Statistics*, 34(2), 598–611.
+#' \doi{10.1214/aoms/1177704172}
+#'
+#' Monahan, J. F. (1984). Algorithm 616: Fast computation of the
+#' Hodges-Lehmann location estimator. *ACM Transactions on Mathematical
+#' Software*, 10(3), 265–270. \doi{10.1145/1271.319414}.
+#' Original code: \url{https://www4.stat.ncsu.edu/~monahan/jul10/}
+#'
+#' Efron, B. (1987). Better bootstrap confidence intervals.
+#' *Journal of the American Statistical Association*, 82(397), 171–185.
+#' \doi{10.1080/01621459.1987.10478410}
+#'
+#' Davison, A. C., Hinkley, D. V. (1997). *Bootstrap Methods and Their
+#' Application*. Cambridge University Press.
 #'
 #' @seealso [stats::wilcox.test()]
 #'
@@ -71,6 +96,10 @@
 #' y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 #' hodgesLehmann(x, y)
 #'
+#' # missing values: NA, or removed per sample with na.rm
+#' hodgesLehmann(c(x, NA), y)
+#' hodgesLehmann(c(x, NA), y[-1], na.rm = TRUE)
+#'
 #' set.seed(1)
 #' hodgesLehmann(x, conf.level = 0.95)
 #'
@@ -84,76 +113,79 @@ hodgesLehmann <- function(x,
                           sides = c("two.sided", "left", "right"),
                           na.rm = FALSE,
                           ...) {
-  
 
-  if (na.rm) {
-    if (is.null(y)) {
-      x <- na.omit(x)
-    } else {
-      ok <- complete.cases(x, y)
-      x <- x[ok]
-      y <- y[ok]
-    }
-  }
-  
-  if (anyNA(x) || (!is.null(y) && anyNA(y))) {
-    if (is.na(conf.level)) {
-      return(NA_real_)
-    } else {
-      return(c(
-        est = NA_real_,
-        lci = NA_real_,
-        uci = NA_real_
-      ))
-    }
-  }
-  
+  # == argument checks =======================================================
+  #
+  # All of them BEFORE any early NA return: missing data must not mask an
+  # invalid call.
+
+  # c(NA, NA) is LOGICAL: "all missing" must reach the NA handling below,
+  # not fail the type check
+  if (is.logical(x) && all(is.na(x))) x <- as.numeric(x)
+  if (is.logical(y) && all(is.na(y))) y <- as.numeric(y)
+
   if (!is.numeric(x))
     stop("'x' must be numeric")
-  
+
   if (!is.null(y) && !is.numeric(y))
     stop("'y' must be numeric")
 
-  if (!is.null(y) && !is.na(conf.level))
-    stop("confidence intervals are currently implemented only for the one-sample case")
-  
-  if (length(x) < 1)
-    stop("'x' must contain at least one observation")
+  withCI <- !(length(conf.level) == 1L && is.na(conf.level))
 
-  # y was never length-checked, so an empty y reached hl2qest_cpp() and was
-  # indexed at y[n - 1] with n = 0
-  if (!is.null(y) && length(y) < 1)
-    stop("'y' must contain at least one observation")
-  
-  if (is.null(y)) {
-    res <- hlqest_cpp(x)
-  } else {
-    res <- hl2qest_cpp(x, y)
+  if (withCI) {
+
+    checkConfLevel(conf.level)
+
+    if (!is.null(y))
+      stop("confidence intervals are currently implemented only for the one-sample case")
+
+    sides <- match.arg(sides)
+
+    # validated here as well, so that a bad R or type is reported even when
+    # the data turn out to be missing
+    args <- .extractBootArgs(list(...))
   }
-  
-  if (is.na(conf.level)) {
 
-    result <- res
-    names(result) <- NULL
 
-  } else {
+  # == missing values ========================================================
+  #
+  # Suite rule: na.rm = FALSE -> NA of the documented shape (as mean()),
+  # na.rm = TRUE -> remove first. x and y are INDEPENDENT samples, so each
+  # is cleaned on its own. The former complete.cases(x, y) paired them:
+  # with unequal lengths it stopped, with equal lengths an NA in x silently
+  # dropped the valid y at the same position.
 
-    # match.arg() above already guarantees "boot", so the former else
-    # branch - a warning plus c(est, NA, NA) - was unreachable. The
-    # distribution-free interval from the Wilcoxon rank statistic is
-    # still worth having; it belongs in method = "exact" when it lands,
-    # not in dead code behind the only accepted value.
-    #
-    # ToDo: two-sample confidence intervals
-    result <- .hodgesLehmann.boot(
-      x,
-      conf.level = conf.level,
-      sides = sides,
-      ...
-    )
+  naResult <- if (withCI)
+    c(est = NA_real_, lci = NA_real_, uci = NA_real_)
+  else
+    NA_real_
+
+  if (na.rm) {
+    x <- x[!is.na(x)]
+    if (!is.null(y)) y <- y[!is.na(y)]
+
+  } else if (anyNA(x) || anyNA(y)) {
+    return(naResult)
   }
-  
-  result
+
+  # an empty sample - given or left over - is empty data, not a calling
+  # error
+  if (length(x) == 0L || (!is.null(y) && length(y) == 0L))
+    return(naResult)
+
+
+  # == estimate ==============================================================
+
+  if (!withCI) {
+    res <- if (is.null(y)) hlqest_cpp(x) else hl2qest_cpp(x, y)
+    return(unname(res))
+  }
+
+  # The distribution-free interval from the Wilcoxon rank statistic is
+  # still worth having; it belongs in method = "exact" when it lands.
+  #
+  # ToDo: two-sample confidence intervals
+  .hodgesLehmann.boot(x, conf.level = conf.level, sides = sides, args = args)
 }
 
 
@@ -161,42 +193,31 @@ hodgesLehmann <- function(x,
 
 # == internal helper functions ================================================
 
-.hodgesLehmann.boot <- function(x,
-                                conf.level,
-                                sides = c("two.sided", "left", "right"),
-                                ...) {
-  
-  sides <- match.arg(
-    sides,
-    choices = c("two.sided", "left", "right"),
-    several.ok = FALSE
-  )
-  
+# x: numeric, no NA, length >= 1; conf.level, sides and args already
+# validated by the caller
+.hodgesLehmann.boot <- function(x, conf.level, sides, args) {
+
   if (sides != "two.sided")
     conf.level <- 1 - 2 * (1 - conf.level)
-  
-  args <- .extractBootArgs(list(...))
-  
-  # adjusted bootstrap percentile (BCa) interval
-  
+
   boot.fun <- boot::boot(
-    
+
     x,
-    
+
     function(x, d)
       hlqest_cpp(x[d]),
-    
+
     R        = args$R,
     parallel = args$parallel,
     ncpus    = args$ncpus
   )
-  
+
   ci <- boot::boot.ci(
     boot.fun,
     conf = conf.level,
     type = args$type
   )
-  
+
   # by name, not by position: ci[[4]] happens to be the first interval
   # component only because exactly one type is requested
   ciMat <- ci[[switch(args$type,
@@ -210,13 +231,13 @@ hodgesLehmann <- function(x,
     lci = unname(bounds[1L]),
     uci = unname(bounds[2L])
   )
-  
+
   # sides names the side carrying the FINITE bound; the estimator is
   # unbounded, so the open side really is infinite here
   if (sides == "left")
     res[["uci"]] <- Inf
   else if (sides == "right")
     res[["lci"]] <- -Inf
-  
+
   res
 }

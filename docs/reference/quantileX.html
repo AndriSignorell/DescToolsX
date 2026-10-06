@@ -55,8 +55,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">quantileX</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.25</span><span class="op">)</span>,</span>
+<span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  type <span class="op">=</span> <span class="fl">7</span>,</span>
@@ -72,109 +72,140 @@
 <dd><p>a numeric vector</p></dd>
 
 
-<dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>an optional numeric vector giving the sample weights</p></dd>
-
-
 <dt id="arg-probs">probs<a class="anchor" aria-label="anchor" href="#arg-probs"></a></dt>
-<dd><p>numeric vector of probabilities with values in \([0,1]\)</p></dd>
+<dd><p>numeric vector of probabilities with values in \([0,1]\);
+<code>NA</code> is allowed</p></dd>
+
+
+<dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
+<dd><p>an optional numeric vector of non-negative, finite sample
+weights, of the same length as <code>x</code>. Missing weights are handled like
+missing values in <code>x</code>.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
-<dd><p>a logical indicating whether missing values in <code>x</code> should
-be omitted</p></dd>
+<dd><p>logical; if <code>TRUE</code>, observations with a missing value or a
+missing weight are removed before the computation</p></dd>
 
 
 <dt id="arg-names">names<a class="anchor" aria-label="anchor" href="#arg-names"></a></dt>
-<dd><p>logical; if true, the result has a <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code>
-attribute.  Set to <code>FALSE</code> for speedup with many <code>probs</code>.</p></dd>
+<dd><p>logical; if true, the result has a <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code> attribute. Set
+to <code>FALSE</code> for speedup with many <code>probs</code>.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>an integer between 1 and 9 selecting one of the nine quantile
-algorithms of <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>. All nine are available for
-unweighted data. With <code>weights</code> only 5 and 7 (default) exist; any
-other value is an error. See Details for how the two differ in their
-reading of the weights.</p></dd>
+<dd><p>an integer selecting the quantile algorithm. Without weights
+one of the nine types of <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> (default 7). With weights
+2 (alias 5) or 7 (default); see Details.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
 <dd><p>used only when <code>names</code> is true: the precision to use when
-formatting the percentages. In <code>R</code> versions up to 4.0.x, this had been
-set to <code>max(2, getOption("digits"))</code>, internally.</p></dd>
+formatting the percentages.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a numeric vector containing the weighted quantiles of <code>x</code> at
-probabilities <code>probs</code>, named when <code>names = TRUE</code></p>
+    <p>a numeric vector of the same length as <code>probs</code>, named when
+<code>names = TRUE</code></p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Without <code>weights</code> the call is handed to <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>
-unchanged, so all nine types are available and the results are identical
-to base R.</p>
-<p>With <code>weights</code> only types 5 and 7 exist, and they interpret the
-weights <strong>differently</strong>:</p>
-<dl><dt><code>type = 5</code></dt>
-<dd><p>treats them as relative weights: only the ratios
-matter, and multiplying every weight by a constant leaves the result
-unchanged. This follows the Eurostat definition (EU-SILC 131-rev/04).</p></dd>
+    <p>Without <code>weights</code> the call is handed to <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>, so all nine
+types are available and the results are identical to base R. The one
+deliberate difference is the treatment of missing values, see below.</p>
+<p>With <code>weights</code> two algorithms exist, and they interpret the weights
+<strong>differently</strong>:</p>
+<dl><dt><code>type = 2</code></dt>
+<dd><p>inverse of the weighted empirical distribution
+function, averaging at discontinuities - the weighted counterpart of
+<code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> type 2. The weights are <em>relative</em>: only their
+ratios matter, multiplying every weight by a constant leaves the
+result unchanged, and equal weights reproduce the unweighted type 2.
+This is the Eurostat definition (EU-SILC 131-rev/04). <code>type = 5</code> is
+accepted as an alias, see the note on DescTools below.</p></dd>
 
 <dt><code>type = 7</code></dt>
-<dd><p>treats them as <em>frequency</em> weights, i.e. as
-replication counts. The effective sample size is <code>sum(weights)</code>,
-so the result is <strong>not</strong> scale-invariant, and weights that have
-been normalized to sum to 1 are degenerate - see below.</p></dd>
+<dd><p>treats the weights as <em>frequency</em> weights, i.e. as
+replication counts: with integer weights the result equals
+<code>quantile(rep(x, weights), type = 7)</code>. The effective sample size is
+<code>sum(weights)</code>, so the result is <strong>not</strong> scale-invariant, and weights
+normalized to sum to 1 are degenerate. <code>type = 7</code> therefore requires
+<code>sum(weights) &gt;= 2</code> and raises an error otherwise.</p></dd>
 
 
-</dl><p>This difference is inherited from the two source implementations and is
-not a free choice of the caller: it is worth knowing which of the two is
-meant before picking a type. Because <code>type = 7</code> needs
-<code>sum(weights)</code> to act as a sample size, it requires that sum to be
-at least 2 and raises an error otherwise.</p>
+</dl><p>Relative weights (survey or design weights) call for <code>type = 2</code>,
+replication counts for <code>type = 7</code>.</p>
+<p><strong>Missing values.</strong> <code>NA</code> and <code>NaN</code> are treated alike, in <code>x</code> and in
+<code>weights</code>; an observation is missing if its value or its weight is.
+With <code>na.rm = FALSE</code>, a missing observation yields <code>NA</code> for every
+requested probability, with and without weights - as <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean()</a></code> does
+(<code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code> raises an error instead). With <code>na.rm = TRUE</code> the
+missing observations are removed first; if nothing is left, the result
+is <code>NA</code>. Invalid arguments (e.g. <code>probs</code> outside \([0,1]\), negative
+or infinite weights) are an error even when data are missing. An <code>NA</code> in
+<code>probs</code> yields <code>NA</code> at that position only.</p>
+<p><strong>Difference to DescTools.</strong> <code><a href="https://andrisignorell.github.io/DescTools/reference/Quantile.html" class="external-link">DescTools::Quantile()</a></code> labelled the
+Eurostat algorithm <code>type = 5</code>. It is not R's type 5, which interpolates
+linearly between order statistics: with equal weights the old weighted
+<code>type = 5</code> and the unweighted <code>type = 5</code> gave different answers. Here the
+algorithm carries its correct number 2; <code>5</code> still selects it, so results
+of existing calls do not change.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Based on code by Andreas Alfons, Matthias Templ,
-adapted to conform to package standards.</p>
+    <p>The weighted algorithms are based on code by Andreas Alfons and
+Matthias Templ (<code>laeken::weightedQuantile()</code>), adapted to conform to
+package standards.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Working group on Statistics on Income and Living Conditions
-(2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
-gap.  <em>EU-SILC 131-rev/04</em>, Eurostat.</p>
+    <p>Working group on Statistics on Income and Living Conditions (2004).
+Common cross-sectional EU indicators based on EU-SILC; the gender pay
+gap. <em>EU-SILC 131-rev/04</em>, Eurostat.</p>
+<p>Hyndman, R. J., Fan, Y. (1996). Sample quantiles in statistical
+packages. <em>The American Statistician</em>, 50(4), 361–365.
+<a href="https://doi.org/10.1080/00031305.1996.10473566" class="external-link">doi:10.1080/00031305.1996.10473566</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="medianX.html">medianX()</a></code>, <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>,
-<code><a href="https://andrisignorell.github.io/lumen/reference/quantileCI.html" class="external-link">lumen::quantileCI()</a></code></p>
+    <div class="dont-index"><p><code><a href="medianX.html">medianX()</a></code>, <code><a href="iqrX.html">iqrX()</a></code>, <code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">stats::quantile()</a></code>, <code><a href="https://andrisignorell.github.io/lumen/reference/quantileCI.html" class="external-link">lumen::quantileCI()</a></code></p>
 <p>Other quantile:
 <code><a href="extremes.html">extremes</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Pizza$temperature contains missing values, so na.rm is needed - without</span></span></span>
-<span class="r-in"><span><span class="co"># it the function returns NA for every prob, silently.</span></span></span>
-<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">Pizza</span><span class="op">$</span><span class="va">temperature</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">Pizza</span><span class="op">)</span><span class="op">)</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Pizza$temperature contains missing values: without na.rm the result is</span></span></span>
+<span class="r-in"><span><span class="co"># NA for every prob</span></span></span>
+<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">Pizza</span><span class="op">$</span><span class="va">temperature</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">Pizza</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>          na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19.3 42.1 49.8 55.3 64.8 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.7</span>, <span class="fl">3.3</span>, <span class="fl">3.5</span>, <span class="fl">2.8</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># type 5 only looks at the ratios of the weights ...</span></span></span>
-<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span>,      type <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># type 2 only looks at the ratios of the weights ...</span></span></span>
+<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span>,      type <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2.8  3.3  3.5  3.7  3.7 </span>
-<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, type <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>   <span class="co"># identical</span></span></span>
+<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, type <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>   <span class="co"># identical</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2.8  3.3  3.5  3.7  3.7 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># ... while type 7 reads them as replication counts, so they have to be</span></span></span>
-<span class="r-in"><span><span class="co"># on that scale</span></span></span>
+<span class="r-in"><span><span class="co"># ... and equal weights give the unweighted type 2</span></span></span>
+<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.80 3.05 3.40 3.60 3.70 </span>
+<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.80 3.05 3.40 3.60 3.70 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># type 7 reads the weights as replication counts</span></span></span>
 <span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="va">x</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2.8  3.3  3.5  3.7  3.7 </span>
+<span class="r-in"><span><span class="fu">quantileX</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, type <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>              <span class="co"># identical</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0%  25%  50%  75% 100% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2.8  3.3  3.5  3.7  3.7 </span>
 <span class="r-in"><span></span></span>

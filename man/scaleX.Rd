@@ -4,7 +4,7 @@
 \alias{scaleX}
 \title{(Robust) Scaling and Centering}
 \usage{
-scaleX(x, center = TRUE, scale = TRUE, robust = FALSE, na.rm = TRUE)
+scaleX(x, center = TRUE, scale = TRUE, robust = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a numeric matrix-like object}
@@ -23,8 +23,9 @@ divisors directly.}
 \item{robust}{logical; whether to standardize by median and MAD rather
 than by mean and standard deviation}
 
-\item{na.rm}{logical; if \code{TRUE} (default), missing values are omitted
-when the column centers and scales are computed. Ignored for whichever of
+\item{na.rm}{logical; if \code{TRUE}, missing values are omitted when the
+column centers and scales are computed. With the default \code{FALSE} a column
+holding missing values gets \code{NA} as its center and scale. Ignored for whichever of
 \code{center} and \code{scale} is given as a numeric vector. Missing
 entries of \code{x} itself always remain missing in the result.}
 }
@@ -72,12 +73,13 @@ than failing, since the result may still be usable when those columns are
 subsequently dropped.
 }
 \examples{
+# temperature has missing values: without na.rm = TRUE the result is NA
 x <- bedrock::Pizza$temperature
 
 # robust standardization is far less affected by the extreme values
-plot(scaleX(x, robust = TRUE), col = "black", pch = 16, cex = 0.4,
-     ylab = "standardized temperature")
-points(scaleX(x), col = "red", pch = 16, cex = 0.4)
+plot(scaleX(x, robust = TRUE, na.rm = TRUE), col = "black", pch = 16,
+     cex = 0.4, ylab = "standardized temperature")
+points(scaleX(x, na.rm = TRUE), col = "red", pch = 16, cex = 0.4)
 legend("topright", legend = c("robust (median/MAD)", "conventional"),
        col = c("black", "red"), pch = 16, bty = "n")
 

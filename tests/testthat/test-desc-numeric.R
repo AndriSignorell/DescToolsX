@@ -1,5 +1,5 @@
 
-test_that("meanAD is the mean absolute deviation, not a truncated one", {
+test_that("meanAbsDev is the mean absolute deviation, not a truncated one", {
 
   # The C++ used unqualified abs() on a double. Without a
   # "using namespace std" that resolves to the C int abs(int) and
@@ -8,16 +8,16 @@ test_that("meanAD is the mean absolute deviation, not a truncated one", {
 
   # deviations well above 1 - the old code was biased low but nonzero
   x <- c(28.4, 31.2, 29.9, 35.1, 27.6, 33.3, 30.0, 26.8)
-  expect_equal(desc(x)$meanAD, ref(x))
+  expect_equal(desc(x)$meanAbsDev, ref(x))
 
   # deviations below 1 - the old code returned exactly 0
   p <- c(0.12, 0.35, 0.48, 0.51, 0.63, 0.29, 0.77, 0.41)
-  expect_equal(desc(p)$meanAD, ref(p))
-  expect_gt(desc(p)$meanAD, 0)
+  expect_equal(desc(p)$meanAbsDev, ref(p))
+  expect_gt(desc(p)$meanAbsDev, 0)
 
   # ties are weighted by their frequency
   y <- c(rep(1.2, 10), rep(3.7, 5), 9.1)
-  expect_equal(desc(y)$meanAD, ref(y))
+  expect_equal(desc(y)$meanAbsDev, ref(y))
 })
 
 
@@ -115,7 +115,7 @@ test_that("degenerate inputs do not error", {
 
   expect_silent(d1 <- desc(c(4, 4, 4, 4)))    # no variation
   expect_equal(d1$sd, 0)
-  expect_equal(d1$meanAD, 0)
+  expect_equal(d1$meanAbsDev, 0)
   expect_equal(d1$unique, 1)
 
   # a single non-missing value

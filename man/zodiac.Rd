@@ -4,14 +4,17 @@
 \alias{zodiac}
 \title{Calculate the Zodiac of a Date}
 \usage{
-zodiac(x, lang = c("en", "de"), stringsAsFactors = TRUE)
+zodiac(x, lang = .getOption("lang"), stringsAsFactors = TRUE)
 }
 \arguments{
 \item{x}{the date to transform, a \code{Date} or anything that
 \code{month()} and \code{day()} accept}
 
-\item{lang}{language of the zodiac names, either English (\code{"en"}) or
-German (\code{"de"})}
+\item{lang}{language of the zodiac names: \code{"en"} (English), \code{"de"}
+(German) or \code{"local"}, which gives the German names in a German locale
+and the English ones everywhere else. Falls back to the \code{"lang"} option
+(\code{options(DescToolsX.lang = )}) as in \code{\link[=month]{month()}} and \code{\link[=weekday]{weekday()}}, and to
+\code{"local"} if the option is not set.}
 
 \item{stringsAsFactors}{logical. If set to \code{TRUE} (default) the result
 will consist of a factor with zodiac signs as levels.}

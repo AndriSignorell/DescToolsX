@@ -6,7 +6,7 @@
 \usage{
 boxCoxLambda(
   x,
-  method = c("guerrero", "loglik"),
+  estimator = c("guerrero", "loglik"),
   lower = -1,
   upper = 2,
   nonseasonalLength = 2
@@ -18,7 +18,7 @@ strictly positive and finite, as the Box-Cox transformation is undefined
 otherwise; missing values are not removed but rejected, since subsetting
 would strip a \code{ts} of its frequency and cycle positions.}
 
-\item{method}{method to be used in calculating lambda. Can be either
+\item{estimator}{method to be used in calculating lambda. Can be either
 \code{"guerrero"} (default) or \code{"loglik"}.}
 
 \item{lower}{lower limit for possible lambda values; defaults to -1}
@@ -73,11 +73,11 @@ to conform to package standards.
 lambda <- boxCoxLambda(AirPassengers)
 
 # profile log likelihood, seasonal trend model
-boxCoxLambda(AirPassengers, method = "loglik")
+boxCoxLambda(AirPassengers, estimator = "loglik")
 
 # plain numeric vector, treated as non-seasonal
 set.seed(1)
-boxCoxLambda(rlnorm(100), method = "loglik")
+boxCoxLambda(rlnorm(100), estimator = "loglik")
 
 }
 \references{

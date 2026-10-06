@@ -262,7 +262,7 @@ print.Abstract <- function(x, width = NULL, truncate = NULL,
   if (coalesceX(truncate, attr(x, "truncate"), TRUE)) {
     res[, ] <- sapply(
       seq_len(ncol(res)),
-      function(i) strTrunc(res[, i], maxlen = width[i])
+      function(i) strTrunc(res[, i], maxLen = width[i])
     )
   }
 

@@ -6,9 +6,9 @@ test_that("all three table methods treat sides the same way", {
 
   # REGRESSION: they did not. "wald" was right, "exact" mapped
   # sides = "left" to fisher.test(alternative = "less") - whose interval
-  # has a finite UPPER bound, i.e. the wrong end - and "midp" ignored
+  # has a finite UPPER bound, i.e. the wrong end - and "mid-p" ignored
   # sides outright and always returned the two-sided interval.
-  for (m in c("wald", "exact", "midp")) {
+  for (m in c("wald", "exact", "mid-p")) {
 
     two   <- oddsRatio(tab, conf.level = 0.95, method = m)
     left  <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "left")
@@ -33,7 +33,7 @@ test_that("all three table methods treat sides the same way", {
 
 test_that("the one-sided bound equals the two-sided one at the adjusted level", {
 
-  for (m in c("wald", "exact", "midp")) {
+  for (m in c("wald", "exact", "mid-p")) {
 
     left  <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "left")
     right <- oddsRatio(tab, conf.level = 0.95, method = m, sides = "right")
@@ -49,7 +49,7 @@ test_that("the exact interval is the widest, the Wald interval the narrowest", {
 
   w <- oddsRatio(tab, conf.level = 0.95, method = "wald")
   e <- oddsRatio(tab, conf.level = 0.95, method = "exact")
-  p <- oddsRatio(tab, conf.level = 0.95, method = "midp")
+  p <- oddsRatio(tab, conf.level = 0.95, method = "mid-p")
 
   expect_gt(diff(e[c("lci", "uci")]), diff(p[c("lci", "uci")]))
   expect_gt(diff(p[c("lci", "uci")]), diff(w[c("lci", "uci")]))
@@ -201,7 +201,7 @@ test_that("exact and mid-p give point estimates without conf.level", {
   x <- matrix(c(12, 5, 7, 9), 2)
   expect_equal(unname(oddsRatio(x, method = "exact")),
                unname(fisher.test(x)$estimate))
-  mp <- oddsRatio(x, method = "midp")
+  mp <- oddsRatio(x, method = "mid-p")
   expect_length(mp, 1L)
   expect_true(is.finite(mp) && mp > 0)
 })

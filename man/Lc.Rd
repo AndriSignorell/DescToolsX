@@ -9,7 +9,7 @@
 \usage{
 \method{lc}{formula}(formula, data, subset, na.action = na.pass, ...)
 
-\method{lc}{default}(x, n = rep(1, length(x)), na.rm = FALSE, ...)
+\method{lc}{default}(x, weights = NULL, na.rm = FALSE, ...)
 
 \method{predict}{Lc}(object, newdata, conf.level = NA, general = FALSE, ...)
 }
@@ -35,15 +35,16 @@ interval types are rejected.}
 
 \item{x}{numeric vector of non-negative values}
 
-\item{n}{numeric vector of non-negative weights of the same length as
-\code{x}. Defaults to equal weights (\code{rep(1, length(x))}). Bootstrap intervals
-draw \code{floor(sum(n))} observations with probabilities proportional to \code{n};
+\item{weights}{numeric vector of non-negative weights of the same length as
+\code{x}. Defaults to equal weights. Bootstrap intervals draw
+\code{floor(sum(weights))} observations with probabilities proportional to
+\code{weights};
 the sum must be finite and at least one. Thus rescaling the weights
 changes the bootstrap sample size; frequency weights are appropriate
 when the weights represent replicated observations.}
 
 \item{na.rm}{logical. If \code{TRUE}, observations with \code{NA} in
-\code{x} or \code{n} are removed before computation.  Default is
+\code{x} or \code{weights} are removed before computation.  Default is
 \code{FALSE}.}
 
 \item{object}{object of class \code{"Lc"} as returned by \code{lc()}}
@@ -127,7 +128,7 @@ lc_obj$Gini
 
 # with weights
 w <- runif(100, 0.5, 2)
-lc(x, n = w)
+lc(x, weights = w)
 
 # formula interface: grouped Lorenz curves
 g <- sample(letters[1:3], 100, replace = TRUE)
@@ -151,7 +152,7 @@ lc_obj <- lc(x)
 plot(lc_obj)
 
 # overlay confidence band
-lines(lc_obj, cbandArgs = list(conf.level = 0.95))
+lines(lc_obj, cband = list(conf.level = 0.95))
 
 # add points
 points(lc_obj, pch = 16)

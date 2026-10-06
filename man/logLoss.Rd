@@ -4,17 +4,17 @@
 \alias{logLoss}
 \title{Log Loss}
 \usage{
-logLoss(x, pred = NULL, eps = .Machine$double.eps)
+logLoss(x, ref = NULL, eps = .Machine$double.eps)
 }
 \arguments{
-\item{x}{Either a numeric or logical vector containing the observed binary
-outcomes (0/1) when \code{pred} is supplied, or a fitted binomial
-\code{glm} from which response and fitted probabilities are extracted.
-Factors are not accepted, as the choice of the positive level would have
-to be guessed.}
+\item{x}{Either a numeric vector containing predicted probabilities in
+\eqn{[0,1]} when \code{ref} is supplied, or a fitted binomial
+\code{glm} from which response and fitted probabilities are extracted.}
 
-\item{pred}{Numeric vector containing predicted probabilities in
-\eqn{[0,1]}. Required when \code{x} is a response vector.}
+\item{ref}{Numeric or logical vector containing the observed binary
+outcomes (0/1), the reference the predictions are scored against.
+Required when \code{x} is a vector of predictions. Factors are not
+accepted, as the choice of the positive level would have to be guessed.}
 
 \item{eps}{Numeric scalar in \eqn{(0, 0.5)} used to clip probabilities
 away from 0 and 1. Defaults to \code{.Machine$double.eps}.}
@@ -52,10 +52,10 @@ explicitly.
 \examples{
 resp <- c(0, 0, 1, 1)
 pred <- c(0.1, 0.4, 0.35, 0.8)
-logLoss(resp, pred)
+logLoss(pred, resp)
 
 # a confidently wrong prediction is capped by eps
-logLoss(c(0, 1), c(1, 0), eps = 1e-6)
+logLoss(c(1, 0), c(0, 1), eps = 1e-6)
 
 m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 logLoss(m)

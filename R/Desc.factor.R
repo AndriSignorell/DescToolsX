@@ -24,7 +24,7 @@
 #' @param maxrows numeric; defines the maximum number of rows in a frequency
 #' table to be reported. For factors with many levels it is often not
 #' interesting to see all of them. Default is set to 12 most frequent ones
-#' (resp. the first ones if `ord` is set to `"levels"` or
+#' (resp. the first ones if `order` is set to `"levels"` or
 #' `"names"`).
 #' 
 #' For a numeric argument x `maxrows` is the minimum number of unique
@@ -45,7 +45,7 @@
 #' @param digits number of digits used to format relative frequencies; the
 #' default can be set with `setDescToolsXOption(digits = x)`
 #' 
-#' @param ord character out of `"name"` (alphabetical order),
+#' @param order character out of `"name"` (alphabetical order),
 #' `"level"`, `"asc"` (by frequencies ascending), `"desc"` (by
 #' frequencies descending) defining the order for a frequency table as used for
 #' factors, numerics with few unique values and logicals. Factors (and
@@ -72,7 +72,7 @@
 #' @rdname desc.factor
 #' @method desc factor
 #' @export
-desc.factor <- function(x, maxrows = NULL, ord = NULL,
+desc.factor <- function(x, maxrows = NULL, order = NULL,
                         conf.level = 0.95,
                         main = NULL, verbose = NULL, plotit = NULL,
                         digits = NULL, ...) {
@@ -94,16 +94,16 @@ desc.factor <- function(x, maxrows = NULL, ord = NULL,
   # view applies unconditionally, not just for a specific value pair.
   if (length(unique(x[ok])) == 2L)
     return(.descLogicalCore(x, xname = xname,
-                            ord = ord %||% "level",
-                            conf.level = conf.level, include_x = TRUE,
+                            order = order %||% "level",
+                            conf.level = conf.level, includeX = TRUE,
                             main = main, verbose = verbose, plotit = plotit,
                             digits = digits, ...))
   
-  if (is.null(ord)) {
-    if (is.ordered(x)) ord <- "level" else ord <- "desc"
+  if (is.null(order)) {
+    if (is.ordered(x)) order <- "level" else order <- "desc"
   }
   
-  freq <- freq(x, ord = ord, ...)
+  freq <- freq(x, order = order, ...)
 
   if (is.null(maxrows)) {
     maxrows <- 12
@@ -126,7 +126,7 @@ desc.factor <- function(x, maxrows = NULL, ord = NULL,
     # nlevels() of a character vector is 0
     levels = if (is.factor(x)) nlevels(x) else length(unique(x[ok])),
     unique = sum(freq$freq > 0), dupes = any(freq$freq > 1), maxrows = maxrows,
-    ord = ord, freq = freq
+    order = order, freq = freq
     
   )
   
@@ -190,5 +190,5 @@ print.Desc.factor <- function(x, digits = NULL, ...) {
 #' @export
 plot.Desc.factor <- function(x, ...){
   pharos::plotCatDist(setNamesX(x$freq[,2], x$freq[,1]), 
-                      na.rm=TRUE, maxcats = x$maxrows, ...)
+                      na.rm=TRUE, maxCats = x$maxrows, ...)
 }

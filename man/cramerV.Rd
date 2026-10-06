@@ -9,7 +9,7 @@ cramerV(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("ncchisq", "ncchisqadj", "fisher", "fisheradj"),
+  method = c("ncchisq", "ncchisq-adj", "fisher", "fisher-adj"),
   correct = FALSE,
   ...
 )
@@ -31,8 +31,8 @@ interval (one of \code{"two.sided"} (default), \code{"left"} or
 
 \item{method}{character string specifying the confidence interval method:
 \code{"ncchisq"} (default, using the noncentral chi-squared distribution),
-\code{"ncchisqadj"}, \code{"fisher"} (using fisher z transformation),
-or \code{"fisheradj"} (using the Fisher z transformation and bias correction)}
+\code{"ncchisq-adj"}, \code{"fisher"} (using fisher z transformation),
+or \code{"fisher-adj"} (using the Fisher z transformation and bias correction)}
 
 \item{correct}{logical; whether to apply the bias correction of Bergsma
 (2013); defaults to \code{FALSE}}
@@ -144,10 +144,10 @@ Bergsma, W. (2013) A bias-correction for Cramer's V and Tschuprow's T
 
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
+\code{\link[=gkLambda]{gkLambda()}},
 \code{\link[=gkTau]{gkTau()}},
-\code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
+\code{\link[=phiCoef]{phiCoef()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}

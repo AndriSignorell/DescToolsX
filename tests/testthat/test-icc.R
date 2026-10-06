@@ -4,7 +4,7 @@
               ncol = 4, byrow = TRUE,
               dimnames = list(paste0("S",1:6), paste0("J",1:4)))
 
-test_that("icc returns a single numeric by default (twoway, agreement, single)", {
+test_that("icc returns a single numeric by default (two-way, agreement, single)", {
   res <- icc(.sf)
   expect_length(res, 1)
   expect_true(is.numeric(res))
@@ -16,20 +16,20 @@ test_that("icc result is in [-1, 1]", {
   expect_lte(res,  1)
 })
 
-test_that("icc oneway agreement single ≈ 0.17 for Shrout-Fleiss data (ICC(1,1))", {
+test_that("icc one-way agreement single ≈ 0.17 for Shrout-Fleiss data (ICC(1,1))", {
   # Shrout & Fleiss Table 2: ICC(1,1) reported as 0.17 (rounded);
   # exact computed value is ≈ 0.166 — allow 3% relative tolerance
-  expect_equal(icc(.sf, model = "oneway", type = "agreement", unit = "single"),
+  expect_equal(icc(.sf, model = "one-way", definition = "agreement", unit = "single"),
                0.17, tolerance = 0.03)
 })
 
-test_that("icc twoway agreement single ≈ 0.29 for Shrout-Fleiss data (ICC(2,1))", {
-  expect_equal(icc(.sf, model = "twoway", type = "agreement", unit = "single"),
+test_that("icc two-way agreement single ≈ 0.29 for Shrout-Fleiss data (ICC(2,1))", {
+  expect_equal(icc(.sf, model = "two-way", definition = "agreement", unit = "single"),
                0.29, tolerance = 0.02)
 })
 
-test_that("icc model = 'oneway' returns a value in [-1, 1]", {
-  res <- icc(.sf, model = "oneway")
+test_that("icc model = 'one-way' returns a value in [-1, 1]", {
+  res <- icc(.sf, model = "one-way")
   expect_gte(res, -1); expect_lte(res, 1)
 })
 
@@ -40,8 +40,8 @@ test_that("icc unit = 'average' gives higher ICC than unit = 'single'", {
 })
 
 test_that("icc type = 'consistency' differs from type = 'agreement'", {
-  agree <- icc(.sf, type = "agreement")
-  cons  <- icc(.sf, type = "consistency")
+  agree <- icc(.sf, definition = "agreement")
+  cons  <- icc(.sf, definition = "consistency")
   expect_false(isTRUE(all.equal(agree, cons)))
 })
 
@@ -108,27 +108,27 @@ test_that("REML honours type and unit", {
   # the average form was silently identical to the single one
   expect_gt(avg, single)
   
-  agree <- icc(sf, method = "reml", type = "agreement")
-  consi <- icc(sf, method = "reml", type = "consistency")
+  agree <- icc(sf, method = "reml", definition = "agreement")
+  consi <- icc(sf, method = "reml", definition = "consistency")
   
   # consistency drops the rater variance from the denominator
   expect_gt(consi, agree)
   
   # and both stay close to their ANOVA counterparts
-  expect_equal(icc(sf, method = "reml", type = "consistency"),
-               icc(sf, method = "anova", type = "consistency"),
+  expect_equal(icc(sf, method = "reml", definition = "consistency"),
+               icc(sf, method = "anova", definition = "consistency"),
                tolerance = 0.05)
 })
 
 
-test_that("oneway plus consistency is refused, not returned as NULL", {
+test_that("one-way plus consistency is refused, not returned as NULL", {
   
   sf <- matrix(c(9,2,5,8, 6,1,3,2, 8,4,6,8, 7,1,2,6, 10,5,6,9, 6,2,4,7),
                ncol = 4, byrow = TRUE)
   
-  expect_error(icc(sf, model = "oneway", type = "consistency"),
+  expect_error(icc(sf, model = "one-way", definition = "consistency"),
                "not defined")
-  expect_error(icc(sf, model = "oneway", type = "consistency",
+  expect_error(icc(sf, model = "one-way", definition = "consistency",
                    conf.level = 0.95), "not defined")
 })
 
@@ -142,14 +142,14 @@ test_that("icc reproduces the Shrout and Fleiss reference values", {
   # compare at that resolution - expect_equal()'s tolerance is RELATIVE,
   # and 0.1657 against 0.17 is 2.5%, which 0.005 does not cover. Same
   # mistake I made with the PSU kappa reference.
-  expect_equal(round(icc(sf, model = "oneway", type = "agreement",
+  expect_equal(round(icc(sf, model = "one-way", definition = "agreement",
                          unit = "single"), 2), 0.17)
-  expect_equal(round(icc(sf, model = "twoway", type = "agreement",
+  expect_equal(round(icc(sf, model = "two-way", definition = "agreement",
                          unit = "single"), 2), 0.29)
-  expect_equal(round(icc(sf, model = "twoway", type = "consistency",
+  expect_equal(round(icc(sf, model = "two-way", definition = "consistency",
                          unit = "single"), 2), 0.71)
   
-  ci <- icc(sf, model = "twoway", type = "consistency",
+  ci <- icc(sf, model = "two-way", definition = "consistency",
             unit = "single", conf.level = 0.95)
   expect_named(ci, c("est", "lci", "uci"))
   expect_lt(ci[["lci"]], ci[["est"]])
@@ -163,13 +163,13 @@ test_that("the F-based intervals reproduce the Shrout-Fleiss reference", {
   # reference values as reported by psych::ICC() for the same data,
   # recomputed independently from the mean squares
   ci <- function(model, type, unit)
-    round(unname(icc(.sf, model = model, type = type, unit = unit,
+    round(unname(icc(.sf, model = model, definition = type, unit = unit,
                      conf.level = 0.95)[c("lci", "uci")]), 2)
-  expect_equal(ci("oneway", "agreement", "single"),   c(-0.13, 0.72))
-  expect_equal(ci("oneway", "agreement", "average"),  c(-0.88, 0.91))
-  expect_equal(ci("twoway", "agreement", "single"),   c(0.02, 0.76))
-  expect_equal(ci("twoway", "consistency", "single"), c(0.34, 0.95))
-  expect_equal(ci("twoway", "consistency", "average"), c(0.68, 0.99))
+  expect_equal(ci("one-way", "agreement", "single"),   c(-0.13, 0.72))
+  expect_equal(ci("one-way", "agreement", "average"),  c(-0.88, 0.91))
+  expect_equal(ci("two-way", "agreement", "single"),   c(0.02, 0.76))
+  expect_equal(ci("two-way", "consistency", "single"), c(0.34, 0.95))
+  expect_equal(ci("two-way", "consistency", "average"), c(0.68, 0.99))
   # the average bounds of ICC(2) are the Spearman-Brown step-up of the
   # single bounds
   s <- icc(.sf, conf.level = 0.95)

@@ -15,19 +15,19 @@
 #' cutoff. Prediction values therefore need only be numeric scores; they are
 #' not restricted to the interval \[0, 1\].
 #'
-#' @param x either a numeric vector of observed binary outcomes (0/1) when
-#'   `pred` is supplied, or a fitted model object from which both response
-#'   and predictions are extracted
-#' @param pred numeric vector of predicted probabilities or scores. Required
-#'   when `x` is a response vector; ignored when `x` is a model
-#'   object.
+#' @param x either a numeric vector of predicted probabilities or scores
+#'   when `ref` is supplied, or a fitted model object from which both
+#'   response and predictions are extracted
+#' @param ref numeric vector of observed binary outcomes (0/1), the
+#'   reference the predictions are scored against. Required when `x` is a
+#'   vector of predictions; ignored when `x` is a model object.
 #'
 #' @return A numeric scalar containing the average precision score.
 #'
 #' @examples
 #' resp <- c(0, 0, 1, 1)
 #' pred <- c(0.1, 0.4, 0.35, 0.8)
-#' averagePrecision(resp, pred)
+#' averagePrecision(pred, resp)
 #'
 #' @family model.metrics
 #' @concept model-evaluation
@@ -36,11 +36,12 @@
 #' 
 #' 
 #' @export
-averagePrecision <- function(x, pred = NULL) {
+averagePrecision <- function(x, ref = NULL) {
 
   # --- extract resp / pred ---------------------------------------------
-  if (!is.null(pred)) {
-    resp <- x
+  if (!is.null(ref)) {
+    pred <- x
+    resp <- ref
   } else {
     if (inherits(x, "glm")) {
       pred <- predict(x, type = "response")
@@ -53,17 +54,17 @@ averagePrecision <- function(x, pred = NULL) {
 
   # --- validate resp / pred --------------------------------------------
   if (length(resp) != length(pred))
-    stop("'x' and 'pred' must have the same length.")
+    stop("'x' and 'ref' must have the same length.")
   if (anyNA(resp) || anyNA(pred))
-    stop("'x' and 'pred' must not contain missing values.")
+    stop("'x' and 'ref' must not contain missing values.")
   if (!all(resp %in% c(0L, 1L)))
-    stop("'x' (response) must be binary (0/1).")
+    stop("'ref' (response) must be binary (0/1).")
   if (!is.numeric(pred))
-    stop("'pred' must be numeric.")
+    stop("'x' must be numeric.")
   if (!length(resp))
-    stop("'x' and 'pred' must not be empty.")
+    stop("'x' and 'ref' must not be empty.")
   if (!any(resp == 1L))
-    stop("'x' must contain at least one positive observation.")
+    stop("'ref' must contain at least one positive observation.")
 
   # --- average precision -----------------------------------------------
   ord  <- order(pred, decreasing = TRUE)

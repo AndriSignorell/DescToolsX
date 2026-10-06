@@ -8,7 +8,7 @@
   x,
   maxrows = NULL,
   conf.level = 0.95,
-  include_x = TRUE,
+  includeX = TRUE,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -23,12 +23,12 @@
 \item{maxrows}{numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
 interesting to see all of them. Default is set to 12 most frequent ones
-(resp. the first ones if \code{ord} is set to \code{"levels"} or
+(resp. the first ones if \code{order} is set to \code{"levels"} or
 \code{"names"}).}
 
 \item{conf.level}{confidence level for interval estimates (default 0.95)}
 
-\item{include_x}{logical; if \code{TRUE}, the original vector is retained
+\item{includeX}{logical; if \code{TRUE}, the original vector is retained
 in the result}
 
 \item{main}{character string, \code{NULL}, or \code{NA}, defining the main

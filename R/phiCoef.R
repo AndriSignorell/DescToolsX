@@ -42,12 +42,12 @@
 #' # Example with vectors
 #' x <- c("A", "A", "B", "B")
 #' y <- c("yes", "no", "yes", "no")
-#' phi(x, y)
+#' phiCoef(x, y)
 #'
 #' # Example with contingency table. Note that the signed coefficient is
-#' # -0.0891 here: phi() reports the magnitude only.
+#' # -0.0891 here: phiCoef() reports the magnitude only.
 #' tab <- matrix(c(10, 20, 30, 40), nrow = 2)
-#' phi(tab)
+#' phiCoef(tab)
 #'
 #'
 #' @seealso [chisq.test()]
@@ -59,7 +59,7 @@
 #'
 #'
 #' @export
-phi  <- function (x, y = NULL, ...) {
+phiCoef  <- function (x, y = NULL, ...) {
 
   if(!is.null(y)) x <- table(x, y, ...)
 

@@ -57,7 +57,7 @@ test_that("the POSIXlt-based extractors were already correct", {
   expect_equal(month(x), 1L)
   expect_equal(day(x), 1L)
   expect_equal(quarter(x), 1L)
-  expect_equal(yearDay(x), 1L)
+  expect_equal(dayOfYear(x), 1L)
   expect_equal(weekday(x), as.POSIXlt(x)$wday)
   expect_equal(hour(x), 0L)
   expect_equal(minute(x), 30L)
@@ -195,12 +195,12 @@ test_that("day<- moves a POSIXct to the requested day of the month", {
 })
 
 
-test_that("yearDays and monthDays stay vectorised", {
+test_that("daysInYear and daysInMonth stay vectorised", {
   
   x <- as.Date(c("2024-02-05", "2023-02-05", "2024-12-31"))
   
-  expect_equal(monthDays(x), c(29, 28, 31))
-  expect_equal(yearDays(x), c(366, 365, 366))
+  expect_equal(daysInMonth(x), c(29, 28, 31))
+  expect_equal(daysInYear(x), c(366, 365, 366))
 })
 
 

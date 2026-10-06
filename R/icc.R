@@ -10,23 +10,23 @@
 #'
 #' \itemize{
 #'   \item **model**: one-way or two-way ANOVA design
-#'   \item **type**: agreement or consistency
+#'   \item **definition**: agreement or consistency
 #'   \item **unit**: single rating or average of k ratings
 #' }
 #'
 #' The six classical Shrout--Fleiss cases are:
 #'
 #' \tabular{lll}{
-#' model \tab type \tab unit \cr
-#' oneway  \tab agreement   \tab single   (ICC1)  \cr
-#' oneway  \tab agreement   \tab average  (ICC1k) \cr
-#' twoway  \tab agreement   \tab single   (ICC2)  \cr
-#' twoway  \tab agreement   \tab average  (ICC2k) \cr
-#' twoway  \tab consistency \tab single   (ICC3)  \cr
-#' twoway  \tab consistency \tab average  (ICC3k) \cr
+#' model \tab definition \tab unit \cr
+#' one-way \tab agreement   \tab single   (ICC1)  \cr
+#' one-way \tab agreement   \tab average  (ICC1k) \cr
+#' two-way \tab agreement   \tab single   (ICC2)  \cr
+#' two-way \tab agreement   \tab average  (ICC2k) \cr
+#' two-way \tab consistency \tab single   (ICC3)  \cr
+#' two-way \tab consistency \tab average  (ICC3k) \cr
 #' }
 #'
-#' For `model = "oneway"` only `type = "agreement"` is meaningful.
+#' For `model = "one-way"` only `definition = "agreement"` is meaningful.
 #'
 #' Confidence intervals can be computed using different inference methods:
 #'
@@ -39,8 +39,8 @@
 #'
 #' @param x numeric matrix or data frame with subjects in rows and raters in
 #' columns
-#' @param model character string, either `"oneway"` or `"twoway"`
-#' @param type character string, either `"agreement"` or
+#' @param model character string, either `"one-way"` or `"two-way"`
+#' @param definition character string, either `"agreement"` or
 #' `"consistency"`
 #' @param unit character string, either `"single"` or `"average"`
 #' 
@@ -108,14 +108,14 @@
 #' icc(sf)
 #' 
 #' # get all versions
-#' args <- formals(icc)[c("model","type","unit")]
+#' args <- formals(icc)[c("model","definition","unit")]
 #' grid <- expand.grid(lapply(args, eval), 
 #'                     stringsAsFactors = FALSE)[-c(4,8),]
 #'                     
 #' out <- apply(grid, 1, function(row)
 #'   icc(sf,
 #'       model = row["model"],
-#'       type  = row["type"],
+#'       definition = row["definition"],
 #'       unit  = row["unit"],
 #'       method = "anova",
 #'       conf.level = 0.95) )
@@ -132,23 +132,23 @@ icc <- function(x,
                 conf.level = NA,
                 sides = c("two.sided","left","right"),
                 method = c("anova","reml","boot"),
-                model = c("twoway","oneway"),
-                type  = c("agreement","consistency"),
+                model = c("two-way","one-way"),
+                definition  = c("agreement","consistency"),
                 unit  = c("single","average"),
                 na.rm = FALSE,
                 ...) {
   
   
   # Shrout & Fleiss	Deine API	McGraw & Wong
-  # ICC(1)	oneway_agreement_single	    Single_raters_absolute
-  # ICC(1k)	oneway_agreement_average	  Average_raters_absolute
-  # ICC(2)	twoway_agreement_single	    Single_raters_absolute
-  # ICC(2k)	twoway_agreement_average	  Average_raters_absolute
-  # ICC(3)	twoway_consistency_single	  Single_raters_consistency
-  # ICC(3k)	twoway_consistency_average	Average_raters_consistency
+  # ICC(1)	one-way_agreement_single	    Single_raters_absolute
+  # ICC(1k)	one-way_agreement_average	  Average_raters_absolute
+  # ICC(2)	two-way_agreement_single	    Single_raters_absolute
+  # ICC(2k)	two-way_agreement_average	  Average_raters_absolute
+  # ICC(3)	two-way_consistency_single	  Single_raters_consistency
+  # ICC(3k)	two-way_consistency_average	Average_raters_consistency
   
   model  <- match.arg(model)
-  type   <- match.arg(type)
+  definition   <- match.arg(definition)
   unit   <- match.arg(unit)
   method <- match.arg(method)
   sides  <- match.arg(sides)
@@ -159,8 +159,8 @@ icc <- function(x,
   # or, with conf.level set, as a two-element vector missing its est. The
   # documented example works around it by dropping rows 4 and 8 of the
   # grid, a sign that the case was known but never refused.
-  if(model == "oneway" && type == "consistency")
-    stop("type = \"consistency\" is not defined for model = \"oneway\"; ",
+  if(model == "one-way" && definition == "consistency")
+    stop("definition = \"consistency\" is not defined for model = \"one-way\"; ",
          "a one-way design has no rater effect", call. = FALSE)
 
   checkConfLevel(conf.level)
@@ -201,15 +201,15 @@ icc <- function(x,
          call. = FALSE)
   
   if(method == "anova" || method == "boot") {
-    estObj <- .iccEstimateAnova(ratings, model, type, unit)
+    estObj <- .iccEstimateAnova(ratings, model, definition, unit)
   } else {
-    estObj <- .iccEstimateReml(ratings, model, type, unit)
+    estObj <- .iccEstimateReml(ratings, model, definition, unit)
   }
   
   if(!is.na(conf.level)) {
     confAdj <- if(sides == "two.sided") conf.level else 2 * conf.level - 1
     ci <- .iccCI(estObj, ratings, confAdj,
-                 model, type, unit, method, R)
+                 model, definition, unit, method, R)
     res <- c(est = estObj$est,
              applySides(unname(ci), sides, lo = -Inf, hi = 1))
   } else {
@@ -223,7 +223,7 @@ icc <- function(x,
 ## ANOVA Estimator
 ############################################################
 
-.iccEstimateAnova <- function(ratings, model, type, unit) {
+.iccEstimateAnova <- function(ratings, model, definition, unit) {
   
   ns <- nrow(ratings)
   nr <- ncol(ratings)
@@ -254,13 +254,13 @@ icc <- function(x,
   icc2k <- (MSB - MSE) / (MSB + (MSJ - MSE) / ns)
   icc3k <- (MSB - MSE) / MSB
   
-  est <- switch(paste(model,type,unit,sep="_"),
-                "oneway_agreement_single"    = icc1,
-                "oneway_agreement_average"   = icc1k,
-                "twoway_agreement_single"    = icc2,
-                "twoway_agreement_average"   = icc2k,
-                "twoway_consistency_single"  = icc3,
-                "twoway_consistency_average" = icc3k)
+  est <- switch(paste(model,definition,unit,sep="_"),
+                "one-way_agreement_single"    = icc1,
+                "one-way_agreement_average"   = icc1k,
+                "two-way_agreement_single"    = icc2,
+                "two-way_agreement_average"   = icc2k,
+                "two-way_consistency_single"  = icc3,
+                "two-way_consistency_average" = icc3k)
   
   list(est=est, icc2=icc2,
        MSB=MSB, MSJ=MSJ, MSE=MSE, MSW=MSW,
@@ -271,7 +271,7 @@ icc <- function(x,
 ## REML Estimator
 ############################################################
 
-.iccEstimateReml <- function(ratings, model, type, unit) {
+.iccEstimateReml <- function(ratings, model, definition, unit) {
   
   if(!requireNamespace("lme4", quietly=TRUE))
     stop("Package 'lme4' required for REML.")
@@ -292,7 +292,7 @@ icc <- function(x,
     vc$vcov[vc$grp == grp]
   }
 
-  if(model=="oneway") {
+  if(model=="one-way") {
 
     fit <- lme4::lmer(value ~ 1 + (1|subject), df_long, REML=TRUE)
     sigma_s <- getVc(fit, "subject")
@@ -308,23 +308,23 @@ icc <- function(x,
 
   }
 
-  # type and unit were ignored entirely: the function always returned the
+  # definition and unit were ignored entirely: the function always returned the
   # single-rating ABSOLUTE-agreement coefficient, so
   # icc(x, method = "reml", unit = "average") silently gave the same
-  # number as unit = "single", and type = "consistency" the same as
-  # type = "agreement".
+  # number as unit = "single", and definition = "consistency" the same as
+  # definition = "agreement".
   #
   # consistency drops the rater variance from the denominator, agreement
   # keeps it; the average form divides the error terms by nr, which is the
   # Spearman-Brown adjustment written in variance components.
   icc <- if(unit == "single") {
 
-    sigma_s / if(type == "consistency") sigma_s + sigma_e
+    sigma_s / if(definition == "consistency") sigma_s + sigma_e
               else sigma_s + sigma_r + sigma_e
 
   } else {
 
-    sigma_s / if(type == "consistency") sigma_s + sigma_e / nr
+    sigma_s / if(definition == "consistency") sigma_s + sigma_e / nr
               else sigma_s + (sigma_r + sigma_e) / nr
 
   }
@@ -338,13 +338,13 @@ icc <- function(x,
 ############################################################
 
 .iccCI <- function(obj, ratings, conf.level,
-                   model, type, unit, method, R) {
+                   model, definition, unit, method, R) {
   
   switch(method,
-         anova = .iccCIAnova(obj, conf.level, model, type, unit),
+         anova = .iccCIAnova(obj, conf.level, model, definition, unit),
          reml  = .iccCIReml(obj, conf.level),
          boot  = .iccCIBoot(ratings, conf.level,
-                            model, type, unit, R)
+                            model, definition, unit, R)
   )
 }
 
@@ -352,7 +352,7 @@ icc <- function(x,
 ## ANOVA CI  (Shrout & Fleiss exact)
 ############################################################
 
-.iccCIAnova <- function(obj, conf.level, model, type, unit) {
+.iccCIAnova <- function(obj, conf.level, model, definition, unit) {
   
   alpha <- 1 - conf.level
   
@@ -361,7 +361,7 @@ icc <- function(x,
   ns  <- obj$ns;  nr  <- obj$nr
   icc2 <- obj$icc2
   
-  if(model=="oneway") {
+  if(model=="one-way") {
     
     F  <- MSB/MSW
     df1 <- ns-1
@@ -378,7 +378,7 @@ icc <- function(x,
       upr <- 1-1/FU
     }
     
-  } else if(model=="twoway" && type=="consistency") {
+  } else if(model=="two-way" && definition=="consistency") {
     
     F  <- MSB/MSE
     df1 <- ns-1
@@ -461,7 +461,7 @@ icc <- function(x,
 ############################################################
 
 .iccCIBoot <- function(ratings, conf.level,
-                       model, type, unit, R) {
+                       model, definition, unit, R) {
   
   alpha <- 1-conf.level
   ns <- nrow(ratings)
@@ -469,7 +469,7 @@ icc <- function(x,
   vals <- replicate(R,{
     idx <- sample(seq_len(ns),replace=TRUE)
     .iccEstimateAnova(ratings[idx,,drop=FALSE],
-                      model,type,unit)$est
+                      model,definition,unit)$est
   })
 
   # a resample that draws the same subject throughout has no between-

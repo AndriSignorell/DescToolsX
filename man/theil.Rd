@@ -4,13 +4,13 @@
 \alias{theil}
 \title{Theil Index}
 \usage{
-theil(x, n = rep(1, length(x)), na.rm = FALSE)
+theil(x, weights = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{x}{numeric vector of non-negative values, such as incomes}
 
-\item{n}{optional frequency weights. Each element of \code{x}
-is replicated \code{n} times. Must be a vector of non-negative
+\item{weights}{optional frequency weights. Each element of \code{x}
+is replicated \code{weights} times. Must be a vector of non-negative
 integers of the same length as \code{x}.}
 
 \item{na.rm}{logical. If \code{TRUE}, missing values are removed.}
@@ -54,7 +54,7 @@ theil(c(0, 0, 0, 40))             # everything in one hand: log(4)
 theil(c(1, 2, 3, 4, 5))
 
 # frequency weights replicate the observations
-theil(1:3, n = c(1, 2, 3))
+theil(1:3, weights = c(1, 2, 3))
 theil(rep(1:3, times = c(1, 2, 3)))
 
 }

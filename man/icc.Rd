@@ -9,8 +9,8 @@ icc(
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("anova", "reml", "boot"),
-  model = c("twoway", "oneway"),
-  type = c("agreement", "consistency"),
+  model = c("two-way", "one-way"),
+  definition = c("agreement", "consistency"),
   unit = c("single", "average"),
   na.rm = FALSE,
   ...
@@ -34,9 +34,9 @@ One-sided intervals require \code{conf.level > 0.5}.}
 \item{method}{character string specifying the estimation and confidence
 interval method; defaults to \code{"anova"}}
 
-\item{model}{character string, either \code{"oneway"} or \code{"twoway"}}
+\item{model}{character string, either \code{"one-way"} or \code{"two-way"}}
 
-\item{type}{character string, either \code{"agreement"} or
+\item{definition}{character string, either \code{"agreement"} or
 \code{"consistency"}}
 
 \item{unit}{character string, either \code{"single"} or \code{"average"}}
@@ -68,23 +68,23 @@ decisions:
 
 \itemize{
 \item \strong{model}: one-way or two-way ANOVA design
-\item \strong{type}: agreement or consistency
+\item \strong{definition}: agreement or consistency
 \item \strong{unit}: single rating or average of k ratings
 }
 
 The six classical Shrout--Fleiss cases are:
 
 \tabular{lll}{
-model \tab type \tab unit \cr
-oneway  \tab agreement   \tab single   (ICC1)  \cr
-oneway  \tab agreement   \tab average  (ICC1k) \cr
-twoway  \tab agreement   \tab single   (ICC2)  \cr
-twoway  \tab agreement   \tab average  (ICC2k) \cr
-twoway  \tab consistency \tab single   (ICC3)  \cr
-twoway  \tab consistency \tab average  (ICC3k) \cr
+model \tab definition \tab unit \cr
+one-way \tab agreement   \tab single   (ICC1)  \cr
+one-way \tab agreement   \tab average  (ICC1k) \cr
+two-way \tab agreement   \tab single   (ICC2)  \cr
+two-way \tab agreement   \tab average  (ICC2k) \cr
+two-way \tab consistency \tab single   (ICC3)  \cr
+two-way \tab consistency \tab average  (ICC3k) \cr
 }
 
-For \code{model = "oneway"} only \code{type = "agreement"} is meaningful.
+For \code{model = "one-way"} only \code{definition = "agreement"} is meaningful.
 
 Confidence intervals can be computed using different inference methods:
 
@@ -124,14 +124,14 @@ sf <- matrix(c( 9, 2, 5, 8,    6, 1, 3, 2,    8, 4, 6, 8,
 icc(sf)
 
 # get all versions
-args <- formals(icc)[c("model","type","unit")]
+args <- formals(icc)[c("model","definition","unit")]
 grid <- expand.grid(lapply(args, eval), 
                     stringsAsFactors = FALSE)[-c(4,8),]
                     
 out <- apply(grid, 1, function(row)
   icc(sf,
       model = row["model"],
-      type  = row["type"],
+      definition = row["definition"],
       unit  = row["unit"],
       method = "anova",
       conf.level = 0.95) )

@@ -7,8 +7,8 @@
 #' with parameter \eqn{\alpha = 1}.
 #'
 #' @param x numeric vector of non-negative values, such as incomes
-#' @param n optional frequency weights. Each element of `x`
-#'   is replicated `n` times. Must be a vector of non-negative
+#' @param weights optional frequency weights. Each element of `x`
+#'   is replicated `weights` times. Must be a vector of non-negative
 #'   integers of the same length as `x`.
 #' @param na.rm logical. If `TRUE`, missing values are removed.
 #'
@@ -46,7 +46,7 @@
 #' theil(c(1, 2, 3, 4, 5))
 #'
 #' # frequency weights replicate the observations
-#' theil(1:3, n = c(1, 2, 3))
+#' theil(1:3, weights = c(1, 2, 3))
 #' theil(rep(1:3, times = c(1, 2, 3)))
 #'
 #' @family inequality
@@ -54,19 +54,22 @@
 #' @concept concentration-index
 #'
 #' @export
-theil <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
+theil <- function(x, weights = NULL, na.rm = FALSE) {
 
   if (!is.numeric(x))
     stop("Argument 'x' must be numeric.")
 
   # -- frequency weights ------------------------------------------------
-  # rep() would silently truncate non-integer values, so check explicitly
-  if (length(n) != length(x))
-    stop("Argument 'n' must have the same length as 'x'.")
-  if (anyNA(n) || any(n < 0) || any(n != trunc(n)))
-    stop("Argument 'n' must contain non-negative integer frequencies.")
+  if (is.null(weights))
+    weights <- rep(1, length(x))
 
-  x <- rep(x, n)
+  # rep() would silently truncate non-integer values, so check explicitly
+  if (length(weights) != length(x))
+    stop("Argument 'weights' must have the same length as 'x'.")
+  if (anyNA(weights) || any(weights < 0) || any(weights != trunc(weights)))
+    stop("Argument 'weights' must contain non-negative integer frequencies.")
+
+  x <- rep(x, weights)
 
   if (na.rm)
     x <- x[!is.na(x)]

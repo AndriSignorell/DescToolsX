@@ -81,7 +81,7 @@ addMonths(x, c(1, 3), origin = as.Date("1970-01-01"))
 \url{https://stackoverflow.com/questions/14169620/add-a-month-to-a-date}
 }
 \seealso{
-\code{\link[=as.ym]{as.ym()}}, \code{\link[=year]{year()}}, \code{\link[=month]{month()}}
+\code{\link[=asYm]{asYm()}}, \code{\link[=year]{year()}}, \code{\link[=month]{month()}}
 
 Other date.time:
 \code{\link[=countWorkDays]{countWorkDays()}},

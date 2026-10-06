@@ -110,7 +110,8 @@ test_that("coefVarCI one-sided naive limits have the correct quantiles", {
   left <- coefVarCI(x, method = "naive", sides = "left")
   right <- coefVarCI(x, method = "naive", sides = "right")
   expect_equal(left, c(est = K, lci = K * sqrt(4 / qchisq(0.95, 4)), uci = Inf))
-  expect_equal(right, c(est = K, lci = -Inf, uci = K * sqrt(4 / qchisq(0.05, 4))))
+  expect_equal(right, c(est = K, lci = 0, uci = K * sqrt(4 / qchisq(0.05, 4))))
+  expect_error(coefVarCI(x, conf.level = 0.4, sides = "left"), "exceed 0.5")
 })
 
 test_that("coefVar forwards frequency weights consistently to point and interval estimates", {

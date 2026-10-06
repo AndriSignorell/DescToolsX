@@ -8,7 +8,7 @@ tukeyBiweight(
   x,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  const = 9,
+  constant = 9,
   na.rm = FALSE,
   ...
 )
@@ -23,7 +23,7 @@ tukeyBiweight(
 interval (one of \code{"two.sided"} (default), \code{"left"} or
 \code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
-\item{const}{tuning constant passed to \code{tbrm_cpp()}. Defaults to \code{9}.}
+\item{constant}{tuning constant passed to \code{tbrm_cpp()}. Defaults to \code{9}.}
 
 \item{na.rm}{logical. Should missing values be removed before computation?
 Defaults to \code{FALSE}.}
@@ -48,7 +48,7 @@ of a numeric vector, optionally with a bootstrap confidence interval.
 \details{
 The biweight mean is a robust location estimator that downweights
 observations far from the median.  It is defined via the tuning constant
-\code{const} (default 9), which controls the breakdown point: larger
+\code{constant} (default 9), which controls the breakdown point: larger
 values are less resistant but more efficient under normality.
 
 When \code{conf.level} is not \code{NA} a bootstrap confidence interval

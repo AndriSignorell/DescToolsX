@@ -4,7 +4,7 @@
 #' Computes the Atkinson inequality index.
 #'
 #' @param x numeric vector of non-negative values, such as incomes
-#' @param n optional frequency weights; either a single non-negative whole
+#' @param weights optional frequency weights; either a single non-negative whole
 #'   number or a vector having the same length as `x`
 #' @param epsilon single non-negative numeric value specifying the inequality
 #'   aversion parameter
@@ -59,7 +59,7 @@
 #'
 #' The calculation uses normalized frequency weights and logarithmic power
 #' means. It therefore does not construct the potentially very large vector
-#' that would result from `rep(x, n)`.
+#' that would result from `rep(x, weights)`.
 #'
 #' Observations with zero frequency are ignored. If all frequencies are zero
 #' or no observations remain after removing missing values, `NA_real_`
@@ -86,7 +86,7 @@
 #' atkinson(x, epsilon = 2)
 #'
 #' # frequency weights
-#' atkinson(c(10, 20, 30), n = c(3, 1, 1))
+#' atkinson(c(10, 20, 30), weights = c(3, 1, 1))
 #'
 #' # zero incomes
 #' atkinson(c(0, 10, 20), epsilon = 1)
@@ -95,8 +95,8 @@
 #' @concept inequality
 #' @concept concentration-index
 #' @export
-atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5,
-                     na.rm = FALSE, tol = 1e-8) {
+atkinson <- function(x, weights = NULL, epsilon = 0.5,
+                     tol = 1e-8, na.rm = FALSE) {
   
   if (!is.numeric(x))
     stop("'x' must be a numeric vector")
@@ -115,23 +115,26 @@ atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5,
   if (epsilon < 0)
     return(NA_real_)
   
-  if (!is.numeric(n) || anyNA(n) || any(!is.finite(n)) ||
-      any(n < 0) || any(n != floor(n)))
-    stop("'n' must contain non-negative finite whole numbers")
+  if (is.null(weights))
+    weights <- rep(1, length(x))
+
+  if (!is.numeric(weights) || anyNA(weights) || any(!is.finite(weights)) ||
+      any(weights < 0) || any(weights != floor(weights)))
+    stop("'weights' must contain non-negative finite whole numbers")
   
-  if (length(n) == 1L) {
-    n <- rep(n, length(x))
-  } else if (length(n) != length(x)) {
-    stop("'n' must have length one or the same length as 'x'")
+  if (length(weights) == 1L) {
+    weights <- rep(weights, length(x))
+  } else if (length(weights) != length(x)) {
+    stop("'weights' must have length one or the same length as 'x'")
   }
   
   if (length(x) == 0L)
     return(NA_real_)
   
   # Values with zero frequency have no influence, including invalid values.
-  keep <- n > 0
+  keep <- weights > 0
   x <- x[keep]
-  n <- n[keep]
+  weights <- weights[keep]
   
   if (length(x) == 0L)
     return(NA_real_)
@@ -139,7 +142,7 @@ atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5,
   if (na.rm) {
     keep <- !is.na(x)
     x <- x[keep]
-    n <- n[keep]
+    weights <- weights[keep]
     
   } else if (anyNA(x)) {
     return(NA_real_)
@@ -162,18 +165,18 @@ atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5,
   # The index is scale invariant. Scaling avoids overflow in the mean.
   x <- x / max(x)
   
-  # Normalize through max(n) so that sum(n) cannot overflow.
-  weights <- n / max(n)
-  weights <- weights / sum(weights)
+  # Normalize through the maximum so that the sum cannot overflow.
+  w <- weights / max(weights)
+  w <- w / sum(w)
   
-  arithmeticMean <- sum(weights * x)
+  arithmeticMean <- sum(w * x)
   
   if (epsilon == 1 || abs(epsilon - 1) <= tol) {
     
     if (any(x == 0))
       return(1)
     
-    logEquivalent <- sum(weights * log(x))
+    logEquivalent <- sum(w * log(x))
     
   } else {
     
@@ -190,7 +193,7 @@ atkinson <- function(x, n = rep(1, length(x)), epsilon = 0.5,
     
     logEquivalent <-
       anchor +
-      log(sum(weights * exp(power * (logX - anchor)))) / power
+      log(sum(w * exp(power * (logX - anchor)))) / power
   }
   
   logRatio <- logEquivalent - log(arithmeticMean)

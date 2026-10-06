@@ -7,7 +7,7 @@
 #' @details
 #' The biweight mean is a robust location estimator that downweights
 #' observations far from the median.  It is defined via the tuning constant
-#' `const` (default 9), which controls the breakdown point: larger
+#' `constant` (default 9), which controls the breakdown point: larger
 #' values are less resistant but more efficient under normality.
 #'
 #' When `conf.level` is not `NA` a bootstrap confidence interval
@@ -32,7 +32,7 @@
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
 #'
-#' @param const tuning constant passed to `tbrm_cpp()`. Defaults to `9`.
+#' @param constant tuning constant passed to `tbrm_cpp()`. Defaults to `9`.
 #' @param na.rm logical. Should missing values be removed before computation?
 #' Defaults to `FALSE`.
 #' @param ... further arguments passed to the bootstrap engine when a
@@ -71,7 +71,7 @@
 tukeyBiweight <- function(x,
                           conf.level = NA,
                           sides      = c("two.sided", "left", "right"),
-                          const      = 9,
+                          constant      = 9,
                           na.rm      = FALSE,
                           ...) {
 
@@ -87,9 +87,9 @@ tukeyBiweight <- function(x,
   if (!is.numeric(x) || length(x) == 0L)
     stop("Argument 'x' must be a non-empty numeric vector.")
 
-  if (!is.numeric(const) || length(const) != 1L || !is.finite(const) ||
-      const <= 0)
-    stop("Argument 'const' must be a single positive number.")
+  if (!is.numeric(constant) || length(constant) != 1L || !is.finite(constant) ||
+      constant <= 0)
+    stop("Argument 'constant' must be a single positive number.")
 
   if (sides != "two.sided" && !is.na(conf.level) && conf.level <= 0.5)
     stop(gettextf(
@@ -120,7 +120,7 @@ tukeyBiweight <- function(x,
   if (is.na(conf.level)) {
     if (anyNA(x))
       return(NA_real_)
-    return(tbrm_cpp(x, C = const))
+    return(tbrm_cpp(x, C = constant))
   }
 
   # --- confidence interval -------------------------------------------
@@ -156,7 +156,7 @@ tukeyBiweight <- function(x,
     x,
     R        = boot_args$R,
     alpha    = alpha,
-    constant = const,          # C++ formal is 'constant', 'const' is a keyword
+    constant = constant,          # C++ formal is 'constant', 'const' is a keyword
     seed     = base_seed,
     method   = boot_args$type
   )

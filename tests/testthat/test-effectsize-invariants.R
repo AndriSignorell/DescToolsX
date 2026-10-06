@@ -13,7 +13,7 @@ test_that("weighted kappa reproduces the PSU reference example", {
                  0,  0,  2, 1), nrow = 4, byrow = TRUE,
               dimnames = list(rater1 = lbl, rater2 = lbl))
 
-  res <- cohenKappa(m, weights = "equal-spacing", conf.level = 0.95)
+  res <- cohenKappa(m, weighting = "equal-spacing", conf.level = 0.95)
 
   # the PSU page reports two decimals, so compare at that resolution -
   # expect_equal()'s tolerance is RELATIVE, and 0.436 vs 0.44 is 0.9%,
@@ -30,8 +30,8 @@ test_that("kappa is invariant to transposition with symmetric weights", {
                          byrow = TRUE))
 
   for (w in c("unweighted", "equal-spacing", "fleiss-cohen"))
-    expect_equal(cohenKappa(m, weights = w),
-                 cohenKappa(t(m), weights = w), label = w)
+    expect_equal(cohenKappa(m, weighting = w),
+                 cohenKappa(t(m), weighting = w), label = w)
 })
 
 
@@ -107,8 +107,8 @@ test_that("the scaled Brier interval lives on the scaled scale", {
   resp <- rbinom(300, 1, 0.4)
   pred <- plogis(rnorm(300, ifelse(resp == 1, 0.5, -0.5)))
 
-  raw    <- brierScore(resp, pred, conf.level = 0.95)
-  scaled <- brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
+  raw    <- brierScore(pred, resp, conf.level = 0.95)
+  scaled <- brierScore(pred, resp, conf.level = 0.95, scaled = TRUE)
 
   # the interval must bracket its own estimate - the former version
   # combined a scaled estimate with an unscaled standard error
@@ -130,9 +130,9 @@ test_that("the percentile bootstrap honours the requested level", {
   resp <- rbinom(200, 1, 0.4)
   pred <- plogis(rnorm(200, ifelse(resp == 1, 0.5, -0.5)))
 
-  perc <- brierScore(resp, pred, conf.level = 0.95, method = "boot",
+  perc <- brierScore(pred, resp, conf.level = 0.95, method = "boot",
                      type = "perc", R = 999)
-  percOne <- brierScore(resp, pred, conf.level = 0.95, sides = "left",
+  percOne <- brierScore(pred, resp, conf.level = 0.95, sides = "left",
                         method = "boot", type = "perc", R = 999)
 
   # the Brier score lies in [0, 1]: the open side is reported at 1

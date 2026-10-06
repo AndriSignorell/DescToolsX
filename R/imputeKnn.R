@@ -78,10 +78,10 @@
 #'
 #' @export
 imputeKnn <- function(x,
+                      distData = NULL,
                       k = 10,
                       scale = TRUE,
-                      method = c("weighted", "median"),
-                      distData = NULL) {
+                      method = c("weighted", "median")) {
 
   method <- match.arg(method)
 

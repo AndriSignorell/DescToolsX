@@ -81,7 +81,7 @@ test_that("unweighted: 2x2 matrix", {
 # -----------------------------------------------------------------------
 
 test_that("equal-spacing: returns numeric scalar", {
-  res <- cohenKappa(m3, weights = "equal-spacing")
+  res <- cohenKappa(m3, weighting = "equal-spacing")
   expect_true(is.numeric(res))
   expect_length(res, 1L)
 })
@@ -90,13 +90,13 @@ test_that("equal-spacing: returns numeric scalar", {
 test_that("equal-spacing >= unweighted for ordered categories", {
   # weighted kappa is generally >= unweighted when weights penalise
   # distant disagreements less than 1
-  expect_gte(cohenKappa(m3, weights = "equal-spacing"),
-             cohenKappa(m3, weights = "unweighted"))
+  expect_gte(cohenKappa(m3, weighting = "equal-spacing"),
+             cohenKappa(m3, weighting = "unweighted"))
 })
 
 
 test_that("fleiss-cohen: returns numeric scalar", {
-  res <- cohenKappa(fleiss, weights = "fleiss-cohen")
+  res <- cohenKappa(fleiss, weighting = "fleiss-cohen")
   expect_true(is.numeric(res))
   expect_length(res, 1L)
 })
@@ -105,15 +105,15 @@ test_that("fleiss-cohen: returns numeric scalar", {
 test_that("fleiss-cohen >= equal-spacing (quadratic > linear penalty)", {
   # Fleiss-Cohen weights decrease more slowly from the diagonal ->
   # closer disagreements penalised less -> higher weighted kappa
-  expect_gte(cohenKappa(m3, weights = "fleiss-cohen"),
-             cohenKappa(m3, weights = "equal-spacing"))
+  expect_gte(cohenKappa(m3, weighting = "fleiss-cohen"),
+             cohenKappa(m3, weighting = "equal-spacing"))
 })
 
 
 test_that("user weight matrix: identity weights equal unweighted", {
   W   <- diag(ncol(m3))
-  k_w <- cohenKappa(m3, weights = W)
-  k_u <- cohenKappa(m3, weights = "unweighted")
+  k_w <- cohenKappa(m3, weighting = W)
+  k_u <- cohenKappa(m3, weighting = "unweighted")
   expect_equal(k_w, k_u)
 })
 
@@ -122,8 +122,8 @@ test_that("user weight matrix: equal-spacing matches built-in", {
   nc <- ncol(m3)
   W  <- outer(seq_len(nc), seq_len(nc),
               function(i, j) 1 - abs(i - j) / (nc - 1))
-  expect_equal(cohenKappa(m3, weights = W),
-               cohenKappa(m3, weights = "equal-spacing"))
+  expect_equal(cohenKappa(m3, weighting = W),
+               cohenKappa(m3, weighting = "equal-spacing"))
 })
 
 
@@ -181,7 +181,7 @@ test_that("CI: symmetric around est (Wald)", {
 
 
 test_that("weighted CI: lci < est < uci", {
-  res <- cohenKappa(m3, weights = "equal-spacing", conf.level = 0.95)
+  res <- cohenKappa(m3, weighting = "equal-spacing", conf.level = 0.95)
   expect_lt(res["lci"], res["est"])
   expect_lt(res["est"], res["uci"])
 })
@@ -244,7 +244,7 @@ test_that("vector interface with CI matches matrix interface", {
 test_that("vector interface + weighted raises error", {
   x <- bedrock::untable(m3)
   expect_error(
-    cohenKappa(x$rater1, x$rater2, weights = "equal-spacing"),
+    cohenKappa(x$rater1, x$rater2, weighting = "equal-spacing"),
     "unweighted kappa only"
   )
 })
@@ -266,26 +266,26 @@ test_that("vector conf.level raises error", {
 
 
 test_that("invalid weights string raises error", {
-  expect_error(cohenKappa(m3, weights = "quadratic"), "arg")
+  expect_error(cohenKappa(m3, weighting = "quadratic"), "arg")
 })
 
 
 test_that("weight matrix: non-numeric raises error", {
   W <- matrix(as.character(diag(3)), 3, 3)
-  expect_error(cohenKappa(m3, weights = W), "numeric")
+  expect_error(cohenKappa(m3, weighting = W), "numeric")
 })
 
 
 test_that("weight matrix: wrong dimensions raises error", {
   W <- diag(4)   # m3 is 3x3
-  expect_error(cohenKappa(m3, weights = W), "dimensions")
+  expect_error(cohenKappa(m3, weighting = W), "dimensions")
 })
 
 
 test_that("weight matrix: non-finite values raise error", {
   W      <- diag(3)
   W[1,2] <- Inf
-  expect_error(cohenKappa(m3, weights = W), "NA, NaN, or Inf")
+  expect_error(cohenKappa(m3, weighting = W), "NA, NaN, or Inf")
 })
 
 
@@ -293,7 +293,7 @@ test_that("weight matrix: values outside [0,1] give warning", {
   W      <- diag(3)
   W[1,2] <- 1.5
   W[2,1] <- 1.5
-  expect_warning(cohenKappa(m3, weights = W), "outside")
+  expect_warning(cohenKappa(m3, weighting = W), "outside")
 })
 
 
@@ -301,7 +301,7 @@ test_that("asymmetric weight matrix gives warning", {
   W      <- diag(3)
   W[1,2] <- 0.5
   W[2,1] <- 0.3
-  expect_warning(cohenKappa(m3, weights = W), "symmetric")
+  expect_warning(cohenKappa(m3, weighting = W), "symmetric")
 })
 
 

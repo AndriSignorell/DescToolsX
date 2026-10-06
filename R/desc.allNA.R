@@ -44,7 +44,7 @@ print.Desc.AllNA <- function(x, ...) {
   ), na.rm = TRUE)
   
   m <- rbind(lst$l1, lst$l2, "")
-  out <- capture.output(printCharMatrix(m, showRownames = FALSE))
+  out <- capture.output(printCharMatrix(m, showRowNames = FALSE))
   
   cat(out, sep = "\n")
   

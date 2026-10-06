@@ -57,8 +57,8 @@
                  , "Somers D R|C"          = .row(ords$somers)
                  , "Pearson Correlation"   = .row(pearsonCor(x, conf.level = conf.level))
                  , "Spearman Correlation"  = .row(spearmanCor(x, conf.level = conf.level))
-                 , "Lambda R|C"            = .row(lambda(x, direction = "row", conf.level = conf.level))
-                 , "Lambda sym"            = .row(lambda(x, direction = "sym", conf.level = conf.level))
+                 , "Lambda R|C"            = .row(gkLambda(x, direction = "row", conf.level = conf.level))
+                 , "Lambda sym"            = .row(gkLambda(x, direction = "sym", conf.level = conf.level))
                  , "Uncertainty Coeff. R|C"  = .row(uncertCoef(x, direction = "row", conf.level = conf.level))
                  , "Uncertainty Coeff. sym"  = .row(uncertCoef(x, direction = "sym", conf.level = conf.level))
                  , "Mutual Information"    = .row(mutInf(x))
@@ -417,18 +417,15 @@ ordAssocs <- function(x, y = NULL,
 #' @export
 gkGamma <- function(x, y = NULL,
                     conf.level = NA,
-                    sides = c("two.sided", "left", "right"),
-                    direction = c("row", "column")
-                    ) {
+                    sides = c("two.sided", "left", "right")) {
 
-  direction <- match.arg(direction)
-  sides     <- match.arg(sides)
+  sides <- match.arg(sides)
 
+  # gamma is symmetric in rows and columns, so no direction is passed
   res <- ordAssocs(
     x = x,
     y = y,
     which = "gamma",
-    direction = direction,
     conf.level = conf.level,
     sides = sides
   )

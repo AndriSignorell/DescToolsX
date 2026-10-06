@@ -155,7 +155,7 @@ percTable(tab, col.vars=c(3,1), prop="total", margins=c(1,2))
 percTable(driver ~ area, data=Pizza, subset=wine_delivered==0)
 
 # sort the table by rows, order first column (Zurich), then third, then row.names (0)
-percTable(sortX(tab, ord=c(1,3,0)))
+percTable(sortX(tab, by=c(1,3,0)))
 
 # reverse the row variables, so that absolute frequencies and percents
 # are not nested together

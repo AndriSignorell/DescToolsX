@@ -44,8 +44,8 @@ test_that("point estimate: const parameter changes result", {
   set.seed(4)
   x <- c(rnorm(50), 5, -5)
   
-  est_9  <- tukeyBiweight(x, const = 9)
-  est_3  <- tukeyBiweight(x, const = 3)
+  est_9  <- tukeyBiweight(x, constant = 9)
+  est_3  <- tukeyBiweight(x, constant = 3)
   
   # smaller const = more aggressive downweighting → different estimate
   expect_false(isTRUE(all.equal(est_9, est_3)))
@@ -277,8 +277,8 @@ test_that("the point estimate is tbrm_cpp() and is robust", {
   expect_lt(tukeyBiweight(x), mean(x))          # the outlier is downweighted
   
   # the tuning constant is honoured for the point estimate
-  expect_false(isTRUE(all.equal(tukeyBiweight(x, const = 3),
-                                tukeyBiweight(x, const = 9))))
+  expect_false(isTRUE(all.equal(tukeyBiweight(x, constant = 3),
+                                tukeyBiweight(x, constant = 9))))
   
 })
 
@@ -341,8 +341,8 @@ test_that("tukeyBiweight() validates its arguments", {
   
   expect_error(tukeyBiweight(character(3)), "non-empty numeric")
   expect_error(tukeyBiweight(numeric(0)), "non-empty numeric")
-  expect_error(tukeyBiweight(x, const = -1), "positive")
-  expect_error(tukeyBiweight(x, const = c(3, 9)), "positive")
+  expect_error(tukeyBiweight(x, constant = -1), "positive")
+  expect_error(tukeyBiweight(x, constant = c(3, 9)), "positive")
   expect_error(tukeyBiweight(x, conf.level = 1), "conf.level")
   expect_error(tukeyBiweight(x, conf.level = 0.4, sides = "left"), "0.5")
   expect_error(tukeyBiweight(x, conf.level = 0.95, method = "asymptotic"), "method")
@@ -357,9 +357,9 @@ test_that("const reaches the bootstrap engine", {
   x <- c(rnorm(50), 10)
   
   set.seed(5)
-  a <- tukeyBiweight(x, conf.level = 0.95, const = 3, R = 299, type = "perc")
-  expect_equal(a[["est"]], tukeyBiweight(x, const = 3))
-  expect_false(isTRUE(all.equal(a[["est"]], tukeyBiweight(x, const = 9))))
+  a <- tukeyBiweight(x, conf.level = 0.95, constant = 3, R = 299, type = "perc")
+  expect_equal(a[["est"]], tukeyBiweight(x, constant = 3))
+  expect_false(isTRUE(all.equal(a[["est"]], tukeyBiweight(x, constant = 9))))
   
 })
 

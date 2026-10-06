@@ -10,7 +10,7 @@ cStat(x, ...)
 
 \method{cStat}{glm}(x, ...)
 
-\method{cStat}{default}(x, resp, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
+\method{cStat}{default}(x, ref, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 }
 \arguments{
 \item{x}{an object for which the C-statistic should be computed; for the
@@ -18,7 +18,7 @@ default method, a numeric vector of predicted values}
 
 \item{...}{additional arguments passed to methods}
 
-\item{resp}{binary response vector (numeric, logical, or factor)}
+\item{ref}{binary response vector (numeric, logical, or factor)}
 
 \item{conf.level}{confidence level for the interval; \code{NA} (default)
 suppresses interval calculation}
@@ -48,7 +48,7 @@ higher predicted value has the higher observed outcome.
 
 Ties in predicted values are handled by assigning a weight of 0.5.
 
-\code{resp} is converted with \code{as.numeric(factor(resp)) - 1}, so
+\code{ref} is converted with \code{as.numeric(factor(resp)) - 1}, so
 the \strong{second} level in sort order counts as the event - \code{1}
 for a 0/1 coding, \code{TRUE} for a logical, and the second factor level
 otherwise. Getting this backwards returns \eqn{1 - C} rather than an
@@ -77,7 +77,7 @@ global random number generator and therefore advances it. Call
 set.seed(1)
 x <- runif(100)
 y <- rbinom(100, 1, 0.5)
-cStat(x, resp = y)
+cStat(x, ref = y)
 
 # GLM method
 r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,

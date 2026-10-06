@@ -35,7 +35,7 @@ test_that("rosenbluth na.rm = TRUE strips NAs", {
 
 test_that("rosenbluth frequency weights replicate observations", {
   x <- c(10, 20)
-  expect_equal(rosenbluth(x, n = c(2,2)), rosenbluth(rep(x, c(2,2))))
+  expect_equal(rosenbluth(x, weights = c(2,2)), rosenbluth(rep(x, c(2,2))))
 })
 
 
@@ -67,7 +67,7 @@ test_that("the value matches the closed form", {
 
 test_that("frequency weights replicate the values", {
   
-  expect_equal(rosenbluth(c(10, 1), n = c(1, 3)),
+  expect_equal(rosenbluth(c(10, 1), weights = c(1, 3)),
                rosenbluth(c(10, 1, 1, 1)))
 })
 
@@ -88,9 +88,9 @@ test_that("degenerate input returns NA rather than NaN", {
 test_that("arguments are validated", {
   
   expect_error(rosenbluth(letters), "numeric")
-  expect_error(rosenbluth(c(1, 2), n = c(1, 2, 3)), "length")
-  expect_error(rosenbluth(c(1, 2), n = c(1, -1)), "non-negative")
-  expect_error(rosenbluth(c(1, 2), n = c(1.5, 2)), "whole numbers")
+  expect_error(rosenbluth(c(1, 2), weights = c(1, 2, 3)), "length")
+  expect_error(rosenbluth(c(1, 2), weights = c(1, -1)), "non-negative")
+  expect_error(rosenbluth(c(1, 2), weights = c(1.5, 2)), "whole numbers")
   expect_error(rosenbluth(c(1, 2), na.rm = NA), "na.rm")
 })
 

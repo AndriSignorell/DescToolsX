@@ -78,10 +78,10 @@ https://doi.org/10.1016/j.jkss.2012.10.002
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
+\code{\link[=gkLambda]{gkLambda()}},
 \code{\link[=gkTau]{gkTau()}},
-\code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
+\code{\link[=phiCoef]{phiCoef()}},
 \code{\link[=uncertCoef]{uncertCoef()}},
 \code{\link{yule}}
 }

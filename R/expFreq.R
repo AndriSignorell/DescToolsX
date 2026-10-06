@@ -5,8 +5,8 @@
 #' 
 #' 
 #' @param x a table
-#' @param freq whether absolute or relative frequencies are computed. Must be
-#' `"abs"` or `"rel"`; partial matching is supported.
+#' @param scale whether expected counts or expected proportions are computed. Must be
+#' `"count"` (default) or `"proportion"`; partial matching is supported.
 #' @details
 #' Expected values for a 2-dimensional table can be easily calculated with
 #' res <- `[chisq.test](x)` and accessed by `res$expected`.
@@ -25,14 +25,14 @@
 #' 
 #' expFreq(Titanic)
 #' 
-#' expFreq(UCBAdmissions, freq="r")
+#' expFreq(UCBAdmissions, scale="proportion")
 #' 
 #' 
 #' @family frequency
 #' @concept frequency-table
 #' @concept chi-square-based
 #' @export
-expFreq <- function(x, freq = c("abs", "rel")) {
+expFreq <- function(x, scale = c("count", "proportion")) {
   
   # returns the expected frequencies of a table assuming independence
   
@@ -44,7 +44,7 @@ expFreq <- function(x, freq = c("abs", "rel")) {
   
   # 'frequency' would mask stats::frequency; the argument itself is
   # already matched here
-  freq <- match.arg(freq)
+  scale <- match.arg(scale)
 
   n <- sum(x)
   x <- x/n
@@ -56,7 +56,7 @@ expFreq <- function(x, freq = c("abs", "rel")) {
   tab <- array(apply(expand.grid(margins), 1, prod),
                d, dimnames = dimnames(x))
 
-  if (freq == "abs")
+  if (scale == "count")
     tab <- tab * n
 
   # the input is a table, so the expected frequencies should be one too -

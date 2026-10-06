@@ -131,8 +131,9 @@ test_that("small and degenerate inputs", {
   expect_equal(hodgesLehmann(5), 5)
   expect_equal(hodgesLehmann(c(1, 4)), 2.5)
   
-  expect_error(hodgesLehmann(numeric(0)), "at least one observation")
-  expect_error(hodgesLehmann(1:5, numeric(0)), "at least one observation")
+  # empty samples are empty data, not a calling error (design rules, NA policy)
+  expect_identical(hodgesLehmann(numeric(0)), NA_real_)
+  expect_identical(hodgesLehmann(1:5, numeric(0)), NA_real_)
   
   expect_equal(hodgesLehmann(c(2, 4, 6), 1), 3)   # m > 1, n == 1
   expect_equal(hodgesLehmann(5, c(1, 3, 5)), 2)   # m == 1, n > 1
@@ -196,4 +197,59 @@ test_that("two-sample with conf.level is refused, not silently wrong", {
   expect_error(hodgesLehmann(1:10, 1:8, conf.level = 0.95),
                "one-sample case")
 })
+
+
+
+
+test_that("missing values give NA of the documented shape", {
+  
+  x <- c(1.83, 0.50, 1.62, 2.48, NA)
+  y <- c(0.878, 0.647, NaN)
+  
+  expect_identical(hodgesLehmann(x), NA_real_)
+  expect_identical(hodgesLehmann(x[-5], y), NA_real_)
+  expect_identical(hodgesLehmann(c(1, NaN, 3)), NA_real_)
+  
+  ci <- hodgesLehmann(x, conf.level = 0.95)
+  expect_identical(ci, c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+})
+
+
+test_that("na.rm cleans x and y separately, they are not pairs", {
+  
+  x <- c(1.83, 0.50, NA, 2.48, 1.68)
+  y <- c(0.878, 0.647, 0.598)          # unequal length: used to stop
+  
+  expect_equal(hodgesLehmann(x, y, na.rm = TRUE),
+               hodgesLehmann(x[-3], y))
+  
+  # equal length: the valid y[3] must survive the NA in x[3]
+  y5 <- c(0.878, 0.647, 0.598, 2.05, 1.06)
+  expect_equal(hodgesLehmann(x, y5, na.rm = TRUE),
+               hodgesLehmann(x[-3], y5))
+})
+
+
+test_that("empty samples give NA, not an error", {
+  
+  expect_identical(hodgesLehmann(numeric(0)), NA_real_)
+  expect_identical(hodgesLehmann(c(NA, NA), na.rm = TRUE), NA_real_)
+  expect_identical(hodgesLehmann(1:3, numeric(0)), NA_real_)
+  expect_identical(hodgesLehmann(1:3, c(NA, NaN), na.rm = TRUE), NA_real_)
+  expect_identical(hodgesLehmann(c(NA, NA), na.rm = TRUE, conf.level = 0.9),
+                   c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+})
+
+
+test_that("invalid arguments are not masked by missing data", {
+  
+  x <- c(1, NA, 3)
+  
+  expect_error(hodgesLehmann(c("a", NA)), "numeric")
+  expect_error(hodgesLehmann(x, c("a", NA)), "numeric")
+  expect_error(hodgesLehmann(x, conf.level = 1.5))
+  expect_error(hodgesLehmann(x, conf.level = 0.95, sides = "up"))
+  expect_error(hodgesLehmann(x, 1:3, conf.level = 0.95), "one-sample")
+})
+
 

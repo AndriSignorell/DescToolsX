@@ -18,13 +18,13 @@
 #' @param x a non-empty numeric vector of data values
 #' @param method the method to be used. So far Tukey's boxplot and Hampel's
 #' rule are implemented.
-#' @param value logical. If `FALSE`, a vector containing the (integer)
-#' indices of the outliers is returned, and if `TRUE` (default), a vector
-#' containing the matching elements themselves is returned.
+#' @param output character string, one of `"value"` (default) or
+#' `"index"`. `"value"` returns the outlying elements themselves,
+#' `"index"` their (integer) positions in `x`.
 #' @param na.rm logical. Should missing values be removed? Defaults to
 #' `FALSE`.
 #' 
-#' @return the outlying values if `value = TRUE`; otherwise their indices
+#' @return the outlying values if `output = "value"`; otherwise their indices
 #' 
 #' @note Performance improvement by Luis Gustavo Schuck.
 #' 
@@ -36,12 +36,12 @@
 #' outlier(Pizza$temperature, na.rm=TRUE)
 #' 
 #' # it's the same as the result from boxplot
-#' sort(Pizza$temperature[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE)])
+#' sort(Pizza$temperature[outlier(Pizza$temperature, output="index", na.rm=TRUE)])
 #' b <- boxplot(Pizza$temperature, plot=FALSE)
 #' sort(b$out)
 #' 
 #' # nice to find the corresponding rows
-#' Pizza[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE), ]
+#' Pizza[outlier(Pizza$temperature, output="index", na.rm=TRUE), ]
 #' 
 #' # compare to Hampel's rule
 #' outlier(Pizza$temperature, method="hampel", na.rm=TRUE)
@@ -59,9 +59,13 @@
 #' @family data.inspection
 #' @concept outlier-detection
 #' @export
-outlier <- function(x, method=c("boxplot", "hampel"), value=TRUE, na.rm=FALSE){
+outlier <- function(x, method=c("boxplot", "hampel"), 
+                    output=c("value", "index"), na.rm=FALSE){
   
-  switch(match.arg(arg = method, choices = c("boxplot", "hampel")),
+  method <- match.arg(method)
+  output <- match.arg(output)
+  
+  switch(method,
          
          boxplot =  {
            # fivenum(), not quantile(): boxplot.stats() builds its fences
@@ -86,7 +90,7 @@ outlier <- function(x, method=c("boxplot", "hampel"), value=TRUE, na.rm=FALSE){
          }
   )
   
-  if(value)
+  if(output == "value")
     res <- x[id]
   else
     res <- which(id)

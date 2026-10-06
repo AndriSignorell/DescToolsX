@@ -2,45 +2,57 @@
 % Please edit documentation in R/iqrX.R
 \name{iqrX}
 \alias{iqrX}
-\title{The (weighted) Interquartile Range}
+\title{The (Weighted) Interquartile Range}
 \usage{
 iqrX(x, weights = NULL, na.rm = FALSE, type = NULL)
 }
 \arguments{
 \item{x}{numeric vector}
 
-\item{weights}{optional numeric vector giving the sample weights}
+\item{weights}{optional numeric vector of non-negative sample weights, of
+the same length as \code{x}}
 
-\item{na.rm}{logical; whether to remove missing values}
+\item{na.rm}{logical; whether to remove missing values. If \code{FALSE} and
+\code{x} contains missing values, the result is \code{NA}.}
 
-\item{type}{an integer selecting one of the many quantile algorithms, see
-\code{\link[=quantileX]{quantileX()}}}
+\item{type}{integer selecting the quantile algorithm, see \code{\link[=quantileX]{quantileX()}}.
+The default \code{NULL} picks the one that suits the branch taken: \code{7}
+without weights, as in \code{\link[stats:IQR]{stats::IQR()}}; \code{2} with weights, which reads
+them as \emph{relative} weights and depends only on their ratios. Pass
+\code{type = 7} explicitly to read the weights as replication counts.}
 }
 \value{
 numeric scalar containing the interquartile range
 }
 \description{
-computes interquartile range of the x values. Weights are supported.
+Compute the interquartile range of \code{x}, with optional weights.
 }
 \details{
-This implementation is based on \code{\link[=quantileX]{quantileX()}} function, which
-allows to define weights.
+The IQR is the difference of the 0.75 and the 0.25 quantile as computed
+by \code{\link[=quantileX]{quantileX()}}. Without weights the result is identical to
+\code{\link[stats:IQR]{stats::IQR()}}, except that a missing value yields \code{NA} instead of an
+error when \code{na.rm = FALSE}.
 }
 \examples{
+x <- c(3.7, 3.3, 3.5, 2.8)
+w <- c(5, 5, 4, 1) / 15
 
-x <- c(3.7,3.3,3.5,2.8)
-w <- c(5, 5, 4, 1)/15
+iqrX(x)
+iqrX(x, weights = w)
+iqrX(x, weights = w * 15)                 # same: only the ratios count
+iqrX(x, weights = w * 15, type = 7)       # replication counts
 
-iqrX(x=x, weights=w)
+iqrX(c(x, NA))                            # NA, no error
+iqrX(c(x, NA), na.rm = TRUE)
 
 }
 \seealso{
-\link{medianX}, \link{quantileX}, \link{IQR}, \link{quantile}
+\code{\link[=medianX]{medianX()}}, \code{\link[=quantileX]{quantileX()}}, \code{\link[stats:IQR]{stats::IQR()}}, \code{\link[stats:quantile]{stats::quantile()}}
 
 Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=madX]{madX()}},
-\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanAbsDev]{meanAbsDev()}},
 \code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}

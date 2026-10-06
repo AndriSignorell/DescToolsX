@@ -50,9 +50,9 @@ desc(x, ...)
 
 \method{desc}{logical}(
   x,
-  ord = "level",
+  order = "level",
   conf.level = 0.95,
-  include_x = TRUE,
+  includeX = TRUE,
   main = NULL,
   verbose = NULL,
   plotit = NULL,
@@ -107,12 +107,12 @@ Applies to tables only.}
 on the classes of the variables. Default can be defined by
 the option \code{plotit}, if it does not exist then it's set to \code{FALSE}.}
 
-\item{ord}{order of the levels}
+\item{order}{order of the levels}
 
 \item{conf.level}{confidence level of the interval (default 0.95).
 If set to \code{NA}, no confidence interval is calculated.}
 
-\item{include_x}{logical; if \code{TRUE}, the original vector is retained
+\item{includeX}{logical; if \code{TRUE}, the original vector is retained
 in the result}
 
 \item{digits}{number of digits used to format relative frequencies; the

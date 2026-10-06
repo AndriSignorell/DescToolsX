@@ -1,5 +1,6 @@
 //
-// Port of Monahans algorithm for Hodges-Lehman estimator
+// Port of Monahan's algorithm for the Hodges-Lehmann estimator
+// (one- and two-sample case)
 //
 // https://dl.acm.org/doi/10.1145/1271.319414
 // https://www4.stat.ncsu.edu/~monahan/jul10/

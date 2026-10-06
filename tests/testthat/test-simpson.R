@@ -8,7 +8,7 @@ test_that("gini matches manual computation", {
   p <- prop.table(table(x))
   expected <- 1 - sum(p^2)
   
-  expect_equal(simpson(x, method = "gini"), expected)
+  expect_equal(simpson(x, metric = "gini"), expected)
 })
 
 test_that("hunter matches manual computation", {
@@ -18,7 +18,7 @@ test_that("hunter matches manual computation", {
   N <- sum(tt)
   expected <- 1 - sum(tt * (tt - 1)) / (N * (N - 1))
   
-  expect_equal(simpson(x, method = "hunter"), expected)
+  expect_equal(simpson(x, metric = "hunter"), expected)
 })
 
 test_that("iqv matches manual computation", {
@@ -28,7 +28,7 @@ test_that("iqv matches manual computation", {
   k <- length(p)
   expected <- (1 - sum(p^2)) * k / (k - 1)
   
-  expect_equal(simpson(x, method = "iqv"), expected)
+  expect_equal(simpson(x, metric = "iqv"), expected)
 })
 
 test_that("gini matches vegan::diversity", {
@@ -39,7 +39,7 @@ test_that("gini matches vegan::diversity", {
   
   expected <- vegan::diversity(tt, index = "simpson")
   
-  expect_equal(simpson(x, method = "gini"), expected)
+  expect_equal(simpson(x, metric = "gini"), expected)
 })
 
 
@@ -56,26 +56,26 @@ test_that("counts input works", {
   counts <- c(A = 2, B = 1, C = 3)
   
   expect_equal(
-    simpson(counts, method = "gini"),
-    simpson(rep(names(counts), counts), method = "gini")
+    simpson(counts, metric = "gini"),
+    simpson(rep(names(counts), counts), metric = "gini")
   )
 })
 
 test_that("method argument works", {
   x <- c("A","B","C")
   
-  expect_error(simpson(x, method = "invalid"))
+  expect_error(simpson(x, metric = "invalid"))
 })
 
 
 
 test_that("edge cases handled", {
   expect_warning(simpson(character(0)),                  "Empty input")
-  expect_warning(simpson("A", method = "hunter"),        "N >= 2")
-  expect_warning(simpson(c("A","A"), method = "iqv"),    "K >= 2")
+  expect_warning(simpson("A", metric = "hunter"),        "N >= 2")
+  expect_warning(simpson(c("A","A"), metric = "iqv"),    "K >= 2")
   expect_true(is.na(suppressWarnings(simpson(character(0)))))
-  expect_true(is.na(suppressWarnings(simpson("A", method = "hunter"))))
-  expect_true(is.na(suppressWarnings(simpson(c("A","A"), method = "iqv"))))
+  expect_true(is.na(suppressWarnings(simpson("A", metric = "hunter"))))
+  expect_true(is.na(suppressWarnings(simpson(c("A","A"), metric = "iqv"))))
 })
 
 
@@ -89,7 +89,7 @@ test_that("hunter matches vegan unbiased simpson", {
   expected <- vegan::simpson.unb(x)
 
   expect_equal(
-    suppressWarnings(simpson(x, method = "hunter")),
+    suppressWarnings(simpson(x, metric = "hunter")),
     unname(expected),
     tolerance = 1e-12
   )
@@ -121,7 +121,7 @@ test_that("a single occupied category is homogeneous, not undefined", {
   expect_true(is.na(res))
 
   # ... and with the possible categories given, it is 0 as well
-  expect_equal(simpson(c(5, 0, 0), "iqv", categories = 5), 0)
+  expect_equal(simpson(c(5, 0, 0), "iqv", levels = 5), 0)
 })
 
 
@@ -202,19 +202,19 @@ test_that("the IQV uses the possible categories when given", {
   x <- c("A", "A", "B", "B", "C", "C")     # uniform over 3 observed
   
   expect_equal(simpson(x, "iqv"), 1)
-  expect_equal(simpson(x, "iqv", categories = 5), (2 / 3) * 5 / 4)
-  expect_equal(simpson(x, "iqv", categories = LETTERS[1:5]),
-               simpson(x, "iqv", categories = 5))
+  expect_equal(simpson(x, "iqv", levels = 5), (2 / 3) * 5 / 4)
+  expect_equal(simpson(x, "iqv", levels = LETTERS[1:5]),
+               simpson(x, "iqv", levels = 5))
   
   # empty factor levels count as possible categories
   f <- factor(x, levels = LETTERS[1:5])
-  expect_equal(simpson(f, "iqv", categories = levels(f)),
-               simpson(x, "iqv", categories = 5))
+  expect_equal(simpson(f, "iqv", levels = levels(f)),
+               simpson(x, "iqv", levels = 5))
   
-  expect_error(simpson(x, "iqv", categories = 2), "smaller")
-  expect_error(simpson(x, "iqv", categories = c("A", "B", "D")), "C")
-  expect_error(simpson(x, "iqv", categories = 4.5), "whole number")
-  expect_warning(simpson(x, "gini", categories = 5), "only used")
+  expect_error(simpson(x, "iqv", levels = 2), "smaller")
+  expect_error(simpson(x, "iqv", levels = c("A", "B", "D")), "C")
+  expect_error(simpson(x, "iqv", levels = 4.5), "whole number")
+  expect_warning(simpson(x, "gini", levels = 5), "only used")
 })
 
 
@@ -234,7 +234,7 @@ test_that("input checks", {
   expect_error(simpson(data.frame(A = 2, B = "3"), "gini"), "numeric counts")
 
   # NA is not a possible category
-  expect_error(simpson(c("A", "B"), "iqv", categories = c("A", "B", NA)),
+  expect_error(simpson(c("A", "B"), "iqv", levels = c("A", "B", NA)),
                "missing values")
 
   # huge counts: no overflow in n_i (n_i - 1) or N (N - 1)

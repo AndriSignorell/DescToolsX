@@ -33,8 +33,10 @@ test_that("conf.level is honoured, not silently replaced", {
 
   # regression: conf.level was never passed to bootCI(), so every request
   # came back at bootCI's own default level
-  set.seed(1); narrow <- krippAlpha(df, conf.level = 0.80, R = 199)
-  set.seed(1); wide   <- krippAlpha(df, conf.level = 0.99, R = 199)
+  # R = 999: a 99% bca interval from 199 replicates sits on the extreme
+  # order statistics, and boot.ci() says so with a warning
+  set.seed(1); narrow <- krippAlpha(df, conf.level = 0.80, R = 999)
+  set.seed(1); wide   <- krippAlpha(df, conf.level = 0.99, R = 999)
 
   expect_named(narrow, c("est", "lci", "uci"))
   expect_equal(narrow[["est"]], wide[["est"]])
@@ -83,22 +85,22 @@ test_that("sides is matched even when no interval is requested", {
 })
 
 
-test_that("output = 'ext' carries the same interval as output = 'def'", {
+test_that("output = 'extended' carries the same interval as output = 'default'", {
 
   set.seed(4); d <- krippAlpha(df, conf.level = 0.95, R = 199)
-  set.seed(4); e <- krippAlpha(df, conf.level = 0.95, R = 199, output = "ext")
+  set.seed(4); e <- krippAlpha(df, conf.level = 0.95, R = 199, output = "extended")
 
   expect_equal(e$ci, d)
   expect_equal(e$alpha, unname(d[["est"]]))
 
   # and without an interval the triple is still indexable
-  f <- krippAlpha(df, output = "ext")
+  f <- krippAlpha(df, output = "extended")
   expect_named(f$ci, c("est", "lci", "uci"))
   expect_true(all(is.na(f$ci)))
 
   # sides applies in the extended output too
   set.seed(4)
-  g <- krippAlpha(df, conf.level = 0.95, R = 199, output = "ext",
+  g <- krippAlpha(df, conf.level = 0.95, R = 199, output = "extended",
                   sides = "left")
   expect_equal(g$ci[["uci"]], 1)
 })

@@ -6,7 +6,7 @@
 \usage{
 brierScore(
   x,
-  pred = NULL,
+  ref = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("normal", "boot"),
@@ -15,13 +15,14 @@ brierScore(
 )
 }
 \arguments{
-\item{x}{either a numeric vector of observed binary outcomes
-(\eqn{0}/\eqn{1}) when \code{pred} is supplied, or a fitted model
+\item{x}{either a numeric vector of predicted probabilities in
+\eqn{[0,1]} when \code{ref} is supplied, or a fitted model
 object (\code{glm} or similar) from which both response and
 predictions are extracted}
 
-\item{pred}{a numeric vector of predicted probabilities in
-\eqn{[0,1]}. Required when \code{x} is a numeric vector; ignored
+\item{ref}{a numeric vector of observed binary outcomes
+(\eqn{0}/\eqn{1}), the reference the predictions are scored
+against. Required when \code{x} is a vector of predictions; ignored
 when \code{x} is a model object.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
@@ -113,10 +114,10 @@ set.seed(1)
 resp <- rbinom(200, 1, 0.4)
 pred <- plogis(rnorm(200, ifelse(resp == 1, 0.5, -0.5)))
 
-brierScore(resp, pred)
-brierScore(resp, pred, conf.level = 0.95)
-brierScore(resp, pred, conf.level = 0.95, method = "boot", type = "bca")
-brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
+brierScore(pred, resp)
+brierScore(pred, resp, conf.level = 0.95)
+brierScore(pred, resp, conf.level = 0.95, method = "boot", type = "bca")
+brierScore(pred, resp, conf.level = 0.95, scaled = TRUE)
 
 }
 \seealso{

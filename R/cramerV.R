@@ -20,8 +20,8 @@
 #'
 #' @param method character string specifying the confidence interval method:
 #' `"ncchisq"` (default, using the noncentral chi-squared distribution),
-#' `"ncchisqadj"`, `"fisher"` (using fisher z transformation),
-#' or `"fisheradj"` (using the Fisher z transformation and bias correction)
+#' `"ncchisq-adj"`, `"fisher"` (using fisher z transformation),
+#' or `"fisher-adj"` (using the Fisher z transformation and bias correction)
 #'
 #' @param ... further arguments, passed on to
 #'   [normalizeToConfusion()] and [table()] for building
@@ -125,8 +125,8 @@
 cramerV <- function(x, y = NULL, 
                     conf.level = NA,
                     sides = c("two.sided", "left", "right"),
-                    method = c("ncchisq", "ncchisqadj",
-                               "fisher", "fisheradj"),
+                    method = c("ncchisq", "ncchisq-adj",
+                               "fisher", "fisher-adj"),
                     correct = FALSE,
                      ...){
 
@@ -188,7 +188,7 @@ cramerV <- function(x, y = NULL,
            ci <- .cramerVFromChisq(ci, tab, n, correct)
          },
 
-         ncchisqadj = {
+         "ncchisq-adj" = {
            ci <- .chisqNcpCI(chisq.hat, df, confAdj) + df
            ci <- .cramerVFromChisq(ci, tab, n, correct)
          },
@@ -198,8 +198,8 @@ cramerV <- function(x, y = NULL,
            ci <- tanh(atanh(v) + c(-halfWidth, halfWidth))
          },
 
-         fisheradj = {
-           halfWidth <- .fisherHalfWidth(n, confAdj, v, "fisheradj")
+         "fisher-adj" = {
+           halfWidth <- .fisherHalfWidth(n, confAdj, v, "fisher-adj")
            # bias correction
            adj <- 0.5 * v / (n - 1)
            ci <- tanh(atanh(v) + c(-halfWidth, halfWidth) + adj)

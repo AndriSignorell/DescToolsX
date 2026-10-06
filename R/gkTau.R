@@ -15,7 +15,7 @@
 #' Misclassification probabilities are based on random category assignment with
 #' probabilities specified by marginal or conditional proportion.
 #' 
-#' Goodman Kruskal tau reduces to \eqn{\phi^2} (see: [phi()]) in the
+#' Goodman Kruskal tau reduces to \eqn{\phi^2} (see: [phiCoef()]) in the
 #' 2x2-table case.\cr
 #' 
 #' The measure lies in \eqn{[0, 1]} by construction. Both ends are reached by
@@ -78,7 +78,7 @@
 #' Papers Series on Quantitative Applications in the Social Sciences, 07-004.
 #' Newbury Park, CA: Sage, pp. 24--30
 #' 
-#' @seealso [lambda()], [cramerV()],
+#' @seealso [gkLambda()], [cramerV()],
 #' [Association()]
 #' 
 #' @examples
@@ -100,7 +100,7 @@
 #' gkTau(tab, direction="row", conf.level=0.95)
 #' gkTau(tab, direction="column", conf.level=0.95)
 #' # reduce both to:
-#' phi(tab)^2
+#' phiCoef(tab)^2
 #' 
 #' 
 #' # example 1 in Liebetrau (1983)

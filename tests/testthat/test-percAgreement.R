@@ -93,10 +93,10 @@ test_that("unknown arguments are rejected rather than swallowed", {
 })
 
 
-test_that("output = 'ext' carries the same interval as output = 'def'", {
+test_that("output = 'extended' carries the same interval as output = 'default'", {
 
   d <- percAgreement(cm, conf.level = 0.95)
-  e <- percAgreement(cm, conf.level = 0.95, output = "ext")
+  e <- percAgreement(cm, conf.level = 0.95, output = "extended")
 
   expect_equal(e$ci, d)
   expect_equal(e$est, unname(d[["est"]]))
@@ -104,11 +104,11 @@ test_that("output = 'ext' carries the same interval as output = 'def'", {
   expect_equal(e$n, sum(cm))
 
   # sides applies in the extended output too
-  g <- percAgreement(cm, conf.level = 0.95, output = "ext", sides = "left")
+  g <- percAgreement(cm, conf.level = 0.95, output = "extended", sides = "left")
   expect_equal(g$ci[["uci"]], 1)
 
   # and without an interval the triple is still indexable
-  f <- percAgreement(cm, output = "ext")
+  f <- percAgreement(cm, output = "extended")
   expect_named(f$ci, c("est", "lci", "uci"))
   expect_true(is.na(f$ci[["lci"]]))
 })

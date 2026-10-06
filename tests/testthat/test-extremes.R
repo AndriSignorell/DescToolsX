@@ -87,8 +87,8 @@ test_that("highLow output contains 'lowest' and 'highest' labels", {
   expect_match(out, "highest")
 })
 
-test_that("highLow nlow = 0 and nhigh = 0 returns empty lines", {
-  out <- highLow(1:10, nlow = 0, nhigh = 0)
+test_that("highLow nLow = 0 and nHigh = 0 returns empty lines", {
+  out <- highLow(1:10, nLow = 0, nHigh = 0)
   expect_match(out, "lowest :", fixed = TRUE)
 })
 
@@ -165,7 +165,7 @@ test_that("unique = TRUE keeps factor labels and Date class", {
 })
 
 test_that("highLow lists values with frequencies above one", {
-  out <- highLow(c(1, 1, 2, 3, 1000, 1000, 1000), nlow = 2, nhigh = 2)
+  out <- highLow(c(1, 1, 2, 3, 1000, 1000, 1000), nLow = 2, nHigh = 2)
   expect_match(out, "lowest : 1 (2), 2", fixed = TRUE)
   expect_match(out, "1'000 (3)", fixed = TRUE)
 })

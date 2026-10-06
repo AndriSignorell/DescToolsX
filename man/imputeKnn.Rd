@@ -6,14 +6,19 @@
 \usage{
 imputeKnn(
   x,
+  distData = NULL,
   k = 10,
   scale = TRUE,
-  method = c("weighted", "median"),
-  distData = NULL
+  method = c("weighted", "median")
 )
 }
 \arguments{
 \item{x}{a data frame with missing values.}
+
+\item{distData}{optional data frame supplying the pool of potential
+neighbours. If given, neighbours are drawn from \code{distData} only,
+while \code{x} alone is imputed. It must have the same variables as
+\code{x}.}
 
 \item{k}{positive integer, the number of nearest neighbours to draw on.}
 
@@ -25,11 +30,6 @@ only, not the imputed values.}
 \code{"weighted"} for a distance-weighted mean (numeric) or weighted
 mode (factor), or \code{"median"} for a median (numeric) or mode
 (factor).}
-
-\item{distData}{optional data frame supplying the pool of potential
-neighbours. If given, neighbours are drawn from \code{distData} only,
-while \code{x} alone is imputed. It must have the same variables as
-\code{x}.}
 }
 \value{
 a data frame of the same shape as \code{x}, with missing values

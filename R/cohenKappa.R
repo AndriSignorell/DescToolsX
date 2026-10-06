@@ -20,7 +20,7 @@
 #' in `x`, or as two vectors `x` and `y`, in which case
 #' `table(x, y, \dots)` is computed internally.  Note that the vector
 #' interface supports **unweighted kappa only**: the function raises
-#' an error if `weights` is not `"unweighted"` and `y` is
+#' an error if `weighting` is not `"unweighted"` and `y` is
 #' supplied, because the level ordering of two independent factors cannot
 #' be guaranteed to be consistent when constructing the confusion table.
 #'
@@ -40,7 +40,7 @@
 #'   compatible dimensions to `x`. When supplied,
 #'   `table(x, y, \dots)` is computed. The vector interface is
 #'   available for unweighted kappa only (see Details).
-#' @param weights  either a character string selecting a built-in weight
+#' @param weighting  either a character string selecting a built-in weight
 #'   scheme -- `"unweighted"` (default), `"equal-spacing"`, or
 #'   `"fleiss-cohen"` -- or a numeric matrix with the same dimensions
 #'   as `x` supplying user-defined weights for each cell
@@ -107,11 +107,11 @@
 #'   nrow = 6, byrow = TRUE,
 #'   dimnames = list(rater1 = cats, rater2 = cats))
 #'
-#' cohenKappa(mw, weights = "equal-spacing", conf.level = 0.95)
+#' cohenKappa(mw, weighting = "equal-spacing", conf.level = 0.95)
 #'
 #' # user-supplied weight matrix
 #' wm <- outer(1:6, 1:6, function(i, j) 1 - abs(i - j) / (6 - 1))
-#' cohenKappa(mw, weights = wm, conf.level = 0.95)
+#' cohenKappa(mw, weighting = wm, conf.level = 0.95)
 #'
 #' # pairwise kappa across raters
 #' rating <- data.frame(
@@ -127,7 +127,7 @@ cohenKappa <- function(x,
                        y          = NULL,
                        conf.level = NA,
                        sides      = c("two.sided", "left", "right"),
-                       weights    = c("unweighted", "equal-spacing",
+                       weighting    = c("unweighted", "equal-spacing",
                                       "fleiss-cohen"),
                        ...) {
 
@@ -139,17 +139,17 @@ cohenKappa <- function(x,
     stop("Argument 'conf.level' must be a single value or NA.")
 
   # --- weight argument -------------------------------------------------
-  if (is.matrix(weights)) {
+  if (is.matrix(weighting)) {
 
     # validated below, once normalizeToConfusion() has fixed the dimension
 
-  } else if (is.character(weights)) {
-    weights <- match.arg(weights)
+  } else if (is.character(weighting)) {
+    weighting <- match.arg(weighting)
   } else {
-    stop("Argument 'weights' must be a character string or a numeric matrix.")
+    stop("Argument 'weighting' must be a character string or a numeric matrix.")
   }
 
-  if (!is.null(y) && !identical(weights, "unweighted"))
+  if (!is.null(y) && !identical(weighting, "unweighted"))
     stop(
       "The vector interface supports unweighted kappa only. ",
       "Provide a confusion matrix for weighted kappa."
@@ -171,27 +171,27 @@ cohenKappa <- function(x,
   rowFreqs <- rowSums(p)
 
   # --- weight matrix W -------------------------------------------------
-  W <- if (is.matrix(weights)) {
+  W <- if (is.matrix(weighting)) {
 
     # validate user-supplied weight matrix
-    if (!is.numeric(weights))
+    if (!is.numeric(weighting))
       stop("Weight matrix must be numeric.")
-    if (!all(dim(weights) == nc))
+    if (!all(dim(weighting) == nc))
       stop("Weight matrix must have the same dimensions as 'x' (",
            nc, " x ", nc, ").")
-    if (any(!is.finite(weights)))
+    if (any(!is.finite(weighting)))
       stop("Weight matrix must not contain NA, NaN, or Inf.")
-    if (any(weights < 0 | weights > 1))
+    if (any(weighting < 0 | weighting > 1))
       warning("Weight matrix contains values outside [0, 1]; ",
               "results may not be interpretable as kappa.")
-    if (!isTRUE(all.equal(weights, t(weights))))
+    if (!isTRUE(all.equal(weighting, t(weighting))))
       warning("Weight matrix is not symmetric; weighted kappa assumes ",
               "symmetric weights.")
-    weights
+    weighting
 
   } else {
     idx <- outer(seq_len(nc), seq_len(nc), `-`)
-    switch(weights,
+    switch(weighting,
            "unweighted"    = diag(nc),
            "equal-spacing" = 1 - abs(idx) / (nc - 1),
            "fleiss-cohen"  = 1 - (idx / (nc - 1))^2

@@ -4,16 +4,16 @@
 \alias{averagePrecision}
 \title{Average Precision Score}
 \usage{
-averagePrecision(x, pred = NULL)
+averagePrecision(x, ref = NULL)
 }
 \arguments{
-\item{x}{either a numeric vector of observed binary outcomes (0/1) when
-\code{pred} is supplied, or a fitted model object from which both response
-and predictions are extracted}
+\item{x}{either a numeric vector of predicted probabilities or scores
+when \code{ref} is supplied, or a fitted model object from which both
+response and predictions are extracted}
 
-\item{pred}{numeric vector of predicted probabilities or scores. Required
-when \code{x} is a response vector; ignored when \code{x} is a model
-object.}
+\item{ref}{numeric vector of observed binary outcomes (0/1), the
+reference the predictions are scored against. Required when \code{x} is a
+vector of predictions; ignored when \code{x} is a model object.}
 }
 \value{
 A numeric scalar containing the average precision score.
@@ -35,7 +35,7 @@ not restricted to the interval [0, 1].
 \examples{
 resp <- c(0, 0, 1, 1)
 pred <- c(0.1, 0.4, 0.35, 0.8)
-averagePrecision(resp, pred)
+averagePrecision(pred, resp)
 
 }
 \seealso{

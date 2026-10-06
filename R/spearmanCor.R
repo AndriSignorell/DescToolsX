@@ -59,7 +59,7 @@
 #' # must be the same as
 #' with(lapply(
 #'        bedrock::untable(pain, 
-#'                         colnames = c("adverse","dose")), 
+#'                         colNames = c("adverse","dose")), 
 #'        ordered), 
 #'      spearmanCor(adverse, dose, conf.level=0.95))
 #' 

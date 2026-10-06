@@ -112,7 +112,8 @@ confidence intervals. See Smithson (2003).
 
 \code{sides} names the side on which the finite bound lies:
 \code{"left"} yields \eqn{[lci, \infty)}, \code{"right"} yields
-\eqn{(-\infty, uci]}.
+\eqn{[0, uci]}: the open side goes to the boundary of the parameter
+range, which is 0 for a positive coefficient of variation.
 
 **Note:**\verb{ } Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
@@ -190,7 +191,7 @@ Statistics Theory and Methods}, Volume 36, No. 12, pp 2187-2206.
 Other dispersion:
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
-\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanAbsDev]{meanAbsDev()}},
 \code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}},
 \code{\link[=varX]{varX()}}

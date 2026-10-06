@@ -32,15 +32,13 @@
 #'   `"right"`). See details in [ConfidenceIntervals()].
 #'   Alpha lies in \eqn{[-1, 1]}, so the open side is reported at that
 #'   boundary rather than at an infinity it cannot reach.
-#' @param output output format, either `"def"` (default) or
-#'   `"ext"` for extended results
+#' @param output output format, either `"default"` (default) or
+#'   `"extended"` for extended results
 #' 
-#' @param ... further arguments passed to [boot::boot()]. Supported
-#' arguments are `type` (`"norm"`, `"basic"`,
-#' `"stud"`, `"perc"`, `"bca"`), `parallel` and the number
-#' of bootstrap replicates `R`. Defaults are `"basic"` for
-#' `type`, option `"boot.parallel"` (or `"no"` if unset) for
-#' `parallel`, and `999` for `R`.
+#' @param ... bootstrap options, passed to [lumen::bootCI()]: the interval
+#' type `type` (`"bca"`, `"perc"`, `"basic"`, `"norm"`), the number of
+#' replicates `R`, and `parallel` and `ncpus`. Defaults are `"bca"` for
+#' `type`, `999` for `R` and `"no"` for `parallel`.
 #'
 #' @details
 #' The function constructs the coincidence matrix from the wide-format data 
@@ -53,8 +51,8 @@
 #'   \item `"ratio"`: Squared relative differences of scale values.
 #' }
 #'
-#' @return if `output = "def"` and `conf.level = NA`, a numeric
-#' scalar. If `output = "def"` and a confidence interval is requested, a named
+#' @return if `output = "default"` and `conf.level = NA`, a numeric
+#' scalar. If `output = "default"` and a confidence interval is requested, a named
 #' numeric vector with elements:
 #' \describe{
 #'   \item{`est`}{point estimate of Krippendorff's alpha}
@@ -62,7 +60,7 @@
 #'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
-#' If `output = "ext"`, a list with elements:
+#' If `output = "extended"`, a list with elements:
 #' \describe{
 #'   \item{`alpha`}{point estimate of Krippendorff's alpha}
 #'   \item{`Do`}{observed disagreement}
@@ -114,7 +112,7 @@ krippAlpha <- function(x,
                                       "interval", "ratio"),
                        levels = NULL,
                        raters = NULL,
-                       output = c("def", "ext"),
+                       output = c("default", "extended"),
                        ...) {
 
   # Krippendorff's alpha from wide data (m raters), using O from above.
@@ -220,7 +218,7 @@ krippAlpha <- function(x,
     ci <- setNamesX(rep(NA_real_, 3), c("est", "lci", "uci"))
   }
   
-  if(output == "def"){
+  if(output == "default"){
     res <- if(is.na(conf.level)) alpha else ci
   } else {
     res <- list(alpha = alpha, Do = Do, De = De, 

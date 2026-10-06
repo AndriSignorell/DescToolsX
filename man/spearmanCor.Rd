@@ -77,7 +77,7 @@ spearmanCor(pain, conf.level=0.95)
 # must be the same as
 with(lapply(
        bedrock::untable(pain, 
-                        colnames = c("adverse","dose")), 
+                        colNames = c("adverse","dose")), 
        ordered), 
      spearmanCor(adverse, dose, conf.level=0.95))
 
@@ -90,12 +90,12 @@ Conover W. J. (1999) \emph{Practical Nonparametric Statistics
 \code{\link[=Association]{Association()}}
 
 Other assoc.continuous:
-\code{\link[=corPart]{corPart()}},
-\code{\link[=corPolychor]{corPolychor()}},
-\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=findCor]{findCor()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
 \code{\link[=keepSig]{keepSig()}},
-\code{\link[=pearsonCor]{pearsonCor()}}
+\code{\link[=partialCor]{partialCor()}},
+\code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=polychorCor]{polychorCor()}}
 }
 \concept{assoc.continuous}
 \concept{correlation}

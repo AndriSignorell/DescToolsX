@@ -4,14 +4,14 @@
 \alias{rosenbluth}
 \title{Rosenbluth Index}
 \usage{
-rosenbluth(x, n = rep(1, length(x)), na.rm = FALSE)
+rosenbluth(x, weights = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{x}{numeric vector of non-negative values, such as market shares or
 frequencies}
 
-\item{n}{optional frequency weights. Each element of \code{x}
-is replicated \code{n} times.}
+\item{weights}{optional frequency weights. Each element of \code{x}
+is replicated \code{weights} times.}
 
 \item{na.rm}{logical. If \code{TRUE}, missing values are removed.}
 }
@@ -48,7 +48,7 @@ rosenbluth(c(1, 0, 0, 0))
 rosenbluth(c(10, 1, 1, 1))
 
 # frequency weights replicate the values
-rosenbluth(c(10, 1), n = c(1, 3))
+rosenbluth(c(10, 1), weights = c(1, 3))
 
 }
 \references{

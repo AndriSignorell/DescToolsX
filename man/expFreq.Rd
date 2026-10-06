@@ -4,13 +4,13 @@
 \alias{expFreq}
 \title{Expected Frequencies}
 \usage{
-expFreq(x, freq = c("abs", "rel"))
+expFreq(x, scale = c("count", "proportion"))
 }
 \arguments{
 \item{x}{a table}
 
-\item{freq}{whether absolute or relative frequencies are computed. Must be
-\code{"abs"} or \code{"rel"}; partial matching is supported.}
+\item{scale}{whether expected counts or expected proportions are computed. Must be
+\code{"count"} (default) or \code{"proportion"}; partial matching is supported.}
 }
 \value{
 a table with either the absolute or the relative expected
@@ -34,7 +34,7 @@ Based on code by David Meyer previously published as
 
 expFreq(Titanic)
 
-expFreq(UCBAdmissions, freq="r")
+expFreq(UCBAdmissions, scale="proportion")
 
 
 }

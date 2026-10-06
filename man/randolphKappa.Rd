@@ -4,20 +4,19 @@
 \alias{randolphKappa}
 \title{Randolph's Free-Marginal Multirater Kappa}
 \usage{
-randolphKappa(x, categories = NULL, conf.level = NA, ...)
+randolphKappa(x, levels = NULL, ...)
 }
 \arguments{
 \item{x}{a matrix of size \eqn{N \times m} with subjects in rows and raters
 in columns; cells contain the assigned categories}
 
-\item{categories}{the categories a rater could have chosen from, or a single
+\item{levels}{the categories a rater could have chosen from, or a single
 number giving how many there were. Defaults to \code{NULL}, i.e. the
 categories actually observed in \code{x}. See Details.}
 
-\item{conf.level}{reserved for future confidence intervals; must be
-\code{NA}}
-
-\item{...}{reserved for future bootstrap options and currently ignored}
+\item{...}{reserved for future bootstrap options. No confidence interval
+is implemented yet, so any argument given here raises an error instead
+of being ignored.}
 }
 \value{
 a numeric scalar containing Randolph's kappa
@@ -43,9 +42,9 @@ which is fixed at \eqn{1/k} instead of being estimated from the marginals.
 
 \eqn{P_e = 1/k} refers to the categories a rater could have \emph{chosen},
 not to those that happen to occur in the data. If a category was available
-but never used, the default \code{categories = NULL} understates \eqn{k}
+but never used, the default \code{levels = NULL} understates \eqn{k}
 and thus overstates chance agreement, which biases \eqn{\kappa} downwards.
-Supply \code{categories} whenever the coding scheme is known.
+Supply \code{levels} whenever the coding scheme is known.
 
 Long-format ratings can first be reshaped with \code{\link[=raterFrame]{raterFrame()}}.
 }
@@ -62,7 +61,7 @@ randolphKappa(x)
 
 # the raters could have chosen from five categories, not just the three
 # they used
-randolphKappa(x, categories = 5)
+randolphKappa(x, levels = 5)
 
 ## Long format with a formula
 df <- data.frame(

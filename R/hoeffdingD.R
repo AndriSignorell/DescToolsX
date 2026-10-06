@@ -14,7 +14,7 @@
 #'   With ties they differ - see Details.
 #' @param R number of permutations used for the test of independence. Only
 #'   used when `output = "test"`; defaults to 999.
-#' @param output output format, either `"def"` (default), which returns
+#' @param output output format, either `"estimate"` (default), which returns
 #'   the statistic, or `"test"`, which returns an object of class
 #'   `"htest"` with a permutation P value for the hypothesis of
 #'   independence.
@@ -25,10 +25,6 @@
 #'   is drawn from \eqn{U(-eps, eps)}. Defaults to `1e-10` times the
 #'   standard deviation of the affected variable. A variable with zero
 #'   variance cannot be jittered and raises an error.
-#' @param seed optional integer random seed for reproducibility when
-#'   `jitter = TRUE`. The state of R's random number generator is
-#'   restored afterwards, so passing a seed does not disturb the calling
-#'   session.
 #'
 #' @return numeric scalar containing Hoeffding's D statistic on the
 #' conventional scale: 1 under perfect monotone or antitone dependence,
@@ -164,9 +160,9 @@
 #' @seealso [spearmanCor()], [kendallTauB()]
 #'
 #' @section Random number generation:
-#' `jitter = TRUE` draws from R's random number generator and
-#' therefore advances it, unless `seed` is supplied - in which case
-#' the previous state is restored.
+#' `jitter = TRUE` and `output = "test"` draw from R's random number
+#' generator and therefore advance it. Call [set.seed()] beforehand for a
+#' reproducible result.
 #'
 #' @family assoc.continuous
 #' @concept association-measure
@@ -175,8 +171,8 @@
 hoeffdingD <- function(x, y,
                        engine = c("fast", "exact"),
                        R = 999,
-                       jitter = FALSE, eps = NULL, seed = NULL,
-                       output = c("def", "test")) {
+                       jitter = FALSE, eps = NULL,
+                       output = c("estimate", "test")) {
   
   engine <- match.arg(engine)
   output <- match.arg(output)
@@ -210,26 +206,6 @@ hoeffdingD <- function(x, y,
   tiesX <- anyDuplicated(x) > 0L
   tiesY <- anyDuplicated(y) > 0L
 
-  # Hoisted out of the jitter block: both the jittering and the permutation
-  # test draw from R's generator, and a caller who supplies a seed expects
-  # it to cover whichever of the two runs. Restoring the stream afterwards
-  # is the point - set.seed(seed) alone used to reseed the whole session.
-  if (!is.null(seed)) {
-
-    if (!is.numeric(seed) || length(seed) != 1L || !is.finite(seed))
-      stop("'seed' must be a single number, or NULL")
-
-    if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
-      oldSeed <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
-      on.exit(assign(".Random.seed", oldSeed, envir = globalenv()), add = TRUE)
-    } else {
-      on.exit(suppressWarnings(rm(".Random.seed", envir = globalenv())),
-              add = TRUE)
-    }
-
-    set.seed(seed)
-  }
-
   # The exact engine resolves ties itself, so neither the warning nor the
   # jittering applies to it.
   if (engine == "exact") {
@@ -240,7 +216,7 @@ hoeffdingD <- function(x, y,
 
     d <- .hoeffdingDExact(x, y)
 
-    if (output == "def")
+    if (output == "estimate")
       return(d)
 
     # y itself is permuted, so both tie structures survive into the null
@@ -277,7 +253,7 @@ hoeffdingD <- function(x, y,
 
   d <- hoeffdingD_cpp(perm)
 
-  if (output == "def")
+  if (output == "estimate")
     return(d)
 
   # The fast engine reads the data only through 'perm', the permutation

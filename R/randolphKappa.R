@@ -8,12 +8,12 @@
 #'
 #' @param x a matrix of size \eqn{N \times m} with subjects in rows and raters
 #'   in columns; cells contain the assigned categories
-#' @param categories the categories a rater could have chosen from, or a single
+#' @param levels the categories a rater could have chosen from, or a single
 #'   number giving how many there were. Defaults to `NULL`, i.e. the
 #'   categories actually observed in `x`. See Details.
-#' @param conf.level reserved for future confidence intervals; must be
-#'   `NA`
-#' @param ... reserved for future bootstrap options and currently ignored
+#' @param ... reserved for future bootstrap options. No confidence interval
+#'   is implemented yet, so any argument given here raises an error instead
+#'   of being ignored.
 #'
 #' @details
 #' Let \eqn{k} be the number of categories, \eqn{m} the number of raters, and
@@ -31,9 +31,9 @@
 #'
 #' \eqn{P_e = 1/k} refers to the categories a rater could have *chosen*,
 #' not to those that happen to occur in the data. If a category was available
-#' but never used, the default `categories = NULL` understates \eqn{k}
+#' but never used, the default `levels = NULL` understates \eqn{k}
 #' and thus overstates chance agreement, which biases \eqn{\kappa} downwards.
-#' Supply `categories` whenever the coding scheme is known.
+#' Supply `levels` whenever the coding scheme is known.
 #'
 #' Long-format ratings can first be reshaped with [raterFrame()].
 #'
@@ -56,7 +56,7 @@
 #'
 #' # the raters could have chosen from five categories, not just the three
 #' # they used
-#' randolphKappa(x, categories = 5)
+#' randolphKappa(x, levels = 5)
 #'
 #' ## Long format with a formula
 #' df <- data.frame(
@@ -75,31 +75,34 @@
 #'
 #'
 #' @export
-randolphKappa <- function(x, categories = NULL, conf.level = NA, ...) {
+randolphKappa <- function(x, levels = NULL, ...) {
 
-  if (!(length(conf.level) == 1L && is.na(conf.level)))
+  # nothing is forwarded: an argument in ... (conf.level in particular)
+  # would otherwise be dropped silently
+  if (...length())
     stop("confidence intervals are not implemented for randolphKappa(); ",
-         "leave 'conf.level' at NA.")
+         "unused argument(s): ",
+         paste(names(list(...)), collapse = ", "))
 
   x <- .asRatingsMatrix(x)
 
   N <- nrow(x)
 
   # number of categories: observed by default, otherwise as supplied
-  if (is.null(categories)) {
+  if (is.null(levels)) {
     k <- length(unique(as.vector(x[!is.na(x)])))
-  } else if (length(categories) == 1L && is.numeric(categories)) {
-    k <- as.integer(categories)
+  } else if (length(levels) == 1L && is.numeric(levels)) {
+    k <- as.integer(levels)
   } else {
-    k <- length(unique(categories))
+    k <- length(unique(levels))
   }
 
   if (is.na(k) || k < 2L)
     stop("at least two categories are needed; kappa is undefined for k < 2.")
 
-  if (!is.null(categories) &&
+  if (!is.null(levels) &&
       k < length(unique(as.vector(x[!is.na(x)]))))
-    stop("'categories' has fewer entries than there are distinct ratings in 'x'.")
+    stop("'levels' has fewer entries than there are distinct ratings in 'x'.")
 
   # observed agreement per subject: the proportion of agreeing rater PAIRS.
   # The previous version used max_j n_ij / m, the share of raters in the modal

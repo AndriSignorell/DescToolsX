@@ -24,11 +24,11 @@ test_that("freq2D formula interface gives same total as default", {
 test_that("freq2D formula interface forwards n, pad, and dnn", {
   res_def <- freq2D(
     quakes$long, quakes$lat,
-    n = c(10, 15), pad = 1, dnn = c("lon", "lat")
+    nBins = c(10, 15), pad = 1, dnn = c("lon", "lat")
   )
   res_form <- freq2D(
     lat ~ long, data = quakes,
-    n = c(10, 15), pad = 1, dnn = c("lon", "lat")
+    nBins = c(10, 15), pad = 1, dnn = c("lon", "lat")
   )
 
   expect_equal(dim(res_form), dim(res_def))
@@ -37,8 +37,8 @@ test_that("freq2D formula interface forwards n, pad, and dnn", {
 })
 
 test_that("freq2D n argument changes number of bins", {
-  r10 <- freq2D(quakes$long, quakes$lat, n = 10)
-  r5  <- freq2D(quakes$long, quakes$lat, n = 5)
+  r10 <- freq2D(quakes$long, quakes$lat, nBins = 10)
+  r5  <- freq2D(quakes$long, quakes$lat, nBins = 5)
   expect_gte(prod(dim(r10)), prod(dim(r5)))
 })
 
@@ -64,7 +64,7 @@ test_that("freq2D copes with a single occupied bin row", {
   y <- c(1, 2, 3, 4)
   
   # trimming empty margins used to drop the matrix to a vector
-  expect_silent(z <- freq2D(x, y, n = 5))
+  expect_silent(z <- freq2D(x, y, nBins = 5))
   expect_true(is.matrix(z))
 })
 

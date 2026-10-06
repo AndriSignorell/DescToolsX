@@ -36,7 +36,6 @@
 #' corrected for ties within raters (default `FALSE`)
 #' @param test a logical indicating whether the test statistic and p-value
 #' should be reported (default `FALSE`)
-#' @param na.rm deprecated and ignored
 #'
 #' @return if `test = FALSE`, a numeric scalar containing Kendall's W.
 #' Otherwise an object of class `"htest"` with components:
@@ -102,14 +101,11 @@
 #'
 #'
 #' @export
-kendallW <- function(x, correct=FALSE, test=FALSE, na.rm=NULL) {
+kendallW <- function(x, correct=FALSE, test=FALSE) {
   
   # see also old Jim Lemon function kendall.w
   # other solution: library(irr);  kendall(ratings, correct = TRUE)
   # http://www.real-statistics.com/reliability/kendalls-w/
-  
-  if(!is.null(na.rm))
-    warning("na.rm is not longer supported, see help!")
   
   dname <- deparse(substitute(x))
   

@@ -38,7 +38,7 @@
 #' @references
 #' <https://stackoverflow.com/questions/14169620/add-a-month-to-a-date>
 #'
-#' @seealso [as.ym()], [year()], [month()]
+#' @seealso [asYm()], [year()], [month()]
 #'
 #' @examples
 #' # character input is converted to Date
@@ -137,7 +137,7 @@ addMonths.ym <- function(x, n, ...) {
   
   res <- idx %/% 12 * 100 + idx %% 12 + 1
   
-  as.ym(res)
+  asYm(res)
 }
 
 

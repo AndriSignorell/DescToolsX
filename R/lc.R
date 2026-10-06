@@ -32,14 +32,15 @@
 #' extracted by `.extractBootArgs()` (default `R = 999`).
 #'
 #' @param x numeric vector of non-negative values
-#' @param n numeric vector of non-negative weights of the same length as
-#'   `x`. Defaults to equal weights (`rep(1, length(x))`). Bootstrap intervals
-#'   draw `floor(sum(n))` observations with probabilities proportional to `n`;
+#' @param weights numeric vector of non-negative weights of the same length as
+#'   `x`. Defaults to equal weights. Bootstrap intervals draw
+#'   `floor(sum(weights))` observations with probabilities proportional to
+#'   `weights`;
 #'   the sum must be finite and at least one. Thus rescaling the weights
 #'   changes the bootstrap sample size; frequency weights are appropriate
 #'   when the weights represent replicated observations.
 #' @param na.rm logical. If `TRUE`, observations with `NA` in
-#'   `x` or `n` are removed before computation.  Default is
+#'   `x` or `weights` are removed before computation.  Default is
 #'   `FALSE`.
 #' @param formula a formula of the form `y ~ group` specifying the
 #'   response and grouping variable
@@ -101,7 +102,7 @@
 #'
 #' # with weights
 #' w <- runif(100, 0.5, 2)
-#' lc(x, n = w)
+#' lc(x, weights = w)
 #'
 #' # formula interface: grouped Lorenz curves
 #' g <- sample(letters[1:3], 100, replace = TRUE)
@@ -125,7 +126,7 @@
 #' plot(lc_obj)
 #'
 #' # overlay confidence band
-#' lines(lc_obj, cbandArgs = list(conf.level = 0.95))
+#' lines(lc_obj, cband = list(conf.level = 0.95))
 #'
 #' # add points
 #' points(lc_obj, pch = 16)
@@ -205,12 +206,15 @@ lc.formula <- function(formula, data, subset, na.action = na.pass, ...) {
 
 #' @rdname lc
 #' @export
-lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
+lc.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
+
+  if (is.null(weights))
+    weights <- rep(1, length(x))
   
   if (na.rm) {
-    keep <- !is.na(x) & !is.na(n)
+    keep <- !is.na(x) & !is.na(weights)
     x <- x[keep]
-    n <- n[keep]
+    weights <- weights[keep]
   }
   
   if (length(x) == 0)
@@ -221,23 +225,23 @@ lc.default <- function(x, n = rep(1, length(x)), na.rm = FALSE, ...) {
   
   # Retain the effective unsorted sample for subsequent bootstrap prediction.
   xx <- x
-  nn <- n
+  nn <- weights
 
-  g <- gini(x, weights = n, na.rm = FALSE)
+  g <- gini(x, weights = weights, na.rm = FALSE)
   
   o <- order(x)
   x <- x[o]
-  n <- n[o]
+  weights <- weights[o]
   
-  wx <- n * x
+  wx <- weights * x
   
-  p <- cumsum(n) / sum(n)
+  p <- cumsum(weights) / sum(weights)
   L <- cumsum(wx) / sum(wx)
   
   p <- c(0, p)
   L <- c(0, L)
   
-  L2 <- L * sum(wx) / sum(n)
+  L2 <- L * sum(wx) / sum(weights)
   
   lc <- list(p = p, L = L, L.general = L2, Gini = g, x = xx, n = nn)
   class(lc) <- "Lc"
@@ -283,15 +287,9 @@ predict.Lc <- function(object, newdata, conf.level = NA, general = FALSE, ...) {
   }
   
   # --- confidence interval ---
-  if (length(conf.level) != 1L ||
-      !(is.numeric(conf.level) || is.logical(conf.level)) ||
-      is.nan(conf.level))
-    stop("conf.level must be a single number in (0, 1), or NA")
+  checkConfLevel(conf.level)
 
   if (!is.na(conf.level)) {
-    if (!is.numeric(conf.level) || !is.finite(conf.level) ||
-        conf.level <= 0 || conf.level >= 1)
-      stop("conf.level must be a single number in (0, 1)")
 
     # This implementation computes pointwise percentile intervals only.
     # Do not inherit the shared helper's BCa default or its BCa diagnostics.

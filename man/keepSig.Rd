@@ -73,11 +73,11 @@ plotWeb(keepSig(m, p = p))
 \link[pharos:plotWeb]{pharos::plotWeb}, \link[pharos:plotCor]{pharos::plotCor}, \link[lumen:corTest]{lumen::corTest}, \link[stats:cor.test]{stats::cor.test}
 
 Other assoc.continuous:
-\code{\link[=corPart]{corPart()}},
-\code{\link[=corPolychor]{corPolychor()}},
-\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=findCor]{findCor()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
+\code{\link[=partialCor]{partialCor()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=polychorCor]{polychorCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }
 \concept{assoc.continuous}

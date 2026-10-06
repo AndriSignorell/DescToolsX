@@ -36,7 +36,7 @@ test_that("herfindahl na.rm = TRUE strips NAs", {
 
 test_that("herfindahl frequency weights n replicate observations", {
   x <- c(10, 20)
-  expect_equal(herfindahl(x, n = c(2, 2)), herfindahl(rep(x, c(2,2))))
+  expect_equal(herfindahl(x, weights = c(2, 2)), herfindahl(rep(x, c(2,2))))
 })
 
 test_that("herfindahl parameter argument changes the result", {
@@ -69,8 +69,8 @@ test_that("parameter = NULL means the classical index", {
 
 test_that("herfindahl validates its arguments", {
   expect_error(herfindahl(letters[1:3]), "numeric")
-  expect_error(herfindahl(1:3, n = 1:2), "same length")
-  expect_error(herfindahl(1:3, n = c(1, 1.5, 1)), "whole numbers")
+  expect_error(herfindahl(1:3, weights = 1:2), "same length")
+  expect_error(herfindahl(1:3, weights = c(1, 1.5, 1)), "whole numbers")
   expect_error(herfindahl(c(1, Inf, 3)), "finite")
   expect_error(herfindahl(1:3, na.rm = NA), "na.rm")
   expect_error(herfindahl(1:3, parameter = c(1, 2)), "positive")

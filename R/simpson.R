@@ -26,9 +26,9 @@
 #'   counts, never as observations; wrap it in [factor()] to have it
 #'   tabulated instead. A data frame with a single row of numeric columns
 #'   (e.g. one site of a community matrix) is read as counts.
-#' @param method character string specifying the index to compute:
+#' @param metric character string specifying the index to compute:
 #'   `"gini"`, `"hunter"`, or `"iqv"`.
-#' @param categories the possible categories for `method = "iqv"`: either
+#' @param levels the possible categories for `metric = "iqv"`: either
 #'   their number (a single number) or the categories themselves (a vector,
 #'   e.g. `levels(x)`). If `NULL` (default), the number of observed,
 #'   non-empty categories is used. Ignored, with a warning, for the other
@@ -41,7 +41,7 @@
 #'   when the index is undefined: no observations, \eqn{N < 2} for
 #'   `"hunter"`, \eqn{K < 2} for `"iqv"`; `NA_real_` without a warning for
 #'   missing values with `na.rm = FALSE`. Invalid input (negative, infinite
-#'   or, for `"hunter"`, non-integer counts; invalid `categories`) is an
+#'   or, for `"hunter"`, non-integer counts; invalid `levels`) is an
 #'   error.
 #'
 #' @details
@@ -54,13 +54,13 @@
 #' categories that were *possible*, not only those observed. With the
 #' default, a sample spread evenly over 3 of 5 possible categories gets an
 #' IQV of 1, although it is far from the maximum diversity the coding scheme
-#' allows. Supply `categories` whenever the set of categories is known; for a
-#' factor, `categories = levels(x)` uses all levels, including empty ones.
+#' allows. Supply `levels` whenever the set of categories is known; for a
+#' factor, `levels = levels(x)` uses all levels, including empty ones.
 #'
 #' A sample concentrated in a single category is perfectly homogeneous rather
 #' than undefined, so `"gini"` returns 0 for it, and so does `"hunter"` as
 #' long as \eqn{N \ge 2}. The IQV requires \eqn{K \ge 2}, since
-#' \eqn{K - 1} appears in its denominator; with `categories` given, a single
+#' \eqn{K - 1} appears in its denominator; with `levels` given, a single
 #' occupied category gives an IQV of 0.
 #'
 #' When `x` is numeric, it is treated as a vector of counts. Relative
@@ -71,28 +71,28 @@
 #' @examples
 #' x <- c("A", "A", "B", "C", "C", "C")
 #'
-#' simpson(x, method = "gini")
-#' simpson(x, method = "hunter")
-#' simpson(x, method = "iqv")
+#' simpson(x, metric = "gini")
+#' simpson(x, metric = "hunter")
+#' simpson(x, metric = "iqv")
 #'
 #' # the same sample, if five categories were possible
-#' simpson(x, method = "iqv", categories = 5)
-#' simpson(x, method = "iqv", categories = c("A", "B", "C", "D", "E"))
+#' simpson(x, metric = "iqv", levels = 5)
+#' simpson(x, metric = "iqv", levels = c("A", "B", "C", "D", "E"))
 #'
 #' # Using counts directly
 #' counts <- c(A = 2, B = 1, C = 3)
-#' simpson(counts, method = "hunter")
+#' simpson(counts, metric = "hunter")
 #'
 #' # Hunter-Gaston = Gini-Simpson * N / (N - 1)
-#' simpson(counts, method = "gini") * 6 / 5
+#' simpson(counts, metric = "gini") * 6 / 5
 #'
 #' # a numeric vector of observations must be tabulated first, otherwise
 #' # its values are read as counts
-#' simpson(factor(c(1, 1, 2, 2, 3)), method = "gini")
+#' simpson(factor(c(1, 1, 2, 2, 3)), metric = "gini")
 #'
 #' # With missing values
 #' x <- c("A", "A", NA, "B")
-#' simpson(x, method = "gini", na.rm = TRUE)
+#' simpson(x, metric = "gini", na.rm = TRUE)
 #'
 #' @references
 #' Sachs, L. (1997). *Angewandte Statistik*. Springer.
@@ -116,16 +116,16 @@
 #'
 #'
 #' @export
-simpson <- function(x, method = c("gini", "hunter", "iqv"),
-                    categories = NULL, na.rm = FALSE) {
+simpson <- function(x, metric = c("gini", "hunter", "iqv"),
+                    levels = NULL, na.rm = FALSE) {
 
-  method <- match.arg(method)
+  metric <- match.arg(metric)
 
   if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
     stop("'na.rm' must be a single non-missing logical value")
 
-  if (!is.null(categories) && method != "iqv")
-    warning("'categories' is only used with method = \"iqv\"; ignored")
+  if (!is.null(levels) && metric != "iqv")
+    warning("'levels' is only used with metric = \"iqv\"; ignored")
 
   # a single row of a community matrix (e.g. vegan BCI[1, ]) is a count
   # vector; several rows would be merged silently by unlist()
@@ -153,7 +153,7 @@ simpson <- function(x, method = c("gini", "hunter", "iqv"),
       stop("Counts must be finite and non-negative")
     # relative frequencies are fine for gini and iqv; hunter counts pairs,
     # and non-integer counts can push it above 1 (rep(0.5, 4) gives 1.5)
-    if (method == "hunter" && any(x != floor(x)))
+    if (metric == "hunter" && any(x != floor(x)))
       stop("the Hunter-Gaston index requires integer counts")
     tt <- x
   } else {
@@ -170,7 +170,7 @@ simpson <- function(x, method = c("gini", "hunter", "iqv"),
 
   gini <- 1 - sum((tt / N)^2)
 
-  switch(method,
+  switch(metric,
 
     gini = unname(gini),
 
@@ -188,7 +188,7 @@ simpson <- function(x, method = c("gini", "hunter", "iqv"),
     },
 
     iqv = {
-      K <- .iqvCategories(tt, categories)
+      K <- .iqvCategories(tt, levels)
       if (K < 2) {
         warning("IQV requires at least 2 categories (K >= 2); returning NA")
         return(NA_real_)

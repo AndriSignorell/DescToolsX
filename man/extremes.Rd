@@ -11,7 +11,7 @@ large(x, k = 5L, unique = FALSE, na.last = NA)
 
 small(x, k = 5L, unique = FALSE, na.last = NA)
 
-highLow(x, nlow = 5L, nhigh = nlow, na.last = NA)
+highLow(x, nLow = 5L, nHigh = nLow, na.last = NA)
 }
 \arguments{
 \item{x}{a numeric vector}
@@ -29,11 +29,11 @@ rather expensive function).}
 missing values in the data are put last; if \code{FALSE}, they are put
 first; if \code{NA}, they are removed.}
 
-\item{nlow}{number of smallest values included in the formatted output;
+\item{nLow}{number of smallest values included in the formatted output;
 defaults to 5}
 
-\item{nhigh}{number of largest values included in the formatted output;
-defaults to \code{nlow}}
+\item{nHigh}{number of largest values included in the formatted output;
+defaults to \code{nLow}}
 }
 \value{
 for \code{large()} and \code{small()}, a vector of extreme values

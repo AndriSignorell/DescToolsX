@@ -66,14 +66,14 @@
 #' colnames(X) <- paste0("V", 1:5)
 #'
 #' # Partial correlations of V1, V2 controlling for V3, V4
-#' corPart(X, x = 1:2, y = 3:4)
+#' partialCor(X, x = 1:2, y = 3:4)
 #'
 #' # Using a correlation matrix directly
 #' C <- cor(X)
-#' corPart(C, x = 1:2, y = 3:4)
+#' partialCor(C, x = 1:2, y = 3:4)
 #'
 #' # a single variable of interest is allowed and returns a 1x1 matrix
-#' corPart(C, x = 1, y = 3:4)
+#' partialCor(C, x = 1, y = 3:4)
 #'
 #' @seealso [stats::cor()], [stats::cov()]
 #'
@@ -81,7 +81,7 @@
 #' @concept correlation
 #' @concept association-measure
 #' @export
-corPart <- function(m, x, y) {
+partialCor <- function(m, x, y) {
 
   if (!is.matrix(m)) m <- as.matrix(m)
 

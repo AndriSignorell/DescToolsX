@@ -45,7 +45,8 @@
 #'
 #' `sides` names the side on which the finite bound lies:
 #' `"left"` yields \eqn{[lci, \infty)}, `"right"` yields
-#' \eqn{(-\infty, uci]}. 
+#' \eqn{[0, uci]}: the open side goes to the boundary of the parameter
+#' range, which is 0 for a positive coefficient of variation.
 #'
 #' **Note:**\verb{ } Analytic (precision) weights are not supported. For
 #' likelihood-based weighted variance estimation, see
@@ -272,6 +273,11 @@ coefVarCI <- function (x,
       any(conf.level <= 0) || any(conf.level >= 1))
     stop("'conf.level' must contain numbers in (0, 1)")
 
+  # the one-sided interval is computed at the doubled alpha, which is only
+  # a level for conf.level > 0.5
+  if (sides != "two.sided" && any(conf.level <= 0.5))
+    stop("'conf.level' must exceed 0.5 for a one-sided interval.")
+
   if (na.rm)
     x <- x[!is.na(x)]
 
@@ -305,6 +311,9 @@ coefVarCI <- function (x,
 
     # double alpha in case of one-sided intervals in order to be able
     # to generally calculate twosided intervals and select afterwards..
+    if (is.na(K))
+      return(c(est = NA_real_, lci = NA_real_, uci = NA_real_))
+
     if (sides != "two.sided")
       conf.level <- 1 - 2 * (1 - conf.level)
 
@@ -342,16 +351,13 @@ coefVarCI <- function (x,
            }
     )
 
-    ci <- c(est = K,
-            lci = min(ciLower, ciUpper),
-            uci = max(ciLower, ciUpper))
+    # the open side goes to the boundary of the parameter range, which is
+    # 0 on the side of the estimate's sign - not to -Inf
+    rng <- if (K >= 0) c(0, Inf) else c(-Inf, 0)
 
-    if (sides == "left")
-      ci[3] <- Inf
-    else if (sides == "right")
-      ci[2] <- -Inf
-
-    return(ci)
+    c(est = K,
+      applySides(c(min(ciLower, ciUpper), max(ciLower, ciUpper)),
+                 sides, lo = rng[1L], hi = rng[2L]))
   })
 
   res <- t(.icoefVarCI(K = K, n = n, method = method, sides = sides,

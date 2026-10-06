@@ -61,7 +61,7 @@ display a histogram, density curve, box plot, and empirical distribution.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  maxrows <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  include_x <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  includeX <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plotit <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -83,7 +83,7 @@ display a histogram, density curve, box plot, and empirical distribution.</p>
 <dd><p>numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
 interesting to see all of them. Default is set to 12 most frequent ones
-(resp. the first ones if <code>ord</code> is set to <code>"levels"</code> or
+(resp. the first ones if <code>order</code> is set to <code>"levels"</code> or
 <code>"names"</code>).</p></dd>
 
 
@@ -91,7 +91,7 @@ interesting to see all of them. Default is set to 12 most frequent ones
 <dd><p>confidence level for interval estimates (default 0.95)</p></dd>
 
 
-<dt id="arg-include-x">include_x<a class="anchor" aria-label="anchor" href="#arg-include-x"></a></dt>
+<dt id="arg-includex">includeX<a class="anchor" aria-label="anchor" href="#arg-includex"></a></dt>
 <dd><p>logical; if <code>TRUE</code>, the original vector is retained
 in the result</p></dd>
 
@@ -190,7 +190,7 @@ and also produce a plot with type "h" instead of a histogram.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">¹ 95%-CI (classic)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="desc.numeric-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> 'plotFreqDist' is not an exported object from 'namespace:pharos'</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -4,7 +4,7 @@
 #' Calculate a frequency distribution for two continuous variables.
 #' 
 #' The exact number of bins is determined by the [pretty()] function,
-#' based on the value of `n`.
+#' based on the value of `nBins`.
 #' 
 #' Padding the margins with zeros can be helpful for subsequent analysis, such
 #' as smoothing.
@@ -22,7 +22,7 @@
 #' evaluated in `data` (`subset = depth > 100`), as in [plot.formula()]
 #' @param na.action a function which indicates what should happen when the data
 #' contain missing values. Defaults to [na.omit()].
-#' @param n the desired number of bins for the output, a scalar or a vector of
+#' @param nBins the desired number of bins for the output, a scalar or a vector of
 #' length 2
 #' @param pad number of rows and columns to add to each margin, containing only
 #' zeros
@@ -40,7 +40,7 @@
 #' @examples
 #' 
 #' freq2D(quakes$long, quakes$lat, dnn="")
-#' freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
+#' freq2D(lat ~ long, quakes, nBins=c(10, 20), pad=1)
 #' freq2D(lat ~ long, quakes, subset = depth > 100)
 #' 
 #' @family frequency
@@ -57,7 +57,7 @@ freq2D <- function(x, ...)
 #' @rdname freq2D
 #' @export
 freq2D.formula <- function(formula, data, subset, na.action = na.omit,
-                           n=20, pad=0, dnn=NULL, ...) {
+                           nBins=20, pad=0, dnn=NULL, ...) {
 
   # The first argument is called 'formula', as in the other formula methods:
   # R CMD check exempts the first argument of a .formula method from the
@@ -73,7 +73,7 @@ freq2D.formula <- function(formula, data, subset, na.action = na.omit,
   y <- do.call(
     freq2D,
     c(
-      list(x = pf$mf[2:1], n = n, pad = pad, dnn = dnn),
+      list(x = pf$mf[2:1], nBins = nBins, pad = pad, dnn = dnn),
       list(...)
     )
   )
@@ -90,7 +90,7 @@ freq2D.formula <- function(formula, data, subset, na.action = na.omit,
 
 #' @rdname freq2D
 #' @export
-freq2D.default <- function(x, y, n=20, pad=0, dnn=NULL, ...) {
+freq2D.default <- function(x, y, nBins=20, pad=0, dnn=NULL, ...) {
   
   dnn <- if(!is.null(dnn)) rep(dnn,length.out=2) else NULL
   xname <- dnn[1]
@@ -108,11 +108,11 @@ freq2D.default <- function(x, y, n=20, pad=0, dnn=NULL, ...) {
   }
   
   ## 2  Create grid
-  n <- rep(n, length.out=2)
-  xmid <- pretty(x, n=n[1])
+  nBins <- rep(nBins, length.out=2)
+  xmid <- pretty(x, n=nBins[1])
   xstep <- diff(xmid)[1]
   xgrid <- c(xmid-0.5*xstep, max(xmid)+0.5*xstep)
-  ymid <- pretty(y, n=n[2])
+  ymid <- pretty(y, n=nBins[2])
   ystep <- diff(ymid)[1]
   ygrid <- c(ymid-0.5*ystep, max(ymid)+0.5*ystep)
   

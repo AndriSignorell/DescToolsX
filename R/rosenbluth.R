@@ -9,8 +9,8 @@
 #'
 #' @param x numeric vector of non-negative values, such as market shares or
 #' frequencies
-#' @param n optional frequency weights. Each element of `x`
-#'   is replicated `n` times.
+#' @param weights optional frequency weights. Each element of `x`
+#'   is replicated `weights` times.
 #' @param na.rm logical. If `TRUE`, missing values are removed.
 #'
 #' @return a numeric scalar containing the Rosenbluth index
@@ -45,33 +45,36 @@
 #' rosenbluth(c(10, 1, 1, 1))
 #'
 #' # frequency weights replicate the values
-#' rosenbluth(c(10, 1), n = c(1, 3))
+#' rosenbluth(c(10, 1), weights = c(1, 3))
 #'
 #' @family inequality  
 #' @concept concentration-index
 #'
 #'
 #' @export
-rosenbluth <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
+rosenbluth <- function(x, weights = NULL, na.rm = FALSE) {
   
   if(!is.numeric(x))
     stop("'x' must be numeric")
   
-  if(!is.numeric(n) || anyNA(n) || any(n < 0))
-    stop("'n' must be a numeric vector of non-negative frequencies")
+  if(is.null(weights))
+    weights <- rep(1, length(x))
+
+  if(!is.numeric(weights) || anyNA(weights) || any(weights < 0))
+    stop("'weights' must be a numeric vector of non-negative frequencies")
   
   # rep() truncates a fractional times= argument without a word, so 2.9 would
   # silently become 2 replications.
-  if(any(n != floor(n)))
-    stop("'n' must contain whole numbers")
+  if(any(weights != floor(weights)))
+    stop("'weights' must contain whole numbers")
   
-  if(length(n) != 1L && length(n) != length(x))
-    stop("'n' must have length 1 or length(x)")
+  if(length(weights) != 1L && length(weights) != length(x))
+    stop("'weights' must have length 1 or length(x)")
   
   if(!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
     stop("'na.rm' must be a single non-missing logical value")
   
-  x <- rep(x, n)    # same handling as Lc and Gini
+  x <- rep(x, weights)    # same handling as Lc and Gini
   if(na.rm) x <- na.omit(x)
   if (any(is.na(x)) || any(x < 0)) return(NA_real_)
   
@@ -80,7 +83,6 @@ rosenbluth <- function(x, n = rep(1, length(x)), na.rm = FALSE) {
   if (length(x) == 0L || sum(x) == 0)
     return(NA_real_)
   
-  # 'n' is the frequency argument up to here; from here on the number of units.
   nUnits <- length(x)
   x <- sort(x)
   HT <- (nUnits:1)*x

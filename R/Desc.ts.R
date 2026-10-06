@@ -150,7 +150,7 @@ print.Desc.ts <- function(x, digits = NULL, ...) {
              c("start", "end", "frequency", "", ""),
              c(paste(x$start, collapse = "-"), paste(x$end, collapse = "-"),
                x$frequency, "", ""))
-  printCharMatrix(m, showRownames = FALSE)
+  printCharMatrix(m, showRowNames = FALSE)
   cat("\n")
 
   num  <- function(v) if (is.na(v)) "-" else fm(unname(v), digits = digits)

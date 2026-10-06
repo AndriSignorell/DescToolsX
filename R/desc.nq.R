@@ -168,7 +168,7 @@ plot.Desc.nq <- function(x, main = x$meta$main, which = 1, ...) {
 
     switch(as.character(j),
            "1" = {
-             plotBox(response, g = group,
+             plotBox(response, groups = group,
                      main = main,
                      xlab = x$meta$xname,
                      ylab = x$meta$yname, ...)

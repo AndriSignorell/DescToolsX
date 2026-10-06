@@ -7,9 +7,9 @@
 #' 
 #' 
 #' @name time-conversions
-#' @aliases hmsToMinute hmsToSec secToHms
+#' @aliases hmsToMin hmsToSec secToHms
 #' 
-#' @param x date-time object for `hmsToMinute()`, vector of times in
+#' @param x date-time object for `hmsToMin()`, vector of times in
 #' h:m:s format for `hmsToSec()`, or numeric vector of seconds for
 #' `secToHms()`
 #' @param digits number of decimal places for seconds, an integer from 0
@@ -19,7 +19,7 @@
 #'   compatibility, `digits = 0` discards fractions using [floor()].
 #' @return depending on the function:
 #' \describe{
-#'   \item{`hmsToMinute()`}{numeric vector of times in minutes}
+#'   \item{`hmsToMin()`}{numeric vector of times in minutes}
 #'   \item{`hmsToSec()`}{numeric vector of times in seconds}
 #'   \item{`secToHms()`}{character vector of times in h:m:s format}
 #' }
@@ -45,7 +45,7 @@
 #'
 #' @rdname time-conversions
 #' @export
-hmsToMinute <- function(x){
+hmsToMin <- function(x){
   hour(x)*60 + minute(x) + second(x)/60
 }
 

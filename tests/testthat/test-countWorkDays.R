@@ -18,14 +18,14 @@ test_that("countWorkDays excludes holiday within the period", {
   from    <- as.Date("2023-01-02")
   to      <- as.Date("2023-01-06")
   holiday <- as.Date("2023-01-04")   # Wednesday
-  expect_equal(countWorkDays(from, to, holiday = holiday), 4L)
+  expect_equal(countWorkDays(from, to, holidays = holiday), 4L)
 })
 
 test_that("countWorkDays holiday outside range has no effect", {
   from    <- as.Date("2023-01-02")
   to      <- as.Date("2023-01-06")
   holiday <- as.Date("2023-01-09")   # following Monday, outside window
-  expect_equal(countWorkDays(from, to, holiday = holiday), 5L)
+  expect_equal(countWorkDays(from, to, holidays = holiday), 5L)
 })
 
 test_that("countWorkDays returns a numeric vector", {
@@ -48,7 +48,7 @@ test_that("countWorkDays handles a two-week span correctly", {
 test_that("countWorkDays nonworkdays parameter changes which days are excluded", {
   # Mon 2023-01-02 to Fri 2023-01-06, Saturday is still included
   res <- countWorkDays(as.Date("2023-01-02"), as.Date("2023-01-07"),
-                       nonworkdays = "Sun")
+                       nonWorkDays = "Sun")
   # Mon-Sat = 6 days
   expect_equal(res, 6L)
 })
@@ -75,13 +75,13 @@ test_that("countWorkDays subtracts holidays once and validates nonworkdays", {
   mon <- as.Date("2019-01-07")
   
   expect_equal(countWorkDays(mon, mon + 4,
-                             holiday = c("2019-01-08", "2019-01-09")), 3L)
+                             holidays = c("2019-01-08", "2019-01-09")), 3L)
   # duplicated holidays count once
   expect_equal(countWorkDays(mon, mon + 4,
-                             holiday = rep("2019-01-08", 3)), 4L)
+                             holidays = rep("2019-01-08", 3)), 4L)
   # a holiday on a weekend changes nothing
-  expect_equal(countWorkDays(mon, mon + 6, holiday = "2019-01-12"), 5L)
+  expect_equal(countWorkDays(mon, mon + 6, holidays = "2019-01-12"), 5L)
   
-  expect_error(countWorkDays(mon, mon + 4, nonworkdays = "Sunday"), "subset")
+  expect_error(countWorkDays(mon, mon + 4, nonWorkDays = "Sunday"), "subset")
 })
 

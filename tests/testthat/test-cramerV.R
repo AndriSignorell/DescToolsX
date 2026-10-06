@@ -18,7 +18,7 @@ test_that("cramerV() point estimate is unchanged by the sides argument", {
 
 test_that("sides names the side carrying the finite bound", {
 
-  for (m in c("ncchisq", "ncchisqadj", "fisher", "fisheradj")) {
+  for (m in c("ncchisq", "ncchisq-adj", "fisher", "fisher-adj")) {
 
     two   <- cramerV(tab, conf.level = 0.95, method = m)
     left  <- cramerV(tab, conf.level = 0.95, method = m, sides = "left")
@@ -40,7 +40,7 @@ test_that("the one-sided bound equals the two-sided one at the adjusted level", 
 
   # left(gamma) reads the same end as two.sided(2*gamma - 1); this is the
   # identity the level adjustment is built on, so it should hold exactly
-  for (m in c("ncchisq", "ncchisqadj", "fisher", "fisheradj")) {
+  for (m in c("ncchisq", "ncchisq-adj", "fisher", "fisher-adj")) {
 
     left <- cramerV(tab, conf.level = 0.95, method = m, sides = "left")
     two  <- cramerV(tab, conf.level = 0.90, method = m)
@@ -54,7 +54,7 @@ test_that("the one-sided bound equals the two-sided one at the adjusted level", 
 
 test_that("bounds stay inside the attainable range", {
 
-  for (m in c("ncchisq", "ncchisqadj", "fisher", "fisheradj")) {
+  for (m in c("ncchisq", "ncchisq-adj", "fisher", "fisher-adj")) {
     ci <- cramerV(tab, conf.level = 0.95, method = m)
     expect_true(ci[["lci"]] >= 0 && ci[["uci"]] <= 1, info = m)
     expect_true(ci[["lci"]] <= ci[["est"]] && ci[["est"]] <= ci[["uci"]],
@@ -100,9 +100,9 @@ test_that("sides and method are matched, not guessed", {
   expect_error(cramerV(tab, conf.level = 0.95, sides = "links"),
                "two.sided")
   
-  # "ncchi" ist zwischen ncchisq und ncchisqadj mehrdeutig
+  # "ncchi" ist zwischen ncchisq und ncchisq-adj mehrdeutig
   expect_error(cramerV(tab, conf.level = 0.95, method = "ncchi"),
-               "ncchisqadj")
+               "ncchisq-adj")
   
   expect_equal(cramerV(tab, conf.level = 0.95, sides = "l"),
                cramerV(tab, conf.level = 0.95, sides = "left"))
@@ -125,7 +125,7 @@ test_that("the Fisher methods report NA where the transformation is undefined", 
   # "NaNs produced" from sqrt() - two neighbours, two answers.
   small <- matrix(c(1, 1, 1, 0), nrow = 2)   # n = 3
 
-  for (m in c("fisher", "fisheradj")) {
+  for (m in c("fisher", "fisher-adj")) {
     expect_warning(ci <- cramerV(small, conf.level = 0.95, method = m),
                    "3 observations")
     expect_true(is.na(ci[["lci"]]))
@@ -143,7 +143,7 @@ test_that("a perfect association does not get a degenerate Fisher interval", {
   perfect <- matrix(c(5, 0, 0, 5), nrow = 2)
   expect_equal(cramerV(perfect), 1)
 
-  for (m in c("fisher", "fisheradj")) {
+  for (m in c("fisher", "fisher-adj")) {
     expect_warning(ci <- cramerV(perfect, conf.level = 0.95, method = m),
                    "perfect association")
     expect_true(is.na(ci[["lci"]]))

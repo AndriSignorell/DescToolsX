@@ -31,12 +31,12 @@
 #'   `"auto"`, `"confusion"`, or `"ratings"`
 #' @param fpc finite population correction, the sampling fraction \eqn{n/N}
 #'   in \eqn{[0, 1)} (default `0`)
-#' @param output output format, either `"def"` (default) or
-#'   `"ext"` for extended results
+#' @param output output format, either `"default"` (default) or
+#'   `"extended"` for extended results
 #' @param ... must be empty. Named arguments are rejected rather than
 #'   silently ignored.
 #'
-#' @return if `output = "def"` and `conf.level = NA`, a numeric
+#' @return if `output = "default"` and `conf.level = NA`, a numeric
 #' scalar; otherwise a named numeric vector with elements:
 #' \describe{
 #'   \item{`est`}{proportion of agreement}
@@ -44,7 +44,7 @@
 #'   \item{`uci`}{upper confidence interval bound}
 #' }
 #'
-#' if `output = "ext"`, a list with the elements `est`,
+#' if `output = "extended"`, a list with the elements `est`,
 #' `se`, `ci` (the named triple above), `n`,
 #' `nPairable` and `method`.
 #'
@@ -60,7 +60,7 @@ percAgreement <- function(x, y = NULL,
                           sides = c("two.sided", "left", "right"),
                           input = c("auto", "confusion", "ratings"),
                           fpc = 0,
-                          output = c("def", "ext"),
+                          output = c("default", "extended"),
                           ...) {
 
   input  <- match.arg(input)
@@ -159,7 +159,7 @@ percAgreement <- function(x, y = NULL,
 
   res <- c(est = Po, ci)
 
-  if (output == "def")
+  if (output == "default")
     return(if (is.na(conf.level)) unname(Po) else res)
 
   list(

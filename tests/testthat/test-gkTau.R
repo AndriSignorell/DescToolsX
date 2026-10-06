@@ -38,12 +38,12 @@ test_that("gkTau reduces to phi^2 in the 2x2 case", {
 
   t2 <- as.table(cbind(c(11, 2), c(4, 6)))
 
-  expect_equal(unname(gkTau(t2, direction = "row")), unname(phi(t2)^2),
+  expect_equal(unname(gkTau(t2, direction = "row")), unname(phiCoef(t2)^2),
                tolerance = 1e-8)
-  expect_equal(unname(gkTau(t2, direction = "column")), unname(phi(t2)^2),
+  expect_equal(unname(gkTau(t2, direction = "column")), unname(phiCoef(t2)^2),
                tolerance = 1e-8)
 
-  # same claim once more without relying on phi(): (ad - bc)^2 over the
+  # same claim once more without relying on phiCoef(): (ad - bc)^2 over the
   # product of the margins (= chi^2 / n; chisq.test() warns on these counts)
   phi2 <- (t2[1, 1] * t2[2, 2] - t2[1, 2] * t2[2, 1])^2 /
     prod(rowSums(t2), colSums(t2))

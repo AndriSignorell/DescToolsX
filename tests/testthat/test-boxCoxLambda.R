@@ -11,13 +11,13 @@ test_that("boxCoxLambda result is within [lower, upper] bounds (guerrero)", {
 })
 
 test_that("boxCoxLambda returns a numeric value for loglik method", {
-  lambda <- boxCoxLambda(AirPassengers, method = "loglik")
+  lambda <- boxCoxLambda(AirPassengers, estimator = "loglik")
   expect_length(lambda, 1)
   expect_true(is.numeric(lambda))
 })
 
 test_that("boxCoxLambda loglik result is within [lower, upper]", {
-  lambda <- boxCoxLambda(AirPassengers, method = "loglik", lower = -1, upper = 2)
+  lambda <- boxCoxLambda(AirPassengers, estimator = "loglik", lower = -1, upper = 2)
   expect_gte(lambda, -1)
   expect_lte(lambda, 2)
 })
@@ -53,14 +53,14 @@ test_that("loglik maximises the profile likelihood of MASS::boxcox", {
   bc <- MASS::boxcox(x ~ trend, lambda = grid, plotit = FALSE)
   # absolute difference: lambda is close to 0 here, where expect_equal()'s
   # relative tolerance would be meaningless
-  expect_lt(abs(boxCoxLambda(x, method = "loglik") - bc$x[which.max(bc$y)]),
+  expect_lt(abs(boxCoxLambda(x, estimator = "loglik") - bc$x[which.max(bc$y)]),
             0.002)
 })
 
 test_that("the log branch near lambda = 0 is continuous with the power branch", {
   set.seed(6)
   x <- exp(seq(1, 3, length.out = 40) + rnorm(40, sd = 0.1))
-  near0 <- boxCoxLambda(x, method = "loglik", lower = -0.01, upper = 0.01)
+  near0 <- boxCoxLambda(x, estimator = "loglik", lower = -0.01, upper = 0.01)
   expect_gte(near0, -0.01)
   expect_lte(near0, 0.01)
 })
@@ -70,13 +70,13 @@ test_that("seasonality is taken from the ts frequency", {
   x <- AirPassengers
   plain <- as.numeric(x)
   expect_false(isTRUE(all.equal(boxCoxLambda(x), boxCoxLambda(plain))))
-  expect_false(isTRUE(all.equal(boxCoxLambda(x, method = "loglik"),
-                                boxCoxLambda(plain, method = "loglik"))))
+  expect_false(isTRUE(all.equal(boxCoxLambda(x, estimator = "loglik"),
+                                boxCoxLambda(plain, estimator = "loglik"))))
   # the seasonal loglik model needs more than frequency + 1 observations
-  expect_error(boxCoxLambda(ts(1:13 + 0.5, frequency = 12), method = "loglik"),
+  expect_error(boxCoxLambda(ts(1:13 + 0.5, frequency = 12), estimator = "loglik"),
                "needs more than 13")
   expect_error(boxCoxLambda(ts(1:23 + 0.5, frequency = 12)),
-               "too short for method \"guerrero\"")
+               "too short for estimator \"guerrero\"")
 })
 
 test_that("guerrero refuses subseries without variation", {
@@ -88,7 +88,7 @@ test_that("boxCoxLambda() validates its input", {
   expect_error(boxCoxLambda(matrix(1:4, 2) + 0.5), "numeric vector")
   expect_error(boxCoxLambda(c(1, NA, 3, 4)), "non-finite")
   expect_error(boxCoxLambda(c(1, Inf, 3, 4)), "non-finite")
-  expect_error(boxCoxLambda(c(2, 3), method = "loglik"), "at least 3")
+  expect_error(boxCoxLambda(c(2, 3), estimator = "loglik"), "at least 3")
   expect_error(boxCoxLambda(2), "at least 2")
   expect_error(boxCoxLambda(rep(4, 10)), "constant")
   expect_error(boxCoxLambda(AirPassengers, lower = 1, upper = 1), "strictly less")

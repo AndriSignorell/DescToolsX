@@ -4,17 +4,17 @@
 \alias{countWorkDays}
 \title{Count Work Days Between Two Dates}
 \usage{
-countWorkDays(from, to, holiday = NULL, nonworkdays = c("Sat", "Sun"))
+countWorkDays(from, to, holidays = NULL, nonWorkDays = c("Sat", "Sun"))
 }
 \arguments{
 \item{from}{initial dates}
 
 \item{to}{final dates}
 
-\item{holiday}{a vector of dates (or strings coercible with
+\item{holidays}{a vector of dates (or strings coercible with
 \code{\link[=as.Date]{as.Date()}}) to exclude}
 
-\item{nonworkdays}{a character vector containing the English three-letter
+\item{nonWorkDays}{a character vector containing the English three-letter
 weekday abbreviations to be treated as non-work days, i.e. a subset of
 \code{c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")}. Default is
 \code{c("Sat", "Sun")}.}
@@ -51,7 +51,7 @@ head(data.frame(date = x, day = weekday(x, fmt = "dd", lang = "en")))
 # two holidays inside the period reduce the count by two
 countWorkDays(from = min(x), to = max(x))
 countWorkDays(from = min(x), to = max(x),
-              holiday = c("2019-01-07", "2019-01-08"))
+              holidays = c("2019-01-07", "2019-01-08"))
 
 # a single day
 countWorkDays(as.Date("2019-01-05"), as.Date("2019-01-05"))  # Saturday: 0

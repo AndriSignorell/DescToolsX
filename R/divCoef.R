@@ -51,8 +51,8 @@
 #' @concept diversity
 #' @concept concentration-index
 #' @export
-divCoef <- function(x, dis = NULL, normalize = FALSE, na.rm = FALSE,
-                    tol = 1e-8) {
+divCoef <- function(x, dis = NULL, normalize = FALSE, tol = 1e-8,
+                    na.rm = FALSE) {
 
   # --- input checks ---
   # 'df' as an argument name masked stats::df and read as "data frame"

@@ -73,16 +73,16 @@ test_that("direction is refused rather than ignored in vector mode", {
 })
 
 
-test_that("as.ym survives NA and out-of-range input", {
-  expect_equal(unclass(as.ym(c(201201, NA, 201513, 999901))),
+test_that("asYm survives NA and out-of-range input", {
+  expect_equal(unclass(asYm(c(201201, NA, 201513, 999901))),
                c(201201L, NA, NA, NA))
 })
 
 
 test_that("ym arithmetic keeps its class and can be chained", {
-  expect_s3_class(as.ym(201511) + 5, "ym")
-  expect_equal(unclass(as.ym(201511) + 5 - 2), 201602L)
-  expect_equal(unclass(addMonths(as.ym(c(201511, 201302)), c(5, -4))),
+  expect_s3_class(asYm(201511) + 5, "ym")
+  expect_equal(unclass(asYm(201511) + 5 - 2), 201602L)
+  expect_equal(unclass(addMonths(asYm(c(201511, 201302)), c(5, -4))),
                c(201604L, 201210L))
 })
 

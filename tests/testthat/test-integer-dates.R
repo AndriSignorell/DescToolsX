@@ -19,7 +19,7 @@ test_that("date functions accept Dates with integer storage", {
   expect_equal(yearMonth(x),       yearMonth(y))
   expect_equal(isLeapYear(x),      isLeapYear(y))
   expect_equal(weekday(x),         weekday(y))
-  expect_equal(yearDay(x),         yearDay(y))
+  expect_equal(dayOfYear(x),         dayOfYear(y))
 })
 
 

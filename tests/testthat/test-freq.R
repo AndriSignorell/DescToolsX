@@ -37,13 +37,13 @@ test_that("freq cumulative percentage ends at 1", {
 
 test_that("freq ord = 'desc' sorts by descending frequency", {
   x <- factor(c("A","A","A","B","B","C"))
-  ft <- freq(x, ord = "desc")
+  ft <- freq(x, order = "desc")
   expect_equal(ft$level[1], "A")
 })
 
 test_that("freq ord = 'asc' sorts by ascending frequency", {
   x <- factor(c("A","A","A","B","B","C"))
-  ft <- freq(x, ord = "asc")
+  ft <- freq(x, order = "asc")
   expect_equal(ft$level[1], "C")
 })
 
@@ -83,8 +83,8 @@ test_that("freq actually sorts by level name", {
   x <- factor(c("b", "b", "a", "c", "c", "c"),
               levels = c("c", "b", "a"))   # levels NOT alphabetical
   
-  byLevel <- freq(x, ord = "level")
-  byName  <- freq(x, ord = "name")
+  byLevel <- freq(x, order = "level")
+  byName  <- freq(x, order = "name")
   
   expect_equal(as.character(byLevel$level), c("c", "b", "a"))
   expect_equal(as.character(byName$level),  c("a", "b", "c"))

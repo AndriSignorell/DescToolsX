@@ -8,16 +8,16 @@
 #' @param x a contingency table or an ordinal vector
 #' @param y optional second ordinal vector. If supplied, a contingency table
 #'   is constructed via `table(x, y, \dots)`.
-#' @param method character string specifying the estimation method:
+#' @param estimator character string specifying the estimation method:
 #'   \describe{
 #'     \item{`"two-step"`}{two-step estimator (default, fast)}
 #'     \item{`"ml"`}{full maximum likelihood estimation}
 #'   }
-#' @param se logical; if `TRUE`, standard errors are computed via the
+#' @param returnSE logical; if `TRUE`, standard errors are computed via the
 #'   Hessian matrix. This requires ml estimation, so it is an error to
-#'   combine it with `method = "two-step"`.
+#'   combine it with `estimator = "two-step"`.
 #' @param control a list of control parameters passed to [stats::optim()]
-#' @param maxcor numeric; maximum absolute correlation allowed (default
+#' @param maxCor numeric; maximum absolute correlation allowed (default
 #'   `0.9999`) to avoid numerical issues near the boundary
 #' @param ... further arguments passed to [table()] when `y`
 #'   is supplied, for example `useNA`
@@ -33,7 +33,7 @@
 #' \itemize{
 #'   \item The correlation parameter is internally transformed using
 #'   `tanh()` to enforce \eqn{|\rho| < 1}. The search range on that
-#'   scale is derived from `maxcor`, so the estimate is free to
+#'   scale is derived from `maxCor`, so the estimate is free to
 #'   approach the documented boundary.
 #'   \item Cell probabilities are bounded away from zero to avoid
 #'   `log(0)`.
@@ -42,9 +42,9 @@
 #' Empty rows or columns in the contingency table are removed with a warning.
 #'
 #' @return
-#' if `se = FALSE`, a numeric value giving the estimated correlation.
+#' if `returnSE = FALSE`, a numeric value giving the estimated correlation.
 #'
-#' If `se = TRUE`, a list with components:
+#' If `returnSE = TRUE`, a list with components:
 #' \describe{
 #'   \item{`type`}{type of correlation}
 #'   \item{`rho`}{estimated polychoric correlation}
@@ -57,7 +57,7 @@
 #'   \item{`n`}{total sample size}
 #'   \item{`chisq`}{likelihood-ratio test statistic}
 #'   \item{`df`}{degrees of freedom}
-#'   \item{`method`}{estimation method actually used}
+#'   \item{`estimator`}{estimation method actually used}
 #' }
 #' The returned object has class `"Polychor"`.
 #'
@@ -78,13 +78,13 @@
 #' y <- factor(cut(z + rnorm(200, sd = 0.6), 3), ordered = TRUE)
 #'
 #' # Two-step estimate
-#' corPolychor(x, y)
+#' polychorCor(x, y)
 #'
 #' # ml estimate
-#' corPolychor(x, y, method = "ml")
+#' polychorCor(x, y, estimator = "ml")
 #'
 #' # With standard errors
-#' res <- corPolychor(x, y, method = "ml", se = TRUE)
+#' res <- polychorCor(x, y, estimator = "ml", returnSE = TRUE)
 #' res$rho
 #'
 #' @family assoc.continuous
@@ -92,28 +92,28 @@
 #' @concept latent-variable
 #' @concept ordinal
 #' @export
-corPolychor <- function(x, y = NULL,
-                        method = c("two-step", "ml"),
-                        se = FALSE,
+polychorCor <- function(x, y = NULL,
+                        estimator = c("two-step", "ml"),
+                        returnSE = FALSE,
                         control = list(),
-                        maxcor = 0.9999,
+                        maxCor = 0.9999,
                         ...) {
 
-  method <- match.arg(method)
+  estimator <- match.arg(estimator)
 
-  if (!is.logical(se) || length(se) != 1L || is.na(se))
-    stop("'se' must be a single non-missing logical value")
+  if (!is.logical(returnSE) || length(returnSE) != 1L || is.na(returnSE))
+    stop("'returnSE' must be a single non-missing logical value")
 
   # Standard errors come from the ml Hessian. The former version quietly
-  # ran the full ml optimisation for se = TRUE and then reported
-  # method = "two-step" in the result, so the object described an
+  # ran the full ml optimisation for returnSE = TRUE and then reported
+  # estimator = "two-step" in the result, so the object described an
   # estimator that had not been used.
-  if (se && method == "two-step")
-    stop("standard errors require method = \"ml\"")
+  if (returnSE && estimator == "two-step")
+    stop("standard errors require estimator = \"ml\"")
 
-  if (!is.numeric(maxcor) || length(maxcor) != 1L || !is.finite(maxcor) ||
-      maxcor <= 0 || maxcor >= 1)
-    stop("'maxcor' must be a single number in (0, 1)")
+  if (!is.numeric(maxCor) || length(maxCor) != 1L || !is.finite(maxCor) ||
+      maxCor <= 0 || maxCor >= 1)
+    stop("'maxCor' must be a single number in (0, 1)")
 
   # --- build contingency table ------------------------------------------
   tab <- if (is.null(y)) as.table(as.matrix(x)) else table(x, y, ...)
@@ -149,7 +149,7 @@ corPolychor <- function(x, y = NULL,
 
     # tanh parametrization -> guarantees |rho| < 1
     rho <- tanh(pars[1])
-    rho <- max(min(rho, maxcor), -maxcor)
+    rho <- max(min(rho, maxCor), -maxCor)
 
     if (length(pars) == 1) {
       rowCuts <- rc
@@ -172,11 +172,11 @@ corPolychor <- function(x, y = NULL,
   # The search interval lives on the atanh scale. It used to be fixed at
   # c(-2, 2), i.e. |rho| <= tanh(2) = 0.964: any stronger association was
   # silently truncated there, well short of the documented maxcor.
-  atanhLim <- atanh(maxcor)
+  atanhLim <- atanh(maxCor)
 
-  if (method == "two-step") {
+  if (estimator == "two-step") {
     rho <- optimise(logLikFun, interval = c(-atanhLim, atanhLim))$minimum
-    return(max(min(tanh(rho), maxcor), -maxcor))
+    return(max(min(tanh(rho), maxCor), -maxCor))
   }
 
   # ml estimation
@@ -186,12 +186,12 @@ corPolychor <- function(x, y = NULL,
                logLikFun,
                method = "BFGS",
                control = control,
-               hessian = se)
+               hessian = returnSE)
 
   rho <- tanh(fit$par[1])
-  rho <- max(min(rho, maxcor), -maxcor)
+  rho <- max(min(rho, maxCor), -maxCor)
 
-  if (!se) return(rho)
+  if (!returnSE) return(rho)
 
   # --- standard errors ---------------------------------------------------
   chisq <- 2 * (fit$value + sum(tab * log((tab + 1e-12) / n)))
@@ -218,7 +218,7 @@ corPolychor <- function(x, y = NULL,
     n = n,
     chisq = chisq,
     df = df,
-    method = method
+    estimator = estimator
   )
 
   class(res) <- "Polychor"

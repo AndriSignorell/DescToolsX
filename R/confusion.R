@@ -8,11 +8,11 @@
 #' model objects (e.g., `glm`, `rpart`, `randomForest`,
 #' `svm`).
 #'
-#' `sensX()` and `specX()` are convenience extractors for the
-#' sensitivity and specificity values computed by `conf()`.
+#' `sensitivity()` and `specificity()` are convenience extractors for the
+#' sensitivity and specificity values computed by `confusion()`.
 #'
-#' @name conf
-#' @aliases sensX specX
+#' @name confusion
+#' @aliases sensitivity specificity
 #' 
 #' @param x object containing predictions; one of:
 #'   \itemize{
@@ -30,8 +30,10 @@
 #'   Default `0.5`.
 #' @param conf.level confidence level for the accuracy interval; defaults
 #'   to 0.95
-#' @param na.rm logical; remove missing values before computation.
-#'   Default `TRUE`.
+#' @param na.rm logical; if `TRUE`, pairs with a missing prediction or
+#'   reference are removed before computation. With the default `FALSE`
+#'   such pairs make all statistics `NA`; the table of the complete pairs
+#'   is still returned.
 #' @param digits integer; number of decimal places for printing
 #' @param main character string specifying the plot title
 #' @param \dots further arguments passed to specific methods
@@ -39,7 +41,7 @@
 #' @details
 #' The orientation of the table matters: rows are read as predictions and
 #' columns as references, so the no-information rate is taken from the
-#' column margin. `conf.default()` builds the table accordingly.
+#' column margin. `confusion.default()` builds the table accordingly.
 #'
 #' **Overall statistics:**
 #' \itemize{
@@ -62,52 +64,52 @@
 #'   \item Matthews Correlation Coefficient (MCC)
 #' }
 #'
-#' @return `conf()` returns an object of class `"Conf"` containing:
+#' @return `confusion()` returns an object of class `"Confusion"` containing:
 #' \describe{
 #'   \item{`table`}{confusion matrix}
 #'   \item{`pos`}{positive class (binary only, else `NULL`)}
 #'   \item{`diag`}{number of correct predictions}
 #'   \item{`n`}{total number of observations}
-#'   \item{`acc`, `acc.lci`, `acc.uci`}{accuracy and CI}
+#'   \item{`acc`, `accLci`, `accUci`}{accuracy and CI}
 #'   \item{`conf.level`}{confidence level used for the accuracy CI}
 #'   \item{`nir`}{no-information rate}
-#'   \item{`acc.pval`}{p-value for accuracy greater than the
+#'   \item{`accPValue`}{p-value for accuracy greater than the
 #'     no-information rate}
 #'   \item{`kappa`}{Cohen's kappa}
-#'   \item{`mcnemar.pval`}{McNemar test p-value}
+#'   \item{`mcnemarPValue`}{McNemar test p-value}
 #'   \item{`byclass`}{matrix of class-wise metrics}
 #' }
 #'
-#' `sensX()` and `specX()` return a named numeric vector containing
+#' `sensitivity()` and `specificity()` return a named numeric vector containing
 #' the sensitivity or specificity, respectively, for each reported class.
 #'
 #' @examples
 #' # vectors
 #' pred <- factor(c("A", "B", "A", "A", "B"))
 #' ref  <- factor(c("A", "A", "A", "B", "B"))
-#' conf(pred, ref)
+#' confusion(pred, ref)
 #'
 #' # table
-#' conf(table(pred, ref))
+#' confusion(table(pred, ref))
 #'
 #' # glm
 #' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-#' conf(m)
+#' confusion(m)
 #'
 #' @family model.classification
 #' @concept model-evaluation
 #' @concept confusion-matrix
 #' @concept classification
 #' @export
-conf <- function(x, ...) UseMethod("conf")
+confusion <- function(x, ...) UseMethod("confusion")
 
 
 
-# -- conf.table ---------------------------------------------------------------
+# -- confusion.table ---------------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.table <- function(x, pos = NULL, conf.level = 0.95, ...) {
+confusion.table <- function(x, pos = NULL, conf.level = 0.95, ...) {
 
   p <- (d <- dim(x))[1L]
   if (!is.numeric(x) || length(d) != 2L || p != d[2L])
@@ -116,9 +118,7 @@ conf.table <- function(x, pos = NULL, conf.level = 0.95, ...) {
   if (!identical(rownames(x), colnames(x)))
     stop("rownames(x) and colnames(x) must be identical")
 
-  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
-      is.na(conf.level) || conf.level <= 0 || conf.level >= 1)
-    stop("'conf.level' must be a single number in (0, 1)")
+  checkConfLevel(conf.level, allowNA = FALSE)
 
   # -- positive class -----------------------------------------------------------
   if (nrow(x) != 2L) {
@@ -150,13 +150,13 @@ conf.table <- function(x, pos = NULL, conf.level = 0.95, ...) {
     diag        = diag_n,
     n           = n,
     acc         = unname(ci[1L]),
-    acc.lci     = unname(ci[2L]),
-    acc.uci     = unname(ci[3L]),
+    accLci      = unname(ci[2L]),
+    accUci      = unname(ci[3L]),
     conf.level  = conf.level,
     nir         = unname(bt$null.value),
-    acc.pval    = unname(bt$p.value),
+    accPValue   = unname(bt$p.value),
     kappa       = cohenKappa(x),
-    mcnemar.pval = tryCatch(mcnemar.test(x)$p.value, error = function(e) NA_real_)
+    mcnemarPValue = tryCatch(mcnemar.test(x)$p.value, error = function(e) NA_real_)
   )
 
   # -- class-wise statistics -----------------------------------------------------------
@@ -197,16 +197,16 @@ conf.table <- function(x, pos = NULL, conf.level = 0.95, ...) {
     byclass <- byclass[, pos, drop = FALSE]
 
   res$byclass <- byclass
-  class(res)  <- "Conf"
+  class(res)  <- "Confusion"
   res
 }
 
 
-# -- conf.default -----------------------------------------------------------
+# -- confusion.default -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.default <- function(x, ref, pos = NULL, na.rm = TRUE, ...) {
+confusion.default <- function(x, ref, pos = NULL, na.rm = FALSE, ...) {
 
   if (missing(ref))
     stop("'ref' must be provided for the default method")
@@ -214,56 +214,79 @@ conf.default <- function(x, ref, pos = NULL, na.rm = TRUE, ...) {
   if (length(x) != length(ref))
     stop("'x' and 'ref' must have the same length")
 
-  if (na.rm) {
-    idx <- complete.cases(data.frame(x, ref))
-    x   <- x[idx]
-    ref <- ref[idx]
-  }
+  checkFlag(na.rm)
+
+  # prediction and reference are paired: a pair is missing if either is
+  ok  <- complete.cases(data.frame(x, ref))
+  x   <- x[ok]
+  ref <- ref[ok]
+
   clvl <- combLevels(x, ref)
-  conf.table(table(Prediction = factor(x,   levels = clvl),
-                   Reference  = factor(ref, levels = clvl)),
-             pos = pos, ...)
+  res  <- confusion.table(table(Prediction = factor(x,   levels = clvl),
+                                Reference  = factor(ref, levels = clvl)),
+                          pos = pos, ...)
+
+  # NA policy: without na.rm, missing values make the statistics NA. The
+  # table of the complete pairs is kept - table() would have left the
+  # missing ones out without a word, and every figure below with them.
+  if (!all(ok) && !na.rm)
+    res <- .naConfusion(res)
+
+  res
 }
 
 
-# -- conf.matrix -----------------------------------------------------------
+# all statistics of a "Confusion" object set to NA, structure and table kept
+.naConfusion <- function(x) {
 
-#' @rdname conf
-#' @export
-conf.matrix <- function(x, pos = NULL, ...) {
-  conf.table(as.table(x), pos = pos, ...)
+  for (nm in c("acc", "accLci", "accUci", "nir", "accPValue", "kappa",
+               "mcnemarPValue"))
+    x[[nm]] <- NA_real_
+
+  x$byclass[] <- NA_real_
+
+  x
 }
 
 
-# -- conf.rpart -----------------------------------------------------------
+# -- confusion.matrix -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.rpart <- function(x, ...) {
+confusion.matrix <- function(x, pos = NULL, ...) {
+  confusion.table(as.table(x), pos = pos, ...)
+}
+
+
+# -- confusion.rpart -----------------------------------------------------------
+
+#' @rdname confusion
+#' @export
+confusion.rpart <- function(x, ...) {
   lvl <- attr(x, "ylevels")
-  conf(x   = lvl[x$frame$yval[x$where]],
+  confusion(x   = lvl[x$frame$yval[x$where]],
        ref = lvl[x$y], ...)
 }
 
 
-# -- conf.multinom -----------------------------------------------------------
+# -- confusion.multinom -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.multinom <- function(x, ...) {
+confusion.multinom <- function(x, ...) {
   if (is.null(x$model))
     stop("'x' does not contain model frame - refit with model = TRUE")
   resp <- model.extract(x$model, "response")
   pred <- predict(x, type = "class")
-  conf(x = pred, ref = resp, ...)
+  confusion(x = pred, ref = resp, ...)
 }
 
 
-# -- conf.glm -----------------------------------------------------------
+# -- confusion.glm -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
+confusion.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
 
   if (is.null(x$model))
     stop("'x' does not contain the model frame - refit with model = TRUE")
@@ -272,58 +295,58 @@ conf.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
   lvl  <- if (is.factor(resp)) levels(resp) else levels(factor(resp))
 
   if (length(lvl) != 2L)
-    stop("conf.glm requires a binary response - use conf.multinom() for multiclass")
+    stop("confusion.glm requires a binary response - use confusion.multinom() for multiclass")
 
   prob <- predict(x, type = "response")
   pred <- lvl[(prob > cutoff) + 1L]
 
   if (is.null(pos)) pos <- lvl[2L]
 
-  conf(x = pred, ref = resp, pos = pos, ...)
+  confusion(x = pred, ref = resp, pos = pos, ...)
 }
 
 
-# -- conf.randomForest -----------------------------------------------------------
+# -- confusion.randomForest -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.randomForest <- function(x, ...) {
-  conf(x = x$predicted, ref = x$y, ...)
+confusion.randomForest <- function(x, ...) {
+  confusion(x = x$predicted, ref = x$y, ...)
 }
 
 
-# -- conf.svm -----------------------------------------------------------
+# -- confusion.svm -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.svm <- function(x, ...) {
+confusion.svm <- function(x, ...) {
   # predict.svm() has no 'type' argument - it was silently swallowed by
   # its dots and had no effect
-  conf(x   = predict(x),
+  confusion(x   = predict(x),
        ref = model.response(model.frame(x)), ...)
 }
 
 
-# -- conf.lda / conf.qda ---------------------------------------------------
+# -- confusion.lda / confusion.qda ---------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.lda <- function(x, ...) {
-  conf(x   = predict(x)$class,
+confusion.lda <- function(x, ...) {
+  confusion(x   = predict(x)$class,
        ref = model.extract(model.frame(x), "response"), ...)
 }
 
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-conf.qda <- function(x, ...) conf.lda(x, ...)
+confusion.qda <- function(x, ...) confusion.lda(x, ...)
 
 
-# -- print.Conf -----------------------------------------------------------
+# -- print.Confusion -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.Confusion <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 
   cat("\nConfusion Matrix and Statistics\n\n")
 
@@ -346,12 +369,12 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
                fm(x$n,           digits = 0L, bigMark = "'"),
                fm(x$acc,         digits = digits),
                fm(100 * coalesceX(x$conf.level, 0.95), digits = 0L), "%",
-               fm(x$acc.lci,     digits = digits),
-               fm(x$acc.uci,     digits = digits),
+               fm(x$accLci,      digits = digits),
+               fm(x$accUci,      digits = digits),
                fm(x$nir,         digits = digits),
-               fm(x$acc.pval,    fmt = "p", naForm = "NA"),
+               fm(x$accPValue,   fmt = "p", naForm = "NA"),
                fm(x$kappa,       digits = digits),
-               fm(x$mcnemar.pval, fmt = "p", naForm = "NA")
+               fm(x$mcnemarPValue, fmt = "p", naForm = "NA")
   ))
 
   rownames(x$byclass) <- c("Sensitivity", "Specificity",
@@ -362,7 +385,7 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 
   if (nrow(x$table) == 2L) {
     cat(paste(strPad(paste0(rownames(x$byclass), " :"),
-                     width = 25L, adj = "right"),
+                     width = 25L, align = "right"),
               fm(x$byclass, digits = digits)),
         sep = "\n")
     cat(gettextf("\n       'Positive' Class : %s\n\n", x$pos))
@@ -377,25 +400,25 @@ print.Conf <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 }
 
 
-# -- plot.Conf -----------------------------------------------------------
+# -- plot.Confusion -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-plot.Conf <- function(x, main = "Confusion Matrix", ...) {
+plot.Confusion <- function(x, main = "Confusion Matrix", ...) {
   mosaicplot(t(x$table), shade = TRUE, main = main, ...)
 }
 
 
 # -- Convenience extractors -----------------------------------------------------------
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-sensX <- function(x, ...) conf(x, ...)[["byclass"]]["sens", ]
+sensitivity <- function(x, ...) confusion(x, ...)[["byclass"]]["sens", ]
 
 
-#' @rdname conf
+#' @rdname confusion
 #' @export
-specX <- function(x, ...) conf(x, ...)[["byclass"]]["spec", ]
+specificity <- function(x, ...) confusion(x, ...)[["byclass"]]["spec", ]
 
 
 # == internal helper functions==================================================

@@ -72,11 +72,11 @@ test_that("lc checks missing, negative and empty data", {
 })
 
 test_that("lc weighted curves agree with hand-calculated population and income shares", {
-  obj <- lc(c(4, 1, 2), n = c(1, 2, 1))
+  obj <- lc(c(4, 1, 2), weights = c(1, 2, 1))
   expect_equal(obj$p, c(0, 0.5, 0.75, 1))
   expect_equal(obj$L, c(0, 0.25, 0.5, 1))
   expect_equal(obj$L.general, c(0, 0.5, 1, 2))
-  clean <- lc(c(4, 1, 2, NA), n = c(1, 2, 1, 5), na.rm = TRUE)
+  clean <- lc(c(4, 1, 2, NA), weights = c(1, 2, 1, 5), na.rm = TRUE)
   expect_equal(clean$L, obj$L)
   expect_equal(clean$p, obj$p)
 })
@@ -130,7 +130,7 @@ test_that("Lorenz bootstrap varies across replicates and is reproducible", {
 test_that("Lorenz pointwise bootstrap agrees with a direct income-share reference", {
   x <- c(1, 3, 8)
   w <- c(2, 3, 1)
-  obj <- lc(x, n = w)
+  obj <- lc(x, weights = w)
   p <- c(0, 0.17, 0.43, 0.81, 1)
   n <- sum(w)
   # Income owned by the poorest p*n sample members, interpolating the
@@ -161,8 +161,8 @@ test_that("Lorenz pointwise bootstrap agrees with a direct income-share referenc
 test_that("lc retains the effective sample and prediction handles legacy missing values", {
   x <- c(1, NA, 3, 8, 13)
   w <- c(2, 9, 1, NA, 3)
-  obj <- lc(x, n = w, na.rm = TRUE)
-  ref <- lc(c(1, 3, 13), n = c(2, 1, 3))
+  obj <- lc(x, weights = w, na.rm = TRUE)
+  ref <- lc(c(1, 3, 13), weights = c(2, 1, 3))
   expect_identical(obj$x, ref$x)
   expect_identical(obj$n, ref$n)
   set.seed(9003)
@@ -178,7 +178,7 @@ test_that("lc retains the effective sample and prediction handles legacy missing
 })
 
 test_that("Lorenz bootstrap samples a single income value without sample's 1:x shortcut", {
-  obj <- lc(5, n = 4)
+  obj <- lc(5, weights = 4)
   set.seed(9004)
   ans <- predict(obj, c(0, 0.5, 1), general = TRUE, conf.level = 0.9, R = 199)
   expect_equal(ans$lci, c(0, 2.5, 5))

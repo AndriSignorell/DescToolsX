@@ -57,7 +57,7 @@ Following association measures are implemented in \strong{DescToolsX}:
 \tabular{ll}{
 \verb{  }\link{cramerV}          \tab Cramer's V \cr
 \verb{  }\link{contCoef}         \tab Pearson's Contingency Coefficient \cr
-\verb{  }\link{lambda}           \tab Goodman's Lambda \cr
+\verb{  }\link{gkLambda}           \tab Goodman's Lambda \cr
 \verb{  }\link{gkTau}            \tab Goodman Kruskal's Tau \cr
 \verb{  }\link{gkGamma}          \tab Goodman Kruskal's Gamma \cr
 \verb{  }\link{kendallTauB}      \tab Kendall's Tau-b \cr
@@ -66,7 +66,7 @@ Following association measures are implemented in \strong{DescToolsX}:
 \verb{  }\link{uncertCoef}       \tab Theil's Uncertainty Coefficient \cr
 \verb{  }\link{mutInf}           \tab Mutual Information \cr
 \verb{  }\link{hoeffdingD}       \tab Hoeffding's D \cr
-\verb{  }\link{corPolychor}      \tab Polychoric Correlation \cr
+\verb{  }\link{polychorCor}      \tab Polychoric Correlation \cr
 }
 }
 \references{

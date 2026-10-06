@@ -7,6 +7,7 @@
 <url><loc>/reference/addMonths.html</loc></url>
 <url><loc>/reference/Agreement.html</loc></url>
 <url><loc>/reference/Association.html</loc></url>
+<url><loc>/reference/asYm.html</loc></url>
 <url><loc>/reference/as_ym.html</loc></url>
 <url><loc>/reference/atkinson.html</loc></url>
 <url><loc>/reference/attach-detach-aliases.html</loc></url>
@@ -25,6 +26,7 @@
 <url><loc>/reference/conDisPairs.html</loc></url>
 <url><loc>/reference/conf.html</loc></url>
 <url><loc>/reference/ConfidenceIntervals.html</loc></url>
+<url><loc>/reference/confusion.html</loc></url>
 <url><loc>/reference/constants.html</loc></url>
 <url><loc>/reference/contCoef.html</loc></url>
 <url><loc>/reference/corPart.html</loc></url>
@@ -54,12 +56,14 @@
 <url><loc>/reference/etaSq.html</loc></url>
 <url><loc>/reference/expFreq.html</loc></url>
 <url><loc>/reference/extremes.html</loc></url>
+<url><loc>/reference/findCor.html</loc></url>
 <url><loc>/reference/findCorrX.html</loc></url>
 <url><loc>/reference/Formulas.html</loc></url>
 <url><loc>/reference/freq.html</loc></url>
 <url><loc>/reference/freq2D.html</loc></url>
 <url><loc>/reference/generation.html</loc></url>
 <url><loc>/reference/gini.html</loc></url>
+<url><loc>/reference/gkLambda.html</loc></url>
 <url><loc>/reference/gkTau.html</loc></url>
 <url><loc>/reference/glassDelta.html</loc></url>
 <url><loc>/reference/gmean.html</loc></url>
@@ -87,6 +91,7 @@
 <url><loc>/reference/madX.html</loc></url>
 <url><loc>/reference/mae.html</loc></url>
 <url><loc>/reference/mape.html</loc></url>
+<url><loc>/reference/meanAbsDev.html</loc></url>
 <url><loc>/reference/meanAD.html</loc></url>
 <url><loc>/reference/meanSE.html</loc></url>
 <url><loc>/reference/meanX.html</loc></url>
@@ -101,10 +106,13 @@
 <url><loc>/reference/ordAssocs.html</loc></url>
 <url><loc>/reference/outlier.html</loc></url>
 <url><loc>/reference/pabak.html</loc></url>
+<url><loc>/reference/partialCor.html</loc></url>
 <url><loc>/reference/pearsonCor.html</loc></url>
 <url><loc>/reference/percAgreement.html</loc></url>
 <url><loc>/reference/percTable.html</loc></url>
 <url><loc>/reference/phi.html</loc></url>
+<url><loc>/reference/phiCoef.html</loc></url>
+<url><loc>/reference/polychorCor.html</loc></url>
 <url><loc>/reference/print.BlandAltman.html</loc></url>
 <url><loc>/reference/print.Desc.Date.html</loc></url>
 <url><loc>/reference/quantileX.html</loc></url>
@@ -115,11 +123,13 @@
 <url><loc>/reference/rmse.html</loc></url>
 <url><loc>/reference/rosenbluth.html</loc></url>
 <url><loc>/reference/scaleX.html</loc></url>
+<url><loc>/reference/sensX.html</loc></url>
 <url><loc>/reference/setDescToolsXOption.html</loc></url>
 <url><loc>/reference/simpson.html</loc></url>
 <url><loc>/reference/skew.html</loc></url>
 <url><loc>/reference/smape.html</loc></url>
 <url><loc>/reference/spearmanCor.html</loc></url>
+<url><loc>/reference/specX.html</loc></url>
 <url><loc>/reference/theil.html</loc></url>
 <url><loc>/reference/time-conversions.html</loc></url>
 <url><loc>/reference/tOne.html</loc></url>

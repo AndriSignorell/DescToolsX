@@ -32,7 +32,7 @@ test_that("theil na.rm = TRUE strips NAs", {
 
 test_that("theil frequency weights replicate observations", {
   x <- c(10, 20)
-  expect_equal(theil(x, n = c(3,3)), theil(rep(x, c(3,3))), tolerance=1e-10)
+  expect_equal(theil(x, weights = c(3,3)), theil(rep(x, c(3,3))), tolerance=1e-10)
 })
 
 
@@ -80,14 +80,14 @@ test_that("zero values follow the convention 0*log(0) = 0", {
 
 test_that("frequency weights replicate the observations", {
   
-  expect_equal(theil(1:3, n = c(1, 2, 3)),
+  expect_equal(theil(1:3, weights = c(1, 2, 3)),
                theil(rep(1:3, times = c(1, 2, 3))))
   
-  expect_equal(theil(c(5, 10), n = c(3, 1)),
+  expect_equal(theil(c(5, 10), weights = c(3, 1)),
                theil(c(5, 5, 5, 10)))
   
   # zero weights drop an observation
-  expect_equal(theil(c(1, 2, 3), n = c(1, 0, 1)), theil(c(1, 3)))
+  expect_equal(theil(c(1, 2, 3), weights = c(1, 0, 1)), theil(c(1, 3)))
   
 })
 
@@ -95,10 +95,10 @@ test_that("frequency weights replicate the observations", {
 test_that("theil() validates its arguments", {
   
   expect_error(theil(letters[1:3]), "numeric")
-  expect_error(theil(1:3, n = 1:2), "same length")
-  expect_error(theil(1:3, n = c(1, 1.5, 1)), "integer")
-  expect_error(theil(1:3, n = c(1, -1, 1)), "integer")
-  expect_error(theil(1:3, n = c(1, NA, 1)), "integer")
+  expect_error(theil(1:3, weights = 1:2), "same length")
+  expect_error(theil(1:3, weights = c(1, 1.5, 1)), "integer")
+  expect_error(theil(1:3, weights = c(1, -1, 1)), "integer")
+  expect_error(theil(1:3, weights = c(1, NA, 1)), "integer")
   
 })
 

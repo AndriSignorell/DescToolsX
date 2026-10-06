@@ -106,7 +106,7 @@ print.Desc.qq <- function(x, digits = NULL, ...) {
   # only the pair is plotted, once
   res <- x$res
   res$meta$plotit <- FALSE
-  print.Desc.table(res, print_header=FALSE, ...)
+  print.Desc.table(res, printHeader=FALSE, ...)
 
   .plotIfRequested(x)
 }

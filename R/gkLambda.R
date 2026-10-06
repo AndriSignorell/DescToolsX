@@ -19,7 +19,7 @@
 #' 
 #' @param direction type of lambda. Can be one out of `"symmetric"`
 #' (default), `"row"`, `"column"` (abbreviations are allowed).  If
-#' direction is set to `"row"` then lambda(R|C) (column dependent) will be
+#' direction is set to `"row"` then gkLambda(R|C) (column dependent) will be
 #' reported. See Details.
 #' 
 #' @param conf.level confidence level of the interval. If set to `NA`
@@ -66,17 +66,17 @@
 #' m
 #' 
 #' # direction default is "symmetric"
-#' lambda(m)
-#' lambda(m, conf.level=0.95)
+#' gkLambda(m)
+#' gkLambda(m, conf.level=0.95)
 #' 
-#' lambda(m, direction="row")
-#' lambda(m, direction="column")
+#' gkLambda(m, direction="row")
+#' gkLambda(m, direction="column")
 #'
 #' @family assoc.nominal
 #' @concept association-measure
 #' @concept nominal
 #' @export
-lambda <- function(x, y = NULL,
+gkLambda <- function(x, y = NULL,
                    conf.level = NA,
                    sides = c("two.sided", "left", "right"),
                    direction = c("symmetric", "row", "column"),

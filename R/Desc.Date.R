@@ -136,8 +136,8 @@ desc.Date <- function(x,
   names(moObs) <- moLevels
 
   if (is.null(mprobs)) {
-    monthDays <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-    mprobs    <- monthDays / sum(monthDays)
+    daysInMonth <- c(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    mprobs    <- daysInMonth / sum(daysInMonth)
   }
 
   if (length(mprobs) != 12)
@@ -284,7 +284,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
                rep("", 2)
              ))
 
-  printCharMatrix(m, align = "right", sep = 2, showRownames = FALSE, useCliStyle = TRUE)
+  printCharMatrix(m, align = "right", sep = 2, showRowNames = FALSE, useCliStyle = TRUE)
   cat("\n")
 
   if (x$sentinel$flag)
@@ -310,7 +310,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
   )
   out <- cbind(out[, 1:4], " ", out[, 5])
   colnames(out) <- c("level", "obs", "perc", "stdres", "", "dev")
-  printCharMatrix(out, align = c(rep("right", 5), "left"), showRownames = FALSE, useCliStyle = TRUE)
+  printCharMatrix(out, align = c(rep("right", 5), "left"), showRowNames = FALSE, useCliStyle = TRUE)
   .printFootnote(gettextf("Chi-squared p-value: %s", fm(wd$p.value, fmt = "p")))
 
   if (verbose < 3)
@@ -332,7 +332,7 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
   )
   out2 <- cbind(out2[, 1:4], " ", out2[, 5])
   colnames(out2) <- c("level", "obs", "perc", "stdres", "", "dev")
-  printCharMatrix(out2, align = c(rep("right", 5), "left"), showRownames = FALSE, useCliStyle = TRUE)
+  printCharMatrix(out2, align = c(rep("right", 5), "left"), showRowNames = FALSE, useCliStyle = TRUE)
   .printFootnote(gettextf("Chi-squared p-value: %s", fm(mo$p.value, fmt = "p")))
 
   invisible(x)

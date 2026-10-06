@@ -1,3 +1,7 @@
+# the default language follows the lang option and, without it, the locale;
+# the expectations below are written for the English names
+withr::local_options(list(DescToolsX.lang = "en"), .local_envir = teardown_env())
+
 test_that("zodiac returns a factor by default", {
   d <- as.Date("1990-03-21")
   expect_s3_class(zodiac(d), "factor")

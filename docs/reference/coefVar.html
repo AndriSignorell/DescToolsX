@@ -178,7 +178,8 @@ https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/coefvacl.htm<
 confidence intervals. See Smithson (2003).</p>
 <p><code>sides</code> names the side on which the finite bound lies:
 <code>"left"</code> yields \([lci, \infty)\), <code>"right"</code> yields
-\((-\infty, uci]\).</p>
+\([0, uci]\): the open side goes to the boundary of the parameter
+range, which is 0 for a positive coefficient of variation.</p>
 <p>**Note:**<code> </code> Analytic (precision) weights are not supported. For
 likelihood-based weighted variance estimation, see
 <code><a href="https://rdrr.io/r/stats/cov.wt.html" class="external-link">stats::cov.wt()</a></code>.</p>
@@ -217,7 +218,7 @@ Statistics Theory and Methods</em>, Volume 36, No. 12, pp 2187-2206.</p>
 <p>Other dispersion:
 <code><a href="iqrX.html">iqrX()</a></code>,
 <code><a href="madX.html">madX()</a></code>,
-<code><a href="meanAD.html">meanAD()</a></code>,
+<code><a href="meanAbsDev.html">meanAbsDev()</a></code>,
 <code><a href="meanSE.html">meanSE()</a></code>,
 <code><a href="rangeX.html">rangeX()</a></code>,
 <code><a href="varX.html">varX()</a></code></p></div>

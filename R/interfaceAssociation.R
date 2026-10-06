@@ -48,7 +48,7 @@
 #'  \tabular{ll}{
 #'    \verb{  }[cramerV]          \tab Cramer's V \cr
 #'    \verb{  }[contCoef]         \tab Pearson's Contingency Coefficient \cr
-#'    \verb{  }[lambda]           \tab Goodman's Lambda \cr
+#'    \verb{  }[gkLambda]           \tab Goodman's Lambda \cr
 #'    \verb{  }[gkTau]            \tab Goodman Kruskal's Tau \cr
 #'    \verb{  }[gkGamma]          \tab Goodman Kruskal's Gamma \cr
 #'    \verb{  }[kendallTauB]      \tab Kendall's Tau-b \cr
@@ -57,7 +57,7 @@
 #'    \verb{  }[uncertCoef]       \tab Theil's Uncertainty Coefficient \cr
 #'    \verb{  }[mutInf]           \tab Mutual Information \cr
 #'    \verb{  }[hoeffdingD]       \tab Hoeffding's D \cr
-#'    \verb{  }[corPolychor]      \tab Polychoric Correlation \cr
+#'    \verb{  }[polychorCor]      \tab Polychoric Correlation \cr
 #'    }
 #'
 #' @param x either a contingency table, a two-column object

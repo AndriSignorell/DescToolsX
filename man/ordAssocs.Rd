@@ -18,13 +18,7 @@ ordAssocs(
   direction = c("row", "column")
 )
 
-gkGamma(
-  x,
-  y = NULL,
-  conf.level = NA,
-  sides = c("two.sided", "left", "right"),
-  direction = c("row", "column")
-)
+gkGamma(x, y = NULL, conf.level = NA, sides = c("two.sided", "left", "right"))
 
 kendallTauA(
   x,

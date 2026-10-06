@@ -109,7 +109,7 @@
 #'   [desc.nq()] for numeric ~ categorical,
 #'   [desc.qn()] for categorical ~ numeric,
 #'   [desc.qq()] for categorical ~ categorical,
-#'   [lumen::corCI()], [lumen::bpTest()],
+#'   [lumen::corCI()], [lumen::breuschPaganTest()],
 #'   [stats::lm()], [stats::cor.test()]
 #'
 #'   Plot functions: [pharos::plotXY()], [pharos::plotDens2D()],
@@ -221,7 +221,7 @@ NULL
   }
   
   # ── 6. Breusch-Pagan + Cook's distance (verbose >= 3) ───────────────────────
-  bp      <- bpTest(lmFit)
+  bp      <- breuschPaganTest(lmFit)
   cook    <- cooks.distance(lmFit)
   cookMax <- max(cook, na.rm = TRUE)
   cookN4  <- sum(cook > 4 / nValid, na.rm = TRUE)   # common 4/n threshold

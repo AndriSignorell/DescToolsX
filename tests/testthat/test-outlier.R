@@ -9,9 +9,9 @@ test_that("outlier (boxplot) returns values, not indices by default", {
   expect_true(all(res %in% x))
 })
 
-test_that("outlier value = FALSE returns indices", {
+test_that("outlier output = \"index\" returns indices", {
   x <- c(rep(5, 10), 100)
-  idx <- outlier(x, value = FALSE)
+  idx <- outlier(x, output = "index")
   expect_type(idx, "integer")
   expect_true(all(idx <= length(x)))
 })
@@ -71,8 +71,8 @@ test_that("outlier returns values or indices consistently", {
   x <- c(1, 2, 3, 4, 5, 100)
   
   expect_equal(outlier(x), 100)
-  expect_equal(outlier(x, value = FALSE), 6L)
-  expect_equal(x[outlier(x, value = FALSE)], outlier(x))
+  expect_equal(outlier(x, output = "index"), 6L)
+  expect_equal(x[outlier(x, output = "index")], outlier(x))
   
   # NAs are dropped from the result, not reported as outliers
   y <- c(x, NA)

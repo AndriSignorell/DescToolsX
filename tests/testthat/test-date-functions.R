@@ -16,14 +16,14 @@ test_that("month() and weekday() give numbers, abbreviations and names", {
                    c("Sunday", "Monday", "Sunday"))
   expect_identical(levels(weekday(d, fmt = "ddd", lang = "local")),
                    format(ISOdate(2000, 1, 3:9), "%A"))
-  expect_equal(month(as.ym(202408)), 8)
+  expect_equal(month(asYm(202408)), 8)
 })
 
 test_that("the simple extractors", {
   t <- as.POSIXct("2024-08-11 14:25:36", tz = "UTC")
   expect_equal(year(d), c(2024, 2024, 2023))
   expect_equal(quarter(d), c(3, 1, 4))
-  expect_equal(yearDay(d), c(224, 1, 365))
+  expect_equal(dayOfYear(d), c(224, 1, 365))
   expect_equal(c(hour(t), minute(t), second(t)), c(14, 25, 36))
   expect_identical(timezone(t), "UTC")
   expect_equal(isWeekend(d), c(TRUE, FALSE, TRUE))

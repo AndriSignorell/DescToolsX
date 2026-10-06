@@ -7,7 +7,7 @@ test_that("expFreq absolute frequencies sum to the same total as input", {
 })
 
 test_that("expFreq relative frequencies sum to 1", {
-  rel <- expFreq(Titanic, freq = "rel")
+  rel <- expFreq(Titanic, scale = "proportion")
   expect_equal(sum(rel), 1, tolerance = 1e-10)
 })
 
@@ -39,8 +39,8 @@ test_that("expFreq stops when passed a non-array (e.g. data frame)", {
 })
 
 test_that("expFreq freq = 'r' is accepted as abbreviation for 'rel'", {
-  rel_full  <- expFreq(Titanic, freq = "rel")
-  rel_abbr  <- expFreq(Titanic, freq = "r")
+  rel_full  <- expFreq(Titanic, scale = "proportion")
+  rel_abbr  <- expFreq(Titanic, scale = "p")
   expect_equal(rel_full, rel_abbr)
 })
 
@@ -57,5 +57,5 @@ test_that("expFreq keeps the table class and reproduces chisq.test", {
                unname(suppressWarnings(chisq.test(tab)$expected)),
                tolerance = 1e-10)
   
-  expect_equal(sum(expFreq(Titanic, freq = "rel")), 1)
+  expect_equal(sum(expFreq(Titanic, scale = "proportion")), 1)
 })

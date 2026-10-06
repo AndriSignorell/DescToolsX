@@ -1,5 +1,5 @@
 # .normWeights() has been covered only through its callers (meanX, madX,
-# meanAD, ...); these tests pin its own contract.
+# meanAbsDev, ...); these tests pin its own contract.
 
 test_that("it returns x, the weights as doubles and their sum", {
   z <- .normWeights(c(3, 1, 2), c(1L, 2L, 3L))

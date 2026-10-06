@@ -25,7 +25,7 @@ measure}
 \item{weights}{optional weighting scheme for ordinal data
 (e.g. "linear", "quadratic")}
 
-\item{model}{model for the ICC, \code{"oneway"} or \code{"twoway"}}
+\item{model}{model for the ICC, \code{"one-way"} or \code{"two-way"}}
 
 \item{type}{type of ICC, \code{"consistency"} or \code{"agreement"}}
 

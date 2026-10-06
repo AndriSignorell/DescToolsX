@@ -10,8 +10,8 @@
 #'
 #' @param x numeric vector of non-negative values, such as market shares,
 #' incomes, or frequencies
-#' @param n optional frequency weights. Each element of `x`
-#'   is replicated `n` times.
+#' @param weights optional frequency weights. Each element of `x`
+#'   is replicated `weights` times.
 #' @param parameter parameter \eqn{m} controlling sensitivity to concentration;
 #' must be strictly positive, default is `1`. `m = 0` is rejected:
 #' it degenerates to a constant 1 for every input.
@@ -55,27 +55,30 @@
 #' @concept inequality
 #' @concept concentration-index
 #' @export
-herfindahl <- function(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE) {
+herfindahl <- function(x, weights = NULL, parameter = 1, na.rm = FALSE) {
 
   if (!is.numeric(x))
     stop("'x' must be numeric")
   checkFlag(na.rm)
 
+  if (is.null(weights))
+    weights <- rep(1, length(x))
+
   # same validation as atkinson(), which shares the family
-  if (!is.numeric(n) || anyNA(n) || any(n < 0, na.rm = TRUE) ||
-      any(n %% 1 != 0, na.rm = TRUE))
-    stop("'n' must be a vector of non-negative whole numbers")
+  if (!is.numeric(weights) || anyNA(weights) || any(weights < 0, na.rm = TRUE) ||
+      any(weights %% 1 != 0, na.rm = TRUE))
+    stop("'weights' must be a vector of non-negative whole numbers")
 
   # rep() recycles neither way and failed with "invalid 'times' argument"
-  if (length(n) != length(x))
-    stop("'n' must have the same length as 'x'")
+  if (length(weights) != length(x))
+    stop("'weights' must have the same length as 'x'")
 
   m <- if (is.null(parameter)) 1 else parameter
 
   if (!is.numeric(m) || length(m) != 1L || is.na(m) || m <= 0)
     stop("'parameter' must be a single positive number")
 
-  x <- rep(x, n)    # same handling as Lc and Gini
+  x <- rep(x, weights)    # same handling as Lc and Gini
 
   if(na.rm) x <- as.numeric(na.omit(x))
   if (length(x) == 0L) return(NA_real_)

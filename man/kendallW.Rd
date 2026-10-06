@@ -4,7 +4,7 @@
 \alias{kendallW}
 \title{Kendall's Coefficient of Concordance W}
 \usage{
-kendallW(x, correct = FALSE, test = FALSE, na.rm = NULL)
+kendallW(x, correct = FALSE, test = FALSE)
 }
 \arguments{
 \item{x}{\eqn{n \times m}{k x m} matrix or dataframe, k subjects (in rows) m
@@ -15,8 +15,6 @@ corrected for ties within raters (default \code{FALSE})}
 
 \item{test}{a logical indicating whether the test statistic and p-value
 should be reported (default \code{FALSE})}
-
-\item{na.rm}{deprecated and ignored}
 }
 \value{
 if \code{test = FALSE}, a numeric scalar containing Kendall's W.

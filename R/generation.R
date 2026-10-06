@@ -18,7 +18,7 @@
 #' documented as `NA` and returned as `"Gen Alpha"`. Naming the
 #' successor generation is not settled enough to hard-code an upper bound.
 #' 
-#' @param year year of birth
+#' @param x year of birth
 #' 
 #' @return ordered factor with levels 
 #' `c("Babyboomer", "Gen X",
@@ -36,7 +36,7 @@
 #' @concept date-time
 #' @concept categorization
 #' @export
-generation <- function(year){
+generation <- function(x){
   
   # Babyboomer   (1946-1964)
   # Generation X (1965-1979)
@@ -48,10 +48,10 @@ generation <- function(year){
   # matching against cut.default()'s formal
   # an all-NA input is logical (NA, c(NA, NA)); cut() would refuse it as
   # non-numeric, but NA in means NA out, as for mean(c(1, NA))
-  if (is.logical(year) && all(is.na(year)))
-    year <- as.numeric(year)
+  if (is.logical(x) && all(is.na(x)))
+    x <- as.numeric(x)
 
-  cut(year,
+  cut(x,
       breaks = c(1946, 1965, 1980, 1996, 2011, Inf), right = FALSE,
       labels = c("Babyboomer", "Gen X", "Millennial", "Gen Z", "Gen Alpha"),
       ordered_result = TRUE)

@@ -101,10 +101,10 @@ Yule, G. U. (1912). On the methods of measuring association between two attribut
 Other assoc.nominal:
 \code{\link[=contCoef]{contCoef()}},
 \code{\link[=cramerV]{cramerV()}},
+\code{\link[=gkLambda]{gkLambda()}},
 \code{\link[=gkTau]{gkTau()}},
-\code{\link[=lambda]{lambda()}},
 \code{\link[=mutInf]{mutInf()}},
-\code{\link[=phi]{phi()}},
+\code{\link[=phiCoef]{phiCoef()}},
 \code{\link[=tschuprowT]{tschuprowT()}},
 \code{\link[=uncertCoef]{uncertCoef()}}
 }

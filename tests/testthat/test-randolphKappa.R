@@ -48,15 +48,15 @@ test_that("randolphKappa() can become negative", {
 test_that("randolphKappa() honours the number of available categories", {
 
   # only three of five categories were used
-  expect_equal(randolphKappa(x5, categories = 5),
+  expect_equal(randolphKappa(x5, levels = 5),
                (11 / 15 - 1 / 5) / (1 - 1 / 5))
-  expect_equal(randolphKappa(x5, categories = c("a", "b", "c", "d", "e")),
+  expect_equal(randolphKappa(x5, levels = c("a", "b", "c", "d", "e")),
                (11 / 15 - 1 / 5) / (1 - 1 / 5))
 
   # more categories -> less chance agreement -> larger kappa
-  expect_gt(randolphKappa(x5, categories = 5), randolphKappa(x5))
+  expect_gt(randolphKappa(x5, levels = 5), randolphKappa(x5))
 
-  expect_error(randolphKappa(x5, categories = 2), "fewer entries")
+  expect_error(randolphKappa(x5, levels = 2), "fewer entries")
 })
 
 
@@ -97,7 +97,7 @@ test_that("randolphKappa() handles missing ratings per subject", {
 
 test_that("randolphKappa() refuses instead of ignoring conf.level", {
   expect_error(randolphKappa(x5, conf.level = 0.95), "not implemented")
-  expect_silent(randolphKappa(x5, conf.level = NA))
+  expect_silent(randolphKappa(x5))
 })
 
 

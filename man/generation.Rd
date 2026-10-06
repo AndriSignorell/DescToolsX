@@ -4,10 +4,10 @@
 \alias{generation}
 \title{Generation by Birth Year}
 \usage{
-generation(year)
+generation(x)
 }
 \arguments{
-\item{year}{year of birth}
+\item{x}{year of birth}
 }
 \value{
 ordered factor with levels

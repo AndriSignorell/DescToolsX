@@ -18,14 +18,14 @@ test_that("user supplied vnames are used verbatim", {
   # regression: default_vnames was TRUE in both branches, so the
   # "(= level)" suffix was appended even to user supplied names and the
   # else branch was dead code
-  t1 <- tOne(d.set[, c("num", "dich")], d.set$g, TEST = NA, fmt = FMT,
-             vnames = c("Score", "Flag"))
+  t1 <- tOne(d.set[, c("num", "dich")], d.set$g, tests = NA, fmt = FMT,
+             varNames = c("Score", "Flag"))
 
   expect_true("Flag" %in% unclass(t1)[, 1])
   expect_false(any(grepl("(= ", unclass(t1)[, 1], fixed = TRUE)))
 
   # without vnames the reported level is appended
-  t2 <- tOne(d.set[, c("num", "dich")], d.set$g, TEST = NA, fmt = FMT)
+  t2 <- tOne(d.set[, c("num", "dich")], d.set$g, tests = NA, fmt = FMT)
   expect_true(any(grepl("dich (= 1)", unclass(t2)[, 1], fixed = TRUE)))
 
 })
@@ -35,7 +35,7 @@ test_that("a matrix without column names gets one name per column", {
 
   # regression: vnames was the single string "Var1", so vnames[2] was NA
   m <- matrix(c(1, 2, 3, 4, 5, 6), ncol = 2)
-  t1 <- tOne(m, TEST = NA, fmt = FMT)
+  t1 <- tOne(m, tests = NA, fmt = FMT)
 
   expect_false(anyNA(unclass(t1)[, 1]))
 
@@ -44,14 +44,14 @@ test_that("a matrix without column names gets one name per column", {
 
 test_that("intref selects the reported level", {
 
-  hi <- tOne(d.set["dich"], d.set$g, TEST = NA, fmt = FMT, intref = "high")
-  lo <- tOne(d.set["dich"], d.set$g, TEST = NA, fmt = FMT, intref = "low")
+  hi <- tOne(d.set["dich"], d.set$g, tests = NA, fmt = FMT, intRef = "high")
+  lo <- tOne(d.set["dich"], d.set$g, tests = NA, fmt = FMT, intRef = "low")
 
   expect_true(any(grepl("= 1", unclass(hi)[, 1], fixed = TRUE)))
   expect_true(any(grepl("= 0", unclass(lo)[, 1], fixed = TRUE)))
 
   # "both" reports the variable as a categorical one, i.e. with all levels
-  bo <- tOne(d.set["dich"], d.set$g, TEST = NA, fmt = FMT, intref = "both")
+  bo <- tOne(d.set["dich"], d.set$g, tests = NA, fmt = FMT, intRef = "both")
   expect_gt(nrow(bo), nrow(hi))
 
 })
@@ -66,7 +66,7 @@ test_that("the total column uses the same denominator as the total counts", {
   d <- data.frame(f = factor(c("a", "a", "b", "b", "c")),
                   g = factor(c("x", "x", "y", "y", NA)))
 
-  t1 <- tOne(d["f"], d$g, TEST = NA, fmt = FMT, add.length = FALSE)
+  t1 <- tOne(d["f"], d$g, tests = NA, fmt = FMT, addLength = FALSE)
   tot <- unclass(t1)[, "total"]
   tot <- tot[tot != ""]
 
@@ -82,13 +82,13 @@ test_that("the total column uses the same denominator as the total counts", {
 test_that("a one-row table keeps its dimensions", {
 
   # regression: res[, -3] / res[, -ncol(res)] dropped to a vector whenever the
-  # table had a single row - one dichotomous variable and add.length = FALSE
-  t1 <- tOne(d.set["dich"], d.set$g, TEST = NA, fmt = FMT, add.length = FALSE)
+  # table had a single row - one dichotomous variable and addLength = FALSE
+  t1 <- tOne(d.set["dich"], d.set$g, tests = NA, fmt = FMT, addLength = FALSE)
   expect_true(is.matrix(unclass(t1)))
   expect_equal(nrow(unclass(t1)), 1L)
   expect_true("total" %in% colnames(unclass(t1)))
 
-  t2 <- tOne(d.set["dich"], TEST = NA, fmt = FMT, add.length = FALSE)
+  t2 <- tOne(d.set["dich"], tests = NA, fmt = FMT, addLength = FALSE)
   expect_true(is.matrix(unclass(t2)))
 
 })
@@ -100,7 +100,7 @@ test_that("an unsupported column type does not break the table", {
                   dat = as.Date("2020-01-01") + 0:5,
                   g   = factor(rep(c("x", "y"), 3)))
 
-  expect_silent(t1 <- tOne(d[, c("num", "dat")], d$g, TEST = NA, fmt = FMT))
+  expect_silent(t1 <- tOne(d[, c("num", "dat")], d$g, tests = NA, fmt = FMT))
   expect_equal(ncol(unclass(t1)), 4)         # var + total + 2 groups
   expect_true("dat" %in% unclass(t1)[, 1])
 
@@ -109,13 +109,13 @@ test_that("an unsupported column type does not break the table", {
 
 test_that("the ungrouped table has no group column", {
 
-  t1 <- tOne(d.set[, c("num", "cat")], TEST = NA, fmt = FMT)
+  t1 <- tOne(d.set[, c("num", "cat")], tests = NA, fmt = FMT)
   expect_equal(ncol(unclass(t1)), 2)         # var + total
 
-  t2 <- tOne(d.set[, c("num", "cat")], d.set$g, TEST = NA, fmt = FMT)
+  t2 <- tOne(d.set[, c("num", "cat")], d.set$g, tests = NA, fmt = FMT)
   expect_equal(ncol(unclass(t2)), 4)         # var + total + 2 groups
 
-  t3 <- tOne(d.set[, c("num", "cat")], d.set$g, TEST = NA, fmt = FMT, total = FALSE)
+  t3 <- tOne(d.set[, c("num", "cat")], d.set$g, tests = NA, fmt = FMT, total = FALSE)
   expect_equal(ncol(unclass(t3)), 3)
 
 })
@@ -123,7 +123,7 @@ test_that("the ungrouped table has no group column", {
 
 test_that("TEST = NA drops the test column and the legend", {
 
-  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, TEST = NA, fmt = FMT)
+  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, tests = NA, fmt = FMT)
   expect_null(attr(t1, "legend"))
 
   # 8 observations in a 3x2 table: the chi-squared warning is expected
@@ -141,7 +141,7 @@ test_that("fmt entries are merged by name, not by value", {
   # that happened to equal a default (or another user entry) silently
   # removed the other one
   sty <- style(digits = 0)
-  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, TEST = NA,
+  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, tests = NA,
              fmt = list(abs = sty, num = sty,
                         per = style(fmt = "%", digits = 1),
                         pval = style(fmt = "*", naForm = "   ")))
@@ -155,7 +155,7 @@ test_that("fmt entries are merged by name, not by value", {
 
 test_that("print() returns its argument invisibly", {
 
-  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, TEST = NA, fmt = FMT)
+  t1 <- tOne(d.set[, c("num", "cat")], d.set$g, tests = NA, fmt = FMT)
   expect_output(res <- print(t1))
   expect_identical(res, t1)
 

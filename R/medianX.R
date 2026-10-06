@@ -116,7 +116,7 @@ medianX.default <- function(x, weights = NULL, na.rm = FALSE, ...) {
     # package do supply, e.g. madX() via .normWeights() - would collapse
     # every quantile onto the largest value. Type 5 depends only on the
     # ratios, which is what "weighted median" is normally taken to mean.
-    quantileX(x, weights, probs=0.5, na.rm=na.rm, names=FALSE, type=5)
+    quantileX(x, probs=0.5, weights=weights, na.rm=na.rm, names=FALSE, type=5)
 }
 
 

@@ -146,7 +146,7 @@ heteroscedasticity and random coefficient variation.
 \code{\link[=desc.nq]{desc.nq()}} for numeric ~ categorical,
 \code{\link[=desc.qn]{desc.qn()}} for categorical ~ numeric,
 \code{\link[=desc.qq]{desc.qq()}} for categorical ~ categorical,
-\code{\link[lumen:corCI]{lumen::corCI()}}, \code{\link[lumen:bpTest]{lumen::bpTest()}},
+\code{\link[lumen:corCI]{lumen::corCI()}}, \code{\link[lumen:breuschPaganTest]{lumen::breuschPaganTest()}},
 \code{\link[stats:lm]{stats::lm()}}, \code{\link[stats:cor.test]{stats::cor.test()}}
 
 Plot functions: \code{\link[pharos:plotXY]{pharos::plotXY()}}, \code{\link[pharos:plotDens2D]{pharos::plotDens2D()}},

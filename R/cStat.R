@@ -6,7 +6,7 @@
 #'
 #' @param x an object for which the C-statistic should be computed; for the
 #' default method, a numeric vector of predicted values
-#' @param resp binary response vector (numeric, logical, or factor)
+#' @param ref binary response vector (numeric, logical, or factor)
 #' @param conf.level confidence level for the interval; `NA` (default)
 #' suppresses interval calculation
 #' @param sides character string specifying the sidedness of the confidence
@@ -32,7 +32,7 @@
 #'
 #' Ties in predicted values are handled by assigning a weight of 0.5.
 #'
-#' `resp` is converted with `as.numeric(factor(resp)) - 1`, so
+#' `ref` is converted with `as.numeric(factor(resp)) - 1`, so
 #' the **second** level in sort order counts as the event - `1`
 #' for a 0/1 coding, `TRUE` for a logical, and the second factor level
 #' otherwise. Getting this backwards returns \eqn{1 - C} rather than an
@@ -59,7 +59,7 @@
 #' set.seed(1)
 #' x <- runif(100)
 #' y <- rbinom(100, 1, 0.5)
-#' cStat(x, resp = y)
+#' cStat(x, ref = y)
 #'
 #' # GLM method
 #' r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
@@ -89,7 +89,7 @@ cStat.glm <- function(x, ...) {
 
   cStat.default(
     x = predict(x, type = "response"),
-    resp = resp,
+    ref = resp,
     ...
   )
 }
@@ -98,33 +98,33 @@ cStat.glm <- function(x, ...) {
 #' @method cStat default
 #' @rdname cStat
 #' @export
-cStat.default <- function(x, resp, conf.level = NA,
+cStat.default <- function(x, ref, conf.level = NA,
                           sides = c("two.sided", "left", "right"), ...) {
 
-  if (missing(resp)) {
-    stop("`resp` must be provided for the default method.", call. = FALSE)
+  if (missing(ref)) {
+    stop("`ref` must be provided for the default method.", call. = FALSE)
   }
 
   # --- basic checks ---
-  if (length(x) != length(resp)) {
-    stop("`x` and `resp` must have the same length.", call. = FALSE)
+  if (length(x) != length(ref)) {
+    stop("`x` and `ref` must have the same length.", call. = FALSE)
   }
 
-  if (anyNA(x) || anyNA(resp)) {
-    stop("`x` and `resp` must not contain missing values.", call. = FALSE)
+  if (anyNA(x) || anyNA(ref)) {
+    stop("`x` and `ref` must not contain missing values.", call. = FALSE)
   }
 
   # convert response to numeric {0,1}
-  y <- as.numeric(factor(resp)) - 1
+  y <- as.numeric(factor(ref)) - 1
 
   if (!all(y %in% c(0, 1))) {
-    stop("`resp` must be binary.", call. = FALSE)
+    stop("`ref` must be binary.", call. = FALSE)
   }
 
   # A constant response has no discordant/concordant pairs at all, so the
   # ratio below is 0/0. Previously this returned NaN without comment.
   if (length(unique(y)) < 2L) {
-    stop("`resp` must contain both outcome classes.", call. = FALSE)
+    stop("`ref` must contain both outcome classes.", call. = FALSE)
   }
 
   # --- compute concordance ---
@@ -159,7 +159,7 @@ cStat.default <- function(x, resp, conf.level = NA,
                        seed = seed)
 
   # est comes from the exact O(n log n) pass above, not from the bootstrap
-  # output, so that cStat(x, resp) and cStat(x, resp, conf.level = 0.95)
+  # output, so that cStat(x, ref) and cStat(x, ref, conf.level = 0.95)
   # cannot report two different point estimates
   c(est = est, applySides(unname(ci[2:3]), sides, lo = 0, hi = 1))
 }

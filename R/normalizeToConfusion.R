@@ -126,11 +126,12 @@ normalizeToConfusion <- function(
     x,
     y      = NULL,
     levels = NULL,
-    useNA  = "no",
+    useNA  = c("no", "ifany", "always"),
     mode   = c("agreement", "association")
 ) {
   
-  mode <- match.arg(mode)
+  useNA <- match.arg(useNA)
+  mode  <- match.arg(mode)
   
   #------------------------------------------------
   # Helper: build table from two vectors

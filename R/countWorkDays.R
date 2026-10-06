@@ -17,9 +17,9 @@
 #'
 #' @param from initial dates
 #' @param to final dates
-#' @param holiday a vector of dates (or strings coercible with
+#' @param holidays a vector of dates (or strings coercible with
 #' [as.Date()]) to exclude
-#' @param nonworkdays a character vector containing the English three-letter
+#' @param nonWorkDays a character vector containing the English three-letter
 #' weekday abbreviations to be treated as non-work days, i.e. a subset of
 #' `c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")`. Default is
 #' `c("Sat", "Sun")`.
@@ -40,7 +40,7 @@
 #' # two holidays inside the period reduce the count by two
 #' countWorkDays(from = min(x), to = max(x))
 #' countWorkDays(from = min(x), to = max(x),
-#'               holiday = c("2019-01-07", "2019-01-08"))
+#'               holidays = c("2019-01-07", "2019-01-08"))
 #'
 #' # a single day
 #' countWorkDays(as.Date("2019-01-05"), as.Date("2019-01-05"))  # Saturday: 0
@@ -49,27 +49,27 @@
 #' @concept date-time
 #' @export
 countWorkDays <- function(from, to,
-                          holiday = NULL, nonworkdays = c("Sat", "Sun")) {
+                          holidays = NULL, nonWorkDays = c("Sat", "Sun")) {
 
   dayAbb <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
   # a typo such as "Sunday" used to be silently ignored, quietly turning
   # every weekend day into a working day
-  if (!is.character(nonworkdays) || anyNA(nonworkdays) ||
-      !all(nonworkdays %in% dayAbb))
-    stop("'nonworkdays' must be a subset of ",
+  if (!is.character(nonWorkDays) || anyNA(nonWorkDays) ||
+      !all(nonWorkDays %in% dayAbb))
+    stop("'nonWorkDays' must be a subset of ",
          paste(dQuote(dayAbb, FALSE), collapse = ", "))
 
-  nonworkdays <- unique(nonworkdays)
+  nonWorkDays <- unique(nonWorkDays)
 
-  if (length(nonworkdays) == 7L)
-    stop("'nonworkdays' cannot cover every day of the week")
+  if (length(nonWorkDays) == 7L)
+    stop("'nonWorkDays' cannot cover every day of the week")
 
   from <- as.Date(from)
   to   <- as.Date(to)
 
-  if (!is.null(holiday))
-    holiday <- unique(as.Date(holiday))
+  if (!is.null(holidays))
+    holidays <- unique(as.Date(holidays))
 
   if (length(from) == 0L || length(to) == 0L)
     return(integer(0))
@@ -80,7 +80,7 @@ countWorkDays <- function(from, to,
   res <- integer(attr(ll, "maxdim"))
   for (i in seq_len(attr(ll, "maxdim")))
     res[i] <- .workDays(ll$from[i], ll$to[i],
-                        holiday = holiday, nonworkdays = nonworkdays)
+                        holidays = holidays, nonWorkDays = nonWorkDays)
 
   return(res)
 }
@@ -90,7 +90,7 @@ countWorkDays <- function(from, to,
 # == internal helper functions =================================================
 
 .workDays <- function(from, to,
-                      holiday = NULL, nonworkdays = c("Sat", "Sun")) {
+                      holidays = NULL, nonWorkDays = c("Sat", "Sun")) {
 
   if (is.na(from) || is.na(to))
     return(NA_integer_)
@@ -103,14 +103,14 @@ countWorkDays <- function(from, to,
   d <- as.integer(to - from)
   w <- d %/% 7
 
-  res <- w * (7 - length(nonworkdays)) +
-    sum(weekday(seq(from + w * 7, to, 1), fmt = "dd", lang = "en") %notin% nonworkdays)
+  res <- w * (7 - length(nonWorkDays)) +
+    sum(weekday(seq(from + w * 7, to, 1), fmt = "dd", lang = "en") %notin% nonWorkDays)
 
-  if (!is.null(holiday) && length(holiday)) {
+  if (!is.null(holidays) && length(holidays)) {
     # count holidays in period
-    h <- holiday[holiday %[]% c(from, to)]
+    h <- holidays[holidays %[]% c(from, to)]
     if (length(h))
-      res <- res - sum(weekday(h, fmt = "dd", lang = "en") %notin% nonworkdays)
+      res <- res - sum(weekday(h, fmt = "dd", lang = "en") %notin% nonWorkDays)
   }
 
   return(as.integer(res))

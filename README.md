@@ -51,16 +51,16 @@ remotes::install_github("AndriSignorell/DescToolsX")
 -   `meanX()`, `medianX()`, `modeX()`, `quantileX()`, `rangeX()`
 -   `gmean()`, `hmean()`, `huberM()`, `tukeyBiweight()`,
     `hodgesLehmann()`
--   `varX()`, `madX()`, `iqrX()`, `meanAD()`, `meanSE()`, `coefVar()`
+-   `varX()`, `madX()`, `iqrX()`, `meanAbsDev()`, `meanSE()`, `coefVar()`
 -   `skew()`, `kurt()`
 
 ### 🔹 Association and Correlation
 
--   Nominal: `cramerV()`, `contCoef()`, `phi()`, `tschuprowT()`,
-    `lambda()`, `uncertCoef()`, `gkTau()`, `yule()`
+-   Nominal: `cramerV()`, `contCoef()`, `phiCoef()`, `tschuprowT()`,
+    `gkLambda()`, `uncertCoef()`, `gkTau()`, `yule()`
 -   Ordinal: `ordAssocs()`, `conDisPairs()`, `kendallW()`
--   Continuous: `pearsonCor()`, `spearmanCor()`, `corPart()`,
-    `corPolychor()`, `hoeffdingD()`, `findCorrX()`
+-   Continuous: `pearsonCor()`, `spearmanCor()`, `partialCor()`,
+    `polychorCor()`, `hoeffdingD()`, `findCor()`
 -   `Association()` — common interface across the measures
 
 ### 🔹 Agreement and Reliability
@@ -89,7 +89,7 @@ remotes::install_github("AndriSignorell/DescToolsX")
 
 ### 🔹 Dates and Time
 
--   `addMonths()`, `as_ym()`, `countWorkDays()`, `generation()`,
+-   `addMonths()`, `asYm()`, `countWorkDays()`, `generation()`,
     `zodiac()`
 -   date predicates and conversions, `cutAge()`
 

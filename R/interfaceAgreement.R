@@ -79,7 +79,7 @@
 #' measure
 #' @param weights optional weighting scheme for ordinal data
 #'   (e.g. "linear", "quadratic")
-#' @param model model for the ICC, `"oneway"` or `"twoway"`
+#' @param model model for the ICC, `"one-way"` or `"two-way"`
 #' @param type type of ICC, `"consistency"` or `"agreement"`
 #' @param unit unit of the ICC, `"single"` or `"average"`
 #' @param ... additional arguments passed to helper functions

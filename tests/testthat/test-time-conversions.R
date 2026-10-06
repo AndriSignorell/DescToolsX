@@ -16,10 +16,10 @@ test_that("secToHms handles integer and explicit fractional precision", {
   expect_equal(unname(hmsToSec(secToHms(x, digits = 3))), x)
 })
 
-test_that("hmsToMinute uses hour, minute and fractional seconds", {
+test_that("hmsToMin uses hour, minute and fractional seconds", {
   x <- as.POSIXct(c("2024-01-01 00:00:00", "2024-01-01 01:02:30"), tz = "UTC")
-  expect_equal(hmsToMinute(x), c(0, 62.5))
-  expect_equal(hmsToMinute(as.POSIXlt(x, tz = "UTC")), c(0, 62.5))
+  expect_equal(hmsToMin(x), c(0, 62.5))
+  expect_equal(hmsToMin(as.POSIXlt(x, tz = "UTC")), c(0, 62.5))
 })
 
 

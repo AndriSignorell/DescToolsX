@@ -67,7 +67,7 @@ ratio, the model method one odds ratio per regression coefficient.</p>
 <span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald"</span>, <span class="st">"exact"</span>, <span class="st">"midp"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald"</span>, <span class="st">"exact"</span>, <span class="st">"mid-p"</span><span class="op">)</span>,</span>
 <span>  interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -123,14 +123,14 @@ at 0 or <code>Inf</code> accordingly. Ignored, with a warning, for
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>character string specifying the interval method. For a
 contingency table one of <code>"wald"</code>, <code>"exact"</code> or
-<code>"midp"</code>; for a binomial model one of <code>"wald"</code> or
+<code>"mid-p"</code>; for a binomial model one of <code>"wald"</code> or
 <code>"profile"</code>. See Details.</p></dd>
 
 
 <dt id="arg-interval">interval<a class="anchor" aria-label="anchor" href="#arg-interval"></a></dt>
 <dd><p>numeric vector of length two giving the search interval
 for the root finding in the mid-p method. Only used by
-<code>method = "midp"</code>; widen it if the reported bound sits at one of
+<code>method = "mid-p"</code>; widen it if the reported bound sits at one of
 its ends.</p></dd>
 
 
@@ -178,11 +178,11 @@ the standard error on the log scale.</p>
 interval on the log scale, fast and adequate for reasonably large counts.
 <code>"exact"</code> is the conditional interval based on the noncentral
 hypergeometric distribution (Fisher); it guarantees coverage but is
-conservative, sometimes markedly so. <code>"midp"</code> halves the probability
+conservative, sometimes markedly so. <code>"mid-p"</code> halves the probability
 of the observed table and lies between the two: it has coverage closer to
 the nominal level than the exact interval without the Wald interval's
 reliance on large counts. With a zero cell the point estimate is 0 or
-<code>Inf</code> and only <code>"exact"</code> and <code>"midp"</code> still deliver a
+<code>Inf</code> and only <code>"exact"</code> and <code>"mid-p"</code> still deliver a
 finite bound on the informative side.</p>
 </div>
 
@@ -252,9 +252,9 @@ Wiley.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3.0000000  0.8914747 10.0956314 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># the exact interval is the widest, the Wald interval the narrowest</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald"</span>, <span class="st">"exact"</span>, <span class="st">"midp"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"wald"</span>, <span class="st">"exact"</span>, <span class="st">"mid-p"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>       <span class="kw">function</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="fu">oddsRatio</span><span class="op">(</span><span class="va">tab</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, method <span class="op">=</span> <span class="va">m</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           wald      exact       midp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           wald      exact      mid-p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> est  3.0000000  2.9483345  2.9118822</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lci  0.8914747  0.7770679  0.8795254</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> uci 10.0956314 12.7381845 10.8604692</span>

@@ -56,7 +56,8 @@ test_that("ties in x are jittered too, not just ties in y", {
   y <- rnorm(50)
 
   expect_warning(hoeffdingD(x, y), "Ties")
-  expect_no_warning(d <- hoeffdingD(x, y, jitter = TRUE, seed = 1))
+  set.seed(1)
+  expect_no_warning(d <- hoeffdingD(x, y, jitter = TRUE))
   expect_true(is.finite(d))
 
   # jittering must actually change the tie structure: with x fully tied
@@ -66,20 +67,15 @@ test_that("ties in x are jittered too, not just ties in y", {
 })
 
 
-test_that("a supplied seed does not disturb the caller's RNG stream", {
-
-  set.seed(123)
-  before <- .Random.seed
+test_that("set.seed() makes the jittered result reproducible", {
 
   x <- rep(1:10, each = 3)
   y <- rep(1:15, times = 2)
-  hoeffdingD(x, y, jitter = TRUE, seed = 42)
 
-  expect_identical(.Random.seed, before)
-
-  # ... and the seed still makes the result reproducible
-  d1 <- hoeffdingD(x, y, jitter = TRUE, seed = 42)
-  d2 <- hoeffdingD(x, y, jitter = TRUE, seed = 42)
+  set.seed(42)
+  d1 <- hoeffdingD(x, y, jitter = TRUE)
+  set.seed(42)
+  d2 <- hoeffdingD(x, y, jitter = TRUE)
   expect_equal(d1, d2)
 })
 
@@ -224,7 +220,8 @@ test_that("jitter is refused for the exact engine rather than ignored", {
   expect_error(hoeffdingD(x, y, engine = "exact", jitter = TRUE), "jitter")
   
   # and it still works for the fast one
-  expect_silent(hoeffdingD(x, y, jitter = TRUE, seed = 1))
+  set.seed(1)
+  expect_silent(hoeffdingD(x, y, jitter = TRUE))
 })
 
 
@@ -245,7 +242,7 @@ test_that("the shared argument checks apply to both engines", {
 })
 
 
-test_that("neither engine disturbs the caller's random stream", {
+test_that("the exact engine does not disturb the caller's random stream", {
   
   set.seed(6)
   x <- rnorm(40); y <- round(rnorm(40), 1)
@@ -254,10 +251,6 @@ test_that("neither engine disturbs the caller's random stream", {
   
   set.seed(99)
   invisible(hoeffdingD(x, y, engine = "exact"))
-  expect_equal(runif(1), before)
-  
-  set.seed(99)
-  invisible(hoeffdingD(x, y, jitter = TRUE, seed = 7))
   expect_equal(runif(1), before)
 })
 
@@ -270,7 +263,8 @@ test_that("output = 'test' returns a usable htest", {
   x <- rnorm(60)
   y <- x^2 + rnorm(60)
   
-  h <- hoeffdingD(x, y, output = "test", R = 199, seed = 1)
+  set.seed(1)
+  h <- hoeffdingD(x, y, output = "test", R = 199)
   
   expect_s3_class(h, "htest")
   expect_named(h$statistic, "D")
@@ -293,10 +287,12 @@ test_that("the P value cannot be zero and respects its own floor", {
   
   # perfect monotone dependence: no permutation can beat it, so the P
   # value is the smallest the design allows, 1/(R+1) - not 0
-  h <- hoeffdingD(1:40, (1:40)^3, output = "test", R = 99, seed = 2)
+  set.seed(2)
+  h <- hoeffdingD(1:40, (1:40)^3, output = "test", R = 99)
   expect_equal(h$p.value, 1 / 100)
   
-  h2 <- hoeffdingD(1:40, (1:40)^3, output = "test", R = 999, seed = 2)
+  set.seed(2)
+  h2 <- hoeffdingD(1:40, (1:40)^3, output = "test", R = 999)
   expect_equal(h2$p.value, 1 / 1000)
   
   # and it always lies in (0, 1]
@@ -316,7 +312,8 @@ test_that("the test finds dependence that correlation misses", {
   y <- x^2 + rnorm(150, sd = 0.05)
   
   expect_gt(cor.test(x, y)$p.value, 0.05)
-  expect_lt(hoeffdingD(x, y, output = "test", R = 499, seed = 3)$p.value, 0.01)
+  set.seed(3)
+  expect_lt(hoeffdingD(x, y, output = "test", R = 499)$p.value, 0.01)
 })
 
 
@@ -342,18 +339,20 @@ test_that("both engines can produce the test, and ties survive the exact one", {
   x <- rnorm(40)
   y <- round(x^2 + rnorm(40), 1)
   
-  he <- hoeffdingD(x, y, engine = "exact", output = "test", R = 99, seed = 4)
+  set.seed(4)
+  he <- hoeffdingD(x, y, engine = "exact", output = "test", R = 99)
   expect_s3_class(he, "htest")
   expect_equal(unname(he$statistic), hoeffdingD(x, y, engine = "exact"))
   expect_match(he$method, "exact")
   
+  set.seed(4)
   hf <- suppressWarnings(
-    hoeffdingD(x, y, output = "test", R = 99, seed = 4))
+    hoeffdingD(x, y, output = "test", R = 99))
   expect_match(hf$method, "fast")
 })
 
 
-test_that("R is validated and the seed still leaves the stream alone", {
+test_that("R is validated and the test follows set.seed()", {
   
   set.seed(16)
   x <- rnorm(30); y <- rnorm(30)
@@ -361,21 +360,10 @@ test_that("R is validated and the seed still leaves the stream alone", {
   expect_error(hoeffdingD(x, y, output = "test", R = 0), "'R'")
   expect_error(hoeffdingD(x, y, output = "test", R = 99.5), "'R'")
   expect_error(hoeffdingD(x, y, output = "test", R = -1), "'R'")
-  expect_error(hoeffdingD(x, y, output = "test", seed = "a"), "seed")
-  expect_error(hoeffdingD(x, y, output = "quick"), "def")
+  expect_error(hoeffdingD(x, y, output = "test", seed = 1), "unused argument")
+  expect_error(hoeffdingD(x, y, output = "quick"), "estimate")
   
-  # a supplied seed makes the test reproducible ...
-  a <- hoeffdingD(x, y, output = "test", R = 99, seed = 5)$p.value
-  b <- hoeffdingD(x, y, output = "test", R = 99, seed = 5)$p.value
-  expect_equal(a, b)
-  
-  # ... without disturbing the caller's stream
-  set.seed(99); before <- runif(1)
-  set.seed(99)
-  invisible(hoeffdingD(x, y, output = "test", R = 99, seed = 5))
-  expect_equal(runif(1), before)
-  
-  # and without a seed it follows set.seed() like everything else
+  # reproducible through set.seed(), like everything else
   set.seed(21); p1 <- hoeffdingD(x, y, output = "test", R = 99)$p.value
   set.seed(21); p2 <- hoeffdingD(x, y, output = "test", R = 99)$p.value
   expect_equal(p1, p2)

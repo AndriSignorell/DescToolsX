@@ -61,7 +61,7 @@ z-transformation.</p>
 <span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
-<span>  scoresType <span class="op">=</span> <span class="st">"table"</span>,</span>
+<span>  scoresType <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"table"</span>, <span class="st">"ranks"</span>, <span class="st">"ridit"</span>, <span class="st">"mod-ridit"</span><span class="op">)</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -91,7 +91,9 @@ interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
 
 
 <dt id="arg-scorestype">scoresType<a class="anchor" aria-label="anchor" href="#arg-scorestype"></a></dt>
-<dd><p>score calculation method for table input</p></dd>
+<dd><p>score calculation method for table input, one of
+<code>"table"</code> (default), <code>"ranks"</code>, <code>"ridit"</code> or <code>"mod-ridit"</code>, see
+<code><a href="https://andrisignorell.github.io/lumen/reference/scores.html" class="external-link">lumen::scores()</a></code></p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -127,11 +129,11 @@ calculation of normal distributed confidence intervals.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="https://andrisignorell.github.io/lumen/reference/fisherZ.html" class="external-link">lumen::fisherZ</a>, <a href="https://andrisignorell.github.io/lumen/reference/fisherZ.html" class="external-link">lumen::fisherZInv</a></p>
 <p>Other assoc.continuous:
-<code><a href="corPart.html">corPart()</a></code>,
-<code><a href="corPolychor.html">corPolychor()</a></code>,
-<code><a href="findCorrX.html">findCorrX()</a></code>,
+<code><a href="findCor.html">findCor()</a></code>,
 <code><a href="hoeffdingD.html">hoeffdingD()</a></code>,
 <code><a href="keepSig.html">keepSig()</a></code>,
+<code><a href="partialCor.html">partialCor()</a></code>,
+<code><a href="polychorCor.html">polychorCor()</a></code>,
 <code><a href="spearmanCor.html">spearmanCor()</a></code></p></div>
     </div>
 

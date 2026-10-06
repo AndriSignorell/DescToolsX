@@ -18,8 +18,11 @@
 #'
 #' @param x the date to transform, a `Date` or anything that
 #' `month()` and `day()` accept
-#' @param lang language of the zodiac names, either English (`"en"`) or
-#' German (`"de"`)
+#' @param lang language of the zodiac names: `"en"` (English), `"de"`
+#' (German) or `"local"`, which gives the German names in a German locale
+#' and the English ones everywhere else. Falls back to the `"lang"` option
+#' (`options(DescToolsX.lang = )`) as in [month()] and [weekday()], and to
+#' `"local"` if the option is not set.
 #' @param stringsAsFactors logical. If set to `TRUE` (default) the result
 #' will consist of a factor with zodiac signs as levels.
 #'
@@ -45,9 +48,16 @@
 #' @concept categorization
 #'
 #' @export
-zodiac <- function(x, lang = c("en", "de"), stringsAsFactors = TRUE) {
+zodiac <- function(x, lang = .getOption("lang"), stringsAsFactors = TRUE) {
 
-  lang <- match.arg(lang)
+  # NULL (option not set) matches the first choice, as in month()
+  lang <- match.arg(lang, c("local", "en", "de"))
+
+  # only two sets of names exist: every locale but a German one gets the
+  # English names
+  if (lang == "local")
+    lang <- if (grepl("^(de|german)", Sys.getlocale("LC_TIME"),
+                      ignore.case = TRUE)) "de" else "en"
 
   if(!isTRUE(stringsAsFactors) && !isFALSE(stringsAsFactors))
     stop("Argument 'stringsAsFactors' must be TRUE or FALSE.")

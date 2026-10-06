@@ -60,7 +60,7 @@ method displays absolute and relative frequencies in horizontal bar plots.</p>
 <span><span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  maxrows <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ord <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  order <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -73,7 +73,7 @@ method displays absolute and relative frequencies in horizontal bar plots.</p>
 <span><span class="fu"><a href="desc.html">desc</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  maxrows <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ord <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  order <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -98,7 +98,7 @@ method displays absolute and relative frequencies in horizontal bar plots.</p>
 <dd><p>numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
 interesting to see all of them. Default is set to 12 most frequent ones
-(resp. the first ones if <code>ord</code> is set to <code>"levels"</code> or
+(resp. the first ones if <code>order</code> is set to <code>"levels"</code> or
 <code>"names"</code>).</p>
 <p>For a numeric argument x <code>maxrows</code> is the minimum number of unique
 values needed for a numeric variable to be treated as continuous. If left to
@@ -114,7 +114,7 @@ going beyond 0.8.</p>
 and also produce a plot with type "h" instead of a histogram.</p></dd>
 
 
-<dt id="arg-ord">ord<a class="anchor" aria-label="anchor" href="#arg-ord"></a></dt>
+<dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>character out of <code>"name"</code> (alphabetical order),
 <code>"level"</code>, <code>"asc"</code> (by frequencies ascending), <code>"desc"</code> (by
 frequencies descending) defining the order for a frequency table as used for

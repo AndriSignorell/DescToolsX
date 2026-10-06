@@ -48,8 +48,8 @@
 #' colnames(m) <- paste0("V", 1:5)
 #' cmat <- cor(m)
 #'
-#' findCorrX(cmat, cutoff = 0.8)
-#' findCorrX(cmat, cutoff = 0.8, method = "max", output = "names")
+#' findCor(cmat, cutoff = 0.8)
+#' findCor(cmat, cutoff = 0.8, method = "max", output = "names")
 #'
 
 
@@ -59,7 +59,7 @@
 #' @concept correlation
 #' @concept feature-selection
 #' @export
-findCorrX <- function(x,
+findCor <- function(x,
                       cutoff = 0.9,
                       method = c("mean", "max", "median"),
                       output = c("index", "names", "logical", "report"),

@@ -15,7 +15,7 @@
 #' strictly positive and finite, as the Box-Cox transformation is undefined
 #' otherwise; missing values are not removed but rejected, since subsetting
 #' would strip a `ts` of its frequency and cycle positions.
-#' @param method method to be used in calculating lambda. Can be either
+#' @param estimator method to be used in calculating lambda. Can be either
 #' `"guerrero"` (default) or `"loglik"`.
 #' @param lower lower limit for possible lambda values; defaults to -1
 #' @param upper upper limit for possible lambda values; defaults to 2
@@ -60,20 +60,20 @@
 #' lambda <- boxCoxLambda(AirPassengers)
 #'
 #' # profile log likelihood, seasonal trend model
-#' boxCoxLambda(AirPassengers, method = "loglik")
+#' boxCoxLambda(AirPassengers, estimator = "loglik")
 #'
 #' # plain numeric vector, treated as non-seasonal
 #' set.seed(1)
-#' boxCoxLambda(rlnorm(100), method = "loglik")
+#' boxCoxLambda(rlnorm(100), estimator = "loglik")
 #'
 #' @family transform
 #' @concept transformation
 #' @concept variance-stabilization
 #' @export
-boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
+boxCoxLambda <- function(x, estimator = c("guerrero", "loglik"),
                          lower = -1, upper = 2, nonseasonalLength = 2) {
 
-  method <- match.arg(method)
+  estimator <- match.arg(estimator)
 
   if (!is.numeric(x) || (!is.null(dim(x)) && !identical(length(dim(x)), 1L)))
     stop("'x' must be a numeric vector or a univariate time series")
@@ -95,13 +95,13 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
   if (any(x <= 0))
     stop("all values of 'x' must be positive")
 
-  # method "loglik" fits intercept + trend, so two observations are
+  # estimator "loglik" fits intercept + trend, so two observations are
   # interpolated exactly (rss == 0, log(rss) == -Inf). Three is the
   # minimum leaving a residual degree of freedom.
-  nMin <- if (method == "loglik") 3L else 2L
+  nMin <- if (estimator == "loglik") 3L else 2L
   if (length(x) < nMin)
-    stop(gettextf("'x' must contain at least %d values for method \"%s\"",
-                  nMin, method), domain = NA)
+    stop(gettextf("'x' must contain at least %d values for estimator \"%s\"",
+                  nMin, estimator), domain = NA)
 
   # A constant series has zero variation: Guerrero's ratio degenerates to
   # 0/0 and the profile log likelihood is singular for every lambda.
@@ -127,7 +127,7 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
       nonseasonalLength %% 1 != 0)
     stop("'nonseasonalLength' must be a single whole number >= 2")
 
-  if (method == "loglik")
+  if (estimator == "loglik")
     .bcLogLik(x, lower = lower, upper = upper)
   else
     .guerrero(x, lower = lower, upper = upper,
@@ -163,7 +163,7 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
   # variation left to minimise, and matrix() below would recycle silently.
   if (nSub < 2L)
     stop(gettextf(
-      "'x' is too short for method \"guerrero\": needs at least %d observations for a period of %d",
+      "'x' is too short for estimator \"guerrero\": needs at least %d observations for a period of %d",
       2L * period, period), domain = NA)
 
   # guerCv computes the coefficient of variation
@@ -217,7 +217,7 @@ boxCoxLambda <- function(x, method = c("guerrero", "loglik"),
     # stability preference, not a rank condition, so it is not imposed.
     if (n <= period + 1L)
       stop(gettextf(
-        "'x' has frequency %d but only %d observations; method \"loglik\" needs more than %d for the seasonal model",
+        "'x' has frequency %d but only %d observations; estimator \"loglik\" needs more than %d for the seasonal model",
         period, n, period + 1L), domain = NA)
 
     # n > period + 1 consecutive observations cover every seasonal

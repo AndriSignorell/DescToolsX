@@ -128,7 +128,7 @@ Other dispersion:
 \code{\link[=coefVar]{coefVar()}},
 \code{\link[=iqrX]{iqrX()}},
 \code{\link[=madX]{madX()}},
-\code{\link[=meanAD]{meanAD()}},
+\code{\link[=meanAbsDev]{meanAbsDev()}},
 \code{\link[=meanSE]{meanSE()}},
 \code{\link[=rangeX]{rangeX()}}
 }

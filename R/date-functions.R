@@ -15,7 +15,7 @@
 #'   `week`        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
 #'   `day`         \tab Day of the month (readable/writable)                   \tab 1-31 \cr
 #'   `weekday`     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon ... 7 = Sun \cr
-#'   `yearDay`     \tab Day of the year                                        \tab 1-366 \cr
+#'   `dayOfYear`     \tab Day of the year                                        \tab 1-366 \cr
 #'   `yearWeek`    \tab Compact year-week integer                              \tab `yyyyww` (ISO or US) \cr
 #'   `yearMonth`   \tab Compact year-month integer                             \tab `yyyymm` \cr
 #' }
@@ -43,8 +43,8 @@
 #'   **Function**        \tab **Description** \cr
 #'   `diffDays360`     \tab Days between two dates using the 360-day calendar convention \cr
 #'   `lastDayOfMonth`  \tab Last calendar day of the month of `x` \cr
-#'   `yearDays`        \tab Total number of days in the year of `x` (365 or 366) \cr
-#'   `monthDays`       \tab Number of days in the month of `x` (28-31) \cr
+#'   `daysInYear`        \tab Total number of days in the year of `x` (365 or 366) \cr
+#'   `daysInMonth`       \tab Number of days in the month of `x` (28-31) \cr
 #' }
 #'
 #' @section Language for month and weekday names:
@@ -63,7 +63,7 @@
 #'
 #' @name date_functions
 #'
-#' @aliases year isoYear quarter month week day day<- weekday yearDay yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone yearDays monthDays month.ym year.ym
+#' @aliases year isoYear quarter month week day day<- weekday dayOfYear yearWeek yearMonth isWeekend isLeapYear hour minute second now today diffDays360 lastDayOfMonth timezone daysInYear daysInMonth month.ym year.ym
 #' 
 #' @param x a `Date`, `POSIXct`, `POSIXlt`, or `ym` object
 #' to evaluate
@@ -84,7 +84,7 @@
 #'   from `month()` and `weekday()` are returned as ordered factors
 #'   whose levels follow calendar order
 #' @param value replacement value for the `day<-` assignment function
-#' @param startDate,endDate start and end dates for `diffDays360()`
+#' @param from,to start and end dates for `diffDays360()`
 #' @param method calculation convention. For `diffDays360()` either
 #'   `"eu"` (European, default) or `"us"` (US); for `week()`
 #'   and `yearWeek()` either `"iso"` (ISO 8601, default) or
@@ -130,7 +130,7 @@
 #' weekday(x, fmt = "dd",  lang = "en")
 #' weekday(x, fmt = "ddd", lang = "local")
 #'
-#' yearDay(x)
+#' dayOfYear(x)
 #' yearWeek(x)
 #' yearMonth(x)
 #'
@@ -145,8 +145,8 @@
 #' lastDayOfMonth(as.Date(c("2014-10-12", "2013-01-31", "2011-12-05")))
 #'
 #' # days in month / year
-#' monthDays(x)
-#' yearDays(x)
+#' daysInMonth(x)
+#' daysInYear(x)
 #'
 #' # 360-day calendar difference. The two conventions agree here ...
 #' diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"))
@@ -450,7 +450,7 @@ isoYear <- function(x) {
 
 #' @rdname date_functions
 #' @export
-yearDay <- function(x) {
+dayOfYear <- function(x) {
   # return(as.integer(format(as.Date(x), "%j")))
   
   # As ?POSIXlt reveals, a $yday suffix to a POSIXlt date (or even a vector of such) 
@@ -464,23 +464,23 @@ yearDay <- function(x) {
 
 #' @rdname date_functions
 #' @export
-diffDays360 <- function(startDate, endDate, method=c("eu","us")){
+diffDays360 <- function(from, to, method=c("eu","us")){
   
   # source: http://en.wikipedia.org/wiki/360-day_calendar
-  startDate <- as.Date(startDate)
-  endDate <- as.Date(endDate)
+  from <- as.Date(from)
+  to <- as.Date(to)
   
-  d1 <- day(startDate)
-  m1 <- month(startDate)
-  y1 <- year(startDate)
-  d2 <- day(endDate)
-  m2 <- month(endDate)
-  y2 <- year(endDate)
+  d1 <- day(from)
+  m1 <- month(from)
+  y1 <- year(from)
+  d2 <- day(to)
+  m2 <- month(to)
+  y2 <- year(to)
   
   method = match.arg(method)
   switch(method,
          "eu" = {
-           # The former version adjusted startDate/endDate here, but d1
+           # The former version adjusted from/to here, but d1
            # and d2 had already been read off above and were never
            # recomputed - so the whole European rule was dead code and
            # "eu" silently returned the unadjusted difference. Only the
@@ -490,8 +490,8 @@ diffDays360 <- function(startDate, endDate, method=c("eu","us")){
            if(any(d2 == 31L)) d2[d2 == 31L] <- 30L
          }
          , "us" ={
-           endFeb1 <- day(startDate + 1L) == 1L & month(startDate + 1L) == 3L
-           endFeb2 <- day(endDate + 1L)   == 1L & month(endDate + 1L)   == 3L
+           endFeb1 <- day(from + 1L) == 1L & month(from + 1L) == 3L
+           endFeb2 <- day(to + 1L)   == 1L & month(to + 1L)   == 3L
 
            # vectorised: the former if()s made the function scalar-only
            # and error out on vector input under R >= 4.2
@@ -520,7 +520,7 @@ lastDayOfMonth <- function(x){
 
 #' @rdname date_functions
 #' @export
-yearDays <- function (x) {
+daysInYear <- function (x) {
   # return the number of days in the specific year of x
   x <- as.POSIXlt(x)
   # [] on every component: a plain x$min <- 0 replaces the whole vector
@@ -536,7 +536,7 @@ yearDays <- function (x) {
 
 #' @rdname date_functions
 #' @export
-monthDays <- function (x) {
+daysInMonth <- function (x) {
   # return the number of days in the specific month of x
   x <- as.POSIXlt(x)
   x$mday[] <- x$sec[] <- x$min[] <- x$hour[] <- 0

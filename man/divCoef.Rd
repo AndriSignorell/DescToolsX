@@ -4,7 +4,7 @@
 \alias{divCoef}
 \title{Compute a diversity coefficient}
 \usage{
-divCoef(x, dis = NULL, normalize = FALSE, na.rm = FALSE, tol = 0.00000001)
+divCoef(x, dis = NULL, normalize = FALSE, tol = 0.00000001, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a data frame or matrix of non-negative values (e.g. abundances).
@@ -17,12 +17,12 @@ Gini-Simpson index \eqn{1 - \sum p_i^2}.}
 \item{normalize}{logical; if \code{TRUE}, the diversity is scaled by its
 maximum over all relative abundances (see Details)}
 
-\item{na.rm}{logical; if \code{TRUE}, columns containing missing values
-yield \code{NA} instead of aborting}
-
 \item{tol}{relative accuracy of the maximum used by
 \code{normalize = TRUE}: the iteration stops once the maximum is certified
 to within this fraction}
+
+\item{na.rm}{logical; if \code{TRUE}, columns containing missing values
+yield \code{NA} instead of aborting}
 }
 \value{
 a numeric vector of diversity coefficients, one per column

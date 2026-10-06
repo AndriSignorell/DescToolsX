@@ -9,7 +9,7 @@
 \method{desc}{factor}(
   x,
   maxrows = NULL,
-  ord = NULL,
+  order = NULL,
   conf.level = 0.95,
   main = NULL,
   verbose = NULL,
@@ -21,7 +21,7 @@
 \method{desc}{character}(
   x,
   maxrows = NULL,
-  ord = NULL,
+  order = NULL,
   conf.level = 0.95,
   main = NULL,
   verbose = NULL,
@@ -38,7 +38,7 @@
 \item{maxrows}{numeric; defines the maximum number of rows in a frequency
 table to be reported. For factors with many levels it is often not
 interesting to see all of them. Default is set to 12 most frequent ones
-(resp. the first ones if \code{ord} is set to \code{"levels"} or
+(resp. the first ones if \code{order} is set to \code{"levels"} or
 \code{"names"}).
 
 For a numeric argument x \code{maxrows} is the minimum number of unique
@@ -56,7 +56,7 @@ going beyond 0.8.
 Setting \code{maxrows} to \code{Inf} will unconditionally report all values
 and also produce a plot with type "h" instead of a histogram.}
 
-\item{ord}{character out of \code{"name"} (alphabetical order),
+\item{order}{character out of \code{"name"} (alphabetical order),
 \code{"level"}, \code{"asc"} (by frequencies ascending), \code{"desc"} (by
 frequencies descending) defining the order for a frequency table as used for
 factors, numerics with few unique values and logicals. Factors (and

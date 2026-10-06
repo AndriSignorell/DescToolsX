@@ -37,7 +37,7 @@
   ...
 )
 
-\method{print}{Desc.table}(x, print_header = TRUE, ...)
+\method{print}{Desc.table}(x, printHeader = TRUE, ...)
 }
 \arguments{
 \item{x}{a \code{table} or \code{matrix} object. For the formula interface,
@@ -65,7 +65,7 @@ See Details for what each level produces.}
 
 \item{\dots}{further arguments passed to or from other methods}
 
-\item{print_header}{whether the header is printed}
+\item{printHeader}{whether the header is printed}
 }
 \value{
 an object of class \code{c("Desc.table", "Desc")}.

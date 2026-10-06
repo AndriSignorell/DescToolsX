@@ -3,230 +3,281 @@
 #'
 #' Compute sample quantiles, with optional weights.
 #'
-#' Without `weights` the call is handed to [stats::quantile()]
-#' unchanged, so all nine types are available and the results are identical
-#' to base R.
+#' Without `weights` the call is handed to [stats::quantile()], so all nine
+#' types are available and the results are identical to base R. The one
+#' deliberate difference is the treatment of missing values, see below.
 #'
-#' With `weights` only types 5 and 7 exist, and they interpret the
-#' weights **differently**:
+#' With `weights` two algorithms exist, and they interpret the weights
+#' **differently**:
 #'
 #' \describe{
-#'   \item{`type = 5`}{treats them as relative weights: only the ratios
-#'     matter, and multiplying every weight by a constant leaves the result
-#'     unchanged. This follows the Eurostat definition (EU-SILC 131-rev/04).}
-#'   \item{`type = 7`}{treats them as *frequency* weights, i.e. as
-#'     replication counts. The effective sample size is `sum(weights)`,
-#'     so the result is **not** scale-invariant, and weights that have
-#'     been normalized to sum to 1 are degenerate - see below.}
+#'   \item{`type = 2`}{inverse of the weighted empirical distribution
+#'     function, averaging at discontinuities - the weighted counterpart of
+#'     [stats::quantile()] type 2. The weights are *relative*: only their
+#'     ratios matter, multiplying every weight by a constant leaves the
+#'     result unchanged, and equal weights reproduce the unweighted type 2.
+#'     This is the Eurostat definition (EU-SILC 131-rev/04). `type = 5` is
+#'     accepted as an alias, see the note on DescTools below.}
+#'   \item{`type = 7`}{treats the weights as *frequency* weights, i.e. as
+#'     replication counts: with integer weights the result equals
+#'     `quantile(rep(x, weights), type = 7)`. The effective sample size is
+#'     `sum(weights)`, so the result is **not** scale-invariant, and weights
+#'     normalized to sum to 1 are degenerate. `type = 7` therefore requires
+#'     `sum(weights) >= 2` and raises an error otherwise.}
 #' }
 #'
-#' This difference is inherited from the two source implementations and is
-#' not a free choice of the caller: it is worth knowing which of the two is
-#' meant before picking a type. Because `type = 7` needs
-#' `sum(weights)` to act as a sample size, it requires that sum to be
-#' at least 2 and raises an error otherwise.
-#' 
+#' Relative weights (survey or design weights) call for `type = 2`,
+#' replication counts for `type = 7`.
+#'
+#' **Missing values.** `NA` and `NaN` are treated alike, in `x` and in
+#' `weights`; an observation is missing if its value or its weight is.
+#' With `na.rm = FALSE`, a missing observation yields `NA` for every
+#' requested probability, with and without weights - as [mean()] does
+#' ([stats::quantile()] raises an error instead). With `na.rm = TRUE` the
+#' missing observations are removed first; if nothing is left, the result
+#' is `NA`. Invalid arguments (e.g. `probs` outside \eqn{[0,1]}, negative
+#' or infinite weights) are an error even when data are missing. An `NA` in
+#' `probs` yields `NA` at that position only.
+#'
+#' **Difference to DescTools.** `DescTools::Quantile()` labelled the
+#' Eurostat algorithm `type = 5`. It is not R's type 5, which interpolates
+#' linearly between order statistics: with equal weights the old weighted
+#' `type = 5` and the unweighted `type = 5` gave different answers. Here the
+#' algorithm carries its correct number 2; `5` still selects it, so results
+#' of existing calls do not change.
+#'
 #' @param x a numeric vector
-#' @param weights an optional numeric vector giving the sample weights
-#' @param probs numeric vector of probabilities with values in \eqn{[0,1]}
-#' @param na.rm a logical indicating whether missing values in `x` should
-#' be omitted
-#' @param names logical; if true, the result has a [names()]
-#' attribute.  Set to `FALSE` for speedup with many `probs`.
-#' @param type an integer between 1 and 9 selecting one of the nine quantile
-#' algorithms of [stats::quantile()]. All nine are available for
-#' unweighted data. With `weights` only 5 and 7 (default) exist; any
-#' other value is an error. See Details for how the two differ in their
-#' reading of the weights.
+#' @param weights an optional numeric vector of non-negative, finite sample
+#'   weights, of the same length as `x`. Missing weights are handled like
+#'   missing values in `x`.
+#' @param probs numeric vector of probabilities with values in \eqn{[0,1]};
+#'   `NA` is allowed
+#' @param na.rm logical; if `TRUE`, observations with a missing value or a
+#'   missing weight are removed before the computation
+#' @param names logical; if true, the result has a [names()] attribute. Set
+#'   to `FALSE` for speedup with many `probs`.
+#' @param type an integer selecting the quantile algorithm. Without weights
+#'   one of the nine types of [stats::quantile()] (default 7). With weights
+#'   2 (alias 5) or 7 (default); see Details.
 #' @param digits used only when `names` is true: the precision to use when
-#' formatting the percentages. In `R` versions up to 4.0.x, this had been
-#' set to `max(2, getOption("digits"))`, internally.
-#' @return a numeric vector containing the weighted quantiles of `x` at
-#' probabilities `probs`, named when `names = TRUE`
-#' 
-#' @note Based on code by Andreas Alfons, Matthias Templ, 
-#' adapted to conform to package standards.
-#' 
-#' @references Working group on Statistics on Income and Living Conditions
-#' (2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
-#' gap.  *EU-SILC 131-rev/04*, Eurostat.
-#' 
+#'   formatting the percentages.
+#'
+#' @return a numeric vector of the same length as `probs`, named when
+#'   `names = TRUE`
+#'
+#' @note The weighted algorithms are based on code by Andreas Alfons and
+#'   Matthias Templ (`laeken::weightedQuantile()`), adapted to conform to
+#'   package standards.
+#'
+#' @references
+#' Working group on Statistics on Income and Living Conditions (2004).
+#' Common cross-sectional EU indicators based on EU-SILC; the gender pay
+#' gap. *EU-SILC 131-rev/04*, Eurostat.
+#'
+#' Hyndman, R. J., Fan, Y. (1996). Sample quantiles in statistical
+#' packages. *The American Statistician*, 50(4), 361–365.
+#' \doi{10.1080/00031305.1996.10473566}
+#'
 #' @examples
-#' # Pizza$temperature contains missing values, so na.rm is needed - without
-#' # it the function returns NA for every prob, silently.
-#' quantileX(Pizza$temperature, rep(c(1:3), length.out = nrow(Pizza)),
+#' # Pizza$temperature contains missing values: without na.rm the result is
+#' # NA for every prob
+#' quantileX(Pizza$temperature, weights = rep(1:3, length.out = nrow(Pizza)),
 #'           na.rm = TRUE)
 #'
 #' x <- c(3.7, 3.3, 3.5, 2.8)
 #'
-#' # type 5 only looks at the ratios of the weights ...
-#' quantileX(x, weights = c(5, 5, 4, 1),      type = 5)
-#' quantileX(x, weights = c(5, 5, 4, 1) / 15, type = 5)   # identical
+#' # type 2 only looks at the ratios of the weights ...
+#' quantileX(x, weights = c(5, 5, 4, 1),      type = 2)
+#' quantileX(x, weights = c(5, 5, 4, 1) / 15, type = 2)   # identical
 #'
-#' # ... while type 7 reads them as replication counts, so they have to be
-#' # on that scale
+#' # ... and equal weights give the unweighted type 2
+#' quantileX(x, weights = rep(1, 4), type = 2)
+#' quantileX(x, type = 2)
+#'
+#' # type 7 reads the weights as replication counts
 #' quantileX(x, weights = c(5, 5, 4, 1), type = 7)
+#' quantileX(rep(x, c(5, 5, 4, 1)), type = 7)              # identical
 #'
-#' @seealso [medianX()], [stats::quantile()],
-#' [lumen::quantileCI()]
+#' @seealso [medianX()], [iqrX()], [stats::quantile()], [lumen::quantileCI()]
 #'
 #' @family quantile
 #' @concept quantile
 #' @concept distribution-summary
 #' @export
-quantileX <- function(x, weights = NULL, probs = seq(0, 1, 0.25),
-                     na.rm = FALSE, names=TRUE, type = 7, digits=7) {
-  
+quantileX <- function(x, probs = seq(0, 1, 0.25), weights = NULL,
+                      na.rm = FALSE, names = TRUE, type = 7, digits = 7) {
+
   # further weighted quantiles in Hmisc and modi, both on CRAN
-  
-  if(is.null(weights)){
-    stats::quantile(x=x, probs=probs, na.rm=na.rm, names=names,
-                    type=type, digits=digits)
-    
+
+  # == argument checks =======================================================
+  #
+  # All of them BEFORE any early NA return: missing data must not mask an
+  # invalid call (probs = 1.5, a negative weight, an unknown type).
+
+  if (!is.numeric(probs) && !all(is.na(probs)))
+    stop("'probs' must be a numeric vector with values in [0,1]")
+  probs <- as.numeric(probs)
+  if (isTRUE(any(probs < 0 | probs > 1)))
+    stop("'probs' must be a numeric vector with values in [0,1]")
+
+  if (!(length(type) == 1L && type %in% 1:9))
+    stop("'type' must be an integer between 1 and 9")
+
+  if (names && length(probs) > 0L)
+    stopifnot(is.numeric(digits), digits >= 1)
+
+  if (!is.null(weights)) {
+
+    # c(NA, NA) is LOGICAL: the natural way to write "all missing" must
+    # reach the NA handling, not the type check
+    if (is.logical(x) && all(is.na(x))) x <- as.numeric(x)
+    if (is.logical(weights) && all(is.na(weights)))
+      weights <- as.numeric(weights)
+
+    # unweighted, stats::quantile() also takes dates and ordered factors
+    if (!is.numeric(x)) stop("'x' must be a numeric vector")
+    if (!is.numeric(weights)) stop("'weights' must be a numeric vector")
+    if (length(weights) != length(x))
+      stop("'weights' must have the same length as 'x'")
+
+    # NA/NaN weights are missing data (handled below), Inf and negative
+    # weights are invalid. A negative weight makes cumsum(weights)
+    # non-monotonic, and both algorithms read it as an increasing index.
+    if (any(is.infinite(weights))) stop("'weights' must be finite")
+    if (any(weights < 0, na.rm = TRUE)) stop("'weights' must not be negative")
+
+    # NOTE on the numbering (deviation from DescTools): DescTools::Quantile()
+    # and laeken::weightedQuantile() called the Eurostat algorithm below
+    # "type 5". It is R's type 2 (inverse ECDF, averaging at jumps), not
+    # R's type 5 (linear interpolation, m = 0.5): with equal weights the old
+    # weighted "type 5" did NOT agree with quantile(x, type = 5), e.g.
+    #   x <- c(2.8, 3.3, 3.5, 3.7), p = 0.3:  3.3 (= type 2) vs 3.15 (type 5)
+    # 5 is kept as an alias, silently, so existing calls give the same
+    # values.
+    if (type == 5) type <- 2
+    if (!type %in% c(2, 7))
+      stop(gettextf(
+        "type = %s is not implemented for weighted quantiles; use 2 or 7",
+        type), domain = NA)
+  }
+
+
+  # == missing values =========================================================
+  #
+  # Suite rule: missing data are not a calling error. na.rm = FALSE -> NA
+  # (as mean()), na.rm = TRUE -> drop them first. NaN counts as NA, in x
+  # and in the weights; a pair is missing if either part is.
+  # stats::quantile() would stop instead, so it must never see NAs.
+
+  # NA result of the documented shape: double, length(probs), named
+  naResult <- function() .quantileXNames(rep.int(NA_real_, length(probs)),
+                                         probs, names, digits)
+
+  miss <- is.na(x)
+  if (!is.null(weights)) miss <- miss | is.na(weights)
+
+  if (any(miss)) {
+    if (!isTRUE(na.rm)) return(naResult())
+    x <- x[!miss]
+    if (!is.null(weights)) weights <- weights[!miss]
+  }
+
+  if (is.null(weights))
+    return(stats::quantile(x = x, probs = probs, names = names,
+                           type = type, digits = digits))
+
+
+  # == weighted ===============================================================
+
+  # Nothing left after removing the missing pairs: empty data, no warning.
+  if (length(x) == 0L)
+    return(naResult())
+
+  # Observations left, but none carries weight: an unusable weighting
+  # scheme, almost always a mistake by the caller - hence the warning.
+  # Undefined is NA, not a fabricated zero.
+  keep <- weights > 0
+  if (!any(keep)) {
+    warning("all weights equal to zero")
+    return(naResult())
+  }
+
+  # Drop zero-weight observations. They contribute nothing by definition,
+  # but leave a repeated value in cumsum(weights), which the exact
+  # comparison in type 2 and approx() in type 7 (tie collapsing, with a
+  # warning) both trip over.
+  x <- x[keep]
+  weights <- weights[keep]
+  n <- length(x)
+
+  o <- order(x)
+  x <- x[o]
+  weights <- weights[o]
+
+  if (type == 2) {
+
+    rw <- cumsum(weights) / sum(weights)
+
+    # Tolerance instead of rw == p: normalized weights such as rep(0.1, 10)
+    # accumulate rounding error in cumsum(), and whether the averaging case
+    # was hit then depended on the scale of the weights - exactly the
+    # invariance this type promises.
+    tol <- sqrt(.Machine$double.eps)
+
+    qs <- vapply(probs, function(p) {
+      if (is.na(p)) return(NA_real_)
+      if (p <= 0)   return(x[1L])
+      if (p >= 1)   return(x[n])
+      select <- which.max(rw >= p - tol)    # first hit; rw[n] == 1
+      if (abs(rw[select] - p) < tol && select < n)
+        (x[select] + x[select + 1L]) / 2
+      else
+        x[select]
+    }, numeric(1))
+
   } else {
 
-    # Everything from here on runs with weights present - the outer if()
-    # already dispatched the NULL case to stats::quantile(). The original
-    # kept the is.null(weights) branches of laeken::weightedQuantile()
-    # inside this arm, where none of them can be reached: the guard at
-    # line 80, the reweighting at 104, `rw <- (1:n)/n`, and the whole
-    # unweighted type-7 block. All removed.
+    # Replication counts: the sum takes the place of the sample size, and
+    # cumsum(weights) indexes the order statistics. Not scale invariant.
+    #
+    # With weights normalized to sum to 1, sumW is 1 and
+    #     ord = 1 + (sumW - 1) * probs = 1   for EVERY prob,
+    # so every quantile collapsed onto the largest observation. Hence the
+    # error instead of a silent, plausible-looking wrong answer.
+    sumW <- sum(weights)
 
-    # initializations
-    if (!is.numeric(x)) stop("'x' must be a numeric vector")
-
-    n <- length(x)
-
-    if (!is.numeric(weights)) stop("'weights' must be a numeric vector")
-    if (length(weights) != n) stop("'weights' must have the same length as 'x'")
-    if (!all(is.finite(weights))) stop("missing or infinite weights")
-
-    # An error, not a warning: a negative weight makes cumsum(weights)
-    # non-monotonic, and both branches below read it as an increasing
-    # index - type 5 through `which(rw >= p)`, type 7 through approx().
-    # The results are not merely imprecise, they are meaningless.
-    if (any(weights < 0)) stop("'weights' must not be negative")
-
-    if (!is.numeric(probs) || all(is.na(probs)) ||
-        isTRUE(any(probs < 0 | probs > 1)))
-      stop("'probs' must be a numeric vector with values in [0,1]")
-
-    qNames <- NULL
-    if (names && length(probs) > 0L) {
-      stopifnot(is.numeric(digits), digits >= 1)
-      qNames <- names(stats::quantile(
-        0, probs=probs, names=TRUE, type=1, digits=digits
-      ))
-    }
-
-    if (n == 0 || (!isTRUE(na.rm) && any(is.na(x)))) {
-      # zero length or missing values. NA_real_ rather than the logical
-      # NA, and named like every other return of this function.
-      qs <- rep.int(NA_real_, length(probs))
-      if (!is.null(qNames)) names(qs) <- qNames
-      return(qs)
-    }
-
-    if (all(weights == 0)) {
-      # The former version returned rep.int(0, length(probs)) here - a
-      # fabricated zero that has nothing to do with the data and reads
-      # like a legitimate quantile. Undefined is NA.
-      warning("all weights equal to zero")
-      qs <- rep.int(NA_real_, length(probs))
-      if (!is.null(qNames)) names(qs) <- qNames
-      return(qs)
-    }
-
-    # remove NAs (if requested)
-    if(isTRUE(na.rm)){
-      indices <- !is.na(x)
-      x <- x[indices]
-      weights <- weights[indices]
-      n <- length(x)
-    }
-
-    # sort values and weights
-    order <- order(x)
-    x <- x[order]
-    weights <- weights[order]
-
-    # Drop zero-weight observations. They contribute nothing by definition,
-    # but they leave a repeated value in cumsum(weights), and approx() in
-    # the type-7 branch below reacts to tied x-values by collapsing them
-    # and averaging the corresponding y - with a warning about something
-    # the caller did not do.
-    if (any(weights == 0)) {
-      keep <- weights > 0
-      x <- x[keep]
-      weights <- weights[keep]
-      n <- length(x)
-    }
-
-    rw <- cumsum(weights)/sum(weights)
-    
-    # obtain quantiles
-    if (type == 5) {
-      qs <- sapply(probs,
-                   function(p) {
-                     if (p == 0) return(x[1])
-                     else if (p == 1) return(x[n])
-                     select <- min(which(rw >= p))
-                     if(rw[select] == p) mean(x[select:(select+1)])
-                     else x[select]
-                   })
-      
-    } else if(type == 7){
-
-      # This branch reads the weights as REPLICATION COUNTS: the sum takes
-      # the place of the sample size, and cumsum(weights) is used as an
-      # index into the order statistics. It is therefore not scale
-      # invariant, unlike type 5 above.
-      #
-      # The degenerate case is worth naming, because it is the natural
-      # thing to pass. With weights normalized to sum to 1, sumW is 1 and
-      #
-      #     ord = 1 + (sumW - 1) * probs = 1   for EVERY prob
-      #
-      # so every quantile collapses onto the largest observation and, for
-      # instance, iqrX() returns 0. That is exactly what the documented
-      # example of iqrX did: w <- c(5, 5, 4, 1)/15 gave an IQR of 0, while
-      # the same weights unnormalized give 0.4. Silent, and plausible
-      # enough to go unnoticed.
-      sumW <- sum(weights)
-
-      if (sumW < 2)
-        stop(gettextf(
-          paste("type = 7 reads 'weights' as replication counts, so their sum",
-                "(%g) must be at least 2. Rescale them to counts, or use",
-                "type = 5, which depends only on their ratios."),
-          sumW), domain = NA)
-
-      ord   <- 1 + (sumW - 1) * probs
-      low   <- pmax(floor(ord), 1)
-      high  <- pmin(low + 1, sumW)
-      ord   <- ord %% 1
-      ## Find low and high order statistics
-      ## These are minimum values of x such that the cum. freqs >= c(low,high)
-      allq <- approx(cumsum(weights), x, xout=c(low, high),
-                     method='constant', f=1, rule=2)$y
-      k <- length(probs)
-      qs <- (1 - ord)*allq[1:k] + ord*allq[-(1:k)]
-
-    } else {
-      # was: qs <- NA plus a warning. qs then had length 1 while probs had
-      # length k, so the names<- below failed with "'names' attribute [k]
-      # must be the same length as the vector [1]" - an error, but about
-      # the wrong thing and only after the warning.
+    if (sumW < 2)
       stop(gettextf(
-        "type = %s is not implemented for weighted quantiles; use 5 or 7",
-        type), domain = NA)
-    }
-    
-    if (!is.null(qNames)) names(qs) <- qNames
-    
-    return(qs)
-    
+        paste("type = 7 reads 'weights' as replication counts, so their sum",
+              "(%g) must be at least 2. Rescale them to counts, or use",
+              "type = 2, which depends only on their ratios."),
+        sumW), domain = NA)
+
+    ord  <- 1 + (sumW - 1) * probs
+    low  <- pmax(floor(ord), 1)
+    high <- pmin(low + 1, sumW)
+    frac <- ord %% 1
+
+    # smallest x whose cumulative frequency is >= low resp. high;
+    # NA probs pass through approx() as NA
+    k <- length(probs)
+    allq <- stats::approx(cumsum(weights), x, xout = c(low, high),
+                          method = "constant", f = 1, rule = 2)$y
+    qs <- (1 - frac) * allq[seq_len(k)] + frac * allq[k + seq_len(k)]
   }
+
+  .quantileXNames(qs, probs, names, digits)
 }
 
 
+# == internal helper functions ================================================
+
+# names exactly as stats::quantile() would set them, "" for NA probs included
+.quantileXNames <- function(qs, probs, names, digits) {
+
+  if (names && length(probs) > 0L) {
+    names(qs) <- names(stats::quantile(0, probs = probs, names = TRUE,
+                                       type = 1, digits = digits))
+  }
+  qs
+}

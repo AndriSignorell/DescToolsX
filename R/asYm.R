@@ -12,8 +12,8 @@
 #' recycling rules; a warning is issued when the longer argument is not a
 #' multiple of the length of the shorter one.
 #'
-#' @name as_ym
-#' @aliases as.ym as.Date.ym print.ym
+#' @name asYm
+#' @aliases asYm as.Date.ym print.ym
 #' 
 #' @param x a vector of integers, representing the dates in the format YYYYMM,
 #' to which a number of months has to be added. YYYY must lie in the range of
@@ -26,7 +26,7 @@
 #' 
 #' @return
 #' \describe{
-#'   \item{`as.ym()`}{an integer vector of class `"ym"`}
+#'   \item{`asYm()`}{an integer vector of class `"ym"`}
 #'   \item{`as.Date.ym()`}{a vector of class `"Date"`}
 #'   \item{`addMonths.ym()`}{an integer vector of class `"ym"`}
 #'   \item{`print.ym()`}{invisibly, `x`}
@@ -36,33 +36,33 @@
 #'
 #' @examples
 #'
-#' month(as.ym(202408))
-#' year(as.ym(202408))
+#' month(asYm(202408))
+#' year(asYm(202408))
 #'
 #' year(as.Date("2024-12-05"))
-#' year(as.ym(202412))
+#' year(asYm(202412))
 #'
 #' month(as.Date("2024-12-05"), fmt = "mm")
-#' month(as.ym(202412), fmt = "mm")
+#' month(asYm(202412), fmt = "mm")
 #'
 #' # arithmetic stays in the ym domain, so it can be chained
-#' addMonths(as.ym(201511), 5)
-#' as.ym(201511) + 5 - 2
+#' addMonths(asYm(201511), 5)
+#' asYm(201511) + 5 - 2
 #'
-#' addMonths(as.ym(c(201511, 201302)), c(5, 15))
-#' addMonths(as.ym(c(201511, 201302)), c(5, -4))
+#' addMonths(asYm(c(201511, 201302)), c(5, 15))
+#' addMonths(asYm(c(201511, 201302)), c(5, -4))
 #'
 #' # out-of-range input is flagged, not silently mangled
-#' as.ym(c(201513, 999901))
+#' asYm(c(201513, 999901))
 #'
 #' @family date-time
 #' @export
-as.ym <- function(x) {
+asYm <- function(x) {
   
   nm <- names(x)
 
   # A Date is stored as days since 1970, which as.numeric() turned into
-  # a number far outside the yyyymm range - as.ym(Sys.Date()) was NA.
+  # a number far outside the yyyymm range - asYm(Sys.Date()) was NA.
   # format() takes a POSIXct in its own time zone.
   if (inherits(x, c("Date", "POSIXt")))
     x <- format(x, "%Y%m")
@@ -97,7 +97,7 @@ as.ym <- function(x) {
 }
 
 
-#' @rdname as_ym
+#' @rdname asYm
 #' @method as.Date ym
 #' @export
 as.Date.ym <- function(x, d = 1, ...) {
@@ -117,7 +117,7 @@ as.Date.ym <- function(x, d = 1, ...) {
 }
 
 
-#' @rdname as_ym
+#' @rdname asYm
 #' @method print ym
 #' @export
 print.ym <- function(x, ...) {

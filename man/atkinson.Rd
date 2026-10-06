@@ -4,27 +4,21 @@
 \alias{atkinson}
 \title{Atkinson Index}
 \usage{
-atkinson(
-  x,
-  n = rep(1, length(x)),
-  epsilon = 0.5,
-  na.rm = FALSE,
-  tol = 0.00000001
-)
+atkinson(x, weights = NULL, epsilon = 0.5, tol = 0.00000001, na.rm = FALSE)
 }
 \arguments{
 \item{x}{numeric vector of non-negative values, such as incomes}
 
-\item{n}{optional frequency weights; either a single non-negative whole
+\item{weights}{optional frequency weights; either a single non-negative whole
 number or a vector having the same length as \code{x}}
 
 \item{epsilon}{single non-negative numeric value specifying the inequality
 aversion parameter}
 
-\item{na.rm}{logical; whether missing values in \code{x} are removed}
-
 \item{tol}{single non-negative numeric value specifying the tolerance for
 treating \code{epsilon} as equal to one}
+
+\item{na.rm}{logical; whether missing values in \code{x} are removed}
 }
 \value{
 a numeric value in the interval \verb{[0, 1]}, or
@@ -77,7 +71,7 @@ A(1) =
 
 The calculation uses normalized frequency weights and logarithmic power
 means. It therefore does not construct the potentially very large vector
-that would result from \code{rep(x, n)}.
+that would result from \code{rep(x, weights)}.
 
 Observations with zero frequency are ignored. If all frequencies are zero
 or no observations remain after removing missing values, \code{NA_real_}
@@ -100,7 +94,7 @@ atkinson(x, epsilon = 1)
 atkinson(x, epsilon = 2)
 
 # frequency weights
-atkinson(c(10, 20, 30), n = c(3, 1, 1))
+atkinson(c(10, 20, 30), weights = c(3, 1, 1))
 
 # zero incomes
 atkinson(c(0, 10, 20), epsilon = 1)

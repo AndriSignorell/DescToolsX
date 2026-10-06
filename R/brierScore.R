@@ -55,12 +55,13 @@
 #'     `getOption("boot.ncpus", 1L)`)}
 #' }
 #'
-#' @param x       either a numeric vector of observed binary outcomes
-#'   (\eqn{0}/\eqn{1}) when `pred` is supplied, or a fitted model
+#' @param x       either a numeric vector of predicted probabilities in
+#'   \eqn{[0,1]} when `ref` is supplied, or a fitted model
 #'   object (`glm` or similar) from which both response and
 #'   predictions are extracted
-#' @param pred    a numeric vector of predicted probabilities in
-#'   \eqn{[0,1]}. Required when `x` is a numeric vector; ignored
+#' @param ref     a numeric vector of observed binary outcomes
+#'   (\eqn{0}/\eqn{1}), the reference the predictions are scored
+#'   against. Required when `x` is a vector of predictions; ignored
 #'   when `x` is a model object.
 #' @param scaled  logical. Should the scaled Brier score be returned?
 #'   Default `FALSE`.
@@ -94,17 +95,17 @@
 #' resp <- rbinom(200, 1, 0.4)
 #' pred <- plogis(rnorm(200, ifelse(resp == 1, 0.5, -0.5)))
 #'
-#' brierScore(resp, pred)
-#' brierScore(resp, pred, conf.level = 0.95)
-#' brierScore(resp, pred, conf.level = 0.95, method = "boot", type = "bca")
-#' brierScore(resp, pred, conf.level = 0.95, scaled = TRUE)
+#' brierScore(pred, resp)
+#' brierScore(pred, resp, conf.level = 0.95)
+#' brierScore(pred, resp, conf.level = 0.95, method = "boot", type = "bca")
+#' brierScore(pred, resp, conf.level = 0.95, scaled = TRUE)
 #'
 #' @family model.metrics
 #' @concept model-evaluation
 #' @concept calibration
 #' @export
 brierScore <- function(x,
-                       pred       = NULL,
+                       ref        = NULL,
                        conf.level = NA,
                        sides      = c("two.sided", "left", "right"),
                        method     = c("normal", "boot"),
@@ -119,8 +120,9 @@ brierScore <- function(x,
   checkFlag(scaled)
 
   # --- extract resp / pred ---------------------------------------------
-  if (!is.null(pred)) {
-    resp <- x
+  if (!is.null(ref)) {
+    pred <- x
+    resp <- ref
   } else {
     if (inherits(x, "glm")) {
       pred <- predict(x, type = "response")
@@ -133,13 +135,13 @@ brierScore <- function(x,
 
   # --- validate resp / pred --------------------------------------------
   if (length(resp) != length(pred))
-    stop("'x' and 'pred' must have the same length.")
+    stop("'x' and 'ref' must have the same length.")
   if (anyNA(resp) || anyNA(pred))
-    stop("'x' and 'pred' must not contain missing values.")
+    stop("'x' and 'ref' must not contain missing values.")
   if (!all(resp %in% c(0L, 1L)))
-    stop("'x' (response) must be binary (0/1).")
+    stop("'ref' (response) must be binary (0/1).")
   if (any(pred < 0 | pred > 1))
-    stop("'pred' must contain probabilities in [0, 1].")
+    stop("'x' must contain probabilities in [0, 1].")
 
   # the scaled score divides by the Brier score of the prevalence, which
   # is 0 for a constant response: the point estimate was -Inf or NaN

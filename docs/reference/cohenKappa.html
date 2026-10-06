@@ -61,7 +61,7 @@ agreement, together with asymptotic confidence intervals.</p>
 <span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
-<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unweighted"</span>, <span class="st">"equal-spacing"</span>, <span class="st">"fleiss-cohen"</span><span class="op">)</span>,</span>
+<span>  weighting <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unweighted"</span>, <span class="st">"equal-spacing"</span>, <span class="st">"fleiss-cohen"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -93,7 +93,7 @@ interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
 <code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
-<dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
+<dt id="arg-weighting">weighting<a class="anchor" aria-label="anchor" href="#arg-weighting"></a></dt>
 <dd><p>either a character string selecting a built-in weight
 scheme – <code>"unweighted"</code> (default), <code>"equal-spacing"</code>, or
 <code>"fleiss-cohen"</code> – or a numeric matrix with the same dimensions
@@ -134,7 +134,7 @@ attach greater importance to closer disagreements.</p>
 in <code>x</code>, or as two vectors <code>x</code> and <code>y</code>, in which case
 <code>table(x, y, \dots)</code> is computed internally.  Note that the vector
 interface supports <strong>unweighted kappa only</strong>: the function raises
-an error if <code>weights</code> is not <code>"unweighted"</code> and <code>y</code> is
+an error if <code>weighting</code> is not <code>"unweighted"</code> and <code>y</code> is
 supplied, because the level ordering of two independent factors cannot
 be guaranteed to be consistent when constructing the confusion table.</p>
 <p>Missing values are handled as <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> does – excluded by
@@ -207,13 +207,13 @@ reliability of scoring EEG sleep recordings.
 <span class="r-in"><span>  nrow <span class="op">=</span> <span class="fl">6</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rater1 <span class="op">=</span> <span class="va">cats</span>, rater2 <span class="op">=</span> <span class="va">cats</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">cohenKappa</span><span class="op">(</span><span class="va">mw</span>, weights <span class="op">=</span> <span class="st">"equal-spacing"</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cohenKappa</span><span class="op">(</span><span class="va">mw</span>, weighting <span class="op">=</span> <span class="st">"equal-spacing"</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.3156685 0.1968117 0.4345252 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># user-supplied weight matrix</span></span></span>
 <span class="r-in"><span><span class="va">wm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/outer.html" class="external-link">outer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">i</span> <span class="op">-</span> <span class="va">j</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">6</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">cohenKappa</span><span class="op">(</span><span class="va">mw</span>, weights <span class="op">=</span> <span class="va">wm</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cohenKappa</span><span class="op">(</span><span class="va">mw</span>, weighting <span class="op">=</span> <span class="va">wm</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.3156685 0.1968117 0.4345252 </span>
 <span class="r-in"><span></span></span>

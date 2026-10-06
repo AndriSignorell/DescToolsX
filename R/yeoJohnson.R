@@ -6,18 +6,18 @@
 #' The Yeo-Johnson transformation extends the Box-Cox transformation to allow
 #' for zero and negative values. It is defined piecewise:
 #'
-#' \deqn{f_\lambda(x) = \frac{(x+1)^\lambda - 1}{\lambda}}{
+#' \deqn{f_\gkLambda(x) = \frac{(x+1)^\lambda - 1}{\lambda}}{
 #'       f(x) = ((x+1)^lambda - 1) / lambda}
 #' for \eqn{x \ge 0} and \eqn{\lambda \ne 0},
 #'
-#' \deqn{f_\lambda(x) = \log(x+1)}{f(x) = log(x+1)}
+#' \deqn{f_\gkLambda(x) = \log(x+1)}{f(x) = log(x+1)}
 #' for \eqn{x \ge 0} and \eqn{\lambda = 0},
 #'
-#' \deqn{f_\lambda(x) = -\frac{(-x+1)^{2-\lambda} - 1}{2-\lambda}}{
+#' \deqn{f_\gkLambda(x) = -\frac{(-x+1)^{2-\lambda} - 1}{2-\lambda}}{
 #'       f(x) = -((-x+1)^(2-lambda) - 1) / (2-lambda)}
 #' for \eqn{x < 0} and \eqn{\lambda \ne 2}, and
 #'
-#' \deqn{f_\lambda(x) = -\log(-x+1)}{f(x) = -log(-x+1)}
+#' \deqn{f_\gkLambda(x) = -\log(-x+1)}{f(x) = -log(-x+1)}
 #' for \eqn{x < 0} and \eqn{\lambda = 2}.
 #'
 #' @name yeoJohnson

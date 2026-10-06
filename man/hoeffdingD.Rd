@@ -11,8 +11,7 @@ hoeffdingD(
   R = 999,
   jitter = FALSE,
   eps = NULL,
-  seed = NULL,
-  output = c("def", "test")
+  output = c("estimate", "test")
 )
 }
 \arguments{
@@ -37,12 +36,7 @@ is drawn from \eqn{U(-eps, eps)}. Defaults to \code{1e-10} times the
 standard deviation of the affected variable. A variable with zero
 variance cannot be jittered and raises an error.}
 
-\item{seed}{optional integer random seed for reproducibility when
-\code{jitter = TRUE}. The state of R's random number generator is
-restored afterwards, so passing a seed does not disturb the calling
-session.}
-
-\item{output}{output format, either \code{"def"} (default), which returns
+\item{output}{output format, either \code{"estimate"} (default), which returns
 the statistic, or \code{"test"}, which returns an object of class
 \code{"htest"} with a permutation P value for the hypothesis of
 independence.}
@@ -144,9 +138,9 @@ that looks like an answer. Remove or impute them before calling.
 }
 \section{Random number generation}{
 
-\code{jitter = TRUE} draws from R's random number generator and
-therefore advances it, unless \code{seed} is supplied - in which case
-the previous state is restored.
+\code{jitter = TRUE} and \code{output = "test"} draw from R's random number
+generator and therefore advance it. Call \code{\link[=set.seed]{set.seed()}} beforehand for a
+reproducible result.
 }
 
 \examples{
@@ -197,11 +191,11 @@ On the bootstrap of U and V statistics.
 \code{\link[=spearmanCor]{spearmanCor()}}, \code{\link[=kendallTauB]{kendallTauB()}}
 
 Other assoc.continuous:
-\code{\link[=corPart]{corPart()}},
-\code{\link[=corPolychor]{corPolychor()}},
-\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=findCor]{findCor()}},
 \code{\link[=keepSig]{keepSig()}},
+\code{\link[=partialCor]{partialCor()}},
 \code{\link[=pearsonCor]{pearsonCor()}},
+\code{\link[=polychorCor]{polychorCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }
 \concept{assoc.continuous}

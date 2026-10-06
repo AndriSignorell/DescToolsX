@@ -34,10 +34,10 @@
 #' @param na.last for controlling the treatment of `NA`s.  If `TRUE`,
 #' missing values in the data are put last; if `FALSE`, they are put
 #' first; if `NA`, they are removed.
-#' @param nlow number of smallest values included in the formatted output;
+#' @param nLow number of smallest values included in the formatted output;
 #' defaults to 5
-#' @param nhigh number of largest values included in the formatted output;
-#' defaults to `nlow`
+#' @param nHigh number of largest values included in the formatted output;
+#' defaults to `nLow`
 #' 
 #' @return for `large()` and `small()`, a vector of extreme values
 #' when `unique = FALSE`, otherwise a list with components:
@@ -193,7 +193,7 @@ small <- function (x, k = 5L, unique = FALSE, na.last = NA) {
 
 #' @rdname extremes
 #' @export
-highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
+highLow <- function (x, nLow = 5L, nHigh = nLow, na.last = NA) {
   
   # updated 1.2.2014 / Andri
   # using table() was unbearable slow and inefficient for big vectors!!
@@ -206,9 +206,9 @@ highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
   # outperformed by nathan russell's C++ solution
   
   
-  if ((nlow + nhigh) != 0L) {
-    frqs <- small(x, k=nlow, unique=TRUE, na.last=na.last)
-    frql <- large(x, k=nhigh, unique=TRUE, na.last=na.last)
+  if ((nLow + nHigh) != 0L) {
+    frqs <- small(x, k=nLow, unique=TRUE, na.last=na.last)
+    frql <- large(x, k=nHigh, unique=TRUE, na.last=na.last)
     frq <- c(frqs$frequency, frql$frequency)
     
     vals <- c(frqs$value, frql$value)
@@ -222,8 +222,8 @@ highLow <- function (x, nlow = 5L, nhigh = nlow, na.last = NA) {
     frqtxt[frq < 2L] <- ""
     
     txt <- strTrim(paste(vals, frqtxt, sep = ""))
-    lowtxt <- paste(head(txt, min(length(frqs$frequency), nlow)), collapse = ", ")
-    hightxt <- paste(tail(txt, min(length(frql$frequency), nhigh)), collapse = ", ")
+    lowtxt <- paste(head(txt, min(length(frqs$frequency), nLow)), collapse = ", ")
+    hightxt <- paste(tail(txt, min(length(frql$frequency), nHigh)), collapse = ", ")
   }
   else {
     lowtxt <- ""

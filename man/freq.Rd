@@ -9,7 +9,7 @@ freq(
   x,
   breaks = if (isDate(x)) pretty(x) else hist(x, plot = FALSE)$breaks,
   include.lowest = TRUE,
-  ord = c("level", "desc", "asc", "name"),
+  order = c("level", "desc", "asc", "name"),
   useNA = c("no", "ifany", "always"),
   ...
 )
@@ -35,7 +35,7 @@ neither numeric nor a date.}
 highest, for \code{right = FALSE}) \code{"breaks"} value should be included.
 Ignored if x is neither numeric nor a date, or if \code{breaks = FALSE}.}
 
-\item{ord}{how should the result be ordered? Default is \code{"level"},
+\item{order}{how should the result be ordered? Default is \code{"level"},
 other choices are 'by frequency' (\code{"desc"} or \code{"asc"})
 or 'by name of the levels' (\code{"name"}). The argument can be abbreviated.
 This is ignored if x is numeric or a date and classed
@@ -87,7 +87,7 @@ value.) See \code{\link[=cut]{cut()}}.
 
 With \code{breaks = FALSE} no classing takes place and the distinct values
 of a numeric or date \code{x} are tabulated directly (in ascending order of
-the values). In this case the \code{ord} argument applies as for categorical
+the values). In this case the \code{order} argument applies as for categorical
 variables.
 }
 \examples{
@@ -103,10 +103,10 @@ d.freq
 print(d.freq, digits=5)
 
 # sorted by frequency
-freq(Pizza$driver, ord="desc")
+freq(Pizza$driver, order="desc")
 
 # sorted by name using all the observations, say including NAs
-freq(Pizza$driver, ord="name", useNA="ifany")
+freq(Pizza$driver, order="name", useNA="ifany")
 
 # percentages and cumulative frequencies for a vector of count data
 freq(as.table(c(2,4,12,8)))
@@ -115,7 +115,7 @@ freq(as.table(c(2,4,12,8)))
 freq(Pizza$count, breaks = FALSE)
 
 # ... which also allows ordering by frequency
-freq(Pizza$count, breaks = FALSE, ord = "desc")
+freq(Pizza$count, breaks = FALSE, order = "desc")
 
 # dates are grouped using calendar-aligned default intervals
 freq(as.Date("2025-01-01") + 0:99)

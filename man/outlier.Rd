@@ -4,7 +4,12 @@
 \alias{outlier}
 \title{Outlier}
 \usage{
-outlier(x, method = c("boxplot", "hampel"), value = TRUE, na.rm = FALSE)
+outlier(
+  x,
+  method = c("boxplot", "hampel"),
+  output = c("value", "index"),
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{x}{a non-empty numeric vector of data values}
@@ -12,15 +17,15 @@ outlier(x, method = c("boxplot", "hampel"), value = TRUE, na.rm = FALSE)
 \item{method}{the method to be used. So far Tukey's boxplot and Hampel's
 rule are implemented.}
 
-\item{value}{logical. If \code{FALSE}, a vector containing the (integer)
-indices of the outliers is returned, and if \code{TRUE} (default), a vector
-containing the matching elements themselves is returned.}
+\item{output}{character string, one of \code{"value"} (default) or
+\code{"index"}. \code{"value"} returns the outlying elements themselves,
+\code{"index"} their (integer) positions in \code{x}.}
 
 \item{na.rm}{logical. Should missing values be removed? Defaults to
 \code{FALSE}.}
 }
 \value{
-the outlying values if \code{value = TRUE}; otherwise their indices
+the outlying values if \code{output = "value"}; otherwise their indices
 }
 \description{
 Return outliers following Tukey's boxplot and Hampel's median/mad
@@ -45,12 +50,12 @@ Performance improvement by Luis Gustavo Schuck.
 outlier(Pizza$temperature, na.rm=TRUE)
 
 # it's the same as the result from boxplot
-sort(Pizza$temperature[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE)])
+sort(Pizza$temperature[outlier(Pizza$temperature, output="index", na.rm=TRUE)])
 b <- boxplot(Pizza$temperature, plot=FALSE)
 sort(b$out)
 
 # nice to find the corresponding rows
-Pizza[outlier(Pizza$temperature, value=FALSE, na.rm=TRUE), ]
+Pizza[outlier(Pizza$temperature, output="index", na.rm=TRUE), ]
 
 # compare to Hampel's rule
 outlier(Pizza$temperature, method="hampel", na.rm=TRUE)

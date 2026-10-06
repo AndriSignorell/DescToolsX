@@ -23,8 +23,8 @@
 #'   
 #' @param digits number of digits used to format relative frequencies; the
 #' default can be set with `setDescToolsXOption(digits = x)`
-#' @param ord order of the levels
-#' @param include_x logical; if `TRUE`, the original vector is retained
+#' @param order order of the levels
+#' @param includeX logical; if `TRUE`, the original vector is retained
 #' in the result
 #'
 #' @return an object of class `c("Desc.logical", "Desc")` with components:
@@ -53,12 +53,12 @@
 #' @rdname desc
 #' @method desc logical
 #' @export
-desc.logical <- function(x, ord = "level", conf.level = 0.95,
-                         include_x = TRUE,
+desc.logical <- function(x, order = "level", conf.level = 0.95,
+                         includeX = TRUE,
                          main = NULL, verbose = NULL, plotit = NULL,
                          digits = NULL, ...) {
-  .descLogicalCore(x, xname = deparse(substitute(x)), ord = ord,
-                   conf.level = conf.level, include_x = include_x,
+  .descLogicalCore(x, xname = deparse(substitute(x)), order = order,
+                   conf.level = conf.level, includeX = includeX,
                    main = main, verbose = verbose, plotit = plotit,
                    digits = digits, ...)
 }
@@ -72,8 +72,8 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
 # deparse(substitute(x)) rather than re-derived here, since substitute()
 # does not see through the extra call frame when this is invoked from
 # desc.numeric()/desc.factor() rather than directly by the user.
-.descLogicalCore <- function(x, xname, ord = "level", conf.level = 0.95,
-                             include_x = TRUE,
+.descLogicalCore <- function(x, xname, order = "level", conf.level = 0.95,
+                             includeX = TRUE,
                              main = NULL, verbose = NULL, plotit = NULL,
                              digits = NULL, ...) {
   
@@ -89,7 +89,7 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
   
   ff <- table(x)
   
-  switch(match.arg(ord, c("level", "desc", "asc", "name")),
+  switch(match.arg(order, c("level", "desc", "asc", "name")),
          level = {  },
          name  = { ff <- ff[order(names(ff))] },   # ff[names(ff)] was a no-op
          asc   = { ff <- sort(ff) },
@@ -114,7 +114,7 @@ desc.logical <- function(x, ord = "level", conf.level = 0.95,
     afrq = ff,
     rfrq = bf,
     conf.level = conf.level,
-    x = if (include_x) x else NULL
+    x = if (includeX) x else NULL
   )
   
   class(res) <- c("Desc.logical", "Desc")

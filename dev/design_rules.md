@@ -1,8 +1,8 @@
 
 # Package Suite — Design Rules & Architecture
 
-Scope: DescToolsX · lumen · pharos · bedrock · alloy  
-Version: 0.5  
+Scope: DescToolsX · lumen · pharos · bedrock · alloy · pons · swissValet  
+Version: 0.6  
 Maintainer: Andri Signorell
 
 ---
@@ -94,6 +94,7 @@ Allowed:
 | Internal functions | `.lowerCamelCase` | `.computeWeights()` |
 | Helper functions | `.prefix` | `.checkInput()` |
 | Engines | `.familyEngine` | `.binomCI_engine()` |
+| Exported framework helpers | `.lowerCamelCase` | `.applyParFromDots()` (see below) |
 | Classes | PascalCase | `LinearModel` |
 | Datasets | PascalCase | `Kunden`, `Messdaten`, `RawData` |
 | Model objects | lowerCamelCase | `fit`, `modKunden`, `regOut` |
@@ -116,6 +117,20 @@ print.PercTable
 plot.Desc.numeric
 lines.Lc
 ```
+
+**Dots in exported names.** Apart from S3 methods, a dot appears in an
+exported name in exactly two cases:
+
+- *Coercion generics* `as.<Class>` that are real S3 generics with methods
+  (`as.CI` with `as.CI.matrix`, `as.CI.data.frame`, ...), mirroring
+  `as.data.frame`. A plain coercion function is `asXxx` (`asBinary`); a
+  predicate is always `isXxx` (`isCI`, `isDate`), never `is.Xxx`.
+- *Exported framework helpers* with a leading dot: the graphics helpers of
+  `pharos` listed in §9.2 (`.withGraphicsState()`, `.applyParFromDots()`,
+  `.resolveTitle()`, `.marTop()`, `.marginLines()`, `.drawGrid()`,
+  `.drawBox()`). They are exported so that plot functions in other suite
+  packages can use them, and keep the dot because they are not user API.
+  No other package exports dot-prefixed functions.
 
 #### 3.1.1.1 Exporting S3 Methods Callable From Other Packages
 
@@ -195,37 +210,47 @@ between_num <- function(...) {
 
 ## 3.2 Function Classification and X Suffix
 
-The X suffix applies exclusively to **statistical summary measures** whose names collide with a function in `base`, `stats`, `graphics`, or `utils`.
+The X suffix marks an exported function whose natural name is already
+taken by an existing function.
 
-**Statistical summary measures, collision-prone → lowercase + X:**
+**Collision set:** `base`, `stats`, `graphics`, `utils` — and `dplyr`,
+because the suite is routinely loaded next to it (`recodeX`, `renameX`,
+`coalesceX`). A name that differs from an existing one only in case counts
+as a collision (`iqrX` against `stats::IQR`).
+
+**Collision → lowercase + X:**
 
 ```text
-meanX       medianX     sdX         varX
-madX        iqrwX       rangeX      coefvarX
-gmeanX      hmeanX      skew       kurt
-maeX        mseX        rmseX       mapeX
-smapeX      quantileX   percentRankX
+meanX       medianX     modeX       sdX
+varX        madX        iqrX        rangeX
+quantileX   scaleX      sortX       rankX
+sampleX     revX        splitX      appendX
+setNamesX   strX        splineX     recodeX
+renameX     coalesceX
+```
+
+**No collision → no X**, however close the measure is to one that has it:
+
+```text
+coefVar     gmean       hmean       skew        kurt
+mae         mse         rmse        mape        smape
+percentRank
 ```
 
 Rules:
 
-- No exceptions
+- No exceptions in either direction: no X without a collision, no
+  collision without X (`pharos::polygon` masks `graphics::polygon` and
+  becomes `polygonX`)
 - No all-caps spelling: `madX`, not `MADX`
-
-**Rule: When exactly is X used?**
-
-X is used when:
-
-1. A function conceptually represents a statistical summary measure
-2. AND the name collides with an existing base-R function
-
-Examples:
-
-```text
-mean → meanX
-var  → varX
-rank → rankX
-```
+- X is used when the natural name is taken, whatever the function that
+  holds it does: `meanX` extends `mean()`, while `modeX` is the statistical
+  mode and has nothing to do with `base::mode()` (the storage mode). The
+  term belongs to statistics; R happens to use it for something else.
+- Where an established name avoids the collision without X, it takes
+  precedence: `lcm()` would mask `graphics::lcm` (a layout unit), and the
+  pair is `GCD` / `LCM` (see the abbreviation list below), not `gcd` /
+  `lcmX`.
 
 Do not use X for:
 
@@ -255,6 +280,11 @@ ShapiroFranciaTest()
 AndersonDarlingTest()
 ```
 
+Eponyms are written out and carry no possessive: `breuschPaganTest`,
+`lillieforsTest`, `hotellingT2Test`, `vanDerWaerdenTest`. Acronyms that are
+themselves the established name of the test stay: `adfTest`, `kpssTest`,
+`dscfTest`.
+
 **Transformations and utilities → lowercase, no X**, except when colliding with base:
 
 ```text
@@ -271,19 +301,25 @@ plotPairs    plotViolin   plotBar
 
 **Special rule: established abbreviations**
 
-Well-known statistical abbreviations may retain uppercase letters:
+Only the abbreviations on this list keep their capitals inside a name:
 
 - CI (confidence interval)
 - QQ (quantile-quantile)
 - ECDF
+- SE (standard error)
+- AD (Anderson-Darling)
+- GCD, LCM (as whole function names)
 
-Examples:
+Every other acronym follows lowerCamelCase like an ordinary word: `Rgb`,
+`Hsv`, `Url`, `Html`, `Sas`, `Knn`.
 
 ```text
-meanCI
-plotQQ
-plotECDF
+meanCI      plotQQ      plotECDF    meanSE      pAD
+cmykToRgb   escapeHtml  toHtmlTable imputeKnn
 ```
+
+The list is closed. A new entry is a rule change, not a local decision;
+that is what keeps the rule checkable in one line.
 
 ## 3.3 Argument Names
 
@@ -296,26 +332,31 @@ na.rm       conf.level      xlab    ylab    xlim    ylim
 **(B) New arguments → lowerCamelCase:**
 
 ```text
-groupSize   numBootstrap    showLegend    maxIter
+groupSize   nPoints         showLegend    maxIter
 ```
+
+Counts take the prefix `n` (`nBins`, `nPoints`, `nGroups`, `nDigits`), never
+`num`.
 
 **(C) Do not introduce new dot-separated names** — the dot is reserved exclusively for legacy/base-R conventions:
 
 ```r
 # incorrect
 group.size
-num.bootstrap
+max.iter
 ```
 
 **(D) Consistent terminology throughout the package** — one concept, one name:
 
 ```text
-data      for data.frames / matrices
-x         for vector input
+x         for vector input, and for input that may be of several classes
 y         second vector
+data      for data frames (data sets); not df or dataset
+m         for a matrix in matrix algebra
+fit       for a fitted model
+ref       for observed values a prediction is compared with; not obs or resp
 groups    not grp or grouping
 weights   not w or weightVec
-data      not mixed with df or dataset
 ```
 
 See also the core vocabulary.
@@ -459,6 +500,29 @@ bpTest(lm_fit)
 pseudoR2(model_object)
 ```
 
+### Scope of `fit`
+
+`fit` is used wherever a fitted model is the only admissible input, plot
+functions included: `plotBinnedResid(fit)`, `plotCalibration(fit)`. S3
+generics keep `x` as their dispatch argument (`cParam(x, ...)`,
+`varImp(x, ...)`), and so do functions that also accept raw data.
+
+### Prediction and observation
+
+Functions that compare predictions with observations take them as
+`(x, ref)`: `x` is the prediction, the score or the fitted model, `ref`
+the observed values.
+
+```r
+mae(x, ref)
+cStat(x, ref)
+brierScore(x, ref)
+```
+
+The order is part of the contract. Both arguments are numeric vectors of
+the same length, so a swapped pair does not fail; it computes something
+else.
+
 ### Rationale
 
 For raw data, `x` and `y` are concise and familiar. For fitted models, `fit` immediately signals that a model object is expected and aligns with common usage throughout the R ecosystem:
@@ -489,26 +553,21 @@ designed so it never bites.
    Worse than the error is the silent case: a prefix matching exactly
    *one* formal the caller did not intend.
 
-2. **Route par-parameters through the dots.** Graphics parameters
-   (`cex`, `lwd`, `col`, ...) are not formals; they pass via `...`
-   to `.applyParFromDots()` / `plot()` / `points()`. The dots never
-   partially match, so no collisions arise.
+2. **Route generic par-parameters through the dots.** Apart from the two
+   or three key visual parameters a function declares explicitly (§6.1),
+   graphics parameters (`las`, `mar`, `cex.axis`, ...) are not formals;
+   they pass via `...` to `.applyParFromDots()` / `plot()` / `points()`.
+   The dots never partially match, so no collisions arise.
 
 3. **List arguments instead of prefixed formals.** Substructure goes
    into a single list argument (`qqline = list(col=, lty=)`), never
    into `qqline.col`, `qqline.lty`, ... formals.
 
-4. **Critical options go after the dots.** (unsure whether to retain: observe) 
-   Formals placed after `...`
-   require exact names — partial matching is off for them:
-
-```r
-   f <- function(x, ..., conf.level = 0.95)
-```
-
-   Trade-off: a typo (`conf.lvl=`) silently falls into the dots instead
-   of matching. Acceptable for a documented API; consider validating
-   unused dots where feasible.
+4. **Formals stand before the dots.** Placing options after `...` to
+   force exact matching was tried and dropped (2026-10): no function
+   followed it consistently, and a mistyped option name then falls
+   silently into the dots. Partial matches are caught by the test setting
+   below instead. See §4.4.
 
 **Development setting**
 
@@ -555,6 +614,21 @@ by.x            # merge
 by.y            # merge
 ncp             # d/p/q/r distribution functions
 df              # d/p/q/r distribution functions (degrees of freedom)
+alternative     # t.test, wilcox.test
+mu              # t.test, wilcox.test
+p.adjust.method # pairwise.t.test
+use             # cor
+useNA           # table
+MARGIN          # apply
+endrule         # runmed
+subdivisions    # integrate
+datax           # qqnorm
+xname           # curve
+newdata         # predict
+maxColorValue   # rgb
+stringsAsFactors # data.frame
+width.cutoff    # deparse
+envir           # assign, eval
 ```
 
 ### abind package
@@ -572,90 +646,238 @@ hier.names
 use.dnns
 ```
 
+### Other third-party packages
+
+```text
+null  nullname  estimated          # goftest::ad.test
+breakpos  bgcol  breakcol  brw     # plotrix::axis.break
+maxiter                            # rootSolve::uniroot.all
+mlen  distn  largest               # evd
+vcov.                              # lmtest, car
+```
+
+Inherited enum *values* are kept as well: `"closest.topleft"` (pROC),
+`"TM"` (gld), the values of `p.adjust.methods`.
+
+### Re-exports
+
+Functions re-exported from another package keep their name and their whole
+signature: `abind`, `Surv`, `coxph`.
+
 ### Rule
 
-If an argument is forwarded — either via `...` or explicitly — to a
-base-R or established third-party function, its original name is always
-preserved, regardless of naming style.
+Two kinds of inherited names are kept.
 
-New arguments introduced by DescToolsX itself always follow lowerCamelCase
-(Section 3.3).
+1. **Shared vocabulary.** Names every R user reads without thinking are
+   used suite-wide, whether or not the value is passed on: `na.rm`,
+   `na.action`, `conf.level`, `sig.level`, `alternative`, `mu`, `paired`,
+   `var.equal`, `lower.tail`, `log.p`, `ncp`, `df`, `decreasing`,
+   `na.last`, `ties.method`, and the graphics labels of §3.3 (A).
+2. **Forwarded names.** Every other name on the lists above is kept
+   exactly when the argument is passed on unchanged, via `...` or
+   explicitly, to the function it comes from.
+
+If the function implements the role itself, the argument is a new one and
+follows lowerCamelCase (§3.3), even where a base-R function has an argument
+for the same purpose: `fm(bigMark = )` formats on its own and is not
+`big.mark`; a function that hands the value to `grepl()` keeps
+`ignore.case`.
+
+The criterion is checkable: a forwarded name must reach a call whose
+callee has a formal of that name.
 
 
 ## 3.4 Return Values
 
-Output is part of the API and must be strictly consistent:
+Output is part of the API and must be strictly consistent.
 
-- always lowerCamelCase
-- no dots
-- descriptive names
+**Rule:** names that `stats` has established for inference are adopted
+unchanged; everything new is lowerCamelCase without dots. `conf.level` is
+therefore not an exception but an instance of the rule.
+
+| Meaning | Argument | Return component |
+|---|---|---|
+| Confidence level | `conf.level` | attribute `conf.level` |
+| Significance level | `sig.level` | – |
+| p-value | – | `p.value` |
+| Test statistic | – | `statistic` |
+| Degrees of freedom | `df` (`df1`, `df2`) | `parameter` (htest), otherwise `df` |
+| Point estimate | – | `estimate` (htest), `est` (CI vector, §5.6) |
+| Interval bounds | – | `conf.int` (htest), `lci` / `uci` (CI vector, §5.6) |
 
 ```r
-# correct
-list(
-  pValue        = 0.03,
-  testStatistic = 2.1,
-  confInt       = c(0.1, 0.5),
-  nObs          = 120
-)
+# correct - an htest keeps the stats names, so print.htest() and
+# broom::tidy() work unchanged
+list(statistic = 2.1, parameter = c(df = 12), p.value = 0.03,
+     estimate = c(mean = 4.2), conf.int = c(0.1, 0.5))
 
-# incorrect
-list(p.value = 0.03, test.statistic = 2.1)
+# correct - new names in lowerCamelCase
+list(nObs = 120, accLci = 0.81, accUci = 0.93)
+
+# incorrect - renames an established name
+list(pValue = 0.03, testStatistic = 2.1)
+
+# incorrect - new name with a dot
+list(n.obs = 120, acc.lci = 0.81)
 ```
 
-**Standardized statistic names**
+**Result matrices** (post-hoc tests, pairwise comparisons) use the same
+vocabulary for their columns: `diff`, `lci`, `uci`, `p.value`. Column names
+carry no spaces.
 
-Where possible, use:
+**Compound new names** that contain an established one are new names and
+follow lowerCamelCase: `accPValue`, not `acc.p.value`.
 
-- pValue
-- testStatistic
-- df (kept base-R compatible)
-- estimate
+"Estimator" is the rule, "estimate" the value: `estimator` is an argument
+(§3.5), `estimate` / `est` a result.
+
+*Status: adopted 2026-10-04. Supersedes the earlier version, which
+prescribed `pValue` and `testStatistic` and thereby renamed two names that
+every `htest` carries.*
 
 
 
 ### Design Rule: Missing-value handling (`NA` policy)
 
-Functions should follow standard R semantics for missing values:
+Missing data are not a calling error. Returning `NA` lets a computation over
+many variables or groups run to the end; an error aborts all of it. Removing
+missing values by default is avoided as well, because it silently changes
+the sample actually used.
 
-- If `na.rm = FALSE` (default) and the input contains `NA` values, the function should generally return `NA` rather than throw an error.
-- If `na.rm = TRUE`, missing values are removed before computation.
-- Functions should only error when missing values make computation structurally impossible (e.g. all observations removed, incompatible dimensions after omission, singular systems caused by complete missingness, etc.).
-- This behaviour should mirror the expectations established by base R summary/statistical functions such as `mean()`, `sd()`, `median()`, and related estimators.
+| Situation | Behaviour |
+|---|---|
+| missing values, `na.rm = FALSE` (default) | return `NA` |
+| missing values, `na.rm = TRUE` | remove them, then compute |
+| nothing left to compute on (empty input, or empty after removal) | return `NA`, **no** warning |
+| invalid argument (`probs = 1.5`, negative weight, unknown type, bad `conf.level`) | error |
+
+This is the behaviour of `mean()`. It is binding for the suite even where a
+base-R function does otherwise — `stats::quantile()` and `IQR()` stop on
+`NA`; `quantileX()` and `iqrX()` return `NA`. A consistent rule across the
+suite outweighs mirroring the individual base-R functions.
+
+**Details, all binding:**
+
+1. **`NaN` is treated like `NA`**, in the data and in weights. `is.na()` and
+   `anyNA()` cover both, so no separate test is needed.
+2. **Weights.** An observation is missing if its value *or* its weight is
+   missing; `na.rm = TRUE` drops the pair. A missing weight is missing data;
+   an infinite or negative weight is an invalid argument and an error.
+3. **Arguments are validated before any early `NA` return.** Missing data
+   must never mask an invalid call: `quantileX(c(1, NA), probs = 1.5)` is an
+   error, not `NA`.
+4. **Result structure is preserved.** The `NA` result has the shape of a
+   regular one: a scalar stays `NA_real_` (double, not logical), a named
+   vector keeps its length and names — `c(est = NA, lci = NA, uci = NA)`
+   for an interval, one named `NA` per `probs` for quantiles.
+5. **No warning for missing values** or for data that are empty after their
+   removal. A warning is reserved for a problem the caller probably did not
+   intend — e.g. observations left over but all with weight zero, which is
+   an unusable weighting scheme, not missing data.
+6. **`NA` inside a vector-valued argument affects its own position only.**
+   `quantileX(x, probs = c(0.25, NA, 0.75))` returns `NA` in the middle and
+   regular quantiles at both ends, as `stats::quantile()` does. A value
+   outside the admissible range is still an error (3).
+7. **Independent samples are cleaned separately.** For `x`/`y` of a
+   two-sample statistic, `na.rm = TRUE` removes the missing values of each
+   sample on its own. `complete.cases(x, y)` treats them as pairs: with
+   unequal lengths it stops, with equal lengths an `NA` in `x` silently
+   discards the valid `y` at the same position. `complete.cases()` is only
+   correct for **paired** data (rows of a matrix, `weights`, paired tests).
+8. **All-`NA` logical input.** `c(NA, NA)` is *logical*. A type check that
+   runs before the `NA` handling rejects the natural way of writing "all
+   missing"; convert first:
+   `if (is.logical(x) && all(is.na(x))) x <- as.numeric(x)`.
+   (Same class of defect as `applySides()` and `relRisk`, §8.1.3.)
 
 #### Examples
 
 ```r
-mean(c(1, NA))
-# NA
+mean(c(1, NA))                   # NA
+mean(c(1, NA), na.rm = TRUE)     # 1
 
-mean(c(1, NA), na.rm = TRUE)
-# 1
+quantileX(c(1, NA, 3))                            # named NA per prob
+quantileX(c(1, NA, 3), probs = 1.5)               # error (rule 3)
+quantileX(1:4, probs = c(0.25, NA, 0.75))         # NA only in the middle
+quantileX(c(NA, NA), weights = c(1, 1), na.rm = TRUE)   # NA, silently
+quantileX(1:3, weights = c(0, 0, 0))              # NA with warning
 ```
 
 #### Recommended implementation pattern
 
-#### Univariate input
+Order: validate arguments → handle missing values → handle empty data →
+compute.
 
 ```r
-if (na.rm)
+f <- function(x, weights = NULL, conf.level = NA, na.rm = FALSE, ...) {
+
+  # 1. arguments -- everything, before any early return
+  if (is.logical(x) && all(is.na(x))) x <- as.numeric(x)
+  if (!is.numeric(x)) stop("'x' must be numeric")
+  withCI <- !(length(conf.level) == 1L && is.na(conf.level))
+  if (withCI) checkConfLevel(conf.level)
+  ...
+
+  naResult <- if (withCI) c(est = NA_real_, lci = NA_real_, uci = NA_real_)
+              else NA_real_
+
+  # 2. missing values (NaN included); a pair is missing if either part is
+  miss <- is.na(x)
+  if (!is.null(weights)) miss <- miss | is.na(weights)
+  if (any(miss)) {
+    if (!na.rm) return(naResult)
+    x <- x[!miss]
+    if (!is.null(weights)) weights <- weights[!miss]
+  }
+
+  # 3. nothing left: empty data, not an error, no warning
+  if (length(x) == 0L) return(naResult)
+
+  # 4. compute
+  ...
+}
+```
+
+Two independent samples:
+
+```r
+if (na.rm) {
   x <- x[!is.na(x)]
-
-if (anyNA(x))
-  return(NA_real_)
+  if (!is.null(y)) y <- y[!is.na(y)]
+} else if (anyNA(x) || anyNA(y)) {
+  return(naResult)
+}
 ```
 
-#### Multivariate input
+Multivariate (paired) input:
 
 ```r
-if (na.rm)
-  x <- x[complete.cases(x), , drop = FALSE]
-
-if (anyNA(x))
-  return(NA_real_)
+if (na.rm) {
+  data <- data[complete.cases(data), , drop = FALSE]
+} else if (anyNA(data)) {
+  return(naResult)
+}
 ```
 
-This rule prioritises predictable R-like behaviour over defensive failure for ordinary missing-data situations.
+Reference implementations: `quantileX()`, `iqrX()`, `hodgesLehmann()`.
+
+*Status: adopted 2026-09-28. Supersedes the earlier version of this rule,
+which made an empty sample after removal an error.*
+
+#### Scope: tests
+
+The policy above is written for estimators. For tests, decided 2026-10-04:
+the formula method of every test uses `na.action = na.pass` and leaves
+missing values to the default method, so that they are handled in one
+place.
+
+*Open:* what the default method of a test does with missing values. Base-R
+tests drop them silently, which is what this policy rejects for
+estimators. Until decided, a test documents its behaviour in `@details`.
+
+*Open:* `impute()` defaults to `na.rm = TRUE`, because the replacement
+value is computed from the observed values. Either an explicit exception
+or another name for the argument.
 
 
 ### Grouping argument by function family
@@ -668,8 +890,12 @@ The grouping argument name follows the base-R function being extended:
 | Extensions of `t.test`, `wilcox.test` | `x`, `y` |
 | All other contexts (desc, plot, reshape, utility) | `groups` |
 
-Examples: `jonckheereTerpstraTest`, `siegelTukeyTest`, `mosesTest` → `g`;
-`toWide`, `plotDot`, `resolveGroups` → `groups`.
+Examples: `jonckheereTerpstraTest`, `leveneTest`, `dunnTest` → `g`;
+`siegelTukeyTest`, `mosesTest`, `yuenTTest` → `x`, `y`;
+`toWide`, `plotDot`, `plotBox`, `resolveGroups` → `groups`.
+
+`cochranQTest` and `pageTest` extend `friedman.test` and take its `y`,
+`groups`, `blocks`.
 
 
 
@@ -689,6 +915,10 @@ External options:
 "clopper-pearson" "agresti-coull"  "mid-p"
 ```
 
+Two exceptions: `"two.sided"` is fixed by the `sides` contract (§4.1) and by
+`alternative` in base R; and enum values forwarded to a third-party
+function keep its spelling (§3.4).
+
 Internal naming:
 
 - underscore `_`
@@ -701,8 +931,15 @@ Internal naming:
 
 ### What `method` may and may not mean
 
-`method` means **the interval method** and nothing else. It selects how the
-confidence interval is computed, never which quantity is estimated.
+In estimators and CI functions (every function that carries a `conf.level`
+today or could carry one) `method` means **the interval method** and
+nothing else. It selects how the confidence interval is computed, never
+which quantity is estimated.
+
+Outside that scope the reservation does not apply: tests, utilities, plot
+functions and conversions use `method` and `type` freely, as §4.3 lists
+them, and look-alikes of base-R functions keep the base meaning
+(`corTest(method = "pearson")`).
 
 An argument that selects the estimator gets its own name:
 
@@ -713,11 +950,14 @@ An argument that selects the estimator gets its own name:
 | the difference function, i.e. another quantity | `metric` | `krippAlpha` |
 | the bootstrap interval type, through `...` | `type` | `contCoef`, `bootCI` |
 
-`type` is reserved for the bootstrap interval type (`"perc"`, `"bca"`, ...)
+Within the same scope, `type` is reserved for the bootstrap interval type (`"perc"`, `"bca"`, ...)
 that travels through `\dots` and is validated by `.extractBootArgs()`. A
 formal named `type` shadows it and must not be introduced for anything
 else — `krippAlpha` briefly carried one for the measurement level, which
-made `type = "perc"` a `match.arg()` error about nominal and ordinal.
+made `type = "perc"` a `match.arg()` error about nominal and ordinal. `icc` still
+carries one for agreement/consistency and is to be changed to `definition`.
+A `type` inherited from base R in a function without bootstrap dots
+(`quantileX(type = 7)`) is unaffected.
 
 `level` is unavailable where `levels` already holds category values.
 
@@ -853,7 +1093,7 @@ skew(
   # Inference
   conf.level = NA,
   sides      = c("two.sided", "left", "right"),
-  method     = c("classic", "boot"),
+  method     = c("boot", "classic"),
   # Estimator
   estimator = 3,
   weights   = NULL,
@@ -956,14 +1196,21 @@ plausible 0.95 value.
 
 *Undecided. Until then `quantileCI` keeps `probs` where it is.*
 
-### Open: `alternative` instead of `sides`
+### Tests keep `alternative`
 
-`corCI`, `signTest` and `tTestA` take `alternative` and, in the latter two,
-place `conf.level` at the end. Either they join the convention or they are
-exempt as deliberate base-R look-alikes — in which case they belong on the
-exemption list in §3.4 and in the exception list of `auditCI()`.
+Decided 2026-10-04. Tests are look-alikes of `t.test()` and keep its
+signature: `alternative` instead of `sides`, `conf.level` after the test
+arguments. `sides` names the side with the finite bound, `alternative` the
+direction of the hypothesis; putting `sides` on a test would give the same
+word the opposite meaning of its base-R counterpart.
 
-*Undecided.*
+Applies to `signTest`, `tTestA`, `zTest`, `yuenTTest` and
+`brunnerMunzelTest`. Post-hoc tests follow `TukeyHSD(conf.level)` and
+carry `conf.level` without `sides`: `dunnettTest`, `gamesHowellTest`,
+`scheffeTest`, `postHocTest`. All of them are on the exception list of
+`auditCI()` (§8.1.6).
+
+`corCI` is not among them: it takes `sides` like every other CI function.
 
 
 ## 4.2 Plot Functions
@@ -985,20 +1232,24 @@ FRAMEWORK
 
 | Group | Typical arguments |
 |---|---|
-| DATA | `x`, possibly `y` |
+| DATA | `x`, possibly `y`; `fit` for model diagnostics (§3.3 H) |
 | LABELS | `main`, `xlab`, `ylab` |
 | AXES | `xlim`, `ylim` |
 | STATISTICS | `nBins`, `conf.level`, `method`, `metric`, `threshold` |
 | STRUCTURE | `cluster`, `order`, `groups`, `gap`, `items` |
-| STYLE | `col`, `lwd`, `pch`, `bg`, `border`, `grid`, `box` |
+| STYLE | `col`, `lwd`, `pch`, `cex`, `bg`, `border`, `grid`, `box` |
 | FEATURES | `legend`, `text`, `labels`, `smooth`, `rug` |
 | FRAMEWORK | `stamp` |
 
+All formals stand before `...` (§4.4).
+
 STATISTICS-Argumente bestimmen, **was gerechnet wird**, bevor irgendetwas
 gezeichnet wird. Sie stehen vor STRUCTURE, weil ein Plot ohne die Rechnung
-keine Struktur hat, die man ordnen könnte. Innerhalb der Gruppe gilt die
-Reihenfolge aus §4.1: erst was die Grösse definiert (`nBins`, `metric`),
-dann die Inferenz (`conf.level`, `method`).
+keine Struktur hat, die man ordnen könnte. Innerhalb der Gruppe gilt eine
+eigene Reihenfolge, nicht die von §4.1: erst was die Grösse definiert
+(`nBins`, `metric`), dann die Inferenz (`conf.level`, `method`). In einem
+Plot ist das Intervall Beiwerk zur gezeichneten Grösse; in einem Schätzer
+ist es der Block, den man an fester Stelle sucht.
 
 Die Regel aus §4.1, dass `method` erst mit dem zweiten Verfahren
 erscheint, gilt hier unverändert. `plotBinnedResid()` hat zwei Bandtypen
@@ -1035,35 +1286,41 @@ closest(
 )
 ```
 
-## 4.4 Toggle Arguments (`callIf`-Pattern)
+## 4.4 Position of `...`
 
-Toggle arguments are always placed **after `...`**, since they are
-secondary to the core function and require exact name matching:
+In plot functions every formal stands **before** `...`; the dots come last
+and carry the generic graphics parameters (§6.1).
 
 ```r
 plotProbDist(
   breaks, FUN,
   # Labels
-  main  = "",
+  main  = NULL,
   xlab  = NULL,
   ylab  = "density",
   # Axes
   xlim  = NULL,
   # Style
-  col     = NULL,
+  col     = .useTheme,
   density = 7,
-  # Features (callIf)
-  ...,
+  grid    = .useTheme,
+  box     = .useTheme,
+  # Features
   areaLabels  = NULL,
   breakLabels = NULL,
-  grid        = FALSE,
-  box         = .useTheme
+  # Framework
+  stamp = .useTheme,
+  ...
 )
 ```
 
-Toggle arguments after `...` are intentional API design: they require
-exact name matching and are documented as such. This prevents accidental
-partial matching against graphical parameters passed via `...`.
+Decided 2026-10-04, replacing the earlier rule that toggle arguments go
+after the dots. That rule bought exact matching for toggles, but no plot
+function implemented it, five functions had drifted to placing *all*
+formals after the dots, and a mistyped toggle name then disappears into
+the dots without a message. One layout for all plot signatures is worth
+more than exact matching for a few arguments; partial matches are caught
+by `options(warnPartialMatchArgs = TRUE)` in the tests (§3.3 I).
 
 ---
 
@@ -1218,26 +1475,33 @@ plotDot():
 
 ## cex policy
 
-`cex` means symbol size, nothing else.
+`cex` means symbol size. Text is sized through the specific parameters.
 
 - Functions that draw symbols (`plotXY`, `plotDot`, `plotQQ`, ...) declare
-  `cex` as a documented formal placed after the dots, resolved against the
-  theme (`cex = NULL` -> `.theme()`), and pass it explicitly to `points()`.
+  `cex = .useTheme` as a documented STYLE formal next to `col`, `pch` and
+  `bg`, resolve it against the theme, and pass it explicitly to
+  `points()`. `plotXY.default` is the reference.
 - All other plot functions do not know `cex`. It is never routed to `par()`
   (`.applyParFromDots()` excludes it by default): setting `par(cex=)` scales
   the text line height and thereby the margins (`mai = mar * line height`),
   silently changing the plot layout.
-- Fine-grained text sizing uses the specific parameters (`cex.axis`,
-  `cex.lab`, `cex.main`), which pass through the dots to `par()` without
-  side effects.
+- Fine-grained text sizing in plot functions uses the specific parameters
+  (`cex.axis`, `cex.lab`, `cex.main`), which pass through the dots to
+  `par()` without side effects.
+- Annotation helpers whose only job is to draw text onto an existing plot
+  (`barText`, `boxedText`, `colLegend`, `stamp`, `textLegend`, `abcCoords`,
+  `spreadOut`) may declare `cex` as the size of that text. There is no
+  symbol it could be confused with.
 - Global scaling (e.g. presentation mode) is a theme concern, declared once
-  via options and resolved in `.theme()` — never per call site via `cex`.
+  via options and resolved in `.theme()`, never per call site via `cex`.
 
 
 ## 6.2 Bootstrap Arguments
 
-Bootstrap arguments (`method`, `R`, `parallel`, etc.) always go through 
-`...` and are internally extracted via `.extractBootArgs()`. This
+Where the bootstrap is one of several interval methods, its arguments
+(`type`, `R`, `parallel`, etc.) go through `...` and are internally
+extracted via `.extractBootArgs()`. `method` is not among them: it is the
+formal that selects the bootstrap in the first place (§3.5). This
 function is available internally in several packages in the file
 utils-ecosys:
 
@@ -1253,6 +1517,14 @@ Forbidden:
 - direct use of `getDotsArg()`
 - direct access to `...` in the function body
 - argument parsing inside `apply` / `replicate`
+
+**`R` as a formal.** Where resampling is the only way the function can
+compute its result, `R` is a formal, because the function cannot run
+without it: `bootCI`, `coefCI`, `rSq`, and permutation or Monte Carlo tests
+(`jonckheereTerpstraTest`, `hoeffdingD`, `jarqueBeraTest`). The number of
+resamples is always called `R` (§13.6), never `nPerm` or `nresample`.
+
+**No `seed` argument**, in either case; see §8.3.
 
 ## 6.3 Flexible Argument Pattern for Graphical Elements
 
@@ -1484,9 +1756,12 @@ belong in the test suite, not in a one-off script.
   `applySides` reached, is the argument order right? It follows the
   **call graph transitively**, because a wrapper that delegates to a
   parent (`gkGamma` → `ordAssocs`) is correct without having either name
-  in its own body. Exception list for functions that deliberately refuse
-  an interval — `randolphKappa` documents "confidence intervals are not
-  implemented" and must not acquire a `sides` formal.
+  in its own body. Exception list, each entry with its reason: tests that keep
+  `alternative` and post-hoc tests without `sides` (§4.1); bands and
+  reference regions (§8.1.8); and three functions whose interval is a
+  by-product of a larger result (`blandAltmanData`, `conf.table`,
+  `predict.Lc`). `randolphKappa` has no interval implemented and therefore
+  carries neither `conf.level` nor `sides` (§8.1.2).
 - **`auditMatchArg()`** — every enum formal without a `match.arg()` call
   in the body. Would have found `lambda`'s unmatched `method`.
 - **single-option enums** — every enum formal with exactly one legal
@@ -1563,8 +1838,13 @@ Design principles:
      Functions do not call set.seed() internally. The RNG state is
      entirely controlled by the user.
 
-  2) No side effects
-     Functions do not modify or restore the global RNG state.
+  2) No seeding side effects
+     Functions do not set, reset or restore the RNG state, and take no
+     `seed` argument. Drawing random numbers advances the state as usual;
+     that is not a side effect in this sense.
+
+     Exception: bedrock::withSeed(seed, expr) exists for exactly this
+     purpose. It is called by the user, not by suite functions.
 
   3) Reproducibility by user control
      Users are expected to ensure reproducibility by calling
@@ -2550,7 +2830,7 @@ If a function could plausibly belong to two families, assign it to the one that 
 
 | Family | Contents |
 |---|---|
-| `color.conversion` | colToHex, colToHSV, colToRGB, colToOpaque, grayscale, hexToCol, hexToRGB, longToRGB, rgbToCol, rgbToHex, rgbToLong |
+| `color.conversion` | colToHex, colToHSV, colToRGB, colToOpaque, grayScale, hexToCol, hexToRGB, longToRGB, rgbToCol, rgbToHex, rgbToLong |
 | `color.space` | cmyToCmyk, cmykToCmy, cmykToRgb, rgbToCmy |
 | `color.handling` | addOpacity |
 | `color.lookup` | contrastColor, findColor |
@@ -2639,7 +2919,7 @@ Superseded a flat, pre-redesign taxonomy (`data.manipulation`, `data.inspection`
 |---|---|
 | `modelling` | fitMod, predict.FitMod, print.FitMod |
 | `model.comparison` | tMod, tmodSummary |
-| `regression.utils` | coefCI, pseudoR2, rSqCI, vif, refLevel, varImp, … |
+| `regression.utils` | coefCI, pseudoR2, rSq, vif, refLevel, varImp, … |
 | `roc` | roc, bestCut, confint.roc |
 | `tree` | bestTree, cParam, leafRates, node, rules, splits, plot.rpart |
 | `data.split` | splitTrainTest |
@@ -2863,7 +3143,10 @@ These checks are cheap to script and expensive to skip — do them as a matter o
 |---|---|---|
 | Vector, primary input | `x` | Standard |
 | Second vector | `y` | Standard |
-| Data frame / matrix | `data` | as in `lm`, `ggplot` |
+| Data frame (data set) | `data` | as in `lm`, `ggplot` |
+| Matrix in matrix algebra | `m` | §3.3 (H) |
+| Fitted model | `fit` | plot functions included |
+| Observed reference values | `ref` | the prediction is `x` |
 | Formula | `formula` | Base-R compatible |
 | File path / connection | `file` | as in `readLines`, `saveRDS` |
 
@@ -2885,13 +3168,17 @@ These checks are cheap to script and expensive to skip — do them as a matter o
 
 ## 13.4 Statistics / Inference
 
-| Meaning | Name |
-|---|---|
-| Confidence level | `conf.level` |
-| p-value | `pValue` |
-| Test statistic | `testStatistic` |
-| Degrees of freedom | `df` |
-| Estimator | `estimate` |
+| Meaning | Argument | Return component |
+|---|---|---|
+| Confidence level | `conf.level` | attribute `conf.level` |
+| Significance level | `sig.level` | – |
+| p-value | – | `p.value` |
+| Test statistic | – | `statistic` |
+| Degrees of freedom | `df` (`df1`, `df2`) | `parameter` (htest), otherwise `df` |
+| Point estimate | – | `estimate` (htest), `est` (CI vector) |
+
+Names established by `stats` are adopted unchanged; see §3.4 (Return
+Values). `sides` and `method` are defined in §4.1 and §3.5.
 
 ## 13.5 Method Control
 
@@ -2907,12 +3194,15 @@ These checks are cheap to script and expensive to skip — do them as a matter o
 reserved for the bootstrap interval type and must not be used as a formal
 for anything else.
 
+Both reservations apply to estimators and CI functions only (§3.5).
+
 
 ## 13.6 Simulation / Bootstrap
 
 | Meaning | Name |
 |---|---|
-| Iterations | `R` |
+| Iterations, resamples, permutations | `R` |
+| Count of anything else | prefix `n` (`nBins`, `nPoints`) |
 
 ## 13.7 Order / Range
 
@@ -2959,22 +3249,26 @@ for anything else.
 
 | Meaning | Name |
 |---|---|
-| p-value | `pValue` |
-| Statistic | `testStatistic` |
+| p-value | `p.value` |
+| Statistic | `statistic` |
+| Point estimate (CI vector) | `est` |
 | Lower CI | `lci` |
 | Upper CI | `uci` |
-| Confidence interval | `confInt` |
+| Confidence interval (htest) | `conf.int` |
+| Output representation (argument) | `output` |
 
 ## 13.13 Forbidden Names
 
 Do not use:
 
 ```text
-df     for data
-dat
-grp
-w
-level
-alpha
-color
+df, dat  for data            -> data
+grp                          -> groups (g in k-sample tests)
+w                            -> weights
+level                        (clashes with levels)
+alpha                        -> sig.level (significance), opacity (colour)
+color, cols                  -> col
+obs, resp                    -> ref
+num*     as a count prefix   -> n*
+pValue, testStatistic        -> p.value, statistic
 ```

@@ -26,13 +26,13 @@
 #' For every other model class, pass response and predicted probabilities
 #' explicitly.
 #'
-#' @param x Either a numeric or logical vector containing the observed binary
-#'   outcomes (0/1) when `pred` is supplied, or a fitted binomial
+#' @param x Either a numeric vector containing predicted probabilities in
+#'   \eqn{[0,1]} when `ref` is supplied, or a fitted binomial
 #'   `glm` from which response and fitted probabilities are extracted.
-#'   Factors are not accepted, as the choice of the positive level would have
-#'   to be guessed.
-#' @param pred Numeric vector containing predicted probabilities in
-#'   \eqn{[0,1]}. Required when `x` is a response vector.
+#' @param ref Numeric or logical vector containing the observed binary
+#'   outcomes (0/1), the reference the predictions are scored against.
+#'   Required when `x` is a vector of predictions. Factors are not
+#'   accepted, as the choice of the positive level would have to be guessed.
 #' @param eps Numeric scalar in \eqn{(0, 0.5)} used to clip probabilities
 #'   away from 0 and 1. Defaults to `.Machine$double.eps`.
 #'
@@ -41,10 +41,10 @@
 #' @examples
 #' resp <- c(0, 0, 1, 1)
 #' pred <- c(0.1, 0.4, 0.35, 0.8)
-#' logLoss(resp, pred)
+#' logLoss(pred, resp)
 #'
 #' # a confidently wrong prediction is capped by eps
-#' logLoss(c(0, 1), c(1, 0), eps = 1e-6)
+#' logLoss(c(1, 0), c(0, 1), eps = 1e-6)
 #'
 #' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
 #' logLoss(m)
@@ -57,9 +57,9 @@
 #' @concept calibration
 #' @concept classification
 #' @export
-logLoss <- function(x, pred = NULL, eps = .Machine$double.eps) {
+logLoss <- function(x, ref = NULL, eps = .Machine$double.eps) {
 
-  fromModel <- is.null(pred)
+  fromModel <- is.null(ref)
 
   # --- extract resp / pred ---------------------------------------------
   if (fromModel) {
@@ -82,12 +82,13 @@ logLoss <- function(x, pred = NULL, eps = .Machine$double.eps) {
     resp <- x$y
 
   } else {
-    resp <- x
+    pred <- x
+    resp <- ref
   }
 
   # --- validate resp / pred --------------------------------------------
-  nmResp <- if (fromModel) "the model response" else "'x'"
-  nmPred <- if (fromModel) "the fitted probabilities" else "'pred'"
+  nmResp <- if (fromModel) "the model response" else "'ref'"
+  nmPred <- if (fromModel) "the fitted probabilities" else "'x'"
 
   if (length(resp) != length(pred))
     stop(nmResp, " and ", nmPred, " must have the same length.")

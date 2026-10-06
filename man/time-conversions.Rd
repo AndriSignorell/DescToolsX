@@ -2,19 +2,19 @@
 % Please edit documentation in R/time-conversions.R
 \name{time-conversions}
 \alias{time-conversions}
-\alias{hmsToMinute}
+\alias{hmsToMin}
 \alias{hmsToSec}
 \alias{secToHms}
 \title{Convert h:m:s To/From seconds}
 \usage{
-hmsToMinute(x)
+hmsToMin(x)
 
 hmsToSec(x)
 
 secToHms(x, digits = NULL)
 }
 \arguments{
-\item{x}{date-time object for \code{hmsToMinute()}, vector of times in
+\item{x}{date-time object for \code{hmsToMin()}, vector of times in
 h:m:s format for \code{hmsToSec()}, or numeric vector of seconds for
 \code{secToHms()}}
 
@@ -27,7 +27,7 @@ compatibility, \code{digits = 0} discards fractions using \code{\link[=floor]{fl
 \value{
 depending on the function:
 \describe{
-\item{\code{hmsToMinute()}}{numeric vector of times in minutes}
+\item{\code{hmsToMin()}}{numeric vector of times in minutes}
 \item{\code{hmsToSec()}}{numeric vector of times in seconds}
 \item{\code{secToHms()}}{character vector of times in h:m:s format}
 }

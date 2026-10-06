@@ -9,7 +9,7 @@ pearsonCor(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  scoresType = "table",
+  scoresType = c("table", "ranks", "ridit", "mod-ridit"),
   na.rm = FALSE
 )
 }
@@ -26,7 +26,9 @@ pearsonCor(
 interval (one of \code{"two.sided"} (default), \code{"left"} or
 \code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
-\item{scoresType}{score calculation method for table input}
+\item{scoresType}{score calculation method for table input, one of
+\code{"table"} (default), \code{"ranks"}, \code{"ridit"} or \code{"mod-ridit"}, see
+\code{lumen::scores()}}
 
 \item{na.rm}{logical, default \code{FALSE} determining if complete cases
 should be respected}
@@ -68,11 +70,11 @@ bedrock::pairApply(swiss,
 \link[lumen:fisherZ]{lumen::fisherZ}, \link[lumen:fisherZInv]{lumen::fisherZInv}
 
 Other assoc.continuous:
-\code{\link[=corPart]{corPart()}},
-\code{\link[=corPolychor]{corPolychor()}},
-\code{\link[=findCorrX]{findCorrX()}},
+\code{\link[=findCor]{findCor()}},
 \code{\link[=hoeffdingD]{hoeffdingD()}},
 \code{\link[=keepSig]{keepSig()}},
+\code{\link[=partialCor]{partialCor()}},
+\code{\link[=polychorCor]{polychorCor()}},
 \code{\link[=spearmanCor]{spearmanCor()}}
 }
 \concept{assoc.continuous}

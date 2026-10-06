@@ -4,12 +4,7 @@
 \alias{simpson}
 \title{Simpson Diversity Indices}
 \usage{
-simpson(
-  x,
-  method = c("gini", "hunter", "iqv"),
-  categories = NULL,
-  na.rm = FALSE
-)
+simpson(x, metric = c("gini", "hunter", "iqv"), levels = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a factor or character vector of observations, or a vector of
@@ -18,10 +13,10 @@ counts, never as observations; wrap it in \code{\link[=factor]{factor()}} to hav
 tabulated instead. A data frame with a single row of numeric columns
 (e.g. one site of a community matrix) is read as counts.}
 
-\item{method}{character string specifying the index to compute:
+\item{metric}{character string specifying the index to compute:
 \code{"gini"}, \code{"hunter"}, or \code{"iqv"}.}
 
-\item{categories}{the possible categories for \code{method = "iqv"}: either
+\item{levels}{the possible categories for \code{metric = "iqv"}: either
 their number (a single number) or the categories themselves (a vector,
 e.g. \code{levels(x)}). If \code{NULL} (default), the number of observed,
 non-empty categories is used. Ignored, with a warning, for the other
@@ -36,7 +31,7 @@ a numeric scalar between 0 and 1. \code{NA_real_} (with a warning)
 when the index is undefined: no observations, \eqn{N < 2} for
 \code{"hunter"}, \eqn{K < 2} for \code{"iqv"}; \code{NA_real_} without a warning for
 missing values with \code{na.rm = FALSE}. Invalid input (negative, infinite
-or, for \code{"hunter"}, non-integer counts; invalid \code{categories}) is an
+or, for \code{"hunter"}, non-integer counts; invalid \code{levels}) is an
 error.
 }
 \description{
@@ -70,13 +65,13 @@ Gini-Simpson index relative to its maximum.
 categories that were \emph{possible}, not only those observed. With the
 default, a sample spread evenly over 3 of 5 possible categories gets an
 IQV of 1, although it is far from the maximum diversity the coding scheme
-allows. Supply \code{categories} whenever the set of categories is known; for a
-factor, \code{categories = levels(x)} uses all levels, including empty ones.
+allows. Supply \code{levels} whenever the set of categories is known; for a
+factor, \code{levels = levels(x)} uses all levels, including empty ones.
 
 A sample concentrated in a single category is perfectly homogeneous rather
 than undefined, so \code{"gini"} returns 0 for it, and so does \code{"hunter"} as
 long as \eqn{N \ge 2}. The IQV requires \eqn{K \ge 2}, since
-\eqn{K - 1} appears in its denominator; with \code{categories} given, a single
+\eqn{K - 1} appears in its denominator; with \code{levels} given, a single
 occupied category gives an IQV of 0.
 
 When \code{x} is numeric, it is treated as a vector of counts. Relative
@@ -87,28 +82,28 @@ counts pairs of observations and therefore requires integer counts
 \examples{
 x <- c("A", "A", "B", "C", "C", "C")
 
-simpson(x, method = "gini")
-simpson(x, method = "hunter")
-simpson(x, method = "iqv")
+simpson(x, metric = "gini")
+simpson(x, metric = "hunter")
+simpson(x, metric = "iqv")
 
 # the same sample, if five categories were possible
-simpson(x, method = "iqv", categories = 5)
-simpson(x, method = "iqv", categories = c("A", "B", "C", "D", "E"))
+simpson(x, metric = "iqv", levels = 5)
+simpson(x, metric = "iqv", levels = c("A", "B", "C", "D", "E"))
 
 # Using counts directly
 counts <- c(A = 2, B = 1, C = 3)
-simpson(counts, method = "hunter")
+simpson(counts, metric = "hunter")
 
 # Hunter-Gaston = Gini-Simpson * N / (N - 1)
-simpson(counts, method = "gini") * 6 / 5
+simpson(counts, metric = "gini") * 6 / 5
 
 # a numeric vector of observations must be tabulated first, otherwise
 # its values are read as counts
-simpson(factor(c(1, 1, 2, 2, 3)), method = "gini")
+simpson(factor(c(1, 1, 2, 2, 3)), metric = "gini")
 
 # With missing values
 x <- c("A", "A", NA, "B")
-simpson(x, method = "gini", na.rm = TRUE)
+simpson(x, metric = "gini", na.rm = TRUE)
 
 }
 \references{

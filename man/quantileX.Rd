@@ -6,8 +6,8 @@
 \usage{
 quantileX(
   x,
-  weights = NULL,
   probs = seq(0, 1, 0.25),
+  weights = NULL,
   na.rm = FALSE,
   names = TRUE,
   type = 7,
@@ -17,86 +17,114 @@ quantileX(
 \arguments{
 \item{x}{a numeric vector}
 
-\item{weights}{an optional numeric vector giving the sample weights}
+\item{probs}{numeric vector of probabilities with values in \eqn{[0,1]};
+\code{NA} is allowed}
 
-\item{probs}{numeric vector of probabilities with values in \eqn{[0,1]}}
+\item{weights}{an optional numeric vector of non-negative, finite sample
+weights, of the same length as \code{x}. Missing weights are handled like
+missing values in \code{x}.}
 
-\item{na.rm}{a logical indicating whether missing values in \code{x} should
-be omitted}
+\item{na.rm}{logical; if \code{TRUE}, observations with a missing value or a
+missing weight are removed before the computation}
 
-\item{names}{logical; if true, the result has a \code{\link[=names]{names()}}
-attribute.  Set to \code{FALSE} for speedup with many \code{probs}.}
+\item{names}{logical; if true, the result has a \code{\link[=names]{names()}} attribute. Set
+to \code{FALSE} for speedup with many \code{probs}.}
 
-\item{type}{an integer between 1 and 9 selecting one of the nine quantile
-algorithms of \code{\link[stats:quantile]{stats::quantile()}}. All nine are available for
-unweighted data. With \code{weights} only 5 and 7 (default) exist; any
-other value is an error. See Details for how the two differ in their
-reading of the weights.}
+\item{type}{an integer selecting the quantile algorithm. Without weights
+one of the nine types of \code{\link[stats:quantile]{stats::quantile()}} (default 7). With weights
+2 (alias 5) or 7 (default); see Details.}
 
 \item{digits}{used only when \code{names} is true: the precision to use when
-formatting the percentages. In \code{R} versions up to 4.0.x, this had been
-set to \code{max(2, getOption("digits"))}, internally.}
+formatting the percentages.}
 }
 \value{
-a numeric vector containing the weighted quantiles of \code{x} at
-probabilities \code{probs}, named when \code{names = TRUE}
+a numeric vector of the same length as \code{probs}, named when
+\code{names = TRUE}
 }
 \description{
 Compute sample quantiles, with optional weights.
 }
 \details{
-Without \code{weights} the call is handed to \code{\link[stats:quantile]{stats::quantile()}}
-unchanged, so all nine types are available and the results are identical
-to base R.
+Without \code{weights} the call is handed to \code{\link[stats:quantile]{stats::quantile()}}, so all nine
+types are available and the results are identical to base R. The one
+deliberate difference is the treatment of missing values, see below.
 
-With \code{weights} only types 5 and 7 exist, and they interpret the
-weights \strong{differently}:
+With \code{weights} two algorithms exist, and they interpret the weights
+\strong{differently}:
 
 \describe{
-\item{\code{type = 5}}{treats them as relative weights: only the ratios
-matter, and multiplying every weight by a constant leaves the result
-unchanged. This follows the Eurostat definition (EU-SILC 131-rev/04).}
-\item{\code{type = 7}}{treats them as \emph{frequency} weights, i.e. as
-replication counts. The effective sample size is \code{sum(weights)},
-so the result is \strong{not} scale-invariant, and weights that have
-been normalized to sum to 1 are degenerate - see below.}
+\item{\code{type = 2}}{inverse of the weighted empirical distribution
+function, averaging at discontinuities - the weighted counterpart of
+\code{\link[stats:quantile]{stats::quantile()}} type 2. The weights are \emph{relative}: only their
+ratios matter, multiplying every weight by a constant leaves the
+result unchanged, and equal weights reproduce the unweighted type 2.
+This is the Eurostat definition (EU-SILC 131-rev/04). \code{type = 5} is
+accepted as an alias, see the note on DescTools below.}
+\item{\code{type = 7}}{treats the weights as \emph{frequency} weights, i.e. as
+replication counts: with integer weights the result equals
+\code{quantile(rep(x, weights), type = 7)}. The effective sample size is
+\code{sum(weights)}, so the result is \strong{not} scale-invariant, and weights
+normalized to sum to 1 are degenerate. \code{type = 7} therefore requires
+\code{sum(weights) >= 2} and raises an error otherwise.}
 }
 
-This difference is inherited from the two source implementations and is
-not a free choice of the caller: it is worth knowing which of the two is
-meant before picking a type. Because \code{type = 7} needs
-\code{sum(weights)} to act as a sample size, it requires that sum to be
-at least 2 and raises an error otherwise.
+Relative weights (survey or design weights) call for \code{type = 2},
+replication counts for \code{type = 7}.
+
+\strong{Missing values.} \code{NA} and \code{NaN} are treated alike, in \code{x} and in
+\code{weights}; an observation is missing if its value or its weight is.
+With \code{na.rm = FALSE}, a missing observation yields \code{NA} for every
+requested probability, with and without weights - as \code{\link[=mean]{mean()}} does
+(\code{\link[stats:quantile]{stats::quantile()}} raises an error instead). With \code{na.rm = TRUE} the
+missing observations are removed first; if nothing is left, the result
+is \code{NA}. Invalid arguments (e.g. \code{probs} outside \eqn{[0,1]}, negative
+or infinite weights) are an error even when data are missing. An \code{NA} in
+\code{probs} yields \code{NA} at that position only.
+
+\strong{Difference to DescTools.} \code{DescTools::Quantile()} labelled the
+Eurostat algorithm \code{type = 5}. It is not R's type 5, which interpolates
+linearly between order statistics: with equal weights the old weighted
+\code{type = 5} and the unweighted \code{type = 5} gave different answers. Here the
+algorithm carries its correct number 2; \code{5} still selects it, so results
+of existing calls do not change.
 }
 \note{
-Based on code by Andreas Alfons, Matthias Templ,
-adapted to conform to package standards.
+The weighted algorithms are based on code by Andreas Alfons and
+Matthias Templ (\code{laeken::weightedQuantile()}), adapted to conform to
+package standards.
 }
 \examples{
-# Pizza$temperature contains missing values, so na.rm is needed - without
-# it the function returns NA for every prob, silently.
-quantileX(Pizza$temperature, rep(c(1:3), length.out = nrow(Pizza)),
+# Pizza$temperature contains missing values: without na.rm the result is
+# NA for every prob
+quantileX(Pizza$temperature, weights = rep(1:3, length.out = nrow(Pizza)),
           na.rm = TRUE)
 
 x <- c(3.7, 3.3, 3.5, 2.8)
 
-# type 5 only looks at the ratios of the weights ...
-quantileX(x, weights = c(5, 5, 4, 1),      type = 5)
-quantileX(x, weights = c(5, 5, 4, 1) / 15, type = 5)   # identical
+# type 2 only looks at the ratios of the weights ...
+quantileX(x, weights = c(5, 5, 4, 1),      type = 2)
+quantileX(x, weights = c(5, 5, 4, 1) / 15, type = 2)   # identical
 
-# ... while type 7 reads them as replication counts, so they have to be
-# on that scale
+# ... and equal weights give the unweighted type 2
+quantileX(x, weights = rep(1, 4), type = 2)
+quantileX(x, type = 2)
+
+# type 7 reads the weights as replication counts
 quantileX(x, weights = c(5, 5, 4, 1), type = 7)
+quantileX(rep(x, c(5, 5, 4, 1)), type = 7)              # identical
 
 }
 \references{
-Working group on Statistics on Income and Living Conditions
-(2004) Common cross-sectional EU indicators based on EU-SILC; the gender pay
-gap.  \emph{EU-SILC 131-rev/04}, Eurostat.
+Working group on Statistics on Income and Living Conditions (2004).
+Common cross-sectional EU indicators based on EU-SILC; the gender pay
+gap. \emph{EU-SILC 131-rev/04}, Eurostat.
+
+Hyndman, R. J., Fan, Y. (1996). Sample quantiles in statistical
+packages. \emph{The American Statistician}, 50(4), 361–365.
+\doi{10.1080/00031305.1996.10473566}
 }
 \seealso{
-\code{\link[=medianX]{medianX()}}, \code{\link[stats:quantile]{stats::quantile()}},
-\code{\link[lumen:quantileCI]{lumen::quantileCI()}}
+\code{\link[=medianX]{medianX()}}, \code{\link[=iqrX]{iqrX()}}, \code{\link[stats:quantile]{stats::quantile()}}, \code{\link[lumen:quantileCI]{lumen::quantileCI()}}
 
 Other quantile:
 \code{\link{extremes}}

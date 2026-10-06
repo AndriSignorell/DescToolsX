@@ -143,7 +143,7 @@ Vector transformations:
 Summary statistics:
   
   - `madX()`
-- `meanAD()`
+- `meanAbsDev()`
 - `medianX()`
 
 Although both may be considered "robust methods", they serve different purposes and therefore belong in different families.

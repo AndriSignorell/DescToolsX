@@ -11,7 +11,7 @@ krippAlpha(
   metric = c("nominal", "ordinal", "interval", "ratio"),
   levels = NULL,
   raters = NULL,
-  output = c("def", "ext"),
+  output = c("default", "extended"),
   ...
 )
 }
@@ -45,19 +45,17 @@ If \code{NULL}, levels are inferred from the data.}
 \item{raters}{optional vector specifying which columns of \code{x}
 are the raters. If \code{NULL}, all columns are assumed to be raters.}
 
-\item{output}{output format, either \code{"def"} (default) or
-\code{"ext"} for extended results}
+\item{output}{output format, either \code{"default"} (default) or
+\code{"extended"} for extended results}
 
-\item{...}{further arguments passed to \code{\link[boot:boot]{boot::boot()}}. Supported
-arguments are \code{type} (\code{"norm"}, \code{"basic"},
-\code{"stud"}, \code{"perc"}, \code{"bca"}), \code{parallel} and the number
-of bootstrap replicates \code{R}. Defaults are \code{"basic"} for
-\code{type}, option \code{"boot.parallel"} (or \code{"no"} if unset) for
-\code{parallel}, and \code{999} for \code{R}.}
+\item{...}{bootstrap options, passed to \code{\link[lumen:bootCI]{lumen::bootCI()}}: the interval
+type \code{type} (\code{"bca"}, \code{"perc"}, \code{"basic"}, \code{"norm"}), the number of
+replicates \code{R}, and \code{parallel} and \code{ncpus}. Defaults are \code{"bca"} for
+\code{type}, \code{999} for \code{R} and \code{"no"} for \code{parallel}.}
 }
 \value{
-if \code{output = "def"} and \code{conf.level = NA}, a numeric
-scalar. If \code{output = "def"} and a confidence interval is requested, a named
+if \code{output = "default"} and \code{conf.level = NA}, a numeric
+scalar. If \code{output = "default"} and a confidence interval is requested, a named
 numeric vector with elements:
 \describe{
 \item{\code{est}}{point estimate of Krippendorff's alpha}
@@ -65,7 +63,7 @@ numeric vector with elements:
 \item{\code{uci}}{upper confidence interval bound}
 }
 
-If \code{output = "ext"}, a list with elements:
+If \code{output = "extended"}, a list with elements:
 \describe{
 \item{\code{alpha}}{point estimate of Krippendorff's alpha}
 \item{\code{Do}}{observed disagreement}

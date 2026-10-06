@@ -15,13 +15,13 @@ test_that("desc.factor() counts levels, values and missings", {
 })
 
 test_that("unordered factors sort by descending frequency, ordered by level", {
-  expect_identical(desc(x)$ord, "desc")
+  expect_identical(desc(x)$order, "desc")
   expect_identical(as.character(desc(x)$freq[[1]][1]), "c")
   xo <- factor(x, ordered = TRUE)
-  expect_identical(desc(xo)$ord, "level")
+  expect_identical(desc(xo)$order, "level")
   expect_identical(as.character(desc(xo)$freq[[1]][1]), "a")
   expect_identical(
-    as.character(desc(x, ord = "name")$freq[[1]][1]), "a")
+    as.character(desc(x, order = "name")$freq[[1]][1]), "a")
 })
 
 test_that("character vectors are described like factors", {

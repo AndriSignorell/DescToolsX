@@ -68,9 +68,9 @@
 #'             
 #' @importFrom bedrock %)(% %[]% abind combPairs maxDec setNamesX label naIf naReplace isZero isWholeLike isDichotomous %][% pairApply appendX sortX revX sampleX untable coalesceX columnWrap splitAt moveAvg removeAttr combLevels mergeArgs printCharMatrix dummy isEuclid collapseTable callIf resolveFormula extractArgs getDotsArg recycle checkConfLevel checkFlag applySides checkCount resolveFormulaFromCall
 #'             
-#' @importFrom pharos plotFdist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addOpacity plotDensBox band canvas fade pal plotBox plotXY mar plot.Desc.qn plot.Desc.table
+#' @importFrom pharos plotFreqDist strAlign strTrim strTrunc fm style lineSep strTrim strPad plotDens2D plotBag plotHexbin plotDens plotAssoc plotHeatmap plotTimeSeries plotCatDist plotPropCI addOpacity plotDensBox band canvas fade pal plotBox plotXY mar plot.Desc.qn plot.Desc.table
 #'             
-#' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest bpTest corCI fisherZ fisherZInv
+#' @importFrom lumen scores adfTest gTest kpssTest mantelTrendTest varTest meanCI binomCI binomDiffCI bootCI leveneTest cochranArmitageTest breuschPaganTest corCI fisherZ fisherZInv
 #'             
 #' @importFrom stringi stri_replace_all_fixed
 #' 

@@ -59,7 +59,7 @@ List n_pow_sum_cpp(NumericVector x) {
     // std::fabs, NOT abs. Without a "using namespace std", unqualified
     // abs() resolves to the C int abs(int) and TRUNCATES its argument:
     // abs(-5.1) is 5, and every deviation below 1 in magnitude becomes 0.
-    // meanAD was therefore biased low throughout, and exactly zero for
+    // meanAbsDev was therefore biased low throughout, and exactly zero for
     // any variable whose values sit within +/-1 of their mean (rates,
     // proportions, measurements in metres). Verified on gcc 12:
     // -25.6% for a delivery-time example, -100% for values in [0, 1].

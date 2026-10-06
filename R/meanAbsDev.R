@@ -6,7 +6,7 @@
 #' sample mean or the median. 
 #' 
 #' 
-#' The `meanAD` function calculates the mean absolute deviation from the mean
+#' The `meanAbsDev` function calculates the mean absolute deviation from the mean
 #' value (or from another supplied center point) of x, after having removed
 #' `NA` values (if requested): \deqn{\frac{1}{n} \cdot \sum_{i=1}^{n}\left
 #' | x_{i}-c \right | \; \; \; \textup{where} \; c=mean(x) \; \textup{or} \;
@@ -35,31 +35,31 @@
 #' @examples
 #' 
 #' x <- runif(100)
-#' meanAD(x)
+#' meanAbsDev(x)
 #' 
 #' speed <- c(58, 88, 40, 60, 72, 66, 80, 48, NA)
-#' meanAD(speed)
-#' meanAD(speed, na.rm=TRUE)
+#' meanAbsDev(speed)
+#' meanAbsDev(speed, na.rm=TRUE)
 #' 
 #' 
 #' # using the median as centerpoint
 #' x <- c(2,3,5,3,1,15,23)
 #' 
-#' meanAD(x, center=mean)
-#' meanAD(x, center=median)
+#' meanAbsDev(x, center=mean)
+#' meanAbsDev(x, center=median)
 #' 
 #' # define a fixed center
-#' meanAD(x, center=4)
+#' meanAbsDev(x, center=4)
 #' 
 #' # use of weights
-#' meanAD(x=0:6, weights=c(21,46,54,40,24,10,5))
+#' meanAbsDev(x=0:6, weights=c(21,46,54,40,24,10,5))
 #' 
 #' @seealso [mad()]
 #' 
 #' @family dispersion
 #' @concept dispersion
 #' @export
-meanAD <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
+meanAbsDev <- function (x, weights=NULL, center = meanX, na.rm = FALSE) {
   
   # weights have to be filtered ALONGSIDE x. The former na.omit(x) left
   # weights at their original length, so from here on observation i of x

@@ -83,12 +83,12 @@ test_that("addMonths forwards date conversion arguments and partially recycles",
 })
 
 test_that("ym month arithmetic covers both operand orders and subtraction", {
-  d <- as.ym(c(202312, 202401))
-  expect_equal(addMonths(d, 1), as.ym(c(202401, 202402)))
-  expect_equal(d + 1, as.ym(c(202401, 202402)))
+  d <- asYm(c(202312, 202401))
+  expect_equal(addMonths(d, 1), asYm(c(202401, 202402)))
+  expect_equal(d + 1, asYm(c(202401, 202402)))
   expect_equal(1 + d, d + 1)
   expect_identical(+d, d)
-  expect_equal(d - 1, as.ym(c(202311, 202312)))
+  expect_equal(d - 1, asYm(c(202311, 202312)))
   expect_true(all(is.na(addMonths(d, NA_real_))))
   expect_error(d + d, "cannot be added")
   expect_error(-d, "unary")

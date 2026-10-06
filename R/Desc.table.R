@@ -24,7 +24,7 @@
 #' @param \dots further arguments passed to or from other methods
 #' @param main main title for the plot
 #' @param plotit whether a plot is produced automatically
-#' @param print_header whether the header is printed
+#' @param printHeader whether the header is printed
 #'
 #' @name desc.table
 #' @details
@@ -234,9 +234,9 @@ desc.array <- desc.table
 
 #' @rdname desc.table
 #' @export
-print.Desc.table <- function(x, print_header=TRUE, ...) {
+print.Desc.table <- function(x, printHeader=TRUE, ...) {
   
-  if(print_header)
+  if(printHeader)
     .printHeader(x$meta)
   
   # x[c(6, 8)] <- NULL
@@ -254,7 +254,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
   
   if (x$ttype == "tndim") { # multdim table
     
-    if(print_header)
+    if(printHeader)
       cat("Summary: \n",
           "n: ", fm(x$n, fmt = "abs.sty"), ", ",
           length(x$dim), "-dim table: ", paste(x$dim, collapse = " x "),
@@ -306,7 +306,7 @@ print.Desc.table <- function(x, print_header=TRUE, ...) {
       }
       
       # 1. summary --------------------------------------------
-      if(print_header)
+      if(printHeader)
         cat("Summary: \n",
             "n: ", fm(x$n, fmt = "abs.sty"),
             ", rows: ", fm(x$dim[1], fmt = "abs.sty"),

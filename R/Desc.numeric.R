@@ -17,12 +17,12 @@
 #' @param maxrows numeric; defines the maximum number of rows in a frequency
 #' table to be reported. For factors with many levels it is often not
 #' interesting to see all of them. Default is set to 12 most frequent ones
-#' (resp. the first ones if `ord` is set to `"levels"` or
+#' (resp. the first ones if `order` is set to `"levels"` or
 #' `"names"`).
 #' 
 #' @param digits number of digits used to format numeric values
 #' 
-#' @param include_x logical; if `TRUE`, the original vector is retained
+#' @param includeX logical; if `TRUE`, the original vector is retained
 #' in the result
 #' @param conf.level confidence level for interval estimates (default 0.95)
 #' 
@@ -67,7 +67,7 @@
 #' @method desc numeric
 #' @export
 desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
-                         include_x = TRUE,
+                         includeX = TRUE,
                          main = NULL, verbose = NULL, plotit = NULL,
                          digits = NULL,
                          ...) {
@@ -93,7 +93,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
   # mean/skew/kurtosis of a Bernoulli variable.
   if (isTRUE(all(x[ok] %in% c(0, 1))) && length(unique(x[ok])) == 2L)
     return(.descLogicalCore(x, xname = xname, conf.level = conf.level,
-                            include_x = include_x, main = main,
+                            includeX = includeX, main = main,
                             verbose = verbose, plotit = plotit,
                             digits = digits, ...))
 
@@ -158,7 +158,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
     meanCI = meanCI,
     quant = nstat$quant,
     range = nstat$range,
-    meanAD = nstat$meanAD,
+    meanAbsDev = nstat$meanAbsDev,
     sd = nstat$sd,
     var = nstat$var,
     vcoef = nstat$vcoef,
@@ -174,7 +174,7 @@ desc.numeric <- function(x, maxrows = NULL, conf.level = 0.95,
     maxrows = maxrows,
     plotit = plotit,
     digits = digits,
-    x = if (include_x) x else NULL
+    x = if (includeX) x else NULL
   )
   
   class(res) <- c("Desc.numeric","Desc")
@@ -262,7 +262,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
     names(lst$l3), lst$l3, "",
     names(lst$l4), lst$l4, ""
   )
-  out <- capture.output(printCharMatrix(m, showRownames = FALSE))
+  out <- capture.output(printCharMatrix(m, showRowNames = FALSE))
   out[1] <- paste0(out[1], .getOption("footnote")[1])
   cat(out, sep = "\n")
   
@@ -338,7 +338,7 @@ print.Desc.numeric <- function(x, digits = NULL, ...) {
 plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
   if (x$n <= 1L)
     return(plot.Desc.AllNA(x, ...))
-  pharos::plotFdist(x$x, main = main, ...)
+  pharos::plotFreqDist(x$x, main = main, ...)
 }
 
 
@@ -412,7 +412,7 @@ plot.Desc.numeric <- function(x, main = x$meta$main, ...) {
     meanSE = sdx / sqrt(n),
     quant = qs,
     range = unname(diff(qs[c(1, 9)])),
-    meanAD = psum$sum1 / n,
+    meanAbsDev = psum$sum1 / n,
     sd = sdx,
     var = varx,
     vcoef = sdx / psum$mean,

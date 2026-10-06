@@ -10,7 +10,7 @@
 \alias{day}
 \alias{day<-}
 \alias{weekday}
-\alias{yearDay}
+\alias{dayOfYear}
 \alias{yearWeek}
 \alias{yearMonth}
 \alias{isWeekend}
@@ -23,8 +23,8 @@
 \alias{diffDays360}
 \alias{lastDayOfMonth}
 \alias{timezone}
-\alias{yearDays}
-\alias{monthDays}
+\alias{daysInYear}
+\alias{daysInMonth}
 \alias{month.ym}
 \alias{year.ym}
 \alias{year.default}
@@ -91,15 +91,15 @@ yearWeek(x, method = c("iso", "us"))
 
 isoYear(x)
 
-yearDay(x)
+dayOfYear(x)
 
-diffDays360(startDate, endDate, method = c("eu", "us"))
+diffDays360(from, to, method = c("eu", "us"))
 
 lastDayOfMonth(x)
 
-yearDays(x)
+daysInYear(x)
 
-monthDays(x)
+daysInMonth(x)
 
 isWeekend(x)
 
@@ -136,7 +136,7 @@ and \code{yearWeek()} either \code{"iso"} (ISO 8601, default) or
 
 \item{value}{replacement value for the \verb{day<-} assignment function}
 
-\item{startDate, endDate}{start and end dates for \code{diffDays360()}}
+\item{from, to}{start and end dates for \code{diffDays360()}}
 }
 \value{
 a vector whose type depends on the function: numeric for
@@ -169,7 +169,7 @@ same pair as one integer \code{yyyyww}.
 \code{week}        \tab Week of the year                                       \tab ISO 8601 or US convention \cr
 \code{day}         \tab Day of the month (readable/writable)                   \tab 1-31 \cr
 \code{weekday}     \tab Day of the week (numeric, abbreviated, or full name)   \tab 1 = Mon ... 7 = Sun \cr
-\code{yearDay}     \tab Day of the year                                        \tab 1-366 \cr
+\code{dayOfYear}     \tab Day of the year                                        \tab 1-366 \cr
 \code{yearWeek}    \tab Compact year-week integer                              \tab \code{yyyyww} (ISO or US) \cr
 \code{yearMonth}   \tab Compact year-month integer                             \tab \code{yyyymm} \cr
 }
@@ -203,8 +203,8 @@ same pair as one integer \code{yyyyww}.
 \strong{Function}        \tab \strong{Description} \cr
 \code{diffDays360}     \tab Days between two dates using the 360-day calendar convention \cr
 \code{lastDayOfMonth}  \tab Last calendar day of the month of \code{x} \cr
-\code{yearDays}        \tab Total number of days in the year of \code{x} (365 or 366) \cr
-\code{monthDays}       \tab Number of days in the month of \code{x} (28-31) \cr
+\code{daysInYear}        \tab Total number of days in the year of \code{x} (365 or 366) \cr
+\code{daysInMonth}       \tab Number of days in the month of \code{x} (28-31) \cr
 }
 }
 
@@ -246,7 +246,7 @@ weekday(x)
 weekday(x, fmt = "dd",  lang = "en")
 weekday(x, fmt = "ddd", lang = "local")
 
-yearDay(x)
+dayOfYear(x)
 yearWeek(x)
 yearMonth(x)
 
@@ -261,8 +261,8 @@ month(seq(Sys.Date(), Sys.Date() + 150, by = "weeks"), fmt = "mm")
 lastDayOfMonth(as.Date(c("2014-10-12", "2013-01-31", "2011-12-05")))
 
 # days in month / year
-monthDays(x)
-yearDays(x)
+daysInMonth(x)
+daysInYear(x)
 
 # 360-day calendar difference. The two conventions agree here ...
 diffDays360(as.Date("2023-01-31"), as.Date("2023-03-31"))

@@ -22,7 +22,7 @@
 #' 
 #' With `breaks = FALSE` no classing takes place and the distinct values
 #' of a numeric or date `x` are tabulated directly (in ascending order of
-#' the values). In this case the `ord` argument applies as for categorical
+#' the values). In this case the `order` argument applies as for categorical
 #' variables.
 #' 
 #' @name freq
@@ -43,7 +43,7 @@
 #' @param include.lowest logical, indicating if an \verb{x[i]} equal to the lowest (or
 #' highest, for `right = FALSE`) `"breaks"` value should be included.
 #' Ignored if x is neither numeric nor a date, or if `breaks = FALSE`.
-#' @param ord how should the result be ordered? Default is `"level"`,
+#' @param order how should the result be ordered? Default is `"level"`,
 #' other choices are 'by frequency' (`"desc"` or `"asc"`)
 #' or 'by name of the levels' (`"name"`). The argument can be abbreviated.
 #' This is ignored if x is numeric or a date and classed
@@ -80,10 +80,10 @@
 #' print(d.freq, digits=5)
 #' 
 #' # sorted by frequency
-#' freq(Pizza$driver, ord="desc")
+#' freq(Pizza$driver, order="desc")
 #' 
 #' # sorted by name using all the observations, say including NAs
-#' freq(Pizza$driver, ord="name", useNA="ifany")
+#' freq(Pizza$driver, order="name", useNA="ifany")
 #' 
 #' # percentages and cumulative frequencies for a vector of count data
 #' freq(as.table(c(2,4,12,8)))
@@ -92,7 +92,7 @@
 #' freq(Pizza$count, breaks = FALSE)
 #' 
 #' # ... which also allows ordering by frequency
-#' freq(Pizza$count, breaks = FALSE, ord = "desc")
+#' freq(Pizza$count, breaks = FALSE, order = "desc")
 #'
 #' # dates are grouped using calendar-aligned default intervals
 #' freq(as.Date("2025-01-01") + 0:99)
@@ -108,7 +108,7 @@
 freq <- function(x,
                  breaks = if (isDate(x)) pretty(x) else hist(x, plot = FALSE)$breaks,
                  include.lowest = TRUE,
-                 ord = c("level", "desc", "asc", "name"),
+                 order = c("level", "desc", "asc", "name"),
                  useNA = c("no", "ifany", "always"), ...){
   
   # check if x is a vector (do not use is.vector()!!!)
@@ -134,11 +134,11 @@ freq <- function(x,
   names(tab)[is.na(names(tab))] <- "<NA>"
   
   # how should the table be sorted, by name, level or frq? (NULL means "desc")
-  switch(match.arg(ord, c("level", "desc", "asc", "name")),
+  switch(match.arg(order, c("level", "desc", "asc", "name")),
          level  = {  }
            # tab[rownames(tab)] reindexed the table by its own names in
-           # their existing order - a no-op. ord = "name" therefore did
-           # exactly what ord = "level" does.
+           # their existing order - a no-op. order = "name" therefore did
+           # exactly what order = "level" does.
          , name   = { tab <- tab[order(names(tab))] }
          , asc    = { tab <- sort(tab) }
          , desc   = { tab <- -sort(-tab) }

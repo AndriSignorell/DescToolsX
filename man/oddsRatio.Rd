@@ -14,7 +14,7 @@ oddsRatio(x, ...)
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  method = c("wald", "exact", "midp"),
+  method = c("wald", "exact", "mid-p"),
   interval = c(0, 1000),
   ...
 )
@@ -53,12 +53,12 @@ at 0 or \code{Inf} accordingly. Ignored, with a warning, for
 
 \item{method}{character string specifying the interval method. For a
 contingency table one of \code{"wald"}, \code{"exact"} or
-\code{"midp"}; for a binomial model one of \code{"wald"} or
+\code{"mid-p"}; for a binomial model one of \code{"wald"} or
 \code{"profile"}. See Details.}
 
 \item{interval}{numeric vector of length two giving the search interval
 for the root finding in the mid-p method. Only used by
-\code{method = "midp"}; widen it if the reported bound sits at one of
+\code{method = "mid-p"}; widen it if the reported bound sits at one of
 its ends.}
 
 \item{digits}{number of digits used for printing}
@@ -99,11 +99,11 @@ Three interval methods are available. \code{"wald"} is the asymptotic
 interval on the log scale, fast and adequate for reasonably large counts.
 \code{"exact"} is the conditional interval based on the noncentral
 hypergeometric distribution (Fisher); it guarantees coverage but is
-conservative, sometimes markedly so. \code{"midp"} halves the probability
+conservative, sometimes markedly so. \code{"mid-p"} halves the probability
 of the observed table and lies between the two: it has coverage closer to
 the nominal level than the exact interval without the Wald interval's
 reliance on large counts. With a zero cell the point estimate is 0 or
-\code{Inf} and only \code{"exact"} and \code{"midp"} still deliver a
+\code{Inf} and only \code{"exact"} and \code{"mid-p"} still deliver a
 finite bound on the informative side.
 }
 
@@ -147,7 +147,7 @@ oddsRatio(tab)
 oddsRatio(tab, conf.level = 0.95)
 
 # the exact interval is the widest, the Wald interval the narrowest
-sapply(c("wald", "exact", "midp"),
+sapply(c("wald", "exact", "mid-p"),
        function(m) oddsRatio(tab, conf.level = 0.95, method = m))
 
 # one-sided: "left" carries the finite lower bound

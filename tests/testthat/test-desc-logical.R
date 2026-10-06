@@ -47,15 +47,15 @@ test_that("0/1 numerics and two-valued factors/characters are routed here", {
 
 test_that("'ord' orders the frequency table", {
   f <- factor(c("b", "b", "b", "a"), levels = c("b", "a"))
-  expect_identical(names(desc(f, ord = "level")$afrq), c("b", "a"))
-  expect_identical(names(desc(f, ord = "name")$afrq),  c("a", "b"))
-  expect_identical(names(desc(f, ord = "asc")$afrq),   c("a", "b"))
-  expect_identical(names(desc(f, ord = "desc")$afrq),  c("b", "a"))
-  expect_error(desc(f, ord = "foo"))
+  expect_identical(names(desc(f, order = "level")$afrq), c("b", "a"))
+  expect_identical(names(desc(f, order = "name")$afrq),  c("a", "b"))
+  expect_identical(names(desc(f, order = "asc")$afrq),   c("a", "b"))
+  expect_identical(names(desc(f, order = "desc")$afrq),  c("b", "a"))
+  expect_error(desc(f, order = "foo"))
 })
 
-test_that("include_x = FALSE drops the data", {
-  expect_null(desc(x, include_x = FALSE)$x)
+test_that("includeX = FALSE drops the data", {
+  expect_null(desc(x, includeX = FALSE)$x)
   expect_identical(desc(x)$x, x)
 })
 

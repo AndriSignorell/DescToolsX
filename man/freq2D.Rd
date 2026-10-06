@@ -13,13 +13,13 @@ freq2D(x, ...)
   data,
   subset,
   na.action = na.omit,
-  n = 20,
+  nBins = 20,
   pad = 0,
   dnn = NULL,
   ...
 )
 
-\method{freq2D}{default}(x, y, n = 20, pad = 0, dnn = NULL, ...)
+\method{freq2D}{default}(x, y, nBins = 20, pad = 0, dnn = NULL, ...)
 }
 \arguments{
 \item{x}{a vector of x values, or a data frame whose first two columns
@@ -38,7 +38,7 @@ evaluated in \code{data} (\code{subset = depth > 100}), as in \code{\link[=plot.
 \item{na.action}{a function which indicates what should happen when the data
 contain missing values. Defaults to \code{\link[=na.omit]{na.omit()}}.}
 
-\item{n}{the desired number of bins for the output, a scalar or a vector of
+\item{nBins}{the desired number of bins for the output, a scalar or a vector of
 length 2}
 
 \item{pad}{number of rows and columns to add to each margin, containing only
@@ -57,7 +57,7 @@ Calculate a frequency distribution for two continuous variables.
 }
 \details{
 The exact number of bins is determined by the \code{\link[=pretty]{pretty()}} function,
-based on the value of \code{n}.
+based on the value of \code{nBins}.
 
 Padding the margins with zeros can be helpful for subsequent analysis, such
 as smoothing.
@@ -68,7 +68,7 @@ Based on code by Arni Magnusson, adapted to conform to package standards.
 \examples{
 
 freq2D(quakes$long, quakes$lat, dnn="")
-freq2D(lat ~ long, quakes, n=c(10, 20), pad=1)
+freq2D(lat ~ long, quakes, nBins=c(10, 20), pad=1)
 freq2D(lat ~ long, quakes, subset = depth > 100)
 
 }

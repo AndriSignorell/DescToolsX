@@ -9,7 +9,7 @@ cohenKappa(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
-  weights = c("unweighted", "equal-spacing", "fleiss-cohen"),
+  weighting = c("unweighted", "equal-spacing", "fleiss-cohen"),
   ...
 )
 }
@@ -29,7 +29,7 @@ available for unweighted kappa only (see Details).}
 interval (one of \code{"two.sided"} (default), \code{"left"} or
 \code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
-\item{weights}{either a character string selecting a built-in weight
+\item{weighting}{either a character string selecting a built-in weight
 scheme -- \code{"unweighted"} (default), \code{"equal-spacing"}, or
 \code{"fleiss-cohen"} -- or a numeric matrix with the same dimensions
 as \code{x} supplying user-defined weights for each cell}
@@ -66,7 +66,7 @@ Data can be passed either as a square confusion matrix (or data frame)
 in \code{x}, or as two vectors \code{x} and \code{y}, in which case
 \verb{table(x, y, \\dots)} is computed internally.  Note that the vector
 interface supports \strong{unweighted kappa only}: the function raises
-an error if \code{weights} is not \code{"unweighted"} and \code{y} is
+an error if \code{weighting} is not \code{"unweighted"} and \code{y} is
 supplied, because the level ordering of two independent factors cannot
 be guaranteed to be consistent when constructing the confusion table.
 
@@ -106,11 +106,11 @@ mw <- matrix(
   nrow = 6, byrow = TRUE,
   dimnames = list(rater1 = cats, rater2 = cats))
 
-cohenKappa(mw, weights = "equal-spacing", conf.level = 0.95)
+cohenKappa(mw, weighting = "equal-spacing", conf.level = 0.95)
 
 # user-supplied weight matrix
 wm <- outer(1:6, 1:6, function(i, j) 1 - abs(i - j) / (6 - 1))
-cohenKappa(mw, weights = wm, conf.level = 0.95)
+cohenKappa(mw, weighting = wm, conf.level = 0.95)
 
 # pairwise kappa across raters
 rating <- data.frame(

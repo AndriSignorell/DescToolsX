@@ -4,14 +4,14 @@
 \alias{herfindahl}
 \title{Herfindahl Index}
 \usage{
-herfindahl(x, n = rep(1, length(x)), parameter = 1, na.rm = FALSE)
+herfindahl(x, weights = NULL, parameter = 1, na.rm = FALSE)
 }
 \arguments{
 \item{x}{numeric vector of non-negative values, such as market shares,
 incomes, or frequencies}
 
-\item{n}{optional frequency weights. Each element of \code{x}
-is replicated \code{n} times.}
+\item{weights}{optional frequency weights. Each element of \code{x}
+is replicated \code{weights} times.}
 
 \item{parameter}{parameter \eqn{m} controlling sensitivity to concentration;
 must be strictly positive, default is \code{1}. \code{m = 0} is rejected:

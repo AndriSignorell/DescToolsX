@@ -33,12 +33,12 @@
 #' Their difference is tested with the Kruskal-Wallis test. For categorical
 #' variables the absolute and relative frequencies are calculated and tested
 #' with a chi-square test. \cr The tests can be changed with the argument
-#' `TEST`. These must be organised as list containing elements named
+#' `tests`. These must be organised as list containing elements named
 #' `"num"`, `"cat"` and `"dich"`. Each of them must be a
 #' function with arguments `(x, g)`, returning something similar to a
 #' p-value.
 #' \preformatted{
-#'   TEST = list( num = list(fun = function(x, g){
+#'   tests = list( num = list(fun = function(x, g){
 #'       summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
 #'     cat = list(fun = function(x, g){
 #'       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
@@ -75,10 +75,10 @@
 #' to MS-Word. Both font and alignment are freely selectable in the Word table.
 #'
 #' @usage tOne(
-#'   x, groups = NA, add.length = TRUE,
-#'   colnames = NULL, vnames = NULL, total = TRUE,
-#'   align = "\\\\l", FUN = NULL, TEST = NULL,
-#'   intref = "high",
+#'   x, groups = NA, addLength = TRUE,
+#'   colNames = NULL, varNames = NULL, total = TRUE,
+#'   align = "\\\\l", FUN = NULL, tests = NULL,
+#'   intRef = "high",
 #'   fmt = list(abs = "abs.sty", num = "num.sty", per = "per.sty",
 #'              pval = style(fmt = "*", naForm = "   "))
 #' )
@@ -86,12 +86,12 @@
 #' @name tOne
 #'
 #' @param x a data.frame containing all the variables to be included in the
-#' table. `NA` inserts a title row containing `vnames` only.
+#' table. `NA` inserts a title row containing `varNames` only.
 #' @param groups the grouping variable
-#' @param add.length logical. If set to `TRUE` (default), a row with the
+#' @param addLength logical. If set to `TRUE` (default), a row with the
 #' group sizes will be inserted as first row of the table.
-#' @param colnames a vector of column names for the result table
-#' @param vnames a vector of variable names to be placed in the first column
+#' @param colNames a vector of column names for the result table
+#' @param varNames a vector of variable names to be placed in the first column
 #' instead of the real names
 #' @param total logical (default `TRUE`), defines whether the results
 #' should also be displayed for the whole, ungrouped variable
@@ -106,12 +106,12 @@
 #' alternatives as `median`/`IQR` are possible by defining a
 #' function). See examples.
 #'
-#' @param TEST a list of functions to be used to test the variables. Must be
+#' @param tests a list of functions to be used to test the variables. Must be
 #' named as `"num"`, `"cat"` and `"dich"` and be defined as
 #' function with arguments `(x, g)`, generating something similar to a
-#' p-value. Use `TEST=NA` to suppress test. (See examples.)
+#' p-value. Use `tests=NA` to suppress test. (See examples.)
 #'
-#' @param intref one out of `"high"` (default), `"low"` or
+#' @param intRef one out of `"high"` (default), `"low"` or
 #' `"both"`, defining which value of a dichotomous variable should be
 #' reported. Usually this will be `1` or `TRUE`. Setting it to
 #' `"low"` will report the lower value `0` or `FALSE`,
@@ -159,7 +159,7 @@
 #'             fm(mean(x, na.rm = TRUE), digits = 1),
 #'             fm(sd(x, na.rm = TRUE), digits = 3)),
 #'
-#'      TEST = list(
+#'      tests = list(
 #'        num = list(fun = function(x, g){summary(aov(x ~ g))[[1]][1, "Pr(>F)"]},
 #'                         lbl = "ANOVA"),
 #'                cat = list(fun = function(x, g){chisq.test(table(x, g))$p.val},
@@ -180,12 +180,12 @@
 #'                                       fm(sd(x, na.rm = TRUE), digits = 3),
 #'                                       fm(median(x, na.rm = TRUE), digits = 1)),
 #'
-#'            TEST = NA,
+#'            tests = NA,
 #'
 #'            fmt = list(abs  = style(bigMark = " ", digits=0),
 #'                       num  = style(bigMark = " ", digits=1),
 #'                       per  = style(fmt=function(x)
-#'                           strPad(fm(x, fmt="%", digits=1), width=5, adj = "r")),
+#'                           strPad(fm(x, fmt="%", digits=1), width=5, align = "r")),
 #'                       pval = style(fmt = "*", naForm = "   "))
 #' )
 #' # add a userdefined legend
@@ -202,12 +202,12 @@
 #' g <- sample(x = letters[1:4], size = 100, replace = TRUE)
 #' d.set <- data.frame(x = x, y = y, z = z, g = g)
 #'
-#' tOne(d.set[1:3], d.set$g, intref = "low")
+#' tOne(d.set[1:3], d.set$g, intRef = "low")
 #'
-#' tOne(d.set[1:3], d.set$g, intref = "high")
+#' tOne(d.set[1:3], d.set$g, intRef = "high")
 #'
 #' # report both levels of the factor
-#' tOne(data.frame(z = z), g, intref = "both")
+#' tOne(data.frame(z = z), g, intRef = "both")
 #'
 #' options(opt)
 #'
@@ -235,9 +235,9 @@
 #' @concept table-summary
 #'
 #' @export
-tOne <- function(x, groups = NA, add.length=TRUE,
-                 colnames=NULL, vnames=NULL, total=TRUE,
-                 align="\\l", FUN = NULL, TEST = NULL, intref="high",
+tOne <- function(x, groups = NA, addLength=TRUE,
+                 colNames=NULL, varNames=NULL, total=TRUE,
+                 align="\\l", FUN = NULL, tests = NULL, intRef="high",
                  fmt=list(abs  = "abs.sty",
                           num  = "num.sty", per="per.sty",
                           pval = style(fmt = "*", naForm = "   ")) ) {
@@ -256,7 +256,7 @@ tOne <- function(x, groups = NA, add.length=TRUE,
   # user supplied one (e.g. fmt=list(num="abs.sty") killed fmt$abs).
   fmt <- fmt[!duplicated(names(fmt))]
 
-  intref <- match.arg(intref, choices = c("high", "low", "both"))
+  intRef <- match.arg(intRef, choices = c("high", "low", "both"))
 
   has_x <- !identical(x, NA)
 
@@ -264,8 +264,8 @@ tOne <- function(x, groups = NA, add.length=TRUE,
     x <- data.frame(x)
 
   # set the variablenames per row
-  if(is.null(vnames)){
-    vnames <- if(is.null(colnames(x)))
+  if(is.null(varNames)){
+    varNames <- if(is.null(colnames(x)))
       paste0("Var", seq_len(max(1L, NCOL(x))))    # NULL colnames: Var1, Var2, ...
     else
       colnames(x)
@@ -291,7 +291,7 @@ tOne <- function(x, groups = NA, add.length=TRUE,
   if(no_groups){
     # no grouping factor, let's define something appropriate
     groups <- rep(1, if(has_x) nrow(x) else length(groups))
-    TEST <- NA
+    tests <- NA
   }
 
   # the group columns as they will be produced by table()/tapply()
@@ -300,9 +300,9 @@ tOne <- function(x, groups = NA, add.length=TRUE,
   ngrp <- length(glev)
 
 
-  if(identical(TEST, NA)){
+  if(identical(tests, NA)){
 
-    TEST <- list(num=list(fun=function(x, g) 1, lbl="None"),
+    tests <- list(num=list(fun=function(x, g) 1, lbl="None"),
                  cat=list(fun=function(x, g) 1, lbl="None"),
                  dich=list(fun=function(x, g) 1, lbl="None"))
     notest <- TRUE
@@ -317,24 +317,24 @@ tOne <- function(x, groups = NA, add.length=TRUE,
                      dich=list(fun=function(x, g){fisher.test(table(x, g))$p.val},
                                lbl="Fisher exact test"))
 
-    if(is.null(TEST))  # the defaults
-      TEST <- TEST.def
+    if(is.null(tests))  # the defaults
+      tests <- TEST.def
 
     # define test for the single tests
-    if(is.null(TEST[["num"]]))
-      TEST[["num"]] <- TEST.def[["num"]]
-    if(is.null(TEST[["cat"]]))
-      TEST[["cat"]] <- TEST.def[["cat"]]
-    if(is.null(TEST[["dich"]]))
-      TEST[["dich"]] <- TEST.def[["dich"]]
+    if(is.null(tests[["num"]]))
+      tests[["num"]] <- TEST.def[["num"]]
+    if(is.null(tests[["cat"]]))
+      tests[["cat"]] <- TEST.def[["cat"]]
+    if(is.null(tests[["dich"]]))
+      tests[["dich"]] <- TEST.def[["dich"]]
 
     notest <- FALSE
 
   }
 
-  num_test <- TEST[["num"]]$fun
-  cat_test <- TEST[["cat"]]$fun
-  dich_test <- TEST[["dich"]]$fun
+  num_test <- tests[["num"]]$fun
+  cat_test <- tests[["cat"]]$fun
+  dich_test <- tests[["dich"]]$fun
 
 
   num_row <- function(x, g, total=TRUE, vname = deparse(substitute(x))){
@@ -434,15 +434,15 @@ tOne <- function(x, groups = NA, add.length=TRUE,
     lst <- list()
     for(i in seq_len(ncol(x))){
       if(ctype[i] == "num"){
-        lst[[i]] <- num_row(x[,i], groups, vname=vnames[i])
+        lst[[i]] <- num_row(x[,i], groups, vname=varNames[i])
 
       } else if(ctype[i] == "cat") {
-        lst[[i]] <- cat_mat(x[,i], groups, vname=vnames[i])
+        lst[[i]] <- cat_mat(x[,i], groups, vname=varNames[i])
 
       } else if(ctype[i] == "dich") {
 
-        if(intref=="both"){
-          lst[[i]] <- cat_mat(factor(x[,i]), groups, vname=vnames[i])
+        if(intRef=="both"){
+          lst[[i]] <- cat_mat(factor(x[,i]), groups, vname=varNames[i])
 
         } else {
 
@@ -454,34 +454,34 @@ tOne <- function(x, groups = NA, add.length=TRUE,
             xi <- x[, i]
           }
 
-          if(intref == "high")
+          if(intRef == "high")
             xi <- relevel(xi, tail(levels(xi), 1))
 
           if (default_vnames) {
             lst[[i]] <- dich_mat(xi, groups,
-                                 vname = gettextf("%s (= %s)", vnames[i],
+                                 vname = gettextf("%s (= %s)", varNames[i],
                                                   head(levels(xi), 1)))
           } else {
-            lst[[i]] <- dich_mat(xi, groups, vname = vnames[i])
+            lst[[i]] <- dich_mat(xi, groups, vname = varNames[i])
           }
         }
 
       } else {
         # unsupported type: an empty row carrying only the variable name.
         # the width must match the other blocks: var + total + groups + test
-        lst[[i]] <- rbind(c(vnames[i], rep(NA_character_, ngrp + 2L)))
+        lst[[i]] <- rbind(c(varNames[i], rep(NA_character_, ngrp + 2L)))
       }
     }
   } else {
     # x = NA: insert a title row only
-    m <- cat_mat(groups, groups, vname = vnames[1L])
-    lst <- list(c(vnames[1L], rep("", ncol(m)-1)))
+    m <- cat_mat(groups, groups, vname = varNames[1L])
+    lst <- list(c(varNames[1L], rep("", ncol(m)-1)))
   }
 
   res <- do.call(rbind, lst)
 
 
-  if(add.length)
+  if(addLength)
     res <- rbind(c("n", c(fm(sum(!is.na(groups)), fmt=fmt$abs),
                           paste(fm(table(groups), fmt=fmt$abs), " (",
                                 fm(prop.table(table(groups)), fmt=fmt$per), ")", sep=""), ""))
@@ -492,7 +492,7 @@ tOne <- function(x, groups = NA, add.length=TRUE,
     res[,-c(1, ncol(res))] <- strAlign(res[,-c(1, ncol(res))], sep = align)
 
   # drop = FALSE throughout: with a single dichotomous variable and
-  # add.length = FALSE the table has one row, and res[, -3] would return a
+  # addLength = FALSE the table has one row, and res[, -3] would return a
   # plain vector - print.tOne() and `[.tOne` then fail on the missing dim
   if(no_groups){
     res <- res[, -3, drop=FALSE]
@@ -507,13 +507,13 @@ tOne <- function(x, groups = NA, add.length=TRUE,
 
   # colnames() is masked by the argument of the same name, but as the latter
   # is not a function, the function is still found in the call below
-  if(!is.null(colnames))
-    colnames(res) <- rep(colnames, length.out=ncol(res))
+  if(!is.null(colNames))
+    colnames(res) <- rep(colNames, length.out=ncol(res))
 
   # attributes must be set AFTER the last subsetting, `[` would drop them
   if(!notest)
     attr(res, "legend") <- gettextf("%s) %s, %s) %s, %s) %s\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
-                                    .FootNote(1), TEST[["num"]]$lbl, .FootNote(2), TEST[["dich"]]$lbl, .FootNote(3), TEST[["cat"]]$lbl)
+                                    .FootNote(1), tests[["num"]]$lbl, .FootNote(2), tests[["dich"]]$lbl, .FootNote(3), tests[["cat"]]$lbl)
 
   class(res) <- "tOne"
   return(res)

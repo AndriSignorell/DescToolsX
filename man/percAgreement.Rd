@@ -11,7 +11,7 @@ percAgreement(
   sides = c("two.sided", "left", "right"),
   input = c("auto", "confusion", "ratings"),
   fpc = 0,
-  output = c("def", "ext"),
+  output = c("default", "extended"),
   ...
 )
 }
@@ -36,14 +36,14 @@ boundary rather than at \eqn{\pm\infty}.}
 \item{fpc}{finite population correction, the sampling fraction \eqn{n/N}
 in \eqn{[0, 1)} (default \code{0})}
 
-\item{output}{output format, either \code{"def"} (default) or
-\code{"ext"} for extended results}
+\item{output}{output format, either \code{"default"} (default) or
+\code{"extended"} for extended results}
 
 \item{...}{must be empty. Named arguments are rejected rather than
 silently ignored.}
 }
 \value{
-if \code{output = "def"} and \code{conf.level = NA}, a numeric
+if \code{output = "default"} and \code{conf.level = NA}, a numeric
 scalar; otherwise a named numeric vector with elements:
 \describe{
 \item{\code{est}}{proportion of agreement}
@@ -51,7 +51,7 @@ scalar; otherwise a named numeric vector with elements:
 \item{\code{uci}}{upper confidence interval bound}
 }
 
-if \code{output = "ext"}, a list with the elements \code{est},
+if \code{output = "extended"}, a list with the elements \code{est},
 \code{se}, \code{ci} (the named triple above), \code{n},
 \code{nPairable} and \code{method}.
 }

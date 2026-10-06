@@ -95,10 +95,7 @@ blandAltmanData.default <- function(
   if (length(x) != length(y))
     stop("'x' and 'y' must have equal lengths")
   
-  if (!is.numeric(conf.level) || length(conf.level) != 1L ||
-      !is.finite(conf.level) ||
-      conf.level <= 0 || conf.level >= 1)
-    stop("'conf.level' must be a single number in (0, 1)")
+  checkConfLevel(conf.level, allowNA = FALSE)
   
   if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
     stop("'na.rm' must be TRUE or FALSE")

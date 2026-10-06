@@ -18,7 +18,9 @@
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
 #'   
-#' @param scoresType score calculation method for table input
+#' @param scoresType score calculation method for table input, one of
+#' `"table"` (default), `"ranks"`, `"ridit"` or `"mod-ridit"`, see
+#' `lumen::scores()`
 #' @param na.rm logical, default `FALSE` determining if complete cases
 #' should be respected
 #' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
@@ -54,10 +56,11 @@
 pearsonCor <- function(x, y = NULL,
                        conf.level = NA,
                        sides = c("two.sided","left","right"),
-                       scoresType = "table",
+                       scoresType = c("table", "ranks", "ridit", "mod-ridit"),
                        na.rm = FALSE) {
   
-  sides  <- match.arg(sides)
+  sides      <- match.arg(sides)
+  scoresType <- match.arg(scoresType)
 
   
   # --------------------------------------------------
