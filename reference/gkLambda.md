@@ -48,7 +48,7 @@ gkLambda(
 
   type of lambda. Can be one out of `"symmetric"` (default), `"row"`,
   `"column"` (abbreviations are allowed). If direction is set to `"row"`
-  then gkLambda(R\|C) (column dependent) will be reported. See Details.
+  then lambda(R\|C) (column dependent) will be reported. See Details.
 
 - ...:
 

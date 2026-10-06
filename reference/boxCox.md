@@ -36,8 +36,8 @@ a numeric vector of the same length as `x`. An input consisting only of
 The Box-Cox transformation is defined for strictly positive values of
 `x` and is given by
 
-\$\$ f\_\gkLambda(x) = \left\\ \begin{array}{ll} (x^\lambda - 1) /
-\lambda & \mbox{if } \lambda \neq 0 \\ \log(x) & \mbox{if } \lambda = 0
+\$\$ f\_\lambda(x) = \left\\ \begin{array}{ll} (x^\lambda - 1) / \lambda
+& \mbox{if } \lambda \neq 0 \\ \log(x) & \mbox{if } \lambda = 0
 \end{array} \right. \$\$
 
 The transformation requires strictly positive input values. If
