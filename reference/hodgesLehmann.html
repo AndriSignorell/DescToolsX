@@ -17,7 +17,7 @@ by John Monahan (1984)."><meta property="og:image" content="/logo.png"></head><b
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.965</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,8 @@ by John Monahan (1984).</p>
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
 <dd><p>confidence level of the interval. If set to <code>NA</code>
-(the default), only the point estimate is returned.</p></dd>
+(the default), only the point estimate is returned. One-sided
+intervals require <code>conf.level &gt; 0.5</code>.</p></dd>
 
 
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
@@ -98,7 +99,9 @@ interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional arguments passed to bootstrap procedures</p></dd>
+<dd><p>additional arguments passed to bootstrap procedures
+(<code>R</code>, <code>type</code>, <code>parallel</code>, <code>ncpus</code>). <code>type = "stud"</code> is not available:
+the bootstrap statistic carries no variance estimate per resample.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -139,6 +142,15 @@ or <code>c(est = NA, lci = NA, uci = NA)</code> when an interval was requested. 
 separately; <code>x</code> and <code>y</code> are independent samples, not pairs. An empty
 sample, given or left over after the removal, yields <code>NA</code> as well.
 Invalid arguments are an error even when data are missing.</p>
+<p><strong>Infinite values</strong> are ordinary order statistics. <code>NaN</code> is returned
+when the median is undefined: if a pair yields <code>Inf - Inf</code> (<code>-Inf</code> and
+<code>Inf</code> both in <code>x</code> in the one-sample case, the same infinity in <code>x</code> and
+<code>y</code> in the two-sample case), or if the two middle order statistics are
+<code>-Inf</code> and <code>Inf</code>.</p>
+<p><strong>Degenerate intervals.</strong> If all bootstrap replicates coincide (e.g.
+constant data), the interval collapses to <code>lci = uci = est</code>. With a
+single observation, or when the replicates are not all finite, no
+interval can be formed: <code>lci</code> and <code>uci</code> are <code>NA</code> with a warning.</p>
 <p><code>x</code> and <code>y</code> are not modified.</p>
     </div>
     <div class="section level2">

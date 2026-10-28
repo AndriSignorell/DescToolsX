@@ -15,7 +15,7 @@ with a confidence interval via a normal approximation or bootstrap."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.965</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,9 +106,9 @@ interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>confidence interval method: <code>"normal"</code> (delta-method
-approximation, default) or <code>"boot"</code> (bootstrap via
-<code>brier_boot_cpp()</code>)</p></dd>
+<dd><p>confidence interval method: <code>"normal"</code> (normal
+approximation for the mean loss, default) or <code>"boot"</code> (bootstrap
+via <code>brier_boot_cpp()</code>).</p></dd>
 
 
 <dt id="arg-scaled">scaled<a class="anchor" aria-label="anchor" href="#arg-scaled"></a></dt>
@@ -147,13 +147,15 @@ yields \([lci, 1]\), <code>"right"</code> yields \([0, uci]\) (raw) or
 \((-\infty, uci]\) (scaled). Two-sided intervals are clamped to the
 same range. One-sided intervals require <code>conf.level &gt; 0.5</code>.</p>
 <p><strong>Normal interval</strong> (<code>method = "normal"</code>)</p>
-<p>A delta-method normal approximation based on the variance of the
-per-observation Brier losses.  Fast and deterministic; reliable for
-moderate to large samples.  With <code>scaled = TRUE</code> the standard error
-is carried onto the skill scale by dividing through \(BS_{\max}\),
-which is treated as fixed; the interval therefore ignores the sampling
-variability of the baseline and is mildly anti-conservative. Prefer
-<code>method = "boot"</code> for scaled scores.</p>
+<p>A normal approximation for the mean of the per-observation Brier
+losses, with standard error \(s_{\mathrm{loss}} / \sqrt{n}\).
+This approximation assumes independent observations and is intended
+for sufficiently large samples.
+With <code>scaled = TRUE</code>, the standard error is divided by
+\(BS_{\max}\), treating the estimated baseline as fixed.
+The resulting interval does not account for uncertainty in the
+baseline; its coverage may therefore differ from the nominal level.
+Prefer <code>method = "boot"</code> for scaled scores.</p>
 <p><strong>Bootstrap interval</strong> (<code>method = "boot"</code>)</p>
 <p>Case-resampling bootstrap via <code>brier_boot_cpp()</code>.  The bootstrap
 type is controlled by the <code>type</code> argument (passed through
@@ -183,6 +185,24 @@ error</p></dd>
 
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Brier, G. W. (1950).
+Verification of forecasts expressed in terms of probability.
+<em>Monthly Weather Review</em>, <b>78</b>(1), 1–3.
+<a href="https://doi.org/10.1175/1520-0493%281950%29078%3C0001%3AVOFEIT%3E2.0.CO%3B2" class="external-link">doi:10.1175/1520-0493(1950)078&lt;0001:VOFEIT&gt;2.0.CO;2</a></p>
+<p>Steyerberg, E. W., Vickers, A. J., Cook, N. R., Gerds, T.,
+Gonen, M., Obuchowski, N., Pencina, M. J., and Kattan, M. W. (2010).
+Assessing the performance of prediction models:
+a framework for traditional and novel measures.
+<em>Epidemiology</em>, <b>21</b>(1), 128–138.
+<a href="https://doi.org/10.1097/EDE.0b013e3181c30fb2" class="external-link">doi:10.1097/EDE.0b013e3181c30fb2</a></p>
+<p>Efron, B. (1987).
+Better bootstrap confidence intervals.
+<em>Journal of the American Statistical Association</em>,
+<b>82</b>(397), 171–185.
+<a href="https://doi.org/10.1080/01621459.1987.10478410" class="external-link">doi:10.1080/01621459.1987.10478410</a></p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">stats::predict()</a></code></p>

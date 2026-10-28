@@ -30,7 +30,8 @@ hodgesLehmann(
 - conf.level:
 
   confidence level of the interval. If set to `NA` (the default), only
-  the point estimate is returned.
+  the point estimate is returned. One-sided intervals require
+  `conf.level > 0.5`.
 
 - sides:
 
@@ -45,7 +46,9 @@ hodgesLehmann(
 
 - ...:
 
-  additional arguments passed to bootstrap procedures
+  additional arguments passed to bootstrap procedures (`R`, `type`,
+  `parallel`, `ncpus`). `type = "stud"` is not available: the bootstrap
+  statistic carries no variance estimate per resample.
 
 ## Value
 
@@ -89,6 +92,17 @@ With `na.rm = TRUE` the missing values are removed from each sample
 separately; `x` and `y` are independent samples, not pairs. An empty
 sample, given or left over after the removal, yields `NA` as well.
 Invalid arguments are an error even when data are missing.
+
+**Infinite values** are ordinary order statistics. `NaN` is returned
+when the median is undefined: if a pair yields `Inf - Inf` (`-Inf` and
+`Inf` both in `x` in the one-sample case, the same infinity in `x` and
+`y` in the two-sample case), or if the two middle order statistics are
+`-Inf` and `Inf`.
+
+**Degenerate intervals.** If all bootstrap replicates coincide (e.g.
+constant data), the interval collapses to `lci = uci = est`. With a
+single observation, or when the replicates are not all finite, no
+interval can be formed: `lci` and `uci` are `NA` with a warning.
 
 `x` and `y` are not modified.
 

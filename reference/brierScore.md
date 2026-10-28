@@ -54,8 +54,8 @@ brierScore(
 
 - method:
 
-  confidence interval method: `"normal"` (delta-method approximation,
-  default) or `"boot"` (bootstrap via `brier_boot_cpp()`)
+  confidence interval method: `"normal"` (normal approximation for the
+  mean loss, default) or `"boot"` (bootstrap via `brier_boot_cpp()`).
 
 - scaled:
 
@@ -98,12 +98,13 @@ One-sided intervals require `conf.level > 0.5`.
 
 **Normal interval** (`method = "normal"`)
 
-A delta-method normal approximation based on the variance of the
-per-observation Brier losses. Fast and deterministic; reliable for
-moderate to large samples. With `scaled = TRUE` the standard error is
-carried onto the skill scale by dividing through \\BS\_{\max}\\, which
-is treated as fixed; the interval therefore ignores the sampling
-variability of the baseline and is mildly anti-conservative. Prefer
+A normal approximation for the mean of the per-observation Brier losses,
+with standard error \\s\_{\mathrm{loss}} / \sqrt{n}\\. This
+approximation assumes independent observations and is intended for
+sufficiently large samples. With `scaled = TRUE`, the standard error is
+divided by \\BS\_{\max}\\, treating the estimated baseline as fixed. The
+resulting interval does not account for uncertainty in the baseline; its
+coverage may therefore differ from the nominal level. Prefer
 `method = "boot"` for scaled scores.
 
 **Bootstrap interval** (`method = "boot"`)
@@ -138,6 +139,22 @@ Further bootstrap arguments passed through `...` via
 - `ncpus`:
 
   number of CPUs (default `getOption("boot.ncpus", 1L)`)
+
+## References
+
+Brier, G. W. (1950). Verification of forecasts expressed in terms of
+probability. *Monthly Weather Review*, **78**(1), 1–3.
+[doi:10.1175/1520-0493(1950)078\<0001:VOFEIT\>2.0.CO;2](https://doi.org/10.1175/1520-0493%281950%29078%3C0001%3AVOFEIT%3E2.0.CO%3B2)
+
+Steyerberg, E. W., Vickers, A. J., Cook, N. R., Gerds, T., Gonen, M.,
+Obuchowski, N., Pencina, M. J., and Kattan, M. W. (2010). Assessing the
+performance of prediction models: a framework for traditional and novel
+measures. *Epidemiology*, **21**(1), 128–138.
+[doi:10.1097/EDE.0b013e3181c30fb2](https://doi.org/10.1097/EDE.0b013e3181c30fb2)
+
+Efron, B. (1987). Better bootstrap confidence intervals. *Journal of the
+American Statistical Association*, **82**(397), 171–185.
+[doi:10.1080/01621459.1987.10478410](https://doi.org/10.1080/01621459.1987.10478410)
 
 ## See also
 
