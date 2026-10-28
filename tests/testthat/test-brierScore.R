@@ -367,9 +367,8 @@ test_that("resamples with a constant response are dropped with a warning", {
   expect_true(all(is.finite(res)))
 })
 
-test_that("the glm method takes fitted probabilities and the response", {
-  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
-  expect_equal(brierScore(fit), brierScore(fitted(fit), mtcars$vs))
-  fit0 <- glm(vs ~ mpg, data = mtcars, family = binomial, y = FALSE)
-  expect_equal(brierScore(fit0), brierScore(fit))
+test_that("the default method needs 'ref'; models are left to alloy", {
+  expect_error(brierScore(c(0.2, 0.8)), "'ref' must be provided")
+  expect_error(brierScore(glm(vs ~ mpg, data = mtcars, family = binomial)),
+               "'ref' must be provided")
 })

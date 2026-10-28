@@ -168,7 +168,7 @@ test_that("subsetting keeps class and legend", {
                  "Chi-squared approximation")
   sub <- t1[1:2, ]
 
-  expect_s3_class(sub, "tOne")
+  expect_s3_class(sub, "TOne")
   expect_equal(attr(sub, "legend"), attr(t1, "legend"))
   expect_equal(nrow(unclass(sub)), 2)
 

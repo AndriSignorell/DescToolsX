@@ -4,8 +4,8 @@
 #' Computes the concordance statistic (C-statistic), equivalent to the
 #' area under the ROC curve (AUC), for predicted values and a binary outcome.
 #'
-#' @param x an object for which the C-statistic should be computed; for the
-#' default method, a numeric vector of predicted values
+#' @param x a numeric vector of predicted values.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ref binary response vector (numeric, logical, or factor)
 #' @param conf.level confidence level for the interval; `NA` (default)
 #' suppresses interval calculation
@@ -61,11 +61,6 @@
 #' y <- rbinom(100, 1, 0.5)
 #' cStat(x, ref = y)
 #'
-#' # GLM method
-#' r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
-#'              data = bedrock::Pizza, family = binomial)
-#' cStat(r.mod, conf.level = 0.95)
-#'
 #' @family assoc.ordinal
 #' @concept association-measure
 #' @concept ordinal
@@ -73,25 +68,6 @@
 #' @export
 cStat <- function(x, ...) {
   UseMethod("cStat")
-}
-
-
-#' @method cStat glm
-#' @rdname cStat
-#' @export
-#' @importFrom stats predict model.response model.frame
-cStat.glm <- function(x, ...) {
-
-  # glm keeps the numeric response in $y; falling back to the model frame
-  # only when the fit was made with y = FALSE. model.response(x$model)
-  # alone failed outright for model = FALSE fits.
-  resp <- if (!is.null(x$y)) x$y else model.response(model.frame(x))
-
-  cStat.default(
-    x = predict(x, type = "response"),
-    ref = resp,
-    ...
-  )
 }
 
 

@@ -55,14 +55,12 @@
 #'     `getOption("boot.ncpus", 1L)`)}
 #' }
 #'
-#' @param x       either a numeric vector of predicted probabilities in
-#'   \eqn{[0,1]} when `ref` is supplied, or a fitted model
-#'   object (`glm` or similar) from which both response and
-#'   predictions are extracted
+#' @param x       a numeric vector of predicted probabilities in
+#'   \eqn{[0,1]}.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ref     a numeric vector of observed binary outcomes
 #'   (\eqn{0}/\eqn{1}), the reference the predictions are scored
-#'   against. Required when `x` is a vector of predictions; ignored
-#'   when `x` is a model object.
+#'   against
 #' @param scaled  logical. Should the scaled Brier score be returned?
 #'   Default `FALSE`.
 #'   
@@ -104,8 +102,15 @@
 #' @concept model-evaluation
 #' @concept calibration
 #' @export
-brierScore <- function(x,
-                       ref        = NULL,
+brierScore <- function(x, ...) {
+  UseMethod("brierScore")
+}
+
+
+#' @rdname brierScore
+#' @export
+brierScore.default <- function(x,
+                       ref,
                        conf.level = NA,
                        sides      = c("two.sided", "left", "right"),
                        method     = c("normal", "boot"),
@@ -119,19 +124,11 @@ brierScore <- function(x,
   checkConfLevel(conf.level)
   checkFlag(scaled)
 
-  # --- extract resp / pred ---------------------------------------------
-  if (!is.null(ref)) {
-    pred <- x
-    resp <- ref
-  } else {
-    if (inherits(x, "glm")) {
-      pred <- predict(x, type = "response")
-      resp <- .numResponse(x)
-    } else {
-      pred <- predict(x, type = "prob")[, 2L]
-      resp <- .numResponse(x)
-    }
-  }
+  if (missing(ref))
+    stop("'ref' must be provided for the default method.", call. = FALSE)
+
+  pred <- x
+  resp <- ref
 
   # --- validate resp / pred --------------------------------------------
   if (length(resp) != length(pred))
@@ -286,24 +283,4 @@ brierScore <- function(x,
     bs    <- 1 - bs / bsMax
   }
   bs
-}
-
-
-
-# --- internal: extract response from model object --------------------
-
-# glm stores the (numeric) response in $y, which is exactly what is
-# needed here. The former version instead overwrote obj$terms with
-# eval(obj$call$formula) before calling model.frame(): the assignment
-# replaced a valid terms object with a bare formula, and the eval() ran in
-# this function's frame, so a call built from a formula held in a variable
-# ("object not found") or fitted with model = FALSE would break.
-.numResponse <- function(obj) {
-
-  if (!is.null(obj$y))
-    return(as.numeric(obj$y))
-
-  res <- model.response(model.frame(obj))
-  if (is.factor(res)) res <- as.numeric(res) - 1
-  as.numeric(res)
 }

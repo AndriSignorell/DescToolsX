@@ -37,9 +37,3 @@ test_that("rmse na.rm = TRUE handles NAs", {
 test_that("rmse stops when x and ref have different lengths", {
   expect_error(rmse(1:3, ref = 1:4), "same length")
 })
-
-test_that("rmse.lm returns a non-negative numeric", {
-  fit <- lm(mpg ~ hp, data = mtcars)
-  res <- rmse(fit)
-  expect_gte(res, 0); expect_length(res, 1)
-})

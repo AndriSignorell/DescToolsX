@@ -2,19 +2,16 @@
 % Please edit documentation in R/cStat.R
 \name{cStat}
 \alias{cStat}
-\alias{cStat.glm}
 \alias{cStat.default}
 \title{Concordance Statistic (C-Statistic / AUC)}
 \usage{
 cStat(x, ...)
 
-\method{cStat}{glm}(x, ...)
-
 \method{cStat}{default}(x, ref, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 }
 \arguments{
-\item{x}{an object for which the C-statistic should be computed; for the
-default method, a numeric vector of predicted values}
+\item{x}{a numeric vector of predicted values.
+Methods for fitted models are provided by the package \pkg{alloy}.}
 
 \item{...}{additional arguments passed to methods}
 
@@ -78,11 +75,6 @@ set.seed(1)
 x <- runif(100)
 y <- rbinom(100, 1, 0.5)
 cStat(x, ref = y)
-
-# GLM method
-r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
-             data = bedrock::Pizza, family = binomial)
-cStat(r.mod, conf.level = 0.95)
 
 }
 \seealso{

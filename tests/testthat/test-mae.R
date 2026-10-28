@@ -31,10 +31,3 @@ test_that("mae na.rm = TRUE handles missing values", {
 test_that("mae stops when x and ref have different lengths", {
   expect_error(mae(1:5, ref = 1:4), "same length")
 })
-
-test_that("mae.lm returns a non-negative numeric for a linear model", {
-  fit <- lm(Sepal.Length ~ Sepal.Width + Petal.Length, data = iris)
-  result <- mae(fit)
-  expect_gte(result, 0)
-  expect_length(result, 1)
-})

@@ -1,51 +1,72 @@
 
 #' Skewness
-#' 
-#' `skew` computes the skewness, `kurt` the excess kurtosis of the
+#'
+#' `skew` computes the skewness, [kurt] the excess kurtosis of the
 #' values in x.
-#' 
-#' If `na.rm` is `TRUE` then missing values are removed before
-#' computation proceeds. \cr
-#' 
+#'
+#' If `na.rm` is `TRUE` then missing values in `x` and in `weights` are
+#' removed, pairwise, before computation proceeds. \cr
+#'
 #' The estimator for calculating the skewness can either be:\cr `1: g_1 =
 #' m_3 / m_2^(3/2) ` \cr `2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) `\cr
 #' `3: b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) ` \cr
-#' 
+#'
 #' 1 is the typical definition used in Stata and in many older textbooks.  \cr
 #' 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
-#' 
+#'
+#' Estimators 1 and 3 need \eqn{n \ge 2}, estimator 2 needs \eqn{n \ge 3}.
+#' For shorter or constant input the skewness is not defined: the result is
+#' `NA` (all three elements if an interval was requested) with a warning.
+#'
 #' Cramer (1997) mentions the asymptotic standard error of `G_1`, that is
 #' of `estimator = 2`:
 #' \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
 #' used for calculating the confidence intervals. The standard errors of the
 #' other two estimators follow from it by the same factors that relate the
 #' estimators themselves, so that `est/se` does not depend on the choice
-#' of `estimator`. This is implemented here with `method="classic"`.
+#' of `estimator`. This is implemented here with `method="classic"`. The
+#' standard error is defined from \eqn{n = 3} on; below, the interval is
+#' `NA` with a warning.
 #' \cr However, Joanes and Gill (1998) advise
 #' against this approach, pointing out that the normal assumptions would
 #' virtually always be violated.  They suggest using the bootstrap method.
 #' That's why the default method for the confidence interval type is set to
 #' `"boot"`. If not further specified the boot ci type will be chosen as
-#' `"bca"`.\cr
-#' 
-#' The standard error is only defined for `n >= 3`; for shorter input the
-#' variance, and with it any `method="classic"` interval, is `NA`.
-#' 
-#' This implementation of the two functions is comparably fast, as the
-#' expensive sums are coded in C++.
-#' 
+#' `"bca"`. If some bootstrap replicates are undefined (a constant
+#' resample) or [boot::boot.ci()] cannot compute the interval, the bounds
+#' are `NA` with a warning. \cr
+#'
+#' **Weights** are frequency weights: `sum(weights)` takes the place of
+#' \eqn{n} in the bias corrections and in the standard error. For integer
+#' weights `skew(x, weights = w)` equals `skew(rep(x, w))`. An observation
+#' with weight 0 is absent: its `x` may be `NA` or infinite without effect.
+#' A missing weight makes the observation missing. The bootstrap resamples
+#' the expanded sample and therefore requires integer weights (memory grows
+#' with `sum(weights)`, and BCa's jackknife with it). Non-integer weights
+#' are admitted for the point estimate and `method = "classic"` as a
+#' computational extension of the same formulas; they correspond to no
+#' actual sample, so the exact normal-theory variance does not strictly
+#' apply to them. Analysis or survey weights are
+#' not supported: neither the bias correction nor the row bootstrap would
+#' reflect them.
+#'
+#' This implementation is comparably fast, as the expensive sums are coded
+#' in C++. The data are rescaled before centring and again after, so that
+#' neither the deviations nor their powers can overflow for any finite
+#' input.
+#'
 #' @name skew
-#' 
-#' @param x a numeric vector
+#'
+#' @param x a numeric vector. A matrix or array contributes all its
+#' elements, as `as.vector(x)`.
 #' @param estimator integer, either 1, 2 or 3 (default) defining the algorithm
 #' used for calculation. See Details.
-#' @param weights a numerical vector of weights the same length as `x`
-#' giving the weights to use for elements of `x`. The weights are read as
-#' frequencies, so that their sum takes the place of the sample size in the
-#' estimator's bias corrections and in the standard error.
-#' 
+#' @param weights a non-negative numeric vector of frequency weights, the
+#' same length as `x`. See Details.
+#'
 #' @param conf.level confidence level of the interval. If set to `NA`
-#'   (the default), only the point estimate is returned.
+#'   (the default), only the point estimate is returned. One-sided
+#'   intervals require `conf.level > 0.5`.
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
@@ -54,12 +75,15 @@
 #'   intervals unless another bootstrap type is supplied through `\dots`;
 #'   `"classic"` uses a Wald interval based on the asymptotic standard
 #'   error. See Details and [ConfidenceIntervals()].
-#'   
+#'
 #' @param na.rm logical, indicating whether `NA` values should be stripped
 #' before the computation proceeds. Defaults to `FALSE`.
-#' @param \dots further arguments passed to [boot::boot()] when
-#' confidence intervals are calculated
-#' 
+#' @param \dots bootstrap settings for `method = "boot"`, and only these:
+#' `R` (number of replicates), `type` (one of `"bca"`, `"perc"`,
+#' `"basic"`, `"norm"`; `"stud"` is not supported, as no suitable
+#' variance estimate is implemented here), `parallel` and
+#' `ncpus` as in [boot::boot()]. Other arguments are an error.
+#'
 #' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
 #' \describe{
@@ -67,34 +91,39 @@
 #'   \item{`lci`}{lower confidence interval bound}
 #'   \item{`uci`}{upper confidence interval bound}
 #' }
-#' 
-#' @references 
+#'
+#' @references
 #' Cramer, D. (1997): *Basic Statistics for Social Research*
 #' Routledge.
-#' 
+#'
 #' Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 #' kurtosis. *The Statistician*, 47, 183-189.
-#' 
-#' @family shape
-#' @concept moments
-#' 
-#' 
+#'
 #' @examples
-#' 
+#'
 #' skew(bedrock::Pizza$price, na.rm=TRUE)
-#' 
+#'
 #' # use sapply to calculate skewness for a data.frame
-#' sapply(bedrock::Pizza[,c("temperature","price","delivery_min")], 
+#' sapply(bedrock::Pizza[,c("temperature","price","delivery_min")],
 #'        skew, na.rm=TRUE)
-#' 
+#'
 #' # the estimate lies inside its own confidence interval
 #' set.seed(1)
 #' skew(rlnorm(50), conf.level=0.95, method="classic")
-#' 
 #'
-#' @seealso [meanX], [sdX], similar code in \pkg{e1071}
+#' # frequency weights are the same as repeating the values
+#' skew(c(1, 2, 3, 10), weights = c(3, 1, 2, 1))
+#' skew(rep(c(1, 2, 3, 10), c(3, 1, 2, 1)))
 #'
+#' @seealso [kurt], [meanX], [sdX], similar code in \pkg{e1071}
 #'
+#' @section Random number generation:
+#' `method = "boot"` - the default - resamples and therefore advances
+#' R's global random number generator. Call [base::set.seed()]
+#' beforehand for reproducible intervals.
+#'
+#' @family shape
+#' @concept moments
 #' @export
 skew <- function(x,
                  conf.level = NA,
@@ -104,282 +133,53 @@ skew <- function(x,
                  weights = NULL,
                  na.rm = FALSE,
                  ...) {
-  
-  if (!is.numeric(x))
-    stop("'x' must be numeric")
-  
-  if (!is.null(weights)) {
-    
-    if (!is.numeric(weights))
-      stop("'weights' must be numeric")
-    
-    if (length(weights) != length(x))
-      stop("'weights' must have same length as 'x'")
-  }
-  
-  # length(estimator) is checked as well: %in% is vectorised, so a vector of
-  # length 2 would have produced a condition of length > 1 here.
-  if (length(estimator) != 1L || !isTRUE(estimator %in% c(1, 2, 3)))
-    stop("'estimator' must be one of 1, 2, or 3")
-  
-  if (!is.logical(na.rm) || length(na.rm) != 1L || is.na(na.rm))
-    stop("'na.rm' must be a single non-missing logical value")
-  
-  # conf.level is the switch between the two return shapes, so it has to be a
-  # single value before it can be tested with is.na(); NULL or a vector would
-  # otherwise fail inside if() with an unrelated message.
-  if (length(conf.level) != 1L)
-    stop("'conf.level' must be a single value, or NA")
-  
-  if (is.na(conf.level)) {
-    
-    # [[ ]] rather than [ ]: the documented return is a plain numeric
-    # scalar, [ ] carried the name "est" through
-    res <- .skew(
-      x,
-      weights = weights,
-      estimator = estimator,
-      na.rm = na.rm
-    )[["est"]]
-    
-  } else {
-    
-    if (!is.numeric(conf.level) || conf.level <= 0 || conf.level >= 1)
-      stop("'conf.level' must be a single number in (0, 1), or NA")
-    
-    sides <- match.arg(sides)
-    
-    method <- match.arg(method)
-    
-    if (sides != "two.sided")
-      conf.level <- 1 - 2 * (1 - conf.level)
-    
-    res <- switch(
-      
-      method,
-      
-      classic = .skew.classic(
-        x,
-        conf.level = conf.level,
-        estimator = estimator,
-        weights = weights,
-        na.rm = na.rm
-      ),
-      
-      boot = .skew.boot(
-        x,
-        conf.level = conf.level,
-        estimator = estimator,
-        weights = weights,
-        na.rm = na.rm,
-        ...
-      )
-    )
-    
-    # Skewness is unbounded in both directions, so the open side is reported
-    # as infinite rather than clipped to a range boundary.
-    if (sides == "left") {
-      
-      res[3] <- Inf
-      
-    } else if (sides == "right") {
-      
-      res[2] <- -Inf
-    }
-  }
-  
-  res
+
+  .shape(.i.skew, x,
+         conf.level = conf.level,
+         sides      = match.arg(sides),
+         method     = match.arg(method),
+         estimator  = estimator,
+         weights    = weights,
+         na.rm      = na.rm,
+         ...)
 }
 
 
 # == internal helper functions ================================================
 
 
-.skew <- function(x,
-                  weights = NULL,
-                  estimator = 3,
-                  na.rm = FALSE) {
-  
-  # C++ part for the expensive
-  # (x - mean(x))^2 etc.
-  # is roughly 14 times faster
-  
-  # estimator 1: older textbooks
-  
-  if (!is.null(weights)) {
-    
-    # use a standard treatment for weights
-    z <- .normWeights(
-      x,
-      weights,
-      na.rm = na.rm
-    )
-    
-    if (anyNA(z$x))
-      return(c(est = NA_real_, var = NA_real_))
-    
-    r.skew <- skew_weighted_cpp(
-      as.numeric(z$x),
-      as.numeric(meanX(
-        z$x,
-        weights = z$weights
-      )),
-      as.numeric(z$weights)
-    )
-    
-    n <- z$wsum
-    
-  } else {
-    
-    if (na.rm)
-      x <- na.omit(x)
-    
-    r.skew <- skew_cpp(
-      as.numeric(x),
-      as.numeric(mean(x))
-    )
-    
-    n <- length(x)
-  }
-  
-  # The asymptotic standard error is only defined from n = 3 on: below that
-  # the radicand is negative and the estimator corrections divide by n - 2.
-  # Returning NA here is what keeps .skew.classic() from reporting a NaN
-  # interval next to a perfectly finite estimate.
-  if (is.na(n) || n < 3) {
-    
-    se <- NA_real_
-    
-  } else {
-    
-    se <- sqrt(
-      (6 * (n - 2)) /
-        ((n + 1) * (n + 3))
-    )
-  }
-  
-  if (estimator == 2) {
-    
-    # estimator 2: SAS/SPSS
-    
-    r.skew <- r.skew *
-      sqrt(n) *
-      sqrt(n - 1) /
-      (n - 2)
-    
-    se <- se *
-      sqrt(n * (n - 1)) /
-      (n - 2)
-    
-  } else if (estimator == 3) {
-    
-    # estimator 3: MINITAB/BMDP
-    
-    r.skew <- r.skew *
-      ((n - 1) / n)^(3 / 2)
-    
-    se <- se *
-      ((n - 1) / n)^(3 / 2)
-  }
-  
-  c(
-    est = unname(r.skew),
-    var = unname(se^2)
-  )
-}
+# Kernel for .shape(), see .i.kurt()
+.i.skew <- function(x, w, n, estimator) {
 
+  nmin <- if (estimator == 2) 3 else 2
 
-.skew.classic <- function(x,
-                          conf.level,
-                          estimator = 3,
-                          weights = NULL,
-                          na.rm = FALSE) {
-  
-  res <- .skew(
-    x,
-    weights = weights,
-    estimator = estimator,
-    na.rm = na.rm
-  )
-  
-  est <- unname(res["est"])
-  se  <- unname(sqrt(res["var"]))
-  
-  # The Wald interval is centred on the estimate. Without the est term the
-  # bounds are symmetric about zero and need not contain the value they are
-  # reported next to.
-  c(
-    est = est,
-    lci = est + qnorm((1 - conf.level) / 2) * se,
-    uci = est + qnorm(1 - (1 - conf.level) / 2) * se
-  )
-}
+  if (n < nmin)
+    return(.shapeUndefined(sprintf(
+      "skewness estimator %d needs n >= %d, got n = %s",
+      estimator, nmin, format(n))))
 
+  if (all(x == x[1L]))
+    return(.shapeUndefined("skewness is undefined for constant 'x'"))
 
-.skew.boot <- function(x,
-                       conf.level,
-                       estimator = 3,
-                       weights = NULL,
-                       na.rm = FALSE,
-                       ...) {
-  
-  # Problematic standard errors and confidence intervals
-  # for skewness and kurtosis.
-  #
-  # Wright DB, Herrington JA. (2011)
-  # recommend only bootstrap intervals.
-  #
-  # adjusted bootstrap percentile (BCa) interval
-  
-  args <- .extractBootArgs(list(...))
-  
-  # Missing values are removed once, here, rather than inside the statistic:
-  # replicates of differing length would each be a sample from a different
-  # sample size, and boot() would resample the NAs along with the data.
-  if (na.rm) {
-    
-    ok <- !is.na(x)
-    
-    if (!is.null(weights))
-      ok <- ok & !is.na(weights)
-    
-    x <- x[ok]
-    
-    if (!is.null(weights))
-      weights <- weights[ok]
-  }
-  
-  boot.fun <- boot::boot(
-    
-    x,
-    
-    # weights[d] rather than weights: the indices d resample x, and a weight
-    # belongs to its observation. Passing the unpermuted vector pairs replicate
-    # i with the weight of the original observation i. Only est is
-    # returned, so the variance is not bootstrapped along for nothing.
-    function(x, d)
-      .skew(
-        x[d],
-        weights = if (is.null(weights)) NULL else weights[d],
-        estimator = estimator
-      )[["est"]],
-    
-    R        = args$R,
-    parallel = args$parallel,
-    ncpus    = args$ncpus
+  g1 <- if (is.null(w)) skew_cpp(x) else skew_weighted_cpp(x, w)
+
+  if (!is.finite(g1))
+    return(.shapeUndefined("skewness could not be computed"))
+
+  # corrections in u = 1/n, see .i.kurt()
+  u <- 1 / n
+
+  # asymptotic SE of g_1 under normality, 6(n-2)/((n+1)(n+3)), defined from
+  # n = 3 on; the other estimators scale it by the factor that relates them
+  # to g_1, so est/se is the same for all three
+  se <- if (n < 3) NA_real_
+        else sqrt(6 * (1 - 2 * u) / (n * (1 + u) * (1 + 3 * u)))
+
+  f <- switch(estimator,
+    1,                            # g_1, older textbooks / Stata
+    sqrt(1 - u) / (1 - 2 * u),    # G_1 = g_1 sqrt(n(n-1))/(n-2), SAS / SPSS
+    (1 - u)^(3 / 2)               # b_1 = g_1 ((n-1)/n)^(3/2), MINITAB / BMDP
   )
-  
-  ci <- boot::boot.ci(
-    boot.fun,
-    conf = conf.level,
-    type = args$type
-  )
-  
-  bounds <- .bootCIBounds(ci, args$type)
-  
-  c(
-    est = unname(boot.fun$t0[1]),
-    lci = unname(bounds[1]),
-    uci = unname(bounds[2])
-  )
+
+  c(est = f * g1, se = f * se)
 }

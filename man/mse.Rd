@@ -2,19 +2,16 @@
 % Please edit documentation in R/mse.R
 \name{mse}
 \alias{mse}
-\alias{mse.lm}
 \alias{mse.default}
 \title{Mean Squared Error}
 \usage{
 mse(x, ...)
 
-\method{mse}{lm}(x, ...)
-
 \method{mse}{default}(x, ref, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{an object. Methods are available for numeric vectors and
-model objects (e.g. \code{lm}).}
+\item{x}{a numeric vector of predicted values.
+Methods for fitted models are provided by the package \pkg{alloy}.}
 
 \item{...}{additional arguments passed to methods}
 
@@ -40,10 +37,6 @@ x <- c(2.5, 3.0, 2.8)
 ref <- c(3.0, 2.5, 3.0)
 
 mse(x, ref)
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-mse(fit)
 
 }
 \seealso{

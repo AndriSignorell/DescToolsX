@@ -3,6 +3,7 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/DescToolsX)](https://CRAN.R-project.org/package=DescToolsX)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+[![R-CMD-check](https://github.com/AndriSignorell/DescToolsX/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AndriSignorell/DescToolsX/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **Title:** Tools for Descriptive Statistics — New Generation\

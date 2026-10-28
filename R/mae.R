@@ -4,8 +4,8 @@
 #' Computes the mean absolute error (MAE) between predicted
 #' and reference values.
 #'
-#' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. `lm`).
+#' @param x a numeric vector of predicted values.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ... additional arguments passed to methods
 #'
 #' @return a numeric scalar containing the MAE
@@ -22,10 +22,6 @@
 #'
 #' mae(x, ref)
 #'
-#' # with linear model
-#' fit <- lm(mpg ~ hp, data = mtcars)
-#' mae(fit)
-#'
 #' @seealso [mean()], [abs()]
 #'
 #'
@@ -35,17 +31,6 @@
 #' @export
 mae <- function(x, ...) {
   UseMethod("mae")
-}
-
-
-#' @rdname mae
-#' @export
-mae.lm <- function(x, ...) {
-  mae(
-    predict(x, type = "response"),
-    model.response(model.frame(x)),
-    ...
-  )
 }
 
 

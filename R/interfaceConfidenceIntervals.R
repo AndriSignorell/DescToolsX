@@ -7,8 +7,10 @@
 #'
 #' @name ConfidenceIntervals
 #'
-#' @param conf.level confidence level of the interval. If set to `NA`
-#'   (the default), only the point estimate is returned.
+#' @param conf.level confidence level of the interval. `NA` returns only the
+#'   point estimate. Dedicated interval functions such as [meanCI()] default
+#'   to `0.95`; estimators that can add an interval to their result default
+#'   to `NA`.
 #'
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval. Must be one of `"two.sided"` (default), `"left"` or
@@ -16,11 +18,11 @@
 #'   the finite bound. The initial letter is sufficient.
 #'
 #' @param method character string specifying the interval method. The
-#'   available methods and the default differ between functions; see the
-#'   individual help page for the choices.
+#'   argument is present only where a function offers more than one method;
+#'   the choices and the default are listed on the individual help page.
 #'
-#' @param ... additional arguments for the bootstrap, such as the number of
-#'   resamples `R` and the interval type `type`.
+#' @param ... further arguments for the bootstrap: the number of resamples
+#'   `R`, the interval type `type`, and `parallel` and `ncpus`.
 #'
 #' @details
 #' \subsection{Return value}{
@@ -39,19 +41,18 @@
 #'   \item{`"right"`}{the upper bound is finite, the lower one is open.}
 #' }
 #'
-#' Thus `sides = "left"` corresponds to `alternative = "greater"`
-#' in [stats::t.test()], and `sides = "right"` to
-#' `alternative = "less"`. This is also the convention used by the
-#' corresponding functions in \pkg{DescTools}.
+#' Thus `sides = "left"` corresponds to `alternative = "greater"` in
+#' [t.test()], and `sides = "right"` to `alternative = "less"`. The
+#' convention is the same as in \pkg{DescTools}.
 #'
 #' The open side is reported at the boundary of the parameter space, not at
 #' infinity - most of the statistics here are bounded, so this is the
 #' ordinary case rather than an exception. A correlation opens to \eqn{\pm 1},
-#' an association measure in \eqn{[0, 1]} to 0 or 1, Cramer's \eqn{V} to 1,
-#' Pearson's \eqn{C} to \eqn{\sqrt{(m-1)/m}}. Where the parameter really is
-#' unbounded, \eqn{\pm\infty} is reported: a relative risk opens upwards to
-#' `Inf` but downwards only to 0, a location estimator opens to
-#' `-Inf` and `Inf`, Cronbach's \eqn{\alpha} to `-Inf` and 1.
+#' an association measure in \eqn{[0, 1]} to 0 or 1, Cram\enc{é}{e}r's
+#' \eqn{V} to 1, Pearson's \eqn{C} to \eqn{\sqrt{(m-1)/m}}. Where the
+#' parameter really is unbounded, \eqn{\pm\infty} is reported: a relative
+#' risk opens upwards to `Inf` but downwards only to 0, a location estimator
+#' opens to `-Inf` and `Inf`, Cronbach's \eqn{\alpha} to `-Inf` and 1.
 #' An interval never claims a value the statistic cannot take.
 #'
 #' A one-sided bound at level \eqn{\gamma} is the corresponding end of the
@@ -70,9 +71,9 @@
 #' none - at the price of being random and slower.
 #'
 #' Bootstrap intervals are partly computed with the \pkg{boot} package (see
-#' [boot::boot()] and [boot::boot.ci()]). The number of
-#' resamples `R` and the interval type - `"perc"`, `"bca"` and
-#' others - are passed through `\dots`.
+#' [boot::boot()] and [boot::boot.ci()]). The number of resamples `R` and
+#' the interval type - `"perc"`, `"bca"` and others - are passed through
+#' `...`.
 #'
 #' `"bca"` corrects for bias and skewness and is the better choice for a
 #' smooth statistic whose parameter lies well inside its range. It is the
@@ -84,12 +85,10 @@
 #'
 #' @section Random number generation:
 #' Requesting a bootstrap confidence interval draws a seed from R's global
-#' random number generator and therefore advances it. Call
-#' [base::set.seed()] beforehand for reproducible intervals. This
-#' applies to the bootstrap methods only; classical intervals are
-#' deterministic.
+#' random number generator and therefore advances it. Call [set.seed()]
+#' beforehand for reproducible intervals. This applies to the bootstrap
+#' methods only; classical intervals are deterministic.
 #'
-#' @seealso [boot::boot()], [boot::boot.ci()],
-#'   [stats::confint()]
+#' @seealso [boot::boot()], [boot::boot.ci()], [confint()]
 #'
 NULL

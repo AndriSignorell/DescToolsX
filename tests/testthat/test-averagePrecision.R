@@ -25,21 +25,6 @@ test_that("averagePrecision accepts arbitrary numeric scores", {
 })
 
 
-test_that("averagePrecision works with glm objects", {
-  dat <- data.frame(
-    # overlapping classes: with complete separation glm() warns that the
-    # fitted probabilities are numerically 0 or 1
-    y = c(0, 0, 1, 0, 1, 1),
-    x = c(-2, -1, 0, 0.5, 1, 2)
-  )
-  fit <- glm(y ~ x, data = dat, family = binomial)
-
-  expect_equal(averagePrecision(fit),
-               averagePrecision(predict(fit, type = "response"), fit$y),
-               tolerance = 1e-12)
-})
-
-
 test_that("averagePrecision validates its inputs", {
   expect_error(averagePrecision(c(0.2), c(0, 1)), "same length", fixed = TRUE)
   expect_error(averagePrecision(c(0.1, 0.2, 0.9), c(0, NA, 1)),
@@ -52,4 +37,8 @@ test_that("averagePrecision validates its inputs", {
                "must not be empty", fixed = TRUE)
   expect_error(averagePrecision(c(0.1, 0.2), c(0, 0)),
                "at least one positive", fixed = TRUE)
+})
+
+test_that("the default method needs 'ref'", {
+  expect_error(averagePrecision(c(0.2, 0.8)), "'ref' must be provided")
 })

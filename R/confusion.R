@@ -2,11 +2,10 @@
 #' Confusion Matrix and Classification Metrics
 #'
 #' Computes confusion matrices and a wide range of performance metrics
-#' for classification models or predicted vs. observed labels.
+#' for predicted vs. observed labels.
 #'
-#' This is a generic function with methods for tables, vectors, and several
-#' model objects (e.g., `glm`, `rpart`, `randomForest`,
-#' `svm`).
+#' This is a generic function with methods for vectors and tables.
+#' Methods for fitted models are provided by the package \pkg{alloy}.
 #'
 #' `sensitivity()` and `specificity()` are convenience extractors for the
 #' sensitivity and specificity values computed by `confusion()`.
@@ -19,15 +18,12 @@
 #'     \item a factor or character vector of predicted classes
 #'     \item a confusion matrix (`table` or `matrix`) with
 #'       **predictions in the rows and references in the columns**
-#'     \item a fitted model object (e.g., `glm`, `rpart`)
 #'   }
 #' @param ref optional reference (true labels). Required for the default
 #'   method.
 #' @param pos optional character specifying the positive class (binary
 #'   classification only). If `NULL`, the second level is used and
 #'   a message is issued.
-#' @param cutoff numeric cutoff for probabilistic models (e.g., `glm`).
-#'   Default `0.5`.
 #' @param conf.level confidence level for the accuracy interval; defaults
 #'   to 0.95
 #' @param na.rm logical; if `TRUE`, pairs with a missing prediction or
@@ -91,10 +87,6 @@
 #'
 #' # table
 #' confusion(table(pred, ref))
-#'
-#' # glm
-#' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-#' confusion(m)
 #'
 #' @family model.classification
 #' @concept model-evaluation
@@ -256,90 +248,6 @@ confusion.default <- function(x, ref, pos = NULL, na.rm = FALSE, ...) {
 confusion.matrix <- function(x, pos = NULL, ...) {
   confusion.table(as.table(x), pos = pos, ...)
 }
-
-
-# -- confusion.rpart -----------------------------------------------------------
-
-#' @rdname confusion
-#' @export
-confusion.rpart <- function(x, ...) {
-  lvl <- attr(x, "ylevels")
-  confusion(x   = lvl[x$frame$yval[x$where]],
-       ref = lvl[x$y], ...)
-}
-
-
-# -- confusion.multinom -----------------------------------------------------------
-
-#' @rdname confusion
-#' @export
-confusion.multinom <- function(x, ...) {
-  if (is.null(x$model))
-    stop("'x' does not contain model frame - refit with model = TRUE")
-  resp <- model.extract(x$model, "response")
-  pred <- predict(x, type = "class")
-  confusion(x = pred, ref = resp, ...)
-}
-
-
-# -- confusion.glm -----------------------------------------------------------
-
-#' @rdname confusion
-#' @export
-confusion.glm <- function(x, cutoff = 0.5, pos = NULL, ...) {
-
-  if (is.null(x$model))
-    stop("'x' does not contain the model frame - refit with model = TRUE")
-
-  resp <- model.extract(x$model, "response")
-  lvl  <- if (is.factor(resp)) levels(resp) else levels(factor(resp))
-
-  if (length(lvl) != 2L)
-    stop("confusion.glm requires a binary response - use confusion.multinom() for multiclass")
-
-  prob <- predict(x, type = "response")
-  pred <- lvl[(prob > cutoff) + 1L]
-
-  if (is.null(pos)) pos <- lvl[2L]
-
-  confusion(x = pred, ref = resp, pos = pos, ...)
-}
-
-
-# -- confusion.randomForest -----------------------------------------------------------
-
-#' @rdname confusion
-#' @export
-confusion.randomForest <- function(x, ...) {
-  confusion(x = x$predicted, ref = x$y, ...)
-}
-
-
-# -- confusion.svm -----------------------------------------------------------
-
-#' @rdname confusion
-#' @export
-confusion.svm <- function(x, ...) {
-  # predict.svm() has no 'type' argument - it was silently swallowed by
-  # its dots and had no effect
-  confusion(x   = predict(x),
-       ref = model.response(model.frame(x)), ...)
-}
-
-
-# -- confusion.lda / confusion.qda ---------------------------------------------------
-
-#' @rdname confusion
-#' @export
-confusion.lda <- function(x, ...) {
-  confusion(x   = predict(x)$class,
-       ref = model.extract(model.frame(x), "response"), ...)
-}
-
-
-#' @rdname confusion
-#' @export
-confusion.qda <- function(x, ...) confusion.lda(x, ...)
 
 
 # -- print.Confusion -----------------------------------------------------------

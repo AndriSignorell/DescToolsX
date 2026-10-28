@@ -16,10 +16,12 @@ skew(
 )
 }
 \arguments{
-\item{x}{a numeric vector}
+\item{x}{a numeric vector. A matrix or array contributes all its
+elements, as \code{as.vector(x)}.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
-(the default), only the point estimate is returned.}
+(the default), only the point estimate is returned. One-sided
+intervals require \code{conf.level > 0.5}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
@@ -34,16 +36,17 @@ error. See Details and \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}
 
-\item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}. The weights are read as
-frequencies, so that their sum takes the place of the sample size in the
-estimator's bias corrections and in the standard error.}
+\item{weights}{a non-negative numeric vector of frequency weights, the
+same length as \code{x}. See Details.}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{\dots}{further arguments passed to \code{\link[boot:boot]{boot::boot()}} when
-confidence intervals are calculated}
+\item{\dots}{bootstrap settings for \code{method = "boot"}, and only these:
+\code{R} (number of replicates), \code{type} (one of \code{"bca"}, \code{"perc"},
+\code{"basic"}, \code{"norm"}; \code{"stud"} is not supported, as no suitable
+variance estimate is implemented here), \code{parallel} and
+\code{ncpus} as in \code{\link[boot:boot]{boot::boot()}}. Other arguments are an error.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -55,12 +58,12 @@ numeric vector with elements:
 }
 }
 \description{
-\code{skew} computes the skewness, \code{kurt} the excess kurtosis of the
+\code{skew} computes the skewness, \link{kurt} the excess kurtosis of the
 values in x.
 }
 \details{
-If \code{na.rm} is \code{TRUE} then missing values are removed before
-computation proceeds. \cr
+If \code{na.rm} is \code{TRUE} then missing values in \code{x} and in \code{weights} are
+removed, pairwise, before computation proceeds. \cr
 
 The estimator for calculating the skewness can either be:\cr \code{1: g_1 = m_3 / m_2^(3/2) } \cr \code{2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) }\cr
 \code{3: b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) } \cr
@@ -68,38 +71,69 @@ The estimator for calculating the skewness can either be:\cr \code{1: g_1 = m_3 
 1 is the typical definition used in Stata and in many older textbooks.  \cr
 2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
 
+Estimators 1 and 3 need \eqn{n \ge 2}, estimator 2 needs \eqn{n \ge 3}.
+For shorter or constant input the skewness is not defined: the result is
+\code{NA} (all three elements if an interval was requested) with a warning.
+
 Cramer (1997) mentions the asymptotic standard error of \code{G_1}, that is
 of \code{estimator = 2}:
 \preformatted{ASE.skew = sqrt( 6*n*(n-1)/((n-2)*(n+1)*(n+3)) )} to be
 used for calculating the confidence intervals. The standard errors of the
 other two estimators follow from it by the same factors that relate the
 estimators themselves, so that \code{est/se} does not depend on the choice
-of \code{estimator}. This is implemented here with \code{method="classic"}.
+of \code{estimator}. This is implemented here with \code{method="classic"}. The
+standard error is defined from \eqn{n = 3} on; below, the interval is
+\code{NA} with a warning.
 \cr However, Joanes and Gill (1998) advise
 against this approach, pointing out that the normal assumptions would
 virtually always be violated.  They suggest using the bootstrap method.
 That's why the default method for the confidence interval type is set to
 \code{"boot"}. If not further specified the boot ci type will be chosen as
-\code{"bca"}.\cr
+\code{"bca"}. If some bootstrap replicates are undefined (a constant
+resample) or \code{\link[boot:boot.ci]{boot::boot.ci()}} cannot compute the interval, the bounds
+are \code{NA} with a warning. \cr
 
-The standard error is only defined for \code{n >= 3}; for shorter input the
-variance, and with it any \code{method="classic"} interval, is \code{NA}.
+\strong{Weights} are frequency weights: \code{sum(weights)} takes the place of
+\eqn{n} in the bias corrections and in the standard error. For integer
+weights \code{skew(x, weights = w)} equals \code{skew(rep(x, w))}. An observation
+with weight 0 is absent: its \code{x} may be \code{NA} or infinite without effect.
+A missing weight makes the observation missing. The bootstrap resamples
+the expanded sample and therefore requires integer weights (memory grows
+with \code{sum(weights)}, and BCa's jackknife with it). Non-integer weights
+are admitted for the point estimate and \code{method = "classic"} as a
+computational extension of the same formulas; they correspond to no
+actual sample, so the exact normal-theory variance does not strictly
+apply to them. Analysis or survey weights are
+not supported: neither the bias correction nor the row bootstrap would
+reflect them.
 
-This implementation of the two functions is comparably fast, as the
-expensive sums are coded in C++.
+This implementation is comparably fast, as the expensive sums are coded
+in C++. The data are rescaled before centring and again after, so that
+neither the deviations nor their powers can overflow for any finite
+input.
 }
+\section{Random number generation}{
+
+\code{method = "boot"} - the default - resamples and therefore advances
+R's global random number generator. Call \code{\link[base:set.seed]{base::set.seed()}}
+beforehand for reproducible intervals.
+}
+
 \examples{
 
 skew(bedrock::Pizza$price, na.rm=TRUE)
 
 # use sapply to calculate skewness for a data.frame
-sapply(bedrock::Pizza[,c("temperature","price","delivery_min")], 
+sapply(bedrock::Pizza[,c("temperature","price","delivery_min")],
        skew, na.rm=TRUE)
 
 # the estimate lies inside its own confidence interval
 set.seed(1)
 skew(rlnorm(50), conf.level=0.95, method="classic")
 
+# frequency weights are the same as repeating the values
+skew(c(1, 2, 3, 10), weights = c(3, 1, 2, 1))
+skew(rep(c(1, 2, 3, 10), c(3, 1, 2, 1)))
 
 }
 \references{
@@ -110,7 +144,7 @@ Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 kurtosis. \emph{The Statistician}, 47, 183-189.
 }
 \seealso{
-\link{meanX}, \link{sdX}, similar code in \pkg{e1071}
+\link{kurt}, \link{meanX}, \link{sdX}, similar code in \pkg{e1071}
 
 Other shape:
 \code{\link[=kurt]{kurt()}}

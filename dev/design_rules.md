@@ -1,8 +1,8 @@
 
 # Package Suite — Design Rules & Architecture
 
-Scope: DescToolsX · lumen · pharos · bedrock · alloy · pons · swissValet  
-Version: 0.6  
+Scope: DescToolsX · lumen · pharos · bedrock · alloy · pons · swissValet · helvetia  
+Version: 0.7.3  
 Maintainer: Andri Signorell
 
 ---
@@ -108,6 +108,15 @@ in `pal(name = ...)`, Methodennamen wie `method = c("rgb", "hsv")`), zählt er a
 User-visible string im Sinne von §3.1.1 und folgt **kebab-case**, nicht PascalCase
 — unabhängig davon, ob die zugrunde liegenden Werte selbst wie ein kleiner
 Datensatz aussehen (z. B. ein benannter Farbvektor).
+
+**Enum values that name a result element.** Where the value selects an
+element of the returned object and that element carries the same name, the
+value follows the rule for return names (§3.4 Return Values), not
+kebab-case: `ordAssocs(which = "tauB")` returns `res$tauB`,
+`pseudoRSq(which = "McFadden")` returns `res["McFadden"]`,
+`sphericityEps(method = "gg")` returns `eps["gg"]`. One spelling for value
+and element keeps `res[[which]]` valid; two spellings would need a
+translation table in every such function. (Decided 2026-10-05.)
 
 
 S3 methods never receive an X suffix and remain base-compliant:
@@ -215,8 +224,16 @@ taken by an existing function.
 
 **Collision set:** `base`, `stats`, `graphics`, `utils` — and `dplyr`,
 because the suite is routinely loaded next to it (`recodeX`, `renameX`,
-`coalesceX`). A name that differs from an existing one only in case counts
-as a collision (`iqrX` against `stats::IQR`).
+`coalesceX`).
+
+**What counts as taken.** A name is taken if it is identical to an existing
+one, or differs from it only in the case of the whole word: `iqr` against
+`stats::IQR`, hence `iqrX`. An internal capital makes a name of its own:
+`combN`, `crossProd`, `strSplit` and `strTrim` stand next to `combn`,
+`crossprod`, `strsplit` and `strtrim` without X. R is case-sensitive, the
+two never mask each other, and the camelCase spelling is the suite's own
+reading of the name. (Narrowed 2026-10-05; before, any difference in case
+counted.)
 
 **Collision → lowercase + X:**
 
@@ -239,9 +256,13 @@ percentRank
 
 Rules:
 
-- No exceptions in either direction: no X without a collision, no
-  collision without X (`pharos::polygon` masks `graphics::polygon` and
-  becomes `polygonX`)
+- No X without a collision, no collision without X (`pharos::polygon`
+  masks `graphics::polygon` and becomes `polygonX`). Two names are exempt,
+  and the list is closed:
+  - `desc()` keeps its name although `dplyr::desc()` exists. It is the
+    main function of DescToolsX and the name users know from DescTools.
+  - An add-in wrapper in swissValet is named `x` + the function it wraps.
+    `xStrX()` wraps `strX()`; its X belongs to the wrapped name.
 - No all-caps spelling: `madX`, not `MADX`
 - X is used when the natural name is taken, whatever the function that
   holds it does: `meanX` extends `mean()`, while `modeX` is the statistical
@@ -305,6 +326,7 @@ Only the abbreviations on this list keep their capitals inside a name:
 
 - CI (confidence interval)
 - QQ (quantile-quantile)
+- XY (a pair of coordinates)
 - ECDF
 - SE (standard error)
 - AD (Anderson-Darling)
@@ -314,7 +336,7 @@ Every other acronym follows lowerCamelCase like an ordinary word: `Rgb`,
 `Hsv`, `Url`, `Html`, `Sas`, `Knn`.
 
 ```text
-meanCI      plotQQ      plotECDF    meanSE      pAD
+meanCI      plotQQ      plotXY      plotECDF    meanSE      pAD
 cmykToRgb   escapeHtml  toHtmlTable imputeKnn
 ```
 
@@ -471,8 +493,8 @@ not merely its storage type.
 | Data frame | `data` |
 | Formula | `formula` |
 | Model fit object (`lm`, `glm`, `coxph`, etc.) | `fit` |
-| User-supplied function | `FUN` |
-| Internal function object | `fun` |
+| User-supplied function that is applied | `FUN` |
+| Function that is inspected, not applied | `fun` |
 
 ### Examples
 
@@ -485,7 +507,7 @@ corCI(x, y)
 fit <- lm(y ~ x)
 
 coefCI(fit)
-pseudoR2(fit)
+pseudoRSq(fit)
 vif(fit)
 
 model.frame(formula, data)
@@ -496,9 +518,33 @@ Avoid:
 ```r
 coefCI(x)
 vif(mod)
-bpTest(lm_fit)
-pseudoR2(model_object)
+breuschPaganTest(lm_fit)
+pseudoRSq(model_object)
 ```
+
+### `FUN` and `fun`
+
+`FUN` is a function the caller hands over to be called: `bootCI(FUN = )`,
+`plotFacet(FUN = )`. `fun` is a function that is the object of the
+operation: `funArgs(fun)` lists its arguments, `funCalls(fun)` the calls in
+its body. The capitals of `FUN` follow `apply()`; they are not a general
+licence.
+
+### Capitals as argument names
+
+An argument name is written in capitals in three cases only:
+
+- `FUN` (above) and `R`, the number of resamples (§13.6);
+- the mathematical symbols `N` (population size), `S` (covariance matrix)
+  and `X` (design matrix), where the function documents a formula in which
+  the quantity carries that symbol: `hyperCI(N)`, `sphericityEps(S)`,
+  `leCessieTest(X)`. Lowercase would collide with the meaning the same
+  letters have everywhere else (`n` the sample size, `x` the data);
+- inherited names that are passed on (`MARGIN`, §3.4).
+
+Everything else follows lowerCamelCase, abbreviations included:
+`breslowDayTest(oddsRatio = )`, not `OR`; `tOne(tests = )`, not `TEST`.
+(Decided 2026-10-05.)
 
 ### Scope of `fit`
 
@@ -559,9 +605,42 @@ designed so it never bites.
    they pass via `...` to `.applyParFromDots()` / `plot()` / `points()`.
    The dots never partially match, so no collisions arise.
 
+   Two kinds of functions take the parameters from the dots without
+   `.applyParFromDots()`. A function that computes its page layout itself
+   picks the ones that define it out by name and hands the rest on
+   (`plotFacet()`: `mar`, `oma`, `cex`; everything else goes to `FUN`). An
+   annotation helper that adds to an existing plot (`polarGrid()`,
+   `colLegend()`) keeps the few it needs as formals: applying the theme's
+   `par` values there would change everything drawn afterwards.
+
 3. **List arguments instead of prefixed formals.** Substructure goes
    into a single list argument (`qqline = list(col=, lty=)`), never
    into `qqline.col`, `qqline.lty`, ... formals.
+
+   *Value or list.* Where the substructure belongs to an argument that
+   already carries a value, the argument takes either the bare value or a
+   list holding the value and its details:
+
+   ```r
+   plotMosaic(tab, labels = "p")
+   plotMosaic(tab, labels = list("p", cex = 0.7, digits = 0))
+
+   plotTreemap(x, groups = grp)
+   plotTreemap(x, groups = list(grp, area = list(border = "black")))
+
+   colLegend("right", labels = list(1:5, adj = "center"),
+             title = list("Scale", adj = 0))
+   ```
+
+   In the list the value stands under a documented element name (`type`,
+   `by`, `text`) or as the one unnamed element, the idiom of
+   `title(main = list("text", cex = 1.5))`. The text of a label or title
+   is always the element `text` (`plotTreemap()`, `colLegend()`,
+   `plotWeb()`). An unknown element is an error: a mistyped name must not
+   disappear. The resolver is `.valueSpec()` in
+   pharos. Where the list configures a drawn element (§6.3), a property of
+   that element is an ordinary entry:
+   `plotFacet(strip = list(labels = vars, bg = "grey80"))`.
 
 4. **Formals stand before the dots.** Placing options after `...` to
    force exact matching was tried and dropped (2026-10): no function
@@ -672,7 +751,9 @@ Two kinds of inherited names are kept.
    used suite-wide, whether or not the value is passed on: `na.rm`,
    `na.action`, `conf.level`, `sig.level`, `alternative`, `mu`, `paired`,
    `var.equal`, `lower.tail`, `log.p`, `ncp`, `df`, `decreasing`,
-   `na.last`, `ties.method`, and the graphics labels of §3.3 (A).
+   `na.last`, `ties.method`, `vcov.` (a covariance matrix or a function
+   that computes one, the convention of lmtest and sandwich), and the
+   graphics labels of §3.3 (A).
 2. **Forwarded names.** Every other name on the lists above is kept
    exactly when the argument is passed on unchanged, via `...` or
    explicitly, to the function it comes from.
@@ -734,6 +815,42 @@ follow lowerCamelCase: `accPValue`, not `acc.p.value`.
 *Status: adopted 2026-10-04. Supersedes the earlier version, which
 prescribed `pValue` and `testStatistic` and thereby renamed two names that
 every `htest` carries.*
+
+### Exception: column names of data tables
+
+The lowerCamelCase rule applies to components of returned *objects*
+(lists, htest, CI vectors, attributes). It does not apply to the
+**columns of data tables** that a data package returns as its data
+model, such as the registers and statistics of `helvetia`. Their
+columns are written in `snake_case` with a type suffix:
+
+| Suffix | Type | Example |
+|---|---|---|
+| `_id` | identifier | `gem_id`, `kanton_id` |
+| `_x` | text | `gem_x`, `noas_x_de` |
+| `_c` | code | `kanton_c`, `sex_c`, `mutation_type_c` |
+| `_n` | number | `jahr_n`, `age_n`, `ch_n` |
+| `_d` | date | `stand_d`, `mutation_d` |
+| `_l` | logical | `age_open_l`, `split_l` |
+
+Rationale: these names follow the attribute conventions of the
+databases the data come from and are joined with, which traditionally do
+not distinguish case and therefore use `snake_case`; the suffix carries
+the type, which `gemId` would lose. A column name is part of a data
+contract that outlives any single function.
+
+Consequences:
+
+- Arguments stay lowerCamelCase (§3.3) and may differ from the column
+  they select: `popGemeinde(year = 2021)` returns `jahr_n`.
+- Attributes and list components of the same functions are not data
+  columns and follow the general rule (`attr(x, "repairedGemId")`,
+  `sourceInfo(x)$retrievedAt`).
+- Code values in such columns that the package defines itself are
+  kebab-case (§3.1.1): `mutation_type_c = "rename-reassign"`. Codes taken
+  over from the source keep its spelling (`"GDETYP2020_9"`, `"ZH"`).
+
+*Status: adopted 2026-10-16.*
 
 
 
@@ -866,14 +983,26 @@ which made an empty sample after removal an error.*
 
 #### Scope: tests
 
-The policy above is written for estimators. For tests, decided 2026-10-04:
-the formula method of every test uses `na.action = na.pass` and leaves
-missing values to the default method, so that they are handled in one
-place.
+The policy above is written for estimators. A test is different: it
+answers one question about the data at hand, and a result of `NA` answers
+none. Decided 2026-10-04 and 2026-10-05:
 
-*Open:* what the default method of a test does with missing values. Base-R
-tests drop them silently, which is what this policy rejects for
-estimators. Until decided, a test documents its behaviour in `@details`.
+1. **The default method removes incomplete cases**, as `kruskal.test()`
+   and `t.test()` do, and says so in `@details`. Group comparisons do it
+   through `bedrock::resolveGroups()`, so that value and group are dropped
+   together. A test that has an `na.rm` argument defaults it to `TRUE`
+   (`runsTest()`).
+2. **The formula method of a group comparison uses `na.action = na.pass`**
+   and leaves the missing values to the default method, so that they are
+   handled in one place (`dunnTest`, `conoverTest`, `nemenyiTest`, ...).
+3. **A formula that describes a model keeps the `na.action` of `lm()`**:
+   `durbinWatsonTest(formula, ...)` and `scheffeTest(formula, ...)` fit a
+   model first, and the model frame is where its missing values belong.
+
+An estimator that returns a structured object follows the policy for
+estimators, point 4: `confusion(x, ref)` with missing values and
+`na.rm = FALSE` returns the table of the complete pairs and `NA` for every
+statistic.
 
 *Open:* `impute()` defaults to `na.rm = TRUE`, because the replacement
 value is computed from the observed values. Either an explicit exception
@@ -978,8 +1107,8 @@ switch(match.arg(direction), row = ..., column = ...)
 ```
 
 This is not hypothetical: `gkTau` matched `direction` inside `switch()`,
-and `lambda` matched `sides` inside the interval branch, where
-`conf.level = NA` skipped it entirely. `lambda` also carried a `method`
+and `gkLambda` matched `sides` inside the interval branch, where
+`conf.level = NA` skipped it entirely. `gkLambda` also carried a `method`
 formal that was never matched at all.
 
 The check is one pass over the namespace — see §8.1.6.
@@ -1171,14 +1300,23 @@ come back in reverse order — and an elementwise clamp does not notice.
 
 ### Relationship to DescTools
 
-This is the **reverse** of DescTools, where `sides` names the direction of
-the alternative hypothesis, as `alternative` does in `t.test`. The
-rationale: the argument is called `sides`, not `alternative`, and describes
-the shape of an interval rather than a test, so naming the side that is
-actually bounded is read off directly instead of derived. The change is
-silent for code carried over — both packages accept the same values — so it
-is documented in `\link{ConfidenceIntervals}` and belongs in NEWS.md under
-breaking changes.
+The semantics are those of DescTools: there, too, `sides = "left"` gives a
+finite `lci` and `uci = Inf`. Code carried over behaves identically; there
+is no breaking change and no NEWS entry.
+
+Against `alternative` in tests the correspondence is crossed, because the
+two arguments name different things — `alternative` the direction of the
+hypothesis, `sides` the bounded end of the interval:
+
+| `sides` | `alternative` in `t.test()` |
+|---|---|
+| `"two.sided"` | `"two.sided"` |
+| `"left"` | `"greater"` |
+| `"right"` | `"less"` |
+
+*Corrected 2026-10-22. An earlier version of this section stated that the
+convention was the reverse of DescTools and called for a breaking-change
+entry; both were wrong.*
 
 ### Open: estimator arguments that name the target
 
@@ -1201,10 +1339,11 @@ plausible 0.95 value.
 Decided 2026-10-04. Tests are look-alikes of `t.test()` and keep its
 signature: `alternative` instead of `sides`, `conf.level` after the test
 arguments. `sides` names the side with the finite bound, `alternative` the
-direction of the hypothesis; putting `sides` on a test would give the same
-word the opposite meaning of its base-R counterpart.
+direction of the hypothesis, and the two are crossed (`"left"` ↔
+`"greater"`, see above). On a test, where readers expect `alternative`,
+`sides = "left"` would read as the opposite of what it does.
 
-Applies to `signTest`, `tTestA`, `zTest`, `yuenTTest` and
+Applies to `signTest`, `tTestSummary`, `zTest`, `yuenTTest` and
 `brunnerMunzelTest`. Post-hoc tests follow `TukeyHSD(conf.level)` and
 carry `conf.level` without `sides`: `dunnettTest`, `gamesHowellTest`,
 `scheffeTest`, `postHocTest`. All of them are on the exception list of
@@ -1279,12 +1418,16 @@ closest(
   x,
   val,
   # Method
-  output = c("value", "index"),
+  output = "value",
   # Data handling
-  na.rm = FALSE,
-  ...
+  na.rm = FALSE
 )
 ```
+
+`output` takes `"value"` or `"index"`. It is recycled along `val` and
+matched with `several.ok = TRUE`, which is why its default is the single
+value and not the enumeration of §5.1: the full vector as a default would
+ask for both.
 
 ## 4.4 Position of `...`
 
@@ -1296,12 +1439,11 @@ plotProbDist(
   breaks, FUN,
   # Labels
   main  = NULL,
-  xlab  = NULL,
   ylab  = "density",
   # Axes
   xlim  = NULL,
   # Style
-  col     = .useTheme,
+  col     = NULL,
   density = 7,
   grid    = .useTheme,
   box     = .useTheme,
@@ -1321,6 +1463,25 @@ formals after the dots, and a mistyped toggle name then disappears into
 the dots without a message. One layout for all plot signatures is worth
 more than exact matching for a few arguments; partial matches are caught
 by `options(warnPartialMatchArgs = TRUE)` in the tests (§3.3 I).
+
+**Exception: dots that carry data.** Where the dots take further samples,
+as in `boxplot(x, ...)`, they follow the first argument:
+
+```r
+plotViolin.default(
+  x, ...,
+  # Labels
+  main = NULL, xlab = "", ylab = "",
+  # Axes, Statistics, Structure, Style, Features as in §4.2
+  # Framework
+  stamp = .useTheme
+)
+```
+
+This holds for the default methods of `plotDens()`, `plotRidge()` and
+`plotViolin()`. Their other formals follow in the order of §4.2 and are
+matched by full name only. The formula methods have no such dots and
+follow the general rule.
 
 ---
 
@@ -1518,6 +1679,12 @@ Forbidden:
 - direct access to `...` in the function body
 - argument parsing inside `apply` / `replicate`
 
+**Dots shared with a user function.** In `bootCI(x, FUN, ...)` the dots
+also carry the arguments of `FUN`. The bootstrap arguments (`type`,
+`parallel`, `ncpus`) are split off by name first and only the rest is
+passed on. A `FUN` with an argument of the same name is wrapped by the
+caller: `bootCI(x, function(z) quantile(z, 0.9, type = 7))`.
+
 **`R` as a formal.** Where resampling is the only way the function can
 compute its result, `R` is a formal, because the function cannot run
 without it: `bootCI`, `coefCI`, `rSq`, and permutation or Monte Carlo tests
@@ -1649,6 +1816,12 @@ conf.level <- checkConfLevel(conf.level)
 checkFlag(correct)
 ```
 
+`NA` means "no interval wanted" and is accepted. A function whose result
+always carries the interval — the tests, `blandAltmanData()`,
+`conf.table()` — calls `checkConfLevel(conf.level, allowNA = FALSE)`
+instead, so that the refusal comes from the same place and in the same
+words.
+
 Both live in `bedrock/R/checks.R` and are imported via
 `@importFrom bedrock checkConfLevel checkFlag`. They are in bedrock and not
 in each package because a copy per package is exactly how the suite ended
@@ -1663,7 +1836,7 @@ vector of length other than one turns the surrounding `if` into the error
 message, which then talks about the condition instead of the argument.
 Length first, then type, then range, with `NaN` excluded explicitly. All
 four failure modes were live in the suite: `relRisk` refused its own
-default, `contCoef`, `cramerV`, `lambda` and `.yuleCoef` aborted inside
+default, `contCoef`, `cramerV`, `gkLambda` and `.yuleCoef` aborted inside
 `if (is.na(conf.level))`.
 
 **Tests assert on the argument name, not on the message text:**
@@ -1705,7 +1878,7 @@ Parameter ranges as adopted:
 | Range | Statistics |
 |---|---|
 | −1 … 1 | `ccc`, `cohenKappa`, `pabak`, `kappaM`, `krippAlpha`, `icc`, `pearsonCor`, `spearmanCor`, `yuleQ`, `yuleY`, gamma, tau-a/b/c, Somers' *D* |
-| 0 … 1 | `cramerV`, `lambda`, `gkTau`, `uncertCoef`, `gini`, `percAgreement`, c statistic |
+| 0 … 1 | `cramerV`, `gkLambda`, `gkTau`, `uncertCoef`, `gini`, `percAgreement`, c statistic |
 | 0 … `sqrt((m-1)/m)` | `contCoef`, or 0 … 1 with Sakoda's correction |
 | 0 … `Inf` | `relRisk`, `oddsRatio`, `gmean`, `hmean`, `coefVarCI` |
 | −`Inf` … 1 | `cronbachAlpha` |
@@ -1759,11 +1932,23 @@ belong in the test suite, not in a one-off script.
   in its own body. Exception list, each entry with its reason: tests that keep
   `alternative` and post-hoc tests without `sides` (§4.1); bands and
   reference regions (§8.1.8); and three functions whose interval is a
-  by-product of a larger result (`blandAltmanData`, `conf.table`,
+  by-product of a larger result (`blandAltmanData`, `confusion.table`,
   `predict.Lc`). `randolphKappa` has no interval implemented and therefore
   carries neither `conf.level` nor `sides` (§8.1.2).
 - **`auditMatchArg()`** — every enum formal without a `match.arg()` call
-  in the body. Would have found `lambda`'s unmatched `method`.
+  in the body. Would have found `gkLambda`'s unmatched `method`.
+- **`bedrock::auditNames()`** — the naming rules of §3.1 to §3.5, read
+  from the namespace: lowerCamelCase for exported functions and formals,
+  the closed list of abbreviations, the X suffix in both directions, dots
+  in exported names, inherited names that are not forwarded, the names
+  replaced by §13.13, and the spelling of enum values. Each package runs
+  it in `tests/testthat/test-auditNames.R` against a list of accepted
+  findings, each with its reason; an entry starting with `open:` is a
+  name still to be decided. An entry that no longer matches a finding
+  fails the test, so the list cannot outlive its reasons. What the audit
+  cannot see is a word boundary that was never written (`maxlen`). Since
+  0.7 it applies the narrowed collision rule of §3.2 and the capitals of
+  §3.3 H, and no package carries an `open:` entry any more.
 - **single-option enums** — every enum formal with exactly one legal
   value, per §4.1.
 
@@ -1794,7 +1979,7 @@ screen is not an interval for a parameter:
   under the model. It is symmetric by construction; a one-sided version
   would have no reading, because a mean residual is evidence against the
   model in either direction.
-- `plotQQ()`'s `cband` and `lines.loess()`'s `bandArgs` are the same shape:
+- `plotQQ()`'s `cband` and `lines.loess()`'s `band` are the same shape:
   a pointwise band around a curve, consumed as a level and nothing else.
 
 The distinction is not "plot vs. statistic". A plot function that reports
@@ -2047,9 +2232,26 @@ The `main` argument follows a three-state contract, resolved via
 
 | Value | Meaning |
 |---|---|
-| `NULL` (default) | derive a title from the call (see below) |
+| `NULL` (default) | no title, unless the theme sets `autoTitle = TRUE`; then the title derived from the call (see below) |
 | `""` / `NA` / `FALSE` | suppress the title; the top margin is compacted accordingly (`.marTop(main)` returns a smaller value) |
 | any other string | used as-is |
+
+**No title by default (decided 2026-10).** As in base graphics and
+ggplot2, a plot gets a title only when asked for one: the axes already
+name the variables, a title derived from the call merely repeats what
+was just typed, and in reports the figure caption takes the title's
+place. `setTheme(list(autoTitle = TRUE))` switches the derived titles on
+for the whole session (interactive exploration, teaching). Every
+function still computes its derived default and passes it to
+`.resolveTitle()`; the theme decides in that one place.
+
+Exceptions, via `.resolveTitle(main, default, always = TRUE)`: titles
+that carry information shown nowhere else in the plot - the palette name
+in `plot.Palette()` and the panel type in `plot.Desc.*()`.
+
+`main` must be resolved *before* the top margin is computed:
+`.marTop()` reads `NULL` as "title present". A function without a
+derived title still calls `main <- .resolveTitle(main)` first.
 
 The derived default follows "substitute magic": `match.call()` is
 captured early (before the data argument is reassigned/transformed), and
@@ -2105,6 +2307,13 @@ plotHeatmap(tab, ..., stamp = NA)   # inside plot.Desc.table()
 Functions that are always called directly by the end user (never
 delegated to) do not need this - only the inner leg of a
 delegation chain does.
+
+**Functions that own the page.** A function that sets up its own layout
+and outer margins (`plotFacet()`) wraps its drawing part in
+`.withGraphicsState()` like any other and sets the outer margins to zero
+as the last statement of that block. The stamp then lands in the corner of
+the page; drawn against the outer margins it would sit on the axis
+annotation of the last panel.
 
 ## 9.6 Left-Margin Auto-Sizing
 
@@ -2830,28 +3039,27 @@ If a function could plausibly belong to two families, assign it to the one that 
 
 | Family | Contents |
 |---|---|
-| `color.conversion` | colToHex, colToHSV, colToRGB, colToOpaque, grayScale, hexToCol, hexToRGB, longToRGB, rgbToCol, rgbToHex, rgbToLong |
+| `color.conversion` | colToHex, colToHsv, colToRgb, colToOpaque, grayScale, hexToCol, hexToRgb, longToRgb, rgbToCol, rgbToHex, rgbToLong |
 | `color.space` | cmyToCmyk, cmykToCmy, cmykToRgb, rgbToCmy |
 | `color.handling` | addOpacity |
-| `color.lookup` | contrastColor, findColor |
-| `color.manipulation` | darken, fade, lighten, mixColors |
+| `color.lookup` | contrastCol, findCol |
+| `color.manipulation` | darken, fade, lighten, mixCol |
 | `color.palettes` | hcol, pal, palNames |
 | `format` | fm, fmCI, style, styles, unit, unit<-, print.Unit, convUnit |
 | `tables` | ftable.list |
 | `geometry.conversion` | cartToPol, polToCart, cartToSph, sphToCart, degToRad, radToDeg |
-| `geometry.structures` | arc, band, bezier, circle, ellipse, polygon, regPolygon, ring |
+| `geometry.structures` | arc, band, bezier, circle, ellipse, polygonX, regPolygon, ring |
 | `geometry.transformation` | transformXY, rotate |
 | `graphics.annotation` | barText, boxedText, colLegend, errBars, lines.lm, splineX, textLegend, titleRect |
-| `graphics.layout` | abcCoords, axisBreak, axTicks, canvas, lineToUser, mar, polarGrid, setBackCol, spreadOut |
+| `graphics.layout` | abcCoords, axisBreak, axTicksPosixct, canvas, lineToUser, mar, polarGrid, setBackCol, spreadOut |
 | `graphics.framework` | stamp |
-| `graphics.utils` | preview — sole remaining member; no established family fits a generic, non-graphics-specific S3 dispatch function. Open decision, see note below. |
-| *(none — see `string-overview`)* | strAbbr, strAlign, strCap, strChop, strCountW, strDist, strExtract, strExtractBetween, strIsNumeric, strLeft/strRight, strLen, strPad, strPos, strRev, strSpell, strSplit, strTrim, strTrunc, strVal, lineSep — documented under the §11.1d overview page `string-overview` instead of an `@family` tag; still `@concept string-manipulation` / `string-inspection` |
-| `html` | htmlHat, htmlBar, `%_%`, as.html, as.img, toHtmlTable |
+| *(none — see `string-overview`)* | strAbbr, strAlign, strCap, strChop, strCountWords, strDist, strExtract, strExtractBetween, strIsNumeric, strLeft/strRight, strLen, strPad, strPos, strRev, strSpell, strSplit, strTrim, strTrunc, strVal, lineSep — documented under the §11.1d overview page `string-overview` instead of an `@family` tag; still `@concept string-manipulation` / `string-inspection` |
+| `html` | htmlHat, htmlBar, `%_%`, asHtml, asImg, toHtmlTable, preview, preview.html |
 | `plot.bivariate` | plotAssoc, plotBag, plotBubble, plotCor, plotDens2D, plotHeatmap, plotHexbin, plotMosaic, plotXY |
 | `plot.distribution` | plotFun, plotProbDist, shade |
 | `plot.s3` | plot.BlandAltman, plot.Desc.qn, plot.Desc.table, plot.Lc |
 | `plot.special` | plotBinaryTree, plotCirc, plotMiss, plotPolar, plotPropCI, plotTernary, plotTimeSeries, plotTreemap, plotWeb |
-| `plot.univariate` | plotArea, plotBar, plotBox, plotCatDist, plotDens, plotDensBox, plotDot, plotECDF, plotFdist, plotLines, plotQQ, plotRidge, plotViolin |
+| `plot.univariate` | plotArea, plotBar, plotBox, plotCatDist, plotDens, plotDensBox, plotDot, plotECDF, plotFreqDist, plotLines, plotQQ, plotRidge, plotViolin |
 | `theme` | getTheme, resetTheme, setTheme |
 
 **Verified against source, 2026-07 pass** (this table now reflects `@family` tags actually present in the `.R` files, not intent):
@@ -2861,13 +3069,13 @@ If a function could plausibly belong to two families, assign it to the one that 
 - `color.space` (`cmyToCmyk, cmykToCmy, cmykToRgb, rgbToCmy`) existed correctly tagged in source but was never added to this table — added now.
 - `tables` (`ftable.list`) — this table previously listed it under a `frequency` family that doesn't exist in source; the actual tag is `tables`.
 - `plot.distribution` previously listed only `shade`; `plotFun` and `plotProbDist` were incorrectly listed under `plot.univariate` in this table but are actually tagged `plot.distribution` in source — moved.
-- `html` previously listed `notation` (not a real function — a descriptive label, removed) and `preview.html` (an S3 method of `preview()`, which is tagged `graphics.utils`, not `html` — removed pending the `preview` decision below).
+- `html` previously listed `notation` (not a real function — a descriptive label, removed) and `preview.html` (an S3 method of `preview()`, which is tagged `graphics.utils`, not `html` — removed pending the `preview` decision below; since 2026-10 back in `html`, see below).
 - Four `topic.graphics` (`plotBubble`, `plotDens`, `plotDens2d`, `plotRidge`) and one `inequality` (`plot.Lc`) leftover pre-redesign tags were found and removed — each had a second, already-correct tag in the same roxygen-grouped doc topic, so no reassignment was needed, just deletion of the stale duplicate.
-- `hexToRGB` carried a stray bare `@family color` (typo from before the initial family redesign) — corrected to `color.conversion`.
-- **Open gap, not resolved:** `as.CI`/`is.CI` (`as.ci.R`) carry no `@family` tag at all in source, despite this table historically listing a `ci.general` family for them. Either the tag needs adding or the row should be dropped — flagging rather than deciding.
-- **Open gap, not resolved:** `preview` has no family that fits — it's a generic S3 dispatch mechanism (also used for the unrelated `html` class), not graphics-specific. Left in `graphics.utils` as a placeholder of one.
+- `hexToRgb` carried a stray bare `@family color` (typo from before the initial family redesign) — corrected to `color.conversion`.
+- **Open gap, not resolved:** `as.CI`/`isCI` (`as.ci.R`) carry no `@family` tag at all in source, despite this table historically listing a `ci.general` family for them. Either the tag needs adding or the row should be dropped — flagging rather than deciding.
+- **Resolved 2026-10:** `preview` (and `preview.html`) moved to `html`. Its reason for existing is the `html` class — a `print()` method there would clash with htmltools — and `html` is its only dedicated method; the default method merely calls `print()`. `graphics.utils` is retired; no function carries it any more.
 
-`color.lookup` (findColor) and the `geometry` bare family (canvas, polarGrid — now correctly in `graphics.layout`, not merged into the old `graphics.utils` as this doc previously and inaccurately claimed) were resolved during the initial family pass: `color` and `geometry` had been used both bare and with `.`-subcategories for the same domain, which no other package in the suite does — a domain is either fully bare (`theme`, `format`, `tables`) or fully `.`-categorized (`color.*`, `geometry.*`), never mixed.
+`color.lookup` (findCol) and the `geometry` bare family (canvas, polarGrid — now correctly in `graphics.layout`, not merged into the old `graphics.utils` as this doc previously and inaccurately claimed) were resolved during the initial family pass: `color` and `geometry` had been used both bare and with `.`-subcategories for the same domain, which no other package in the suite does — a domain is either fully bare (`theme`, `format`, `tables`) or fully `.`-categorized (`color.*`, `geometry.*`), never mixed.
 
 With the threshold now at 5-6 (revised 2026-07, see §11.1d), considerably more families qualify for an overview page than before: `plot.univariate` (13), `color.conversion` (11), `graphics.layout` (9), `plot.bivariate` (9), `plot.special` (9), `graphics.annotation` (8), `geometry.structures` (8) all now exceed it — previously only `graphics.utils` (25) was flagged. None of these have overview pages yet; all deferred pending prioritization.
 
@@ -2882,7 +3090,7 @@ With the threshold now at 5-6 (revised 2026-07, see §11.1d), considerably more 
 | `data.coerce` | bin, chr, int, nchr, num, … |
 | `data.equal` | allDuplicated, allIdentical, compareDataFrames |
 | `data.inspect` | strX |
-| `data.interval` | between, the 8 range operators, intervals, overlap(s), distance, %:%, %::% |
+| `data.interval` | between, the 8 range operators, intervals, overlapSize, overlaps, distance, %:%, %::% |
 | `data.missing` | completeColumns, countCompCases |
 | `data.order` | binaryTree, revX, sortX |
 | `data.predicate` | flags, isDichotomous, isEuclid, isLowCardinality, isNumeric, … |
@@ -2892,8 +3100,8 @@ With the threshold now at 5-6 (revised 2026-07, see §11.1d), considerably more 
 | `data.resolve` | resolveContingency, resolveFormula, resolveGroups |
 | `datasets` | Cards, Pizza, Roulette, Tarot, courseData |
 | `date.format` | asCDateFmt |
-| `file.io` | parseSASDatalines, pdfManual, peekFile |
-| `file.path` | buildPath, fileExistURL, findDownload, isFilePath, isURL, … |
+| `file.io` | parseSasDatalines, pdfManual, peekFile |
+| `file.path` | buildPath, urlExists, findDownload, isFilePath, isUrl, … |
 | `label.attrs` | keepAttr, label, label<-, removeAttr, renameX, … |
 | `label.import` | dataDescription, openDataObject |
 | `math.basic` | closest, crossProd, crossProdN, dotProd, roundTo, … |
@@ -2918,8 +3126,8 @@ Superseded a flat, pre-redesign taxonomy (`data.manipulation`, `data.inspection`
 | Family | Contents |
 |---|---|
 | `modelling` | fitMod, predict.FitMod, print.FitMod |
-| `model.comparison` | tMod, tmodSummary |
-| `regression.utils` | coefCI, pseudoR2, rSq, vif, refLevel, varImp, … |
+| `model.comparison` | tMod, tModSummary |
+| `regression.utils` | coefCI, pseudoRSq, rSq, vif, refLevel, varImp, … |
 | `roc` | roc, bestCut, confint.roc |
 | `tree` | bestTree, cParam, leafRates, node, rules, splits, plot.rpart |
 | `data.split` | splitTrainTest |
@@ -2933,6 +3141,22 @@ Superseded a flat, pre-redesign taxonomy (`data.manipulation`, `data.inspection`
 | `model.metrics` | `auc`, `brierScore`, `cStat`, prediction error |
 | `roc` | `roc`, `confint.roc`, `bestCut` |
 | `model.selection` | `drop1`-Varianten, `vif`, stepwise helpers |
+
+
+**helvetia**
+
+| Family | Contents |
+|---|---|
+| `swiss.register` | gemeinde, gemeindeMutationen, raumgliederung, praemienregion, kanton |
+| `swiss.statistics` | popGemeinde, arealGemeinde, noas |
+| `swiss.geometry` | geoGemeinde, geoBezirk, geoKanton, geoThemakart, geoGewaesser, themakartSets |
+| `swiss.map` | plotMap, addGewaesser, stampBfs |
+| `swiss.spatial` | combineRegions, neighbours, locate, geocode |
+| `swiss.source` | sourceInfo, cacheList, cacheClear |
+
+The package-level help page `helvetia-package` serves as the overview of
+all six families (§11.1d); the families stay, since each has at most six
+topics.
 
 
 ## 12.3 `@concept`
@@ -3004,56 +3228,68 @@ feature-selection  prediction-error     calibration
 The following concepts are approved and in use across the suite. Use these exact spellings:
 
 ```text
-agreement               annotation              anova-effect-size
-association-measure     asymmetric-association  attribute
-autocorrelation         bar-chart               binary
-binary-association      binary-outcome          binning
-bivariate               bootstrap               boxplot
-calibration             categorical-agreement   categorical-test
-categorization          chi-square-based        classification
-color                   color-conversion        combinatorics
-concentration-index     concordance             confidence-interval
-confusion-matrix        correlation             dataset
-date-time               demographics            density
-dispersion              distribution-function   distribution-summary
-distribution-visualization  dotchart            dummy-coding
-effect-size             exact-test              extreme-value
-factor-handling         feature-selection       finance
-formatting              formula                 frequency-table
-geometry                goodness-of-fit         homogeneity
-html                    hypothesis-test         imputation
-inequality              information-theory      internal-consistency
-interrater-agreement    introspection           k-sample
-label                   latent-variable         line-chart
-location                location-test           machine-learning
-merge                   method-comparison       missing-value
-model-evaluation        modelling               multicollinearity
-multiple-testing        multivariate            nominal
-nonlinear-association   nonlinear-mean          nonparametric
-normality-test          number-formatting       number-theory
-numeric-conversion      numerical-methods       order-statistic
-ordering                ordinal                 outlier-detection
-palette                 parametric              pattern-matching
-phonetic-encoding       post-hoc                power
-prediction              prediction-error
-programming             proportion              quantile
-randomness              range                   rank-correlation
-rater-data              regression              regression-diagnostics
-reliability             reshape                 robust-statistic
-roc                     sample-size             sampling
-scatterplot             shape                   standardization
-string-inspection       string-manipulation     summary
-table
-table-summary           theme                   time-series
-transformation          tree                    trend-test
-type-test               variance-analysis       variance-component
-variance-stabilization  variance-test
+agreement                   annotation                  anova-effect-size
+association-measure         asymmetric-association      attribute
+autocorrelation             bar-chart                   binary
+binary-association          binary-outcome              binning
+bivariate                   bootstrap                   boxplot
+caching                     calibration                 canton
+categorical-agreement       categorical-test            categorization
+chi-square-based            choropleth                  classification
+color                       color-conversion            combinatorics
+concentration-index         concordance                 confidence-interval
+confusion-matrix            correlation                 dataset
+date-time                   demographics                density
+dispersion                  distribution-function       distribution-summary
+distribution-visualization  dotchart                    dummy-coding
+effect-size                 exact-test                  extreme-value
+factor-handling             feature-selection           finance
+formatting                  formula                     frequency-table
+geocoding                   geometry                    goodness-of-fit
+health-insurance            historicisation             homogeneity
+html                        hydrography                 hypothesis-test
+imputation                  inequality                  information-theory
+internal-consistency        interrater-agreement        introspection
+k-sample                    label                       land-use
+latent-variable             line-chart                  location
+location-test               machine-learning            map
+merge                       method-comparison           missing-value
+model-evaluation            modelling                   multicollinearity
+multiple-testing            multivariate                municipality
+nomenclature                nominal                     nonlinear-association
+nonlinear-mean              nonparametric               normality-test
+number-formatting           number-theory               numeric-conversion
+numerical-methods           order-statistic             ordering
+ordinal                     outlier-detection           palette
+parametric                  pattern-matching            phonetic-encoding
+population                  post-hoc                    power
+prediction                  prediction-error            programming
+proportion                  quantile                    randomness
+range                       rank-correlation            rater-data
+regional-classification     regression                  regression-diagnostics
+reliability                 reproducibility             reshape
+robust-statistic            roc                         sample-size
+sampling                    scatterplot                 shape
+source-metadata             spatial-data                standardization
+string-inspection           string-manipulation         summary
+table                       table-summary               theme
+time-series                 transformation              tree
+trend-test                  type-test                   variance-analysis
+variance-component          variance-stabilization      variance-test
 ```
 
 ### Recently added concepts
 
+- helvetia (2026-10-16): `municipality`, `canton`, `historicisation`
+  (register stands and their changes over time), `regional-classification`,
+  `population`, `land-use`, `nomenclature` (code lists such as NOAS04 or
+  the cantons), `health-insurance`, `spatial-data`, `map`, `choropleth`,
+  `hydrography` (lakes and rivers), `geocoding`, and for the source
+  infrastructure `caching`, `source-metadata`, `reproducibility`. Together
+  with the existing `demographics`, `geometry`, `annotation` and
+  `missing-value`.
 - `string-inspection` — added for pharos's `string` family to separate functions
-  that measure or test a string (`strCountW`, `strDist`, `strIsNumeric`,
+  that measure or test a string (`strCountWords`, `strDist`, `strIsNumeric`,
   `strLen`, `strPos`) from those in `string-manipulation` that change one
   (`strAbbr`, `strPad`, `strSplit`, ...). Same relationship as
   `distribution-function` vs. `distribution-summary` below.
@@ -3188,13 +3424,20 @@ Values). `sides` and `method` are defined in §4.1 and §3.5.
 | Estimator among several of the same quantity | `estimator` |
 | Difference function / measurement level | `metric` |
 | Bootstrap interval type (through `...`) | `type` |
-| Internal engine | `engine` |
+| Fitting function or backend selected by name | `engine` |
 
 `method` is reserved for the interval method — see §3.5. `type` is
 reserved for the bootstrap interval type and must not be used as a formal
 for anything else.
 
 Both reservations apply to estimators and CI functions only (§3.5).
+
+`engine` names the key of a registry of fitting functions:
+`fitMod(formula, data, engine = "logit")`. It is not `model`, `method` or
+`type`, because the function hands its dots on to the fitters, and many of
+them have arguments of exactly these names (`lm(model = )`,
+`glm(method = )`, `svm(type = )`). The result carries the key as
+`fit$engine`.
 
 
 ## 13.6 Simulation / Bootstrap
@@ -3209,6 +3452,7 @@ Both reservations apply to estimators and CI functions only (§3.5).
 | Meaning | Name |
 |---|---|
 | Sorting / ordering | `order` |
+| Columns or keys to sort by | `by` |
 | Value range | `range` |
 | Decreasing | `decreasing` |
 

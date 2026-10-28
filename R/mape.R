@@ -4,8 +4,8 @@
 #' Computes the mean absolute percentage error (MAPE) between predicted
 #' and reference values.
 #'
-#' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. `lm`).
+#' @param x a numeric vector of predicted values.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ... additional arguments passed to methods
 #'
 #' @return a numeric scalar containing the MAPE, as a **fraction**,
@@ -28,10 +28,6 @@
 #'
 #' mape(x, ref)
 #'
-#' # with linear model
-#' fit <- lm(mpg ~ hp, data = mtcars)
-#' mape(fit)
-#'
 #'
 #' @family model.metrics
 #' @concept model-evaluation
@@ -39,17 +35,6 @@
 #' @export
 mape <- function(x, ...) {
   UseMethod("mape")
-}
-
-
-#' @rdname mape
-#' @export
-mape.lm <- function(x, ...) {
-  mape(
-    predict(x, type = "response"),
-    model.response(model.frame(x)),
-    ...
-  )
 }
 
 

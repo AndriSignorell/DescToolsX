@@ -40,14 +40,6 @@ test_that("smape stops when x and ref have different lengths", {
   expect_error(smape(1:3, ref=1:4), "same length")
 })
 
-test_that("smape.lm returns a non-negative numeric", {
-  fit <- lm(mpg ~ hp, data = mtcars)
-  res <- smape(fit)
-  expect_gte(res, 0); expect_length(res, 1)
-})
-
-
-
 test_that("smape matches its definition and its bounds", {
   
   x <- c(2.5, 3.0, 2.8)
@@ -101,19 +93,4 @@ test_that("smape and rmse validate their arguments", {
   expect_error(smape(letters, letters), "numeric")
   expect_error(smape(1:3, 1:3, na.rm = NA), "na.rm")
   expect_error(rmse(1:3, 1:4), "same length")
-})
-
-
-test_that("the lm methods refuse a non-numeric response", {
-  
-  fit <- lm(mpg ~ hp, data = mtcars)
-  expect_equal(rmse(fit),
-               sqrt(mean(residuals(fit)^2)))
-  
-  # factor response without (quasi-)separation; I(mpg > 20) ~ hp gave
-  # fitted probabilities numerically 0 or 1
-  gfit <- glm(factor(vs) ~ mpg, data = mtcars, family = binomial)
-  # a factor or matrix response reached the arithmetic unchecked before
-  expect_error(rmse(gfit), "numeric vector")
-  expect_error(smape(gfit), "numeric vector")
 })

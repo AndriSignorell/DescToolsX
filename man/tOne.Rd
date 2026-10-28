@@ -2,8 +2,8 @@
 % Please edit documentation in R/tOne.R
 \name{tOne}
 \alias{tOne}
-\alias{print.tOne}
-\alias{[.tOne}
+\alias{print.TOne}
+\alias{[.TOne}
 \title{Create Table One Describing Baseline Characteristics}
 \usage{
 tOne(
@@ -15,12 +15,12 @@ tOne(
              pval = style(fmt = "*", naForm = "   "))
 )
 
-\method{print}{tOne}(x, ...)
+\method{print}{TOne}(x, ...)
 
-\method{[}{tOne}(x, i, j, ..., drop = FALSE)
+\method{[}{TOne}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
-\item{x}{a tOne object to subset}
+\item{x}{a \code{TOne} object to subset.}
 
 \item{groups}{the grouping variable}
 
@@ -63,16 +63,17 @@ reporting the last and \code{"low"} the first level.}
 \item{fmt}{fm codes for absolute, numeric and percentage values, and for
 the p-values of the tests}
 
-\item{...}{further parameters (not used here)}
+\item{...}{further parameters (not used here).}
 
-\item{i}{rowindex}
+\item{i}{row index; without \code{j} and without a comma (\code{x[i]}), a
+cell index as for a plain matrix.}
 
-\item{j}{columnindex}
+\item{j}{column index.}
 
-\item{drop}{drop the structure in case of total reduction}
+\item{drop}{drop the structure in case of total reduction.}
 }
 \value{
-a character matrix of class \code{tOne}
+a character matrix of class \code{TOne}.
 }
 \description{
 Create a table summarizing continuous, categorical and dichotomous
@@ -115,7 +116,7 @@ function with arguments \verb{(x, g)}, returning something similar to a
 p-value.
 \preformatted{
   tests = list( num = list(fun = function(x, g){
-      summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
+      summary(aov(x ~ g))[[1]][1], "Pr(>F)"]}, lbl = "ANOVA"),
     cat = list(fun = function(x, g){
       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
     dich = list(fun = function(x, g){
@@ -126,10 +127,10 @@ The legend text of the test, which is appended to
 the table together with the significance codes, can be set with the variable
 \code{lbl}.
 
-Great importance was attached to the free definition of the number fms.
-By default, the optionally definable fm templates of \strong{DescToolsX}
+Great importance was attached to the free definition of the number formats.
+By default, the optionally definable format templates of \strong{DescToolsX}
 are used. Deviations from this can be freely passed as arguments to the
-function. fms can be defined for integers, floating point numbers,
+function. Formats can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of the
 function \code{\link[pharos:fm]{pharos::fm()}} are available and can be provided as a list.
 See examples which show several different implementations.

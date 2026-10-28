@@ -57,75 +57,6 @@ test_that("logLoss supports custom clipping", {
 })
 
 
-test_that("logLoss accepts a fitted glm", {
-
-  m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-
-  expect_equal(
-    logLoss(m),
-    logLoss(predict(m, type = "response"), m$y)
-  )
-
-  # for ungrouped Bernoulli data the saturated log-likelihood is zero,
-  # hence deviance == 2 * n * logLoss -- an independent reference
-  expect_equal(logLoss(m), m$deviance / (2 * nrow(mtcars)))
-})
-
-
-test_that("logLoss handles na.exclude in fitted glm", {
-
-  # regression test: predict() pads its result via napredict() under
-  # na.exclude, $fitted.values does not and stays aligned with $y
-  d <- mtcars
-  d$hp[c(2, 5)] <- NA
-
-  m <- glm(
-    am ~ hp + wt,
-    data = d,
-    family = binomial,
-    na.action = na.exclude
-  )
-
-  expect_length(m$y, nrow(mtcars) - 2L)
-
-  expect_equal(
-    logLoss(m),
-    m$deviance / (2 * length(m$y))
-  )
-})
-
-
-test_that("logLoss rejects unsupported models", {
-
-  expect_error(
-    logLoss(lm(mpg ~ wt, data = mtcars)),
-    "only for 'glm'",
-    fixed = TRUE
-  )
-
-  expect_error(
-    logLoss(glm(mpg ~ wt, data = mtcars)),
-    "got \"gaussian\"",
-    fixed = TRUE
-  )
-
-  # quasibinomial has no full likelihood, hence no log loss
-  expect_error(
-    logLoss(glm(am ~ wt, data = mtcars, family = quasibinomial)),
-    "got \"quasibinomial\"",
-    fixed = TRUE
-  )
-
-  grp <- data.frame(succ = c(3, 7), fail = c(7, 3), x = c(0, 1))
-
-  expect_error(
-    logLoss(glm(cbind(succ, fail) ~ x, data = grp, family = binomial)),
-    "prior weights",
-    fixed = TRUE
-  )
-})
-
-
 test_that("logLoss validates the response type", {
 
   # a factor passes %in% via character coercion and would silently
@@ -210,4 +141,8 @@ test_that("logLoss validates eps", {
       "'eps'",
       fixed = TRUE
     )
+})
+
+test_that("the default method needs 'ref'", {
+  expect_error(logLoss(c(0.2, 0.8)), "'ref' must be provided")
 })

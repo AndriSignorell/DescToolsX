@@ -307,52 +307,48 @@ BEGIN_RCPP
 END_RCPP
 }
 // skew_cpp
-double skew_cpp(NumericVector x, double mean);
-RcppExport SEXP _DescToolsX_skew_cpp(SEXP xSEXP, SEXP meanSEXP) {
+double skew_cpp(NumericVector x);
+RcppExport SEXP _DescToolsX_skew_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
-    rcpp_result_gen = Rcpp::wrap(skew_cpp(x, mean));
+    rcpp_result_gen = Rcpp::wrap(skew_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
 // skew_weighted_cpp
-double skew_weighted_cpp(NumericVector x, double mean, NumericVector w);
-RcppExport SEXP _DescToolsX_skew_weighted_cpp(SEXP xSEXP, SEXP meanSEXP, SEXP wSEXP) {
+double skew_weighted_cpp(NumericVector x, NumericVector w);
+RcppExport SEXP _DescToolsX_skew_weighted_cpp(SEXP xSEXP, SEXP wSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(skew_weighted_cpp(x, mean, w));
+    rcpp_result_gen = Rcpp::wrap(skew_weighted_cpp(x, w));
     return rcpp_result_gen;
 END_RCPP
 }
 // kurt_cpp
-double kurt_cpp(NumericVector x, double mean);
-RcppExport SEXP _DescToolsX_kurt_cpp(SEXP xSEXP, SEXP meanSEXP) {
+double kurt_cpp(NumericVector x);
+RcppExport SEXP _DescToolsX_kurt_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
-    rcpp_result_gen = Rcpp::wrap(kurt_cpp(x, mean));
+    rcpp_result_gen = Rcpp::wrap(kurt_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
 // kurt_weighted_cpp
-double kurt_weighted_cpp(NumericVector x, double mean, NumericVector w);
-RcppExport SEXP _DescToolsX_kurt_weighted_cpp(SEXP xSEXP, SEXP meanSEXP, SEXP wSEXP) {
+double kurt_weighted_cpp(NumericVector x, NumericVector w);
+RcppExport SEXP _DescToolsX_kurt_weighted_cpp(SEXP xSEXP, SEXP wSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mean(meanSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
-    rcpp_result_gen = Rcpp::wrap(kurt_weighted_cpp(x, mean, w));
+    rcpp_result_gen = Rcpp::wrap(kurt_weighted_cpp(x, w));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -411,10 +407,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_hl2qest_cpp", (DL_FUNC) &_DescToolsX_hl2qest_cpp, 2},
     {"_DescToolsX_hoeffdingD_cpp", (DL_FUNC) &_DescToolsX_hoeffdingD_cpp, 1},
     {"_DescToolsX_n_pow_sum_cpp", (DL_FUNC) &_DescToolsX_n_pow_sum_cpp, 1},
-    {"_DescToolsX_skew_cpp", (DL_FUNC) &_DescToolsX_skew_cpp, 2},
-    {"_DescToolsX_skew_weighted_cpp", (DL_FUNC) &_DescToolsX_skew_weighted_cpp, 3},
-    {"_DescToolsX_kurt_cpp", (DL_FUNC) &_DescToolsX_kurt_cpp, 2},
-    {"_DescToolsX_kurt_weighted_cpp", (DL_FUNC) &_DescToolsX_kurt_weighted_cpp, 3},
+    {"_DescToolsX_skew_cpp", (DL_FUNC) &_DescToolsX_skew_cpp, 1},
+    {"_DescToolsX_skew_weighted_cpp", (DL_FUNC) &_DescToolsX_skew_weighted_cpp, 2},
+    {"_DescToolsX_kurt_cpp", (DL_FUNC) &_DescToolsX_kurt_cpp, 1},
+    {"_DescToolsX_kurt_weighted_cpp", (DL_FUNC) &_DescToolsX_kurt_weighted_cpp, 2},
     {"_DescToolsX_tbrm_cpp", (DL_FUNC) &_DescToolsX_tbrm_cpp, 2},
     {"_DescToolsX_tbrm_boot_cpp", (DL_FUNC) &_DescToolsX_tbrm_boot_cpp, 6},
     {NULL, NULL, 0}

@@ -7,13 +7,6 @@
 \alias{confusion.table}
 \alias{confusion.default}
 \alias{confusion.matrix}
-\alias{confusion.rpart}
-\alias{confusion.multinom}
-\alias{confusion.glm}
-\alias{confusion.randomForest}
-\alias{confusion.svm}
-\alias{confusion.lda}
-\alias{confusion.qda}
 \alias{print.Confusion}
 \alias{plot.Confusion}
 \title{Confusion Matrix and Classification Metrics}
@@ -25,20 +18,6 @@ confusion(x, ...)
 \method{confusion}{default}(x, ref, pos = NULL, na.rm = FALSE, ...)
 
 \method{confusion}{matrix}(x, pos = NULL, ...)
-
-\method{confusion}{rpart}(x, ...)
-
-\method{confusion}{multinom}(x, ...)
-
-\method{confusion}{glm}(x, cutoff = 0.5, pos = NULL, ...)
-
-\method{confusion}{randomForest}(x, ...)
-
-\method{confusion}{svm}(x, ...)
-
-\method{confusion}{lda}(x, ...)
-
-\method{confusion}{qda}(x, ...)
 
 \method{print}{Confusion}(x, digits = max(3L, getOption("digits") - 3L), ...)
 
@@ -54,7 +33,6 @@ specificity(x, ...)
 \item a factor or character vector of predicted classes
 \item a confusion matrix (\code{table} or \code{matrix}) with
 \strong{predictions in the rows and references in the columns}
-\item a fitted model object (e.g., \code{glm}, \code{rpart})
 }}
 
 \item{\dots}{further arguments passed to specific methods}
@@ -73,9 +51,6 @@ method.}
 reference are removed before computation. With the default \code{FALSE}
 such pairs make all statistics \code{NA}; the table of the complete pairs
 is still returned.}
-
-\item{cutoff}{numeric cutoff for probabilistic models (e.g., \code{glm}).
-Default \code{0.5}.}
 
 \item{digits}{integer; number of decimal places for printing}
 
@@ -103,12 +78,11 @@ the sensitivity or specificity, respectively, for each reported class.
 }
 \description{
 Computes confusion matrices and a wide range of performance metrics
-for classification models or predicted vs. observed labels.
+for predicted vs. observed labels.
 }
 \details{
-This is a generic function with methods for tables, vectors, and several
-model objects (e.g., \code{glm}, \code{rpart}, \code{randomForest},
-\code{svm}).
+This is a generic function with methods for vectors and tables.
+Methods for fitted models are provided by the package \pkg{alloy}.
 
 \code{sensitivity()} and \code{specificity()} are convenience extractors for the
 sensitivity and specificity values computed by \code{confusion()}.
@@ -146,10 +120,6 @@ confusion(pred, ref)
 
 # table
 confusion(table(pred, ref))
-
-# glm
-m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-confusion(m)
 
 }
 \concept{classification}

@@ -4,8 +4,8 @@
 #' Computes the symmetric mean absolute percentage error (SMAPE) between
 #' predicted and reference values.
 #'
-#' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. `lm`).
+#' @param x a numeric vector of predicted values.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ... additional arguments passed to methods
 #'
 #' @return a numeric scalar containing the SMAPE
@@ -32,10 +32,6 @@
 #'
 #' smape(x, ref)
 #'
-#' # with linear model
-#' fit <- lm(mpg ~ hp, data = mtcars)
-#' smape(fit)
-#'
 #'
 #' @family model.metrics  
 #' @concept prediction-error
@@ -44,26 +40,6 @@
 #' @export
 smape <- function(x, ...) {
   UseMethod("smape")
-}
-
-
-#' @rdname smape
-#' @export
-smape.lm <- function(x, ...) {
-  
-  ref <- model.response(model.frame(x))
-  
-  # glm objects inherit from lm, so this method is also reached for, say, a
-  # logistic fit, where the response is a factor or a two-column matrix and
-  # the arithmetic below would fail with an unrelated message.
-  if(!is.numeric(ref) || !is.null(dim(ref)))
-    stop("the model response must be a numeric vector to compute smape()")
-  
-  smape(
-    predict(x, type = "response"),
-    ref,
-    ...
-  )
 }
 
 

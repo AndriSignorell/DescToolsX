@@ -105,14 +105,6 @@ test_that("cStat counts concordant pairs, ties in x by half", {
   expect_equal(cStat(c(0.1, 0.4, 0.4, 0.8), ref = resp), 3.5 / 4)
 })
 
-test_that("the glm method uses fitted probabilities and the response", {
-  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
-  expect_equal(cStat(fit), cStat(fitted(fit), ref = mtcars$vs))
-  # without the stored response the model frame is used
-  fit0 <- glm(vs ~ mpg, data = mtcars, family = binomial, y = FALSE)
-  expect_equal(cStat(fit0), cStat(fit))
-})
-
 test_that("cStat rejects missing, non-binary and invalid input", {
   expect_error(cStat(c(0.1, NA, 0.3), ref = c(0, 1, 1)), "missing values")
   expect_error(cStat(1:6, ref = rep(1:3, 2)), "binary")
@@ -155,11 +147,4 @@ test_that("cStat validates sides and R", {
   expect_error(cStat(x, ref = y, sides = "up"))
   expect_error(cStat(x, ref = y, conf.level = 0.95, R = 0), "'R'")
   expect_error(cStat(x, ref = y, conf.level = 0.95, R = 99.5), "'R'")
-})
-
-test_that("the glm method passes sides on", {
-  fit <- glm(vs ~ mpg, data = mtcars, family = binomial)
-  set.seed(2)
-  res <- cStat(fit, conf.level = 0.95, sides = "right", R = 300)
-  expect_equal(unname(res[["lci"]]), 0)
 })

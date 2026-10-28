@@ -1,7 +1,25 @@
+# R session
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+.httr-oauth
+
+# tools
 .positai
+.quarto
+
+# operating system
+.DS_Store
+desktop.ini
+
+# generated
 Rplots.pdf
-docs
+/docs/
+/*.Rcheck/
+/*.tar.gz
+
+# compiled code
+/src/*.o
+/src/*.so
+/src/*.dll

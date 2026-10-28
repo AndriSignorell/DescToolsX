@@ -2,11 +2,14 @@
 % Please edit documentation in R/brierScore.R
 \name{brierScore}
 \alias{brierScore}
+\alias{brierScore.default}
 \title{Brier Score}
 \usage{
-brierScore(
+brierScore(x, ...)
+
+\method{brierScore}{default}(
   x,
-  ref = NULL,
+  ref,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("normal", "boot"),
@@ -15,15 +18,19 @@ brierScore(
 )
 }
 \arguments{
-\item{x}{either a numeric vector of predicted probabilities in
-\eqn{[0,1]} when \code{ref} is supplied, or a fitted model
-object (\code{glm} or similar) from which both response and
-predictions are extracted}
+\item{x}{a numeric vector of predicted probabilities in
+\eqn{[0,1]}.
+Methods for fitted models are provided by the package \pkg{alloy}.}
+
+\item{...}{further arguments passed to the bootstrap engine when
+\code{method = "boot"}: \code{R}, \code{type} (\code{"perc"}, \code{"basic"},
+\code{"norm"} or \code{"bca"}; \code{"stud"} is not available). \code{parallel} and
+\code{ncpus} are accepted but have no effect: the resampling loop in
+\code{brier_boot_cpp()} is serial. See Details.}
 
 \item{ref}{a numeric vector of observed binary outcomes
 (\eqn{0}/\eqn{1}), the reference the predictions are scored
-against. Required when \code{x} is a vector of predictions; ignored
-when \code{x} is a model object.}
+against}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
 (the default), only the point estimate is returned.}
@@ -38,12 +45,6 @@ approximation, default) or \code{"boot"} (bootstrap via
 
 \item{scaled}{logical. Should the scaled Brier score be returned?
 Default \code{FALSE}.}
-
-\item{...}{further arguments passed to the bootstrap engine when
-\code{method = "boot"}: \code{R}, \code{type} (\code{"perc"}, \code{"basic"},
-\code{"norm"} or \code{"bca"}; \code{"stud"} is not available). \code{parallel} and
-\code{ncpus} are accepted but have no effect: the resampling loop in
-\code{brier_boot_cpp()} is serial. See Details.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar containing the Brier

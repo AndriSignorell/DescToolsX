@@ -19,20 +19,18 @@
 #' or 1 contributes a finite penalty of at most \eqn{-\log(\epsilon)}
 #' (about 36.0 for the default `eps`) instead of `Inf`.
 #'
-#' Being the negative Bernoulli log-likelihood per observation, log loss is
-#' extracted automatically only from a `glm` with family
-#' `"binomial"` fitted to ungrouped data (all prior weights equal to
-#' one); for such a fit `logLoss(x)` equals `deviance(x) / (2 * n)`.
-#' For every other model class, pass response and predicted probabilities
-#' explicitly.
+#' Being the negative Bernoulli log-likelihood per observation, log loss
+#' equals `deviance(fit) / (2 * n)` for a binomial `glm` fitted to
+#' ungrouped data. Methods for fitted models are provided by the package
+#' \pkg{alloy}.
 #'
-#' @param x Either a numeric vector containing predicted probabilities in
-#'   \eqn{[0,1]} when `ref` is supplied, or a fitted binomial
-#'   `glm` from which response and fitted probabilities are extracted.
-#' @param ref Numeric or logical vector containing the observed binary
+#' @param x a numeric vector containing predicted probabilities in
+#'   \eqn{[0,1]}
+#' @param ref numeric or logical vector containing the observed binary
 #'   outcomes (0/1), the reference the predictions are scored against.
-#'   Required when `x` is a vector of predictions. Factors are not
-#'   accepted, as the choice of the positive level would have to be guessed.
+#'   Factors are not accepted, as the choice of the positive level would
+#'   have to be guessed.
+#' @param ... further arguments passed to methods
 #' @param eps Numeric scalar in \eqn{(0, 0.5)} used to clip probabilities
 #'   away from 0 and 1. Defaults to `.Machine$double.eps`.
 #'
@@ -46,49 +44,29 @@
 #' # a confidently wrong prediction is capped by eps
 #' logLoss(c(1, 0), c(0, 1), eps = 1e-6)
 #'
-#' m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-#' logLoss(m)
-#'
-#' # equivalently, half the mean deviance
-#' m$deviance / (2 * nrow(mtcars))
-#'
 #' @family model.metrics
 #' @concept model-evaluation
 #' @concept calibration
 #' @concept classification
 #' @export
-logLoss <- function(x, ref = NULL, eps = .Machine$double.eps) {
+logLoss <- function(x, ...) {
+  UseMethod("logLoss")
+}
 
-  fromModel <- is.null(ref)
 
-  # --- extract resp / pred ---------------------------------------------
-  if (fromModel) {
+#' @rdname logLoss
+#' @export
+logLoss.default <- function(x, ref, eps = .Machine$double.eps, ...) {
 
-    if (!inherits(x, "glm"))
-      stop("automatic extraction is currently supported only for 'glm' ",
-           "models; supply response and predictions explicitly otherwise.")
+  if (missing(ref))
+    stop("'ref' must be provided for the default method.", call. = FALSE)
 
-    if (!identical(x$family$family, "binomial"))
-      stop("logLoss() requires a model with family \"binomial\", got \"",
-           x$family$family, "\".")
-
-    if (any(x$prior.weights != 1))
-      stop("logLoss() is defined for ungrouped Bernoulli data, but the ",
-           "model has non-unit prior weights.")
-
-    # $fitted.values and $y are both stored unpadded and are therefore
-    # aligned even under na.action = na.exclude, where predict() pads
-    pred <- x$fitted.values
-    resp <- x$y
-
-  } else {
-    pred <- x
-    resp <- ref
-  }
+  pred <- x
+  resp <- ref
 
   # --- validate resp / pred --------------------------------------------
-  nmResp <- if (fromModel) "the model response" else "'ref'"
-  nmPred <- if (fromModel) "the fitted probabilities" else "'x'"
+  nmResp <- "'ref'"
+  nmPred <- "'x'"
 
   if (length(resp) != length(pred))
     stop(nmResp, " and ", nmPred, " must have the same length.")

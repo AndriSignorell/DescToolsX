@@ -77,7 +77,7 @@ New S Language}.  Wadsworth & Brooks/Cole.
 }
 \seealso{
 \code{\link[=weighted.mean]{weighted.mean()}}, \code{\link[=mean.POSIXct]{mean.POSIXct()}},
-\code{\link[=colMeans]{colMeans()}} for row and column means.
+\code{\link[=colMeans]{colMeans()}} for row and column means, \code{\link[lumen:meanCI]{lumen::meanCI()}} for confidence intervals.
 
 Other location:
 \code{\link[=gmean]{gmean()}},

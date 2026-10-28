@@ -4,8 +4,8 @@
 #' Computes the mean squared error (MSE) between predicted
 #' and reference values.
 #'
-#' @param x an object. Methods are available for numeric vectors and
-#'   model objects (e.g. `lm`).
+#' @param x a numeric vector of predicted values.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ... additional arguments passed to methods
 #'
 #' @return a numeric scalar containing the MSE
@@ -22,10 +22,6 @@
 #'
 #' mse(x, ref)
 #'
-#' # with linear model
-#' fit <- lm(mpg ~ hp, data = mtcars)
-#' mse(fit)
-#'
 #' @seealso [mean()]
 #'
 #' @family model.metrics
@@ -34,17 +30,6 @@
 #' @export
 mse <- function(x, ...) {
   UseMethod("mse")
-}
-
-
-#' @rdname mse
-#' @export
-mse.lm <- function(x, ...) {
-  mse(
-    predict(x, type = "response"),
-    model.response(model.frame(x)),
-    ...
-  )
 }
 
 

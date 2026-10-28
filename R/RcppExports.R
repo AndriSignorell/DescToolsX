@@ -101,20 +101,20 @@ n_pow_sum_cpp <- function(x) {
     .Call(`_DescToolsX_n_pow_sum_cpp`, x)
 }
 
-skew_cpp <- function(x, mean) {
-    .Call(`_DescToolsX_skew_cpp`, x, mean)
+skew_cpp <- function(x) {
+    .Call(`_DescToolsX_skew_cpp`, x)
 }
 
-skew_weighted_cpp <- function(x, mean, w) {
-    .Call(`_DescToolsX_skew_weighted_cpp`, x, mean, w)
+skew_weighted_cpp <- function(x, w) {
+    .Call(`_DescToolsX_skew_weighted_cpp`, x, w)
 }
 
-kurt_cpp <- function(x, mean) {
-    .Call(`_DescToolsX_kurt_cpp`, x, mean)
+kurt_cpp <- function(x) {
+    .Call(`_DescToolsX_kurt_cpp`, x)
 }
 
-kurt_weighted_cpp <- function(x, mean, w) {
-    .Call(`_DescToolsX_kurt_weighted_cpp`, x, mean, w)
+kurt_weighted_cpp <- function(x, w) {
+    .Call(`_DescToolsX_kurt_weighted_cpp`, x, w)
 }
 
 tbrm_cpp <- function(x, C) {

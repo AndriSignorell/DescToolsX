@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,6 +59,7 @@
 <div class="section level3">
 <h3 id="changes-from-desctools-0-0-0-945">Changes from DescTools<a class="anchor" aria-label="anchor" href="#changes-from-desctools-0-0-0-945"></a></h3>
 <ul><li>Consistent lowerCamelCase naming throughout; function names, argument names and argument order follow the design rules of the suite.</li>
+<li>The classifier and prediction metrics work on vectors and tables only. Their methods for fitted models (<code><a href="../reference/confusion.html">confusion()</a></code> for <code>glm</code>, <code>multinom</code>, <code>rpart</code>, <code>randomForest</code>, <code>svm</code>, <code>lda</code> and <code>qda</code>; <code><a href="../reference/cStat.html">cStat()</a></code> for <code>glm</code>; <code><a href="../reference/mae.html">mae()</a></code>, <code><a href="../reference/mse.html">mse()</a></code>, <code><a href="../reference/rmse.html">rmse()</a></code>, <code><a href="../reference/mape.html">mape()</a></code> and <code><a href="../reference/smape.html">smape()</a></code> for <code>lm</code>) moved to the modelling package alloy, together with the model branches of <code><a href="../reference/brierScore.html">brierScore()</a></code>, <code><a href="../reference/averagePrecision.html">averagePrecision()</a></code> and <code><a href="../reference/logLoss.html">logLoss()</a></code>. These three are now generics with a default method <code>(x, ref)</code>; <code>ref</code> is required.</li>
 <li>Base utilities, graphics and inferential procedures have moved into the separate packages bedrock, pharos and lumen; DescToolsX now depends on them instead of carrying its own copies.</li>
 </ul></div>
 <div class="section level3">

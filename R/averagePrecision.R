@@ -15,12 +15,11 @@
 #' cutoff. Prediction values therefore need only be numeric scores; they are
 #' not restricted to the interval \[0, 1\].
 #'
-#' @param x either a numeric vector of predicted probabilities or scores
-#'   when `ref` is supplied, or a fitted model object from which both
-#'   response and predictions are extracted
+#' @param x a numeric vector of predicted probabilities or scores.
+#'   Methods for fitted models are provided by the package \pkg{alloy}.
 #' @param ref numeric vector of observed binary outcomes (0/1), the
-#'   reference the predictions are scored against. Required when `x` is a
-#'   vector of predictions; ignored when `x` is a model object.
+#'   reference the predictions are scored against
+#' @param ... further arguments passed to methods
 #'
 #' @return A numeric scalar containing the average precision score.
 #'
@@ -36,21 +35,20 @@
 #' 
 #' 
 #' @export
-averagePrecision <- function(x, ref = NULL) {
+averagePrecision <- function(x, ...) {
+  UseMethod("averagePrecision")
+}
 
-  # --- extract resp / pred ---------------------------------------------
-  if (!is.null(ref)) {
-    pred <- x
-    resp <- ref
-  } else {
-    if (inherits(x, "glm")) {
-      pred <- predict(x, type = "response")
-      resp <- .numResponse(x)
-    } else {
-      pred <- predict(x, type = "prob")[, 2L]
-      resp <- .numResponse(x)
-    }
-  }
+
+#' @rdname averagePrecision
+#' @export
+averagePrecision.default <- function(x, ref, ...) {
+
+  if (missing(ref))
+    stop("'ref' must be provided for the default method.", call. = FALSE)
+
+  pred <- x
+  resp <- ref
 
   # --- validate resp / pred --------------------------------------------
   if (length(resp) != length(pred))

@@ -2,18 +2,21 @@
 % Please edit documentation in R/averagePrecision.R
 \name{averagePrecision}
 \alias{averagePrecision}
+\alias{averagePrecision.default}
 \title{Average Precision Score}
 \usage{
-averagePrecision(x, ref = NULL)
+averagePrecision(x, ...)
+
+\method{averagePrecision}{default}(x, ref, ...)
 }
 \arguments{
-\item{x}{either a numeric vector of predicted probabilities or scores
-when \code{ref} is supplied, or a fitted model object from which both
-response and predictions are extracted}
+\item{x}{a numeric vector of predicted probabilities or scores.
+Methods for fitted models are provided by the package \pkg{alloy}.}
+
+\item{...}{further arguments passed to methods}
 
 \item{ref}{numeric vector of observed binary outcomes (0/1), the
-reference the predictions are scored against. Required when \code{x} is a
-vector of predictions; ignored when \code{x} is a model object.}
+reference the predictions are scored against}
 }
 \value{
 A numeric scalar containing the average precision score.

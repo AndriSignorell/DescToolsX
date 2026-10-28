@@ -2,19 +2,16 @@
 % Please edit documentation in R/rmse.R
 \name{rmse}
 \alias{rmse}
-\alias{rmse.lm}
 \alias{rmse.default}
 \title{Root Mean Squared Error}
 \usage{
 rmse(x, ...)
 
-\method{rmse}{lm}(x, ...)
-
 \method{rmse}{default}(x, ref, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{an object. Methods are available for numeric vectors and
-model objects (e.g. \code{lm}).}
+\item{x}{a numeric vector of predicted values.
+Methods for fitted models are provided by the package \pkg{alloy}.}
 
 \item{...}{additional arguments passed to methods}
 
@@ -40,10 +37,6 @@ x <- c(2.5, 3.0, 2.8)
 ref <- c(3.0, 2.5, 3.0)
 
 rmse(x, ref)
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-rmse(fit)
 
 }
 \seealso{

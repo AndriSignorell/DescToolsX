@@ -16,11 +16,12 @@ kurt(
 )
 }
 \arguments{
-\item{x}{a numeric vector. An object that is not a vector is coerced by
-\code{as.vector} if possible.}
+\item{x}{a numeric vector. A matrix or array contributes all its
+elements, as \code{as.vector(x)}.}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
-(the default), only the point estimate is returned.}
+(the default), only the point estimate is returned. One-sided
+intervals require \code{conf.level > 0.5}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
@@ -29,20 +30,23 @@ interval (one of \code{"two.sided"} (default), \code{"left"} or
 \item{method}{character string specifying the confidence interval method.
 \code{"boot"} (default) uses a nonparametric bootstrap, with BCa
 intervals unless another bootstrap type is supplied through \verb{\\dots};
-\code{"classic"} uses a Wald interval based on the asymptotic standard
-error. See Details and \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
+\code{"classic"} uses a Wald interval based on the standard error under
+normality. See Details and \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
 \item{estimator}{integer, either 1, 2 or 3 (default) defining the algorithm
 used for calculation. See Details.}
 
-\item{weights}{a numerical vector of weights the same length as \code{x}
-giving the weights to use for elements of \code{x}}
+\item{weights}{a non-negative numeric vector of frequency weights, the
+same length as \code{x}. See Details.}
 
 \item{na.rm}{logical, indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{FALSE}.}
 
-\item{\dots}{further arguments passed to \code{\link[boot:boot]{boot::boot()}} when
-confidence intervals are calculated}
+\item{\dots}{bootstrap settings for \code{method = "boot"}, and only these:
+\code{R} (number of replicates), \code{type} (one of \code{"bca"}, \code{"perc"},
+\code{"basic"}, \code{"norm"}; \code{"stud"} is not supported, as no suitable
+variance estimate is implemented here), \code{parallel} and
+\code{ncpus} as in \code{\link[boot:boot]{boot::boot()}}. Other arguments are an error.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -58,8 +62,8 @@ numeric vector with elements:
 as \code{kurt(x) + 3} if required.
 }
 \details{
-If \code{na.rm} is \code{TRUE} then missing values are removed before
-computation proceeds. \cr
+If \code{na.rm} is \code{TRUE} then missing values in \code{x} and in \code{weights} are
+removed, pairwise, before computation proceeds. \cr
 
 The estimator for calculating kurtosis can either be:\cr
 \code{1: g_2 = m_4 / m_2^2 - 3 } \cr
@@ -67,7 +71,12 @@ The estimator for calculating kurtosis can either be:\cr
 \code{3: b_2 = m_4 / s^4 - 3 = (g_2 + 3) (1 - 1/n)^2 - 3 } \cr
 
 1 is the typical definition used in Stata and in many older textbooks.  \cr
-2 is used in SAS and SPSS.  \cr 3 is used in MINITAB and BMDP. \cr
+2 is used in SAS and SPSS; it is unbiased under normality, not in
+general.  \cr 3 is used in MINITAB and BMDP. \cr
+
+Estimators 1 and 3 need \eqn{n \ge 2}, estimator 2 needs \eqn{n \ge 4}.
+For shorter or constant input the kurtosis is not defined: the result is
+\code{NA} (all three elements if an interval was requested) with a warning.
 
 \code{method = "classic"} uses a Wald interval with the standard error of the
 kurtosis under normality. For estimator 1 this is the exact standard
@@ -80,16 +89,36 @@ this gives the familiar formula of Cramer (1997), as reported by SPSS:
 \preformatted{SES = sqrt(6*n*(n - 1) / ((n - 2)*(n + 1)*(n + 3)))
 SEK = 2 * SES * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
     = sqrt(24*n*(n - 1)^2 / ((n - 3)*(n - 2)*(n + 3)*(n + 5)))}
-Note that it applies to \eqn{G_2} only, not to the default estimator 3.
-With weights, \eqn{n} is the sum of the weights. \cr
+The standard error is defined from \eqn{n = 4} on; below, the interval
+is \code{NA} with a warning. The interval remains a Wald approximation even
+though the variance is exact under normality. \cr
 However, Joanes and Gill (1998) advise
 against this approach, pointing out that the normal assumptions would
 virtually always be violated.  They suggest using the bootstrap method.
 That's why the default method for the confidence interval type is set to
-\code{"boot"}.
-If not further specified the boot ci type will be chosen as \code{"bca"}.\cr
+\code{"boot"}. If not further specified the boot ci type will be chosen as
+\code{"bca"}. If some bootstrap replicates are undefined (a constant
+resample) or \code{\link[boot:boot.ci]{boot::boot.ci()}} cannot compute the interval, the bounds
+are \code{NA} with a warning. \cr
 
-This implementation is comparably fast, as the expensive sums are coded in C.
+\strong{Weights} are frequency weights: \code{sum(weights)} takes the place of
+\eqn{n} in the bias corrections and in the standard error. For integer
+weights \code{kurt(x, weights = w)} equals \code{kurt(rep(x, w))}. An observation
+with weight 0 is absent: its \code{x} may be \code{NA} or infinite without effect.
+A missing weight makes the observation missing. The bootstrap resamples
+the expanded sample and therefore requires integer weights (memory grows
+with \code{sum(weights)}, and BCa's jackknife with it). Non-integer weights
+are admitted for the point estimate and \code{method = "classic"} as a
+computational extension of the same formulas; they correspond to no
+actual sample, so the exact normal-theory variance does not strictly
+apply to them. Analysis or survey weights are
+not supported: neither the bias correction nor the row bootstrap would
+reflect them.
+
+This implementation is comparably fast, as the expensive sums are coded
+in C++. The data are rescaled before centring and again after, so that
+neither the deviations nor their powers can overflow for any finite
+input.
 }
 \section{Random number generation}{
 
@@ -100,14 +129,19 @@ beforehand for reproducible intervals.
 
 \examples{
 
-kurt(Pizza$price, na.rm=TRUE)
+kurt(bedrock::Pizza$price, na.rm=TRUE)
 
-# use sapply to calculate skewness for a data.frame
-sapply(Pizza[,c("temperature","price","delivery_min")], kurt, na.rm=TRUE)
+# use sapply to calculate kurtosis for a data.frame
+sapply(bedrock::Pizza[,c("temperature","price","delivery_min")],
+       kurt, na.rm=TRUE)
 
 # or apply to do that columnwise with a matrix
-apply(as.matrix(Pizza[,c("temperature","price","delivery_min")]), 2, 
-      kurt, na.rm=TRUE)
+apply(as.matrix(bedrock::Pizza[,c("temperature","price","delivery_min")]),
+      2, kurt, na.rm=TRUE)
+
+# frequency weights are the same as repeating the values
+kurt(c(1, 2, 3, 10), weights = c(3, 1, 2, 1))
+kurt(rep(c(1, 2, 3, 10), c(3, 1, 2, 1)))
 
 }
 \references{
@@ -118,7 +152,7 @@ Joanes, D. N., Gill, C. A. (1998): Comparing measures of sample skewness and
 kurtosis. \emph{The Statistician}, 47, 183-189.
 }
 \seealso{
-\link{meanX}, \link{sdX}, similar code in \pkg{e1071}
+\link{skew}, \link{meanX}, \link{sdX}, similar code in \pkg{e1071}
 
 Other shape:
 \code{\link[=skew]{skew()}}

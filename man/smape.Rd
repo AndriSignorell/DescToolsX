@@ -2,19 +2,16 @@
 % Please edit documentation in R/smape.R
 \name{smape}
 \alias{smape}
-\alias{smape.lm}
 \alias{smape.default}
 \title{Symmetric Mean Absolute Percentage Error}
 \usage{
 smape(x, ...)
 
-\method{smape}{lm}(x, ...)
-
 \method{smape}{default}(x, ref, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{an object. Methods are available for numeric vectors and
-model objects (e.g. \code{lm}).}
+\item{x}{a numeric vector of predicted values.
+Methods for fitted models are provided by the package \pkg{alloy}.}
 
 \item{...}{additional arguments passed to methods}
 
@@ -50,10 +47,6 @@ x <- c(2.5, 3.0, 2.8)
 ref <- c(3.0, 2.5, 3.0)
 
 smape(x, ref)
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-smape(fit)
 
 
 }

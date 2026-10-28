@@ -34,15 +34,6 @@ test_that("mape stops when x and ref have different lengths", {
   expect_error(mape(1:3, ref = 1:4), "same length")
 })
 
-test_that("mape.lm returns a non-negative numeric for a linear model", {
-  fit <- lm(mpg ~ hp, data = mtcars)
-  res <- mape(fit)
-  expect_gte(res, 0)
-  expect_length(res, 1)
-})
-
-
-
 test_that("mape is a fraction and mae is on the data scale", {
   
   x   <- c(2.5, 3.0, 2.8)

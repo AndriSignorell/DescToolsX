@@ -4,8 +4,10 @@
 \alias{ConfidenceIntervals}
 \title{Confidence Interval Interface - Common Arguments}
 \arguments{
-\item{conf.level}{confidence level of the interval. If set to \code{NA}
-(the default), only the point estimate is returned.}
+\item{conf.level}{confidence level of the interval. \code{NA} returns only the
+point estimate. Dedicated interval functions such as \code{\link[lumen:meanCI]{meanCI()}} default
+to \code{0.95}; estimators that can add an interval to their result default
+to \code{NA}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
@@ -13,11 +15,11 @@ interval. Must be one of \code{"two.sided"} (default), \code{"left"} or
 the finite bound. The initial letter is sufficient.}
 
 \item{method}{character string specifying the interval method. The
-available methods and the default differ between functions; see the
-individual help page for the choices.}
+argument is present only where a function offers more than one method;
+the choices and the default are listed on the individual help page.}
 
-\item{...}{additional arguments for the bootstrap, such as the number of
-resamples \code{R} and the interval type \code{type}.}
+\item{...}{further arguments for the bootstrap: the number of resamples
+\code{R}, the interval type \code{type}, and \code{parallel} and \code{ncpus}.}
 }
 \description{
 Arguments shared by the confidence interval functions in this package,
@@ -41,19 +43,18 @@ since some functions return further elements.
 \item{\code{"right"}}{the upper bound is finite, the lower one is open.}
 }
 
-Thus \code{sides = "left"} corresponds to \code{alternative = "greater"}
-in \code{\link[stats:t.test]{stats::t.test()}}, and \code{sides = "right"} to
-\code{alternative = "less"}. This is also the convention used by the
-corresponding functions in \pkg{DescTools}.
+Thus \code{sides = "left"} corresponds to \code{alternative = "greater"} in
+\code{\link[=t.test]{t.test()}}, and \code{sides = "right"} to \code{alternative = "less"}. The
+convention is the same as in \pkg{DescTools}.
 
 The open side is reported at the boundary of the parameter space, not at
 infinity - most of the statistics here are bounded, so this is the
 ordinary case rather than an exception. A correlation opens to \eqn{\pm 1},
-an association measure in \eqn{[0, 1]} to 0 or 1, Cramer's \eqn{V} to 1,
-Pearson's \eqn{C} to \eqn{\sqrt{(m-1)/m}}. Where the parameter really is
-unbounded, \eqn{\pm\infty} is reported: a relative risk opens upwards to
-\code{Inf} but downwards only to 0, a location estimator opens to
-\code{-Inf} and \code{Inf}, Cronbach's \eqn{\alpha} to \code{-Inf} and 1.
+an association measure in \eqn{[0, 1]} to 0 or 1, Cram\enc{é}{e}r's
+\eqn{V} to 1, Pearson's \eqn{C} to \eqn{\sqrt{(m-1)/m}}. Where the
+parameter really is unbounded, \eqn{\pm\infty} is reported: a relative
+risk opens upwards to \code{Inf} but downwards only to 0, a location estimator
+opens to \code{-Inf} and \code{Inf}, Cronbach's \eqn{\alpha} to \code{-Inf} and 1.
 An interval never claims a value the statistic cannot take.
 
 A one-sided bound at level \eqn{\gamma} is the corresponding end of the
@@ -72,9 +73,9 @@ closed-form variance and are therefore available for statistics that have
 none - at the price of being random and slower.
 
 Bootstrap intervals are partly computed with the \pkg{boot} package (see
-\code{\link[boot:boot]{boot::boot()}} and \code{\link[boot:boot.ci]{boot::boot.ci()}}). The number of
-resamples \code{R} and the interval type - \code{"perc"}, \code{"bca"} and
-others - are passed through \verb{\\dots}.
+\code{\link[boot:boot]{boot::boot()}} and \code{\link[boot:boot.ci]{boot::boot.ci()}}). The number of resamples \code{R} and
+the interval type - \code{"perc"}, \code{"bca"} and others - are passed through
+\code{...}.
 
 \code{"bca"} corrects for bias and skewness and is the better choice for a
 smooth statistic whose parameter lies well inside its range. It is the
@@ -87,13 +88,11 @@ than a pathology. \code{"perc"} is the more robust default there.
 \section{Random number generation}{
 
 Requesting a bootstrap confidence interval draws a seed from R's global
-random number generator and therefore advances it. Call
-\code{\link[base:set.seed]{base::set.seed()}} beforehand for reproducible intervals. This
-applies to the bootstrap methods only; classical intervals are
-deterministic.
+random number generator and therefore advances it. Call \code{\link[=set.seed]{set.seed()}}
+beforehand for reproducible intervals. This applies to the bootstrap
+methods only; classical intervals are deterministic.
 }
 
 \seealso{
-\code{\link[boot:boot]{boot::boot()}}, \code{\link[boot:boot.ci]{boot::boot.ci()}},
-\code{\link[stats:confint]{stats::confint()}}
+\code{\link[boot:boot]{boot::boot()}}, \code{\link[boot:boot.ci]{boot::boot.ci()}}, \code{\link[=confint]{confint()}}
 }

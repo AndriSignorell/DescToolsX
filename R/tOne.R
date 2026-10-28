@@ -39,7 +39,7 @@
 #' p-value.
 #' \preformatted{
 #'   tests = list( num = list(fun = function(x, g){
-#'       summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
+#'       summary(aov(x ~ g))[[1]][1], "Pr(>F)"]}, lbl = "ANOVA"),
 #'     cat = list(fun = function(x, g){
 #'       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
 #'     dich = list(fun = function(x, g){
@@ -50,10 +50,10 @@
 #' the table together with the significance codes, can be set with the variable
 #' `lbl`.
 #'
-#' Great importance was attached to the free definition of the number fms.
-#' By default, the optionally definable fm templates of **DescToolsX**
+#' Great importance was attached to the free definition of the number formats.
+#' By default, the optionally definable format templates of **DescToolsX**
 #' are used. Deviations from this can be freely passed as arguments to the
-#' function. fms can be defined for integers, floating point numbers,
+#' function. Formats can be defined for integers, floating point numbers,
 #' percentages and for the p-values of statistical tests. All options of the
 #' function [pharos::fm()] are available and can be provided as a list.
 #' See examples which show several different implementations.
@@ -122,7 +122,7 @@
 #' @param fmt fm codes for absolute, numeric and percentage values, and for
 #' the p-values of the tests
 #'
-#' @return a character matrix of class `tOne`
+#' @return a character matrix of class `TOne`.
 #'
 #' @seealso [bedrock::appendX()]
 #'
@@ -493,7 +493,7 @@ tOne <- function(x, groups = NA, addLength=TRUE,
 
   # drop = FALSE throughout: with a single dichotomous variable and
   # addLength = FALSE the table has one row, and res[, -3] would return a
-  # plain vector - print.tOne() and `[.tOne` then fail on the missing dim
+  # plain vector - print.TOne() and `[.TOne` then fail on the missing dim
   if(no_groups){
     res <- res[, -3, drop=FALSE]
     total <- TRUE
@@ -515,7 +515,8 @@ tOne <- function(x, groups = NA, addLength=TRUE,
     attr(res, "legend") <- gettextf("%s) %s, %s) %s, %s) %s\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1",
                                     .FootNote(1), tests[["num"]]$lbl, .FootNote(2), tests[["dich"]]$lbl, .FootNote(3), tests[["cat"]]$lbl)
 
-  class(res) <- "tOne"
+  # classes are PascalCase (design rules 3.1.1)
+  class(res) <- "TOne"
   return(res)
 }
 
@@ -523,7 +524,7 @@ tOne <- function(x, groups = NA, addLength=TRUE,
 
 #' @rdname tOne
 #' @export
-print.tOne <- function(x, ...){
+print.TOne <- function(x, ...){
 
   cat("\n")
 
@@ -564,17 +565,27 @@ print.tOne <- function(x, ...){
 
 
 
-# subsetting tOne
+# subsetting TOne
 
-#' @param x a tOne object to subset
-#' @param i rowindex
-#' @param j columnindex
-#' @param ... further parameters (not used here)
-#' @param drop drop the structure in case of total reduction
+#' @param x a `TOne` object to subset.
+#' @param i row index; without `j` and without a comma (`x[i]`), a
+#'   cell index as for a plain matrix.
+#' @param j column index.
+#' @param ... further parameters (not used here).
+#' @param drop drop the structure in case of total reduction.
 #'
 #' @rdname tOne
 #' @export
-`[.tOne` <- function(x, i, j, ..., drop=FALSE) {
+`[.TOne` <- function(x, i, j, ..., drop=FALSE) {
+
+  # x[i] (vector-style, no comma): behave like a matrix, i.e. index the
+  # cells, not the rows. Generic code such as append(), head() or rev()
+  # relies on this. nargs() also counts a supplied drop argument.
+  # NB: the parentheses are essential - `!` binds weaker than `-` and `==`,
+  # nargs() - !missing(drop) == 2L parses as nargs() - !(missing(drop) == 2L)
+  # and is always TRUE
+  if((nargs() - !missing(drop)) == 2L)
+    return(unclass(x)[i])
 
   # subset main character matrix, don't drop structure by default
   res <- unclass(x)[i, j, drop=drop]
@@ -605,4 +616,4 @@ print.tOne <- function(x, ...){
 }
 
 # see also
-# \code{\link{WrdTable}()}, \code{\link{ToWrd.tOne}()},
+# \code{\link{WrdTable}()}, \code{\link{ToWrd.TOne}()},

@@ -253,6 +253,15 @@ quantileX <- function(x, probs = seq(0, 1, 0.25), weights = NULL,
               "type = 2, which depends only on their ratios."),
         sumW), domain = NA)
 
+    # Counts are >= 1 once the zero weights are gone, so sumW >= n. A smaller
+    # sum means fractional weights, i.e. most likely relative weights read
+    # with the wrong type: the result is then strongly scale-dependent.
+    if (sumW < n)
+      warning(gettextf(
+        paste("sum(weights) = %g is smaller than the number of observations",
+              "(%d): these do not look like replication counts. Use type = 2",
+              "for relative weights."), sumW, n), domain = NA)
+    
     ord  <- 1 + (sumW - 1) * probs
     low  <- pmax(floor(ord), 1)
     high <- pmin(low + 1, sumW)

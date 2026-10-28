@@ -2,19 +2,23 @@
 % Please edit documentation in R/logLoss.R
 \name{logLoss}
 \alias{logLoss}
+\alias{logLoss.default}
 \title{Log Loss}
 \usage{
-logLoss(x, ref = NULL, eps = .Machine$double.eps)
+logLoss(x, ...)
+
+\method{logLoss}{default}(x, ref, eps = .Machine$double.eps, ...)
 }
 \arguments{
-\item{x}{Either a numeric vector containing predicted probabilities in
-\eqn{[0,1]} when \code{ref} is supplied, or a fitted binomial
-\code{glm} from which response and fitted probabilities are extracted.}
+\item{x}{a numeric vector containing predicted probabilities in
+\eqn{[0,1]}}
 
-\item{ref}{Numeric or logical vector containing the observed binary
+\item{...}{further arguments passed to methods}
+
+\item{ref}{numeric or logical vector containing the observed binary
 outcomes (0/1), the reference the predictions are scored against.
-Required when \code{x} is a vector of predictions. Factors are not
-accepted, as the choice of the positive level would have to be guessed.}
+Factors are not accepted, as the choice of the positive level would
+have to be guessed.}
 
 \item{eps}{Numeric scalar in \eqn{(0, 0.5)} used to clip probabilities
 away from 0 and 1. Defaults to \code{.Machine$double.eps}.}
@@ -42,12 +46,10 @@ interval \eqn{[\epsilon, 1-\epsilon]}, so that a prediction of exactly 0
 or 1 contributes a finite penalty of at most \eqn{-\log(\epsilon)}
 (about 36.0 for the default \code{eps}) instead of \code{Inf}.
 
-Being the negative Bernoulli log-likelihood per observation, log loss is
-extracted automatically only from a \code{glm} with family
-\code{"binomial"} fitted to ungrouped data (all prior weights equal to
-one); for such a fit \code{logLoss(x)} equals \code{deviance(x) / (2 * n)}.
-For every other model class, pass response and predicted probabilities
-explicitly.
+Being the negative Bernoulli log-likelihood per observation, log loss
+equals \code{deviance(fit) / (2 * n)} for a binomial \code{glm} fitted to
+ungrouped data. Methods for fitted models are provided by the package
+\pkg{alloy}.
 }
 \examples{
 resp <- c(0, 0, 1, 1)
@@ -56,12 +58,6 @@ logLoss(pred, resp)
 
 # a confidently wrong prediction is capped by eps
 logLoss(c(1, 0), c(0, 1), eps = 1e-6)
-
-m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-logLoss(m)
-
-# equivalently, half the mean deviance
-m$deviance / (2 * nrow(mtcars))
 
 }
 \seealso{

@@ -144,7 +144,11 @@ test_that("the classic standard error matches the published formulas", {
 
 
 test_that("the classic standard error is NA where it is undefined", {
-  res <- kurt(c(1, 2, 4), conf.level = 0.95, method = "classic")
+  # n = 3: the estimate exists, its normal-theory SE does not
+  expect_warning(
+    res <- kurt(c(1, 2, 4), conf.level = 0.95, method = "classic"),
+    "standard error undefined")
+  expect_false(is.na(res[["est"]]))
   expect_true(is.na(res[["lci"]]))
   expect_true(is.na(res[["uci"]]))
 })

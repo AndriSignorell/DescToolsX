@@ -169,13 +169,20 @@ test_that("frequency weights match the replicated sample", {
 
 test_that("the bootstrap resamples weights together with the values", {
   
-  # If the weights were not permuted along with the data, replicate i would
-  # carry the weight of the original observation i and the interval would
-  # differ from the one obtained on the replicated sample.
-  set.seed(42)
-  a <- skew(c(1, 2, 5, 7), weights = c(3, 1, 2, 1), conf.level = 0.95,
-            R = 200)
+  # Frequency weights: the bootstrap draws from the expanded sample, so with
+  # the same seed it must reproduce the interval of rep(v, w) exactly.
+  # Larger than c(1, 2, 5, 7) / c(3, 1, 2, 1): with only 7 expanded units a
+  # constant resample (undefined skewness) turns up within R = 200, and the
+  # interval is then NA by contract.
+  v <- c(1, 2, 5, 7, 9, 12)
+  w <- c(3, 1, 2, 1, 2, 1)
   
+  set.seed(42)
+  a <- skew(v, weights = w, conf.level = 0.95, R = 200, type = "perc")
+  set.seed(42)
+  b <- skew(rep(v, w), conf.level = 0.95, R = 200, type = "perc")
+  
+  expect_equal(a, b)
   expect_named(a, c("est", "lci", "uci"))
   expect_true(a[["lci"]] <= a[["est"]])
   expect_true(a[["est"]] <= a[["uci"]])
@@ -197,7 +204,11 @@ test_that("na.rm reaches the bootstrap branch", {
 
 test_that("the standard error is NA where it is undefined", {
   
-  res <- skew(c(1, 2), conf.level = 0.95, method = "classic")
+  # n = 2: the estimate exists, its standard error does not
+  expect_warning(
+    res <- skew(c(1, 2), conf.level = 0.95, method = "classic"),
+    "standard error undefined")
+  expect_false(is.na(res[["est"]]))
   expect_true(is.na(res[["lci"]]))
   expect_true(is.na(res[["uci"]]))
 })
@@ -224,7 +235,8 @@ test_that("arguments are validated", {
   expect_error(skew(x, weights = 1:3), "same length")
   expect_error(skew(x, estimator = 4), "estimator")
   expect_error(skew(x, estimator = c(1, 2)), "estimator")
-  expect_error(skew(x, conf.level = NULL), "single value")
+  expect_error(skew(x, conf.level = NULL), "conf.level")
+  expect_error(skew(x, estimator = "2"), "estimator")
   expect_error(skew(x, conf.level = 1), "conf.level")
 })
 

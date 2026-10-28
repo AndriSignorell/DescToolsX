@@ -2,19 +2,16 @@
 % Please edit documentation in R/mape.R
 \name{mape}
 \alias{mape}
-\alias{mape.lm}
 \alias{mape.default}
 \title{Mean Absolute Percentage Error}
 \usage{
 mape(x, ...)
 
-\method{mape}{lm}(x, ...)
-
 \method{mape}{default}(x, ref, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{an object. Methods are available for numeric vectors and
-model objects (e.g. \code{lm}).}
+\item{x}{a numeric vector of predicted values.
+Methods for fitted models are provided by the package \pkg{alloy}.}
 
 \item{...}{additional arguments passed to methods}
 
@@ -46,10 +43,6 @@ x <- c(2.5, 3.0, 2.8)
 ref <- c(3.0, 2.5, 3.0)
 
 mape(x, ref)
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-mape(fit)
 
 
 }

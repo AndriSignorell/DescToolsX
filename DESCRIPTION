@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.963
+Version: 0.0.0.964
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -68,13 +68,13 @@ Config/testthat/edition: 3
 Imports:
     stats, boot, cli, stringi, mvtnorm, Rcpp, RcppParallel
 Suggests:
-    goftest, testthat (>= 3.0.0), R.rsp, readr, vegan, VGAM, nnet,
-    MASS, rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
-    survival, pons, dbscan, prettyunits, withr, randomForest, rpart
-Remotes:  
+    goftest, testthat (>= 3.0.0), R.rsp, readr, vegan, VGAM, MASS,
+    rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
+    survival, pons, dbscan, prettyunits, withr
+Remotes: 
     AndriSignorell/bedrock, AndriSignorell/pharos, AndriSignorell/lumen, AndriSignorell/pons
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/
 BugReports: https://github.com/AndriSignorell/DescToolsX/issues
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1

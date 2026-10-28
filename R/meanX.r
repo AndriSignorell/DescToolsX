@@ -47,7 +47,7 @@
 #' is computed.
 #' 
 #' @seealso [weighted.mean()], [mean.POSIXct()],
-#' [colMeans()] for row and column means.
+#' [colMeans()] for row and column means, [lumen::meanCI()] for confidence intervals.
 #' @references Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) *The
 #' New S Language*.  Wadsworth & Brooks/Cole.
 #' 
@@ -92,19 +92,7 @@ meanX.default <- function (x, weights = NULL, trim = 0, na.rm = FALSE, ...) {
   } else {
     if(trim!=0)
       warning("trim can't be set together with weights, we fall back to trim=0!")
-    
-    # # verbatim from :weighted.mean.default
-    # 
-    # if (length(weights) != length(x))
-    #   stop("'x' and 'w' must have the same length")
-    # weights <- as.double(weights)
-    # if (na.rm) {
-    #   i <- !is.na(x)
-    #   weights <- weights[i]
-    #   x <- x[i]
-    # }
-    # sum((x * weights)[weights != 0])/sum(weights)
-    
+
     # use a standard treatment for weights
     z <- .normWeights(x, weights, na.rm=na.rm)
     

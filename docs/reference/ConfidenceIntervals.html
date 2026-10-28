@@ -17,7 +17,7 @@ accept and refer here for what the values mean."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,10 @@ accept and refer here for what the values mean.</p>
 
 
 <dl><dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
-<dd><p>confidence level of the interval. If set to <code>NA</code>
-(the default), only the point estimate is returned.</p></dd>
+<dd><p>confidence level of the interval. <code>NA</code> returns only the
+point estimate. Dedicated interval functions such as <code><a href="https://andrisignorell.github.io/lumen/reference/meanCI.html" class="external-link">meanCI()</a></code> default
+to <code>0.95</code>; estimators that can add an interval to their result default
+to <code>NA</code>.</p></dd>
 
 
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
@@ -76,13 +78,13 @@ the finite bound. The initial letter is sufficient.</p></dd>
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>character string specifying the interval method. The
-available methods and the default differ between functions; see the
-individual help page for the choices.</p></dd>
+argument is present only where a function offers more than one method;
+the choices and the default are listed on the individual help page.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional arguments for the bootstrap, such as the number of
-resamples <code>R</code> and the interval type <code>type</code>.</p></dd>
+<dd><p>further arguments for the bootstrap: the number of resamples
+<code>R</code>, the interval type <code>type</code>, and <code>parallel</code> and <code>ncpus</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -107,18 +109,17 @@ since some functions return further elements.</p>
 <dd><p>the upper bound is finite, the lower one is open.</p></dd>
 
 
-</dl><p>Thus <code>sides = "left"</code> corresponds to <code>alternative = "greater"</code>
-in <code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">stats::t.test()</a></code>, and <code>sides = "right"</code> to
-<code>alternative = "less"</code>. This is also the convention used by the
-corresponding functions in <span class="pkg">DescTools</span>.</p>
+</dl><p>Thus <code>sides = "left"</code> corresponds to <code>alternative = "greater"</code> in
+<code><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test()</a></code>, and <code>sides = "right"</code> to <code>alternative = "less"</code>. The
+convention is the same as in <span class="pkg">DescTools</span>.</p>
 <p>The open side is reported at the boundary of the parameter space, not at
 infinity - most of the statistics here are bounded, so this is the
 ordinary case rather than an exception. A correlation opens to \(\pm 1\),
-an association measure in \([0, 1]\) to 0 or 1, Cramer's \(V\) to 1,
-Pearson's \(C\) to \(\sqrt{(m-1)/m}\). Where the parameter really is
-unbounded, \(\pm\infty\) is reported: a relative risk opens upwards to
-<code>Inf</code> but downwards only to 0, a location estimator opens to
-<code>-Inf</code> and <code>Inf</code>, Cronbach's \(\alpha\) to <code>-Inf</code> and 1.
+an association measure in \([0, 1]\) to 0 or 1, Cramér's
+\(V\) to 1, Pearson's \(C\) to \(\sqrt{(m-1)/m}\). Where the
+parameter really is unbounded, \(\pm\infty\) is reported: a relative
+risk opens upwards to <code>Inf</code> but downwards only to 0, a location estimator
+opens to <code>-Inf</code> and <code>Inf</code>, Cronbach's \(\alpha\) to <code>-Inf</code> and 1.
 An interval never claims a value the statistic cannot take.</p>
 <p>A one-sided bound at level \(\gamma\) is the corresponding end of the
 two-sided interval at level \(2\gamma - 1\): a 95\<!-- % lower bound is the -->
@@ -136,9 +137,9 @@ formula exists. Bootstrap intervals, requested with <code>"boot"</code>, need no
 closed-form variance and are therefore available for statistics that have
 none - at the price of being random and slower.</p>
 <p>Bootstrap intervals are partly computed with the <span class="pkg">boot</span> package (see
-<code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> and <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>). The number of
-resamples <code>R</code> and the interval type - <code>"perc"</code>, <code>"bca"</code> and
-others - are passed through <code>\dots</code>.</p>
+<code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> and <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>). The number of resamples <code>R</code> and
+the interval type - <code>"perc"</code>, <code>"bca"</code> and others - are passed through
+<code>...</code>.</p>
 <p><code>"bca"</code> corrects for bias and skewness and is the better choice for a
 smooth statistic whose parameter lies well inside its range. It is the
 weaker choice near a boundary: both of its ingredients degrade where the
@@ -153,15 +154,13 @@ than a pathology. <code>"perc"</code> is the more robust default there.</p>
 
 
 <p>Requesting a bootstrap confidence interval draws a seed from R's global
-random number generator and therefore advances it. Call
-<code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code> beforehand for reproducible intervals. This
-applies to the bootstrap methods only; classical intervals are
-deterministic.</p>
+random number generator and therefore advances it. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>
+beforehand for reproducible intervals. This applies to the bootstrap
+methods only; classical intervals are deterministic.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>, <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>,
-<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">stats::confint()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>, <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code>, <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
