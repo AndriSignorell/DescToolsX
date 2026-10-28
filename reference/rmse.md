@@ -8,9 +8,6 @@ reference values.
 ``` r
 rmse(x, ...)
 
-# S3 method for class 'lm'
-rmse(x, ...)
-
 # Default S3 method
 rmse(x, ref, na.rm = FALSE, ...)
 ```
@@ -19,8 +16,8 @@ rmse(x, ref, na.rm = FALSE, ...)
 
 - x:
 
-  an object. Methods are available for numeric vectors and model objects
-  (e.g. `lm`).
+  a numeric vector of predicted values. Methods for fitted models are
+  provided by the package alloy.
 
 - ...:
 
@@ -60,9 +57,4 @@ ref <- c(3.0, 2.5, 3.0)
 
 rmse(x, ref)
 #> [1] 0.4242641
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-rmse(fit)
-#> [1] 3.740297
 ```

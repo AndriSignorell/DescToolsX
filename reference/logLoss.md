@@ -6,23 +6,28 @@ probabilistic predictions.
 ## Usage
 
 ``` r
-logLoss(x, ref = NULL, eps = .Machine$double.eps)
+logLoss(x, ...)
+
+# Default S3 method
+logLoss(x, ref, eps = .Machine$double.eps, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  Either a numeric vector containing predicted probabilities in
-  \\\[0,1\]\\ when `ref` is supplied, or a fitted binomial `glm` from
-  which response and fitted probabilities are extracted.
+  a numeric vector containing predicted probabilities in \\\[0,1\]\\
+
+- ...:
+
+  further arguments passed to methods
 
 - ref:
 
-  Numeric or logical vector containing the observed binary outcomes
-  (0/1), the reference the predictions are scored against. Required when
-  `x` is a vector of predictions. Factors are not accepted, as the
-  choice of the positive level would have to be guessed.
+  numeric or logical vector containing the observed binary outcomes
+  (0/1), the reference the predictions are scored against. Factors are
+  not accepted, as the choice of the positive level would have to be
+  guessed.
 
 - eps:
 
@@ -49,11 +54,10 @@ interval \\\[\epsilon, 1-\epsilon\]\\, so that a prediction of exactly 0
 or 1 contributes a finite penalty of at most \\-\log(\epsilon)\\ (about
 36.0 for the default `eps`) instead of `Inf`.
 
-Being the negative Bernoulli log-likelihood per observation, log loss is
-extracted automatically only from a `glm` with family `"binomial"`
-fitted to ungrouped data (all prior weights equal to one); for such a
-fit `logLoss(x)` equals `deviance(x) / (2 * n)`. For every other model
-class, pass response and predicted probabilities explicitly.
+Being the negative Bernoulli log-likelihood per observation, log loss
+equals `deviance(fit) / (2 * n)` for a binomial `glm` fitted to
+ungrouped data. Methods for fitted models are provided by the package
+alloy.
 
 ## See also
 
@@ -74,12 +78,4 @@ logLoss(pred, resp)
 # a confidently wrong prediction is capped by eps
 logLoss(c(1, 0), c(0, 1), eps = 1e-6)
 #> [1] 13.81551
-
-m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-logLoss(m)
-#> [1] 0.1571736
-
-# equivalently, half the mean deviance
-m$deviance / (2 * nrow(mtcars))
-#> [1] 0.1571736
 ```

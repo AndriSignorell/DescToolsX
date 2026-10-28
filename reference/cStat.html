@@ -15,7 +15,7 @@ area under the ROC curve (AUC), for predicted values and a binary outcome."><met
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,9 +58,6 @@ area under the ROC curve (AUC), for predicted values and a binary outcome.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cStat</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'glm'</span></span>
-<span><span class="fu">cStat</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">cStat</span><span class="op">(</span><span class="va">x</span>, <span class="va">ref</span>, conf.level <span class="op">=</span> <span class="cn">NA</span>, sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -70,8 +67,8 @@ area under the ROC curve (AUC), for predicted values and a binary outcome.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>an object for which the C-statistic should be computed; for the
-default method, a numeric vector of predicted values</p></dd>
+<dd><p>a numeric vector of predicted values.
+Methods for fitted models are provided by the package <span class="pkg">alloy</span>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -150,13 +147,6 @@ global random number generator and therefore advances it. Call
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">cStat</span><span class="op">(</span><span class="va">x</span>, ref <span class="op">=</span> <span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4569243</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># GLM method</span></span></span>
-<span class="r-in"><span><span class="va">r.mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">complaint</span> <span class="op">~</span> <span class="va">temperature</span> <span class="op">+</span> <span class="va">wrongpizza</span> <span class="op">+</span> <span class="va">wine_ordered</span>,</span></span>
-<span class="r-in"><span>             data <span class="op">=</span> <span class="fu">bedrock</span><span class="fu">::</span><span class="va"><a href="https://andrisignorell.github.io/bedrock/reference/Pizza.html" class="external-link">Pizza</a></span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">cStat</span><span class="op">(</span><span class="va">r.mod</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.6251552 0.5784738 0.6705040 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

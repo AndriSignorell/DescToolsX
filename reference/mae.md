@@ -8,9 +8,6 @@ values.
 ``` r
 mae(x, ...)
 
-# S3 method for class 'lm'
-mae(x, ...)
-
 # Default S3 method
 mae(x, ref, na.rm = FALSE, ...)
 ```
@@ -19,8 +16,8 @@ mae(x, ref, na.rm = FALSE, ...)
 
 - x:
 
-  an object. Methods are available for numeric vectors and model objects
-  (e.g. `lm`).
+  a numeric vector of predicted values. Methods for fitted models are
+  provided by the package alloy.
 
 - ...:
 
@@ -62,9 +59,4 @@ ref <- c(3.0, 2.5, 3.0)
 
 mae(x, ref)
 #> [1] 0.4
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-mae(fit)
-#> [1] 2.907452
 ```

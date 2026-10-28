@@ -6,8 +6,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Confusion Matrix and Classification Metrics — confusion"><meta name="description" content="Computes confusion matrices and a wide range of performance metrics
-for classification models or predicted vs. observed labels."><meta property="og:description" content="Computes confusion matrices and a wide range of performance metrics
-for classification models or predicted vs. observed labels."><meta property="og:image" content="/logo.png"></head><body>
+for predicted vs. observed labels."><meta property="og:description" content="Computes confusion matrices and a wide range of performance metrics
+for predicted vs. observed labels."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +15,7 @@ for classification models or predicted vs. observed labels."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ for classification models or predicted vs. observed labels."><meta property="og:
 
     <div class="ref-description section level2">
     <p>Computes confusion matrices and a wide range of performance metrics
-for classification models or predicted vs. observed labels.</p>
+for predicted vs. observed labels.</p>
     </div>
 
     <div class="section level2">
@@ -66,27 +66,6 @@ for classification models or predicted vs. observed labels.</p>
 <span></span>
 <span><span class="co"># S3 method for class 'matrix'</span></span>
 <span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'rpart'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'multinom'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'glm'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, cutoff <span class="op">=</span> <span class="fl">0.5</span>, pos <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'randomForest'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'svm'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'lda'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for class 'qda'</span></span>
-<span><span class="fu">confusion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Confusion'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"digits"</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3L</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -107,7 +86,6 @@ for classification models or predicted vs. observed labels.</p>
 <dd><p>object containing predictions; one of:</p><ul><li><p>a factor or character vector of predicted classes</p></li>
 <li><p>a confusion matrix (<code>table</code> or <code>matrix</code>) with
 <strong>predictions in the rows and references in the columns</strong></p></li>
-<li><p>a fitted model object (e.g., <code>glm</code>, <code>rpart</code>)</p></li>
 </ul></dd>
 
 
@@ -136,11 +114,6 @@ method.</p></dd>
 reference are removed before computation. With the default <code>FALSE</code>
 such pairs make all statistics <code>NA</code>; the table of the complete pairs
 is still returned.</p></dd>
-
-
-<dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
-<dd><p>numeric cutoff for probabilistic models (e.g., <code>glm</code>).
-Default <code>0.5</code>.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
@@ -193,9 +166,8 @@ the sensitivity or specificity, respectively, for each reported class.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This is a generic function with methods for tables, vectors, and several
-model objects (e.g., <code>glm</code>, <code>rpart</code>, <code>randomForest</code>,
-<code>svm</code>).</p>
+    <p>This is a generic function with methods for vectors and tables.
+Methods for fitted models are provided by the package <span class="pkg">alloy</span>.</p>
 <p><code>sensitivity()</code> and <code>specificity()</code> are convenience extractors for the
 sensitivity and specificity values computed by <code>confusion()</code>.</p>
 <p>The orientation of the table matters: rows are read as predictions and
@@ -284,39 +256,6 @@ column margin. <code>confusion.default()</code> builds the table accordingly.</p
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Matthews Cor.-Coef. : 0.1667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        'Positive' Class : B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># glm</span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">confusion</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confusion Matrix and Statistics</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Reference</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Prediction  1  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1 12  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          0  1 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 Total n : 32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                Accuracy : 0.9375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 95% CI : (0.7985, 0.9827)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     No Information Rate : 0.5938</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     P-Value [Acc &gt; NIR] : &lt; 0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   Kappa : 0.8704</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  McNemar's Test P-Value : 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Sensitivity : 0.9231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Specificity : 0.9474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Pos Pred Value : 0.9231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Neg Pred Value : 0.9474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              Prevalence : 0.4063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Detection Rate : 0.3750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Detection Prevalence : 0.4063</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Balanced Accuracy : 0.9352</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 F-Value : 0.9231</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Matthews Cor.-Coef. : 0.8704</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        'Positive' Class : 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

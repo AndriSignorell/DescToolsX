@@ -8,9 +8,6 @@ under the ROC curve (AUC), for predicted values and a binary outcome.
 ``` r
 cStat(x, ...)
 
-# S3 method for class 'glm'
-cStat(x, ...)
-
 # Default S3 method
 cStat(x, ref, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 ```
@@ -19,8 +16,8 @@ cStat(x, ref, conf.level = NA, sides = c("two.sided", "left", "right"), ...)
 
 - x:
 
-  an object for which the C-statistic should be computed; for the
-  default method, a numeric vector of predicted values
+  a numeric vector of predicted values. Methods for fitted models are
+  provided by the package alloy.
 
 - ...:
 
@@ -105,11 +102,4 @@ x <- runif(100)
 y <- rbinom(100, 1, 0.5)
 cStat(x, ref = y)
 #> [1] 0.4569243
-
-# GLM method
-r.mod <- glm(complaint ~ temperature + wrongpizza + wine_ordered,
-             data = bedrock::Pizza, family = binomial)
-cStat(r.mod, conf.level = 0.95)
-#>       est       lci       uci 
-#> 0.6251552 0.5784738 0.6705040 
 ```

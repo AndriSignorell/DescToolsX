@@ -88,7 +88,9 @@ Language*. Wadsworth & Brooks/Cole.
 [`weighted.mean()`](https://rdrr.io/r/stats/weighted.mean.html),
 [`mean.POSIXct()`](https://rdrr.io/r/base/DateTimeClasses.html),
 [`colMeans()`](https://rdrr.io/r/base/colSums.html) for row and column
-means.
+means,
+[`lumen::meanCI()`](https://andrisignorell.github.io/lumen/reference/meanCI.html)
+for confidence intervals.
 
 Other location: [`gmean()`](gmean.md), [`hmean()`](hmean.md),
 [`hodgesLehmann()`](hodgesLehmann.md), [`huberM()`](huberM.md),

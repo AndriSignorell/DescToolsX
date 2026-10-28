@@ -15,7 +15,7 @@ values in x."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ values in x."><meta property="og:image" content="/logo.png"></head><body>
     </div>
 
     <div class="ref-description section level2">
-    <p><code>skew</code> computes the skewness, <code>kurt</code> the excess kurtosis of the
+    <p><code>skew</code> computes the skewness, <a href="kurt.html">kurt</a> the excess kurtosis of the
 values in x.</p>
     </div>
 
@@ -73,12 +73,14 @@ values in x.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a numeric vector</p></dd>
+<dd><p>a numeric vector. A matrix or array contributes all its
+elements, as <code>as.vector(x)</code>.</p></dd>
 
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
 <dd><p>confidence level of the interval. If set to <code>NA</code>
-(the default), only the point estimate is returned.</p></dd>
+(the default), only the point estimate is returned. One-sided
+intervals require <code>conf.level &gt; 0.5</code>.</p></dd>
 
 
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
@@ -101,10 +103,8 @@ used for calculation. See Details.</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>a numerical vector of weights the same length as <code>x</code>
-giving the weights to use for elements of <code>x</code>. The weights are read as
-frequencies, so that their sum takes the place of the sample size in the
-estimator's bias corrections and in the standard error.</p></dd>
+<dd><p>a non-negative numeric vector of frequency weights, the
+same length as <code>x</code>. See Details.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
@@ -113,8 +113,11 @@ before the computation proceeds. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> when
-confidence intervals are calculated</p></dd>
+<dd><p>bootstrap settings for <code>method = "boot"</code>, and only these:
+<code>R</code> (number of replicates), <code>type</code> (one of <code>"bca"</code>, <code>"perc"</code>,
+<code>"basic"</code>, <code>"norm"</code>; <code>"stud"</code> is not supported, as no suitable
+variance estimate is implemented here), <code>parallel</code> and
+<code>ncpus</code> as in <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>. Other arguments are an error.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -133,27 +136,55 @@ numeric vector with elements:</p><dl><dt><code>est</code></dt>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If <code>na.rm</code> is <code>TRUE</code> then missing values are removed before
-computation proceeds. <br></p>
+    <p>If <code>na.rm</code> is <code>TRUE</code> then missing values in <code>x</code> and in <code>weights</code> are
+removed, pairwise, before computation proceeds. <br></p>
 <p>The estimator for calculating the skewness can either be:<br><code>1: g_1 = m_3 / m_2^(3/2) </code> <br><code>2: G_1 = g_1 * sqrt(n(n-1)) / (n-2) </code><br><code>3: b_1 = m_3 / s^3 = g_1 ((n-1)/n)^(3/2) </code> <br></p>
 <p>1 is the typical definition used in Stata and in many older textbooks.  <br>
 2 is used in SAS and SPSS.  <br> 3 is used in MINITAB and BMDP. <br></p>
+<p>Estimators 1 and 3 need \(n \ge 2\), estimator 2 needs \(n \ge 3\).
+For shorter or constant input the skewness is not defined: the result is
+<code>NA</code> (all three elements if an interval was requested) with a warning.</p>
 <p>Cramer (1997) mentions the asymptotic standard error of <code>G_1</code>, that is
 of <code>estimator = 2</code>:</p><div class="sourceCode"><pre><code><span><span class="va">ASE.skew</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span> <span class="fl">6</span><span class="op">*</span><span class="va">n</span><span class="op">*</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="op">(</span><span class="va">n</span><span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="va">n</span><span class="op">+</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div><p>to be
 used for calculating the confidence intervals. The standard errors of the
 other two estimators follow from it by the same factors that relate the
 estimators themselves, so that <code>est/se</code> does not depend on the choice
-of <code>estimator</code>. This is implemented here with <code>method="classic"</code>.
+of <code>estimator</code>. This is implemented here with <code>method="classic"</code>. The
+standard error is defined from \(n = 3\) on; below, the interval is
+<code>NA</code> with a warning.
 <br> However, Joanes and Gill (1998) advise
 against this approach, pointing out that the normal assumptions would
 virtually always be violated.  They suggest using the bootstrap method.
 That's why the default method for the confidence interval type is set to
 <code>"boot"</code>. If not further specified the boot ci type will be chosen as
-<code>"bca"</code>.<br></p>
-<p>The standard error is only defined for <code>n &gt;= 3</code>; for shorter input the
-variance, and with it any <code>method="classic"</code> interval, is <code>NA</code>.</p>
-<p>This implementation of the two functions is comparably fast, as the
-expensive sums are coded in C++.</p>
+<code>"bca"</code>. If some bootstrap replicates are undefined (a constant
+resample) or <code><a href="https://rdrr.io/pkg/boot/man/boot.ci.html" class="external-link">boot::boot.ci()</a></code> cannot compute the interval, the bounds
+are <code>NA</code> with a warning. <br></p>
+<p><strong>Weights</strong> are frequency weights: <code>sum(weights)</code> takes the place of
+\(n\) in the bias corrections and in the standard error. For integer
+weights <code>skew(x, weights = w)</code> equals <code>skew(rep(x, w))</code>. An observation
+with weight 0 is absent: its <code>x</code> may be <code>NA</code> or infinite without effect.
+A missing weight makes the observation missing. The bootstrap resamples
+the expanded sample and therefore requires integer weights (memory grows
+with <code>sum(weights)</code>, and BCa's jackknife with it). Non-integer weights
+are admitted for the point estimate and <code>method = "classic"</code> as a
+computational extension of the same formulas; they correspond to no
+actual sample, so the exact normal-theory variance does not strictly
+apply to them. Analysis or survey weights are
+not supported: neither the bias correction nor the row bootstrap would
+reflect them.</p>
+<p>This implementation is comparably fast, as the expensive sums are coded
+in C++. The data are rescaled before centring and again after, so that
+neither the deviations nor their powers can overflow for any finite
+input.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="random-number-generation">Random number generation<a class="anchor" aria-label="anchor" href="#random-number-generation"></a></h2>
+
+
+<p><code>method = "boot"</code> - the default - resamples and therefore advances
+R's global random number generator. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code>
+beforehand for reproducible intervals.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -164,7 +195,7 @@ kurtosis. <em>The Statistician</em>, 47, 183-189.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="meanX.html">meanX</a>, <a href="varX.html">sdX</a>, similar code in <span class="pkg">e1071</span></p>
+    <div class="dont-index"><p><a href="kurt.html">kurt</a>, <a href="meanX.html">meanX</a>, <a href="varX.html">sdX</a>, similar code in <span class="pkg">e1071</span></p>
 <p>Other shape:
 <code><a href="kurt.html">kurt()</a></code></p></div>
     </div>
@@ -176,7 +207,7 @@ kurtosis. <em>The Statistician</em>, 47, 183-189.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4970801</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># use sapply to calculate skewness for a data.frame</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu">bedrock</span><span class="fu">::</span><span class="va"><a href="https://andrisignorell.github.io/bedrock/reference/Pizza.html" class="external-link">Pizza</a></span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temperature"</span>,<span class="st">"price"</span>,<span class="st">"delivery_min"</span><span class="op">)</span><span class="op">]</span>, </span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu">bedrock</span><span class="fu">::</span><span class="va"><a href="https://andrisignorell.github.io/bedrock/reference/Pizza.html" class="external-link">Pizza</a></span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temperature"</span>,<span class="st">"price"</span>,<span class="st">"delivery_min"</span><span class="op">)</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>       <span class="va">skew</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  temperature        price delivery_min </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -0.8418683    0.4970801    0.6106322 </span>
@@ -187,6 +218,11 @@ kurtosis. <em>The Statistician</em>, 47, 183-189.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.2578214 0.6371518 1.8784909 </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># frequency weights are the same as repeating the values</span></span></span>
+<span class="r-in"><span><span class="fu">skew</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.367629</span>
+<span class="r-in"><span><span class="fu">skew</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.367629</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

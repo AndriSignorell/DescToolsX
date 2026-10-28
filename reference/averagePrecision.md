@@ -5,22 +5,27 @@ Computes average precision (AP) for binary probabilistic predictions.
 ## Usage
 
 ``` r
-averagePrecision(x, ref = NULL)
+averagePrecision(x, ...)
+
+# Default S3 method
+averagePrecision(x, ref, ...)
 ```
 
 ## Arguments
 
 - x:
 
-  either a numeric vector of predicted probabilities or scores when
-  `ref` is supplied, or a fitted model object from which both response
-  and predictions are extracted
+  a numeric vector of predicted probabilities or scores. Methods for
+  fitted models are provided by the package alloy.
+
+- ...:
+
+  further arguments passed to methods
 
 - ref:
 
   numeric vector of observed binary outcomes (0/1), the reference the
-  predictions are scored against. Required when `x` is a vector of
-  predictions; ignored when `x` is a model object.
+  predictions are scored against
 
 ## Value
 

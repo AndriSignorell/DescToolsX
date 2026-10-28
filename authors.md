@@ -89,13 +89,13 @@ Source:
 [`DESCRIPTION`](https://github.com/AndriSignorell/DescToolsX/blob/main/DESCRIPTION)
 
 Signorell A (2026). *DescToolsX: Tools for Descriptive Statistics - New
-Generation*. R package version 0.0.0.963,
+Generation*. R package version 0.0.0.964,
 <https://andrisignorell.github.io/DescToolsX/>.
 
     @Manual{,
       title = {DescToolsX: Tools for Descriptive Statistics - New Generation},
       author = {Andri Signorell},
       year = {2026},
-      note = {R package version 0.0.0.963},
+      note = {R package version 0.0.0.964},
       url = {https://andrisignorell.github.io/DescToolsX/},
     }

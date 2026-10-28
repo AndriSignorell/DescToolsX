@@ -7,9 +7,12 @@ bootstrap.
 ## Usage
 
 ``` r
+brierScore(x, ...)
+
+# Default S3 method
 brierScore(
   x,
-  ref = NULL,
+  ref,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("normal", "boot"),
@@ -22,15 +25,21 @@ brierScore(
 
 - x:
 
-  either a numeric vector of predicted probabilities in \\\[0,1\]\\ when
-  `ref` is supplied, or a fitted model object (`glm` or similar) from
-  which both response and predictions are extracted
+  a numeric vector of predicted probabilities in \\\[0,1\]\\. Methods
+  for fitted models are provided by the package alloy.
+
+- ...:
+
+  further arguments passed to the bootstrap engine when
+  `method = "boot"`: `R`, `type` (`"perc"`, `"basic"`, `"norm"` or
+  `"bca"`; `"stud"` is not available). `parallel` and `ncpus` are
+  accepted but have no effect: the resampling loop in `brier_boot_cpp()`
+  is serial. See Details.
 
 - ref:
 
   a numeric vector of observed binary outcomes (\\0\\/\\1\\), the
-  reference the predictions are scored against. Required when `x` is a
-  vector of predictions; ignored when `x` is a model object.
+  reference the predictions are scored against
 
 - conf.level:
 
@@ -51,14 +60,6 @@ brierScore(
 - scaled:
 
   logical. Should the scaled Brier score be returned? Default `FALSE`.
-
-- ...:
-
-  further arguments passed to the bootstrap engine when
-  `method = "boot"`: `R`, `type` (`"perc"`, `"basic"`, `"norm"` or
-  `"bca"`; `"stud"` is not available). `parallel` and `ncpus` are
-  accepted but have no effect: the resampling loop in `brier_boot_cpp()`
-  is serial. See Details.
 
 ## Value
 

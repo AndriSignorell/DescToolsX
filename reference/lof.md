@@ -37,7 +37,7 @@ threshold, as its scale depends on the data. Values below 1 arise in
 unusually dense regions and are not normally of interest.
 
 The computation uses
-[`dbscan::lof()`](http://michael.hahsler.net/dbscan/reference/lof.md)
+[`dbscan::lof()`](https://michael.hahsler.net/dbscan/reference/lof.html)
 from the dbscan package, which builds a kd-tree and therefore scales to
 large data. Note that its `minPts` counts the observation itself,
 whereas `k` here counts neighbours only, following Breunig et al.; the
@@ -70,7 +70,7 @@ International Conference on Management of Data*, 93-104.
 
 ## See also
 
-[`dbscan::lof()`](http://michael.hahsler.net/dbscan/reference/lof.md)
+[`dbscan::lof()`](https://michael.hahsler.net/dbscan/reference/lof.html)
 
 ## Examples
 

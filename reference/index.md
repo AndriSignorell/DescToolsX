@@ -90,8 +90,8 @@ tables.
 - [`percTable()`](percTable.md)
   [`print(`*`<PercTable>`*`)`](percTable.md) : Percentage Table
 
-- [`tOne()`](tOne.md) [`print(`*`<tOne>`*`)`](tOne.md)
-  [`` `[`( ``*`<tOne>`*`)`](tOne.md) : Create Table One Describing
+- [`tOne()`](tOne.md) [`print(`*`<TOne>`*`)`](tOne.md)
+  [`` `[`( ``*`<TOne>`*`)`](tOne.md) : Create Table One Describing
   Baseline Characteristics
 
 ## Location, Dispersion & Shape

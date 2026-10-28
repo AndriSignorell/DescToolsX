@@ -21,6 +21,19 @@
 
 - Consistent lowerCamelCase naming throughout; function names, argument
   names and argument order follow the design rules of the suite.
+- The classifier and prediction metrics work on vectors and tables only.
+  Their methods for fitted models
+  ([`confusion()`](../reference/confusion.md) for `glm`, `multinom`,
+  `rpart`, `randomForest`, `svm`, `lda` and `qda`;
+  [`cStat()`](../reference/cStat.md) for `glm`;
+  [`mae()`](../reference/mae.md), [`mse()`](../reference/mse.md),
+  [`rmse()`](../reference/rmse.md), [`mape()`](../reference/mape.md) and
+  [`smape()`](../reference/smape.md) for `lm`) moved to the modelling
+  package alloy, together with the model branches of
+  [`brierScore()`](../reference/brierScore.md),
+  [`averagePrecision()`](../reference/averagePrecision.md) and
+  [`logLoss()`](../reference/logLoss.md). These three are now generics
+  with a default method `(x, ref)`; `ref` is required.
 - Base utilities, graphics and inferential procedures have moved into
   the separate packages bedrock, pharos and lumen; DescToolsX now
   depends on them instead of carrying its own copies.

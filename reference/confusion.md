@@ -1,7 +1,7 @@
 # Confusion Matrix and Classification Metrics
 
 Computes confusion matrices and a wide range of performance metrics for
-classification models or predicted vs. observed labels.
+predicted vs. observed labels.
 
 ## Usage
 
@@ -16,27 +16,6 @@ confusion(x, ref, pos = NULL, na.rm = FALSE, ...)
 
 # S3 method for class 'matrix'
 confusion(x, pos = NULL, ...)
-
-# S3 method for class 'rpart'
-confusion(x, ...)
-
-# S3 method for class 'multinom'
-confusion(x, ...)
-
-# S3 method for class 'glm'
-confusion(x, cutoff = 0.5, pos = NULL, ...)
-
-# S3 method for class 'randomForest'
-confusion(x, ...)
-
-# S3 method for class 'svm'
-confusion(x, ...)
-
-# S3 method for class 'lda'
-confusion(x, ...)
-
-# S3 method for class 'qda'
-confusion(x, ...)
 
 # S3 method for class 'Confusion'
 print(x, digits = max(3L, getOption("digits") - 3L), ...)
@@ -59,8 +38,6 @@ specificity(x, ...)
 
   - a confusion matrix (`table` or `matrix`) with **predictions in the
     rows and references in the columns**
-
-  - a fitted model object (e.g., `glm`, `rpart`)
 
 - ...:
 
@@ -86,10 +63,6 @@ specificity(x, ...)
   removed before computation. With the default `FALSE` such pairs make
   all statistics `NA`; the table of the complete pairs is still
   returned.
-
-- cutoff:
-
-  numeric cutoff for probabilistic models (e.g., `glm`). Default `0.5`.
 
 - digits:
 
@@ -153,8 +126,8 @@ reported class.
 
 ## Details
 
-This is a generic function with methods for tables, vectors, and several
-model objects (e.g., `glm`, `rpart`, `randomForest`, `svm`).
+This is a generic function with methods for vectors and tables. Methods
+for fitted models are provided by the package alloy.
 
 `sensitivity()` and `specificity()` are convenience extractors for the
 sensitivity and specificity values computed by `confusion()`.
@@ -262,38 +235,5 @@ confusion(table(pred, ref))
 #>     Matthews Cor.-Coef. : 0.1667
 #> 
 #>        'Positive' Class : B
-#> 
-
-# glm
-m <- glm(am ~ hp + wt, data = mtcars, family = binomial)
-confusion(m)
-#> 
-#> Confusion Matrix and Statistics
-#> 
-#>           Reference
-#> Prediction  1  0
-#>          1 12  1
-#>          0  1 18
-#> 
-#>                 Total n : 32
-#>                Accuracy : 0.9375
-#>                 95% CI : (0.7985, 0.9827)
-#>     No Information Rate : 0.5938
-#>     P-Value [Acc > NIR] : < 0.001
-#>                   Kappa : 0.8704
-#>  McNemar's Test P-Value : 1
-#> 
-#>             Sensitivity : 0.9231
-#>             Specificity : 0.9474
-#>          Pos Pred Value : 0.9231
-#>          Neg Pred Value : 0.9474
-#>              Prevalence : 0.4063
-#>          Detection Rate : 0.3750
-#>    Detection Prevalence : 0.4063
-#>       Balanced Accuracy : 0.9352
-#>                 F-Value : 0.9231
-#>     Matthews Cor.-Coef. : 0.8704
-#> 
-#>        'Positive' Class : 1
 #> 
 ```

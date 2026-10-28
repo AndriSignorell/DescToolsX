@@ -8,8 +8,11 @@ accept and refer here for what the values mean.
 
 - conf.level:
 
-  confidence level of the interval. If set to `NA` (the default), only
-  the point estimate is returned.
+  confidence level of the interval. `NA` returns only the point
+  estimate. Dedicated interval functions such as
+  [`meanCI()`](https://andrisignorell.github.io/lumen/reference/meanCI.html)
+  default to `0.95`; estimators that can add an interval to their result
+  default to `NA`.
 
 - sides:
 
@@ -20,14 +23,14 @@ accept and refer here for what the values mean.
 
 - method:
 
-  character string specifying the interval method. The available methods
-  and the default differ between functions; see the individual help page
-  for the choices.
+  character string specifying the interval method. The argument is
+  present only where a function offers more than one method; the choices
+  and the default are listed on the individual help page.
 
 - ...:
 
-  additional arguments for the bootstrap, such as the number of
-  resamples `R` and the interval type `type`.
+  further arguments for the bootstrap: the number of resamples `R`, the
+  interval type `type`, and `parallel` and `ncpus`.
 
 ## Details
 
@@ -52,14 +55,13 @@ some functions return further elements.
   the upper bound is finite, the lower one is open.
 
 Thus `sides = "left"` corresponds to `alternative = "greater"` in
-[`stats::t.test()`](https://rdrr.io/r/stats/t.test.html), and
-`sides = "right"` to `alternative = "less"`. This is also the convention
-used by the corresponding functions in DescTools.
+[`t.test()`](https://rdrr.io/r/stats/t.test.html), and `sides = "right"`
+to `alternative = "less"`. The convention is the same as in DescTools.
 
 The open side is reported at the boundary of the parameter space, not at
 infinity - most of the statistics here are bounded, so this is the
 ordinary case rather than an exception. A correlation opens to \\\pm
-1\\, an association measure in \\\[0, 1\]\\ to 0 or 1, Cramer's \\V\\ to
+1\\, an association measure in \\\[0, 1\]\\ to 0 or 1, Cramér's \\V\\ to
 1, Pearson's \\C\\ to \\\sqrt{(m-1)/m}\\. Where the parameter really is
 unbounded, \\\pm\infty\\ is reported: a relative risk opens upwards to
 `Inf` but downwards only to 0, a location estimator opens to `-Inf` and
@@ -84,7 +86,7 @@ Bootstrap intervals are partly computed with the boot package (see
 [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) and
 [`boot::boot.ci()`](https://rdrr.io/pkg/boot/man/boot.ci.html)). The
 number of resamples `R` and the interval type - `"perc"`, `"bca"` and
-others - are passed through `\dots`.
+others - are passed through `...`.
 
 `"bca"` corrects for bias and skewness and is the better choice for a
 smooth statistic whose parameter lies well inside its range. It is the
@@ -97,7 +99,7 @@ than a pathology. `"perc"` is the more robust default there.
 
 Requesting a bootstrap confidence interval draws a seed from R's global
 random number generator and therefore advances it. Call
-[`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
+[`set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
 reproducible intervals. This applies to the bootstrap methods only;
 classical intervals are deterministic.
 
@@ -105,4 +107,4 @@ classical intervals are deterministic.
 
 [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html),
 [`boot::boot.ci()`](https://rdrr.io/pkg/boot/man/boot.ci.html),
-[`stats::confint()`](https://rdrr.io/r/stats/confint.html)
+[`confint()`](https://rdrr.io/r/stats/confint.html)

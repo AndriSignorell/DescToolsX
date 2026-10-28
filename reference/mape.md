@@ -8,9 +8,6 @@ reference values.
 ``` r
 mape(x, ...)
 
-# S3 method for class 'lm'
-mape(x, ...)
-
 # Default S3 method
 mape(x, ref, na.rm = FALSE, ...)
 ```
@@ -19,8 +16,8 @@ mape(x, ref, na.rm = FALSE, ...)
 
 - x:
 
-  an object. Methods are available for numeric vectors and model objects
-  (e.g. `lm`).
+  a numeric vector of predicted values. Methods for fitted models are
+  provided by the package alloy.
 
 - ...:
 
@@ -65,10 +62,5 @@ ref <- c(3.0, 2.5, 3.0)
 
 mape(x, ref)
 #> [1] 0.1444444
-
-# with linear model
-fit <- lm(mpg ~ hp, data = mtcars)
-mape(fit)
-#> [1] 0.1566944
 
 ```

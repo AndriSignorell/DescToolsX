@@ -15,7 +15,7 @@ probabilistic predictions."><meta property="og:image" content="/logo.png"></head
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,10 @@ probabilistic predictions.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logLoss</span><span class="op">(</span><span class="va">x</span>, ref <span class="op">=</span> <span class="cn">NULL</span>, eps <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">logLoss</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default S3 method</span></span>
+<span><span class="fu">logLoss</span><span class="op">(</span><span class="va">x</span>, <span class="va">ref</span>, eps <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,16 +67,19 @@ probabilistic predictions.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Either a numeric vector containing predicted probabilities in
-\([0,1]\) when <code>ref</code> is supplied, or a fitted binomial
-<code>glm</code> from which response and fitted probabilities are extracted.</p></dd>
+<dd><p>a numeric vector containing predicted probabilities in
+\([0,1]\)</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>further arguments passed to methods</p></dd>
 
 
 <dt id="arg-ref">ref<a class="anchor" aria-label="anchor" href="#arg-ref"></a></dt>
-<dd><p>Numeric or logical vector containing the observed binary
+<dd><p>numeric or logical vector containing the observed binary
 outcomes (0/1), the reference the predictions are scored against.
-Required when <code>x</code> is a vector of predictions. Factors are not
-accepted, as the choice of the positive level would have to be guessed.</p></dd>
+Factors are not accepted, as the choice of the positive level would
+have to be guessed.</p></dd>
 
 
 <dt id="arg-eps">eps<a class="anchor" aria-label="anchor" href="#arg-eps"></a></dt>
@@ -97,12 +103,10 @@ probabilistic predictions; a perfect model has log loss 0.</p>
 interval \([\epsilon, 1-\epsilon]\), so that a prediction of exactly 0
 or 1 contributes a finite penalty of at most \(-\log(\epsilon)\)
 (about 36.0 for the default <code>eps</code>) instead of <code>Inf</code>.</p>
-<p>Being the negative Bernoulli log-likelihood per observation, log loss is
-extracted automatically only from a <code>glm</code> with family
-<code>"binomial"</code> fitted to ungrouped data (all prior weights equal to
-one); for such a fit <code>logLoss(x)</code> equals <code>deviance(x) / (2 * n)</code>.
-For every other model class, pass response and predicted probabilities
-explicitly.</p>
+<p>Being the negative Bernoulli log-likelihood per observation, log loss
+equals <code>deviance(fit) / (2 * n)</code> for a binomial <code>glm</code> fitted to
+ungrouped data. Methods for fitted models are provided by the package
+<span class="pkg">alloy</span>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -129,14 +133,6 @@ explicitly.</p>
 <span class="r-in"><span><span class="co"># a confidently wrong prediction is capped by eps</span></span></span>
 <span class="r-in"><span><span class="fu">logLoss</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, eps <span class="op">=</span> <span class="fl">1e-6</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13.81551</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">logLoss</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1571736</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># equivalently, half the mean deviance</span></span></span>
-<span class="r-in"><span><span class="va">m</span><span class="op">$</span><span class="va">deviance</span> <span class="op">/</span> <span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1571736</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

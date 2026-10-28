@@ -17,7 +17,7 @@ adequate statistical tests."><meta property="og:image" content="/logo.png"></hea
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.963</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.964</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,10 +68,10 @@ adequate statistical tests.</p>
 <span>             pval <span class="op">=</span> <span class="fu"><a href="https://andrisignorell.github.io/pharos/reference/style.html" class="external-link">style</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"*"</span>, naForm <span class="op">=</span> <span class="st">"   "</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'tOne'</span></span>
+<span><span class="co"># S3 method for class 'TOne'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'tOne'</span></span>
+<span><span class="co"># S3 method for class 'TOne'</span></span>
 <span><span class="va">x</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">...</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre></div>
     </div>
 
@@ -80,7 +80,7 @@ adequate statistical tests.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a tOne object to subset</p></dd>
+<dd><p>a <code>TOne</code> object to subset.</p></dd>
 
 
 <dt id="arg-groups">groups<a class="anchor" aria-label="anchor" href="#arg-groups"></a></dt>
@@ -145,24 +145,25 @@ the p-values of the tests</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further parameters (not used here)</p></dd>
+<dd><p>further parameters (not used here).</p></dd>
 
 
 <dt id="arg-i">i<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
-<dd><p>rowindex</p></dd>
+<dd><p>row index; without <code>j</code> and without a comma (<code>x[i]</code>), a
+cell index as for a plain matrix.</p></dd>
 
 
 <dt id="arg-j">j<a class="anchor" aria-label="anchor" href="#arg-j"></a></dt>
-<dd><p>columnindex</p></dd>
+<dd><p>column index.</p></dd>
 
 
 <dt id="arg-drop">drop<a class="anchor" aria-label="anchor" href="#arg-drop"></a></dt>
-<dd><p>drop the structure in case of total reduction</p></dd>
+<dd><p>drop the structure in case of total reduction.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a character matrix of class <code>tOne</code></p>
+    <p>a character matrix of class <code>TOne</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -195,7 +196,7 @@ with a chi-square test. <br> The tests can be changed with the argument
 function with arguments <code>(x, g)</code>, returning something similar to a
 p-value.</p><div class="sourceCode"><pre><code>
   tests = list( num = list(fun = function(x, g){
-      summary(aov(x ~ g))\verb{[[1]][1, "Pr(&gt;F)"]}}, lbl = "ANOVA"),
+      summary(aov(x ~ g))[[1]][1], "Pr(&gt;F)"]}, lbl = "ANOVA"),
     cat = list(fun = function(x, g){
       chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
     dich = list(fun = function(x, g){
@@ -205,10 +206,10 @@ p-value.</p><div class="sourceCode"><pre><code>
 <p>The legend text of the test, which is appended to
 the table together with the significance codes, can be set with the variable
 <code>lbl</code>.</p>
-<p>Great importance was attached to the free definition of the number fms.
-By default, the optionally definable fm templates of <strong>DescToolsX</strong>
+<p>Great importance was attached to the free definition of the number formats.
+By default, the optionally definable format templates of <strong>DescToolsX</strong>
 are used. Deviations from this can be freely passed as arguments to the
-function. fms can be defined for integers, floating point numbers,
+function. Formats can be defined for integers, floating point numbers,
 percentages and for the p-values of statistical tests. All options of the
 function <code><a href="https://andrisignorell.github.io/pharos/reference/fm.html" class="external-link">pharos::fm()</a></code> are available and can be provided as a list.
 See examples which show several different implementations.</p><div class="sourceCode"><pre><code><span></span>

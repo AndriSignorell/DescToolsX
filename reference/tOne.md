@@ -16,10 +16,10 @@ tOne(
              pval = style(fmt = "*", naForm = "   "))
 )
 
-# S3 method for class 'tOne'
+# S3 method for class 'TOne'
 print(x, ...)
 
-# S3 method for class 'tOne'
+# S3 method for class 'TOne'
 x[i, j, ..., drop = FALSE]
 ```
 
@@ -27,7 +27,7 @@ x[i, j, ..., drop = FALSE]
 
 - x:
 
-  a tOne object to subset
+  a `TOne` object to subset.
 
 - groups:
 
@@ -90,23 +90,24 @@ x[i, j, ..., drop = FALSE]
 
 - ...:
 
-  further parameters (not used here)
+  further parameters (not used here).
 
 - i:
 
-  rowindex
+  row index; without `j` and without a comma (`x[i]`), a cell index as
+  for a plain matrix.
 
 - j:
 
-  columnindex
+  column index.
 
 - drop:
 
-  drop the structure in case of total reduction
+  drop the structure in case of total reduction.
 
 ## Value
 
-a character matrix of class `tOne`
+a character matrix of class `TOne`.
 
 ## Details
 
@@ -147,7 +148,7 @@ returning something similar to a p-value.
 
 
       tests = list( num = list(fun = function(x, g){
-          summary(aov(x ~ g))\verb{[[1]][1, "Pr(>F)"]}}, lbl = "ANOVA"),
+          summary(aov(x ~ g))[[1]][1], "Pr(>F)"]}, lbl = "ANOVA"),
         cat = list(fun = function(x, g){
           chisq.test(table(x, g))$p.val}, lbl = "Chi-Square test"),
         dich = list(fun = function(x, g){
@@ -157,12 +158,12 @@ returning something similar to a p-value.
 The legend text of the test, which is appended to the table together
 with the significance codes, can be set with the variable `lbl`.
 
-Great importance was attached to the free definition of the number fms.
-By default, the optionally definable fm templates of **DescToolsX** are
-used. Deviations from this can be freely passed as arguments to the
-function. fms can be defined for integers, floating point numbers,
-percentages and for the p-values of statistical tests. All options of
-the function
+Great importance was attached to the free definition of the number
+formats. By default, the optionally definable format templates of
+**DescToolsX** are used. Deviations from this can be freely passed as
+arguments to the function. Formats can be defined for integers, floating
+point numbers, percentages and for the p-values of statistical tests.
+All options of the function
 [`pharos::fm()`](https://andrisignorell.github.io/pharos/reference/fm.html)
 are available and can be provided as a list. See examples which show
 several different implementations.
