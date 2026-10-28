@@ -69,17 +69,19 @@ test_that("hodgesLehmann does not modify its arguments", {
   # std::sort() in hlqest_cpp()/hl2qest_cpp() reordered the user's vector. Only
   # na.omit() upstream produced a copy, i.e. the vector was mangled
   # exactly in the ordinary case.
+  # w <- v would share the SEXP, so a mutation would hit both and pass;
+  # serialize() gives an independent snapshot
   v <- c(3, 1, 2, 5, 4)
-  w <- v
+  before <- serialize(v, NULL)
   hodgesLehmann(v)
-  expect_identical(v, w)
-  
+  expect_identical(serialize(v, NULL), before)
+
   a <- c(9, 7, 8)
   b <- c(2, 1, 3)
-  a0 <- a; b0 <- b
+  a0 <- serialize(a, NULL); b0 <- serialize(b, NULL)
   hodgesLehmann(a, b)
-  expect_identical(a, a0)
-  expect_identical(b, b0)
+  expect_identical(serialize(a, NULL), a0)
+  expect_identical(serialize(b, NULL), b0)
 })
 
 
@@ -92,8 +94,8 @@ test_that("one-sample estimate is the median of the Walsh averages", {
   
   expect_equal(hodgesLehmann(x), expected)
   
-  # even n, so the estimate falls between two Walsh averages
-  x2 <- c(4, 1, 7, 2, 9, 3)
+  # n = 4: 10 Walsh averages, so the estimate falls between two of them
+  x2 <- c(4, 1, 7, 2)
   w2 <- outer(x2, x2, "+") / 2
   expect_equal(hodgesLehmann(x2),
                median(w2[upper.tri(w2, diag = TRUE)]))
@@ -253,3 +255,92 @@ test_that("invalid arguments are not masked by missing data", {
 })
 
 
+test_that("two-sample search terminates under ties (former endless loop)", {
+
+  # the initial row bounds froze the search: am = -0.5, sq = l = 6, sm = 15
+  x <- c(0, 0, 1, 1, 1)
+  y <- c(0, 0, 0, 1, 1, 1)
+  expect_equal(hodgesLehmann(x, y), median(outer(x, y, "-")))
+
+  set.seed(3)
+  for (i in 1:200) {
+    x <- sample(0:2, sample(2:15, 1), replace = TRUE)
+    y <- sample(0:2, sample(2:15, 1), replace = TRUE)
+    expect_equal(hodgesLehmann(x, y), median(outer(x, y, "-")))
+  }
+})
+
+
+test_that("no overflow when the result is finite", {
+  expect_equal(hodgesLehmann(c(1e308, 1e308)), 1e308)
+  expect_equal(hodgesLehmann(1e308, 1e308), 0)
+  expect_equal(hodgesLehmann(c(-.Machine$double.xmax, 0, .Machine$double.xmax)), 0)
+})
+
+
+test_that("infinite values: order statistics, NaN where undefined", {
+  expect_equal(hodgesLehmann(c(1, 2, 3, Inf)), 2.75)
+  expect_equal(hodgesLehmann(c(1, 2, Inf), c(0, 1, 2)), 1)
+
+  # differences: four -Inf, two Inf; this one used to hit the iteration
+  # cap, since the midrange step produced (-Inf + Inf) / 2
+  expect_identical(hodgesLehmann(c(-Inf, -Inf, Inf), c(0, 0)), -Inf)
+  expect_identical(hodgesLehmann(c(1, Inf, Inf), 0), Inf)
+
+  expect_identical(hodgesLehmann(c(-Inf, 1, Inf)), NaN)      # Inf - Inf pair
+  expect_identical(hodgesLehmann(c(1, Inf), c(0, Inf)), NaN)
+  expect_identical(hodgesLehmann(c(-Inf, Inf), 0), NaN)      # middle -Inf, Inf
+
+  # against brute force, all combinations of a small infinite alphabet
+  set.seed(5)
+  ref <- function(d) if (anyNA(d)) NaN else median(d)
+  for (i in 1:200) {
+    x <- sample(c(-Inf, 0:3, Inf), sample(1:7, 1), replace = TRUE)
+    y <- sample(c(-Inf, 0:3, Inf), sample(1:7, 1), replace = TRUE)
+    w <- outer(x, x, "+") / 2
+    expect_identical(hodgesLehmann(x), ref(w[upper.tri(w, diag = TRUE)]))
+    expect_identical(hodgesLehmann(x, y), ref(outer(x, y, "-")))
+  }
+})
+
+
+test_that("argument validation", {
+  x <- c(1.83, 0.50, 1.62, 2.48, 1.68)
+
+  expect_error(hodgesLehmann(x, na.rm = NA))
+  expect_error(hodgesLehmann(x, na.rm = "yes"))
+  expect_error(hodgesLehmann(x, na.rm = c(TRUE, FALSE)))
+
+  # NaN is an invalid level, not a synonym for NA
+  expect_error(hodgesLehmann(x, conf.level = NaN))
+
+  # one-sided levels must stay positive after 1 - 2 * (1 - conf.level)
+  expect_error(hodgesLehmann(x, conf.level = 0.5, sides = "left"), "0.5")
+  expect_error(hodgesLehmann(x, conf.level = 0.3, sides = "right"), "0.5")
+
+  expect_error(hodgesLehmann(x, conf.level = 0.95, type = "stud"), "stud")
+})
+
+
+test_that("degenerate bootstrap cases keep the documented shape", {
+
+  # point mass: collapsed interval, no warning
+  set.seed(1)
+  res <- expect_silent(hodgesLehmann(rep(7, 20), conf.level = 0.95, R = 199))
+  expect_identical(res, c(est = 7, lci = 7, uci = 7))
+
+  set.seed(1)
+  res <- hodgesLehmann(rep(7, 20), conf.level = 0.95, sides = "left", R = 199)
+  expect_identical(res, c(est = 7, lci = 7, uci = Inf))
+
+  # one observation: named NA bounds with warning
+  expect_warning(res <- hodgesLehmann(7, conf.level = 0.95), "single")
+  expect_identical(res, c(est = 7, lci = NA_real_, uci = NA_real_))
+
+  # non-finite replicates
+  set.seed(1)
+  expect_warning(res <- hodgesLehmann(c(1, 2, 3, Inf), conf.level = 0.95,
+                                      R = 199), "finite")
+  expect_named(res, c("est", "lci", "uci"))
+  expect_true(all(is.na(res[c("lci", "uci")])))
+})

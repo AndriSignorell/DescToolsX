@@ -39,9 +39,9 @@ against}
 interval (one of \code{"two.sided"} (default), \code{"left"} or
 \code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
-\item{method}{confidence interval method: \code{"normal"} (delta-method
-approximation, default) or \code{"boot"} (bootstrap via
-\code{brier_boot_cpp()})}
+\item{method}{confidence interval method: \code{"normal"} (normal
+approximation for the mean loss, default) or \code{"boot"} (bootstrap
+via \code{brier_boot_cpp()}).}
 
 \item{scaled}{logical. Should the scaled Brier score be returned?
 Default \code{FALSE}.}
@@ -80,13 +80,15 @@ same range. One-sided intervals require \code{conf.level > 0.5}.
 
 \strong{Normal interval} (\code{method = "normal"})
 
-A delta-method normal approximation based on the variance of the
-per-observation Brier losses.  Fast and deterministic; reliable for
-moderate to large samples.  With \code{scaled = TRUE} the standard error
-is carried onto the skill scale by dividing through \eqn{BS_{\max}},
-which is treated as fixed; the interval therefore ignores the sampling
-variability of the baseline and is mildly anti-conservative. Prefer
-\code{method = "boot"} for scaled scores.
+A normal approximation for the mean of the per-observation Brier
+losses, with standard error \eqn{s_{\mathrm{loss}} / \sqrt{n}}.
+This approximation assumes independent observations and is intended
+for sufficiently large samples.
+With \code{scaled = TRUE}, the standard error is divided by
+\eqn{BS_{\max}}, treating the estimated baseline as fixed.
+The resulting interval does not account for uncertainty in the
+baseline; its coverage may therefore differ from the nominal level.
+Prefer \code{method = "boot"} for scaled scores.
 
 \strong{Bootstrap interval} (\code{method = "boot"})
 
@@ -120,6 +122,25 @@ brierScore(pred, resp, conf.level = 0.95)
 brierScore(pred, resp, conf.level = 0.95, method = "boot", type = "bca")
 brierScore(pred, resp, conf.level = 0.95, scaled = TRUE)
 
+}
+\references{
+Brier, G. W. (1950).
+Verification of forecasts expressed in terms of probability.
+\emph{Monthly Weather Review}, \bold{78}(1), 1--3.
+\doi{10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}
+
+Steyerberg, E. W., Vickers, A. J., Cook, N. R., Gerds, T.,
+Gonen, M., Obuchowski, N., Pencina, M. J., and Kattan, M. W. (2010).
+Assessing the performance of prediction models:
+a framework for traditional and novel measures.
+\emph{Epidemiology}, \bold{21}(1), 128--138.
+\doi{10.1097/EDE.0b013e3181c30fb2}
+
+Efron, B. (1987).
+Better bootstrap confidence intervals.
+\emph{Journal of the American Statistical Association},
+\bold{82}(397), 171--185.
+\doi{10.1080/01621459.1987.10478410}
 }
 \seealso{
 \code{\link[stats:predict]{stats::predict()}}

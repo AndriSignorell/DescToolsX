@@ -22,13 +22,16 @@
 #' @param x numeric vector
 #' @param y optional numeric vector
 #' @param conf.level confidence level of the interval. If set to `NA`
-#'   (the default), only the point estimate is returned.
+#'   (the default), only the point estimate is returned. One-sided
+#'   intervals require `conf.level > 0.5`.
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
 #' @param na.rm logical; if `TRUE`, missing values are removed from `x` and
 #'   `y` separately before the computation
 #' @param ... additional arguments passed to bootstrap procedures
+#'   (`R`, `type`, `parallel`, `ncpus`). `type = "stud"` is not available:
+#'   the bootstrap statistic carries no variance estimate per resample.
 #'
 #' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
@@ -51,6 +54,17 @@
 #' separately; `x` and `y` are independent samples, not pairs. An empty
 #' sample, given or left over after the removal, yields `NA` as well.
 #' Invalid arguments are an error even when data are missing.
+#'
+#' **Infinite values** are ordinary order statistics. `NaN` is returned
+#' when the median is undefined: if a pair yields `Inf - Inf` (`-Inf` and
+#' `Inf` both in `x` in the one-sample case, the same infinity in `x` and
+#' `y` in the two-sample case), or if the two middle order statistics are
+#' `-Inf` and `Inf`.
+#'
+#' **Degenerate intervals.** If all bootstrap replicates coincide (e.g.
+#' constant data), the interval collapses to `lci = uci = est`. With a
+#' single observation, or when the replicates are not all finite, no
+#' interval can be formed: `lci` and `uci` are `NA` with a warning.
 #'
 #' `x` and `y` are not modified.
 #'
@@ -130,7 +144,12 @@ hodgesLehmann <- function(x,
   if (!is.null(y) && !is.numeric(y))
     stop("'y' must be numeric")
 
-  withCI <- !(length(conf.level) == 1L && is.na(conf.level))
+  checkFlag(na.rm)
+
+  # only NA switches the interval off; NaN is an invalid level and goes
+  # to checkConfLevel()
+  withCI <- !(length(conf.level) == 1L && is.na(conf.level) &&
+                !is.nan(conf.level))
 
   if (withCI) {
 
@@ -141,9 +160,18 @@ hodgesLehmann <- function(x,
 
     sides <- match.arg(sides)
 
+    # a one-sided level is mapped to 1 - 2 * (1 - conf.level), which must
+    # stay positive
+    if (sides != "two.sided" && conf.level <= 0.5)
+      stop("one-sided intervals require 'conf.level' > 0.5")
+
     # validated here as well, so that a bad R or type is reported even when
     # the data turn out to be missing
     args <- .extractBootArgs(list(...))
+
+    if (identical(args$type, "stud"))
+      stop("type = \"stud\" is not available: the bootstrap statistic ",
+           "provides no variance estimate per resample")
   }
 
 
@@ -200,6 +228,17 @@ hodgesLehmann <- function(x,
   if (sides != "two.sided")
     conf.level <- 1 - 2 * (1 - conf.level)
 
+  est <- hlqest_cpp(x)
+
+  # no interval: named NA bounds plus warning, the documented shape stays
+  noCI <- function(reason) {
+    warning("no confidence interval: ", reason, call. = FALSE)
+    c(est = est, lci = NA_real_, uci = NA_real_)
+  }
+
+  if (length(x) < 2L)
+    return(noCI("sampling variability cannot be estimated from a single observation"))
+
   boot.fun <- boot::boot(
 
     x,
@@ -212,22 +251,34 @@ hodgesLehmann <- function(x,
     ncpus    = args$ncpus
   )
 
-  ci <- boot::boot.ci(
-    boot.fun,
-    conf = conf.level,
-    type = args$type
-  )
+  tt <- boot.fun$t[, 1L]
 
-  # by name, not by position: ci[[4]] happens to be the first interval
-  # component only because exactly one type is requested
-  ciMat <- ci[[switch(args$type,
-                      norm = "normal", basic = "basic", stud = "student",
-                      perc = "percent", bca = "bca")]]
+  if (!all(is.finite(tt)))
+    return(noCI("bootstrap replicates are not all finite"))
 
-  bounds <- if (args$type == "norm") ciMat[2:3] else ciMat[4:5]
+  if (all(tt == est)) {
+    # point mass: every interval type collapses onto the estimate, while
+    # boot.ci() itself would return NULL
+    bounds <- c(est, est)
+
+  } else {
+
+    ci <- boot::boot.ci(boot.fun, conf = conf.level, type = args$type)
+
+    # by name, not by position: ci[[4]] happens to be the first interval
+    # component only because exactly one type is requested
+    ciMat <- ci[[switch(args$type,
+                        norm = "normal", basic = "basic",
+                        perc = "percent", bca = "bca")]]
+
+    if (is.null(ciMat))
+      return(noCI("boot.ci() returned no interval"))
+
+    bounds <- if (args$type == "norm") ciMat[2:3] else ciMat[4:5]
+  }
 
   res <- c(
-    est = unname(boot.fun$t0),
+    est = est,
     lci = unname(bounds[1L]),
     uci = unname(bounds[2L])
   )

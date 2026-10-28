@@ -19,7 +19,8 @@ hodgesLehmann(
 \item{y}{optional numeric vector}
 
 \item{conf.level}{confidence level of the interval. If set to \code{NA}
-(the default), only the point estimate is returned.}
+(the default), only the point estimate is returned. One-sided
+intervals require \code{conf.level > 0.5}.}
 
 \item{sides}{character string specifying the sidedness of the confidence
 interval (one of \code{"two.sided"} (default), \code{"left"} or
@@ -28,7 +29,9 @@ interval (one of \code{"two.sided"} (default), \code{"left"} or
 \item{na.rm}{logical; if \code{TRUE}, missing values are removed from \code{x} and
 \code{y} separately before the computation}
 
-\item{...}{additional arguments passed to bootstrap procedures}
+\item{...}{additional arguments passed to bootstrap procedures
+(\code{R}, \code{type}, \code{parallel}, \code{ncpus}). \code{type = "stud"} is not available:
+the bootstrap statistic carries no variance estimate per resample.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -71,6 +74,17 @@ or \code{c(est = NA, lci = NA, uci = NA)} when an interval was requested. With
 separately; \code{x} and \code{y} are independent samples, not pairs. An empty
 sample, given or left over after the removal, yields \code{NA} as well.
 Invalid arguments are an error even when data are missing.
+
+\strong{Infinite values} are ordinary order statistics. \code{NaN} is returned
+when the median is undefined: if a pair yields \code{Inf - Inf} (\code{-Inf} and
+\code{Inf} both in \code{x} in the one-sample case, the same infinity in \code{x} and
+\code{y} in the two-sample case), or if the two middle order statistics are
+\code{-Inf} and \code{Inf}.
+
+\strong{Degenerate intervals.} If all bootstrap replicates coincide (e.g.
+constant data), the interval collapses to \code{lci = uci = est}. With a
+single observation, or when the replicates are not all finite, no
+interval can be formed: \code{lci} and \code{uci} are \code{NA} with a warning.
 
 \code{x} and \code{y} are not modified.
 }

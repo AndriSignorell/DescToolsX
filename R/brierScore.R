@@ -25,14 +25,16 @@
 #'
 #' **Normal interval** (`method = "normal"`)
 #'
-#' A delta-method normal approximation based on the variance of the
-#' per-observation Brier losses.  Fast and deterministic; reliable for
-#' moderate to large samples.  With `scaled = TRUE` the standard error
-#' is carried onto the skill scale by dividing through \eqn{BS_{\max}},
-#' which is treated as fixed; the interval therefore ignores the sampling
-#' variability of the baseline and is mildly anti-conservative. Prefer
-#' `method = "boot"` for scaled scores.
-#'
+#' A normal approximation for the mean of the per-observation Brier
+#' losses, with standard error \eqn{s_{\mathrm{loss}} / \sqrt{n}}.
+#' This approximation assumes independent observations and is intended
+#' for sufficiently large samples.
+#' With `scaled = TRUE`, the standard error is divided by
+#' \eqn{BS_{\max}}, treating the estimated baseline as fixed.
+#' The resulting interval does not account for uncertainty in the
+#' baseline; its coverage may therefore differ from the nominal level.
+#' Prefer `method = "boot"` for scaled scores.
+#'  
 #' **Bootstrap interval** (`method = "boot"`)
 #'
 #' Case-resampling bootstrap via `brier_boot_cpp()`.  The bootstrap
@@ -69,9 +71,9 @@
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
-#' @param method  confidence interval method: `"normal"` (delta-method
-#'   approximation, default) or `"boot"` (bootstrap via
-#'   `brier_boot_cpp()`)
+#' @param method confidence interval method: `"normal"` (normal
+#'   approximation for the mean loss, default) or `"boot"` (bootstrap
+#'   via `brier_boot_cpp()`).
 #' @param ...     further arguments passed to the bootstrap engine when
 #'   `method = "boot"`: `R`, `type` (`"perc"`, `"basic"`,
 #'   `"norm"` or `"bca"`; `"stud"` is not available). `parallel` and
@@ -86,6 +88,25 @@
 #'   \item{`uci`}{upper confidence interval bound.}
 #' }
 #'
+#' @references
+#' Brier, G. W. (1950).
+#' Verification of forecasts expressed in terms of probability.
+#' \emph{Monthly Weather Review}, \bold{78}(1), 1--3.
+#' \doi{10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}
+#'
+#' Steyerberg, E. W., Vickers, A. J., Cook, N. R., Gerds, T.,
+#' Gonen, M., Obuchowski, N., Pencina, M. J., and Kattan, M. W. (2010).
+#' Assessing the performance of prediction models:
+#' a framework for traditional and novel measures.
+#' \emph{Epidemiology}, \bold{21}(1), 128--138.
+#' \doi{10.1097/EDE.0b013e3181c30fb2}
+#'
+#' Efron, B. (1987).
+#' Better bootstrap confidence intervals.
+#' \emph{Journal of the American Statistical Association},
+#' \bold{82}(397), 171--185.
+#' \doi{10.1080/01621459.1987.10478410}
+#' 
 #' @seealso [stats::predict()]
 #'
 #' @examples
