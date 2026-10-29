@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.965
+Version: 0.0.0.966
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -60,7 +60,7 @@ Description: Offers a broad toolkit for describing, summarising and
     machinery respectively.
 Encoding: UTF-8
 Depends: R (>= 4.6.0),
-    pharos, lumen, bedrock
+    bedrock, pharos, lumen 
 License: GPL (>= 2)
 LinkingTo: Rcpp, RcppParallel, RcppArmadillo  
 Roxygen: list(markdown = TRUE)
@@ -70,9 +70,9 @@ Imports:
 Suggests:
     goftest, testthat (>= 3.0.0), R.rsp, readr, vegan, VGAM, MASS,
     rstudioapi, gld, lme4, hexbin, ppcor, forecast, MuMIn,
-    survival, pons, dbscan, prettyunits, withr
+    survival, dbscan, prettyunits, withr
 Remotes: 
-    AndriSignorell/bedrock, AndriSignorell/pharos, AndriSignorell/lumen, AndriSignorell/pons
+    AndriSignorell/pharos, AndriSignorell/lumen
 VignetteBuilder: R.rsp
 URL: https://andrisignorell.github.io/DescToolsX/,
             https://github.com/AndriSignorell/DescToolsX/

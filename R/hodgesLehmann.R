@@ -27,11 +27,16 @@
 #' @param sides character string specifying the sidedness of the confidence
 #'   interval (one of `"two.sided"` (default), `"left"` or
 #'   `"right"`). See [ConfidenceIntervals()].
+#' @param method interval method: `"exact"` (default), the distribution-free
+#'   interval obtained by inverting the Wilcoxon signed-rank (one-sample) or
+#'   rank-sum (two-sample) test; or `"boot"`, a bootstrap interval
+#'   (one-sample only). Ignored without `conf.level`.
 #' @param na.rm logical; if `TRUE`, missing values are removed from `x` and
 #'   `y` separately before the computation
-#' @param ... additional arguments passed to bootstrap procedures
-#'   (`R`, `type`, `parallel`, `ncpus`). `type = "stud"` is not available:
-#'   the bootstrap statistic carries no variance estimate per resample.
+#' @param ... additional arguments for `method = "boot"` (`R`, `type`,
+#'   `parallel`, `ncpus`); an error with `method = "exact"`.
+#'   `type = "stud"` is not available: the bootstrap statistic carries no
+#'   variance estimate per resample.
 #'
 #' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
 #' numeric vector with elements:
@@ -61,7 +66,30 @@
 #' `y` in the two-sample case), or if the two middle order statistics are
 #' `-Inf` and `Inf`.
 #'
-#' **Degenerate intervals.** If all bootstrap replicates coincide (e.g.
+#' **Exact interval.** With `method = "exact"` the interval inverts the
+#' Wilcoxon signed-rank (one-sample) resp. rank-sum (two-sample) test
+#' (Bauer 1972). Its bounds are Walsh averages resp. differences
+#' `x[i] - y[j]`, selected by Monahan's partitioning instead of sorting all
+#' \eqn{O(n^2)} values, so large samples are no problem.
+#' \itemize{
+#'   \item Samples below 50 (both below 50 in the two-sample case) use
+#'     the exact null distribution: the classic one without ties, the
+#'     conditional (permutation) distribution given the midranks with ties.
+#'   \item Larger samples use the normal approximation with continuity and
+#'     tie correction.
+#' }
+#' The results agree with `wilcox.test(exact = TRUE, conf.int = TRUE)`
+#' (R >= 4.6.0) in the two-sample case and in the one-sample case without
+#' ties. With ties, `wilcox.test()` (R 4.6.1) takes the lower one-sample
+#' bound from \eqn{P(V > v)} instead of \eqn{P(V \ge v)}, one rank too
+#' narrow, with coverage below the nominal level; `hodgesLehmann()` uses
+#' \eqn{P(V \ge v)}. In the large-sample case `wilcox.test()` interpolates
+#' between Walsh averages with [uniroot()], `hodgesLehmann()` returns the
+#' order statistics that bound the inverted test.
+#' If the requested level is not attainable (very small samples, e.g.
+#' \eqn{n \le 5} at 95\%), the bound is infinite and a warning is issued.
+#'
+#' **Bootstrap interval.** If all bootstrap replicates coincide (e.g.
 #' constant data), the interval collapses to `lci = uci = est`. With a
 #' single observation, or when the replicates are not all finite, no
 #' interval can be formed: `lci` and `uci` are `NA` with a warning.
@@ -69,11 +97,10 @@
 #' `x` and `y` are not modified.
 #'
 #' @section Random number generation:
-#' A confidence level triggers a bootstrap and therefore advances R's
-#' global random number generator. Call [base::set.seed()]
-#' beforehand for reproducible intervals. The point estimate itself is
-#' deterministic: the compiled routine picks its pivots from a local
-#' generator and does not touch R's stream.
+#' Only `method = "boot"` uses R's random number generator; call
+#' [base::set.seed()] beforehand for reproducible intervals. The point
+#' estimate and the exact interval are deterministic: the compiled routine
+#' picks its pivots from a local generator and does not touch R's stream.
 #'
 #' @note C++ port of Monahan's algorithm by Cyril Flurin Moser
 #'
@@ -86,6 +113,10 @@
 #' Hodges-Lehmann location estimator. *ACM Transactions on Mathematical
 #' Software*, 10(3), 265–270. \doi{10.1145/1271.319414}.
 #' Original code: \url{https://www4.stat.ncsu.edu/~monahan/jul10/}
+#'
+#' Bauer, D. F. (1972). Constructing confidence sets using rank
+#' statistics. *Journal of the American Statistical Association*, 67(339),
+#' 687–690. \doi{10.1080/01621459.1972.10481279}
 #'
 #' Efron, B. (1987). Better bootstrap confidence intervals.
 #' *Journal of the American Statistical Association*, 82(397), 171–185.
@@ -114,8 +145,14 @@
 #' hodgesLehmann(c(x, NA), y)
 #' hodgesLehmann(c(x, NA), y[-1], na.rm = TRUE)
 #'
-#' set.seed(1)
+#' # distribution-free interval, one- and two-sample
 #' hodgesLehmann(x, conf.level = 0.95)
+#' hodgesLehmann(x, y, conf.level = 0.95)
+#' hodgesLehmann(x, conf.level = 0.95, sides = "left")
+#'
+#' # bootstrap interval (one-sample)
+#' set.seed(1)
+#' hodgesLehmann(x, conf.level = 0.95, method = "boot", R = 999)
 #'
 #' @family location
 #' @concept location
@@ -125,6 +162,7 @@ hodgesLehmann <- function(x,
                           y = NULL,
                           conf.level = NA,
                           sides = c("two.sided", "left", "right"),
+                          method = c("exact", "boot"),
                           na.rm = FALSE,
                           ...) {
 
@@ -155,23 +193,33 @@ hodgesLehmann <- function(x,
 
     checkConfLevel(conf.level)
 
-    if (!is.null(y))
-      stop("confidence intervals are currently implemented only for the one-sample case")
+    sides  <- match.arg(sides)
+    method <- match.arg(method)
 
-    sides <- match.arg(sides)
-
-    # a one-sided level is mapped to 1 - 2 * (1 - conf.level), which must
-    # stay positive
+    # one-sided at a level <= 0.5 is meaningless, and for the bootstrap
+    # 1 - 2 * (1 - conf.level) would not even stay positive
     if (sides != "two.sided" && conf.level <= 0.5)
       stop("one-sided intervals require 'conf.level' > 0.5")
 
-    # validated here as well, so that a bad R or type is reported even when
-    # the data turn out to be missing
-    args <- .extractBootArgs(list(...))
+    if (method == "exact") {
 
-    if (identical(args$type, "stud"))
-      stop("type = \"stud\" is not available: the bootstrap statistic ",
-           "provides no variance estimate per resample")
+      if (...length() > 0L)
+        stop("'...' is only used with method = \"boot\"")
+
+    } else {
+
+      if (!is.null(y))
+        stop("bootstrap intervals are implemented only for the one-sample ",
+             "case; use method = \"exact\"")
+
+      # validated here as well, so that a bad R or type is reported even
+      # when the data turn out to be missing
+      args <- .extractBootArgs(list(...))
+
+      if (identical(args$type, "stud"))
+        stop("type = \"stud\" is not available: the bootstrap statistic ",
+             "provides no variance estimate per resample")
+    }
   }
 
 
@@ -209,17 +257,146 @@ hodgesLehmann <- function(x,
     return(unname(res))
   }
 
-  # The distribution-free interval from the Wilcoxon rank statistic is
-  # still worth having; it belongs in method = "exact" when it lands.
-  #
-  # ToDo: two-sample confidence intervals
-  .hodgesLehmann.boot(x, conf.level = conf.level, sides = sides, args = args)
+  if (method == "exact")
+    .hodgesLehmann.exact(x, y, conf.level = conf.level, sides = sides)
+  else
+    .hodgesLehmann.boot(x, conf.level = conf.level, sides = sides, args = args)
 }
 
 
 
 
 # == internal helper functions ================================================
+
+# == exact (rank-based) interval ===============================================
+#
+# The interval inverts the signed-rank (one-sample) resp. rank-sum
+# (two-sample) test. Its bounds are Walsh averages resp. differences
+# d = x[i] - y[j], since the test statistic only changes where mu crosses
+# one of them. Everything is expressed through the LOWER bound; the upper
+# bound is the mirrored lower bound of the negated data.
+#
+# Between two consecutive distinct values of d, ties in |x - mu| (resp. in
+# c(x - mu, y)) can only stem from equal values within x (resp. within x or
+# within y): |x[i] - mu| = |x[j] - mu| for x[i] != x[j] means that mu is a
+# Walsh average, x[i] - mu = y[j] that mu is a difference. Hence
+#   * without such ties the null distribution is the classic one, and the
+#     bound is an order statistic at a closed-form rank;
+#   * the normal approximation has a constant tie-corrected variance there,
+#     so also yields a closed-form rank;
+#   * only the exact conditional distribution depends on the
+#     arrangement of the tie groups, i.e. on mu, and needs a search.
+# The lower bound is the first d(k) beyond which the upper tail
+# P(T >= t) exceeds alpha, as in wilcox.test() (R >= 4.6.0) - except that
+# its one-sample conditional branch uses P(V > v) there (off by one).
+
+.hlTol <- 10 * .Machine$double.eps
+
+
+# Lower confidence bound for the one-sided error probability alpha; carries
+# attr "unattainable" = TRUE if alpha cannot be met (bound -Inf).
+.hlLower <- function(alpha, x, y = NULL) {
+
+  one   <- is.null(y)
+  n     <- as.numeric(length(x))   # double: n * m * (n + m + 1) overflows int
+  m     <- if (one) 0 else as.numeric(length(y))
+  exact <- n < 50 && m < 50
+  ties  <- anyDuplicated(x) || (!one && anyDuplicated(y))
+
+  if (exact && ties)
+    return(.hlLowerCond(alpha, x, y))
+
+  N <- if (one) n * (n + 1) / 2 else n * m
+
+  C <- if (exact) {
+    p <- if (one) function(q) psignrank(q, n) else function(q) pwilcox(q, n, m)
+    q <- if (one) qsignrank(alpha, n) else qwilcox(alpha, n, m)
+    # q is the smallest with P(W <= q) >= alpha; at equality q + 1 is
+    # still valid
+    q + (p(q) <= alpha + .hlTol)
+
+  } else {
+    # normal approximation with continuity correction and tie-corrected
+    # variance: smallest q with pnorm((q + 0.5 - N/2) / s) >= alpha
+    tt <- function(v) { t <- table(v); sum(t^3 - t) }
+    s2 <- if (one)
+      n * (n + 1) * (2 * n + 1) / 24 - tt(x) / 48
+    else
+      n * m / 12 * ((n + m + 1) - (tt(x) + tt(y)) / ((n + m) * (n + m - 1)))
+    max(0, ceiling(N / 2 - 0.5 + qnorm(alpha) * sqrt(s2)))
+  }
+
+  if (C == 0)
+    return(structure(-Inf, unattainable = TRUE))
+
+  if (one) hlqorder_cpp(x, C) else hl2qorder_cpp(x, y, C)
+}
+
+
+# Exact conditional lower bound (small samples with ties). u are the
+# distinct values of d; interval j = 0..J is (u[j], u[j+1]) with
+# u[0] = -Inf, u[J+1] = Inf. The upper tail at interval j increases with j,
+# so the first j exceeding alpha is found by bisection - O(log J) instead
+# of the linear scan in wilcox.test().
+.hlLowerCond <- function(alpha, x, y = NULL) {
+
+  one <- is.null(y)
+  d <- if (one) {
+    w <- outer(x, x, "+") / 2
+    w[upper.tri(w, diag = TRUE)]
+  } else
+    outer(x, y, "-")
+  u <- sort(unique(as.vector(d)))
+  J <- length(u)
+
+  # does the upper tail on interval j exceed alpha?
+  exceeds <- function(j) {
+    if (j == J) return(TRUE)                        # statistic at its minimum
+    lo <- if (j == 0) -Inf else u[j]
+    hi <- u[j + 1L]
+    if (lo == hi) return(FALSE)                     # empty: u[1] = -Inf
+    mu <- if (is.finite(lo) && is.finite(hi)) (lo + hi) / 2 else
+      if (is.finite(hi)) hi - 1 else lo + 1
+
+    p <- if (one) {
+      z <- rank(abs(x - mu))
+      signrankUpper_cpp(as.integer(2 * z), 2 * sum(z[x > mu]))
+    } else {
+      z <- rank(c(x - mu, y))
+      wilcoxUpper_cpp(as.integer(2 * z), length(x), 2 * sum(z[seq_along(x)]))
+    }
+    p > alpha + .hlTol
+  }
+
+  lo <- 0L; hi <- J
+  while (lo < hi) {
+    mid <- (lo + hi) %/% 2L
+    if (exceeds(mid)) hi <- mid else lo <- mid + 1L
+  }
+
+  if (lo == 0L) structure(-Inf, unattainable = TRUE) else u[lo]
+}
+
+
+# x, y: numeric, no NA, length >= 1; conf.level, sides already validated
+.hodgesLehmann.exact <- function(x, y, conf.level, sides) {
+
+  alpha <- 1 - conf.level
+  if (sides == "two.sided") alpha <- alpha / 2
+
+  neg <- function(v) if (is.null(v)) NULL else -v
+
+  est <- if (is.null(y)) hlqest_cpp(x) else hl2qest_cpp(x, y)
+  lci <- if (sides == "right") -Inf else .hlLower(alpha, x, y)
+  uci <- if (sides == "left")   Inf else -.hlLower(alpha, -x, neg(y))
+
+  if (isTRUE(attr(lci, "unattainable")) || isTRUE(attr(uci, "unattainable")))
+    warning("requested 'conf.level' not attainable with this sample size; ",
+            "the bound is infinite", call. = FALSE)
+
+  c(est = est, lci = as.vector(lci), uci = as.vector(uci))
+}
+
 
 # x: numeric, no NA, length >= 1; conf.level, sides and args already
 # validated by the caller
@@ -237,7 +414,7 @@ hodgesLehmann <- function(x,
   }
 
   if (length(x) < 2L)
-    return(noCI("sampling variability cannot be estimated from a single observation"))
+    return(noCI("a single observation has no sampling variability"))
 
   boot.fun <- boot::boot(
 

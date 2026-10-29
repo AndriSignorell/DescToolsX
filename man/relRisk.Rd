@@ -10,40 +10,51 @@ relRisk(
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("score", "wald", "use-or"),
-  delta = 0.5,
+  delta = 0,
   ...
 )
 }
 \arguments{
-\item{x}{a numeric 2x2 matrix or table containing non-negative counts}
+\item{x}{a numeric 2x2 matrix or table of finite, non-negative integer
+counts, with positive row totals; alternatively an exposure vector when
+\code{y} is supplied. The first row is the exposed group and the first column
+is the event, regardless of their names.}
 
-\item{y}{an optional vector. If supplied, \code{table(x, y, ...)} is
-computed.}
+\item{y}{an optional outcome vector. If supplied, \code{table(x, y, ...)} is
+computed without reordering its levels. For binary 0/1 data, use
+\code{factor(x, levels = c(1, 0))} and \code{factor(y, levels = c(1, 0))} to obtain
+the orientation shown above. Missing values follow \code{\link[=table]{table()}} conventions.}
 
-\item{conf.level}{confidence level for the interval estimate. If
-\code{NA} (default), only the point estimate is returned.}
+\item{conf.level}{a single confidence level strictly between 0 and 1,
+or \code{NA} (the default) to return only the point estimate. One-sided
+intervals require a confidence level greater than 0.5.}
 
 \item{sides}{character string specifying the sidedness of the confidence
-interval (one of \code{"two.sided"} (default), \code{"left"} or
-\code{"right"}). See details in \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
+interval: \code{"two.sided"} (default), \code{"left"}, or \code{"right"}.
+\code{"left"} retains the lower bound and sets the upper bound to \code{Inf};
+\code{"right"} sets the lower bound to 0 and retains the upper bound.
+See also \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
-\item{method}{character string specifying the confidence interval method.
-One of \code{"score"}, \code{"wald"}, or \code{"use-or"}.}
+\item{method}{character string specifying the interval method:
+\code{"score"} (default), \code{"wald"}, or \code{"use-or"}. See Details.}
 
-\item{delta}{small continuity correction added to the event counts in the
-\emph{standard error} of the Wald interval. Only used if
-\code{method = "wald"}; see the note below.}
+\item{delta}{a single finite, non-negative number (default 0), the cell
+correction of the Wald-type methods. For \code{method = "wald"} it is added to
+each of the four cells before computing both the point estimate and the
+interval, so each row total increases by \code{2 * delta}; this also applies
+when only the point estimate is requested. For \code{method = "use-or"} it is
+passed to the Wald odds-ratio interval only; the estimate and \code{p2} stay
+uncorrected. \code{"score"} ignores \code{delta} after validating it.}
 
-\item{\dots}{further arguments passed to \code{\link[=table]{table()}}}
+\item{\dots}{further arguments passed to \code{\link[=table]{table()}} when \code{y} is supplied}
 }
 \value{
-if \code{conf.level = NA}, a numeric scalar. Otherwise a named
-numeric vector with elements:
-\describe{
-\item{\code{est}}{relative risk estimate}
-\item{\code{lci}}{lower confidence interval bound}
-\item{\code{uci}}{upper confidence interval bound}
-}
+if \code{conf.level = NA}, a numeric scalar. Otherwise a named numeric
+vector with elements \code{est}, \code{lci}, and \code{uci} for the estimate and bounds.
+Without a Wald correction, no events in either group give \code{est = NaN};
+events only in the first group give \code{est = Inf}, and events only in the
+second group give \code{est = 0}. The score interval remains available in these
+cases, including \verb{[0, Inf]} when neither group has events.
 }
 \description{
 Computes the relative risk for a 2x2 contingency table together with
@@ -71,26 +82,40 @@ RR = \frac{x_1 / n_1}{x_2 / n_2}
 Confidence intervals can be calculated using the score method of Koopman
 (1984), a Wald approximation, or via transformation of the odds ratio.
 
-The score interval is based on the method of Koopman (1984) and
-Miettinen and Nurminen (1985). It is obtained from the closed-form
-solution of the cubic equation in the constrained maximum likelihood
-estimate; if the unexposed group has no non-events (\code{x2 == n2}) that
-cubic has a root on the parameter boundary and its roots can no longer be
-assigned to the two interval bounds by their order alone. This case is
-therefore solved directly from the score statistic
-(\code{\link[stats:uniroot]{stats::uniroot()}}); both routes agree to numerical precision
-wherever the closed form applies.
+The score interval uses the uncorrected Koopman (1984) score statistic.
+It does not include the \code{N / (N - 1)} variance correction associated with
+the Miettinen--Nurminen variant, where \code{N = n1 + n2}. Bounds are found by
+inverting the score statistic on the log risk-ratio scale. Closed forms
+apply when both groups have no events or both groups contain only events.
+If only the reference group has no events, the rows are reversed and the
+resulting bounds are inverted. The numerical search expands adaptively;
+failure to bracket a bound within numerical limits raises an error rather
+than returning an artificial zero or infinite endpoint.
 
-The Wald interval is asymptotic and may perform poorly for small counts or
-extreme probabilities. Note that \code{delta} enters the standard error
-only, not the point estimate the interval is centred on: with a zero cell
-the point estimate is \code{0} or \code{Inf} and the Wald interval
-degenerates accordingly. Use \code{method = "score"} for tables with zero
-cells.
+The Wald method uses the log risk ratio and variance
+\code{1 / x1 - 1 / n1 + 1 / x2 - 1 / n2}, evaluated after any cell correction.
+With \code{delta = 0}, a zero event count in either group makes the log-Wald
+interval unavailable: a warning is issued and its bounds are \code{NA}.
+Use the score method for such data, or explicitly choose a positive
+correction, for example \code{delta = 0.5}. Wald intervals are asymptotic and
+can perform poorly with small counts or probabilities near the boundaries.
+If both groups contain only events and \code{delta = 0}, the formal Wald
+interval is \verb{[1, 1]}; it is returned with a warning because it is degenerate.
+For a one-sided interval, the corresponding open endpoint is still applied.
 
-If the table orientation differs from the required structure, rows or
-columns can be reversed using \code{\link[bedrock:revX]{bedrock::revX()}} or transposed
-with \code{\link[=t]{t()}}.
+The \code{"use-or"} method transforms the Wald bounds returned by
+\code{\link[=oddsRatio]{oddsRatio()}} using \code{RR = OR / (1 - p2 + p2 * OR)}, with \code{p2 = x2 / n2}
+fixed at its observed value. This is a plug-in approximation: monotonicity
+of the transformation does not establish nominal coverage when \code{p2} is
+estimated. It requires \verb{0 < p2 < 1}, and, like the Wald odds-ratio
+interval, positive cells unless \code{delta > 0}; otherwise a warning is issued
+and the interval bounds are \code{NA}. An infinite OR bound is mapped to its
+limit \code{1 / p2}.
+
+For unavailable intervals, one-sided output still uses the natural open
+endpoint (0 or \code{Inf}); the estimated endpoint remains \code{NA}.
+Rows or columns can be reversed with \code{\link[bedrock:revX]{bedrock::revX()}}, or the table
+transposed with \code{\link[=t]{t()}}, to obtain the required orientation.
 }
 \examples{
 m <- matrix(
@@ -125,6 +150,10 @@ relRisk(
 # unexposed group without non-events: the score interval is still valid
 relRisk(matrix(c(2, 5, 3, 0), nrow = 2), conf.level = 0.95)
 
+
+# explicitly corrected Wald estimate and interval
+relRisk(matrix(c(0, 4, 10, 6), nrow = 2),
+        method = "wald", delta = 0.5, conf.level = 0.95)
 
 }
 \references{

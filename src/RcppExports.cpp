@@ -262,25 +262,75 @@ BEGIN_RCPP
 END_RCPP
 }
 // hlqest_cpp
-double hlqest_cpp(NumericVector xIn);
-RcppExport SEXP _DescToolsX_hlqest_cpp(SEXP xInSEXP) {
+double hlqest_cpp(NumericVector x);
+RcppExport SEXP _DescToolsX_hlqest_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type xIn(xInSEXP);
-    rcpp_result_gen = Rcpp::wrap(hlqest_cpp(xIn));
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(hlqest_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
 // hl2qest_cpp
-double hl2qest_cpp(NumericVector xIn, NumericVector yIn);
-RcppExport SEXP _DescToolsX_hl2qest_cpp(SEXP xInSEXP, SEXP yInSEXP) {
+double hl2qest_cpp(NumericVector x, NumericVector y);
+RcppExport SEXP _DescToolsX_hl2qest_cpp(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type xIn(xInSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type yIn(yInSEXP);
-    rcpp_result_gen = Rcpp::wrap(hl2qest_cpp(xIn, yIn));
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(hl2qest_cpp(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hlqorder_cpp
+NumericVector hlqorder_cpp(NumericVector x, NumericVector k);
+RcppExport SEXP _DescToolsX_hlqorder_cpp(SEXP xSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(hlqorder_cpp(x, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hl2qorder_cpp
+NumericVector hl2qorder_cpp(NumericVector x, NumericVector y, NumericVector k);
+RcppExport SEXP _DescToolsX_hl2qorder_cpp(SEXP xSEXP, SEXP ySEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(hl2qorder_cpp(x, y, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// signrankUpper_cpp
+double signrankUpper_cpp(IntegerVector w, double s);
+RcppExport SEXP _DescToolsX_signrankUpper_cpp(SEXP wSEXP, SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(signrankUpper_cpp(w, s));
+    return rcpp_result_gen;
+END_RCPP
+}
+// wilcoxUpper_cpp
+double wilcoxUpper_cpp(IntegerVector w, int k, double s);
+RcppExport SEXP _DescToolsX_wilcoxUpper_cpp(SEXP wSEXP, SEXP kSEXP, SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< IntegerVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(wilcoxUpper_cpp(w, k, s));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -405,6 +455,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DescToolsX_fast_mode_cpp", (DL_FUNC) &_DescToolsX_fast_mode_cpp, 2},
     {"_DescToolsX_hlqest_cpp", (DL_FUNC) &_DescToolsX_hlqest_cpp, 1},
     {"_DescToolsX_hl2qest_cpp", (DL_FUNC) &_DescToolsX_hl2qest_cpp, 2},
+    {"_DescToolsX_hlqorder_cpp", (DL_FUNC) &_DescToolsX_hlqorder_cpp, 2},
+    {"_DescToolsX_hl2qorder_cpp", (DL_FUNC) &_DescToolsX_hl2qorder_cpp, 3},
+    {"_DescToolsX_signrankUpper_cpp", (DL_FUNC) &_DescToolsX_signrankUpper_cpp, 2},
+    {"_DescToolsX_wilcoxUpper_cpp", (DL_FUNC) &_DescToolsX_wilcoxUpper_cpp, 3},
     {"_DescToolsX_hoeffdingD_cpp", (DL_FUNC) &_DescToolsX_hoeffdingD_cpp, 1},
     {"_DescToolsX_n_pow_sum_cpp", (DL_FUNC) &_DescToolsX_n_pow_sum_cpp, 1},
     {"_DescToolsX_skew_cpp", (DL_FUNC) &_DescToolsX_skew_cpp, 1},

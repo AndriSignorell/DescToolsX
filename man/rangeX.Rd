@@ -7,20 +7,34 @@
 rangeX(x, trim = NULL, robust = FALSE, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{a numeric vector}
+\item{x}{a numeric vector whose range width is to be computed. In robust
+mode, \code{Inf} and \code{-Inf} are excluded; see \code{na.rm} for missing values.}
 
-\item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each
-end of \code{x} before the range is computed. Values of \code{trim} outside
-that range are taken as the nearest endpoint. Default is 0 for
-\code{robust = FALSE} and 0.2 for \code{robust = TRUE}.}
+\item{trim}{a single numeric trimming fraction between 0 and 0.5, or
+\code{NULL} (the default). \code{NULL} selects 0 when \code{robust = FALSE} and 0.2 when
+\code{robust = TRUE}. In conventional mode, this fraction is removed from each
+end of \code{x} before computing the extrema. In robust mode, it controls
+trimming of both the centre and the absolute deviations as described
+above; it does not directly specify the fraction of observations outside
+the returned bounds. A non-finite value in robust mode is replaced by 0.2.}
 
-\item{robust}{logical; whether to return the robust or conventional range}
+\item{robust}{a single logical value; \code{FALSE} (the default) returns the
+conventional, optionally trimmed range width. \code{TRUE} returns the width
+between the robust bounds described above.}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be
-stripped before the computation proceeds}
+\item{na.rm}{a single logical value indicating whether \code{NA} and \code{NaN}
+values should be removed before computation. The default is \code{FALSE};
+missing values then produce a missing range width and missing bounds.
+In robust mode, infinite values are excluded regardless of \code{na.rm}.}
 
-\item{...}{further arguments passed to \code{.robRange}, including
-\code{fac}. Only used if \code{robust = TRUE}.}
+\item{...}{additional arguments passed to the internal helper \code{.robRange}
+when \code{robust = TRUE}. Currently, the supported argument is \code{fac}, a
+positive finite numeric scalar (default 3) multiplying the deviation
+scale. Larger values widen the robust bounds up to the observed finite
+extrema; smaller values narrow them. For example,
+\code{rangeX(x, robust = TRUE, fac = 2)} uses a multiplier of 2. This factor
+does not specify a confidence level or a guaranteed coverage probability.
+Arguments in \code{...} are ignored when \code{robust = FALSE}.}
 }
 \value{
 a numeric scalar containing the range width. The corresponding
@@ -29,20 +43,27 @@ Note that the attribute is dropped by subsetting and by
 \code{\link[=as.vector]{as.vector()}}, so read it before computing on the result.
 }
 \description{
-Determines the range of the data, which can possibly be trimmed before
-calculating the extreme values. The robust range version is calculated on
-the basis of the trimmed mean and variance (see Details).
+Computes the width of a numeric vector, optionally after trimming, or a
+robust range based on a trimmed mean and absolute deviations.
 }
 \details{
-The R base function range returns the minimum and maximum value of a numeric
-object. Here we return the span of a (possibly trimmed) numeric vector, say
-the difference of maximum and minimum value.
+Unlike \code{\link[=range]{range()}}, which returns the minimum and maximum, \code{rangeX()} returns
+their difference and stores the endpoints in the \code{"bounds"} attribute.
 
-If robust is set to \code{TRUE} the function determines the trimmed mean m
-and then the "upper trimmed mean" s of absolute deviations from m,
-multiplied by \code{fac} (fac is 3 by default). The robust minimum is then
-defined as m-fac*s or min(x), whichever is larger, and similarly for the
-maximum.
+With \code{robust = TRUE}, only finite observations are used after handling
+missing values according to \code{na.rm}. Let \code{n} be their number and \code{m} their
+mean after trimming a fraction \code{trim} from each tail. The absolute
+deviations from \code{m} are sorted, and the smallest
+\code{k = ceiling((1 - trim) * n)} deviations are retained. The scale \code{s} is
+their sum divided by \code{k - 1}; it is not a variance or standard deviation.
+The bounds are \code{max(m - fac * s, min(x))} and
+\code{min(m + fac * s, max(x))}, with extrema taken over the finite observations.
+Thus, \code{trim} acts on both tails when estimating the centre but only on the
+upper tail of the absolute deviations when estimating the scale.
+
+If \code{k < 3} or the scaled deviation measure is zero, a warning is issued
+and the ordinary range of the finite observations is returned. If no
+finite observations remain, the robust computation stops with an error.
 }
 \note{
 Robust range contributed by Werner Stahel.
@@ -54,7 +75,9 @@ xm <- rangeX(x)
 c(xm, rangeX(x, trim = 0.10))
 
 x <- c(rnorm(20), rnorm(3, 5, 20))
-rangeX(x, robust=TRUE)
+rangeX(x, robust = TRUE)
+rangeX(x, robust = TRUE, trim = 0.1, fac = 2)
+attr(rangeX(x, robust = TRUE), "bounds")
 
 # compared to
 rangeX(x)

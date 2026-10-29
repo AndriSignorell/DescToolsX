@@ -15,7 +15,7 @@ oddsRatio(x, ...)
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
   method = c("wald", "exact", "mid-p"),
-  interval = c(0, 1000),
+  delta = 0,
   ...
 )
 
@@ -30,15 +30,16 @@ oddsRatio(x, ...)
 \method{print}{OddsRatio}(x, digits = 3, ...)
 }
 \arguments{
-\item{x}{a 2x2 contingency table, two vectors to be cross-tabulated, or a
-binomial \code{\link[stats:glm]{stats::glm()}} object}
+\item{x}{a 2x2 contingency table of finite, non-negative integer counts
+with positive row and column totals, an exposure vector to be
+cross-tabulated with \code{y}, or a binomial \code{\link[stats:glm]{stats::glm()}} object}
 
 \item{...}{further arguments passed to methods. For the default method
 with two vectors, these reach \code{\link[=table]{table()}}, so \code{useNA} can
 be set here.}
 
 \item{y}{optional second variable. If supplied,
-\code{table(x, y, ...)} is computed.}
+\code{table(x, y, ...)} is computed without reordering its levels.}
 
 \item{conf.level}{confidence level of the interval. For the table method
 \code{NA} (the default) returns the point estimate only; the model
@@ -51,22 +52,23 @@ is bounded below by 0 and unbounded above, so the open side is reported
 at 0 or \code{Inf} accordingly. Ignored, with a warning, for
 \code{method = "profile"}.}
 
-\item{method}{character string specifying the interval method. For a
+\item{method}{character string specifying the method. For a
 contingency table one of \code{"wald"}, \code{"exact"} or
 \code{"mid-p"}; for a binomial model one of \code{"wald"} or
 \code{"profile"}. See Details.}
 
-\item{interval}{numeric vector of length two giving the search interval
-for the root finding in the mid-p method. Only used by
-\code{method = "mid-p"}; widen it if the reported bound sits at one of
-its ends.}
+\item{delta}{a single finite, non-negative number (default 0). Only for
+\code{method = "wald"}, this value is added to each of the four cells before
+computing both the point estimate and the interval, also when only the
+point estimate is requested. The other methods ignore \code{delta} after
+validating it.}
 
 \item{digits}{number of digits used for printing}
 }
 \value{
 For a contingency table with \code{conf.level = NA} a numeric scalar,
 otherwise a named numeric vector with the elements \code{est}, \code{lci}
-and \code{uci}.
+and \code{uci}. The estimate depends on \code{method}, see Details.
 
 For a binomial model an object of class \code{"OddsRatio"}, a list with:
 \describe{
@@ -91,20 +93,41 @@ ratio, the model method one odds ratio per regression coefficient.
 }
 \details{
 \subsection{Contingency tables}{
-For a 2x2 table the odds ratio is
+For a 2x2 table with cells \eqn{n_{ij}} the sample odds ratio is
 
 \deqn{OR = \frac{n_{11} n_{22}}{n_{12} n_{21}}}
 
-Three interval methods are available. \code{"wald"} is the asymptotic
-interval on the log scale, fast and adequate for reasonably large counts.
-\code{"exact"} is the conditional interval based on the noncentral
-hypergeometric distribution (Fisher); it guarantees coverage but is
-conservative, sometimes markedly so. \code{"mid-p"} halves the probability
-of the observed table and lies between the two: it has coverage closer to
-the nominal level than the exact interval without the Wald interval's
-reliance on large counts. With a zero cell the point estimate is 0 or
-\code{Inf} and only \code{"exact"} and \code{"mid-p"} still deliver a
-finite bound on the informative side.
+Three methods are available, and each comes with its own point estimate.
+
+\code{"wald"} uses the sample odds ratio and the asymptotic interval on the log
+scale, with variance \eqn{\sum 1/n_{ij}}. It is fast and adequate for
+reasonably large counts. With a zero cell the estimate is 0 or \code{Inf} and
+the interval is unavailable: a warning is issued and its bounds are \code{NA}.
+Use \code{"exact"} or \code{"mid-p"} for such data, or explicitly choose a
+correction, for example \code{delta = 0.5} (Haldane--Anscombe).
+
+\code{"exact"} uses the conditional maximum likelihood estimate and the
+conditional (Fisher) interval, both based on the noncentral
+hypergeometric distribution of \eqn{n_{11}} given the margins. The
+interval guarantees coverage but is conservative, sometimes markedly so.
+These are the estimate and interval of \code{\link[stats:fisher.test]{stats::fisher.test()}}, computed
+to full precision (see below).
+
+\code{"mid-p"} uses the conditional median-unbiased estimate and the mid-p
+interval, which counts only half the probability of the observed table.
+Its coverage is closer to the nominal level than that of the exact
+interval, without the Wald interval's reliance on large counts.
+
+The conditional methods remain informative with a zero cell: if
+\eqn{n_{11}} lies at the lower end of its support, the estimate and the
+lower bound are 0; at the upper end, the estimate and the upper bound are
+\code{Inf}. The other bound is finite.
+
+The conditional estimates and bounds are found by root finding on the
+log odds-ratio scale with a relative tolerance of about \code{1e-10}.
+\code{\link[stats:fisher.test]{stats::fisher.test()}} uses an absolute tolerance of about \code{1e-4} on the
+odds-ratio scale instead, which is inaccurate for small odds ratios and
+bounds; results agree with it up to that tolerance.
 }
 
 \subsection{Binomial models}{
@@ -112,7 +135,9 @@ For a model fitted with \code{glm(family = binomial)}, each coefficient is
 exponentiated: \eqn{\exp(\beta_j)} is the factor by which the odds of the
 response are multiplied when the corresponding predictor increases by one
 unit, all other predictors held fixed. For a dummy variable this is the
-odds ratio between the level and its reference level.
+odds ratio between the level and its reference level. Quasi-binomial
+models are not supported; their coefficient table reports t rather than
+z statistics.
 
 The intercept is exponentiated along with the rest, but
 \eqn{\exp(\beta_0)} is \emph{not} an odds ratio - it is the odds of the
@@ -146,12 +171,18 @@ tab <- matrix(c(10, 20,
 oddsRatio(tab)
 oddsRatio(tab, conf.level = 0.95)
 
-# the exact interval is the widest, the Wald interval the narrowest
+# each method has its own estimate; for this table the exact interval
+# is the widest and the Wald interval the narrowest
 sapply(c("wald", "exact", "mid-p"),
        function(m) oddsRatio(tab, conf.level = 0.95, method = m))
 
 # one-sided: "left" carries the finite lower bound
 oddsRatio(tab, conf.level = 0.95, sides = "left")
+
+# a zero cell: the conditional methods keep the informative bound
+z <- matrix(c(10, 0, 5, 7), nrow = 2)
+oddsRatio(z, conf.level = 0.95, method = "mid-p")
+oddsRatio(z, conf.level = 0.95, method = "wald", delta = 0.5)
 
 
 # --- binomial model --------------------------------------------
@@ -179,9 +210,13 @@ Fisher, R. A. (1935). The logic of inductive inference.
 Gart, J. J. (1966). Alternative analyses of contingency tables.
 \emph{Journal of the Royal Statistical Society Series B},
 \emph{28}(1), 164--179.
+
+Hirji, K. F. (2006). \emph{Exact Analysis of Discrete Data}.
+Chapman & Hall/CRC.
 }
 \seealso{
-\link{attachAliases}, \link{relRisk}, \code{\link[stats:confint.glm]{stats::confint.glm()}}
+\link{attachAliases}, \link{relRisk}, \code{\link[stats:fisher.test]{stats::fisher.test()}},
+\code{\link[stats:confint.glm]{stats::confint.glm()}}
 
 Other effect.size:
 \code{\link[=cohenD]{cohenD()}},

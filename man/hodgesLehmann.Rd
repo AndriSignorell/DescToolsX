@@ -9,6 +9,7 @@ hodgesLehmann(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
+  method = c("exact", "boot"),
   na.rm = FALSE,
   ...
 )
@@ -26,12 +27,18 @@ intervals require \code{conf.level > 0.5}.}
 interval (one of \code{"two.sided"} (default), \code{"left"} or
 \code{"right"}). See \code{\link[=ConfidenceIntervals]{ConfidenceIntervals()}}.}
 
+\item{method}{interval method: \code{"exact"} (default), the distribution-free
+interval obtained by inverting the Wilcoxon signed-rank (one-sample) or
+rank-sum (two-sample) test; or \code{"boot"}, a bootstrap interval
+(one-sample only). Ignored without \code{conf.level}.}
+
 \item{na.rm}{logical; if \code{TRUE}, missing values are removed from \code{x} and
 \code{y} separately before the computation}
 
-\item{...}{additional arguments passed to bootstrap procedures
-(\code{R}, \code{type}, \code{parallel}, \code{ncpus}). \code{type = "stud"} is not available:
-the bootstrap statistic carries no variance estimate per resample.}
+\item{...}{additional arguments for \code{method = "boot"} (\code{R}, \code{type},
+\code{parallel}, \code{ncpus}); an error with \code{method = "exact"}.
+\code{type = "stud"} is not available: the bootstrap statistic carries no
+variance estimate per resample.}
 }
 \value{
 if \code{conf.level = NA}, a numeric scalar. Otherwise a named
@@ -81,7 +88,30 @@ when the median is undefined: if a pair yields \code{Inf - Inf} (\code{-Inf} and
 \code{y} in the two-sample case), or if the two middle order statistics are
 \code{-Inf} and \code{Inf}.
 
-\strong{Degenerate intervals.} If all bootstrap replicates coincide (e.g.
+\strong{Exact interval.} With \code{method = "exact"} the interval inverts the
+Wilcoxon signed-rank (one-sample) resp. rank-sum (two-sample) test
+(Bauer 1972). Its bounds are Walsh averages resp. differences
+\code{x[i] - y[j]}, selected by Monahan's partitioning instead of sorting all
+\eqn{O(n^2)} values, so large samples are no problem.
+\itemize{
+\item Samples below 50 (both below 50 in the two-sample case) use
+the exact null distribution: the classic one without ties, the
+conditional (permutation) distribution given the midranks with ties.
+\item Larger samples use the normal approximation with continuity and
+tie correction.
+}
+The results agree with \code{wilcox.test(exact = TRUE, conf.int = TRUE)}
+(R >= 4.6.0) in the two-sample case and in the one-sample case without
+ties. With ties, \code{wilcox.test()} (R 4.6.1) takes the lower one-sample
+bound from \eqn{P(V > v)} instead of \eqn{P(V \ge v)}, one rank too
+narrow, with coverage below the nominal level; \code{hodgesLehmann()} uses
+\eqn{P(V \ge v)}. In the large-sample case \code{wilcox.test()} interpolates
+between Walsh averages with \code{\link[=uniroot]{uniroot()}}, \code{hodgesLehmann()} returns the
+order statistics that bound the inverted test.
+If the requested level is not attainable (very small samples, e.g.
+\eqn{n \le 5} at 95\\%), the bound is infinite and a warning is issued.
+
+\strong{Bootstrap interval.} If all bootstrap replicates coincide (e.g.
 constant data), the interval collapses to \code{lci = uci = est}. With a
 single observation, or when the replicates are not all finite, no
 interval can be formed: \code{lci} and \code{uci} are \code{NA} with a warning.
@@ -93,11 +123,10 @@ C++ port of Monahan's algorithm by Cyril Flurin Moser
 }
 \section{Random number generation}{
 
-A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call \code{\link[base:set.seed]{base::set.seed()}}
-beforehand for reproducible intervals. The point estimate itself is
-deterministic: the compiled routine picks its pivots from a local
-generator and does not touch R's stream.
+Only \code{method = "boot"} uses R's random number generator; call
+\code{\link[base:set.seed]{base::set.seed()}} beforehand for reproducible intervals. The point
+estimate and the exact interval are deterministic: the compiled routine
+picks its pivots from a local generator and does not touch R's stream.
 }
 
 \examples{
@@ -118,8 +147,14 @@ hodgesLehmann(x, y)
 hodgesLehmann(c(x, NA), y)
 hodgesLehmann(c(x, NA), y[-1], na.rm = TRUE)
 
-set.seed(1)
+# distribution-free interval, one- and two-sample
 hodgesLehmann(x, conf.level = 0.95)
+hodgesLehmann(x, y, conf.level = 0.95)
+hodgesLehmann(x, conf.level = 0.95, sides = "left")
+
+# bootstrap interval (one-sample)
+set.seed(1)
+hodgesLehmann(x, conf.level = 0.95, method = "boot", R = 999)
 
 }
 \references{
@@ -131,6 +166,10 @@ Monahan, J. F. (1984). Algorithm 616: Fast computation of the
 Hodges-Lehmann location estimator. \emph{ACM Transactions on Mathematical
 Software}, 10(3), 265–270. \doi{10.1145/1271.319414}.
 Original code: \url{https://www4.stat.ncsu.edu/~monahan/jul10/}
+
+Bauer, D. F. (1972). Constructing confidence sets using rank
+statistics. \emph{Journal of the American Statistical Association}, 67(339),
+687–690. \doi{10.1080/01621459.1972.10481279}
 
 Efron, B. (1987). Better bootstrap confidence intervals.
 \emph{Journal of the American Statistical Association}, 82(397), 171–185.

@@ -1,30 +1,51 @@
 #' (Robust) Range 
 #' 
-#' Determines the range of the data, which can possibly be trimmed before
-#' calculating the extreme values. The robust range version is calculated on
-#' the basis of the trimmed mean and variance (see Details). 
-#' 
-#' The R base function range returns the minimum and maximum value of a numeric
-#' object. Here we return the span of a (possibly trimmed) numeric vector, say
-#' the difference of maximum and minimum value.
-#' 
-#' If robust is set to `TRUE` the function determines the trimmed mean m
-#' and then the "upper trimmed mean" s of absolute deviations from m,
-#' multiplied by `fac` (fac is 3 by default). The robust minimum is then
-#' defined as m-fac*s or min(x), whichever is larger, and similarly for the
-#' maximum.
-#' 
-#' @param x a numeric vector
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each
-#' end of `x` before the range is computed. Values of `trim` outside
-#' that range are taken as the nearest endpoint. Default is 0 for
-#' `robust = FALSE` and 0.2 for `robust = TRUE`.
-#' @param robust logical; whether to return the robust or conventional range
-#' @param na.rm a logical value indicating whether `NA` values should be
-#' stripped before the computation proceeds
-#' @param ... further arguments passed to `.robRange`, including
-#' `fac`. Only used if `robust = TRUE`.
-#' 
+#' Computes the width of a numeric vector, optionally after trimming, or a
+#' robust range based on a trimmed mean and absolute deviations.
+#'
+#' Unlike [range()], which returns the minimum and maximum, `rangeX()` returns
+#' their difference and stores the endpoints in the `"bounds"` attribute.
+#'
+#' With `robust = TRUE`, only finite observations are used after handling
+#' missing values according to `na.rm`. Let `n` be their number and `m` their
+#' mean after trimming a fraction `trim` from each tail. The absolute
+#' deviations from `m` are sorted, and the smallest
+#' `k = ceiling((1 - trim) * n)` deviations are retained. The scale `s` is
+#' their sum divided by `k - 1`; it is not a variance or standard deviation.
+#' The bounds are `max(m - fac * s, min(x))` and
+#' `min(m + fac * s, max(x))`, with extrema taken over the finite observations.
+#' Thus, `trim` acts on both tails when estimating the centre but only on the
+#' upper tail of the absolute deviations when estimating the scale.
+#'
+#' If `k < 3` or the scaled deviation measure is zero, a warning is issued
+#' and the ordinary range of the finite observations is returned. If no
+#' finite observations remain, the robust computation stops with an error.
+#'
+#' @param x a numeric vector whose range width is to be computed. In robust
+#' mode, `Inf` and `-Inf` are excluded; see `na.rm` for missing values.
+#' @param trim a single numeric trimming fraction between 0 and 0.5, or
+#' `NULL` (the default). `NULL` selects 0 when `robust = FALSE` and 0.2 when
+#' `robust = TRUE`. In conventional mode, this fraction is removed from each
+#' end of `x` before computing the extrema. In robust mode, it controls
+#' trimming of both the centre and the absolute deviations as described
+#' above; it does not directly specify the fraction of observations outside
+#' the returned bounds. A non-finite value in robust mode is replaced by 0.2.
+#' @param robust a single logical value; `FALSE` (the default) returns the
+#' conventional, optionally trimmed range width. `TRUE` returns the width
+#' between the robust bounds described above.
+#' @param na.rm a single logical value indicating whether `NA` and `NaN`
+#' values should be removed before computation. The default is `FALSE`;
+#' missing values then produce a missing range width and missing bounds.
+#' In robust mode, infinite values are excluded regardless of `na.rm`.
+#' @param ... additional arguments passed to the internal helper `.robRange`
+#' when `robust = TRUE`. Currently, the supported argument is `fac`, a
+#' positive finite numeric scalar (default 3) multiplying the deviation
+#' scale. Larger values widen the robust bounds up to the observed finite
+#' extrema; smaller values narrow them. For example,
+#' `rangeX(x, robust = TRUE, fac = 2)` uses a multiplier of 2. This factor
+#' does not specify a confidence level or a guaranteed coverage probability.
+#' Arguments in `...` are ignored when `robust = FALSE`.
+#'
 #' @return a numeric scalar containing the range width. The corresponding
 #' lower and upper bounds are returned in the `"bounds"` attribute.
 #' Note that the attribute is dropped by subsetting and by
@@ -39,7 +60,9 @@
 #' c(xm, rangeX(x, trim = 0.10))
 #' 
 #' x <- c(rnorm(20), rnorm(3, 5, 20))
-#' rangeX(x, robust=TRUE)
+#' rangeX(x, robust = TRUE)
+#' rangeX(x, robust = TRUE, trim = 0.1, fac = 2)
+#' attr(rangeX(x, robust = TRUE), "bounds")
 #' 
 #' # compared to
 #' rangeX(x)

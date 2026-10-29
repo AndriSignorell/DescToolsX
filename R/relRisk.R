@@ -25,53 +25,75 @@
 #' Confidence intervals can be calculated using the score method of Koopman
 #' (1984), a Wald approximation, or via transformation of the odds ratio.
 #'
-#' @param x a numeric 2x2 matrix or table containing non-negative counts
-#' @param y an optional vector. If supplied, `table(x, y, ...)` is
-#'   computed.
-#' @param delta small continuity correction added to the event counts in the
-#'   *standard error* of the Wald interval. Only used if
-#'   `method = "wald"`; see the note below.
-#'   
-#' @param method character string specifying the confidence interval method.
-#'   One of `"score"`, `"wald"`, or `"use-or"`.
-#'   
-#' @param conf.level confidence level for the interval estimate. If
-#'   `NA` (default), only the point estimate is returned.
+#' @param x a numeric 2x2 matrix or table of finite, non-negative integer
+#'   counts, with positive row totals; alternatively an exposure vector when
+#'   `y` is supplied. The first row is the exposed group and the first column
+#'   is the event, regardless of their names.
+#' @param y an optional outcome vector. If supplied, `table(x, y, ...)` is
+#'   computed without reordering its levels. For binary 0/1 data, use
+#'   `factor(x, levels = c(1, 0))` and `factor(y, levels = c(1, 0))` to obtain
+#'   the orientation shown above. Missing values follow [table()] conventions.
+#' @param conf.level a single confidence level strictly between 0 and 1,
+#'   or `NA` (the default) to return only the point estimate. One-sided
+#'   intervals require a confidence level greater than 0.5.
 #' @param sides character string specifying the sidedness of the confidence
-#'   interval (one of `"two.sided"` (default), `"left"` or
-#'   `"right"`). See details in [ConfidenceIntervals()].
+#'   interval: `"two.sided"` (default), `"left"`, or `"right"`.
+#'   `"left"` retains the lower bound and sets the upper bound to `Inf`;
+#'   `"right"` sets the lower bound to 0 and retains the upper bound.
+#'   See also [ConfidenceIntervals()].
+#' @param method character string specifying the interval method:
+#'   `"score"` (default), `"wald"`, or `"use-or"`. See Details.
+#' @param delta a single finite, non-negative number (default 0), the cell
+#'   correction of the Wald-type methods. For `method = "wald"` it is added to
+#'   each of the four cells before computing both the point estimate and the
+#'   interval, so each row total increases by `2 * delta`; this also applies
+#'   when only the point estimate is requested. For `method = "use-or"` it is
+#'   passed to the Wald odds-ratio interval only; the estimate and `p2` stay
+#'   uncorrected. `"score"` ignores `delta` after validating it.
+#' @param \dots further arguments passed to [table()] when `y` is supplied
 #'
-#' @param \dots further arguments passed to [table()]
-#'
-#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named
-#' numeric vector with elements:
-#' \describe{
-#'   \item{`est`}{relative risk estimate}
-#'   \item{`lci`}{lower confidence interval bound}
-#'   \item{`uci`}{upper confidence interval bound}
-#' }
+#' @return if `conf.level = NA`, a numeric scalar. Otherwise a named numeric
+#'   vector with elements `est`, `lci`, and `uci` for the estimate and bounds.
+#'   Without a Wald correction, no events in either group give `est = NaN`;
+#'   events only in the first group give `est = Inf`, and events only in the
+#'   second group give `est = 0`. The score interval remains available in these
+#'   cases, including `[0, Inf]` when neither group has events.
 #'
 #' @details
-#' The score interval is based on the method of Koopman (1984) and
-#' Miettinen and Nurminen (1985). It is obtained from the closed-form
-#' solution of the cubic equation in the constrained maximum likelihood
-#' estimate; if the unexposed group has no non-events (`x2 == n2`) that
-#' cubic has a root on the parameter boundary and its roots can no longer be
-#' assigned to the two interval bounds by their order alone. This case is
-#' therefore solved directly from the score statistic
-#' ([stats::uniroot()]); both routes agree to numerical precision
-#' wherever the closed form applies.
+#' The score interval uses the uncorrected Koopman (1984) score statistic.
+#' It does not include the `N / (N - 1)` variance correction associated with
+#' the Miettinen--Nurminen variant, where `N = n1 + n2`. Bounds are found by
+#' inverting the score statistic on the log risk-ratio scale. Closed forms
+#' apply when both groups have no events or both groups contain only events.
+#' If only the reference group has no events, the rows are reversed and the
+#' resulting bounds are inverted. The numerical search expands adaptively;
+#' failure to bracket a bound within numerical limits raises an error rather
+#' than returning an artificial zero or infinite endpoint.
 #'
-#' The Wald interval is asymptotic and may perform poorly for small counts or
-#' extreme probabilities. Note that `delta` enters the standard error
-#' only, not the point estimate the interval is centred on: with a zero cell
-#' the point estimate is `0` or `Inf` and the Wald interval
-#' degenerates accordingly. Use `method = "score"` for tables with zero
-#' cells.
+#' The Wald method uses the log risk ratio and variance
+#' `1 / x1 - 1 / n1 + 1 / x2 - 1 / n2`, evaluated after any cell correction.
+#' With `delta = 0`, a zero event count in either group makes the log-Wald
+#' interval unavailable: a warning is issued and its bounds are `NA`.
+#' Use the score method for such data, or explicitly choose a positive
+#' correction, for example `delta = 0.5`. Wald intervals are asymptotic and
+#' can perform poorly with small counts or probabilities near the boundaries.
+#' If both groups contain only events and `delta = 0`, the formal Wald
+#' interval is `[1, 1]`; it is returned with a warning because it is degenerate.
+#' For a one-sided interval, the corresponding open endpoint is still applied.
 #'
-#' If the table orientation differs from the required structure, rows or
-#' columns can be reversed using [bedrock::revX()] or transposed
-#' with [t()].
+#' The `"use-or"` method transforms the Wald bounds returned by
+#' [oddsRatio()] using `RR = OR / (1 - p2 + p2 * OR)`, with `p2 = x2 / n2`
+#' fixed at its observed value. This is a plug-in approximation: monotonicity
+#' of the transformation does not establish nominal coverage when `p2` is
+#' estimated. It requires `0 < p2 < 1`, and, like the Wald odds-ratio
+#' interval, positive cells unless `delta > 0`; otherwise a warning is issued
+#' and the interval bounds are `NA`. An infinite OR bound is mapped to its
+#' limit `1 / p2`.
+#'
+#' For unavailable intervals, one-sided output still uses the natural open
+#' endpoint (0 or `Inf`); the estimated endpoint remains `NA`.
+#' Rows or columns can be reversed with [bedrock::revX()], or the table
+#' transposed with [t()], to obtain the required orientation.
 #'
 #' @references
 #' Koopman, P. A. R. (1984). Confidence intervals for the ratio of two
@@ -117,6 +139,10 @@
 #' relRisk(matrix(c(2, 5, 3, 0), nrow = 2), conf.level = 0.95)
 #'
 #'
+#' # explicitly corrected Wald estimate and interval
+#' relRisk(matrix(c(0, 4, 10, 6), nrow = 2),
+#'         method = "wald", delta = 0.5, conf.level = 0.95)
+#'
 #' @family effect.size
 #' @concept effect-size
 #' @concept binary-outcome
@@ -129,33 +155,11 @@ relRisk <- function(
     conf.level = NA,
     sides = c("two.sided", "left", "right"),
     method = c("score", "wald", "use-or"),
-    delta = 0.5,
+    delta = 0,
     ...
 ) {
 
-  if (!is.null(y))
-    x <- table(x, y, ...)
-
-  if (!is.numeric(x))
-    stop("Argument 'x' must be numeric.")
-
-  if (anyNA(x))
-    stop("Argument 'x' must not contain missing values.")
-
-  if (length(dim(x)) != 2L)
-    stop("Argument 'x' must be a matrix.")
-
-  if (!all(dim(x) == c(2L, 2L)))
-    stop("Argument 'x' must be a 2x2 matrix.")
-
-  if (any(x < 0))
-    stop("Argument 'x' must contain non-negative counts.")
-
-  if (any(x %% 1 != 0))
-    stop("Argument 'x' must contain integer counts.")
-
-  if (any(rowSums(x) == 0))
-    stop("Rows of 'x' must contain positive totals.")
+  x <- .as2x2(x, y, ...)
 
   # NA is LOGICAL, so the type must not be tested before the NA case is
   # admitted - otherwise the function rejects its own default. The shared
@@ -171,10 +175,15 @@ relRisk <- function(
 
   confAdj <- if (sides == "two.sided") conf.level else 2 * conf.level - 1
 
-  if (length(delta) != 1L || !is.numeric(delta) || is.na(delta) || delta < 0)
-    stop("'delta' must be a single non-negative number.")
+  delta <- .checkDelta(delta)
 
   method <- match.arg(method)
+
+  if (method == "wald" && delta > 0) {
+    x <- x + delta
+    if (any(!is.finite(rowSums(x))))
+      stop("'delta' produces non-finite row totals.")
+  }
 
   x1 <- x[1L, 1L]
   x2 <- x[2L, 1L]
@@ -204,7 +213,6 @@ relRisk <- function(
       x2 = x2,
       n1 = n1,
       n2 = n2,
-      delta = delta,
       conf.level = confAdj
     ),
 
@@ -212,14 +220,12 @@ relRisk <- function(
       x = x,
       x2 = x2,
       n2 = n2,
-      conf.level = confAdj
+      conf.level = confAdj,
+      delta = delta
     )
   )
 
-  # The relative risk is a ratio of probabilities: bounded below by 0,
-  # unbounded above. This is the first measure in this round whose open
-  # side really is infinite - the same range the caller table records for
-  # oddsRatio, gmean, hmean and coefVarCI.
+  # Natural parameter space for the open side of a one-sided interval.
   c(
     est = estimate,
     applySides(c(ci[["lci"]], ci[["uci"]]), sides, lo = 0, hi = Inf)
@@ -231,234 +237,104 @@ relRisk <- function(
 
 # == internal helper functions ================================================
 
-.relRiskScore <- function(
-    x1,
-    x2,
-    n1,
-    n2,
-    conf.level
-) {
+# Invert the score statistic on the log risk-ratio scale, with closed forms
+# when both groups have no events or both groups contain only events.
+.relRiskScore <- function(x1, x2, n1, n2, conf.level) {
 
+  # Use the lower tail to avoid rounding (1 + conf.level) / 2 to 1.
   z <- abs(qnorm((1 - conf.level) / 2))
 
-  if (x1 == 0 && x2 == 0) {
+  if (x1 == 0 && x2 == 0)
     return(c(lci = 0, uci = Inf))
+
+  if (x1 == n1 && x2 == n2)
+    return(c(lci = n1 / (n1 + z^2), uci = (n2 + z^2) / n2))
+
+  # An infinite estimate is handled by reversing rows and taking reciprocals.
+  if (x2 == 0) {
+    ci <- .relRiskScoreNumeric(x2, x1, n2, n1, z)
+    return(c(lci = 1 / ci[["uci"]], uci = Inf))
   }
 
-  # x2 == n2 puts the constrained MLE on the boundary p2 = 1. One root of the
-  # cubic then coincides with that boundary, and the "smallest root gives the
-  # upper bound, middle root the lower bound" rule no longer holds -- it
-  # returned intervals not containing the estimate, intervals with lci > uci,
-  # and NaN. Solved from the score statistic instead.
-  # x1 == n1 is the mirror image: the constrained MLE then sits on p1 = 1, the
-  # middle root no longer delivers the lower bound (the interval came out far
-  # too narrow), and at p0 = (x2 + n1)/(n1 + n2) the bound formula degenerates
-  # to 0/0. x2 == 0 keeps its own branch below, where the estimate is infinite
-  # and the numeric bracketing has nothing to start from.
-  if (x2 != 0 && ((x2 == n2 && x1 != n1) || (x1 == n1 && x2 != n2))) {
-    return(.relRiskScoreNumeric(x1 = x1, x2 = x2, n1 = n1, n2 = n2, z = z))
-  }
-
-  roots <- .relRiskScoreRoots(
-    x1 = x1,
-    x2 = x2,
-    n1 = n1,
-    n2 = n2,
-    z = z
-  )
-
-  p0low <- roots[["p0low"]]
-  p0up  <- roots[["p0up"]]
-
-  if (x2 == 0 && x1 != 0) {
-
-    lci <- .relRiskScoreBound(
-      p0 = p0low,
-      x1 = x1,
-      x2 = x2,
-      n1 = n1,
-      n2 = n2
-    )
-
-    return(c(lci = lci, uci = Inf))
-
-  }
-
-  if (x2 != n2 && x1 == 0) {
-
-    uci <- .relRiskScoreBound(
-      p0 = p0up,
-      x1 = x1,
-      x2 = x2,
-      n1 = n1,
-      n2 = n2
-    )
-
-    return(c(lci = 0, uci = uci))
-
-  }
-
-  if (x2 == n2 && x1 == n1) {
-
-    return(c(
-      lci = n1 / (n1 + z^2),
-      uci = (n2 + z^2) / n2
-    ))
-
-  }
-
-  lci <- .relRiskScoreBound(
-    p0 = p0low,
-    x1 = x1,
-    x2 = x2,
-    n1 = n1,
-    n2 = n2
-  )
-
-  uci <- .relRiskScoreBound(
-    p0 = p0up,
-    x1 = x1,
-    x2 = x2,
-    n1 = n1,
-    n2 = n2
-  )
-
-  c(lci = lci, uci = uci)
+  .relRiskScoreNumeric(x1, x2, n1, n2, z)
 
 }
-
-
-
-.relRiskScoreRoots <- function(
-    x1,
-    x2,
-    n1,
-    n2,
-    z
-) {
-
-  a1 <- n2 * (
-    n2 * (n2 + n1) * x1 +
-      n1 * (n2 + x1) * z^2
-  )
-
-  a2 <- -n2 * (
-    n2 * n1 * (x2 + x1) +
-      2 * (n2 + n1) * x2 * x1 +
-      n1 * (n2 + x2 + 2 * x1) * z^2
-  )
-
-  a3 <- (
-    2 * n2 * n1 * x2 * (x2 + x1) +
-      (n2 + n1) * x2^2 * x1 +
-      n2 * n1 * (x2 + x1) * z^2
-  )
-
-  a4 <- -n1 * x2^2 * (x2 + x1)
-
-  b1 <- a2 / a1
-  b2 <- a3 / a1
-  b3 <- a4 / a1
-
-  c1 <- b2 - b1^2 / 3
-  c2 <- b3 - b1 * b2 / 3 + 2 * b1^3 / 27
-
-  acosArg <- sqrt(27) * c2 / (2 * c1 * sqrt(-c1))
-  acosArg <- min(1, max(-1, acosArg))
-
-  ceta <- acos(acosArg)
-
-  t1 <- -2 * sqrt(-c1 / 3) * cos(pi / 3 - ceta / 3)
-  t2 <- -2 * sqrt(-c1 / 3) * cos(pi / 3 + ceta / 3)
-  t3 <-  2 * sqrt(-c1 / 3) * cos(ceta / 3)
-
-  p01 <- t1 - b1 / 3
-  p02 <- t2 - b1 / 3
-  p03 <- t3 - b1 / 3
-
-  p0up <- min(p01, p02, p03)
-
-  p0sum <- p01 + p02 + p03
-
-  p0low <- p0sum - p0up - max(p01, p02, p03)
-
-  list(
-    p0low = p0low,
-    p0up  = p0up
-  )
-
-}
-
-
-
-.relRiskScoreBound <- function(
-    p0,
-    x1,
-    x2,
-    n1,
-    n2
-) {
-
-  # x1 == n1 makes the numerator exactly zero, and the denominator vanishes at
-  # p0 = (x2 + n1)/(n1 + n2) - which is where the relevant root sits in that
-  # case. Without this the expression is 0/0 = NaN.
-  num <- (n1 - x1) * (1 - p0)
-  ratio <- if (num == 0) 0 else num / (x2 + n1 - (n1 + n2) * p0)
-
-  (1 - ratio) / p0
-
-}
-
 
 
 # Score statistic for H0: p1 = theta * p2, evaluated at the constrained MLE.
 # The constrained MLE of p2 solves
 #   (n1 + n2) theta p^2 - (theta (n1 + x2) + n2 + x1) p + (x1 + x2) = 0 .
-# Checked against .relRiskScoreRoots() for all 2x2 tables with
-# n1, n2 in {4, 5, 10, 25, 60} and 0 < x1 < n1, 0 < x2 < n2 (9801 tables):
-# maximum relative deviation of both bounds 3.3e-08 (root finder tolerance).
+# Scale the quadratic coefficients to avoid overflow during log-scale searches.
 .relRiskScoreStat <- function(theta, x1, x2, n1, n2) {
 
-  a <- (n1 + n2) * theta
-  b <- -(theta * (n1 + x2) + n2 + x1)
-  cc <- x1 + x2
+  if (!is.finite(theta) || theta <= 0)
+    stop("The score statistic requires a finite positive risk ratio.")
 
-  p2 <- (-b - sqrt(max(b^2 - 4 * a * cc, 0))) / (2 * a)
-  p1 <- theta * p2
+  scale <- max(n1, n2)
+  n1s <- n1 / scale
+  n2s <- n2 / scale
+  x1s <- x1 / scale
+  x2s <- x2 / scale
+  if (theta <= 1) {
+    a <- (n1s + n2s) * theta
+    b <- theta * (n1s + x2s) + n2s + x1s
+    cc <- x1s + x2s
+  } else {
+    a <- n1s + n2s
+    b <- n1s + x2s + (n2s + x1s) / theta
+    cc <- (x1s + x2s) / theta
+  }
 
-  s <- 0
-  if (p1 > 0 && p1 < 1) s <- s + (x1 - n1 * p1)^2 / (n1 * p1 * (1 - p1))
-  if (p2 > 0 && p2 < 1) s <- s + (x2 - n2 * p2)^2 / (n2 * p2 * (1 - p2))
+  p2 <- 2 * cc / (b + sqrt(max(b^2 - 4 * a * cc, 0)))
+  p2 <- min(p2, 1, 1 / theta)
+  p1 <- min(theta * p2, 1)
 
-  s
+  .relRiskScoreTerm(x1, n1, p1) + .relRiskScoreTerm(x2, n2, p2)
 
+}
+
+
+# A zero-variance binomial contributes zero only when the data match its
+# deterministic outcome. Incompatible boundary observations contribute Inf.
+.relRiskScoreTerm <- function(x, n, p) {
+  if (p == 0) return(if (x == 0) 0 else Inf)
+  if (p == 1) return(if (x == n) 0 else Inf)
+  n * ((x / n - p)^2 / p) / (1 - p)
 }
 
 
 .relRiskScoreNumeric <- function(x1, x2, n1, n2, z) {
 
   target <- z^2
-  f <- function(theta) .relRiskScoreStat(theta, x1, x2, n1, n2) - target
-
-  est <- (x1 / n1) / (x2 / n2)
-
-  # lower bound
-  if (x1 == 0) {
-    lci <- 0
-  } else {
-    lo <- est
-    while (f(lo) < 0 && lo > 1e-12) lo <- lo / 2
-    lci <- if (f(lo) > 0) uniroot(f, c(lo, est), tol = .Machine$double.eps^0.5)$root
-           else 0
+  g <- function(lt) {
+    value <- .relRiskScoreStat(exp(lt), x1, x2, n1, n2) - target
+    if (is.na(value)) stop("Could not evaluate the relative-risk score statistic.")
+    value
   }
 
-  # upper bound
-  hi <- max(est, 1e-8)
-  while (f(hi) < 0 && hi < 1e12) hi <- hi * 2
-  uci <- if (f(hi) > 0)
-           uniroot(f, c(max(est, 1e-12), hi), tol = .Machine$double.eps^0.5)$root
-         else Inf
+  # The score statistic is U-shaped around the estimate, so each bound is
+  # bracketed by its own outward search (see .seekLog()).
+  limits <- c(log(.Machine$double.xmin), log(.Machine$double.xmax) - 1)
 
+  if (x1 == 0) {
+    # Start at the risk ratio corresponding to one event in the first group,
+    # then search towards zero for a point inside the confidence set.
+    seed <- log(n2) - log(n1) - log(x2)
+    seed <- max(limits[1], min(limits[2], seed))
+    inside <- if (g(seed) <= 0) seed else .seekLog(g, seed, -1, sign = -1)
+    lci <- 0
+  } else {
+    inside <- log(x1) - log(n1) - log(x2) + log(n2)
+    if (inside <= limits[1] || inside >= limits[2] || g(inside) > 0)
+      stop("Could not locate an interior point for the relative-risk score interval.")
+    lower <- .seekLog(g, inside, -1, sign = 1)
+    lci <- exp(uniroot(g, c(lower, inside), tol = 1e-10,
+                       check.conv = TRUE)$root)
+  }
+
+  upper <- .seekLog(g, inside, 1, sign = 1)
+  uci <- exp(uniroot(g, c(inside, upper), tol = 1e-10,
+                     check.conv = TRUE)$root)
   c(lci = lci, uci = uci)
 
 }
@@ -471,18 +347,22 @@ relRisk <- function(
     x2,
     n1,
     n2,
-    delta,
     conf.level
 ) {
 
-  x1d <- x1 + delta
-  x2d <- x2 + delta
+  if (x1 == 0 || x2 == 0) {
+    warning("The log-Wald interval requires positive event counts; use method = 'score' or delta > 0.")
+    return(c(lci = NA_real_, uci = NA_real_))
+  }
+
+  if (x1 == n1 && x2 == n2)
+    warning("The log-Wald interval is degenerate because both groups contain only events; use method = 'score'.")
 
   logEstimate <- log(estimate)
 
+  # Equivalent to 1/x1 - 1/n1 + 1/x2 - 1/n2, without cancellation.
   seLogEstimate <- sqrt(
-    1 / x1d - 1 / n1 +
-      1 / x2d - 1 / n2
+    ((n1 - x1) / n1) / x1 + ((n2 - x2) / n2) / x2
   )
 
   z <- abs(qnorm((1 - conf.level) / 2))
@@ -500,13 +380,24 @@ relRisk <- function(
     x,
     x2,
     n2,
-    conf.level
+    conf.level,
+    delta = 0
 ) {
 
-  or <- oddsRatio(
+  p2 <- x2 / n2
+  if (p2 == 0 || p2 == 1) {
+    warning("The use-or interval requires 0 < x2 / n2 < 1; use method = 'score'.")
+    return(c(lci = NA_real_, uci = NA_real_))
+  }
+
+  # The Wald OR interval, with the caller's cell correction: like the Wald
+  # RR interval it is unavailable for a zero cell unless delta > 0.
+  or <- suppressWarnings(oddsRatio(
     x,
-    conf.level = conf.level
-  )
+    conf.level = conf.level,
+    method = "wald",
+    delta = delta
+  ))
 
   # read by name, not by position: a helper that returns a shorter or
   # differently ordered vector must fail loudly here, not silently shift
@@ -514,11 +405,19 @@ relRisk <- function(
   if (!all(c("est", "lci", "uci") %in% names(or)))
     stop("oddsRatio() did not return the expected 'est'/'lci'/'uci' vector.")
 
-  p2 <- x2 / n2
+  if (anyNA(or[c("lci", "uci")])) {
+    warning("The use-or interval requires positive cell counts; ",
+            "use method = 'score' or delta > 0.", call. = FALSE)
+    return(c(lci = NA_real_, uci = NA_real_))
+  }
 
-  # RR = OR / (1 - p2 + p2 * OR) is monotone increasing in OR, so the
-  # transformation maps the bounds onto the bounds.
-  tr <- function(o) o / ((1 - p2) + p2 * o)
+  # Fixing p2 gives a plug-in interval, not guaranteed nominal RR coverage.
+  tr <- function(o) {
+    if (is.na(o)) return(NA_real_)
+    if (o == 0) return(0)
+    # This form also handles o = Inf and avoids overflow in p2 * o.
+    1 / (p2 + (1 - p2) / o)
+  }
 
   c(
     lci = unname(tr(or[["lci"]])),

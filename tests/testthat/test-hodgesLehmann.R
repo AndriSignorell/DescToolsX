@@ -44,7 +44,7 @@ test_that("hodgesLehmann na.rm = TRUE strips NAs before estimation", {
 test_that("hodgesLehmann conf.level returns named vector est/lci/uci", {
   set.seed(42)
   x <- rnorm(50, mean = 5)
-  res <- hodgesLehmann(x, conf.level = 0.95, R = 300)
+  res <- hodgesLehmann(x, conf.level = 0.95, method = "boot", R = 300)
   expect_length(res, 3)
   expect_named(res, c("est", "lci", "uci"))
 })
@@ -52,7 +52,7 @@ test_that("hodgesLehmann conf.level returns named vector est/lci/uci", {
 test_that("hodgesLehmann CI: lci < est < uci", {
   set.seed(42)
   x <- rnorm(50, mean = 5)
-  res <- hodgesLehmann(x, conf.level = 0.95, R = 300)
+  res <- hodgesLehmann(x, conf.level = 0.95, method = "boot", R = 300)
   expect_lt(res["lci"], res["est"])
   expect_gt(res["uci"], res["est"])
 })
@@ -178,15 +178,15 @@ test_that("the bootstrap interval brackets the estimate and honours sides", {
   set.seed(42)
   x <- rnorm(40, 10)
   
-  two   <- hodgesLehmann(x, conf.level = 0.95, R = 499)
+  two   <- hodgesLehmann(x, conf.level = 0.95, method = "boot", R = 499)
   expect_named(two, c("est", "lci", "uci"))
   expect_lt(two[["lci"]], two[["est"]])
   expect_gt(two[["uci"]], two[["est"]])
   
   set.seed(42)
-  left  <- hodgesLehmann(x, conf.level = 0.95, sides = "left",  R = 499)
+  left  <- hodgesLehmann(x, conf.level = 0.95, method = "boot", sides = "left",  R = 499)
   set.seed(42)
-  right <- hodgesLehmann(x, conf.level = 0.95, sides = "right", R = 499)
+  right <- hodgesLehmann(x, conf.level = 0.95, method = "boot", sides = "right", R = 499)
   
   expect_identical(unname(left[["uci"]]), Inf)
   expect_identical(unname(right[["lci"]]), -Inf)
@@ -195,8 +195,8 @@ test_that("the bootstrap interval brackets the estimate and honours sides", {
 })
 
 
-test_that("two-sample with conf.level is refused, not silently wrong", {
-  expect_error(hodgesLehmann(1:10, 1:8, conf.level = 0.95),
+test_that("two-sample bootstrap interval is refused, not silently wrong", {
+  expect_error(hodgesLehmann(1:10, 1:8, conf.level = 0.95, method = "boot"),
                "one-sample case")
 })
 
@@ -251,7 +251,9 @@ test_that("invalid arguments are not masked by missing data", {
   expect_error(hodgesLehmann(x, c("a", NA)), "numeric")
   expect_error(hodgesLehmann(x, conf.level = 1.5))
   expect_error(hodgesLehmann(x, conf.level = 0.95, sides = "up"))
-  expect_error(hodgesLehmann(x, 1:3, conf.level = 0.95), "one-sample")
+  expect_error(hodgesLehmann(x, 1:3, conf.level = 0.95, method = "boot"),
+               "one-sample")
+  expect_error(hodgesLehmann(x, conf.level = 0.95, method = "nope"))
 })
 
 
@@ -318,7 +320,8 @@ test_that("argument validation", {
   expect_error(hodgesLehmann(x, conf.level = 0.5, sides = "left"), "0.5")
   expect_error(hodgesLehmann(x, conf.level = 0.3, sides = "right"), "0.5")
 
-  expect_error(hodgesLehmann(x, conf.level = 0.95, type = "stud"), "stud")
+  expect_error(hodgesLehmann(x, conf.level = 0.95, method = "boot", type = "stud"),
+               "stud")
 })
 
 
@@ -326,21 +329,216 @@ test_that("degenerate bootstrap cases keep the documented shape", {
 
   # point mass: collapsed interval, no warning
   set.seed(1)
-  res <- expect_silent(hodgesLehmann(rep(7, 20), conf.level = 0.95, R = 199))
+  res <- expect_silent(hodgesLehmann(rep(7, 20), conf.level = 0.95, method = "boot", R = 199))
   expect_identical(res, c(est = 7, lci = 7, uci = 7))
 
   set.seed(1)
-  res <- hodgesLehmann(rep(7, 20), conf.level = 0.95, sides = "left", R = 199)
+  res <- hodgesLehmann(rep(7, 20), conf.level = 0.95, method = "boot", sides = "left", R = 199)
   expect_identical(res, c(est = 7, lci = 7, uci = Inf))
 
   # one observation: named NA bounds with warning
-  expect_warning(res <- hodgesLehmann(7, conf.level = 0.95), "single")
+  expect_warning(res <- hodgesLehmann(7, conf.level = 0.95, method = "boot"),
+                 "single")
   expect_identical(res, c(est = 7, lci = NA_real_, uci = NA_real_))
 
   # non-finite replicates
   set.seed(1)
   expect_warning(res <- hodgesLehmann(c(1, 2, 3, Inf), conf.level = 0.95,
+                                      method = "boot",
                                       R = 199), "finite")
   expect_named(res, c("est", "lci", "uci"))
   expect_true(all(is.na(res[c("lci", "uci")])))
+})
+
+
+# == exact (rank-based) interval ===============================================
+
+test_that("exact interval reproduces wilcox.test(exact = TRUE)", {
+
+  set.seed(8)
+  sidesMap <- c(two.sided = "two.sided", left = "greater", right = "less")
+  wt <- function(..., cl, sd)
+    as.numeric(wilcox.test(..., conf.int = TRUE, conf.level = cl,
+                           alternative = sidesMap[[sd]], exact = TRUE)$conf.int)
+
+  for (i in 1:40) {
+    # n >= 10: every level used here is attainable
+    x  <- round(rnorm(sample(10:30, 1), 1), 3)
+    y  <- round(rnorm(sample(6:30, 1)), 3)
+    xt <- sample(0:8, length(x), replace = TRUE) / 2     # with ties
+    yt <- sample(0:8, length(y), replace = TRUE) / 2
+    cl <- sample(c(0.8, 0.9, 0.95, 0.99), 1)
+
+    for (sd in names(sidesMap)) {
+      hl <- function(...) unname(hodgesLehmann(..., conf.level = cl, sides = sd)[2:3])
+
+      # two-sample, also with ties (exact conditional branch)
+      expect_equal(hl(x, y),   wt(x, y,   cl = cl, sd = sd))
+      expect_equal(hl(xt, yt), wt(xt, yt, cl = cl, sd = sd))
+
+      # one-sample only where wilcox.test() stays in its unconditional
+      # branch: its conditional branch (R 4.6) takes the lower bound from
+      # P(V > v) instead of P(V >= v), one rank too narrow - see the
+      # reference test below
+      if (!anyDuplicated(abs(x)) && all(x != 0))
+        expect_equal(hl(x), wt(x, cl = cl, sd = sd))
+    }
+  }
+})
+
+
+test_that("exact conditional interval under ties matches a brute-force inversion", {
+
+  # Reference: invert the test by scanning ALL intervals between distinct
+  # Walsh averages / differences, with the permutation distribution by
+  # full enumeration; no bisection, no mirroring, no DP.
+  tail1 <- function(x, mu, upper) {
+    z <- rank(abs(x - mu)); v <- sum(z[x > mu])
+    V <- as.matrix(expand.grid(rep(list(0:1), length(x)))) %*% z
+    mean(if (upper) V >= v - 1e-9 else V <= v + 1e-9)
+  }
+  tail2 <- function(x, y, mu, upper) {
+    z <- rank(c(x - mu, y)); w <- sum(z[seq_along(x)])
+    W <- combn(z, length(x), sum)
+    mean(if (upper) W >= w - 1e-9 else W <= w + 1e-9)
+  }
+  ref <- function(alpha, x, y = NULL) {
+    d <- if (is.null(y)) { w <- outer(x, x, "+") / 2; w[upper.tri(w, TRUE)] }
+         else outer(x, y, "-")
+    u <- c(-Inf, sort(unique(as.vector(d))), Inf)
+    mids <- function(j) {
+      lo <- u[j]; hi <- u[j + 1L]
+      if (is.infinite(lo)) hi - 1 else if (is.infinite(hi)) lo + 1 else (lo + hi) / 2
+    }
+    tl <- function(mu, upper)
+      if (is.null(y)) tail1(x, mu, upper) else tail2(x, y, mu, upper)
+    J <- length(u) - 1L                       # intervals 1..J
+    tol <- 10 * .Machine$double.eps
+    lo <- -Inf; up <- Inf
+    for (j in seq_len(J))                     # first interval accepting mu
+      if (tl(mids(j), TRUE) > alpha + tol) { lo <- u[j]; break }
+    for (j in rev(seq_len(J)))                # last interval accepting mu
+      if (tl(mids(j), FALSE) > alpha + tol) { up <- u[j + 1L]; break }
+    c(lo, up)
+  }
+
+  set.seed(10)
+  for (i in 1:60) {
+    n  <- sample(4:10, 1); m <- sample(2:5, 1)
+    x  <- sample(0:4, n, replace = TRUE) / 2
+    y  <- sample(0:4, m, replace = TRUE) / 2
+    cl <- sample(c(0.6, 0.8, 0.9, 0.95), 1)
+    a  <- (1 - cl) / 2
+    expect_identical(unname(suppressWarnings(hodgesLehmann(x, conf.level = cl))[2:3]),
+                     ref(a, x))
+    expect_identical(unname(suppressWarnings(hodgesLehmann(x, y, conf.level = cl))[2:3]),
+                     ref(a, x, y))
+  }
+})
+
+
+test_that("exact interval, large samples: tie-corrected normal ranks", {
+
+  # ties and n >= 50: the ranks come from the normal approximation with
+  # tie-corrected variance, the bounds are exactly those order statistics
+  set.seed(9)
+  x <- sample(0:20, 60, replace = TRUE)
+  y <- sample(0:20, 55, replace = TRUE)
+
+  w <- outer(x, x, "+") / 2
+  w <- sort(w[upper.tri(w, diag = TRUE)])
+  d <- sort(outer(x, y, "-"))
+
+  tt   <- function(v) { t <- table(v); sum(t^3 - t) }
+  rank <- function(N, s2) ceiling(N / 2 - 0.5 + qnorm(0.025) * sqrt(s2))
+
+  n <- length(x); m <- length(y)
+  C1 <- rank(length(w), n * (n + 1) * (2 * n + 1) / 24 - tt(x) / 48)
+  C2 <- rank(length(d), n * m / 12 *
+               ((n + m + 1) - (tt(x) + tt(y)) / ((n + m) * (n + m - 1))))
+
+  expect_identical(hodgesLehmann(x, conf.level = 0.95),
+                   c(est = median(w), lci = w[C1], uci = w[length(w) + 1 - C1]))
+  expect_identical(hodgesLehmann(x, y, conf.level = 0.95),
+                   c(est = median(d), lci = d[C2], uci = d[length(d) + 1 - C2]))
+})
+
+
+test_that("exact interval brackets the estimate and honours sides", {
+  set.seed(42)
+  x <- rnorm(200, 10)
+  y <- rnorm(150, 9)
+
+  for (args in list(list(x), list(x, y))) {
+    two   <- do.call(hodgesLehmann, c(args, conf.level = 0.95))
+    left  <- do.call(hodgesLehmann, c(args, conf.level = 0.95, sides = "left"))
+    right <- do.call(hodgesLehmann, c(args, conf.level = 0.95, sides = "right"))
+
+    expect_true(two[["lci"]] < two[["est"]] && two[["est"]] < two[["uci"]])
+    expect_identical(left[["uci"]], Inf)
+    expect_identical(right[["lci"]], -Inf)
+    # one-sided at 95% is tighter than two-sided at 95%
+    expect_gt(left[["lci"]], two[["lci"]])
+    expect_lt(right[["uci"]], two[["uci"]])
+  }
+})
+
+
+test_that("exact interval: deterministic, no RNG, no extra arguments", {
+  x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+
+  set.seed(1)
+  before <- .Random.seed
+  a <- hodgesLehmann(x, conf.level = 0.9)
+  expect_identical(.Random.seed, before)
+  expect_identical(hodgesLehmann(x, conf.level = 0.9), a)
+
+  expect_error(hodgesLehmann(x, conf.level = 0.9, R = 999), "boot")
+})
+
+
+test_that("exact interval: degenerate and unattainable cases", {
+
+  # point mass: collapsed interval
+  expect_identical(hodgesLehmann(rep(7, 20), conf.level = 0.95),
+                   c(est = 7, lci = 7, uci = 7))
+
+  # n = 5: P(V = 0) = 1/32 > 0.025, the 95% level is not attainable
+  expect_warning(res <- hodgesLehmann(1:5, conf.level = 0.95), "attainable")
+  expect_identical(res, c(est = 3, lci = -Inf, uci = Inf))
+
+  # ... but n = 6 is fine
+  expect_silent(res <- hodgesLehmann(c(1, 2, 3, 4, 5, 7), conf.level = 0.95))
+  expect_true(all(is.finite(res)))
+
+  # Inf - Inf: everything undefined
+  expect_identical(hodgesLehmann(c(-Inf, 1:8, Inf), conf.level = 0.9),
+                   c(est = NaN, lci = NaN, uci = NaN))
+})
+
+
+test_that("exact interval scales to large samples", {
+  set.seed(2)
+  x <- rnorm(1e5)
+  y <- rnorm(5e4, 0.5)
+  res <- hodgesLehmann(x, y, conf.level = 0.95)
+  expect_true(res[["lci"]] < -0.5 && -0.5 < res[["uci"]])
+  expect_lt(res[["uci"]] - res[["lci"]], 0.05)
+})
+
+
+test_that("exact interval: tail probability exactly alpha keeps the rank", {
+
+  # pwilcox(4, 3, 9) == 0.05 exactly: the lower 95% bound is d(5), not
+  # d(4) (wilcox.test() before R 4.6.0 gave d(4))
+  x <- c(0.1, 1.3, 2.7)
+  y <- c(-1.9, -1.2, -0.6, 0.2, 0.55, 0.9, 1.6, 2.2, 3.1)
+  d <- sort(outer(x, y, "-"))
+  expect_identical(hodgesLehmann(x, y, conf.level = 0.95, sides = "left")[["lci"]],
+                   d[5])
+
+  # pwilcox(0, 3, 3) == 0.05: attainable, bound is the smallest difference
+  y3 <- c(-1.9, 0.2, 3.1)
+  expect_silent(res <- hodgesLehmann(x, y3, conf.level = 0.95, sides = "left"))
+  expect_identical(res[["lci"]], min(outer(x, y3, "-")))
 })

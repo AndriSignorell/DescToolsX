@@ -85,12 +85,28 @@ fast_mode_cpp <- function(x, narm = FALSE) {
     .Call(`_DescToolsX_fast_mode_cpp`, x, narm)
 }
 
-hlqest_cpp <- function(xIn) {
-    .Call(`_DescToolsX_hlqest_cpp`, xIn)
+hlqest_cpp <- function(x) {
+    .Call(`_DescToolsX_hlqest_cpp`, x)
 }
 
-hl2qest_cpp <- function(xIn, yIn) {
-    .Call(`_DescToolsX_hl2qest_cpp`, xIn, yIn)
+hl2qest_cpp <- function(x, y) {
+    .Call(`_DescToolsX_hl2qest_cpp`, x, y)
+}
+
+hlqorder_cpp <- function(x, k) {
+    .Call(`_DescToolsX_hlqorder_cpp`, x, k)
+}
+
+hl2qorder_cpp <- function(x, y, k) {
+    .Call(`_DescToolsX_hl2qorder_cpp`, x, y, k)
+}
+
+signrankUpper_cpp <- function(w, s) {
+    .Call(`_DescToolsX_signrankUpper_cpp`, w, s)
+}
+
+wilcoxUpper_cpp <- function(w, k, s) {
+    .Call(`_DescToolsX_wilcoxUpper_cpp`, w, k, s)
 }
 
 hoeffdingD_cpp <- function(permIn) {
