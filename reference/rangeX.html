@@ -5,11 +5,9 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="(Robust) Range — rangeX"><meta name="description" content="Determines the range of the data, which can possibly be trimmed before
-calculating the extreme values. The robust range version is calculated on
-the basis of the trimmed mean and variance (see Details)."><meta property="og:description" content="Determines the range of the data, which can possibly be trimmed before
-calculating the extreme values. The robust range version is calculated on
-the basis of the trimmed mean and variance (see Details)."><meta property="og:image" content="/logo.png"></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="(Robust) Range — rangeX"><meta name="description" content="Computes the width of a numeric vector, optionally after trimming, or a
+robust range based on a trimmed mean and absolute deviations."><meta property="og:description" content="Computes the width of a numeric vector, optionally after trimming, or a
+robust range based on a trimmed mean and absolute deviations."><meta property="og:image" content="/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +15,7 @@ the basis of the trimmed mean and variance (see Details)."><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.965</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.966</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,9 +50,8 @@ the basis of the trimmed mean and variance (see Details)."><meta property="og:im
     </div>
 
     <div class="ref-description section level2">
-    <p>Determines the range of the data, which can possibly be trimmed before
-calculating the extreme values. The robust range version is calculated on
-the basis of the trimmed mean and variance (see Details).</p>
+    <p>Computes the width of a numeric vector, optionally after trimming, or a
+robust range based on a trimmed mean and absolute deviations.</p>
     </div>
 
     <div class="section level2">
@@ -67,28 +64,42 @@ the basis of the trimmed mean and variance (see Details).</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a numeric vector</p></dd>
+<dd><p>a numeric vector whose range width is to be computed. In robust
+mode, <code>Inf</code> and <code>-Inf</code> are excluded; see <code>na.rm</code> for missing values.</p></dd>
 
 
 <dt id="arg-trim">trim<a class="anchor" aria-label="anchor" href="#arg-trim"></a></dt>
-<dd><p>the fraction (0 to 0.5) of observations to be trimmed from each
-end of <code>x</code> before the range is computed. Values of <code>trim</code> outside
-that range are taken as the nearest endpoint. Default is 0 for
-<code>robust = FALSE</code> and 0.2 for <code>robust = TRUE</code>.</p></dd>
+<dd><p>a single numeric trimming fraction between 0 and 0.5, or
+<code>NULL</code> (the default). <code>NULL</code> selects 0 when <code>robust = FALSE</code> and 0.2 when
+<code>robust = TRUE</code>. In conventional mode, this fraction is removed from each
+end of <code>x</code> before computing the extrema. In robust mode, it controls
+trimming of both the centre and the absolute deviations as described
+above; it does not directly specify the fraction of observations outside
+the returned bounds. A non-finite value in robust mode is replaced by 0.2.</p></dd>
 
 
 <dt id="arg-robust">robust<a class="anchor" aria-label="anchor" href="#arg-robust"></a></dt>
-<dd><p>logical; whether to return the robust or conventional range</p></dd>
+<dd><p>a single logical value; <code>FALSE</code> (the default) returns the
+conventional, optionally trimmed range width. <code>TRUE</code> returns the width
+between the robust bounds described above.</p></dd>
 
 
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
-<dd><p>a logical value indicating whether <code>NA</code> values should be
-stripped before the computation proceeds</p></dd>
+<dd><p>a single logical value indicating whether <code>NA</code> and <code>NaN</code>
+values should be removed before computation. The default is <code>FALSE</code>;
+missing values then produce a missing range width and missing bounds.
+In robust mode, infinite values are excluded regardless of <code>na.rm</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code>.robRange</code>, including
-<code>fac</code>. Only used if <code>robust = TRUE</code>.</p></dd>
+<dd><p>additional arguments passed to the internal helper <code>.robRange</code>
+when <code>robust = TRUE</code>. Currently, the supported argument is <code>fac</code>, a
+positive finite numeric scalar (default 3) multiplying the deviation
+scale. Larger values widen the robust bounds up to the observed finite
+extrema; smaller values narrow them. For example,
+<code>rangeX(x, robust = TRUE, fac = 2)</code> uses a multiplier of 2. This factor
+does not specify a confidence level or a guaranteed coverage probability.
+Arguments in <code>...</code> are ignored when <code>robust = FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -100,14 +111,21 @@ Note that the attribute is dropped by subsetting and by
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The R base function range returns the minimum and maximum value of a numeric
-object. Here we return the span of a (possibly trimmed) numeric vector, say
-the difference of maximum and minimum value.</p>
-<p>If robust is set to <code>TRUE</code> the function determines the trimmed mean m
-and then the "upper trimmed mean" s of absolute deviations from m,
-multiplied by <code>fac</code> (fac is 3 by default). The robust minimum is then
-defined as m-fac*s or min(x), whichever is larger, and similarly for the
-maximum.</p>
+    <p>Unlike <code><a href="https://rdrr.io/r/base/range.html" class="external-link">range()</a></code>, which returns the minimum and maximum, <code>rangeX()</code> returns
+their difference and stores the endpoints in the <code>"bounds"</code> attribute.</p>
+<p>With <code>robust = TRUE</code>, only finite observations are used after handling
+missing values according to <code>na.rm</code>. Let <code>n</code> be their number and <code>m</code> their
+mean after trimming a fraction <code>trim</code> from each tail. The absolute
+deviations from <code>m</code> are sorted, and the smallest
+<code>k = ceiling((1 - trim) * n)</code> deviations are retained. The scale <code>s</code> is
+their sum divided by <code>k - 1</code>; it is not a variance or standard deviation.
+The bounds are <code>max(m - fac * s, min(x))</code> and
+<code>min(m + fac * s, max(x))</code>, with extrema taken over the finite observations.
+Thus, <code>trim</code> acts on both tails when estimating the centre but only on the
+upper tail of the absolute deviations when estimating the scale.</p>
+<p>If <code>k &lt; 3</code> or the scaled deviation measure is zero, a warning is issued
+and the ordinary range of the finite observations is returned. If no
+finite observations remain, the robust computation stops with an error.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -134,9 +152,15 @@ maximum.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50  9</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">rangeX</span><span class="op">(</span><span class="va">x</span>, robust<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">rangeX</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.574194</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"bounds")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.904542  1.669652</span>
+<span class="r-in"><span><span class="fu">rangeX</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">TRUE</span>, trim <span class="op">=</span> <span class="fl">0.1</span>, fac <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.180857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"bounds")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.651108  1.529749</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="fu">rangeX</span><span class="op">(</span><span class="va">x</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="st">"bounds"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.904542  1.669652</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compared to</span></span></span>

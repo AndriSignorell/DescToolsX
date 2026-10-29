@@ -17,7 +17,7 @@ by John Monahan (1984)."><meta property="og:image" content="/logo.png"></head><b
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.965</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.966</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@ by John Monahan (1984).</p>
 <span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"boot"</span><span class="op">)</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -93,15 +94,23 @@ interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
 <code>"right"</code>). See <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dd><p>interval method: <code>"exact"</code> (default), the distribution-free
+interval obtained by inverting the Wilcoxon signed-rank (one-sample) or
+rank-sum (two-sample) test; or <code>"boot"</code>, a bootstrap interval
+(one-sample only). Ignored without <code>conf.level</code>.</p></dd>
+
+
 <dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
 <dd><p>logical; if <code>TRUE</code>, missing values are removed from <code>x</code> and
 <code>y</code> separately before the computation</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>additional arguments passed to bootstrap procedures
-(<code>R</code>, <code>type</code>, <code>parallel</code>, <code>ncpus</code>). <code>type = "stud"</code> is not available:
-the bootstrap statistic carries no variance estimate per resample.</p></dd>
+<dd><p>additional arguments for <code>method = "boot"</code> (<code>R</code>, <code>type</code>,
+<code>parallel</code>, <code>ncpus</code>); an error with <code>method = "exact"</code>.
+<code>type = "stud"</code> is not available: the bootstrap statistic carries no
+variance estimate per resample.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -147,7 +156,26 @@ when the median is undefined: if a pair yields <code>Inf - Inf</code> (<code>-In
 <code>Inf</code> both in <code>x</code> in the one-sample case, the same infinity in <code>x</code> and
 <code>y</code> in the two-sample case), or if the two middle order statistics are
 <code>-Inf</code> and <code>Inf</code>.</p>
-<p><strong>Degenerate intervals.</strong> If all bootstrap replicates coincide (e.g.
+<p><strong>Exact interval.</strong> With <code>method = "exact"</code> the interval inverts the
+Wilcoxon signed-rank (one-sample) resp. rank-sum (two-sample) test
+(Bauer 1972). Its bounds are Walsh averages resp. differences
+<code>x[i] - y[j]</code>, selected by Monahan's partitioning instead of sorting all
+\(O(n^2)\) values, so large samples are no problem.</p><ul><li><p>Samples below 50 (both below 50 in the two-sample case) use
+the exact null distribution: the classic one without ties, the
+conditional (permutation) distribution given the midranks with ties.</p></li>
+<li><p>Larger samples use the normal approximation with continuity and
+tie correction.</p></li>
+</ul><p>The results agree with <code>wilcox.test(exact = TRUE, conf.int = TRUE)</code>
+(R &gt;= 4.6.0) in the two-sample case and in the one-sample case without
+ties. With ties, <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test()</a></code> (R 4.6.1) takes the lower one-sample
+bound from \(P(V &gt; v)\) instead of \(P(V \ge v)\), one rank too
+narrow, with coverage below the nominal level; <code>hodgesLehmann()</code> uses
+\(P(V \ge v)\). In the large-sample case <code><a href="https://rdrr.io/r/stats/wilcox.test.html" class="external-link">wilcox.test()</a></code> interpolates
+between Walsh averages with <code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot()</a></code>, <code>hodgesLehmann()</code> returns the
+order statistics that bound the inverted test.
+If the requested level is not attainable (very small samples, e.g.
+\(n \le 5\) at 95\<!-- %), the bound is infinite and a warning is issued. --></p>
+<p><strong>Bootstrap interval.</strong> If all bootstrap replicates coincide (e.g.
 constant data), the interval collapses to <code>lci = uci = est</code>. With a
 single observation, or when the replicates are not all finite, no
 interval can be formed: <code>lci</code> and <code>uci</code> are <code>NA</code> with a warning.</p>
@@ -161,11 +189,10 @@ interval can be formed: <code>lci</code> and <code>uci</code> are <code>NA</code
     <h2 id="random-number-generation">Random number generation<a class="anchor" aria-label="anchor" href="#random-number-generation"></a></h2>
 
 
-<p>A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code>
-beforehand for reproducible intervals. The point estimate itself is
-deterministic: the compiled routine picks its pivots from a local
-generator and does not touch R's stream.</p>
+<p>Only <code>method = "boot"</code> uses R's random number generator; call
+<code><a href="https://rdrr.io/r/base/Random.html" class="external-link">base::set.seed()</a></code> beforehand for reproducible intervals. The point
+estimate and the exact interval are deterministic: the compiled routine
+picks its pivots from a local generator and does not touch R's stream.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -177,6 +204,9 @@ Hodges-Lehmann location estimator. <em>ACM Transactions on Mathematical
 Software</em>, 10(3), 265–270. <a href="https://doi.org/10.1145/1271.319414" class="external-link">doi:10.1145/1271.319414</a>
 .
 Original code: <a href="https://www4.stat.ncsu.edu/~monahan/jul10/" class="external-link">https://www4.stat.ncsu.edu/~monahan/jul10/</a></p>
+<p>Bauer, D. F. (1972). Constructing confidence sets using rank
+statistics. <em>Journal of the American Statistical Association</em>, 67(339),
+687–690. <a href="https://doi.org/10.1080/01621459.1972.10481279" class="external-link">doi:10.1080/01621459.1972.10481279</a></p>
 <p>Efron, B. (1987). Better bootstrap confidence intervals.
 <em>Journal of the American Statistical Association</em>, 82(397), 171–185.
 <a href="https://doi.org/10.1080/01621459.1987.10478410" class="external-link">doi:10.1080/01621459.1987.10478410</a></p>
@@ -221,8 +251,20 @@ Application</em>. Cambridge University Press.</p>
 <span class="r-in"><span><span class="fu">hodgesLehmann</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>, <span class="cn">NA</span><span class="op">)</span>, <span class="va">y</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.54</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># distribution-free interval, one- and two-sample</span></span></span>
 <span class="r-in"><span><span class="fu">hodgesLehmann</span><span class="op">(</span><span class="va">x</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   est   lci   uci </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.725 1.165 2.370 </span>
+<span class="r-in"><span><span class="fu">hodgesLehmann</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    est    lci    uci </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.560 -0.220  1.082 </span>
+<span class="r-in"><span><span class="fu">hodgesLehmann</span><span class="op">(</span><span class="va">x</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, sides <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   est   lci   uci </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.725 1.425   Inf </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># bootstrap interval (one-sample)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">hodgesLehmann</span><span class="op">(</span><span class="va">x</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, method <span class="op">=</span> <span class="st">"boot"</span>, R <span class="op">=</span> <span class="fl">999</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      est      lci      uci </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.725000 1.425000 2.211442 </span>
 <span class="r-in"><span></span></span>

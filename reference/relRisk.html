@@ -15,7 +15,7 @@ optional confidence intervals."><meta property="og:image" content="/logo.png"></
 
     <a class="navbar-brand me-2" href="../index.html">DescToolsX</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.965</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Unreleased version">0.0.0.966</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@ optional confidence intervals.</p>
 <span>  conf.level <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  sides <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"left"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"score"</span>, <span class="st">"wald"</span>, <span class="st">"use-or"</span><span class="op">)</span>,</span>
-<span>  delta <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  delta <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -72,54 +72,61 @@ optional confidence intervals.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a numeric 2x2 matrix or table containing non-negative counts</p></dd>
+<dd><p>a numeric 2x2 matrix or table of finite, non-negative integer
+counts, with positive row totals; alternatively an exposure vector when
+<code>y</code> is supplied. The first row is the exposed group and the first column
+is the event, regardless of their names.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>an optional vector. If supplied, <code>table(x, y, ...)</code> is
-computed.</p></dd>
+<dd><p>an optional outcome vector. If supplied, <code>table(x, y, ...)</code> is
+computed without reordering its levels. For binary 0/1 data, use
+<code>factor(x, levels = c(1, 0))</code> and <code>factor(y, levels = c(1, 0))</code> to obtain
+the orientation shown above. Missing values follow <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> conventions.</p></dd>
 
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
-<dd><p>confidence level for the interval estimate. If
-<code>NA</code> (default), only the point estimate is returned.</p></dd>
+<dd><p>a single confidence level strictly between 0 and 1,
+or <code>NA</code> (the default) to return only the point estimate. One-sided
+intervals require a confidence level greater than 0.5.</p></dd>
 
 
 <dt id="arg-sides">sides<a class="anchor" aria-label="anchor" href="#arg-sides"></a></dt>
 <dd><p>character string specifying the sidedness of the confidence
-interval (one of <code>"two.sided"</code> (default), <code>"left"</code> or
-<code>"right"</code>). See details in <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
+interval: <code>"two.sided"</code> (default), <code>"left"</code>, or <code>"right"</code>.
+<code>"left"</code> retains the lower bound and sets the upper bound to <code>Inf</code>;
+<code>"right"</code> sets the lower bound to 0 and retains the upper bound.
+See also <code><a href="ConfidenceIntervals.html">ConfidenceIntervals()</a></code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>character string specifying the confidence interval method.
-One of <code>"score"</code>, <code>"wald"</code>, or <code>"use-or"</code>.</p></dd>
+<dd><p>character string specifying the interval method:
+<code>"score"</code> (default), <code>"wald"</code>, or <code>"use-or"</code>. See Details.</p></dd>
 
 
 <dt id="arg-delta">delta<a class="anchor" aria-label="anchor" href="#arg-delta"></a></dt>
-<dd><p>small continuity correction added to the event counts in the
-<em>standard error</em> of the Wald interval. Only used if
-<code>method = "wald"</code>; see the note below.</p></dd>
+<dd><p>a single finite, non-negative number (default 0), the cell
+correction of the Wald-type methods. For <code>method = "wald"</code> it is added to
+each of the four cells before computing both the point estimate and the
+interval, so each row total increases by <code>2 * delta</code>; this also applies
+when only the point estimate is requested. For <code>method = "use-or"</code> it is
+passed to the Wald odds-ratio interval only; the estimate and <code>p2</code> stay
+uncorrected. <code>"score"</code> ignores <code>delta</code> after validating it.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code></p></dd>
+<dd><p>further arguments passed to <code><a href="https://rdrr.io/r/base/table.html" class="external-link">table()</a></code> when <code>y</code> is supplied</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>if <code>conf.level = NA</code>, a numeric scalar. Otherwise a named
-numeric vector with elements:</p><dl><dt><code>est</code></dt>
-<dd><p>relative risk estimate</p></dd>
-
-<dt><code>lci</code></dt>
-<dd><p>lower confidence interval bound</p></dd>
-
-<dt><code>uci</code></dt>
-<dd><p>upper confidence interval bound</p></dd>
-
-
-</dl></div>
+    <p>if <code>conf.level = NA</code>, a numeric scalar. Otherwise a named numeric
+vector with elements <code>est</code>, <code>lci</code>, and <code>uci</code> for the estimate and bounds.
+Without a Wald correction, no events in either group give <code>est = NaN</code>;
+events only in the first group give <code>est = Inf</code>, and events only in the
+second group give <code>est = 0</code>. The score interval remains available in these
+cases, including <code>[0, Inf]</code> when neither group has events.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The relative risk compares the event probability in the exposed group with
@@ -138,24 +145,37 @@ RR = \frac{x_1 / n_1}{x_2 / n_2}
 $$</p>
 <p>Confidence intervals can be calculated using the score method of Koopman
 (1984), a Wald approximation, or via transformation of the odds ratio.</p>
-<p>The score interval is based on the method of Koopman (1984) and
-Miettinen and Nurminen (1985). It is obtained from the closed-form
-solution of the cubic equation in the constrained maximum likelihood
-estimate; if the unexposed group has no non-events (<code>x2 == n2</code>) that
-cubic has a root on the parameter boundary and its roots can no longer be
-assigned to the two interval bounds by their order alone. This case is
-therefore solved directly from the score statistic
-(<code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">stats::uniroot()</a></code>); both routes agree to numerical precision
-wherever the closed form applies.</p>
-<p>The Wald interval is asymptotic and may perform poorly for small counts or
-extreme probabilities. Note that <code>delta</code> enters the standard error
-only, not the point estimate the interval is centred on: with a zero cell
-the point estimate is <code>0</code> or <code>Inf</code> and the Wald interval
-degenerates accordingly. Use <code>method = "score"</code> for tables with zero
-cells.</p>
-<p>If the table orientation differs from the required structure, rows or
-columns can be reversed using <code><a href="https://andrisignorell.github.io/bedrock/reference/revX.html" class="external-link">bedrock::revX()</a></code> or transposed
-with <code><a href="https://rdrr.io/r/base/t.html" class="external-link">t()</a></code>.</p>
+<p>The score interval uses the uncorrected Koopman (1984) score statistic.
+It does not include the <code>N / (N - 1)</code> variance correction associated with
+the Miettinen–Nurminen variant, where <code>N = n1 + n2</code>. Bounds are found by
+inverting the score statistic on the log risk-ratio scale. Closed forms
+apply when both groups have no events or both groups contain only events.
+If only the reference group has no events, the rows are reversed and the
+resulting bounds are inverted. The numerical search expands adaptively;
+failure to bracket a bound within numerical limits raises an error rather
+than returning an artificial zero or infinite endpoint.</p>
+<p>The Wald method uses the log risk ratio and variance
+<code>1 / x1 - 1 / n1 + 1 / x2 - 1 / n2</code>, evaluated after any cell correction.
+With <code>delta = 0</code>, a zero event count in either group makes the log-Wald
+interval unavailable: a warning is issued and its bounds are <code>NA</code>.
+Use the score method for such data, or explicitly choose a positive
+correction, for example <code>delta = 0.5</code>. Wald intervals are asymptotic and
+can perform poorly with small counts or probabilities near the boundaries.
+If both groups contain only events and <code>delta = 0</code>, the formal Wald
+interval is <code>[1, 1]</code>; it is returned with a warning because it is degenerate.
+For a one-sided interval, the corresponding open endpoint is still applied.</p>
+<p>The <code>"use-or"</code> method transforms the Wald bounds returned by
+<code><a href="oddsRatio.html">oddsRatio()</a></code> using <code>RR = OR / (1 - p2 + p2 * OR)</code>, with <code>p2 = x2 / n2</code>
+fixed at its observed value. This is a plug-in approximation: monotonicity
+of the transformation does not establish nominal coverage when <code>p2</code> is
+estimated. It requires <code>0 &lt; p2 &lt; 1</code>, and, like the Wald odds-ratio
+interval, positive cells unless <code>delta &gt; 0</code>; otherwise a warning is issued
+and the interval bounds are <code>NA</code>. An infinite OR bound is mapped to its
+limit <code>1 / p2</code>.</p>
+<p>For unavailable intervals, one-sided output still uses the natural open
+endpoint (0 or <code>Inf</code>); the estimated endpoint remains <code>NA</code>.
+Rows or columns can be reversed with <code><a href="https://andrisignorell.github.io/bedrock/reference/revX.html" class="external-link">bedrock::revX()</a></code>, or the table
+transposed with <code><a href="https://rdrr.io/r/base/t.html" class="external-link">t()</a></code>, to obtain the required orientation.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -205,7 +225,7 @@ binomial proportions. <em>Biometrics</em>, <em>40</em>(2), 513–517.</p>
 <span class="r-in"><span>  method <span class="op">=</span> <span class="st">"wald"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.5298570 0.3037489 0.9242780 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.5298570 0.2974925 0.9437161 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">relRisk</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">mm</span><span class="op">)</span>,</span></span>
@@ -220,6 +240,12 @@ binomial proportions. <em>Biometrics</em>, <em>40</em>(2), 513–517.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       est       lci       uci </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.4000000 0.1176208 0.9378042 </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># explicitly corrected Wald estimate and interval</span></span></span>
+<span class="r-in"><span><span class="fu">relRisk</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">10</span>, <span class="fl">6</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        method <span class="op">=</span> <span class="st">"wald"</span>, delta <span class="op">=</span> <span class="fl">0.5</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         est         lci         uci </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.111111111 0.006758933 1.826572271 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

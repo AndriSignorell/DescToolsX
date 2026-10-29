@@ -12,6 +12,7 @@ hodgesLehmann(
   y = NULL,
   conf.level = NA,
   sides = c("two.sided", "left", "right"),
+  method = c("exact", "boot"),
   na.rm = FALSE,
   ...
 )
@@ -39,6 +40,13 @@ hodgesLehmann(
   (one of `"two.sided"` (default), `"left"` or `"right"`). See
   [`ConfidenceIntervals()`](ConfidenceIntervals.md).
 
+- method:
+
+  interval method: `"exact"` (default), the distribution-free interval
+  obtained by inverting the Wilcoxon signed-rank (one-sample) or
+  rank-sum (two-sample) test; or `"boot"`, a bootstrap interval
+  (one-sample only). Ignored without `conf.level`.
+
 - na.rm:
 
   logical; if `TRUE`, missing values are removed from `x` and `y`
@@ -46,9 +54,10 @@ hodgesLehmann(
 
 - ...:
 
-  additional arguments passed to bootstrap procedures (`R`, `type`,
-  `parallel`, `ncpus`). `type = "stud"` is not available: the bootstrap
-  statistic carries no variance estimate per resample.
+  additional arguments for `method = "boot"` (`R`, `type`, `parallel`,
+  `ncpus`); an error with `method = "exact"`. `type = "stud"` is not
+  available: the bootstrap statistic carries no variance estimate per
+  resample.
 
 ## Value
 
@@ -99,7 +108,34 @@ when the median is undefined: if a pair yields `Inf - Inf` (`-Inf` and
 `y` in the two-sample case), or if the two middle order statistics are
 `-Inf` and `Inf`.
 
-**Degenerate intervals.** If all bootstrap replicates coincide (e.g.
+**Exact interval.** With `method = "exact"` the interval inverts the
+Wilcoxon signed-rank (one-sample) resp. rank-sum (two-sample) test
+(Bauer 1972). Its bounds are Walsh averages resp. differences
+`x[i] - y[j]`, selected by Monahan's partitioning instead of sorting all
+\\O(n^2)\\ values, so large samples are no problem.
+
+- Samples below 50 (both below 50 in the two-sample case) use the exact
+  null distribution: the classic one without ties, the conditional
+  (permutation) distribution given the midranks with ties.
+
+- Larger samples use the normal approximation with continuity and tie
+  correction.
+
+The results agree with `wilcox.test(exact = TRUE, conf.int = TRUE)` (R
+\>= 4.6.0) in the two-sample case and in the one-sample case without
+ties. With ties,
+[`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) (R 4.6.1)
+takes the lower one-sample bound from \\P(V \> v)\\ instead of \\P(V \ge
+v)\\, one rank too narrow, with coverage below the nominal level;
+`hodgesLehmann()` uses \\P(V \ge v)\\. In the large-sample case
+[`wilcox.test()`](https://rdrr.io/r/stats/wilcox.test.html) interpolates
+between Walsh averages with
+[`uniroot()`](https://rdrr.io/r/stats/uniroot.html), `hodgesLehmann()`
+returns the order statistics that bound the inverted test. If the
+requested level is not attainable (very small samples, e.g. \\n \le 5\\
+at 95\\
+
+**Bootstrap interval.** If all bootstrap replicates coincide (e.g.
 constant data), the interval collapses to `lci = uci = est`. With a
 single observation, or when the replicates are not all finite, no
 interval can be formed: `lci` and `uci` are `NA` with a warning.
@@ -112,12 +148,11 @@ C++ port of Monahan's algorithm by Cyril Flurin Moser
 
 ## Random number generation
 
-A confidence level triggers a bootstrap and therefore advances R's
-global random number generator. Call
+Only `method = "boot"` uses R's random number generator; call
 [`base::set.seed()`](https://rdrr.io/r/base/Random.html) beforehand for
-reproducible intervals. The point estimate itself is deterministic: the
-compiled routine picks its pivots from a local generator and does not
-touch R's stream.
+reproducible intervals. The point estimate and the exact interval are
+deterministic: the compiled routine picks its pivots from a local
+generator and does not touch R's stream.
 
 ## References
 
@@ -130,6 +165,10 @@ Hodges-Lehmann location estimator. *ACM Transactions on Mathematical
 Software*, 10(3), 265–270.
 [doi:10.1145/1271.319414](https://doi.org/10.1145/1271.319414) .
 Original code: <https://www4.stat.ncsu.edu/~monahan/jul10/>
+
+Bauer, D. F. (1972). Constructing confidence sets using rank statistics.
+*Journal of the American Statistical Association*, 67(339), 687–690.
+[doi:10.1080/01621459.1972.10481279](https://doi.org/10.1080/01621459.1972.10481279)
 
 Efron, B. (1987). Better bootstrap confidence intervals. *Journal of the
 American Statistical Association*, 82(397), 171–185.
@@ -173,8 +212,20 @@ hodgesLehmann(c(x, NA), y)
 hodgesLehmann(c(x, NA), y[-1], na.rm = TRUE)
 #> [1] 0.54
 
-set.seed(1)
+# distribution-free interval, one- and two-sample
 hodgesLehmann(x, conf.level = 0.95)
+#>   est   lci   uci 
+#> 1.725 1.165 2.370 
+hodgesLehmann(x, y, conf.level = 0.95)
+#>    est    lci    uci 
+#>  0.560 -0.220  1.082 
+hodgesLehmann(x, conf.level = 0.95, sides = "left")
+#>   est   lci   uci 
+#> 1.725 1.425   Inf 
+
+# bootstrap interval (one-sample)
+set.seed(1)
+hodgesLehmann(x, conf.level = 0.95, method = "boot", R = 999)
 #>      est      lci      uci 
 #> 1.725000 1.425000 2.211442 
 ```

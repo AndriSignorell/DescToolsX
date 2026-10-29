@@ -251,11 +251,11 @@ month(x, fmt = "mmm", lang = "local")
 week(x)
 #> [1] 44
 week(x, method = "us")
-#> [1] 43
+#> [1] 44
 
 # day is both readable and writable
 day(x)
-#> [1] 28
+#> [1] 29
 day(x) <- 20
 x
 #> [1] "2026-10-20"
