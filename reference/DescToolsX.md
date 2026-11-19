@@ -192,6 +192,8 @@ Other contributors:
 
 - Vilmantas Gegzna \[contributor\]
 
+- Sereina Graber \[contributor\]
+
 - Rob J. Hyndman \[contributor\]
 
 - Max Kuhn \[contributor\]

@@ -206,7 +206,7 @@ desc(quality ~ delivery_min, Pizza)
 #> Conditional distribution of y by x-quantile:
 #>         xCut
 #> yOk      [9–17) [17–24) [24–33) [33–66)
-#>   low     5.3%   8.8%   13.4%   33.9%  
+#>   low    5.3%   8.8%    13.4%   33.9%  
 #>   medium 30.0%  33.1%   41.5%   36.6%  
 #>   high   64.8%  58.2%   45.1%   29.6%  
 #> 
@@ -243,7 +243,7 @@ desc(quality ~ delivery_min, Pizza, verbose = 3)
 #> Conditional distribution of y by x-quantile:
 #>         xCut
 #> yOk      [9–17) [17–24) [24–33) [33–66)
-#>   low     5.3%   8.8%   13.4%   33.9%  
+#>   low    5.3%   8.8%    13.4%   33.9%  
 #>   medium 30.0%  33.1%   41.5%   36.6%  
 #>   high   64.8%  58.2%   45.1%   29.6%  
 #> 
@@ -270,7 +270,7 @@ print(d, verbose = 1)
 #> Conditional distribution of y by x-quantile:
 #>         xCut
 #> yOk      [9–17) [17–24) [24–33) [33–66)
-#>   low     5.3%   8.8%   13.4%   33.9%  
+#>   low    5.3%   8.8%    13.4%   33.9%  
 #>   medium 30.0%  33.1%   41.5%   36.6%  
 #>   high   64.8%  58.2%   45.1%   29.6%  
 #> 

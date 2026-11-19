@@ -234,48 +234,48 @@ cbind(year = year(d), isoYear = isoYear(d), week = week(d))
 
 # month: numeric, abbreviated, full name
 month(x)
-#> [1] 10
+#> [1] 11
 month(x, fmt = "mm",  lang = "en")
-#> [1] Oct
+#> [1] Nov
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 month(x, fmt = "mm",  lang = "local")
-#> [1] Oct
+#> [1] Nov
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 month(x, fmt = "mmm", lang = "en")
-#> [1] October
+#> [1] November
 #> 12 Levels: January < February < March < April < May < June < ... < December
 month(x, fmt = "mmm", lang = "local")
-#> [1] October
+#> [1] November
 #> 12 Levels: January < February < March < April < May < June < ... < December
 
 week(x)
-#> [1] 44
+#> [1] 47
 week(x, method = "us")
-#> [1] 44
+#> [1] 47
 
 # day is both readable and writable
 day(x)
-#> [1] 29
+#> [1] 19
 day(x) <- 20
 x
-#> [1] "2026-10-20"
+#> [1] "2026-11-20"
 
 # weekday: numeric, abbreviated, full name
 weekday(x)
-#> [1] 2
+#> [1] 5
 weekday(x, fmt = "dd",  lang = "en")
-#> [1] Tue
+#> [1] Fri
 #> Levels: Mon < Tue < Wed < Thu < Fri < Sat < Sun
 weekday(x, fmt = "ddd", lang = "local")
-#> [1] Tuesday
+#> [1] Friday
 #> 7 Levels: Monday < Tuesday < Wednesday < Thursday < Friday < ... < Sunday
 
 dayOfYear(x)
-#> [1] 293
+#> [1] 324
 yearWeek(x)
-#> [1] 202643
+#> [1] 202647
 yearMonth(x)
-#> [1] 202610
+#> [1] 202611
 
 isWeekend(x)
 #> [1] FALSE
@@ -286,8 +286,8 @@ isLeapYear(2000L)
 
 # month names for a weekly time sequence
 month(seq(Sys.Date(), Sys.Date() + 150, by = "weeks"), fmt = "mm")
-#>  [1] Oct Nov Nov Nov Nov Dec Dec Dec Dec Dec Jan Jan Jan Jan Feb Feb Feb Feb Mar
-#> [20] Mar Mar Mar
+#>  [1] Nov Nov Dec Dec Dec Dec Dec Jan Jan Jan Jan Feb Feb Feb Feb Mar Mar Mar Mar
+#> [20] Apr Apr Apr
 #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
 
 # last day of month for several dates
@@ -296,7 +296,7 @@ lastDayOfMonth(as.Date(c("2014-10-12", "2013-01-31", "2011-12-05")))
 
 # days in month / year
 daysInMonth(x)
-#> [1] 31
+#> [1] 30
 daysInYear(x)
 #> [1] 365
 

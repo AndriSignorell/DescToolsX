@@ -98,7 +98,7 @@ When printing, the `Label` column is hidden if no labels are set.
 ## Details
 
 The levels of a factor and describing variable labels (as created by
-[`bedrock::label()`](https://andrisignorell.github.io/bedrock/reference/Label.html))
+[`bedrock::label()`](https://andrisignorell.github.io/bedrock/reference/label.html))
 will be wrapped within the columns.
 
 The first 4 columns are printed with the needed fix width, the last 2

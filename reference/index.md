@@ -212,6 +212,9 @@ measures.
 - [`divCoef()`](divCoef.md) : Compute a diversity coefficient
 - [`entropy()`](entropy.md) : Shannon Entropy
 - [`simpson()`](simpson.md) : Simpson Diversity Indices
+- [`chainedIndex()`](chainedIndex.md) : Chained Price Index
+- [`priceIndex()`](priceIndex.md) [`quantityIndex()`](priceIndex.md) :
+  Price and Quantity Indices
 
 ## Classification & Model Evaluation
 
