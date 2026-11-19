@@ -235,3 +235,41 @@ test_that("tables with empty rows, columns and single counts agree with vector m
   y <- rep(col(m), m)
   expect_equal(conDisPairs(m), conDisPairs(x, y))
 })
+
+
+# Review 19.11.2026: the table core segfaulted on macOS/arm64 ------------------
+
+test_that("the table core guards its own input", {
+  # .tableAssocCI() calls it directly, past the checks in conDisPairs()
+  core <- DescToolsX:::condis_pairs_tab_cpp
+  expect_error(core(matrix(c(1L, NA, 2L, 3L), 2)), "missing")
+  expect_error(core(matrix(c(1L, -1L, 2L, 3L), 2)), "non-negative")
+  expect_error(core(matrix(c(.Machine$integer.max, 1L, 0L, 0L), 2)),
+               "integer.max")
+})
+
+test_that("the table core handles degenerate shapes", {
+  core <- DescToolsX:::condis_pairs_tab_cpp
+  z <- core(matrix(integer(0), 0, 3))
+  expect_equal(unlist(z[1:5]), c(C = 0, D = 0, Ties_X = 0, Ties_Y = 0, Ties_XY = 0))
+  expect_equal(dim(z$pi.c), c(0L, 3L))
+})
+
+test_that("ordAssocs() applies the table checks in both branches", {
+  # .tableAssocCI() called the C++ core directly, and Rcpp truncated 2.5 to 2
+  m <- matrix(c(1, 2.5, 3, 4), 2)
+  expect_error(ordAssocs(m, conf.level = 0.95), "whole numbers")
+  expect_error(ordAssocs(m), "whole numbers")
+  expect_error(ordAssocs(matrix(c(1, NA, 3, 4), 2), conf.level = 0.95), "missing")
+  expect_error(ordAssocs(matrix(c(1, -1, 3, 4), 2), conf.level = 0.95), "non-negative")
+})
+
+test_that("tau-b with and without an interval agrees with cor()", {
+  # REGRESSION: the point-estimate branch fed the exclusive tie counts of
+  # conDisPairs() into the tau-b denominator, which wants inclusive ones
+  tab <- as.table(rbind(c(26, 26, 23, 18,  9),
+                        c( 6,  7,  9, 14, 23)))
+  ref <- cor(rep(row(tab), tab), rep(col(tab), tab), method = "kendall")
+  expect_equal(kendallTauB(tab), ref)
+  expect_equal(unname(kendallTauB(tab, conf.level = 0.95)[["est"]]), ref)
+})

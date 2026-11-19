@@ -11,6 +11,11 @@ using namespace Rcpp;
 using namespace std;
 
 
+// File-local helpers live in an anonymous namespace, so that no other
+// translation unit can bring a type of the same name and a different layout
+// (an ODR violation - see con_dis_pairs_tab.cpp and assoc.cpp, whose two
+// BIT2D did exactly that).
+namespace {
 
 // 1D Binary Indexed Tree (Fenwick tree) over compressed y ranks.
 struct BIT1D {
@@ -63,7 +68,7 @@ struct ConcordanceResult {
 // no node allocation, no hashing of doubles. Sorting treats -0.0 and 0.0 as
 // equivalent and unique() collapses them, which is what the pair counts mean
 // by a tie.
-static int compressRanks(const vector<double>& v, vector<int>& rank_out) {
+int compressRanks(const vector<double>& v, vector<int>& rank_out) {
 
   const size_t n = v.size();
   rank_out.assign(n, -1);
@@ -98,7 +103,7 @@ static int compressRanks(const vector<double>& v, vector<int>& rank_out) {
 // owns, so a bootstrap allocates them once per thread instead of once per
 // replicate.
 template <class XKey>
-static ConcordanceResult sweepPairs(vector<pair<XKey,int> >& points,
+ConcordanceResult sweepPairs(vector<pair<XKey,int> >& points,
                                     int y_size,
                                     BIT1D& bit,
                                     vector<long long>& count_y) {
@@ -212,6 +217,8 @@ ConcordanceResult conDisPairsXY_indexed(const vector<double>& x,
   return sweepPairs(points, y_size, bit, count_y);
 }
 
+} // namespace
+
 
 
 // [[Rcpp::export]]
@@ -262,6 +269,8 @@ using namespace RcppParallel;
 // That is harmless: the counts depend on the order and the equalities of the
 // values drawn, and both survive. Only the tree is then wider than strictly
 // needed.
+namespace {
+
 struct CStatWorker : public Worker {
 
   const std::vector<double>& y;      // outcome, for the degeneracy check
@@ -337,6 +346,8 @@ struct CStatWorker : public Worker {
   }
 
 };
+
+} // namespace
 
 
 // [[Rcpp::export]]

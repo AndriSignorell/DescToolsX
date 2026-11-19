@@ -179,6 +179,7 @@ Other contributors:
   \item Romain Francois [contributor]
   \item Matthias Gamer [contributor]
   \item Vilmantas Gegzna [contributor]
+  \item Sereina Graber [contributor]
   \item Rob J. Hyndman [contributor]
   \item Max Kuhn [contributor]
   \item Jim Lemon [contributor]

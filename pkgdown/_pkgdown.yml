@@ -183,6 +183,8 @@ reference:
   - divCoef
   - entropy
   - simpson
+  - chainedIndex
+  - priceIndex
 
 - title: Classification & Model Evaluation
   desc: >

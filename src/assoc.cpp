@@ -11,8 +11,16 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <map>
 
-  
+
+// File-local helpers live in an anonymous namespace. A class at namespace
+// scope has external linkage, and its inline member functions are merged by
+// the linker across translation units: con_dis_pairs_tab.cpp had its own,
+// differently laid out BIT2D, one definition silently replaced the other,
+// and ordAssocs() segfaulted on macOS/arm64.
+namespace {
+
 // 2D Binary Indexed Tree (Fenwick Tree)
 struct BIT2D {
   int size_x, size_y;
@@ -45,6 +53,8 @@ struct BIT2D {
     + query(x1 - 1, y1 - 1);
   }
 };
+
+} // namespace
 
 
 

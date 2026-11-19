@@ -1,6 +1,6 @@
 Package: DescToolsX
 Title: Tools for Descriptive Statistics - New Generation
-Version: 0.0.0.966
+Version: 0.0.0.967
 Authors@R: c(
   person(given="Andri", family="Signorell", 
          email = "andri@signorell.net", 
@@ -19,6 +19,7 @@ Authors@R: c(
   person("Romain"        , "Francois"      , role = c("ctb")),
   person("Matthias"      , "Gamer"         , role = c("ctb")),
   person("Vilmantas"     , "Gegzna"        , role = c("ctb")),
+  person("Sereina"       , "Graber"        , role = c("ctb")),
   person("Rob J."        , "Hyndman"       , role = c("ctb")),
   person("Max"           , "Kuhn"          , role = c("ctb")),
   person("Jim"           , "Lemon"         , role = c("ctb")),

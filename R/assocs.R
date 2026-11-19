@@ -295,8 +295,14 @@ ordAssocs <- function(x, y = NULL,
 
       C  <- unname(cd[["C"]])
       D  <- unname(cd[["D"]])
-      Tx <- unname(cd[["Ties_X"]])
-      Ty <- unname(cd[["Ties_Y"]])
+      # tau-b needs the INCLUSIVE marginal ties. conDisPairs() reports
+      # exclusive ones (tied in x only, in y only), so the joint ties go
+      # back in - without them tau-b came out too small whenever a cell
+      # held more than one observation, and differed from the interval
+      # branch, which builds its ties from the margins.
+      Txy <- unname(cd[["Ties_XY"]])
+      Tx  <- unname(cd[["Ties_X"]]) + Txy
+      Ty  <- unname(cd[["Ties_Y"]]) + Txy
 
       n  <- sum(tab)
       n0 <- n * (n - 1) / 2
@@ -386,31 +392,7 @@ ordAssocs <- function(x, y = NULL,
 }
 
 
-.ordAssocResult <- function(res, conf.level) {
-
-  est <- unname(res[[1L]])
-
-  if(is.na(conf.level)) {
-
-    if(length(est) != 1L)
-      stop(gettextf(
-        "ordAssocs() returned %d values where a single estimate was expected.",
-        length(est)
-      ), domain = NA)
-
-    est
-
-  } else {
-
-    if(length(est) != 3L)
-      stop(gettextf(
-        "ordAssocs() returned %d values where estimate and interval were expected.",
-        length(est)
-      ), domain = NA)
-
-    setNamesX(est, c("est", "lci", "uci"))
-  }
-}
+# .ordAssocResult() lives in ordAssocResult.R
 
 
 #' @rdname ordAssocs
@@ -570,6 +552,10 @@ somersDelta <- function(x, y = NULL,
 
 #' @noRd
 .tableAssocCI <- function(tab, conf.level = 0.95, direction = "row"){
+
+  # The C++ core takes an IntegerMatrix and truncates 2.5 to 2 on the way
+  # in; without the shared checks the interval belonged to another table.
+  .checkPairTable(tab)
 
   cd <- condis_pairs_tab_cpp(tab)
 

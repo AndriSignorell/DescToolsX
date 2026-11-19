@@ -38,6 +38,53 @@
 }
 
 
+# Input checks for a table that goes to condis_pairs_tab_cpp(). Shared by
+# conDisPairs() and .tableAssocCI(): the latter used to call the C++ core
+# directly, so a table with 2.5 in a cell reached the IntegerMatrix
+# conversion, which truncates silently, and the intervals of ordAssocs()
+# were computed for a different table than the one passed in.
+#' @noRd
+.checkPairTable <- function(x) {
+
+  if(!(is.matrix(x) || is.table(x))){
+    stop("If 'y' is NULL, 'x' must be a contingency table or matrix.")
+  }
+  
+  # is.table() is TRUE for any number of dimensions, so a 2x2x2 table
+  # used to reach the C++ code, which reads it as if it were flat
+  if(length(dim(x)) != 2L)
+    stop(gettextf(
+      "'x' must be a two-dimensional table, not one with %d dimensions.",
+      length(dim(x))), domain = NA)
+  
+  if(!is.numeric(x))
+    stop("Table counts must be numeric.")
+  
+  # Checked before the comparisons below. With na.rm = TRUE the negative
+  # test passed an NA table through, and sum(x) was then NA, so the
+  # count test aborted with "missing value where TRUE/FALSE needed" -
+  # a message about the condition rather than about the table.
+  if(anyNA(x))
+    stop("Table counts must not be missing.")
+  
+  if(any(x < 0)){
+    stop("Table counts must be non-negative.")
+  }
+
+  # The C++ side takes an IntegerMatrix: Rcpp truncates 2.5 to 2 and turns
+  # Inf into NA, and the partition check in .completePairCounts() failed with "pair
+  # counts do not add up", which blames the counting rather than the
+  # input. The pi.c/pi.d matrices are int as well, so the total must fit.
+  if(any(!is.finite(x)) || any(x != round(x)))
+    stop("Table counts must be finite whole numbers.")
+
+  if(sum(x) > .Machine$integer.max)
+    stop("Table counts must not add up to more than .Machine$integer.max.")
+
+  invisible(x)
+}
+
+
 #' Concordant and Discordant Pairs
 #'
 #' @description
@@ -226,41 +273,8 @@ conDisPairs <- function(x, y = NULL){
     # TABLE MODE
     # ============================
     
-    if(!(is.matrix(x) || is.table(x))){
-      stop("If 'y' is NULL, 'x' must be a contingency table or matrix.")
-    }
-    
-    # is.table() is TRUE for any number of dimensions, so a 2x2x2 table
-    # used to reach the C++ code, which reads it as if it were flat
-    if(length(dim(x)) != 2L)
-      stop(gettextf(
-        "'x' must be a two-dimensional table, not one with %d dimensions.",
-        length(dim(x))), domain = NA)
-    
-    if(!is.numeric(x))
-      stop("Table counts must be numeric.")
-    
-    # Checked before the comparisons below. With na.rm = TRUE the negative
-    # test passed an NA table through, and sum(x) was then NA, so the
-    # count test aborted with "missing value where TRUE/FALSE needed" -
-    # a message about the condition rather than about the table.
-    if(anyNA(x))
-      stop("Table counts must not be missing.")
-    
-    if(any(x < 0)){
-      stop("Table counts must be non-negative.")
-    }
+    .checkPairTable(x)
 
-    # The C++ side takes an IntegerMatrix: Rcpp truncates 2.5 to 2 and turns
-    # Inf into NA, and the partition check below then failed with "pair
-    # counts do not add up", which blames the counting rather than the
-    # input. The Fenwick sums are int as well, so the total must fit.
-    if(any(!is.finite(x)) || any(x != round(x)))
-      stop("Table counts must be finite whole numbers.")
-
-    if(sum(x) > .Machine$integer.max)
-      stop("Table counts must not add up to more than .Machine$integer.max.")
-    
     if(sum(x) < 2){
       return(setNamesX(rep(NA_real_, 5),
                       c("C","D","Ties_X","Ties_Y","Ties_XY")))
