@@ -23,6 +23,10 @@ chi-square p-value}
 
 \item{...}{further arguments passed to underlying print methods}
 }
+\value{
+\code{x}, invisibly. Called for its side effect of printing the
+summary to the console.
+}
 \description{
 Prints a structured summary of a \code{"Desc.Date"} object as created
 by \code{\link[=desc]{desc()}}. The output includes core time-axis statistics

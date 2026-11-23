@@ -266,10 +266,39 @@ print.Abstract <- function(x, width = NULL, truncate = NULL,
     )
   }
 
-  res$NAs <- strAlign(res$NAs, " ")
+  res$NAs <- .alignNAs(res$NAs)
 
   print(x = res, print.gap = print.gap, right = FALSE, row.names = FALSE, ...)
   cat("\n")
 
   invisible(x)
+}
+
+
+# Aligns the NAs column on the blank before "(": counts right-justified, so
+# their last digits - and a zeroForm such as "." - share one position, the
+# percentages left-justified after them. strAlign(, " ") did not do this:
+# zeroForm contains no blank, and the cells arrive padded from columnWrap(),
+# so the first blank was not necessarily the separator. Empty cells (the
+# continuation lines of a wrapped row) stay empty.
+#' @noRd
+.alignNAs <- function(z) {
+
+  z <- trimws(z)
+  m <- regmatches(z, regexec("^(\\S+) (\\(.*\\))$", z))
+
+  cnt <- vapply(seq_along(z),
+                function(i) if (length(m[[i]])) m[[i]][2L] else z[i], "")
+  pct <- vapply(m, function(v) if (length(v)) v[3L] else "", "")
+
+  blank <- !nzchar(z)
+  cnt <- formatC(cnt, width = max(nchar(cnt[!blank]), 0L))
+
+  out <- if (any(nzchar(pct)))
+    paste(cnt, formatC(pct, width = max(nchar(pct)), flag = "-"))
+  else
+    cnt
+
+  out[blank] <- ""
+  out
 }

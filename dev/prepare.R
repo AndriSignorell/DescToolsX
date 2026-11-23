@@ -272,3 +272,21 @@ remotes::install_github("omegahat/RDCOMClient")
 
 # RStudio key bindings live here
 normalizePath(file.path(Sys.getenv("APPDATA"), "RStudio", "keybindings"))
+
+
+
+# == 9  check based on CRAN feedback =====================================
+
+rd <- tools::Rd_db(dir = ".")
+tag <- function(x, t) any(vapply(x, \(e) identical(attr(e, "Rd_tag"), t), logical(1)))
+dt  <- vapply(rd, \(x) {
+  d <- Filter(\(e) identical(attr(e, "Rd_tag"), "\\docType"), x)
+  if (length(d)) as.character(d[[1]]) else ""
+}, character(1))
+
+(hit <- names(rd)[!vapply(rd, tag, logical(1), t = "\\value") & 
+                    !dt %in% c("data", "package")])
+
+vapply(rd[hit], tag, logical(1), t = "\\usage")
+
+

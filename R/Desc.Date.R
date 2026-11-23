@@ -81,16 +81,17 @@ desc.Date <- function(x,
   # ------------------------------
   # Basic handling
 
+  xname  <- deparse1(substitute(x))
   nTotal <- length(x)
   ok     <- !is.na(x)
   xOk    <- x[ok]
   n      <- length(xOk)
 
   if (n == 0L)
-    return(.descAllNA(x, deparse(substitute(x)), main, plotit, verbose))
+    return(.descAllNA(x, xname, main, plotit, verbose))
 
   if (is.null(main))
-    main <- deparse(substitute(x))
+    main <- xname
 
   # ------------------------------
   # Core statistics
@@ -177,7 +178,7 @@ desc.Date <- function(x,
 
   res <- list(
 
-    meta = .descMeta(x, deparse(substitute(x)), main, plotit, verbose),
+    meta = .descMeta(x, xname, main, plotit, verbose),
 
     core = list(
       length     = nTotal,
@@ -244,6 +245,9 @@ desc.Date <- function(x,
 #' }
 #'
 #' @param ... further arguments passed to underlying print methods
+#'
+#' @return `x`, invisibly. Called for its side effect of printing the
+#'   summary to the console.
 #'
 #' @details
 #' Weekday and month distributions are compared to their expected
@@ -394,6 +398,6 @@ print.Desc.Date <- function(x, verbose = NULL, ...) {
 
 
 
-.printFootnote <- function(x, len = 20, ...) {
-  cat(gettextf("\n%s\n%s \n\n", strrep("\u2500", 20), x))
+.printFootnote <- function(x, len = 20) {
+  cat(gettextf("\n%s\n%s \n\n", strrep("\u2500", len), x))
 }
