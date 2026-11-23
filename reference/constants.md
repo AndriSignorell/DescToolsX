@@ -1,7 +1,6 @@
 # DescToolsX Constants
 
-English abbreviated and full weekday names, starting with Monday. Metric
-prefixes with name, abbreviation and dimension.
+English abbreviated and full weekday names, starting with Monday.
 
 ## Usage
 
@@ -13,4 +12,4 @@ day.name
 
 ## Format
 
-A character vector of length 7.
+Character vectors of length 7.

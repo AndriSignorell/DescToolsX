@@ -40,6 +40,11 @@ print(x, verbose = NULL, ...)
 
   further arguments passed to underlying print methods
 
+## Value
+
+`x`, invisibly. Called for its side effect of printing the summary to
+the console.
+
 ## Details
 
 Depending on the selected verbosity level, weekday and month
